@@ -5,7 +5,6 @@ import java.nio.file.Files
 plugins {
     java
     id("org.graalvm.buildtools.native") version "0.10.2"
-    // todo: use official version when https://github.com/johnrengelman/shadow/pull/879 is merged
     id("io.github.goooler.shadow") version "8.1.7"
     `maven-publish`
 }
@@ -32,10 +31,6 @@ repositories {
         name = "opencollab-release"
         content { includeGroupByRegex("org.cloudburstmc.*") }
     }
-    maven("https://repo.opencollab.dev/maven-snapshots/") {
-        name = "opencollab-snapshot"
-        content { includeGroupByRegex("org.cloudburstmc.fastutil.*") }
-    }
     maven("https://papermc.io/repo/repository/maven-public/") {
         name = "paper"
         content { includeGroup("com.velocitypowered") }
@@ -58,27 +53,19 @@ repositories {
             includeGroup("net.lenni0451")
         }
     }
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots/") {
-        name = "sonatype-oss-snapshots"
-        content { includeGroup("net.kyori") }
-    }
     maven("https://repo1.maven.org/maven2/") { name = "maven central" }
     mavenLocal()
 }
 
 val shade: Configuration by configurations.creating
 configurations.implementation.get().extendsFrom(shade)
-val lombokVersion = "1.18.32"
-val postgresVersion = "42.7.3"
-val nettyVersion = "4.1.110.Final"
-val fastutilVersion = "edaf36bfd3"
-val jdbiVersion = "3.45.1"
 
 dependencies {
+    shade("com.zaxxer:HikariCP:5.1.0")
+    shade("org.postgresql:postgresql:42.7.3")
+    val jdbiVersion = "3.45.1"
     shade("org.jdbi:jdbi3-core:$jdbiVersion")
     shade("org.jdbi:jdbi3-postgres:$jdbiVersion")
-    shade("com.zaxxer:HikariCP:5.1.0")
-    shade("org.postgresql:postgresql:$postgresVersion")
     shade("com.google.guava:guava:33.2.0-jre")
     shade("org.apache.commons:commons-collections4:4.4")
     shade("ch.qos.logback:logback-classic:1.5.6")
@@ -97,6 +84,7 @@ dependencies {
         exclude(group = "fr.litarvan")
     }
     shade("net.raphimc:MinecraftAuth:4.0.2")
+    val nettyVersion = "4.1.110.Final"
     shade("io.netty:netty-codec-haproxy:$nettyVersion")
     shade("io.netty:netty-codec-dns:$nettyVersion")
     shade("io.netty:netty-codec-http2:$nettyVersion")
@@ -115,6 +103,7 @@ dependencies {
     shade("org.redisson:redisson:3.30.0") {
         exclude(group = "io.netty")
     }
+    val fastutilVersion = "edaf36bfd3"
     shade("com.github.rfresh2.fastutil:object-object-maps:$fastutilVersion")
     shade("com.github.rfresh2.fastutil:int-object-maps:$fastutilVersion")
     shade("com.github.rfresh2.fastutil:object-int-maps:$fastutilVersion")
@@ -128,6 +117,7 @@ dependencies {
     shade("org.jline:jline-terminal-jansi:3.26.1")
     shade("ar.com.hjg:pngj:2.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    val lombokVersion = "1.18.32"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")
@@ -263,9 +253,6 @@ tasks {
         group = "build"
         dependsOn(shadowJar, build, javaPathTask)
     }
-    register("sourceJar", Jar::class.java) {
-        from(sourceSets.main.get().allSource)
-    }
     nativeCompile {
         classpathJar = shadowJar.flatMap { it.archiveFile }
         dependsOn(jarBuildTask)
@@ -313,20 +300,17 @@ graalvmNative {
 }
 
 /** Publishing stuff for dataGenerator subproject **/
-// avoiding publishing the shaded jar. we need a few adhoc workarounds
-// jar task also needs to be enabled above for publishing task to work correct
-val javaComponent = components["java"] as AdhocComponentWithVariants
-javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) {
-    skip()
-}
-
+// avoiding publishing the shaded jar which would otherwise cause dependency duplication issues
+// jar task needs to be enabled above (temporarily) for this publishing to work
 publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = "com.zenith"
             artifactId = "ZenithProxy"
             version = project.version.toString()
-            from(javaComponent)
+            val publishArtifact = components["java"] as AdhocComponentWithVariants
+            publishArtifact.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) { skip() }
+            from(publishArtifact)
         }
     }
 }
