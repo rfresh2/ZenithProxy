@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.*;
 import java.time.chrono.ChronoZonedDateTime;
-import java.util.Objects;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
@@ -62,7 +61,7 @@ public class ActiveHours extends Module {
             .flatMap(activeTime -> {
                 var activeHourToday = ZonedDateTime.of(
                     LocalDate.now(ZoneId.of(activeHoursConfig.timeZoneId)),
-                    LocalTime.of(activeTime.hour, activeTime.minute),
+                    LocalTime.of(activeTime.hour(), activeTime.minute()),
                     ZoneId.of(activeHoursConfig.timeZoneId));
                 var activeHourTomorrow = activeHourToday.plusDays(1L);
                 return Stream.of(activeHourToday, activeHourTomorrow);
@@ -84,37 +83,18 @@ public class ActiveHours extends Module {
         }
     }
 
-    public static class ActiveTime {
-        public int hour;
-        public int minute;
+    public record ActiveTime(int hour, int minute) {
 
         public static ActiveTime fromString(final String arg) {
             final String[] split = arg.split(":");
             final int hour = Integer.parseInt(split[0]);
             final int minute = Integer.parseInt(split[1]);
-            ActiveTime activeTime = new ActiveTime();
-            activeTime.hour = hour;
-            activeTime.minute = minute;
-            return activeTime;
+            return new ActiveTime(hour, minute);
         }
 
         @Override
         public String toString() {
-            return (hour < 10 ? "0" + hour : hour) + ":" + (minute < 10 ? "0" + minute : minute);
+            return (hour() < 10 ? "0" + hour() : hour()) + ":" + (minute() < 10 ? "0" + minute() : minute());
         }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            ActiveTime that = (ActiveTime) o;
-            return hour == that.hour && minute == that.minute;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(hour, minute);
-        }
-
     }
 }

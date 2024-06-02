@@ -24,6 +24,6 @@ public class CommandContext {
     }
 
     public static CommandContext create(final String input, final CommandSource source) {
-        return new CommandContext(input, source, new Embed(), new ArrayList<>());
+        return new CommandContext(input, source, new Embed(), new ArrayList<>(0));
     }
 }

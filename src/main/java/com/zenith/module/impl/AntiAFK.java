@@ -41,11 +41,12 @@ public class AntiAFK extends Module {
 
     @Override
     public void subscribeEvents() {
-        EVENT_BUS.subscribe(this,
-                            of(ClientBotTick.class, this::handleClientTickEvent),
-                            of(ClientBotTick.Starting.class, this::handleClientBotTickStarting),
-                            of(ClientBotTick.Stopped.class, this::handleClientBotTickStopped),
-                            of(DeathEvent.class, this::handleDeathEvent)
+        EVENT_BUS.subscribe(
+            this,
+            of(ClientBotTick.class, this::handleClientTickEvent),
+            of(ClientBotTick.Starting.class, this::handleClientBotTickStarting),
+            of(ClientBotTick.Stopped.class, this::handleClientBotTickStopped),
+            of(DeathEvent.class, this::handleDeathEvent)
         );
     }
 

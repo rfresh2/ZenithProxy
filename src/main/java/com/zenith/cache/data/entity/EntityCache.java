@@ -80,19 +80,15 @@ public class EntityCache implements CachedData {
         return Optional.ofNullable(this.recentlyRemovedPlayers.getIfPresent(uuid));
     }
 
-    @SuppressWarnings("unchecked")
-    public <E extends Entity> E get(int id) {
-        Entity entity = this.entities.get(id);
-        if (entity == null) return null;
-        return (E) entity;
+    public Entity get(int id) {
+        return this.entities.get(id);
     }
 
     // todo: this is not particularly efficient but is currently used infrequently.
     //  if there are higher frequency use cases, consider building a secondary cached map of uuids to entity
-    public <E extends Entity> E get(UUID uuid) {
+    public Entity get(UUID uuid) {
         return this.entities.values().stream()
             .filter(entity -> entity.getUuid().equals(uuid))
-            .map(entity -> (E) entity)
             .findFirst()
             .orElse(null);
     }

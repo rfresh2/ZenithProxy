@@ -1,33 +1,36 @@
 package com.zenith.module.impl;
 
+import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.module.ClientBotTick;
+import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
+import com.zenith.event.proxy.PlayerLeftVisualRangeEvent;
 import com.zenith.feature.world.Pathing;
 import com.zenith.module.Module;
 import com.zenith.util.Timer;
 import com.zenith.util.math.MathHelper;
-import org.cloudburstmc.math.vector.Vector2f;
-
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Stack;
-import java.util.concurrent.atomic.AtomicBoolean;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class Spook extends Module {
-    public final AtomicBoolean hasTarget = new AtomicBoolean(false);
-    private final Timer stareTimer = Timer.newTickTimer();
-    private final Stack<EntityPlayer> focusStack = new Stack<>();
-    private static final int MOVEMENT_PRIORITY = 10;
+    private final Timer searchTimer = Timer.newTickTimer();
+    // list (used as a stack) of most recently seen player entity ID's
+    private final IntArrayList playerTargetStack = new IntArrayList();
+    private int targetEntity = -1;
+    private static final int MOVEMENT_PRIORITY = 10; // relatively low
+    private static final int SEARCH_DELAY_TICKS = 50;
 
     @Override
     public void subscribeEvents() {
-        EVENT_BUS.subscribe(this,
-                            of(ClientBotTick.class, this::handleClientTickEvent),
-                            of(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent));
+        EVENT_BUS.subscribe(
+            this,
+            of(ClientBotTick.class, this::handleClientTickEvent),
+            of(DisconnectEvent.class, this::handleDisconnectEvent),
+            of(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent),
+            of(PlayerLeftVisualRangeEvent.class, this::handlePlayerLeftVisualRangeEvent));
     }
 
     @Override
@@ -39,76 +42,86 @@ public class Spook extends Module {
     public void onEnable() {
         CACHE.getEntityCache().getEntities().values().stream()
                 .filter(entity -> entity instanceof EntityPlayer && !entity.equals(CACHE.getPlayerCache().getThePlayer()))
-                .map(entity -> (EntityPlayer) entity)
-                .forEach(this.focusStack::push);
+                .map(Entity::getEntityId)
+                .forEach(this.playerTargetStack::push);
     }
 
-    public void handleClientTickEvent(final ClientBotTick event) {
-        synchronized (focusStack) { // handling this regardless of mode so we don't fill stack indefinitely
-            if (!this.focusStack.isEmpty()) {
-                this.focusStack.removeIf(e -> CACHE.getEntityCache().getEntities().values().stream()
-                        .noneMatch(entity -> Objects.equals(e, entity)));
+    @Override
+    public void onDisable() {
+        this.playerTargetStack.clear();
+    }
+
+    private void handleClientTickEvent(final ClientBotTick event) {
+        if (searchTimer.tick(SEARCH_DELAY_TICKS)) {
+            EXECUTOR.execute(this::searchForTarget);
+        }
+        rotateToTarget();
+    }
+
+
+    private void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
+        synchronized (this.playerTargetStack) {
+            this.playerTargetStack.push(event.playerEntity().getEntityId());
+        }
+    }
+
+    private void handlePlayerLeftVisualRangeEvent(PlayerLeftVisualRangeEvent event) {
+        synchronized (this.playerTargetStack) {
+            this.playerTargetStack.rem(event.playerEntity().getEntityId());
+        }
+    }
+
+    private void handleDisconnectEvent(DisconnectEvent event) {
+        synchronized (this.playerTargetStack) {
+            this.playerTargetStack.clear();
+        }
+    }
+
+    private void searchForTarget() {
+        synchronized (playerTargetStack) { // handling this regardless of mode so we don't fill stack indefinitely
+            if (!this.playerTargetStack.isEmpty()) {
+                this.playerTargetStack.removeIf(e -> CACHE.getEntityCache().get(e) == null);
             }
         }
-        if (!MODULE.get(KillAura.class).isActive()) {
-            stareTick();
-        } else {
-            hasTarget.lazySet(false);
-        }
+        this.targetEntity = switch (CONFIG.client.extra.spook.spookTargetingMode) {
+            case NEAREST -> findNearestTarget();
+            case VISUAL_RANGE -> findVisualRangeTarget();
+        };
     }
 
-
-    public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
-        synchronized (this.focusStack) {
-            this.focusStack.push(event.playerEntity());
-        }
-    }
-
-    private void stareTick() {
-        if (stareTimer.tick(CONFIG.client.extra.spook.tickDelay)) {
-            switch (CONFIG.client.extra.spook.spookTargetingMode) {
-                case NEAREST -> handleNearestTargetTick();
-                case VISUAL_RANGE -> handleVisualRangeTargetTick();
+    private int findVisualRangeTarget() {
+        synchronized (playerTargetStack) {
+            if (!this.playerTargetStack.isEmpty()) {
+                return this.playerTargetStack.topInt();
             }
         }
+        return -1;
     }
 
-    private void handleNearestTargetTick() {
-        final Optional<EntityPlayer> nearestPlayer = getNearestPlayer();
-        if (nearestPlayer.isPresent()) {
-            this.hasTarget.set(true);
-            Vector2f rotationTo = Pathing.rotationTo(nearestPlayer.get().getX(),
-                                                     nearestPlayer.get().getY()+1.6,
-                                                     nearestPlayer.get().getZ());
-            PATHING.rotate(rotationTo.getX(), rotationTo.getY(), MOVEMENT_PRIORITY);
-        } else {
-            this.hasTarget.set(false);
-        }
-    }
-
-    private void handleVisualRangeTargetTick() {
-        synchronized (focusStack) {
-            if (!this.focusStack.isEmpty()) {
-                var target = this.focusStack.peek();
-                this.hasTarget.set(true);
-                Vector2f rotationTo = Pathing.shortestRotationTo(target);
-                PATHING.rotate(rotationTo.getX(), rotationTo.getY(), MOVEMENT_PRIORITY);
-            } else {
-                this.hasTarget.set(false);
-            }
-        }
-    }
-
-    private Optional<EntityPlayer> getNearestPlayer() {
+    private int findNearestTarget() {
         return CACHE.getEntityCache().getEntities().values().stream()
-                .filter(entity -> entity instanceof EntityPlayer)
-                .map(entity -> (EntityPlayer) entity)
-                .filter(e -> e != CACHE.getPlayerCache().getThePlayer())
-                .min((e1, e2) -> (int) (getDistanceToPlayer(e1) - getDistanceToPlayer(e2)));
+            .filter(entity -> entity instanceof EntityPlayer)
+            .filter(e -> e != CACHE.getPlayerCache().getThePlayer())
+            .map(entity -> (EntityPlayer) entity)
+            .min((e1, e2) -> (int) (getDistanceToPlayer(e1) - getDistanceToPlayer(e2)))
+            .map(Entity::getEntityId)
+            .orElse(-1);
+    }
+
+    private void rotateToTarget() {
+        if (targetEntity != -1) {
+            var entity = CACHE.getEntityCache().get(targetEntity);
+            if (entity == null) {
+                targetEntity = -1;
+                return;
+            }
+            var rotation = Pathing.rotationTo(entity.getX(), entity.getY() + 1.6, entity.getZ());
+            PATHING.rotate(rotation.getX(), rotation.getY(), MOVEMENT_PRIORITY);
+        }
     }
 
     private double getDistanceToPlayer(final EntityPlayer e) {
         var player = CACHE.getPlayerCache().getThePlayer();
-        return MathHelper.distanceSq3d(e.getX(), e.getY(), e.getZ(), player.getX(), player.getY(), player.getZ());
+        return MathHelper.manhattanDistance3d(e.getX(), e.getY(), e.getZ(), player.getX(), player.getY(), player.getZ());
     }
 }

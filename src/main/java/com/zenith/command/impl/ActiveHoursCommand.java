@@ -134,16 +134,16 @@ public class ActiveHoursCommand extends Command {
         boolean matchesRegex = matcher.matches();
         if (!matchesRegex) return false;
         final ActiveTime activeTime = ActiveTime.fromString(arg);
-        return activeTime.hour <= 23 && activeTime.minute <= 59;
+        return activeTime.hour() <= 23 && activeTime.minute() <= 59;
     }
 
     private String activeTimeListToString(final List<ActiveTime> activeTimes) {
         return activeTimes.stream()
                 .sorted((a, b) -> {
-                    if (a.hour == b.hour) {
-                        return a.minute - b.minute;
+                    if (a.hour() == b.hour()) {
+                        return a.minute() - b.minute();
                     } else {
-                        return a.hour - b.hour;
+                        return a.hour() - b.hour();
                     }
                 })
                 .map(ActiveTime::toString)
