@@ -7,7 +7,6 @@ import com.zenith.event.proxy.HealthAutoDisconnectEvent;
 import com.zenith.event.proxy.NewPlayerInVisualRangeEvent;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.module.Module;
-import com.zenith.network.server.ServerConnection;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -21,11 +20,12 @@ public class AutoDisconnect extends Module {
 
     @Override
     public void subscribeEvents() {
-        EVENT_BUS.subscribe(this,
-                            of(PlayerHealthChangedEvent.class, this::handleLowPlayerHealthEvent),
-                            of(WeatherChangeEvent.class, this::handleWeatherChangeEvent),
-                            of(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
-                            of(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent)
+        EVENT_BUS.subscribe(
+            this,
+            of(PlayerHealthChangedEvent.class, this::handleLowPlayerHealthEvent),
+            of(WeatherChangeEvent.class, this::handleWeatherChangeEvent),
+            of(ProxyClientDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
+            of(NewPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent)
         );
     }
 
@@ -62,8 +62,8 @@ public class AutoDisconnect extends Module {
 
     public void handleProxyClientDisconnectedEvent(ProxyClientDisconnectedEvent event) {
         if (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
-            ServerConnection currentConnection = Proxy.getInstance().getCurrentPlayer().get();
-            if (nonNull(currentConnection) && currentConnection.getProfileCache().getProfile().equals(event.clientGameProfile())) {
+            var connection = Proxy.getInstance().getActivePlayer();
+            if (nonNull(connection) && connection.getProfileCache().getProfile().equals(event.clientGameProfile())) {
                 info("Auto Client Disconnect");
                 Proxy.getInstance().disconnect();
             }

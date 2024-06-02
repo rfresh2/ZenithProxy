@@ -4,6 +4,7 @@ import com.zenith.Proxy;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.module.Module;
+import com.zenith.util.Timer;
 import org.geysermc.mcprotocollib.protocol.data.game.ClientCommand;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 
@@ -11,11 +12,11 @@ import java.util.concurrent.TimeUnit;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static java.util.Objects.isNull;
 
 public class AutoRespawn extends Module {
     private static final int tickEventRespawnDelay = 100;
     private int tickCounter = 0;
+    private Timer tickTimer = Timer.newTickTimer();
     public AutoRespawn() {
         super();
     }
@@ -48,8 +49,10 @@ public class AutoRespawn extends Module {
     }
 
     private void checkAndRespawn() {
-        if (Proxy.getInstance().isConnected() && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0 && isNull(
-                Proxy.getInstance().getCurrentPlayer().get())) {
+        if (Proxy.getInstance().isConnected()
+            && CACHE.getPlayerCache().getThePlayer().getHealth() <= 0
+            && !Proxy.getInstance().hasActivePlayer()
+        ) {
             info("Performing Respawn");
             sendClientPacketAsync(new ServerboundClientCommandPacket(ClientCommand.RESPAWN));
             CACHE.getPlayerCache().getThePlayer().setHealth(20.0f);

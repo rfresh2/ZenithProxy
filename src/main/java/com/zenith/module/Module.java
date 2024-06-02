@@ -72,7 +72,7 @@ public abstract class Module {
         }
     }
 
-    private final String moduleLogPrefix = "[" + this.getClass().getSimpleName() + "] ";
+    protected final String moduleLogPrefix = "[" + this.getClass().getSimpleName() + "] ";
 
     public void info(String msg) {
         MODULE_LOG.info(moduleLogPrefix + msg);
@@ -106,11 +106,19 @@ public abstract class Module {
         MODULE_LOG.warn(moduleLogPrefix + msg, args);
     }
 
+    protected final String moduleAlertPrefix = "&7[&b" + this.getClass().getSimpleName() + "&7]&r ";
+
     public void inGameAlert(String minedown) {
         var connections = Proxy.getInstance().getActiveConnections().getArray();
         for (int i = 0; i < connections.length; i++) {
             var connection = connections[i];
-            connection.sendAsyncAlert(minedown);
+            connection.sendAsyncAlert(moduleAlertPrefix + minedown);
         }
+    }
+
+    public void inGameAlertActivePlayer(String minedown) {
+        var connection = Proxy.getInstance().getActivePlayer();
+        if (connection == null) return;
+        connection.sendAsyncAlert(moduleAlertPrefix + minedown);
     }
 }

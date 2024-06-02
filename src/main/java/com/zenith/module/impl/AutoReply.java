@@ -15,17 +15,10 @@ import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
 public class AutoReply extends Module {
-    private final Duration replyRateLimitDuration = Duration.ofSeconds(1);
-    private Cache<String, String> repliedPlayersCache;
-    private Instant lastReply;
-
-    public AutoReply() {
-        super();
-        this.repliedPlayersCache = CacheBuilder.newBuilder()
-                .expireAfterWrite(CONFIG.client.extra.autoReply.cooldownSeconds, TimeUnit.SECONDS)
-                .build();
-        this.lastReply = Instant.now();
-    }
+    private Cache<String, String> repliedPlayersCache = CacheBuilder.newBuilder()
+            .expireAfterWrite(CONFIG.client.extra.autoReply.cooldownSeconds, TimeUnit.SECONDS)
+            .build();
+    private Instant lastReply = Instant.now();
 
     @Override
     public void subscribeEvents() {
@@ -52,9 +45,9 @@ public class AutoReply extends Module {
         try {
             if (event.isIncomingWhisper()) {
                 if (!event.sender().get().getName().equalsIgnoreCase(CONFIG.authentication.username)
-                        && Instant.now().minus(replyRateLimitDuration).isAfter(lastReply)
+                        && Instant.now().minus(Duration.ofSeconds(1)).isAfter(lastReply)
                         && (DISCORD.lastRelaymessage.isEmpty()
-                        || Instant.now().minus(Duration.ofSeconds(CONFIG.client.extra.autoReply.cooldownSeconds)).isAfter(DISCORD.lastRelaymessage.get()))) {
+                            || Instant.now().minus(Duration.ofSeconds(CONFIG.client.extra.autoReply.cooldownSeconds)).isAfter(DISCORD.lastRelaymessage.get()))) {
                     if (isNull(repliedPlayersCache.getIfPresent(event.sender().get().getName()))) {
                         repliedPlayersCache.put(event.sender().get().getName(), event.sender().get().getName());
                         // 236 char max ( 256 - 4(command) - 16(max name length) )

@@ -45,20 +45,25 @@ public class AutoArmor extends Module {
             delay--;
             return;
         }
-        for (EquipmentSlot equipmentSlot : ARMOR_SLOTS) {
+        for (int i = 0; i < ARMOR_SLOTS.size(); i++) {
+            final EquipmentSlot equipmentSlot = ARMOR_SLOTS.get(i);
             // identify if we have the best possible armor equipped for the slot
             final ItemStack currentItemStack = CACHE.getPlayerCache().getEquipment(equipmentSlot);
             final int invSlotId = ARMOR_SLOTS.indexOf(equipmentSlot) + 5;
             final BestArmorData bestArmorInInventory = getBestArmorInInventory(equipmentSlot);
             if (bestArmorInInventory == null) continue;
             if (currentItemStack == Container.EMPTY_STACK) {
-                INVENTORY.invActionReq(this, INVENTORY.swapSlots(bestArmorInInventory.index(), invSlotId), MOVEMENT_PRIORITY);
+                INVENTORY.invActionReq(this,
+                                       INVENTORY.swapSlots(bestArmorInInventory.index(), invSlotId),
+                                       MOVEMENT_PRIORITY);
                 delay = 5;
                 return;
             }
             final ArmorMaterial currentArmorMaterial = getArmorMaterial(ItemRegistry.REGISTRY.get(currentItemStack.getId()));
             if (currentArmorMaterial == null || bestArmorInInventory.material().compareTo(currentArmorMaterial) > 0) {
-                INVENTORY.invActionReq(this, INVENTORY.swapSlots(bestArmorInInventory.index(), invSlotId), MOVEMENT_PRIORITY);
+                INVENTORY.invActionReq(this,
+                                       INVENTORY.swapSlots(bestArmorInInventory.index(), invSlotId),
+                                       MOVEMENT_PRIORITY);
                 delay = 5;
                 return;
             }

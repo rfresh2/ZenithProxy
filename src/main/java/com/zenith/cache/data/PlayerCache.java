@@ -47,6 +47,7 @@ import java.util.function.Consumer;
 import static com.zenith.Shared.CLIENT_LOG;
 import static com.zenith.Shared.CONFIG;
 import static java.util.Objects.nonNull;
+import static org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot.*;
 
 
 @Getter
@@ -174,12 +175,12 @@ public class PlayerCache implements CachedData {
         var inventory = this.inventoryCache.getPlayerInventory();
         if (inventory == null) return null;
         return switch (slot) {
-            case EquipmentSlot.HELMET -> inventory.getItemStack(5);
-            case EquipmentSlot.CHESTPLATE -> inventory.getItemStack(6);
-            case EquipmentSlot.LEGGINGS -> inventory.getItemStack(7);
-            case EquipmentSlot.BOOTS -> inventory.getItemStack(8);
-            case EquipmentSlot.OFF_HAND -> inventory.getItemStack(45);
-            case EquipmentSlot.MAIN_HAND -> inventory.getItemStack(heldItemSlot + 36);
+            case HELMET -> inventory.getItemStack(5);
+            case CHESTPLATE -> inventory.getItemStack(6);
+            case LEGGINGS -> inventory.getItemStack(7);
+            case BOOTS -> inventory.getItemStack(8);
+            case OFF_HAND -> inventory.getItemStack(45);
+            case MAIN_HAND -> inventory.getItemStack(heldItemSlot + 36);
             default -> null; // EquipmentSlot.BODY doesn't apply to players, only entities like horses
         };
     }
@@ -187,12 +188,12 @@ public class PlayerCache implements CachedData {
     // prefer calling getEquipment with a slot type instead of this, creates gc spam
     public Map<EquipmentSlot, ItemStack> getEquipment() {
         final Map<EquipmentSlot, ItemStack> equipment = new EnumMap<>(EquipmentSlot.class);
-        equipment.put(EquipmentSlot.HELMET, getEquipment(EquipmentSlot.HELMET));
-        equipment.put(EquipmentSlot.CHESTPLATE, getEquipment(EquipmentSlot.CHESTPLATE));
-        equipment.put(EquipmentSlot.LEGGINGS, getEquipment(EquipmentSlot.LEGGINGS));
-        equipment.put(EquipmentSlot.BOOTS, getEquipment(EquipmentSlot.BOOTS));
-        equipment.put(EquipmentSlot.OFF_HAND, getEquipment(EquipmentSlot.OFF_HAND));
-        equipment.put(EquipmentSlot.MAIN_HAND, getEquipment(EquipmentSlot.MAIN_HAND));
+        equipment.put(HELMET, getEquipment(HELMET));
+        equipment.put(CHESTPLATE, getEquipment(CHESTPLATE));
+        equipment.put(LEGGINGS, getEquipment(LEGGINGS));
+        equipment.put(BOOTS, getEquipment(BOOTS));
+        equipment.put(OFF_HAND, getEquipment(OFF_HAND));
+        equipment.put(MAIN_HAND, getEquipment(MAIN_HAND));
         return equipment;
     }
 
