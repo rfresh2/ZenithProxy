@@ -66,7 +66,7 @@ dependencies {
     val jdbiVersion = "3.45.1"
     shade("org.jdbi:jdbi3-core:$jdbiVersion")
     shade("org.jdbi:jdbi3-postgres:$jdbiVersion")
-    shade("com.google.guava:guava:33.2.0-jre")
+    shade("com.google.guava:guava:33.2.1-jre")
     shade("org.apache.commons:commons-collections4:4.4")
     shade("ch.qos.logback:logback-classic:1.5.6")
     shade("org.slf4j:slf4j-api:2.0.13")
@@ -100,7 +100,7 @@ dependencies {
     shade("de.themoep:minedown-adventure:1.7.2-SNAPSHOT")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
-    shade("org.redisson:redisson:3.30.0") {
+    shade("org.redisson:redisson:3.31.0") {
         exclude(group = "io.netty")
     }
     val fastutilVersion = "edaf36bfd3"
