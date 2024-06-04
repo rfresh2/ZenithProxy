@@ -754,7 +754,7 @@
 {
   "name":"com.zenith.module.impl.ActiveHours$ActiveTime",
   "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
+  "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"<init>","parameterTypes":["int","int"] }, {"name":"hour","parameterTypes":[] }, {"name":"minute","parameterTypes":[] }]
 },
 {
   "name":"com.zenith.network.client.ClientSession"
