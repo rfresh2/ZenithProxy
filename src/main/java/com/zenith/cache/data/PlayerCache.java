@@ -9,6 +9,7 @@ import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.inventory.InventoryCache;
 import com.zenith.util.math.MutableVec3i;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.ints.IntArrayFIFOQueue;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -83,8 +84,7 @@ public class PlayerCache implements CachedData {
     protected AtomicInteger actionId = new AtomicInteger(0);
     private static final MutableVec3i DEFAULT_SPAWN_POSITION = new MutableVec3i(0, 0, 0);
     protected MutableVec3i spawnPosition = DEFAULT_SPAWN_POSITION;
-    protected int lastTeleportReceived = 0;
-    protected int lastTeleportAccepted = 0;
+    protected IntArrayFIFOQueue teleportQueue = new IntArrayFIFOQueue();
 
     public PlayerCache(final EntityCache entityCache) {
         this.entityCache = entityCache;
@@ -125,8 +125,8 @@ public class PlayerCache implements CachedData {
             this.inventoryCache.reset();
             this.heldItemSlot = 0;
             this.doLimitedCrafting = false;
-            this.lastTeleportReceived = 0;
-            this.lastTeleportAccepted = 0;
+            this.teleportQueue.clear();
+            this.teleportQueue.trim();
         }
         this.spawnPosition = DEFAULT_SPAWN_POSITION;
         this.gameMode = null;

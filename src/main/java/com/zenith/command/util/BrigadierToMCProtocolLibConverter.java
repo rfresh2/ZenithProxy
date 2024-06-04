@@ -64,11 +64,12 @@ public class BrigadierToMCProtocolLibConverter {
     }
 
     private List<CommandNode> createEntries(final Object2IntMap<com.mojang.brigadier.tree.CommandNode<CommandContext>> nodes) {
-        ArrayList<CommandNode> objectArrayList = new ArrayList<>(nodes.size());
+        ArrayList<CommandNode> nodeList = new ArrayList<>(nodes.size());
+        for (int i = 0; i < nodes.size(); i++) nodeList.add(null);
         for (var entry : nodes.object2IntEntrySet()) {
-            objectArrayList.set(entry.getIntValue(), createEntry(entry.getKey(), nodes));
+            nodeList.set(entry.getIntValue(), createEntry(entry.getKey(), nodes));
         }
-        return objectArrayList;
+        return nodeList;
     }
 
     private CommandNode createEntry(
