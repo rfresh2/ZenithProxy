@@ -110,6 +110,7 @@ dependencies {
     shade("com.github.rfresh2.fastutil:long-object-maps:$fastutilVersion")
     shade("com.github.rfresh2.fastutil:int-int-maps:$fastutilVersion")
     shade("com.github.rfresh2.fastutil:reference-object-maps:$fastutilVersion")
+    shade("com.github.rfresh2.fastutil:int-queues:$fastutilVersion")
     shade("net.raphimc:ViaLoader:3.0.0-20240603.155811-3")
     shade("com.viaversion:viaversion:5.0.0-20240603.132511-36")
     shade("com.viaversion:viabackwards:5.0.0-20240603.183511-16")

@@ -652,22 +652,12 @@ public class PlayerSimulation extends Module {
     private boolean resyncTeleport() {
         if (!CONFIG.debug.teleportResync) return false;
         // can occur when a connected player disconnects in an unusual way like crashing
-        var lastAccepted = CACHE.getPlayerCache().getLastTeleportAccepted();
-        var lastReceived = CACHE.getPlayerCache().getLastTeleportReceived();
-        if (lastAccepted < lastReceived) {
-            warn("Detected teleport desync, resyncing. lastAccepted: {}, lastReceived: {}", lastAccepted, lastReceived);
-            sendClientPacketAsync(new ServerboundAcceptTeleportationPacket(lastAccepted + 1));
-            sendClientPacketAsync(new ServerboundMovePlayerPosRotPacket(
-                onGround,
-                x,
-                y,
-                z,
-                yaw,
-                pitch
-            ));
-            return true;
-        }
-        return false;
+        if (CACHE.getPlayerCache().getTeleportQueue().isEmpty()) return false;
+        int queuedTeleport = CACHE.getPlayerCache().getTeleportQueue().dequeueInt();
+        warn("Detected teleport desync, resyncing. queuedTeleport: {}, queueSize: {}", queuedTeleport, CACHE.getPlayerCache().getTeleportQueue().size());
+        sendClientPacketAsync(new ServerboundAcceptTeleportationPacket(queuedTeleport));
+        sendClientPacketAsync(new ServerboundMovePlayerPosRotPacket(onGround, x, y, z, yaw, pitch));
+        return true;
     }
 
 }
