@@ -151,9 +151,9 @@ public class DebugCommand extends Command {
                 Proxy.getInstance().kickDisconnect(MANUAL_DISCONNECT, null);
             }))
             .then(literal("teleportResync").then(argument("toggle", toggle()).executes(c -> {
-                CONFIG.debug.teleportResync = getToggle(c, "toggle");
+                CONFIG.debug.resyncTeleports = getToggle(c, "toggle");
                 c.getSource().getEmbed()
-                    .title("Teleport Resync " + toggleStrCaps(CONFIG.debug.teleportResync));
+                    .title("Teleport Resync " + toggleStrCaps(CONFIG.debug.resyncTeleports));
                 return 1;
             })))
             .then(literal("ncpStrictInventory").then(argument("toggle", toggle()).executes(c -> {
@@ -174,7 +174,7 @@ public class DebugCommand extends Command {
             .addField("Send Chunks Before Player Spawn", toggleStr(CONFIG.debug.sendChunksBeforePlayerSpawn), false)
             .addField("Binary Nbt Component Serializer", toggleStr(CONFIG.debug.binaryNbtComponentSerializer), false)
             .addField("Kick Disconnect", toggleStr(CONFIG.debug.kickDisconnect), false)
-            .addField("Teleport Resync", toggleStr(CONFIG.debug.teleportResync), false)
+            .addField("Teleport Resync", toggleStr(CONFIG.debug.resyncTeleports), false)
             .addField("NCP Strict Inventory", toggleStr(CONFIG.debug.ncpStrictInventory), false)
             .primaryColor();
     }
