@@ -24,10 +24,12 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                     TERMINAL_LOG.info("{} executed spectator command: {}", session.getProfileCache().getProfile().getName(), packet.getMessage());
                     handleCommandInput(packet.getMessage(), session);
                 } else {
+                    var chatMessage = ComponentSerializer.minedown("&c" + session.getProfileCache().getProfile().getName() + " > " + packet.getMessage() + "&r");
+                    SERVER_LOG.info("{}", ComponentSerializer.serializeJson(chatMessage));
                     var connections = Proxy.getInstance().getActiveConnections().getArray();
                     for (int i = 0; i < connections.length; i++) {
                         var connection = connections[i];
-                        connection.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&c" + session.getProfileCache().getProfile().getName() + " > " + packet.getMessage() + "&r"), false));
+                        connection.send(new ClientboundSystemChatPacket(chatMessage, false));
                     }
                 }
             });

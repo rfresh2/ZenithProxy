@@ -17,9 +17,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-import static com.zenith.Shared.CACHE_LOG;
-import static com.zenith.Shared.CONFIG;
-
 
 @Getter
 @Setter
@@ -61,19 +58,11 @@ public class TabListCache implements CachedData {
     }
 
     public Optional<PlayerListEntry> remove(@NonNull PlayerListEntry entry) {
-        PlayerListEntry removed = this.tablist.remove(entry.getProfile().getId());
-        if (removed == null && CONFIG.debug.server.cache.unknownplayers) {
-            CACHE_LOG.error("Could not remove player with UUID: {}", entry.getProfile().getId());
-        }
-        return Optional.ofNullable(removed);
+        return remove(entry.getProfileId());
     }
 
     public Optional<PlayerListEntry> remove(@NonNull UUID uuid) {
-        PlayerListEntry removed = this.tablist.remove(uuid);
-        if (removed == null && CONFIG.debug.server.cache.unknownplayers) {
-            CACHE_LOG.error("Could not remove player with UUID: {}", uuid);
-        }
-        return Optional.ofNullable(removed);
+        return Optional.ofNullable(this.tablist.remove(uuid));
     }
 
     public Optional<PlayerListEntry> get(UUID uuid) {

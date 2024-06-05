@@ -378,8 +378,6 @@ public final class Config {
             public final Cache cache = new Cache();
 
             public static final class Cache {
-                public boolean sendingmessages = true;
-                public boolean unknownplayers = false;
                 public boolean unlockAllRecipes = true;
             }
         }
@@ -394,7 +392,6 @@ public final class Config {
         public final Ping ping = new Ping();
         public final ServerViaVersion viaversion = new ServerViaVersion();
         public boolean verifyUsers = true;
-        public boolean kickPrevious = false;
         public String proxyIP = "localhost";
         public int queueStatusRefreshMinutes = 5; // how often to refresh queue lengths
         public boolean healthCheck = true;
@@ -411,13 +408,8 @@ public final class Config {
             public boolean allowSpectator = true;
             public String spectatorEntity = "cat";
             public boolean spectatorPublicChatEnabled = true;
-
             public ArrayList<PlayerEntry> whitelist = new ArrayList<>();
-            // todo: log spectator chats to discord relay and terminal
-            //  both from spectators and to spectators from controlling player
-            public boolean logSpectatorChats = false;
         }
-
 
         public static final class Bind {
             public String address = "0.0.0.0";
@@ -488,6 +480,7 @@ public final class Config {
         public boolean enable = true;
         public boolean logToDiscord = true;
     }
+
     public static final class InGameCommands {
         public boolean enable = true;
         public boolean slashCommands = true;
@@ -495,6 +488,7 @@ public final class Config {
         public String prefix = "!";
         public boolean logToDiscord = true;
     }
+
     public static final class Discord {
         public boolean enable = false;
         public String token = "";
@@ -526,6 +520,7 @@ public final class Config {
                     HTTP, SOCKS4, SOCKS5
                 }
         }
+
         public static final class QueueWarning {
             public boolean enabled = true;
             public int position = 10; // Queue position to send warning message at
@@ -565,7 +560,6 @@ public final class Config {
         public final Lock lock = new Lock();
 
         public static final class QueueWait {
-            // queue wait time monitor
             public boolean enabled = true;
         }
 
