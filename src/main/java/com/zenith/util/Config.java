@@ -227,7 +227,6 @@ public final class Config {
 
             public static final class Spook {
                 public boolean enabled = false;
-                public Long tickDelay = 0L;
                 public TargetingMode spookTargetingMode = TargetingMode.VISUAL_RANGE;
 
                 public enum TargetingMode {

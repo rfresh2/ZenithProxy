@@ -1,6 +1,5 @@
 package com.zenith.command.impl;
 
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
@@ -10,7 +9,6 @@ import com.zenith.discord.Embed;
 import com.zenith.module.impl.Spook;
 import com.zenith.util.Config;
 
-import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.MODULE;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
@@ -30,7 +28,6 @@ public class SpookCommand extends Command {
             """,
             asList(
                 "on/off",
-                "delay <ticks>",
                 "mode <visualRange/nearest>"
             )
         );
@@ -46,13 +43,6 @@ public class SpookCommand extends Command {
                     .title("Spook " + toggleStrCaps(CONFIG.client.extra.spook.enabled));
                 return OK;
             }))
-            .then(literal("delay").then(argument("delayTicks", integer(0, 1000)).executes(c -> {
-                final int delay = IntegerArgumentType.getInteger(c, "delayTicks");
-                CONFIG.client.extra.spook.tickDelay = (long) delay;
-                c.getSource().getEmbed()
-                    .title("Spook Delay Updated!");
-                return OK;
-            })))
             .then(literal("mode")
                       .then(literal("nearest").executes(c -> {
                           CONFIG.client.extra.spook.spookTargetingMode = Config.Client.Extra.Spook.TargetingMode.NEAREST;
@@ -70,7 +60,6 @@ public class SpookCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("Spook", toggleStr(CONFIG.client.extra.spook.enabled), false)
-            .addField("Delay", CONFIG.client.extra.spook.tickDelay + " tick(s)", false)
             .addField("Mode", CONFIG.client.extra.spook.spookTargetingMode.toString().toLowerCase(), false)
             .primaryColor();
     }
