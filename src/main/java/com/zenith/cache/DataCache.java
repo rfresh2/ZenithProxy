@@ -20,7 +20,8 @@ import lombok.Getter;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CACHE_LOG;
+import static com.zenith.Shared.SERVER_LOG;
 
 
 @Getter
@@ -65,14 +66,9 @@ public class DataCache {
 
     public static void sendCacheData(final Collection<CachedData> cacheData, final ServerConnection connection) {
         cacheData.forEach(data -> {
-            if (CONFIG.debug.server.cache.sendingmessages) {
-                String msg = data.getSendingMessage();
-                if (msg == null)    {
-                    SERVER_LOG.debug("Sending data to client {}", data.getClass().getCanonicalName());
-                } else {
-                    SERVER_LOG.debug(msg);
-                }
-            }
+            String msg = data.getSendingMessage();
+            if (msg == null) SERVER_LOG.debug("Sending data to client {}", data.getClass().getSimpleName());
+            else SERVER_LOG.debug(msg);
             data.getPackets(connection::send);
         });
     }

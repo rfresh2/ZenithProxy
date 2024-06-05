@@ -12,6 +12,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
+import static com.zenith.Shared.SERVER_LOG;
 import static java.util.Arrays.asList;
 
 public class SendMessageCommand extends Command {
@@ -34,11 +35,13 @@ public class SendMessageCommand extends Command {
                               var session = Proxy.getInstance().getCurrentPlayer().get();
                               if (session == null) return ERROR;
                               var senderName = session.getProfileCache().getProfile().getName();
+                              var chatMessage = ComponentSerializer.minedown("&c" + senderName + " > " + message + "&r");
                               var connections = Proxy.getInstance().getActiveConnections().getArray();
                               for (int i = 0; i < connections.length; i++) {
                                   var connection = connections[i];
                                   connection.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&c" + senderName + " > " + message + "&r"), false));
                               }
+                              SERVER_LOG.info("{}", ComponentSerializer.serializeJson(chatMessage));
                               c.getSource().setSensitiveInput(true);
                               c.getSource().setNoOutput(true);
                           } else {
