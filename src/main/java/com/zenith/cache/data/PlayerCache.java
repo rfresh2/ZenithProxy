@@ -128,6 +128,10 @@ public class PlayerCache implements CachedData {
             this.teleportQueue.clear();
             this.teleportQueue.trim();
         }
+        if (type == CacheResetType.LOGIN) {
+            this.teleportQueue.clear();
+            this.teleportQueue.trim();
+        }
         this.spawnPosition = DEFAULT_SPAWN_POSITION;
         this.gameMode = null;
         this.thePlayer.setHealth(20.0f);

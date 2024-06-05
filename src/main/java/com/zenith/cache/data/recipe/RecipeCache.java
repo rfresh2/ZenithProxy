@@ -94,12 +94,10 @@ public class RecipeCache implements CachedData {
         switch (packet.getAction()) {
             case INIT -> {
                 for (int i = 0; i < packet.getRecipeIdsToChange().length; i++) {
-                    var id = packet.getRecipeIdsToChange()[i];
-                    this.knownRecipes.add(id);
+                    this.knownRecipes.add(packet.getRecipeIdsToChange()[i]);
                 }
                 for (int i = 0; i < packet.getRecipeIdsToInit().length; i++) {
-                    var id = packet.getRecipeIdsToInit()[i];
-                    this.displayedRecipes.add(id);
+                    this.displayedRecipes.add(packet.getRecipeIdsToInit()[i]);
                 }
             }
             case ADD -> {
@@ -111,8 +109,7 @@ public class RecipeCache implements CachedData {
             }
             case REMOVE -> {
                 for (int i = 0; i < packet.getRecipeIdsToChange().length; i++) {
-                    var id = packet.getRecipeIdsToChange()[i];
-                    this.displayedRecipes.remove(id);
+                    this.displayedRecipes.remove(packet.getRecipeIdsToChange()[i]);
                 }
             }
         }
@@ -125,4 +122,10 @@ public class RecipeCache implements CachedData {
         this.openSmokingBook = packet.isOpenSmokingBook();
         this.activateSmokingFiltering = packet.isActivateSmokingFiltering();
     }
+
+    @Override
+    public String getSendingMessage()  {
+        return String.format("Sending %d recipes", this.recipeRegistry.size());
+    }
+
 }

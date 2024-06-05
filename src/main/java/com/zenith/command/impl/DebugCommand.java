@@ -62,8 +62,8 @@ public class DebugCommand extends Command {
                                     if (toggle) {
                                         CONFIG.debug.packetLog.clientPacketLog.received = true;
                                         CONFIG.debug.packetLog.clientPacketLog.receivedBody = true;
-                                        CONFIG.debug.packetLog.clientPacketLog.preSent = true;
                                         CONFIG.debug.packetLog.clientPacketLog.postSent = true;
+                                        CONFIG.debug.packetLog.clientPacketLog.postSentBody = true;
                                     } else {
                                         CONFIG.debug.packetLog.clientPacketLog.received = false;
                                         CONFIG.debug.packetLog.clientPacketLog.postSent = false;
@@ -79,8 +79,8 @@ public class DebugCommand extends Command {
                                     if (toggle) {
                                         CONFIG.debug.packetLog.serverPacketLog.received = true;
                                         CONFIG.debug.packetLog.serverPacketLog.receivedBody = true;
-                                        CONFIG.debug.packetLog.serverPacketLog.preSent = true;
                                         CONFIG.debug.packetLog.serverPacketLog.postSent = true;
+                                        CONFIG.debug.packetLog.serverPacketLog.postSentBody = true;
                                     } else {
                                         CONFIG.debug.packetLog.serverPacketLog.received = false;
                                         CONFIG.debug.packetLog.serverPacketLog.postSent = false;
