@@ -53,4 +53,10 @@ public class StatisticsCache implements CachedData {
             this.progress.clear();
         }
     }
+
+    @Override
+    public String getSendingMessage()  {
+        return String.format("Sending: %d advancements and %d statistics", this.advancements.size(), this.statistics.size());
+    }
+
 }

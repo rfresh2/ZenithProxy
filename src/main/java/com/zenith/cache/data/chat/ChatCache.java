@@ -35,4 +35,10 @@ public class ChatCache implements CachedData {
             }
         }
     }
+
+    @Override
+    public String getSendingMessage()  {
+        return String.format("Sending %s server commands", this.commandNodes.length);
+    }
+
 }

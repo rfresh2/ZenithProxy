@@ -28,4 +28,10 @@ public class ServerProfileCache implements CachedData {
             this.profile = null;
         }
     }
+
+    @Override
+    public String getSendingMessage()  {
+        return String.format("Sending profile: %s", profile.toString());
+    }
+
 }
