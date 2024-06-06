@@ -318,7 +318,7 @@ public class Authenticator {
 
     private static HttpClient createHttpClient() {
         var client = MinecraftAuth.createHttpClient();
-        if (CONFIG.authentication.useClientConnectionProxy && CONFIG.client.connectionProxy.enabled) {
+        if (CONFIG.authentication.useClientConnectionProxy) {
             var type = switch (CONFIG.client.connectionProxy.type) {
                 case SOCKS5 -> ProxyType.SOCKS5;
                 case SOCKS4 -> ProxyType.SOCKS4;
