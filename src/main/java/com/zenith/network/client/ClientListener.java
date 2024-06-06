@@ -103,6 +103,7 @@ public class ClientListener implements SessionListener {
             var connection = connections[i];
             connection.disconnect(reason);
         }
+        Proxy.getInstance().getCurrentPlayer().set(null);
     }
 
     @Override
