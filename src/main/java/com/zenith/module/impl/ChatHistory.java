@@ -5,8 +5,8 @@ import com.zenith.event.proxy.ProxyClientLoggedInEvent;
 import com.zenith.event.proxy.ProxySpectatorLoggedInEvent;
 import com.zenith.event.proxy.ServerChatReceivedEvent;
 import com.zenith.module.Module;
+import com.zenith.util.CircularFifoQueue;
 import net.kyori.adventure.text.Component;
-import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 
 import java.time.Instant;

@@ -1,7 +1,7 @@
 package com.zenith.feature.tps;
 
 import com.google.common.primitives.Floats;
-import org.apache.commons.collections4.queue.CircularFifoQueue;
+import com.zenith.util.CircularFifoQueue;
 
 public class TPSCalculator {
 
