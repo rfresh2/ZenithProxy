@@ -17,10 +17,6 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerSpawnIn
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundServerDataPacket;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
@@ -32,7 +28,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
         ServerConnection connection = (ServerConnection) session;
 
         if (!Wait.waitUntil(() -> Proxy.getInstance().isConnected()
-                        && (Proxy.getInstance().getConnectTime() != null && Proxy.getInstance().getConnectTime().isBefore(Instant.now().minus(Duration.of(3, ChronoUnit.SECONDS))) || Proxy.getInstance().isInQueue())
+                        && (Proxy.getInstance().getOnlineTimeSeconds() > 3 || Proxy.getInstance().isInQueue())
                         && CACHE.getPlayerCache().getEntityId() != -1
                         && nonNull(CACHE.getProfileCache().getProfile())
                         && nonNull(CACHE.getPlayerCache().getGameMode())

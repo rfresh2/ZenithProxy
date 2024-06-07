@@ -16,7 +16,6 @@ import org.geysermc.mcprotocollib.protocol.data.status.handler.ServerInfoBuilder
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -113,7 +112,7 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
         if (Proxy.getInstance().isConnected()) {
             sb
                 .append(getMotdStatus())
-                .append("\n&bOnline for:&r &f[&r").append(getOnlineTime()).append("&f]&r");
+                .append("\n&bOnline for:&r &f[&r").append(Proxy.getInstance().getOnlineTimeString()).append("&f]&r");
         } else sb.append("&cDisconnected&r");
         return ComponentSerializer.minedown(sb.toString());
     }
@@ -140,10 +139,4 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
             return "&aIn Game&r";
         }
     }
-
-    private String getOnlineTime() {
-        long onlineSeconds = Instant.now().getEpochSecond() - Proxy.getInstance().getConnectTime().getEpochSecond();
-        return Queue.getEtaStringFromSeconds(onlineSeconds);
-    }
-
 }

@@ -42,6 +42,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundSoundPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -83,12 +84,12 @@ public class Proxy {
     protected final FastArrayList<ServerConnection> activeConnections = new FastArrayList<>(ServerConnection.class);
     private boolean inQueue = false;
     private int queuePosition = 0;
-    @Setter private Instant connectTime;
+    @Setter @Nullable private Instant connectTime;
     private Instant disconnectTime = Instant.now();
     private Optional<Boolean> isPrio = Optional.empty();
     private Optional<Boolean> isPrioBanned = Optional.empty();
     @Getter private final AtomicBoolean loggingIn = new AtomicBoolean(false);
-    @Setter private AutoUpdater autoUpdater;
+    @Setter @NotNull private AutoUpdater autoUpdater = NoOpAutoUpdater.INSTANCE;
     private LanBroadcaster lanBroadcaster;
     // might move to config and make the user deal with it when it changes
     private static final Duration twoB2tTimeLimit = Duration.ofHours(6);
@@ -156,7 +157,7 @@ public class Proxy {
             MinecraftCodecHelper.useBinaryNbtComponentSerializer = CONFIG.debug.binaryNbtComponentSerializer;
             MinecraftConstants.CHUNK_SECTION_COUNT_PROVIDER = CACHE.getSectionCountProvider();
             this.tcpManager = new TcpConnectionManager();
-            this.startServer();
+            startServer();
             CACHE.reset(CacheResetType.FULL);
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
@@ -166,25 +167,31 @@ public class Proxy {
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon)
                 EXECUTOR.submit(this::updateFavicon);
             boolean connected = false;
-            if (CONFIG.client.autoConnect && !this.isConnected()) {
-                this.connectAndCatchExceptions();
+            if (CONFIG.client.autoConnect && !isConnected()) {
+                connectAndCatchExceptions();
                 connected = true;
             }
             if (!connected && CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate) {
                 CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
                 saveConfigAsync();
-                if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect && !this.isConnected()) {
-                    this.connectAndCatchExceptions();
+                if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect && !isConnected()) {
+                    connectAndCatchExceptions();
                     connected = true;
                 }
             }
             if (LAUNCH_CONFIG.auto_update) {
-                if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new NoOpAutoUpdater();
-                else autoUpdater = new RestAutoUpdater();
+                autoUpdater = LAUNCH_CONFIG.release_channel.equals("git")
+                    ? NoOpAutoUpdater.INSTANCE
+                    : new RestAutoUpdater();
                 autoUpdater.start();
                 DEFAULT_LOG.info("Started AutoUpdater");
             }
             DEFAULT_LOG.info("ZenithProxy started!");
+            if (LAUNCH_CONFIG.release_channel.endsWith(".pre")) {
+                DEFAULT_LOG.warn("You are currently using a ZenithProxy prerelease");
+                DEFAULT_LOG.warn("Prereleases include experiments that may contain bugs and are not always updated with fixes");
+                DEFAULT_LOG.warn("Switch to a stable release with the `channel` command");
+            }
             if (!connected)
                 DEFAULT_LOG.info("Use the `connect` command to log in!");
             Wait.waitSpinLoop();
@@ -585,7 +592,7 @@ public class Proxy {
                 || !isOnlineOn2b2tForAtLeastDuration(twoB2tTimeLimit.minusMinutes(10L))
             ) return;
             final ServerConnection playerConnection = this.currentPlayer.get();
-            final Duration durationUntilKick = twoB2tTimeLimit.minus(Duration.between(this.connectTime, Instant.now()));
+            final Duration durationUntilKick = twoB2tTimeLimit.minus(Duration.ofSeconds(Proxy.getInstance().getOnlineTimeSeconds()));
             if (durationUntilKick.isNegative()) return; // sanity check just in case 2b's plugin changes
             var actionBarPacket = new ClientboundSetActionBarTextPacket(
                 ComponentSerializer.minedown((durationUntilKick.toMinutes() <= 3 ? "&c" : "&9") + twoB2tTimeLimit.toHours() + "hr kick in: " + durationUntilKick.toMinutes() + "m"));
@@ -611,6 +618,17 @@ public class Proxy {
 
     public boolean isOn2b2t() {
         return CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org");
+    }
+
+    public long getOnlineTimeSeconds() {
+        var proxyConnectTime = this.connectTime;
+        return proxyConnectTime != null
+            ? TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) - proxyConnectTime.getEpochSecond()
+            : 0L;
+    }
+
+    public String getOnlineTimeString() {
+        return Queue.getEtaStringFromSeconds(getOnlineTimeSeconds());
     }
 
     public void handleDisconnectEvent(DisconnectEvent event) {

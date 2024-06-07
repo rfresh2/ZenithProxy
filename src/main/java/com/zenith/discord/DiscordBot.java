@@ -49,10 +49,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -154,6 +151,17 @@ public class DiscordBot {
                 DISCORD_LOG.error("Failed processing discord command: {}", message, e);
             }
         });
+        if (LAUNCH_CONFIG.release_channel.endsWith(".pre")) {
+            sendEmbedMessage(Embed.builder()
+                                 .title("ZenithProxy Prerelease")
+                                 .description("""
+                                              You are currently using a ZenithProxy prerelease
+                                              
+                                              Prereleases include experiments that may contain bugs and are not always updated with fixes
+                                              
+                                              Switch to a stable release with the `channel` command
+                                              """));
+        }
     }
 
     public synchronized void start() {
@@ -277,9 +285,8 @@ public class DiscordBot {
         try {
             if (LAUNCH_CONFIG.auto_update) {
                 final AutoUpdater autoUpdater = Proxy.getInstance().getAutoUpdater();
-                if (autoUpdater != null
-                    && autoUpdater.getUpdateAvailable()
-                    && Math.random() < 0.25
+                if (autoUpdater.getUpdateAvailable()
+                    && ThreadLocalRandom.current().nextDouble() < 0.25
                 ) {
                     this.client.updatePresence(getUpdateAvailablePresence(autoUpdater))
                         .block(BLOCK_TIMEOUT);
@@ -317,9 +324,8 @@ public class DiscordBot {
     }
 
     private ClientPresence getOnlinePresence() {
-        long onlineSeconds = Instant.now().getEpochSecond() - Proxy.getInstance().getConnectTime().getEpochSecond();
         return ClientPresence.of(Status.ONLINE, ClientActivity.custom(
-      (Proxy.getInstance().isOn2b2t() ? "2b2t" : CONFIG.client.server.address) + " [" + Queue.getEtaStringFromSeconds(onlineSeconds) + "]"));
+      (Proxy.getInstance().isOn2b2t() ? "2b2t" : CONFIG.client.server.address) + " [" + Proxy.getInstance().getOnlineTimeString() + "]"));
     }
 
     private void handleProxyUpdateComplete() {

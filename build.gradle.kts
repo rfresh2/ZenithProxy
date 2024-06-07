@@ -67,7 +67,6 @@ dependencies {
     shade("org.jdbi:jdbi3-core:$jdbiVersion")
     shade("org.jdbi:jdbi3-postgres:$jdbiVersion")
     shade("com.google.guava:guava:33.2.1-jre")
-    shade("org.apache.commons:commons-collections4:4.4")
     shade("ch.qos.logback:logback-classic:1.5.6")
     shade("org.slf4j:slf4j-api:2.0.13")
     shade("org.slf4j:jul-to-slf4j:2.0.13")

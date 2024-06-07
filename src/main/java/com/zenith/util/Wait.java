@@ -2,7 +2,7 @@ package com.zenith.util;
 
 import lombok.SneakyThrows;
 
-import java.time.Instant;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
@@ -29,14 +29,18 @@ public class Wait {
     }
 
     public static boolean waitUntil(final Supplier<Boolean> conditionSupplier, int secondsToWait) {
-        final var beforeTime = Instant.now().getEpochSecond();
-        while (!conditionSupplier.get() && Instant.now().getEpochSecond() - beforeTime < secondsToWait) {
+        final var beforeTime = getEpochSecond();
+        while (!conditionSupplier.get() && getEpochSecond() - beforeTime < secondsToWait) {
             Wait.waitMs(50);
         }
         return conditionSupplier.get();
     }
 
     public static void waitRandomMs(final int ms) {
-        Wait.waitMs((int) (Math.random() * ms));
+        Wait.waitMs((int) (ThreadLocalRandom.current().nextDouble(ms)));
+    }
+
+    public static long getEpochSecond() {
+        return TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
     }
 }

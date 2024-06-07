@@ -7,9 +7,6 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.event.proxy.UpdateStartEvent;
-import com.zenith.feature.autoupdater.AutoUpdater;
-
-import java.util.Optional;
 
 import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
@@ -29,7 +26,7 @@ public class UpdateCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("update").requires(Command::validateAccountOwner).executes(c -> {
             try {
-                EVENT_BUS.post(new UpdateStartEvent(Optional.ofNullable(Proxy.getInstance().getAutoUpdater()).flatMap(AutoUpdater::getNewVersion)));
+                EVENT_BUS.post(new UpdateStartEvent(Proxy.getInstance().getAutoUpdater().getNewVersion()));
                 CONFIG.discord.isUpdating = true;
                 if (Proxy.getInstance().isConnected()) {
                     CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
@@ -47,7 +44,7 @@ public class UpdateCommand extends Command {
         }).then(literal("c").executes(c -> {
             CONFIG.discord.isUpdating = true;
             CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
-            EVENT_BUS.post(new UpdateStartEvent(Optional.ofNullable(Proxy.getInstance().getAutoUpdater()).flatMap(AutoUpdater::getNewVersion)));
+            EVENT_BUS.post(new UpdateStartEvent(Proxy.getInstance().getAutoUpdater().getNewVersion()));
             Proxy.getInstance().stop();
         }));
     }

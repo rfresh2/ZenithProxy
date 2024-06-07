@@ -45,7 +45,7 @@ public class AutoEat extends AbstractInventoryModule {
     public void handleClientTick(final ClientBotTick e) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && playerHealthBelowThreshold()
-                && Instant.now().minus(Duration.ofSeconds(10)).isAfter(Proxy.getInstance().getConnectTime())) {
+                && Proxy.getInstance().getOnlineTimeSeconds() > 10) {
             if (delay > 0) {
                 delay--;
                 return;
