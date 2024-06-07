@@ -42,6 +42,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundSoundPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -88,7 +89,7 @@ public class Proxy {
     private Optional<Boolean> isPrio = Optional.empty();
     private Optional<Boolean> isPrioBanned = Optional.empty();
     @Getter private final AtomicBoolean loggingIn = new AtomicBoolean(false);
-    @Setter private AutoUpdater autoUpdater;
+    @Setter @NotNull private AutoUpdater autoUpdater = NoOpAutoUpdater.INSTANCE;
     private LanBroadcaster lanBroadcaster;
     // might move to config and make the user deal with it when it changes
     private static final Duration twoB2tTimeLimit = Duration.ofHours(6);
@@ -156,7 +157,7 @@ public class Proxy {
             MinecraftCodecHelper.useBinaryNbtComponentSerializer = CONFIG.debug.binaryNbtComponentSerializer;
             MinecraftConstants.CHUNK_SECTION_COUNT_PROVIDER = CACHE.getSectionCountProvider();
             this.tcpManager = new TcpConnectionManager();
-            this.startServer();
+            startServer();
             CACHE.reset(CacheResetType.FULL);
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
@@ -166,21 +167,22 @@ public class Proxy {
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon)
                 EXECUTOR.submit(this::updateFavicon);
             boolean connected = false;
-            if (CONFIG.client.autoConnect && !this.isConnected()) {
-                this.connectAndCatchExceptions();
+            if (CONFIG.client.autoConnect && !isConnected()) {
+                connectAndCatchExceptions();
                 connected = true;
             }
             if (!connected && CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate) {
                 CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = false;
                 saveConfigAsync();
-                if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect && !this.isConnected()) {
-                    this.connectAndCatchExceptions();
+                if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect && !isConnected()) {
+                    connectAndCatchExceptions();
                     connected = true;
                 }
             }
             if (LAUNCH_CONFIG.auto_update) {
-                if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new NoOpAutoUpdater();
-                else autoUpdater = new RestAutoUpdater();
+                autoUpdater = LAUNCH_CONFIG.release_channel.equals("git")
+                    ? NoOpAutoUpdater.INSTANCE
+                    : new RestAutoUpdater();
                 autoUpdater.start();
                 DEFAULT_LOG.info("Started AutoUpdater");
             }

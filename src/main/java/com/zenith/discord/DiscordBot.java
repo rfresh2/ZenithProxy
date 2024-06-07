@@ -49,10 +49,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -288,9 +285,8 @@ public class DiscordBot {
         try {
             if (LAUNCH_CONFIG.auto_update) {
                 final AutoUpdater autoUpdater = Proxy.getInstance().getAutoUpdater();
-                if (autoUpdater != null
-                    && autoUpdater.getUpdateAvailable()
-                    && Math.random() < 0.25
+                if (autoUpdater.getUpdateAvailable()
+                    && ThreadLocalRandom.current().nextDouble() < 0.25
                 ) {
                     this.client.updatePresence(getUpdateAvailablePresence(autoUpdater))
                         .block(BLOCK_TIMEOUT);

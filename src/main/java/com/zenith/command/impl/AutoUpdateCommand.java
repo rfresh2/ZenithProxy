@@ -8,8 +8,6 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.feature.autoupdater.AutoUpdater;
-import com.zenith.feature.autoupdater.NoOpAutoUpdater;
-import com.zenith.feature.autoupdater.RestAutoUpdater;
 
 import static com.zenith.Shared.LAUNCH_CONFIG;
 import static com.zenith.Shared.saveLaunchConfig;
@@ -43,16 +41,8 @@ public class AutoUpdateCommand extends Command {
                 final boolean toggle = getToggle(c, "toggle");
                 LAUNCH_CONFIG.auto_update = toggle;
                 AutoUpdater autoUpdater = Proxy.getInstance().getAutoUpdater();
-                if (toggle) {
-                    if (autoUpdater == null) {
-                        if (LAUNCH_CONFIG.release_channel.equals("git")) autoUpdater = new NoOpAutoUpdater();
-                        else autoUpdater = new RestAutoUpdater();
-                        Proxy.getInstance().setAutoUpdater(autoUpdater);
-                    }
-                    autoUpdater.start();
-                } else {
-                    if (autoUpdater != null) autoUpdater.stop();
-                }
+                if (toggle) autoUpdater.start();
+                else autoUpdater.stop();
                 LAUNCH_CONFIG.auto_update = toggle;
                 saveLaunchConfig();
                 c.getSource().getEmbed().title("AutoUpdater " + toggleStrCaps(toggle));
