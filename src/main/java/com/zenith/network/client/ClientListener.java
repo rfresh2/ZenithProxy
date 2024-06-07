@@ -19,8 +19,6 @@ import org.geysermc.mcprotocollib.protocol.packet.handshake.serverbound.ClientIn
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.time.Instant;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static com.zenith.Shared.*;
@@ -117,9 +115,7 @@ public class ClientListener implements SessionListener {
             reasonStr = isNull(reason) ? "Disconnected" : ComponentSerializer.serializeJson(reason);
         }
         CLIENT_LOG.info("Disconnected: {}", reasonStr);
-        var connectTime = Optional.ofNullable(Proxy.getInstance().getConnectTime()).orElse(Instant.now());
-        var disconnectTime = Instant.now();
-        var onlineDuration = Duration.between(connectTime, disconnectTime);
+        var onlineDuration = Duration.ofSeconds(Proxy.getInstance().getOnlineTimeSeconds());
         // stop processing packets before we reset the client cache to avoid race conditions
         this.session.getClientEventLoop().shutdownGracefully(0L, 15L, TimeUnit.SECONDS).awaitUninterruptibly();
         EVENT_BUS.post(new DisconnectEvent(reasonStr, onlineDuration, Proxy.getInstance().isInQueue(), Proxy.getInstance().getQueuePosition()));

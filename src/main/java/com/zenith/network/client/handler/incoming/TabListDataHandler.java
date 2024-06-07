@@ -59,9 +59,7 @@ public class TabListDataHandler implements ClientEventLoopPacketHandler<Clientbo
                     // can occur if we get kicked to queue in certain cases like if the main server restarts
                     // resetting connect time to calculate queue duration correctly
                     CLIENT_LOG.info("Detected that the client was kicked to queue. Was online for {}",
-                                    formatDuration(Duration.between(
-                                        Proxy.getInstance().getConnectTime(),
-                                        Instant.now())));
+                                    formatDuration(Duration.ofSeconds(Proxy.getInstance().getOnlineTimeSeconds())));
                     Proxy.getInstance().setConnectTime(Instant.now());
                 }
                 EVENT_BUS.postAsync(new StartQueueEvent());
@@ -73,7 +71,7 @@ public class TabListDataHandler implements ClientEventLoopPacketHandler<Clientbo
             session.setInQueue(false);
             session.setLastQueuePosition(Integer.MAX_VALUE);
             // need to calculate and store duration here as proxy connect time gets reset in the queue complete event handler
-            queueDuration = Optional.of(Duration.between(Proxy.getInstance().getConnectTime(), Instant.now()));
+            queueDuration = Optional.of(Duration.ofSeconds(Proxy.getInstance().getOnlineTimeSeconds()));
             EVENT_BUS.postAsync(new QueueCompleteEvent(queueDuration.get()));
         } else if (!session.isOnline()) {
             if (headerContentLineBreakSplit.length == 1 && headerContentLineBreakSplit[0].isEmpty()) return; // can occur right after game profile packet received

@@ -1,14 +1,11 @@
 package com.zenith.network.server.handler.shared.outgoing;
 
 import com.zenith.Proxy;
-import com.zenith.feature.queue.Queue;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
-
-import java.time.Instant;
 
 import static com.zenith.Shared.*;
 
@@ -38,16 +35,11 @@ public class ServerTablistDataOutgoingHandler implements PacketHandler<Clientbou
                 .append(Component.text()
                          .appendNewline()
                          .append(ComponentSerializer.minedown(
-                             "&9Online: &r&b&l" + getOnlineTime() + " &r&7-&r &r&9TPS: &r&b&l" +
+                             "&9Online: &r&b&l" + Proxy.getInstance().getOnlineTimeString() + " &r&7-&r &r&9TPS: &r&b&l" +
                                  TPS.getTPS() + "&r")).build());
         } catch (final Exception e) {
             SERVER_LOG.warn("Failed injecting proxy info to tablist footer", e);
             return footer;
         }
-    }
-
-    public String getOnlineTime() {
-        long onlineSeconds = Instant.now().getEpochSecond() - Proxy.getInstance().getConnectTime().getEpochSecond();
-        return Queue.getEtaStringFromSeconds(onlineSeconds);
     }
 }

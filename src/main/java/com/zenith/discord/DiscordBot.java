@@ -328,9 +328,8 @@ public class DiscordBot {
     }
 
     private ClientPresence getOnlinePresence() {
-        long onlineSeconds = Instant.now().getEpochSecond() - Proxy.getInstance().getConnectTime().getEpochSecond();
         return ClientPresence.of(Status.ONLINE, ClientActivity.custom(
-      (Proxy.getInstance().isOn2b2t() ? "2b2t" : CONFIG.client.server.address) + " [" + Queue.getEtaStringFromSeconds(onlineSeconds) + "]"));
+      (Proxy.getInstance().isOn2b2t() ? "2b2t" : CONFIG.client.server.address) + " [" + Proxy.getInstance().getOnlineTimeString() + "]"));
     }
 
     private void handleProxyUpdateComplete() {

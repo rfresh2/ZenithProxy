@@ -11,7 +11,6 @@ import com.zenith.feature.queue.QueueStatus;
 import com.zenith.util.math.MathHelper;
 
 import java.time.Duration;
-import java.time.Instant;
 
 import static java.util.Arrays.asList;
 
@@ -42,7 +41,7 @@ public class QueueStatusCommand extends Command {
                 .primaryColor();
             if (inQueue) {
                 final int queuePosition = Proxy.getInstance().getQueuePosition();
-                final Duration currentWaitDuration = Duration.between(Proxy.getInstance().getConnectTime(), Instant.now());
+                final Duration currentWaitDuration = Duration.ofSeconds(Proxy.getInstance().getOnlineTimeSeconds());
                 c.getSource().getEmbed()
                     .addField("Position", queuePosition + " [ETA: " + Queue.getQueueEta(queuePosition) + "]", false)
                     .addField("Current Wait Duration", MathHelper.formatDuration(currentWaitDuration), false);

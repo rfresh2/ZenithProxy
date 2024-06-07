@@ -83,7 +83,7 @@ public class Proxy {
     protected final FastArrayList<ServerConnection> activeConnections = new FastArrayList<>(ServerConnection.class);
     private boolean inQueue = false;
     private int queuePosition = 0;
-    @Setter private Instant connectTime;
+    @Setter @Nullable private Instant connectTime;
     private Instant disconnectTime = Instant.now();
     private Optional<Boolean> isPrio = Optional.empty();
     private Optional<Boolean> isPrioBanned = Optional.empty();
@@ -590,7 +590,7 @@ public class Proxy {
                 || !isOnlineOn2b2tForAtLeastDuration(twoB2tTimeLimit.minusMinutes(10L))
             ) return;
             final ServerConnection playerConnection = this.currentPlayer.get();
-            final Duration durationUntilKick = twoB2tTimeLimit.minus(Duration.between(this.connectTime, Instant.now()));
+            final Duration durationUntilKick = twoB2tTimeLimit.minus(Duration.ofSeconds(Proxy.getInstance().getOnlineTimeSeconds()));
             if (durationUntilKick.isNegative()) return; // sanity check just in case 2b's plugin changes
             var actionBarPacket = new ClientboundSetActionBarTextPacket(
                 ComponentSerializer.minedown((durationUntilKick.toMinutes() <= 3 ? "&c" : "&9") + twoB2tTimeLimit.toHours() + "hr kick in: " + durationUntilKick.toMinutes() + "m"));
@@ -616,6 +616,17 @@ public class Proxy {
 
     public boolean isOn2b2t() {
         return CONFIG.client.server.address.toLowerCase().endsWith("2b2t.org");
+    }
+
+    public long getOnlineTimeSeconds() {
+        var proxyConnectTime = this.connectTime;
+        return proxyConnectTime != null
+            ? TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) - proxyConnectTime.getEpochSecond()
+            : 0L;
+    }
+
+    public String getOnlineTimeString() {
+        return Queue.getEtaStringFromSeconds(getOnlineTimeSeconds());
     }
 
     public void handleDisconnectEvent(DisconnectEvent event) {

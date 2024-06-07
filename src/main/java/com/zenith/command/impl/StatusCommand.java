@@ -91,13 +91,9 @@ public class StatusCommand extends Command {
     }
 
     public String getOnlineTime() {
-        if (Proxy.getInstance().isConnected()) {
-            long secondsOnline = Instant.now().getEpochSecond() - Proxy.getInstance().getConnectTime().getEpochSecond();
-            // hours:minutes:seconds
-            return Queue.getEtaStringFromSeconds(secondsOnline);
-        } else {
-            return "Not Online!";
-        }
+        return Proxy.getInstance().isConnected()
+            ? Proxy.getInstance().getOnlineTimeString()
+            : "Not Online!";
     }
 
     @Override
