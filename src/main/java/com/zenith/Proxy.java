@@ -185,6 +185,11 @@ public class Proxy {
                 DEFAULT_LOG.info("Started AutoUpdater");
             }
             DEFAULT_LOG.info("ZenithProxy started!");
+            if (LAUNCH_CONFIG.release_channel.endsWith(".pre")) {
+                DEFAULT_LOG.warn("You are currently using a ZenithProxy prerelease");
+                DEFAULT_LOG.warn("Prereleases include experiments that may contain bugs and are not always updated with fixes");
+                DEFAULT_LOG.warn("Switch to a stable release with the `channel` command");
+            }
             if (!connected)
                 DEFAULT_LOG.info("Use the `connect` command to log in!");
             Wait.waitSpinLoop();
