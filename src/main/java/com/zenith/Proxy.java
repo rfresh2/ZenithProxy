@@ -348,7 +348,6 @@ public class Proxy {
         if (Objects.equals(address, "connect.2b2t.org"))
             this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         this.client.setReadTimeout(CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : 0);
-        this.client.setFlag(BuiltinFlags.PRINT_DEBUG, true);
         this.client.setFlag(MinecraftConstants.CLIENT_CHANNEL_INITIALIZER, ZenithClientChannelInitializer.FACTORY);
         this.client.connect(true);
     }

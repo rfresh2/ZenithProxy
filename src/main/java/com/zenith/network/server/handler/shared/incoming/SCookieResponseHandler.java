@@ -14,11 +14,7 @@ public class SCookieResponseHandler implements PacketHandler<ServerboundCookieRe
     @Override
     public ServerboundCookieResponsePacket apply(final ServerboundCookieResponsePacket packet, final ServerConnection session) {
         if (session.isTransferring() && !session.isConfigured()) {
-            if (!packet.getKey().startsWith("minecraft:")) {
-                SERVER_LOG.debug("Received unexpected cookie response: {}", packet.getKey());
-                return null;
-            }
-            var cookieKey = packet.getKey().split("minecraft:")[1];
+            var cookieKey = packet.getKey();
             session.getCookieCache().handleCookieResponse(cookieKey, packet.getPayload());
 
             if (session.getCookieCache().receivedAllCookieResponses()) {

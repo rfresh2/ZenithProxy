@@ -17,6 +17,7 @@ import it.unimi.dsi.fastutil.longs.LongArrayList;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import net.kyori.adventure.key.Key;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodecHelper;
@@ -66,14 +67,14 @@ public class ChunkCache implements CachedData {
     protected final Long2ObjectOpenHashMap<Chunk> cache = new Long2ObjectOpenHashMap<>();
     protected @Nullable DimensionData currentDimension = null;
     protected Int2ObjectOpenHashMap<DimensionData> dimensionRegistry = new Int2ObjectOpenHashMap<>();
-    protected List<String> worldNames = new ArrayList<>();
+    protected List<Key> worldNames = new ArrayList<>();
     protected int serverViewDistance = -1;
     protected int serverSimulationDistance = -1;
     protected MinecraftCodecHelper codec;
     protected int centerX;
     protected int centerZ;
     protected int dimensionType;
-    protected String worldName;
+    protected Key worldName;
     protected long hashedSeed;
     protected boolean debug;
     protected boolean flat;
@@ -97,8 +98,8 @@ public class ChunkCache implements CachedData {
         dimensionRegistry.clear();
         for (int id = 0; id < entries.size(); id++) {
             RegistryEntry entry = entries.get(id);
-            if (!entry.getId().startsWith("minecraft:")) continue;
-            String name = entry.getId().split("minecraft:")[1];
+            if (!entry.getId().namespace().equals("minecraft")) continue;
+            String name = entry.getId().value();
             MNBT tag = entry.getData();
             DimensionData dimensionData;
             if (tag == null) { // occurs when we report to the server we have the core 1.20.6 pack
@@ -120,7 +121,7 @@ public class ChunkCache implements CachedData {
         }
     }
 
-    public void setCurrentWorld(final int dimensionId, final String worldName, long hashedSeed, boolean debug, boolean flat) {
+    public void setCurrentWorld(final int dimensionId, final Key worldName, long hashedSeed, boolean debug, boolean flat) {
         this.dimensionType = dimensionId;
         this.worldName = worldName;
         this.hashedSeed = hashedSeed;
@@ -322,7 +323,7 @@ public class ChunkCache implements CachedData {
     public void getPackets(@NonNull Consumer<Packet> consumer) {
         try {
             final var brandBytes = getServerBrand();
-            consumer.accept(new ClientboundCustomPayloadPacket("minecraft:brand", brandBytes));
+            consumer.accept(new ClientboundCustomPayloadPacket(Key.key("minecraft", "brand"), brandBytes));
             consumer.accept(new ClientboundInitializeBorderPacket(
                 worldBorderData.getCenterX(),
                 worldBorderData.getCenterZ(),
@@ -400,7 +401,7 @@ public class ChunkCache implements CachedData {
             var data = DIMENSION_DATA.getDimensionData(name);
             dimensionRegistry.put(data.id(), data);
         });
-        worldNames = asList("minecraft:overworld", "minecraft:the_nether", "minecraft:the_end");
+        worldNames = asList(Key.key("minecraft:overworld"), Key.key("minecraft:the_nether"), Key.key("minecraft:the_end"));
     }
 
     @Override
@@ -497,7 +498,7 @@ public class ChunkCache implements CachedData {
             CACHE_LOG.error("Things are going to break...");
         } else {
             this.currentDimension = newDim;
-            this.worldName = currentDimension.name();
+            this.worldName = Key.key("minecraft", currentDimension.name());
         }
         this.dimensionType = info.getDimension();
         this.hashedSeed = info.getHashedSeed();

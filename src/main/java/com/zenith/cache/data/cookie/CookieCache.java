@@ -3,6 +3,7 @@ package com.zenith.cache.data.cookie;
 import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import lombok.Data;
+import net.kyori.adventure.key.Key;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundCookieRequestPacket;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundStoreCookiePacket;
@@ -22,10 +23,10 @@ import static java.util.Arrays.asList;
 // todo: generify this to support both ClientSession and ServerConnection caches?
 @Data
 public class CookieCache implements CachedData {
-    private static final String zenithTransferSrcKey = "zenith-transfer-src";
-    private static final String zenithSpectatorKey = "zenith-spectator";
-    private static final List<String> zenithCookies = asList(zenithTransferSrcKey, zenithSpectatorKey);
-    private final Map<String, @Nullable String> cookies = new HashMap<>(2);
+    private static final Key zenithTransferSrcKey = Key.key("zenith", "zenith-transfer-src");
+    private static final Key zenithSpectatorKey = Key.key("zenith", "zenith-spectator");
+    private static final List<Key> zenithCookies = asList(zenithTransferSrcKey, zenithSpectatorKey);
+    private final Map<Key, @Nullable String> cookies = new HashMap<>(2);
 
     public Optional<Boolean> getSpectatorCookieValue() {
         var value = cookies.get(zenithSpectatorKey);
@@ -64,7 +65,7 @@ public class CookieCache implements CachedData {
         }
     }
 
-    public void handleCookieResponse(final String key, byte @Nullable [] value) {
+    public void handleCookieResponse(final Key key, byte @Nullable [] value) {
         if (value == null) {
             cookies.put(key, null);
         } else {

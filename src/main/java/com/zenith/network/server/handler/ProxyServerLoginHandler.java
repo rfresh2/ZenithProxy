@@ -9,6 +9,7 @@ import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
 import com.zenith.network.server.CustomServerInfoBuilder;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Wait;
+import net.kyori.adventure.key.Key;
 import org.geysermc.mcprotocollib.network.Session;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.ServerLoginHandler;
@@ -47,7 +48,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             session.send(new ClientboundLoginPacket(
                 connection.getSpectatorSelfEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
-                CACHE.getChunkCache().getWorldNames().toArray(new String[0]),
+                CACHE.getChunkCache().getWorldNames().toArray(new Key[0]),
                 CACHE.getPlayerCache().getMaxPlayers(),
                 CACHE.getChunkCache().getServerViewDistance(),
                 CACHE.getChunkCache().getServerSimulationDistance(),
@@ -72,7 +73,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             session.send(new ClientboundLoginPacket(
                 CACHE.getPlayerCache().getEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
-                CACHE.getChunkCache().getWorldNames().toArray(new String[0]),
+                CACHE.getChunkCache().getWorldNames().toArray(new Key[0]),
                 CACHE.getPlayerCache().getMaxPlayers(),
                 CACHE.getChunkCache().getServerViewDistance(),
                 CACHE.getChunkCache().getServerSimulationDistance(),

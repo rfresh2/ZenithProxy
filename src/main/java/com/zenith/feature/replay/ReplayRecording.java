@@ -8,6 +8,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.PooledByteBufAllocator;
 import lombok.Getter;
+import net.kyori.adventure.key.Key;
 import org.geysermc.mcprotocollib.network.Session;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodecHelper;
@@ -87,12 +88,12 @@ public class ReplayRecording implements Closeable {
     private void lateStartRecording() {
         writePacket0(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile(), false), Proxy.getInstance().getClient(), ProtocolState.LOGIN);
         CACHE.getConfigurationCache().getPackets(packet -> writePacket0(System.currentTimeMillis(), (MinecraftPacket) packet, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION));
-        writePacket0(System.currentTimeMillis(), new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
+        writePacket0(System.currentTimeMillis(), new ClientboundCustomPayloadPacket(Key.key("minecraft:brand"), CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
         writePacket0(System.currentTimeMillis(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
         writePacket(System.currentTimeMillis(), new ClientboundLoginPacket(
             CACHE.getPlayerCache().getEntityId(),
             CACHE.getPlayerCache().isHardcore(),
-            CACHE.getChunkCache().getWorldNames().toArray(new String[0]),
+            CACHE.getChunkCache().getWorldNames().toArray(new Key[0]),
             CACHE.getPlayerCache().getMaxPlayers(),
             CACHE.getChunkCache().getServerViewDistance(),
             CACHE.getChunkCache().getServerSimulationDistance(),
@@ -229,7 +230,7 @@ public class ReplayRecording implements Closeable {
             if (preConnectSyncNeeded) {
                 writeToFile(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile(), false), session, ProtocolState.LOGIN);
                 CACHE.getConfigurationCache().getPackets(packet2 -> writeToFile(System.currentTimeMillis(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION));
-                writeToFile(System.currentTimeMillis(), new ClientboundCustomPayloadPacket("minecraft:brand", CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
+                writeToFile(System.currentTimeMillis(), new ClientboundCustomPayloadPacket(Key.key("minecraft:brand"), CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
                 writeToFile(System.currentTimeMillis(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
                 time = System.currentTimeMillis();
                 preConnectSyncNeeded = false;
