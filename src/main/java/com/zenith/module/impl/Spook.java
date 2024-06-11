@@ -38,6 +38,7 @@ public class Spook extends Module {
         return CONFIG.client.extra.spook.enabled;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onEnable() {
         CACHE.getEntityCache().getEntities().values().stream()
