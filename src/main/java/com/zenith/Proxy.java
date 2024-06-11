@@ -192,8 +192,10 @@ public class Proxy {
                 DEFAULT_LOG.warn("Prereleases include experiments that may contain bugs and are not always updated with fixes");
                 DEFAULT_LOG.warn("Switch to a stable release with the `channel` command");
             }
-            if (!connected)
+            if (!connected) {
+                DEFAULT_LOG.info("Proxy IP: {}", CONFIG.server.getProxyAddress());
                 DEFAULT_LOG.info("Use the `connect` command to log in!");
+            }
             Wait.waitSpinLoop();
         } catch (Exception e) {
             DEFAULT_LOG.error("", e);
