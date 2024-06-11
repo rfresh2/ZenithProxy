@@ -98,8 +98,8 @@ public class ChunkCache implements CachedData {
         dimensionRegistry.clear();
         for (int id = 0; id < entries.size(); id++) {
             RegistryEntry entry = entries.get(id);
-            if (!entry.getId().namespace().equals("minecraft")) continue;
-            String name = entry.getId().value();
+            if (!entry.getId().startsWith("minecraft:")) continue;
+            String name = entry.getId().split("minecraft:")[1];
             MNBT tag = entry.getData();
             DimensionData dimensionData;
             if (tag == null) { // occurs when we report to the server we have the core 1.20.6 pack

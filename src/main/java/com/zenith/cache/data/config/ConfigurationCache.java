@@ -4,7 +4,6 @@ import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
-import net.kyori.adventure.key.Key;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.RegistryEntry;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundResourcePackPushPacket;
@@ -23,10 +22,10 @@ import java.util.function.Consumer;
  */
 @Data
 public class ConfigurationCache implements CachedData {
-    private Map<Key, List<RegistryEntry>> registryEntries = new ConcurrentHashMap<>();
-    protected Key[] enabledFeatures = new Key[]{Key.key("minecraft:vanilla")};
+    private Map<String, List<RegistryEntry>> registryEntries = new ConcurrentHashMap<>();
+    protected String[] enabledFeatures = new String[]{"minecraft:vanilla"};
     private Map<UUID, ResourcePack> resourcePacks = new ConcurrentHashMap<>();
-    private Map<Key, Map<Key, int[]>> tags = new ConcurrentHashMap<>();
+    private Map<String, Map<String, int[]>> tags = new ConcurrentHashMap<>();
 
     @Override
     public void getPackets(@NonNull final Consumer<Packet> consumer) {
@@ -46,7 +45,7 @@ public class ConfigurationCache implements CachedData {
     public void reset(CacheResetType type) {
         if (type == CacheResetType.FULL) {
             this.registryEntries.clear();
-            this.enabledFeatures = new Key[]{Key.key("minecraft:vanilla")};
+            this.enabledFeatures = new String[]{"minecraft:vanilla"};
             this.resourcePacks = new ConcurrentHashMap<>();
             this.tags = new ConcurrentHashMap<>();
         }

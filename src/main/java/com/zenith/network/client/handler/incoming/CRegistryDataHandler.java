@@ -10,7 +10,7 @@ public class CRegistryDataHandler implements PacketHandler<ClientboundRegistryDa
     @Override
     public ClientboundRegistryDataPacket apply(final ClientboundRegistryDataPacket packet, final ClientSession session) {
         CACHE.getConfigurationCache().getRegistryEntries().put(packet.getRegistry(), packet.getEntries());
-        if ("dimension_type".equals(packet.getRegistry().value())) {
+        if ("minecraft:dimension_type".equals(packet.getRegistry())) {
             CACHE.getChunkCache().updateDimensionRegistry(packet.getEntries());
         }
         return packet;
