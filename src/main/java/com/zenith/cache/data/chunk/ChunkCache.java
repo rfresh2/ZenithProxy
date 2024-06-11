@@ -102,7 +102,7 @@ public class ChunkCache implements CachedData {
             String name = entry.getId().split("minecraft:")[1];
             MNBT tag = entry.getData();
             DimensionData dimensionData;
-            if (tag == null) { // occurs when we report to the server we have the core 1.20.6 pack
+            if (tag == null) { // occurs when we report to the server we have the core pack
                 // just populate from our own registry
                 dimensionData = DIMENSION_DATA.getDimensionData(id);
             } else {

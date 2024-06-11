@@ -41,7 +41,7 @@ dependencies {
     implementation("com.github.rfresh2:MCProtocolLib:d82fe51c52") {
         exclude("*")
     }
-    implementation("com.zenith:ZenithProxy:1.20.6") {
+    implementation("com.zenith:ZenithProxy:1.21.0") {
         exclude("*")
     }
     compileOnly("org.projectlombok:lombok:$lombokVersion")
