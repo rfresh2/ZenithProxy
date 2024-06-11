@@ -13,12 +13,16 @@ import net.kyori.adventure.key.Key;
 import org.geysermc.mcprotocollib.network.Session;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.ServerLoginHandler;
+import org.geysermc.mcprotocollib.protocol.data.game.ServerLink;
+import org.geysermc.mcprotocollib.protocol.data.game.ServerLinkType;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerSpawnInfo;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundServerLinksPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundServerDataPacket;
 
 import static com.zenith.Shared.*;
+import static java.util.Arrays.asList;
 import static java.util.Objects.nonNull;
 
 public class ProxyServerLoginHandler implements ServerLoginHandler {
@@ -94,11 +98,15 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 false
             ));
             if (!Proxy.getInstance().isInQueue()) { PlayerCache.sync(); }
-            CustomServerInfoBuilder serverInfoBuilder = (CustomServerInfoBuilder) Proxy.getInstance().getServer().getGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);
-            session.send(new ClientboundServerDataPacket(
-                serverInfoBuilder.getMotd(),
-                Proxy.getInstance().getServerIcon()
-            ));
         }
+        CustomServerInfoBuilder serverInfoBuilder = (CustomServerInfoBuilder) Proxy.getInstance().getServer().getGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);
+        session.send(new ClientboundServerDataPacket(
+            serverInfoBuilder.getMotd(),
+            Proxy.getInstance().getServerIcon()
+        ));
+        session.send(new ClientboundServerLinksPacket(asList(
+            new ServerLink(ServerLinkType.WEBSITE, null, "https://github.com/rfresh2/ZenithProxy"),
+            new ServerLink(ServerLinkType.SUPPORT, null, "https://discord.gg/nJZrSaRKtb")
+        )));
     }
 }
