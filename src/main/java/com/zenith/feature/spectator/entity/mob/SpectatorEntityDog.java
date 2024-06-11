@@ -4,21 +4,21 @@ import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.cache.data.PlayerCache;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataType;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.IntEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.data.game.level.sound.BuiltinSound;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class SpectatorEntityDog extends SpectatorMob {
     @Override
     public ArrayList<EntityMetadata<?, ?>> getBaseEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
-        return metadataListOf(
-            new IntEntityMetadata(22, MetadataType.WOLF_VARIANT, ThreadLocalRandom.current().nextInt(0, 9))
-        );
+        return noMetadataList();
+        // todo: need to create wolf variant registry in dataGenerator for this to work in 1.21+
+        //  cba just for this use case though lol
+//        return metadataListOf(
+//            new ObjectEntityMetadata<Holder<WolfVariant>>(22, MetadataType.WOLF_VARIANT, ThreadLocalRandom.current().nextInt(0, 9))
+//        );
     }
 
     @Override

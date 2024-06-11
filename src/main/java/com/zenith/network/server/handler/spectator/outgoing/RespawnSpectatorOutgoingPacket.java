@@ -22,7 +22,7 @@ public class RespawnSpectatorOutgoingPacket implements PacketHandler<Clientbound
                 packet.getCommonPlayerSpawnInfo().getPortalCooldown()
             ),
             packet.isKeepMetadata(),
-            packet.isKeepAttributes()
+            packet.isKeepAttributeModifiers()
         );
     }
 }

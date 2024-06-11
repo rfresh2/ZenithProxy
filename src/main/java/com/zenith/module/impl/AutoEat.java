@@ -3,8 +3,8 @@ package com.zenith.module.impl;
 import com.zenith.Proxy;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.event.module.ClientBotTick;
-import com.zenith.mc.food.FoodRegistry;
 import com.zenith.mc.food.FoodData;
+import com.zenith.mc.food.FoodRegistry;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
 
@@ -83,7 +83,7 @@ public class AutoEat extends AbstractInventoryModule {
         if (hand == null) return;
         isEating = true;
         delay = 50;
-        sendClientPacketAsync(new ServerboundUseItemPacket(hand, CACHE.getPlayerCache().getActionId().incrementAndGet()));
+        sendClientPacketAsync(new ServerboundUseItemPacket(hand, CACHE.getPlayerCache().getActionId().incrementAndGet(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
     }
 
     public void handleBotTickStarting(final ClientBotTick.Starting event) {

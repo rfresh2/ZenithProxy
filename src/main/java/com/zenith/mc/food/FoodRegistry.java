@@ -6,7 +6,7 @@ import com.zenith.mc.Registry;
 public final class FoodRegistry {
     public static final Registry<FoodData> REGISTRY = new Registry<FoodData>(41);
 
-    public static final FoodData APPLE = REGISTRY.register(new FoodData(799, "apple", 64, 4.0f, 19.2f, true));
+    public static final FoodData APPLE = REGISTRY.register(new FoodData(800, "apple", 64, 4.0f, 19.2f, true));
 
     public static final FoodData MUSHROOM_STEW = REGISTRY.register(new FoodData(849, "mushroom_stew", 1, 6.0f, 86.4f, true));
 
@@ -78,13 +78,13 @@ public final class FoodRegistry {
 
     public static final FoodData BEETROOT_SOUP = REGISTRY.register(new FoodData(1156, "beetroot_soup", 1, 6.0f, 86.4f, true));
 
-    public static final FoodData SUSPICIOUS_STEW = REGISTRY.register(new FoodData(1190, "suspicious_stew", 1, 6.0f, 86.4f, true));
+    public static final FoodData SUSPICIOUS_STEW = REGISTRY.register(new FoodData(1193, "suspicious_stew", 1, 6.0f, 86.4f, true));
 
-    public static final FoodData SWEET_BERRIES = REGISTRY.register(new FoodData(1213, "sweet_berries", 64, 2.0f, 1.6f, true));
+    public static final FoodData SWEET_BERRIES = REGISTRY.register(new FoodData(1216, "sweet_berries", 64, 2.0f, 1.6f, true));
 
-    public static final FoodData GLOW_BERRIES = REGISTRY.register(new FoodData(1214, "glow_berries", 64, 2.0f, 1.6f, true));
+    public static final FoodData GLOW_BERRIES = REGISTRY.register(new FoodData(1217, "glow_berries", 64, 2.0f, 1.6f, true));
 
-    public static final FoodData HONEY_BOTTLE = REGISTRY.register(new FoodData(1221, "honey_bottle", 16, 6.0f, 14.400001f, true));
+    public static final FoodData HONEY_BOTTLE = REGISTRY.register(new FoodData(1224, "honey_bottle", 16, 6.0f, 14.400001f, true));
 
-    public static final FoodData OMINOUS_BOTTLE = REGISTRY.register(new FoodData(1328, "ominous_bottle", 64, 1.0f, 0.4f, true));
+    public static final FoodData OMINOUS_BOTTLE = REGISTRY.register(new FoodData(1331, "ominous_bottle", 64, 1.0f, 0.4f, true));
 }

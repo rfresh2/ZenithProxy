@@ -75,7 +75,7 @@ public class AutoFish extends AbstractInventoryModule {
     public void handleSplashSoundEffectEvent(final SplashSoundEffectEvent event) {
         if (isFishing()) {
             // reel in
-            sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet()));
+            sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
             castTimer.reset();
             fishHookEntityId = -1;
         }
@@ -95,7 +95,7 @@ public class AutoFish extends AbstractInventoryModule {
             // something's wrong, probably don't have hook in water
             CLIENT_LOG.warn("[AutoFish] Probably don't have hook in water. reeling in");
             fishHookEntityId = -1;
-            sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet()));
+            sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
             castTimer.reset();
         }
     }
@@ -111,7 +111,7 @@ public class AutoFish extends AbstractInventoryModule {
             delay = 5;
             return;
         }
-        sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet()));
+        sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
         castTime = Instant.now();
     }
 

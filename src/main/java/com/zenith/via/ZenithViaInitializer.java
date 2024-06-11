@@ -53,6 +53,7 @@ public class ZenithViaInitializer {
     // pipeline order after readTimeout -> encryption -> sizer -> compression -> via-codec -> codec -> manager
 
     public void clientViaChannelInitializer(Channel channel, Session client) {
+        if (true) return; // todo: 1.21 via
         if (!CONFIG.client.viaversion.enabled) return;
         if (CONFIG.client.viaversion.autoProtocolVersion) updateClientViaProtocolVersion();
         if (CONFIG.client.viaversion.protocolVersion == MinecraftCodec.CODEC.getProtocolVersion()) {
@@ -70,6 +71,7 @@ public class ZenithViaInitializer {
     }
 
     public void serverViaChannelInitializer(final Channel channel) {
+        if (true) return; // todo: 1.21 via
         if (!CONFIG.server.viaversion.enabled) return;
         init();
         var userConnection = new UserConnectionImpl(channel, false);
