@@ -45,10 +45,10 @@ public class TerminalConsoleAppender extends ConsoleAppender<ILoggingEvent> {
             initialized = true;
             try {
                 terminal = TerminalBuilder.builder()
-                        .jansi(true)
-                        .systemOutput(TerminalBuilder.SystemOutput.SysOut)
-                        .color(true)
-                        .build();
+                    .jansi(true)
+                    .systemOutput(TerminalBuilder.SystemOutput.SysOut)
+                    .color(true)
+                    .build();
 
             } catch (IllegalStateException | IOException e) {
                 System.out.println("Failed to initialize terminal. Falling back to standard output");

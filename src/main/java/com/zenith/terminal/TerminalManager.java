@@ -23,22 +23,26 @@ public class TerminalManager {
     public void start() {
         if (isRunning.compareAndSet(false, true)) {
             Terminal terminal = TerminalConsoleAppender.getTerminal();
-            if (terminal != null && !(terminal instanceof DumbTerminal)) {
-                TERMINAL_LOG.info("Starting Interactive Terminal...");
-                this.lineReader = LineReaderBuilder.builder()
-                        .terminal(terminal)
-                        .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
-                        .option(LineReader.Option.INSERT_TAB, false)
-                        .completer(new TerminalCommandCompleter())
-                        .build();
-                TerminalConsoleAppender.setReader(lineReader);
-                var terminalThread = new Thread(interactiveRunnable, "ZenithProxy Terminal");
-                terminalThread.setDaemon(true);
-                terminal.handle(Terminal.Signal.INT, signal -> terminalThread.interrupt());
-                terminalThread.start();
-            } else {
-                TERMINAL_LOG.warn("Unsupported Terminal. Interactive Terminal will not be started.");
+            if (terminal == null) {
+                TERMINAL_LOG.warn("Unable to initialize interactive terminal");
+                return;
             }
+            if (terminal instanceof DumbTerminal && !CONFIG.interactiveTerminal.allowDumbTerminal) {
+                TERMINAL_LOG.warn("Dumb terminal initialized but is disabled by config");
+                return;
+            }
+            TERMINAL_LOG.info("Starting Interactive Terminal...");
+            this.lineReader = LineReaderBuilder.builder()
+                .terminal(terminal)
+                .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
+                .option(LineReader.Option.INSERT_TAB, false)
+                .completer(new TerminalCommandCompleter())
+                .build();
+            TerminalConsoleAppender.setReader(lineReader);
+            var terminalThread = new Thread(interactiveRunnable, "ZenithProxy Terminal");
+            terminalThread.setDaemon(true);
+            terminal.handle(Terminal.Signal.INT, signal -> terminalThread.interrupt());
+            terminalThread.start();
         }
     }
 
