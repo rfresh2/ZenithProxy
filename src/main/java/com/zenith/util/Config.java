@@ -116,6 +116,11 @@ public final class Config {
             public final ActionLimiter actionLimiter = new ActionLimiter();
             public final VisualRange visualRange = new VisualRange();
             public final AutoArmor autoArmor = new AutoArmor();
+            public final AutoMend autoMend = new AutoMend();
+
+            public static class AutoMend {
+                public boolean enabled = true;
+            }
 
             public static class VisualRange {
                 public boolean enabled = true;
