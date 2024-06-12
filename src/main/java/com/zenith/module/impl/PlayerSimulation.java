@@ -27,14 +27,14 @@ import static com.zenith.Shared.*;
 
 public class PlayerSimulation extends Module {
     private double gravity = 0.08;
-    private double x;
-    private double y;
-    private double z;
+    @Getter private double x;
+    @Getter private double y;
+    @Getter private double z;
     private double lastX;
     private double lastY;
     private double lastZ;
-    private float yaw;
-    private float pitch;
+    @Getter private float yaw;
+    @Getter private float pitch;
     private float lastYaw;
     private float lastPitch;
     @Getter private boolean onGround;
@@ -68,8 +68,9 @@ public class PlayerSimulation extends Module {
     @Override
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
-                            // we want this to be the last thing that happens in the tick
+                            // we want this to be one of the last thing that happens in the tick
                             // to allow other modules to update the player's input
+                            // other modules can also do actions after this tick by setting an even lower priority
                             of(ClientBotTick.class, -20000, this::tick),
                             of(ClientBotTick.Starting.class, this::handleClientTickStarting),
                             of(ClientBotTick.Stopped.class, this::handleClientTickStopped)

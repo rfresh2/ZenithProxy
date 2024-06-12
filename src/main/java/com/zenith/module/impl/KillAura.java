@@ -6,6 +6,7 @@ import com.zenith.cache.data.entity.EntityStandard;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.feature.world.Pathing;
 import com.zenith.mc.item.ItemRegistry;
+import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
@@ -70,7 +71,8 @@ public class KillAura extends AbstractInventoryModule {
         EVENT_BUS.subscribe(
             this,
             of(ClientBotTick.class, this::handleClientTick),
-            of(ClientBotTick.Stopped.class, this::handleBotTickStopped)
+            of(ClientBotTick.Stopped.class, this::handleBotTickStopped),
+            of(ClientBotTick.class, -30000 + MOVEMENT_PRIORITY, this::handlePostTick)
         );
     }
 
@@ -82,26 +84,33 @@ public class KillAura extends AbstractInventoryModule {
     public void handleClientTick(final ClientBotTick event) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
                 && !MODULE.get(AutoEat.class).isEating()) {
-            if (delay > 0) {
-                delay--;
-                return;
-            }
+            if (delay > 0) return;
             // find non-friended players or hostile mobs within 3.5 blocks
             final Entity target = findTarget();
             // rotate to target
             if (target != null && MODULE.get(PlayerSimulation.class).isOnGround()) {
                 isAttacking = true;
-                if (switchToWeapon()) {
-                    if (rotateTo(target)) {
-                        attack(target);
-                        delay = CONFIG.client.extra.killAura.attackDelayTicks;
-                    }
-                }
+                if (switchToWeapon())
+                    rotateTo(target);
                 PATHING.stop(MOVEMENT_PRIORITY-1);
             } else {
                 isAttacking = false;
             }
         }
+    }
+
+
+    private void handlePostTick(ClientBotTick post) {
+        if (delay > 0) {
+            delay--;
+            return;
+        }
+        if (!isAttacking) return; // todo: store attack target as a nullable weak ref?
+        final Entity target = findTarget();
+        if (target == null) return;
+        if (hasRotation(target))
+            attack(target);
+        delay = CONFIG.client.extra.killAura.attackDelayTicks;
     }
 
     @Nullable
@@ -144,7 +153,7 @@ public class KillAura extends AbstractInventoryModule {
                 }
             }
             if (CONFIG.client.extra.killAura.targetCustom) {
-                if (CONFIG.client.extra.killAura.customTargets.contains(e.getEntityType())) return true;
+                return CONFIG.client.extra.killAura.customTargets.contains(e.getEntityType());
             }
         }
         return false;
@@ -162,10 +171,17 @@ public class KillAura extends AbstractInventoryModule {
         );
     }
 
-    private boolean rotateTo(Entity entity) {
+    private void rotateTo(Entity entity) {
         var rotation = Pathing.shortestRotationTo(entity);
         PATHING.rotate(rotation.getX(), rotation.getY(), MOVEMENT_PRIORITY);
-        return true;
+    }
+
+    private boolean hasRotation(final Entity entity) {
+        var rotation = Pathing.shortestRotationTo(entity);
+        var sim = MODULE.get(PlayerSimulation.class);
+        boolean yawNear = MathHelper.isNear(sim.getYaw(), rotation.getX(), 0.1f);
+        boolean pitchNear = MathHelper.isNear(sim.getPitch(), rotation.getY(), 0.1f);
+        return yawNear && pitchNear;
     }
 
     public boolean switchToWeapon() {

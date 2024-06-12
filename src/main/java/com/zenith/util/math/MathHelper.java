@@ -112,6 +112,10 @@ public class MathHelper {
         }
     }
 
+    public static boolean isNear(float val, float target, float range) {
+        return val > target - range && val < target + range;
+    }
+
     public static Vector3d calculateRayEndPos(double x, double y, double z, double yaw, double pitch, double maxDistance) {
         final Vector3d viewVec = MathHelper.calculateViewVector(yaw, pitch);
         final double targetX = x + (viewVec.getX() * maxDistance);
