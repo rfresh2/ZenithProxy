@@ -2,6 +2,7 @@ package com.zenith.generator;
 
 import com.google.gson.reflect.TypeToken;
 import com.zenith.DataGenerator;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -13,13 +14,43 @@ import java.util.regex.Pattern;
 
 public class Language implements Generator {
     public static final Pattern PATTERN = Pattern.compile("%((\\d+)\\$)?s");
-
+    // filtering out entries that will likely not be received by chat or title packets
+    // runtime memory optimization
+    static ObjectSet<String> prefixes = ObjectSet.of(
+        "advancement",
+        "advancements",
+        "argument",
+        "build",
+        "chat",
+        "clear",
+        "command",
+        "commands",
+        "death",
+        "disconnect",
+        "entity",
+        "gameMode",
+        "item_modifier",
+        "multiplayer",
+        "parsing",
+        "particle",
+        "recipe",
+        "record",
+        "sleep",
+        "slot"
+    );
 
     @Override
     public void generate() {
         try {
             String rawJson = new String(Language.class.getResourceAsStream("/assets/minecraft/lang/en_us.json").readAllBytes(), StandardCharsets.UTF_8);
             Map<String, String> json = (Map<String, String>) DataGenerator.gson.fromJson(rawJson, TypeToken.getParameterized(Map.class, String.class, String.class));
+            for (var it = json.entrySet().iterator(); it.hasNext(); ) {
+                var entry = it.next();
+                var prefix = entry.getKey().split("\\.")[0];
+                if (!prefixes.contains(prefix)) {
+                    it.remove();
+                }
+            }
 
             // Transform MC's language map values into java MessageFormat objects
             json.replaceAll((k, v) -> convertToMessageFormat(v));
