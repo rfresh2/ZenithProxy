@@ -20,7 +20,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.Serv
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundSwingPacket;
 
 import javax.annotation.Nullable;
-import java.util.List;
+import java.lang.ref.WeakReference;
 import java.util.Set;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -44,7 +44,8 @@ public class KillAura extends AbstractInventoryModule {
         EntityType.ZOMBIFIED_PIGLIN
     );
     private int delay = 0;
-    private boolean isAttacking = false;
+    private final WeakReference<Entity> nullRef = new WeakReference<>(null);
+    private WeakReference<Entity> attackTarget = nullRef;
     private EquipmentSlot weaponSlot = EquipmentSlot.MAIN_HAND;
     private static final int MOVEMENT_PRIORITY = 500;
     private final IntSet swords = IntSet.of(
@@ -63,7 +64,7 @@ public class KillAura extends AbstractInventoryModule {
     }
 
     public boolean isActive() {
-        return CONFIG.client.extra.killAura.enabled && isAttacking;
+        return CONFIG.client.extra.killAura.enabled && attackTarget.get() != null;
     }
 
     @Override
@@ -81,36 +82,38 @@ public class KillAura extends AbstractInventoryModule {
         return CONFIG.client.extra.killAura.enabled;
     }
 
-    public void handleClientTick(final ClientBotTick event) {
+    private void handleClientTick(final ClientBotTick event) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
-                && !MODULE.get(AutoEat.class).isEating()) {
-            if (delay > 0) return;
-            // find non-friended players or hostile mobs within 3.5 blocks
+                && !MODULE.get(AutoEat.class).isEating()
+                && delay <= 0
+                && MODULE.get(PlayerSimulation.class).isOnGround()) {
             final Entity target = findTarget();
-            // rotate to target
-            if (target != null && MODULE.get(PlayerSimulation.class).isOnGround()) {
-                isAttacking = true;
+            if (target != null) {
+                if (!attackTarget.refersTo(target))
+                    attackTarget = new WeakReference<>(target);
                 if (switchToWeapon())
                     rotateTo(target);
-                PATHING.stop(MOVEMENT_PRIORITY-1);
-            } else {
-                isAttacking = false;
+                else
+                    // stop while doing inventory actions
+                    PATHING.stop(MOVEMENT_PRIORITY-1);
+                return;
             }
         }
+        attackTarget = nullRef;
     }
 
 
-    private void handlePostTick(ClientBotTick post) {
+    private void handlePostTick(ClientBotTick event) {
         if (delay > 0) {
             delay--;
             return;
         }
-        if (!isAttacking) return; // todo: store attack target as a nullable weak ref?
-        final Entity target = findTarget();
+        var target = attackTarget.get();
         if (target == null) return;
-        if (hasRotation(target))
+        if (hasRotation(target)) {
             attack(target);
-        delay = CONFIG.client.extra.killAura.attackDelayTicks;
+            delay = CONFIG.client.extra.killAura.attackDelayTicks;
+        }
     }
 
     @Nullable
@@ -159,9 +162,9 @@ public class KillAura extends AbstractInventoryModule {
         return false;
     }
 
-    public void handleBotTickStopped(final ClientBotTick.Stopped event) {
+    private void handleBotTickStopped(final ClientBotTick.Stopped event) {
         delay = 0;
-        isAttacking = false;
+        attackTarget = nullRef;
     }
 
     private void attack(final Entity entity) {
