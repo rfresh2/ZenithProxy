@@ -38,7 +38,8 @@ public class AutoFish extends AbstractInventoryModule {
                             of(SplashSoundEffectEvent.class, this::handleSplashSoundEffectEvent),
                             of(ClientBotTick.class, this::handleClientTick),
                             of(ClientBotTick.Starting.class, this::handleBotTickStarting),
-                            of(ClientBotTick.Stopped.class, this::handleBotTickStopped)
+                            of(ClientBotTick.Stopped.class, this::handleBotTickStopped),
+                            of(ClientBotTick.class, -30000 + MOVEMENT_PRIORITY, this::handlePostTick)
         );
     }
 
@@ -82,37 +83,45 @@ public class AutoFish extends AbstractInventoryModule {
     }
 
     public void handleClientTick(final ClientBotTick event) {
+        if (delay > 0) return;
         if (MODULE.get(AutoEat.class).isEating() || MODULE.get(KillAura.class).isActive()) return;
+        if (!isFishing() && switchToFishingRod()) {
+            // cast
+            rotate();
+        }
+    }
+
+    private void handlePostTick(ClientBotTick event) {
         if (delay > 0) {
             delay--;
             return;
         }
-        if (!isFishing() && switchToFishingRod() && castTimer.tick(CONFIG.client.extra.autoFish.castDelay)) {
-            // cast
+        if (MODULE.get(AutoEat.class).isEating() || MODULE.get(KillAura.class).isActive()) return;
+        if (castTimer.tick(CONFIG.client.extra.autoFish.castDelay)) {
             cast();
         }
         if (isFishing() && Instant.now().getEpochSecond() - castTime.getEpochSecond() > 60) {
             // something's wrong, probably don't have hook in water
-            CLIENT_LOG.warn("[AutoFish] Probably don't have hook in water. reeling in");
+            warn("Probably don't have hook in water. reeling in");
             fishHookEntityId = -1;
             sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
             castTimer.reset();
         }
     }
 
+    private void rotate() {
+        PATHING.rotate(CONFIG.client.extra.autoFish.yaw, CONFIG.client.extra.autoFish.pitch, MOVEMENT_PRIORITY);
+    }
+
     private void cast() {
         // rotate to water if needed
-        float yawDiff = Math.abs(MathHelper.wrapPitch(CACHE.getPlayerCache()
-                                                      .getYaw()) - MathHelper.wrapDegrees(CONFIG.client.extra.autoFish.yaw));
-        float pitchDiff = Math.abs(MathHelper.wrapPitch(CACHE.getPlayerCache().getPitch()) - MathHelper.wrapDegrees(CONFIG.client.extra.autoFish.pitch));
-        if ((yawDiff > 1.0 && yawDiff < 180.0f)
-            || (pitchDiff > 1.0 && pitchDiff < 90.0f)) {
-            PATHING.rotate(CONFIG.client.extra.autoFish.yaw, CONFIG.client.extra.autoFish.pitch, MOVEMENT_PRIORITY);
+        var sim = MODULE.get(PlayerSimulation.class);
+        if (MathHelper.isNear(sim.getYaw(), CONFIG.client.extra.autoFish.yaw, 0.1f)
+            && MathHelper.isNear(sim.getPitch(), CONFIG.client.extra.autoFish.pitch, 0.1f)) {
+            sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
+            castTime = Instant.now();
             delay = 5;
-            return;
         }
-        sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
-        castTime = Instant.now();
     }
 
     public boolean switchToFishingRod() {

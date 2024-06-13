@@ -72,11 +72,11 @@ dependencies {
     shade("org.slf4j:jul-to-slf4j:2.0.13")
     shade("com.mojang:brigadier:1.2.9")
     shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.1")
-    shade("com.github.rfresh2:SimpleEventBus:1.1")
+    shade("com.github.rfresh2:SimpleEventBus:1.2")
     shade("com.github.rfresh2.Discord4j:discord4j-core:778616c1bb") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:1.21.0") {
+    shade("com.github.rfresh2:MCProtocolLib:dfe137a4cc") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")
