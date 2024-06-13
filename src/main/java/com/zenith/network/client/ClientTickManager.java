@@ -13,8 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.github.rfresh2.EventConsumer.of;
-import static com.zenith.Shared.CLIENT_LOG;
-import static com.zenith.Shared.EVENT_BUS;
+import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
 public class ClientTickManager {
@@ -55,20 +54,23 @@ public class ClientTickManager {
         if (this.clientTickFuture == null || this.clientTickFuture.isDone()) {
             CLIENT_LOG.debug("Starting Client Ticks");
             EVENT_BUS.post(ClientTickEvent.Starting.INSTANCE);
-            this.clientTickFuture = Proxy.getInstance().getClient().getClientEventLoop().scheduleAtFixedRate(
-                () -> {
-                    try {
-                        EVENT_BUS.post(ClientTickEvent.INSTANCE);
-                        if (doBotTicks.get()) {
-                            EVENT_BUS.post(ClientBotTick.INSTANCE);
-                        }
-                    } catch (final Throwable e) {
-                        CLIENT_LOG.error("Error during client tick", e);
-                    }
-                },
-                0L, 50, TimeUnit.MILLISECONDS);
+            var eventLoop = Proxy.getInstance().getClient().getClientEventLoop();
+            this.clientTickFuture = CONFIG.debug.clientTickFixedDelay
+                ? eventLoop.scheduleWithFixedDelay(tickRunnable, 0, 50, TimeUnit.MILLISECONDS)
+                : eventLoop.scheduleAtFixedRate(tickRunnable, 0, 50, TimeUnit.MILLISECONDS);
         }
     }
+
+    private final Runnable tickRunnable = () -> {
+        try {
+            EVENT_BUS.post(ClientTickEvent.INSTANCE);
+            if (doBotTicks.get()) {
+                EVENT_BUS.post(ClientBotTick.INSTANCE);
+            }
+        } catch (final Throwable e) {
+            CLIENT_LOG.error("Error during client tick", e);
+        }
+    };
 
     public synchronized void stopClientTicks() {
         if (this.clientTickFuture != null && !this.clientTickFuture.isDone()) {
