@@ -118,9 +118,10 @@ public class KillAura extends AbstractInventoryModule {
 
     @Nullable
     private Entity findTarget() {
+        var rangeSq = Math.pow(CONFIG.client.extra.killAura.attackRange, 2);
         for (Entity entity : CACHE.getEntityCache().getEntities().values()) {
             if (!validTarget(entity)) continue;
-            if (CACHE.getPlayerCache().distanceToSelf(entity) > CONFIG.client.extra.killAura.attackRange) continue;
+            if (CACHE.getPlayerCache().distanceSqToSelf(entity) > rangeSq) continue;
             return entity;
         }
         return null;

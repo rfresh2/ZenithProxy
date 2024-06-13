@@ -272,11 +272,10 @@ public class PlayerCache implements CachedData {
         return this;
     }
 
-    public double distanceToSelf(final Entity entity) {
-        return Math.sqrt(
-            Math.pow(getX() - entity.getX(), 2)
-                + Math.pow(getY() - entity.getY(), 2)
-                + Math.pow(getZ() - entity.getZ(), 2));
+    public double distanceSqToSelf(final Entity entity) {
+        return Math.pow(getX() - entity.getX(), 2)
+            + Math.pow(getY() - entity.getY(), 2)
+            + Math.pow(getZ() - entity.getZ(), 2);
     }
 
     public void closeContainer(final int containerId) {
