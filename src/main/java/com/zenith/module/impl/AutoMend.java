@@ -1,8 +1,9 @@
 package com.zenith.module.impl;
 
 import com.zenith.event.module.ClientBotTick;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EnchantmentType;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.ItemStack;
+import com.zenith.mc.enchantment.EnchantmentRegistry;
+import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
+import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentType;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -40,11 +41,13 @@ public class AutoMend extends AbstractInventoryModule {
 
     @Override
     public boolean itemPredicate(final ItemStack itemStack) {
-        if (itemStack.getNbt() == null) return false;
-        if (!itemStack.getEnchantments().containsKey(EnchantmentType.MENDING)) return false;
-        var nbt = itemStack.getCompoundTag();
-        if (!nbt.contains("Damage")) return false;
-        var damage = nbt.getInt("Damage");
-        return damage > 0;
+        var dataComponents = itemStack.getDataComponents();
+        if (dataComponents == null) return false;
+        var enchantmentComponents = dataComponents.get(DataComponentType.ENCHANTMENTS);
+        if (enchantmentComponents == null) return false;
+        if (!enchantmentComponents.getEnchantments().containsKey(EnchantmentRegistry.MENDING.id())) return false;
+        var damageComponent = dataComponents.get(DataComponentType.DAMAGE);
+        if (damageComponent == null) return false;
+        return damageComponent > 0;
     }
 }
