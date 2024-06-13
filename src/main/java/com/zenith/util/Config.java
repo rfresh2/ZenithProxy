@@ -119,7 +119,7 @@ public final class Config {
             public final AutoMend autoMend = new AutoMend();
 
             public static class AutoMend {
-                public boolean enabled = true;
+                public boolean enabled = false;
             }
 
             public static class VisualRange {
