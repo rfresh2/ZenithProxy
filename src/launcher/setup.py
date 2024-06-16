@@ -30,20 +30,16 @@ def setup_execute(config):
     while True:
         print("Select a Minecraft version: (1/2)")
         print("1. 1.20.4")
-        print("2. 1.20.6")
-        print("3. 1.21.0")
+        print("2. 1.21.0")
         i1 = input("> ")
         if i1 == "1":
             minecraft_version = "1.20.4"
             break
         elif i1 == "2":
-            minecraft_version = "1.20.6"
-            break
-        elif i1 == "3":
             minecraft_version = "1.21.0"
             break
         else:
-            print("Invalid input. Enter 1, 2, or 3")
+            print("Invalid input. Enter 1 or 2")
     print("")
     config.auto_update = True
     config.auto_update_launcher = True
