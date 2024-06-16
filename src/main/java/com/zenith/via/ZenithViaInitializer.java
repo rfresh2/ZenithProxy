@@ -4,7 +4,6 @@ import com.viaversion.viaversion.api.minecraft.entities.EntityTypes1_15;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
-import com.zenith.Proxy;
 import com.zenith.util.Wait;
 import com.zenith.via.handler.ZViaProtocolStateHandler;
 import io.netty.channel.Channel;
@@ -53,14 +52,15 @@ public class ZenithViaInitializer {
     // pipeline order after readTimeout -> encryption -> sizer -> compression -> via-codec -> codec -> manager
 
     public void clientViaChannelInitializer(Channel channel, Session client) {
-        if (true) return; // todo: 1.21 via
         if (!CONFIG.client.viaversion.enabled) return;
         if (CONFIG.client.viaversion.autoProtocolVersion) updateClientViaProtocolVersion();
         if (CONFIG.client.viaversion.protocolVersion == MinecraftCodec.CODEC.getProtocolVersion()) {
             CLIENT_LOG.warn("ViaVersion enabled but the protocol is the same as ours, connecting without ViaVersion");
-        } else if (Proxy.getInstance().isOn2b2t()) {
-            CLIENT_LOG.warn("ViaVersion enabled but server set to 2b2t.org, connecting without ViaVersion");
         }
+        // todo: add back when 2b2t adds 1.21 via support
+//        else if (Proxy.getInstance().isOn2b2t()) {
+//            CLIENT_LOG.warn("ViaVersion enabled but server set to 2b2t.org, connecting without ViaVersion");
+//        }
         else {
             init();
             UserConnectionImpl userConnection = new UserConnectionImpl(channel, true);
@@ -71,7 +71,6 @@ public class ZenithViaInitializer {
     }
 
     public void serverViaChannelInitializer(final Channel channel) {
-        if (true) return; // todo: 1.21 via
         if (!CONFIG.server.viaversion.enabled) return;
         init();
         var userConnection = new UserConnectionImpl(channel, false);

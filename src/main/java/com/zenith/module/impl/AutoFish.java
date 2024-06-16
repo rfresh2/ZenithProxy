@@ -116,8 +116,8 @@ public class AutoFish extends AbstractInventoryModule {
     private void cast() {
         // rotate to water if needed
         var sim = MODULE.get(PlayerSimulation.class);
-        if (MathHelper.isNear(sim.getYaw(), CONFIG.client.extra.autoFish.yaw, 0.1f)
-            && MathHelper.isNear(sim.getPitch(), CONFIG.client.extra.autoFish.pitch, 0.1f)) {
+        if (MathHelper.isNear(MathHelper.wrapYaw(sim.getYaw()), CONFIG.client.extra.autoFish.yaw, 0.1f)
+            && MathHelper.isNear(MathHelper.wrapPitch(sim.getPitch()), CONFIG.client.extra.autoFish.pitch, 0.1f)) {
             sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet(), CACHE.getPlayerCache().getYaw(), CACHE.getPlayerCache().getPitch()));
             castTime = Instant.now();
             delay = 5;

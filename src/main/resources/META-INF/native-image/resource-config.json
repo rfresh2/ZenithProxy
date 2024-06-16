@@ -99,6 +99,8 @@
   }, {
     "pattern":"\\Qassets/viabackwards/data/mappings-1.20to1.19.4.nbt\\E"
   }, {
+    "pattern":"\\Qassets/viabackwards/data/mappings-1.21to1.20.5.nbt\\E"
+  }, {
     "pattern":"\\Qassets/viabackwards/data/sounds-1.19.json\\E"
   }, {
     "pattern":"\\Qassets/viabackwards/data/translation-mappings.json\\E"
@@ -126,6 +128,8 @@
     "pattern":"\\Qassets/viaversion/data/dimension-registry-1.16.2.nbt\\E"
   }, {
     "pattern":"\\Qassets/viaversion/data/en_US.properties\\E"
+  }, {
+    "pattern":"\\Qassets/viaversion/data/enchantments-1.21.nbt\\E"
   }, {
     "pattern":"\\Qassets/viaversion/data/extra-identifiers-1.20.3.nbt\\E"
   }, {
@@ -169,9 +173,13 @@
   }, {
     "pattern":"\\Qassets/viaversion/data/identifiers-1.20.nbt\\E"
   }, {
+    "pattern":"\\Qassets/viaversion/data/identifiers-1.21.nbt\\E"
+  }, {
     "pattern":"\\Qassets/viaversion/data/identifiers-1.9.4.nbt\\E"
   }, {
     "pattern":"\\Qassets/viaversion/data/itemrecipes1_12_2to1_13.json\\E"
+  }, {
+    "pattern":"\\Qassets/viaversion/data/jukebox-songs-1.21.nbt\\E"
   }, {
     "pattern":"\\Qassets/viaversion/data/mapping-lang-1.12-1.13.json\\E"
   }, {
@@ -202,6 +210,8 @@
     "pattern":"\\Qassets/viaversion/data/mappings-1.20.2to1.20.3.nbt\\E"
   }, {
     "pattern":"\\Qassets/viaversion/data/mappings-1.20.3to1.20.5.nbt\\E"
+  }, {
+    "pattern":"\\Qassets/viaversion/data/mappings-1.20.5to1.21.nbt\\E"
   }, {
     "pattern":"\\Qassets/viaversion/data/mappings-1.20to1.20.2.nbt\\E"
   }, {

@@ -41,7 +41,8 @@ public class DebugCommand extends Command {
                 "kickDisconnect on/off",
                 "dc",
                 "teleportResync on/off",
-                "ncpStrictInventory on/off"
+                "ncpStrictInventory on/off",
+                "clientTickFixedDelay on/off"
             )
         );
     }
@@ -161,6 +162,12 @@ public class DebugCommand extends Command {
                 c.getSource().getEmbed()
                     .title("NCP Strict Inventory " + toggleStrCaps(CONFIG.debug.ncpStrictInventory));
                 return 1;
+            })))
+            .then(literal("clientTickFixedDelay").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.clientTickFixedDelay = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Client Tick Fixed Delay " + toggleStrCaps(CONFIG.debug.clientTickFixedDelay));
+                return OK;
             })));
     }
 
@@ -176,6 +183,7 @@ public class DebugCommand extends Command {
             .addField("Kick Disconnect", toggleStr(CONFIG.debug.kickDisconnect), false)
             .addField("Teleport Resync", toggleStr(CONFIG.debug.resyncTeleports), false)
             .addField("NCP Strict Inventory", toggleStr(CONFIG.debug.ncpStrictInventory), false)
+            .addField("Client Tick Fixed Delay", toggleStr(CONFIG.debug.clientTickFixedDelay), false)
             .primaryColor();
     }
 }

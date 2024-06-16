@@ -118,9 +118,10 @@ public class KillAura extends AbstractInventoryModule {
 
     @Nullable
     private Entity findTarget() {
+        var rangeSq = Math.pow(CONFIG.client.extra.killAura.attackRange, 2);
         for (Entity entity : CACHE.getEntityCache().getEntities().values()) {
             if (!validTarget(entity)) continue;
-            if (CACHE.getPlayerCache().distanceToSelf(entity) > CONFIG.client.extra.killAura.attackRange) continue;
+            if (CACHE.getPlayerCache().distanceSqToSelf(entity) > rangeSq) continue;
             return entity;
         }
         return null;
@@ -182,8 +183,8 @@ public class KillAura extends AbstractInventoryModule {
     private boolean hasRotation(final Entity entity) {
         var rotation = Pathing.shortestRotationTo(entity);
         var sim = MODULE.get(PlayerSimulation.class);
-        boolean yawNear = MathHelper.isNear(sim.getYaw(), rotation.getX(), 0.1f);
-        boolean pitchNear = MathHelper.isNear(sim.getPitch(), rotation.getY(), 0.1f);
+        boolean yawNear = MathHelper.isNear(MathHelper.wrapYaw(sim.getYaw()), MathHelper.wrapYaw(rotation.getX()), 0.1f);
+        boolean pitchNear = MathHelper.isNear(MathHelper.wrapPitch(sim.getPitch()), MathHelper.wrapPitch(rotation.getY()), 0.1f);
         return yawNear && pitchNear;
     }
 

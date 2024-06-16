@@ -76,7 +76,7 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:778616c1bb") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:232e7c2ddc") {
+    shade("com.github.rfresh2:MCProtocolLib:1bcd972d01") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
         exclude(group = "com.microsoft.azure")
@@ -110,9 +110,9 @@ dependencies {
     shade("com.github.rfresh2.fastutil:int-int-maps:$fastutilVersion")
     shade("com.github.rfresh2.fastutil:reference-object-maps:$fastutilVersion")
     shade("com.github.rfresh2.fastutil:int-queues:$fastutilVersion")
-    shade("net.raphimc:ViaLoader:3.0.0-20240604.224010-5")
-    shade("com.viaversion:viaversion:5.0.0-20240609.151013-46")
-    shade("com.viaversion:viabackwards:5.0.0-20240608.181111-24")
+    shade("net.raphimc:ViaLoader:3.0.0")
+    shade("com.viaversion:viaversion:5.0.0")
+    shade("com.viaversion:viabackwards:5.0.0")
     shade("org.jline:jline:3.26.1")
     shade("org.jline:jline-terminal-jansi:3.26.1")
     shade("ar.com.hjg:pngj:2.1.0")

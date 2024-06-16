@@ -8,7 +8,6 @@ import org.redisson.api.RLock;
 import javax.annotation.Nullable;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -172,10 +171,14 @@ public abstract class LockingDatabase extends Database {
                     return;
                 }
             }
-            if (isNull(Proxy.getInstance()) || !Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(30))) {
+            if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(30))) {
                 if (hasLock() || lockAcquired.get()) {
-                    releaseLock();
-                    onLockReleased();
+                    // 5 second grace period to finish up remaining inserts
+                    if (insertQueue.isEmpty()
+                        || Proxy.getInstance().getDisconnectTime().isBefore(Instant.now().minusSeconds(5))) {
+                        releaseLock();
+                        onLockReleased();
+                    }
                 }
                 return;
             }
@@ -224,8 +227,8 @@ public abstract class LockingDatabase extends Database {
         if (lockAcquired.get() && nonNull(lockExecutorService) && !lockExecutorService.isShutdown()) {
             try {
                 final LockingDatabase.InsertInstance insertInstance = insertQueue.poll();
-                if (nonNull(insertInstance)) {
-                    queryExecutor.execute(() -> Objects.requireNonNull(insertInstance).query());
+                if (insertInstance != null) {
+                    queryExecutor.execute(insertInstance::query);
                     if (nonNull(insertInstance.redisQuery())) {
                         EXECUTOR.execute(() -> insertInstance.redisQuery().run());
                     }
