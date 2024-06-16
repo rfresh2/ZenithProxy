@@ -886,6 +886,11 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.zenith.util.Config$Client$Extra$AutoMend",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.util.Config$Client$Extra$AutoReconnect",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
