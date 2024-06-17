@@ -23,6 +23,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 
 import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
+import static java.util.Arrays.asList;
 import static java.util.Objects.nonNull;
 
 public class ProxyServerLoginHandler implements ServerLoginHandler {
@@ -103,12 +104,12 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 false
             ));
             if (!Proxy.getInstance().isInQueue()) { PlayerCache.sync(); }
-            CustomServerInfoBuilder serverInfoBuilder = (CustomServerInfoBuilder) Proxy.getInstance().getServer().getGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);
-            connection.send(new ClientboundServerDataPacket(
-                serverInfoBuilder.getMotd(),
-                Proxy.getInstance().getServerIcon()
-            ));
         }
+        CustomServerInfoBuilder serverInfoBuilder = (CustomServerInfoBuilder) Proxy.getInstance().getServer().getGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);
+        connection.send(new ClientboundServerDataPacket(
+            serverInfoBuilder.getMotd(),
+            Proxy.getInstance().getServerIcon()
+        ));
         connection.send(new ClientboundServerLinksPacket(asList(
             new ServerLink(ServerLinkType.WEBSITE, null, "https://github.com/rfresh2/ZenithProxy"),
             new ServerLink(ServerLinkType.SUPPORT, null, "https://discord.gg/nJZrSaRKtb")
