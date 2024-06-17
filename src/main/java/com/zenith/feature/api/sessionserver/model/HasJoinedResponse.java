@@ -1,7 +1,7 @@
 package com.zenith.feature.api.sessionserver.model;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.feature.api.ProfileData;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 
 import java.util.List;
 import java.util.UUID;

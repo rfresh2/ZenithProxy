@@ -1,8 +1,8 @@
 package com.zenith.feature.api.sessionserver;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.feature.api.Api;
 import com.zenith.feature.api.sessionserver.model.*;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.KeyGenerator;

@@ -11,7 +11,7 @@ import org.geysermc.mcprotocollib.protocol.packet.status.serverbound.Serverbound
 public class CStatusResponseHandler implements PacketHandler<ClientboundStatusResponsePacket, ClientSession> {
     @Override
     public ClientboundStatusResponsePacket apply(final ClientboundStatusResponsePacket packet, final ClientSession session) {
-        ServerStatusInfo info = packet.getInfo();
+        ServerStatusInfo info = packet.parseInfo();
         ServerInfoHandler handler = session.getFlag(MinecraftConstants.SERVER_INFO_HANDLER_KEY);
         if (handler != null) {
             handler.handle(session, info);

@@ -1,12 +1,12 @@
 package com.zenith.network.server.handler.shared.outgoing;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.Proxy;
 import com.zenith.event.proxy.NonWhitelistedPlayerConnectedEvent;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Wait;
 import lombok.NonNull;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 

@@ -1,11 +1,11 @@
 package com.zenith.feature.spectator.entity.mob;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.viaversion.nbt.io.MNBTIO;
 import com.viaversion.nbt.tag.CompoundTag;
 import com.viaversion.nbt.tag.IntArrayTag;
 import com.viaversion.nbt.tag.ListTag;
 import com.zenith.mc.item.ItemRegistry;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.ItemStack;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataType;

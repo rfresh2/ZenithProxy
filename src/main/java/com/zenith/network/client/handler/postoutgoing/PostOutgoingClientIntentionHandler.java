@@ -1,8 +1,8 @@
 package com.zenith.network.client.handler.postoutgoing;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PostOutgoingPacketHandler;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.packet.handshake.serverbound.ClientIntentionPacket;

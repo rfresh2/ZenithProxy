@@ -1,8 +1,8 @@
 package com.zenith.feature.spectator.entity;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.cache.data.PlayerCache;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataType;

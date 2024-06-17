@@ -1,5 +1,5 @@
 package com.zenith.event.proxy;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 
 public record ProxySpectatorDisconnectedEvent(GameProfile clientGameProfile) { }

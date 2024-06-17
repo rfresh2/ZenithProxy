@@ -1,6 +1,5 @@
 package com.zenith.command.impl;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.Proxy;
 import com.zenith.command.Command;
@@ -13,6 +12,7 @@ import com.zenith.discord.DiscordBot;
 import com.zenith.discord.Embed;
 import com.zenith.feature.whitelist.PlayerListsManager;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
 import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntryAction;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerSpawnInfo;
