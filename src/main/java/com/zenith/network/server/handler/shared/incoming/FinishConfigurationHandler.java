@@ -22,7 +22,6 @@ public class FinishConfigurationHandler implements PacketHandler<ServerboundFini
             if (session.getFlag(MinecraftConstants.AUTOMATIC_KEEP_ALIVE_MANAGEMENT, true)) {
                 EXECUTOR.execute(new KeepAliveTask(session));
             }
-            session.setConfigured(true);
             return null;
         }
         return packet;
