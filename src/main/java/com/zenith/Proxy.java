@@ -1,7 +1,6 @@
 package com.zenith;
 
 import ch.qos.logback.classic.LoggerContext;
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.cache.CacheResetType;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.autoupdater.AutoUpdater;
@@ -28,6 +27,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.raphimc.minecraftauth.responsehandler.exception.MinecraftRequestException;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.BuiltinFlags;
 import org.geysermc.mcprotocollib.network.ProxyInfo;
 import org.geysermc.mcprotocollib.network.tcp.TcpConnectionManager;

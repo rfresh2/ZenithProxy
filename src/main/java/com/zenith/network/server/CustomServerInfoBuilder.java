@@ -1,12 +1,12 @@
 package com.zenith.network.server;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
 import com.zenith.feature.queue.Queue;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.Session;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 import org.geysermc.mcprotocollib.protocol.data.status.PlayerInfo;

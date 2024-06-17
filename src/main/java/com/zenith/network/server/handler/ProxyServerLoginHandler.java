@@ -1,6 +1,5 @@
 package com.zenith.network.server.handler;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.event.proxy.PlayerLoginEvent;
@@ -10,6 +9,7 @@ import com.zenith.network.server.CustomServerInfoBuilder;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Wait;
 import net.kyori.adventure.key.Key;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.Session;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.ServerLoginHandler;
