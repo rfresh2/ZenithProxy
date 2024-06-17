@@ -26,26 +26,31 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
     public void loggedIn(Session session) {
         final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
         SERVER_LOG.info("Player connected: UUID: {}, Username: {}, Address: {}", clientGameProfile.getId(), clientGameProfile.getName(), session.getRemoteAddress());
-        ServerConnection connection = (ServerConnection) session;
+        EXECUTOR.execute(() -> finishLogin((ServerConnection) session));
+    }
 
+    private void finishLogin(ServerConnection connection) {
+        final GameProfile clientGameProfile = connection.getFlag(MinecraftConstants.PROFILE_KEY);
         if (!Wait.waitUntil(() -> Proxy.getInstance().isConnected()
-                        && (Proxy.getInstance().getOnlineTimeSeconds() > 3 || Proxy.getInstance().isInQueue())
-                        && CACHE.getPlayerCache().getEntityId() != -1
-                        && nonNull(CACHE.getProfileCache().getProfile())
-                        && nonNull(CACHE.getPlayerCache().getGameMode())
-                        && nonNull(CACHE.getChunkCache().getCurrentDimension())
-                        && nonNull(CACHE.getChunkCache().getWorldName())
-                        && nonNull(CACHE.getTabListCache().get(CACHE.getProfileCache().getProfile().getId()))
-                        && connection.isWhitelistChecked(),
+                                && (Proxy.getInstance().getOnlineTimeSeconds() > 3 || Proxy.getInstance().isInQueue())
+                                && CACHE.getPlayerCache().getEntityId() != -1
+                                && nonNull(CACHE.getProfileCache().getProfile())
+                                && nonNull(CACHE.getPlayerCache().getGameMode())
+                                && nonNull(CACHE.getChunkCache().getCurrentDimension())
+                                && nonNull(CACHE.getChunkCache().getWorldName())
+                                && nonNull(CACHE.getTabListCache().get(CACHE.getProfileCache().getProfile().getId()))
+                                && connection.isWhitelistChecked(),
                             20)) {
-            session.disconnect("Client login timed out.");
+            connection.disconnect("Client login timed out.");
             return;
         }
+        // avoid race condition if player disconnects sometime during our wait
+        if (!connection.isConnected()) return;
         connection.setPlayer(true);
         EVENT_BUS.post(new PlayerLoginEvent(connection));
         if (connection.isSpectator()) {
             EVENT_BUS.post(new ProxySpectatorConnectedEvent(clientGameProfile));
-            session.send(new ClientboundLoginPacket(
+            connection.send(new ClientboundLoginPacket(
                 connection.getSpectatorSelfEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
                 CACHE.getChunkCache().getWorldNames().toArray(new Key[0]),
@@ -70,7 +75,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             ));
         } else {
             EVENT_BUS.post(new ProxyClientConnectedEvent(clientGameProfile));
-            session.send(new ClientboundLoginPacket(
+            connection.send(new ClientboundLoginPacket(
                 CACHE.getPlayerCache().getEntityId(),
                 CACHE.getPlayerCache().isHardcore(),
                 CACHE.getChunkCache().getWorldNames().toArray(new Key[0]),
@@ -95,10 +100,11 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
             ));
             if (!Proxy.getInstance().isInQueue()) { PlayerCache.sync(); }
             CustomServerInfoBuilder serverInfoBuilder = (CustomServerInfoBuilder) Proxy.getInstance().getServer().getGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);
-            session.send(new ClientboundServerDataPacket(
+            connection.send(new ClientboundServerDataPacket(
                 serverInfoBuilder.getMotd(),
                 Proxy.getInstance().getServerIcon()
             ));
         }
+        connection.setConfigured(true);
     }
 }
