@@ -99,12 +99,12 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                 false
             ));
             if (!Proxy.getInstance().isInQueue()) { PlayerCache.sync(); }
-            CustomServerInfoBuilder serverInfoBuilder = (CustomServerInfoBuilder) Proxy.getInstance().getServer().getGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);
-            connection.send(new ClientboundServerDataPacket(
-                serverInfoBuilder.getMotd(),
-                Proxy.getInstance().getServerIcon()
-            ));
         }
+        CustomServerInfoBuilder serverInfoBuilder = (CustomServerInfoBuilder) Proxy.getInstance().getServer().getGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);
+        connection.send(new ClientboundServerDataPacket(
+            serverInfoBuilder.getMotd(),
+            Proxy.getInstance().getServerIcon()
+        ));
         connection.setConfigured(true);
     }
 }
