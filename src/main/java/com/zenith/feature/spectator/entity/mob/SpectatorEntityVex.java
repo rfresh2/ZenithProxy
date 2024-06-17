@@ -1,7 +1,7 @@
 package com.zenith.feature.spectator.entity.mob;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.cache.data.PlayerCache;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;

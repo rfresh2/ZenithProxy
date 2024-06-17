@@ -76,14 +76,12 @@ dependencies {
     shade("com.github.rfresh2.Discord4j:discord4j-core:778616c1bb") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:5baf10c659") {
+    shade("com.github.rfresh2:MCProtocolLib:08eab632d0") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
-        exclude(group = "com.microsoft.azure")
-        exclude(group = "fr.litarvan")
     }
     shade("net.raphimc:MinecraftAuth:4.0.2")
-    val nettyVersion = "4.1.110.Final"
+    val nettyVersion = "4.1.111.Final"
     shade("io.netty:netty-codec-haproxy:$nettyVersion")
     shade("io.netty:netty-codec-dns:$nettyVersion")
     shade("io.netty:netty-codec-http2:$nettyVersion")

@@ -1,6 +1,6 @@
 package com.zenith.feature.whitelist;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 
 import java.time.Instant;
 import java.util.ArrayList;

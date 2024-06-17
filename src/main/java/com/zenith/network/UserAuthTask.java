@@ -1,7 +1,7 @@
 package com.zenith.network;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.network.server.ServerConnection;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundLoginCompressionPacket;

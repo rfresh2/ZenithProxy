@@ -1,10 +1,10 @@
 package com.zenith.cache.data;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import lombok.NonNull;
 import lombok.Setter;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 
 import javax.annotation.Nullable;

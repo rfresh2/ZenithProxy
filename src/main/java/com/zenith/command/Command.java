@@ -1,6 +1,5 @@
 package com.zenith.command;
 
-import com.github.steveice10.mc.auth.data.GameProfile;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
@@ -18,6 +17,7 @@ import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
 import discord4j.core.util.MentionUtil;
+import org.geysermc.mcprotocollib.auth.GameProfile;
 
 import java.util.List;
 import java.util.Map;

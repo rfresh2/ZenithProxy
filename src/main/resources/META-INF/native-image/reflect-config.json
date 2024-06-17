@@ -30,7 +30,7 @@
   "name":"[Lcom.fasterxml.jackson.databind.type.TypeModifier;"
 },
 {
-  "name":"[Lcom.github.steveice10.mc.auth.data.GameProfile;"
+  "name":"[Lorg.geysermc.mcprotocollib.auth.GameProfile;"
 },
 {
   "name":"[Lcom.viaversion.nbt.tag.CompoundTag;"
@@ -337,34 +337,34 @@
   "name":"com.github.luben.zstd.Zstd"
 },
 {
-  "name":"com.github.steveice10.mc.auth.data.GameProfile",
+  "name":"org.geysermc.mcprotocollib.auth.GameProfile",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.github.steveice10.mc.auth.data.GameProfile$MinecraftTexturesPayload",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.data.GameProfile$Property",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.github.steveice10.mc.auth.data.GameProfile$Texture",
+  "name":"org.geysermc.mcprotocollib.auth.GameProfile$MinecraftTexturesPayload",
   "allDeclaredFields":true,
   "unsafeAllocated":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.github.steveice10.mc.auth.data.GameProfile$TextureType",
+  "name":"org.geysermc.mcprotocollib.auth.GameProfile$Property",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.geysermc.mcprotocollib.auth.GameProfile$Texture",
+  "allDeclaredFields":true,
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.geysermc.mcprotocollib.auth.GameProfile$TextureType",
   "allDeclaredFields":true,
   "unsafeAllocated":true
 },
 {
-  "name":"com.github.steveice10.mc.auth.service.SessionService$MinecraftProfileResponse",
+  "name":"org.geysermc.mcprotocollib.auth.SessionService$MinecraftProfileResponse",
   "allDeclaredFields":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
