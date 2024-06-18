@@ -6,6 +6,8 @@ import com.zenith.feature.api.mojang.model.MojangProfileResponse;
 import java.util.Optional;
 
 public class MojangApi extends Api {
+    public static MojangApi INSTANCE = new MojangApi();
+
     public MojangApi() {
         super("https://api.mojang.com");
     }

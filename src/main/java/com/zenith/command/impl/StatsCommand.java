@@ -6,13 +6,13 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
+import com.zenith.feature.api.vcapi.VcApi;
 import com.zenith.feature.api.vcapi.model.StatsResponse;
 
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-import static com.zenith.Shared.VC;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.util.math.MathHelper.formatDurationLong;
 import static discord4j.common.util.TimestampFormat.SHORT_DATE_TIME;
@@ -37,7 +37,7 @@ public class StatsCommand extends Command {
         return command("stats")
             .then(argument("playerName", wordWithChars()).executes(c -> {
                 final String playerName = c.getArgument("playerName", String.class);
-                final Optional<StatsResponse> statsResponse = VC.getStats(playerName);
+                final Optional<StatsResponse> statsResponse = VcApi.INSTANCE.getStats(playerName);
                 if (statsResponse.isEmpty()) {
                     c.getSource().getEmbed()
                         .title(playerName + " not found");

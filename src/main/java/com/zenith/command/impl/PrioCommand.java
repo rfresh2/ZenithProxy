@@ -6,9 +6,9 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
+import com.zenith.feature.api.prioban.PriobanApi;
 
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.PRIOBAN;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -49,7 +49,7 @@ public class PrioCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Checking Prio ban");
                 c.getSource().getEmbed()
-                    .addField("Banned", (PRIOBAN.checkPrioBan().map(Object::toString).orElse("unknown")), true);
+                    .addField("Banned", (PriobanApi.INSTANCE.checkPrioBan().map(Object::toString).orElse("unknown")), true);
             }));
     }
 

@@ -2,6 +2,7 @@ package com.zenith.network.server.handler.shared.outgoing;
 
 import com.zenith.Proxy;
 import com.zenith.event.proxy.NonWhitelistedPlayerConnectedEvent;
+import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerConnection;
 import com.zenith.util.Wait;
@@ -102,7 +103,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             final GameProfile spectatorFakeProfile = new GameProfile(spectatorFakeUUID, clientGameProfile.getName());
             // caching assumes the spectatorUUID is immutable
             if (clientGameProfile.getProperty("textures") == null) {
-                SESSION_SERVER.getProfileAndSkin(clientGameProfile.getId())
+                SessionServerApi.INSTANCE.getProfileAndSkin(clientGameProfile.getId())
                     .ifPresentOrElse(p -> spectatorFakeProfile.setProperties(p.getProperties()),
                                      () -> SERVER_LOG.info("Failed getting spectator skin for {} [{}]", clientGameProfile.getName(), clientGameProfile.getId().toString()));
             } else {

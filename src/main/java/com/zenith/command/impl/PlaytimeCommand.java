@@ -6,11 +6,11 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
+import com.zenith.feature.api.vcapi.VcApi;
 import com.zenith.util.math.MathHelper;
 
 import java.time.Duration;
 
-import static com.zenith.Shared.VC;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static java.util.Arrays.asList;
@@ -33,7 +33,7 @@ public class PlaytimeCommand extends Command {
         return command("playtime")
             .then(argument("playerName", wordWithChars()).executes(c -> {
                 final String playerName = getString(c, "playerName");
-                VC.getPlaytime(playerName)
+                VcApi.INSTANCE.getPlaytime(playerName)
                     .ifPresentOrElse((response) ->
                                          c.getSource().getEmbed()
                                              .title("Playtime")
