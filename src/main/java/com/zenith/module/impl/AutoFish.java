@@ -8,6 +8,7 @@ import com.zenith.event.module.SplashSoundEffectEvent;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.util.Timer;
 import com.zenith.util.math.MathHelper;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.ItemStack;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.object.ProjectileData;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
@@ -33,13 +34,14 @@ public class AutoFish extends AbstractInventoryModule {
 
     @Override
     public void subscribeEvents() {
-        EVENT_BUS.subscribe(this,
-                            of(EntityFishHookSpawnEvent.class, this::handleEntityFishHookSpawnEvent),
-                            of(SplashSoundEffectEvent.class, this::handleSplashSoundEffectEvent),
-                            of(ClientBotTick.class, this::handleClientTick),
-                            of(ClientBotTick.Starting.class, this::handleBotTickStarting),
-                            of(ClientBotTick.Stopped.class, this::handleBotTickStopped),
-                            of(ClientBotTick.class, -30000 + MOVEMENT_PRIORITY, this::handlePostTick)
+        EVENT_BUS.subscribe(
+            this,
+            of(EntityFishHookSpawnEvent.class, this::handleEntityFishHookSpawnEvent),
+            of(SplashSoundEffectEvent.class, this::handleSplashSoundEffectEvent),
+            of(ClientBotTick.class, this::handleClientTick),
+            of(ClientBotTick.Starting.class, this::handleBotTickStarting),
+            of(ClientBotTick.Stopped.class, this::handleBotTickStopped),
+            of(ClientBotTick.class, -30000 + MOVEMENT_PRIORITY, this::handlePostTick)
         );
     }
 
@@ -47,7 +49,6 @@ public class AutoFish extends AbstractInventoryModule {
     public boolean shouldBeEnabled() {
         return CONFIG.client.extra.autoFish.enabled;
     }
-
 
     public void handleBotTickStarting(final ClientBotTick.Starting event) {
         reset();
@@ -97,7 +98,10 @@ public class AutoFish extends AbstractInventoryModule {
             return;
         }
         if (MODULE.get(AutoEat.class).isEating() || MODULE.get(KillAura.class).isActive()) return;
-        if (castTimer.tick(CONFIG.client.extra.autoFish.castDelay)) {
+        if (castTimer.tick(CONFIG.client.extra.autoFish.castDelay)
+            && !isFishing()
+            && isRodInHand()
+            && hasRotation()) {
             cast();
         }
         if (isFishing() && Instant.now().getEpochSecond() - castTime.getEpochSecond() > 60) {
@@ -113,15 +117,24 @@ public class AutoFish extends AbstractInventoryModule {
         PATHING.rotate(CONFIG.client.extra.autoFish.yaw, CONFIG.client.extra.autoFish.pitch, MOVEMENT_PRIORITY);
     }
 
-    private void cast() {
-        // rotate to water if needed
+    private boolean hasRotation() {
         var sim = MODULE.get(PlayerSimulation.class);
-        if (MathHelper.isNear(MathHelper.wrapYaw(sim.getYaw()), CONFIG.client.extra.autoFish.yaw, 0.1f)
-            && MathHelper.isNear(MathHelper.wrapPitch(sim.getPitch()), CONFIG.client.extra.autoFish.pitch, 0.1f)) {
-            sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet()));
-            castTime = Instant.now();
-            delay = 5;
-        }
+        return MathHelper.isNear(MathHelper.wrapYaw(sim.getYaw()), CONFIG.client.extra.autoFish.yaw, 0.1f)
+            && MathHelper.isNear(MathHelper.wrapPitch(sim.getPitch()), CONFIG.client.extra.autoFish.pitch, 0.1f);
+    }
+
+    private boolean isRodInHand() {
+        return switch (rodHand) {
+            case MAIN_HAND -> itemPredicate(CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND));
+            case OFF_HAND -> itemPredicate(CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND));
+            case null -> false;
+        };
+    }
+
+    private void cast() {
+        sendClientPacketAsync(new ServerboundUseItemPacket(rodHand, CACHE.getPlayerCache().getActionId().incrementAndGet()));
+        castTime = Instant.now();
+        delay = 5;
     }
 
     public boolean switchToFishingRod() {
