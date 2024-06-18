@@ -94,7 +94,7 @@ dependencies {
     shade("io.netty:netty-transport-native-epoll:$nettyVersion:linux-x86_64")
     shade("io.netty:netty-transport-native-unix-common:$nettyVersion:linux-x86_64")
     shade("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
-    shade("de.themoep:minedown-adventure:1.7.2-SNAPSHOT")
+    shade("de.themoep:minedown-adventure:1.7.3-SNAPSHOT")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
     shade("org.redisson:redisson:3.31.0") {
@@ -111,8 +111,8 @@ dependencies {
     shade("net.raphimc:ViaLoader:3.0.0")
     shade("com.viaversion:viaversion:5.0.0")
     shade("com.viaversion:viabackwards:5.0.0")
-    shade("org.jline:jline:3.26.1")
-    shade("org.jline:jline-terminal-jansi:3.26.1")
+    shade("org.jline:jline:3.26.2")
+    shade("org.jline:jline-terminal-jansi:3.26.2")
     shade("ar.com.hjg:pngj:2.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     val lombokVersion = "1.18.32"
