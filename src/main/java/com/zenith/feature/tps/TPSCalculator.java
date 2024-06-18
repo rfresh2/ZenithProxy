@@ -1,55 +1,60 @@
 package com.zenith.feature.tps;
 
-import com.google.common.primitives.Floats;
-import com.zenith.util.CircularFifoQueue;
+import com.google.common.primitives.Doubles;
+import com.zenith.event.proxy.ConnectEvent;
+
+import java.util.Arrays;
+
+import static com.zenith.Shared.EVENT_BUS;
 
 public class TPSCalculator {
 
-    /**
-     * Calculator credits to Lambda
-     */
-
-    private static final int TICK_RATES_SIZE = 120;
-    private final CircularFifoQueue<Float> tickRates;
-    private Long timeSinceLastTimeUpdate = -1L;
+    private static final int TICK_RATES_SIZE = 60; // 1 sample per second - so 1 minute
+    // circularly written array
+    private final double[] tickRates = new double[TICK_RATES_SIZE];
+    private int nextTickIndex = 0;
+    private long timeSinceLastTimeUpdate = -1L;
 
     public TPSCalculator() {
-        this.tickRates = new CircularFifoQueue<>(TICK_RATES_SIZE);
         reset();
+        // calculators must always be reused
+        // beware: event sub is never unsubbed
+        EVENT_BUS.subscribe(this, ConnectEvent.class, (e) -> reset());
     }
 
+    // expected to be received once per second by the mc server
     public void handleTimeUpdate() {
-        if (this.timeSinceLastTimeUpdate != -1L) {
+        if (timeSinceLastTimeUpdate != -1L) {
             final double timeElapsed = (System.nanoTime() - timeSinceLastTimeUpdate) / 1E9;
-            final float tps = Floats.constrainToRange((float) (20.0 / timeElapsed), 0.0f, 20.0f);
-            synchronized (this.tickRates) {
-                this.tickRates.add(tps);
+            final double tps = Doubles.constrainToRange(20.0 / timeElapsed, 0.0, 20.0);
+            synchronized (tickRates) {
+                tickRates[nextTickIndex] = tps;
+                if (++nextTickIndex >= tickRates.length) nextTickIndex = 0;
             }
         }
-        this.timeSinceLastTimeUpdate = System.nanoTime();
+        timeSinceLastTimeUpdate = System.nanoTime();
     }
 
     public void reset() {
-        synchronized (this.tickRates) {
+        synchronized (tickRates) {
             // fill with 20.0 tps by default
-            for (int i = 0; i < TICK_RATES_SIZE; i++) {
-                this.tickRates.add(20.0f);
-            }
-            this.timeSinceLastTimeUpdate = -1L;
+            Arrays.fill(tickRates, 20.0);
+            nextTickIndex = 0;
+            timeSinceLastTimeUpdate = -1L;
         }
     }
 
-    private Float getTickRatesAverage() {
-        synchronized (this.tickRates) {
-            if (this.tickRates.isEmpty()) return 0.0f;
-            return this.tickRates.stream()
-                    .reduce(Float::sum)
-                    .map(sum -> sum / this.tickRates.size())
-                    .orElse(0.0f);
+    private double getTickRateAverage() {
+        synchronized (tickRates) {
+            double sum = 0f;
+            for (int i = 0; i < tickRates.length; i++) {
+                sum += tickRates[i];
+            }
+            return sum / tickRates.length;
         }
     }
 
     public String getTPS() {
-        return String.format("%.2f", getTickRatesAverage());
+        return String.format("%.2f", getTickRateAverage());
     }
 }
