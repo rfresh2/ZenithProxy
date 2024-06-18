@@ -29,6 +29,7 @@ public class DebugCommand extends Command {
             Debug settings for features in testing or for use in development.
             """,
             asList(
+                "deprecationWarning on/off",
                 "sync inventory",
                 "sync chunks",
                 "clearEffects",
@@ -168,12 +169,19 @@ public class DebugCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Client Tick Fixed Delay " + toggleStrCaps(CONFIG.debug.clientTickFixedDelay));
                 return OK;
+            })))
+            .then(literal("deprecationWarning").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.deprecationWarning_1_20_6 = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Deprecation warning " + toggleStrCaps(CONFIG.deprecationWarning_1_20_6));
+                return OK;
             })));
     }
 
     @Override
     public void postPopulate(final Embed builder) {
         builder
+            .addField("Deprecation Warning", toggleStr(CONFIG.deprecationWarning_1_20_6), false)
             .addField("Packet Log", toggleStr(CONFIG.debug.packetLog.enabled), false)
             .addField("Client Packet Log", toggleStr(CONFIG.debug.packetLog.clientPacketLog.received), false)
             .addField("Server Packet Log", toggleStr(CONFIG.debug.packetLog.serverPacketLog.received), false)

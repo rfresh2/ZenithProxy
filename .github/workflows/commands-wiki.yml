@@ -2,9 +2,9 @@ name: Publish Commands Wiki
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - '[0-9]+.[0-9]+.[0-9]+\+1.20.6'
+#  push:
+#    tags:
+#      - '[0-9]+.[0-9]+.[0-9]+\+1.20.6'
 
 jobs:
   generate:

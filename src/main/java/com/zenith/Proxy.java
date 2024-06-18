@@ -192,6 +192,10 @@ public class Proxy {
                 DEFAULT_LOG.warn("Prereleases include experiments that may contain bugs and are not always updated with fixes");
                 DEFAULT_LOG.warn("Switch to a stable release with the `channel` command");
             }
+            if (CONFIG.deprecationWarning_1_20_6) {
+                DEFAULT_LOG.info("1.20.6 support has been discontinued, please update to 1.21!");
+                DEFAULT_LOG.info("Command to update: `channel set <java/linux> 1.21.0`");
+            }
             if (!connected) {
                 DEFAULT_LOG.info("Proxy IP: {}", CONFIG.server.getProxyAddress());
                 DEFAULT_LOG.info("Use the `connect` command to log in!");
