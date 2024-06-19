@@ -30,9 +30,6 @@
   "name":"[Lcom.fasterxml.jackson.databind.type.TypeModifier;"
 },
 {
-  "name":"[Lorg.geysermc.mcprotocollib.auth.GameProfile;"
-},
-{
   "name":"[Lcom.viaversion.nbt.tag.CompoundTag;"
 },
 {
@@ -136,6 +133,9 @@
 },
 {
   "name":"[Ljava.util.UUID;"
+},
+{
+  "name":"[Lorg.geysermc.mcprotocollib.auth.GameProfile;"
 },
 {
   "name":"[Lorg.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;"
@@ -335,38 +335,6 @@
 },
 {
   "name":"com.github.luben.zstd.Zstd"
-},
-{
-  "name":"org.geysermc.mcprotocollib.auth.GameProfile",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"org.geysermc.mcprotocollib.auth.GameProfile$MinecraftTexturesPayload",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"org.geysermc.mcprotocollib.auth.GameProfile$Property",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"org.geysermc.mcprotocollib.auth.GameProfile$Texture",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"org.geysermc.mcprotocollib.auth.GameProfile$TextureType",
-  "allDeclaredFields":true,
-  "unsafeAllocated":true
-},
-{
-  "name":"org.geysermc.mcprotocollib.auth.SessionService$MinecraftProfileResponse",
-  "allDeclaredFields":true,
-  "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"com.google.common.util.concurrent.AbstractFuture",
@@ -586,6 +554,13 @@
   "queryAllDeclaredMethods":true,
   "queryAllDeclaredConstructors":true,
   "methods":[{"name":"<init>","parameterTypes":["java.lang.String","java.lang.String","java.util.List"] }]
+},
+{
+  "name":"com.zenith.feature.api.mcstatus.model.MCStatusResponse",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["boolean","java.lang.String","int","java.lang.String"] }]
 },
 {
   "name":"com.zenith.feature.api.minetools.model.MinetoolsProfileResponse",
@@ -1659,6 +1634,38 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"org.geysermc.mcprotocollib.auth.GameProfile",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.geysermc.mcprotocollib.auth.GameProfile$MinecraftTexturesPayload",
+  "allDeclaredFields":true,
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.geysermc.mcprotocollib.auth.GameProfile$Property",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.geysermc.mcprotocollib.auth.GameProfile$Texture",
+  "allDeclaredFields":true,
+  "unsafeAllocated":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"org.geysermc.mcprotocollib.auth.GameProfile$TextureType",
+  "allDeclaredFields":true,
+  "unsafeAllocated":true
+},
+{
+  "name":"org.geysermc.mcprotocollib.auth.SessionService$MinecraftProfileResponse",
+  "allDeclaredFields":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"org.geysermc.mcprotocollib.network.ProxyInfo$Type",
   "allDeclaredFields":true
 },
@@ -2281,7 +2288,7 @@
 {
   "name":"sun.misc.Unsafe",
   "allDeclaredFields":true,
-  "methods":[{"name":"allocateInstance","parameterTypes":["java.lang.Class"] }, {"name":"copyMemory","parameterTypes":["java.lang.Object","long","java.lang.Object","long","long"] }, {"name":"getAndAddLong","parameterTypes":["java.lang.Object","long","long"] }, {"name":"getAndSetObject","parameterTypes":["java.lang.Object","long","java.lang.Object"] }, {"name":"invokeCleaner","parameterTypes":["java.nio.ByteBuffer"] }, {"name":"storeFence","parameterTypes":[] }]
+  "methods":[{"name":"addressSize","parameterTypes":[] }, {"name":"allocateInstance","parameterTypes":["java.lang.Class"] }, {"name":"allocateMemory","parameterTypes":["long"] }, {"name":"arrayBaseOffset","parameterTypes":["java.lang.Class"] }, {"name":"arrayIndexScale","parameterTypes":["java.lang.Class"] }, {"name":"copyMemory","parameterTypes":["java.lang.Object","long","java.lang.Object","long","long"] }, {"name":"freeMemory","parameterTypes":["long"] }, {"name":"getAndAddLong","parameterTypes":["java.lang.Object","long","long"] }, {"name":"getAndSetObject","parameterTypes":["java.lang.Object","long","java.lang.Object"] }, {"name":"getBoolean","parameterTypes":["java.lang.Object","long"] }, {"name":"getByte","parameterTypes":["long"] }, {"name":"getByte","parameterTypes":["java.lang.Object","long"] }, {"name":"getInt","parameterTypes":["long"] }, {"name":"getInt","parameterTypes":["java.lang.Object","long"] }, {"name":"getLong","parameterTypes":["long"] }, {"name":"getLong","parameterTypes":["java.lang.Object","long"] }, {"name":"invokeCleaner","parameterTypes":["java.nio.ByteBuffer"] }, {"name":"objectFieldOffset","parameterTypes":["java.lang.reflect.Field"] }, {"name":"putByte","parameterTypes":["long","byte"] }, {"name":"putByte","parameterTypes":["java.lang.Object","long","byte"] }, {"name":"putInt","parameterTypes":["long","int"] }, {"name":"putInt","parameterTypes":["java.lang.Object","long","int"] }, {"name":"putLong","parameterTypes":["long","long"] }, {"name":"putLong","parameterTypes":["java.lang.Object","long","long"] }, {"name":"reallocateMemory","parameterTypes":["long","long"] }, {"name":"setMemory","parameterTypes":["long","long","byte"] }, {"name":"setMemory","parameterTypes":["java.lang.Object","long","long","byte"] }, {"name":"staticFieldBase","parameterTypes":["java.lang.reflect.Field"] }, {"name":"staticFieldOffset","parameterTypes":["java.lang.reflect.Field"] }, {"name":"storeFence","parameterTypes":[] }]
 },
 {
   "name":"sun.misc.VM"
