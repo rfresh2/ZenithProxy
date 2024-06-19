@@ -59,7 +59,6 @@ public class ConnectionTestCommand extends Command {
                             This means you are either hosting ZenithProxy on your home PC or you have not set the public IP yet.
                             
                             To configure the `proxyIP` use the `help serverConnection` command.
-                                     
                             """);
                     return;
                 }
@@ -67,17 +66,11 @@ public class ConnectionTestCommand extends Command {
                     c.getSource().getEmbed(),
                     proxyAddress,
                     () -> """
-                         Unable to connect to %s
-                         
-                         Either the `proxyIP` setting is not set to a public IP address or your instance is not
-                         exposed on the public internet.
-    
-                         To configure the `proxyIP` use the `help serverConnection` command
-                         
-                         If you are hosting this on a VPS this is usually caused by a firewall needing to be disabled.
-                         Consult with your VPS provider for how to disable the firewall.
-    
-                         If you are hosting this on a home PC you need to disable any firewall and configure port forwarding in your router.
+                        Unable to connect to configured `proxyIP`: %s
+                             
+                        This test is most likely failing due to your firewall needing to be disabled.
+                        
+                        For instructions on how to disable the firewall consult with your VPS provider. Each provider varies in steps.
                          """.formatted(proxyAddress),
                     () -> """
                          Internal error while querying the MC server status API.
@@ -91,7 +84,7 @@ public class ConnectionTestCommand extends Command {
                     c.getSource().getEmbed(),
                     proxyAddress,
                     () -> """
-                        Unable to connect to %s. No server response received.
+                        Unable to connect to: %s
                         """.formatted(proxyAddress),
                     () -> """
                         Internal error while querying the MC server status API.
