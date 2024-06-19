@@ -362,7 +362,7 @@ public final class Config {
         public boolean kickDisconnect = false;
         public boolean resyncTeleports = true;
         public boolean ncpStrictInventory = false;
-        public boolean clientTickFixedDelay = false;
+        public boolean clientTickFixedRate = false;
 
         public static final class PacketLog {
             public boolean enabled = false;

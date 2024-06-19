@@ -43,7 +43,7 @@ public class DebugCommand extends Command {
                 "dc",
                 "teleportResync on/off",
                 "ncpStrictInventory on/off",
-                "clientTickFixedDelay on/off"
+                "clientTickFixedRate on/off"
             )
         );
     }
@@ -164,10 +164,10 @@ public class DebugCommand extends Command {
                     .title("NCP Strict Inventory " + toggleStrCaps(CONFIG.debug.ncpStrictInventory));
                 return 1;
             })))
-            .then(literal("clientTickFixedDelay").then(argument("toggle", toggle()).executes(c -> {
-                CONFIG.debug.clientTickFixedDelay = getToggle(c, "toggle");
+            .then(literal("clientTickFixedRate").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.clientTickFixedRate = getToggle(c, "toggle");
                 c.getSource().getEmbed()
-                    .title("Client Tick Fixed Delay " + toggleStrCaps(CONFIG.debug.clientTickFixedDelay));
+                    .title("Client Tick Fixed Rate " + toggleStrCaps(CONFIG.debug.clientTickFixedRate));
                 return OK;
             })))
             .then(literal("deprecationWarning").then(argument("toggle", toggle()).executes(c -> {
@@ -191,7 +191,7 @@ public class DebugCommand extends Command {
             .addField("Kick Disconnect", toggleStr(CONFIG.debug.kickDisconnect), false)
             .addField("Teleport Resync", toggleStr(CONFIG.debug.resyncTeleports), false)
             .addField("NCP Strict Inventory", toggleStr(CONFIG.debug.ncpStrictInventory), false)
-            .addField("Client Tick Fixed Delay", toggleStr(CONFIG.debug.clientTickFixedDelay), false)
+            .addField("Client Tick Fixed Rate", toggleStr(CONFIG.debug.clientTickFixedRate), false)
             .primaryColor();
     }
 }

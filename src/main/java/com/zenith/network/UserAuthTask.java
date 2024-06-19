@@ -1,5 +1,6 @@
 package com.zenith.network;
 
+import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.network.server.ServerConnection;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
@@ -11,7 +12,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.SESSION_SERVER;
 
 public class UserAuthTask implements Runnable {
     private final ServerConnection session;
@@ -26,9 +26,9 @@ public class UserAuthTask implements Runnable {
     public void run() {
         GameProfile profile;
         if (this.key != null) {
-            final Optional<GameProfile> response = SESSION_SERVER.hasJoined(
+            final Optional<GameProfile> response = SessionServerApi.INSTANCE.hasJoined(
                 session.getUsername(),
-                SESSION_SERVER.getSharedSecret(session.getServerId(),
+                SessionServerApi.INSTANCE.getSharedSecret(session.getServerId(),
                                                session.getKeyPair().getPublic(),
                                                this.key));
             if (response.isEmpty()) {

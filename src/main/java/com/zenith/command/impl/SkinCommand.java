@@ -10,6 +10,7 @@ import com.zenith.command.brigadier.CommandSource;
 import com.zenith.command.util.CommandOutputHelper;
 import com.zenith.discord.DiscordBot;
 import com.zenith.discord.Embed;
+import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.feature.whitelist.PlayerListsManager;
 import com.zenith.network.server.ServerConnection;
 import org.geysermc.mcprotocollib.auth.GameProfile;
@@ -23,7 +24,8 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 import java.util.EnumSet;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.word;
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CACHE;
+import static com.zenith.Shared.EXECUTOR;
 import static java.util.Arrays.asList;
 
 public class SkinCommand extends Command {
@@ -58,7 +60,7 @@ public class SkinCommand extends Command {
 
     private void updateSkin(final ServerConnection session, final String playerName) {
         PlayerListsManager.getProfileFromUsername(playerName)
-            .flatMap(profile -> SESSION_SERVER.getProfileAndSkin(profile.uuid()))
+            .flatMap(profile -> SessionServerApi.INSTANCE.getProfileAndSkin(profile.uuid()))
             .ifPresentOrElse(profile -> {
                 var existingProfile = CACHE.getProfileCache().getProfile();
                 if (existingProfile == null) {
