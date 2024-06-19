@@ -48,6 +48,7 @@ public class CommandManager {
         new ClientConnectionCommand(),
         new CommandConfigCommand(),
         new ConnectCommand(),
+        new ConnectionTestCommand(),
         new DatabaseCommand(),
         new DebugCommand(),
         new DisconnectCommand(),

@@ -21,10 +21,11 @@ import java.util.UUID;
 import static com.zenith.Shared.*;
 
 public class SessionServerApi extends Api {
+    public static SessionServerApi INSTANCE = new SessionServerApi();
+
     public SessionServerApi() {
         super("https://sessionserver.mojang.com");
     }
-
 
     public Optional<SessionProfileResponse> getProfile(final UUID uuid) {
         return get("/session/minecraft/profile/" + uuid.toString(), SessionProfileResponse.class);

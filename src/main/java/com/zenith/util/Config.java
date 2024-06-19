@@ -13,6 +13,7 @@ import static java.util.Arrays.asList;
 
 
 public final class Config {
+    public boolean deprecationWarning_1_20_6 = true;
     public final Authentication authentication = new Authentication();
     public final Client client = new Client();
     public final Debug debug = new Debug();
@@ -361,7 +362,7 @@ public final class Config {
         public boolean kickDisconnect = false;
         public boolean resyncTeleports = true;
         public boolean ncpStrictInventory = false;
-        public boolean clientTickFixedDelay = false;
+        public boolean clientTickFixedRate = false;
 
         public static final class PacketLog {
             public boolean enabled = false;

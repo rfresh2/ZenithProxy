@@ -3,6 +3,9 @@ package com.zenith;
 import ch.qos.logback.classic.LoggerContext;
 import com.zenith.cache.CacheResetType;
 import com.zenith.event.proxy.*;
+import com.zenith.feature.api.crafthead.CraftheadApi;
+import com.zenith.feature.api.minotar.MinotarApi;
+import com.zenith.feature.api.prioban.PriobanApi;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.NoOpAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
@@ -191,6 +194,10 @@ public class Proxy {
                 DEFAULT_LOG.warn("You are currently using a ZenithProxy prerelease");
                 DEFAULT_LOG.warn("Prereleases include experiments that may contain bugs and are not always updated with fixes");
                 DEFAULT_LOG.warn("Switch to a stable release with the `channel` command");
+            }
+            if (CONFIG.deprecationWarning_1_20_6) {
+                DEFAULT_LOG.info("1.20.6 support has been discontinued, please update to 1.21!");
+                DEFAULT_LOG.info("Command to update: `channel set <java/linux> 1.21.0`");
             }
             if (!connected) {
                 DEFAULT_LOG.info("Proxy IP: {}", CONFIG.server.getProxyAddress());
@@ -519,7 +526,7 @@ public class Proxy {
 
     public void updatePrioBanStatus() {
         if (!CONFIG.client.extra.prioBan2b2tCheck || !isOn2b2t()) return;
-        this.isPrioBanned = PRIOBAN.checkPrioBan();
+        this.isPrioBanned = PriobanApi.INSTANCE.checkPrioBan();
         if (this.isPrioBanned.isPresent() && !this.isPrioBanned.get().equals(CONFIG.authentication.prioBanned)) {
             EVENT_BUS.postAsync(new PrioBanStatusUpdateEvent(this.isPrioBanned.get()));
             CONFIG.authentication.prioBanned = this.isPrioBanned.get();
@@ -557,12 +564,12 @@ public class Proxy {
                 if (profile != null && profile.getId() != null) {
                     // do uuid lookup
                     final UUID uuid = profile.getId();
-                    this.serverIcon = MINOTAR.getAvatar(uuid).or(() -> CRAFTHEAD.getAvatar(uuid))
+                    this.serverIcon = MinotarApi.INSTANCE.getAvatar(uuid).or(() -> CraftheadApi.INSTANCE.getAvatar(uuid))
                         .orElseThrow(() -> new IOException("Unable to download server icon for \"" + uuid + "\""));
                 } else {
                     // do username lookup
                     final String username = CONFIG.authentication.username;
-                    this.serverIcon = MINOTAR.getAvatar(username).or(() -> CRAFTHEAD.getAvatar(username))
+                    this.serverIcon = MinotarApi.INSTANCE.getAvatar(username).or(() -> CraftheadApi.INSTANCE.getAvatar(username))
                         .orElseThrow(() -> new IOException("Unable to download server icon for \"" + username + "\""));
                 }
                 if (DISCORD.isRunning()) {

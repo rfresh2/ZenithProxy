@@ -1,5 +1,6 @@
 package com.zenith.network.client.handler.incoming;
 
+import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
 import org.geysermc.mcprotocollib.auth.GameProfile;
@@ -8,8 +9,6 @@ import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundH
 import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundKeyPacket;
 
 import javax.crypto.SecretKey;
-
-import static com.zenith.Shared.SESSION_SERVER;
 
 public class CHelloHandler implements PacketHandler<ClientboundHelloPacket, ClientSession> {
     @Override
@@ -21,14 +20,14 @@ public class CHelloHandler implements PacketHandler<ClientboundHelloPacket, Clie
             session.disconnect("No Profile or Access Token provided.");
             return null;
         }
-        final SecretKey key = SESSION_SERVER.generateClientKey();
+        final SecretKey key = SessionServerApi.INSTANCE.generateClientKey();
         if (key == null) {
             session.disconnect("Failed to generate secret key.");
             return null;
         }
-        final String sharedSecret = SESSION_SERVER.getSharedSecret(packet.getServerId(), packet.getPublicKey(), key);
+        final String sharedSecret = SessionServerApi.INSTANCE.getSharedSecret(packet.getServerId(), packet.getPublicKey(), key);
         try {
-            SESSION_SERVER.joinServer(profile.getId(), accessToken, sharedSecret);
+            SessionServerApi.INSTANCE.joinServer(profile.getId(), accessToken, sharedSecret);
         } catch (Exception e) {
             session.disconnect("Login failed: Authentication service unavailable.", e);
             return null;

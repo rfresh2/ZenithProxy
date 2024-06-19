@@ -1,6 +1,10 @@
 package com.zenith.feature.whitelist;
 
 import com.zenith.feature.api.ProfileData;
+import com.zenith.feature.api.crafthead.CraftheadApi;
+import com.zenith.feature.api.minetools.MinetoolsApi;
+import com.zenith.feature.api.mojang.MojangApi;
+import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.util.Wait;
 import lombok.Getter;
 
@@ -93,14 +97,14 @@ public class PlayerListsManager {
     }
 
     public static Optional<ProfileData> getProfileFromUsername(final String username) {
-        return MOJANG.getProfile(username).map(o -> (ProfileData) o)
-            .or(() -> CRAFTHEAD.getProfile(username).map(o -> (ProfileData) o)
-                .or(() -> MINETOOLS.getProfileFromUsername(username)));
+        return MojangApi.INSTANCE.getProfile(username).map(o -> (ProfileData) o)
+            .or(() -> CraftheadApi.INSTANCE.getProfile(username).map(o -> (ProfileData) o)
+                .or(() -> MinetoolsApi.INSTANCE.getProfileFromUsername(username)));
     }
 
     public static Optional<ProfileData> getProfileFromUUID(final UUID uuid) {
-        return SESSION_SERVER.getProfile(uuid).map(o -> (ProfileData) o)
-            .or(() -> CRAFTHEAD.getProfile(uuid).map(o -> (ProfileData) o)
-                .or(() -> MINETOOLS.getProfileFromUUID(uuid)));
+        return SessionServerApi.INSTANCE.getProfile(uuid).map(o -> (ProfileData) o)
+            .or(() -> CraftheadApi.INSTANCE.getProfile(uuid).map(o -> (ProfileData) o)
+                .or(() -> MinetoolsApi.INSTANCE.getProfileFromUUID(uuid)));
     }
 }

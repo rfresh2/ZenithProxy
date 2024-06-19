@@ -1,5 +1,6 @@
 package com.zenith.feature.queue;
 
+import com.zenith.feature.api.vcapi.VcApi;
 import com.zenith.feature.queue.mcping.MCPing;
 import com.zenith.feature.queue.mcping.data.FinalResponse;
 import lombok.Getter;
@@ -91,7 +92,7 @@ public class Queue {
 
     private static boolean apiUpdate() {
         try {
-            var response = VC.getQueue().orElseThrow();
+            var response = VcApi.INSTANCE.getQueue().orElseThrow();
             queueStatus = new QueueStatus(response.prio(), response.regular(), response.time().toEpochSecond());
             return true;
         } catch (final Exception e) {

@@ -55,9 +55,9 @@ public class ClientTickManager {
             CLIENT_LOG.debug("Starting Client Ticks");
             EVENT_BUS.post(ClientTickEvent.Starting.INSTANCE);
             var eventLoop = Proxy.getInstance().getClient().getClientEventLoop();
-            this.clientTickFuture = CONFIG.debug.clientTickFixedDelay
-                ? eventLoop.scheduleWithFixedDelay(tickRunnable, 0, 50, TimeUnit.MILLISECONDS)
-                : eventLoop.scheduleAtFixedRate(tickRunnable, 0, 50, TimeUnit.MILLISECONDS);
+            this.clientTickFuture = CONFIG.debug.clientTickFixedRate
+                ? eventLoop.scheduleAtFixedRate(tickRunnable, 0, 50, TimeUnit.MILLISECONDS)
+                : eventLoop.scheduleWithFixedDelay(tickRunnable, 0, 50, TimeUnit.MILLISECONDS);
         }
     }
 

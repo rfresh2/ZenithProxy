@@ -12,13 +12,6 @@ import com.zenith.cache.DataCache;
 import com.zenith.command.CommandManager;
 import com.zenith.database.DatabaseManager;
 import com.zenith.discord.DiscordBot;
-import com.zenith.feature.api.crafthead.CraftheadApi;
-import com.zenith.feature.api.minetools.MinetoolsApi;
-import com.zenith.feature.api.minotar.MinotarApi;
-import com.zenith.feature.api.mojang.MojangApi;
-import com.zenith.feature.api.prioban.PriobanApi;
-import com.zenith.feature.api.sessionserver.SessionServerApi;
-import com.zenith.feature.api.vcapi.VcApi;
 import com.zenith.feature.items.PlayerInventoryManager;
 import com.zenith.feature.tps.TPSCalculator;
 import com.zenith.feature.whitelist.PlayerListsManager;
@@ -86,13 +79,6 @@ public class Shared {
     public static final InGameCommandManager IN_GAME_COMMAND;
     public static final CommandManager COMMAND;
     public static final PlayerInventoryManager INVENTORY;
-    public static final VcApi VC;
-    public static final MojangApi MOJANG;
-    public static final SessionServerApi SESSION_SERVER;
-    public static final MinetoolsApi MINETOOLS;
-    public static final CraftheadApi CRAFTHEAD;
-    public static final MinotarApi MINOTAR;
-    public static final PriobanApi PRIOBAN;
     public static final ZenithViaInitializer VIA_INITIALIZER;
     public static synchronized void loadConfig() {
         try {
@@ -235,13 +221,6 @@ public class Shared {
             IN_GAME_COMMAND = new InGameCommandManager();
             COMMAND = new CommandManager();
             INVENTORY = new PlayerInventoryManager();
-            VC = new VcApi();
-            MOJANG = new MojangApi();
-            SESSION_SERVER = new SessionServerApi();
-            MINETOOLS = new MinetoolsApi();
-            CRAFTHEAD = new CraftheadApi();
-            MINOTAR = new MinotarApi();
-            PRIOBAN = new PriobanApi();
             VIA_INITIALIZER = new ZenithViaInitializer();
             TranslationRegistryInitializer.registerAllTranslations();
         } catch (final Throwable e) {
