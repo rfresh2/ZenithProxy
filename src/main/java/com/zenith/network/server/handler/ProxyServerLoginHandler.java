@@ -7,6 +7,7 @@ import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
 import com.zenith.network.server.CustomServerInfoBuilder;
 import com.zenith.network.server.ServerConnection;
+import com.zenith.util.Maps;
 import com.zenith.util.Wait;
 import net.kyori.adventure.key.Key;
 import org.geysermc.mcprotocollib.auth.GameProfile;
@@ -17,12 +18,12 @@ import org.geysermc.mcprotocollib.protocol.data.game.ServerLink;
 import org.geysermc.mcprotocollib.protocol.data.game.ServerLinkType;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerSpawnInfo;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundCustomReportDetailsPacket;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundServerLinksPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundServerDataPacket;
 
 import static com.zenith.Shared.*;
-import static java.util.Arrays.asList;
 import static java.util.Arrays.asList;
 import static java.util.Objects.nonNull;
 
@@ -113,6 +114,9 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
         connection.send(new ClientboundServerLinksPacket(asList(
             new ServerLink(ServerLinkType.WEBSITE, null, "https://github.com/rfresh2/ZenithProxy"),
             new ServerLink(ServerLinkType.SUPPORT, null, "https://discord.gg/nJZrSaRKtb")
+        )));
+        connection.send(new ClientboundCustomReportDetailsPacket(Maps.of(
+            "ZenithProxy Support", "https://discord.gg/nJZrSaRKtb"
         )));
         connection.setConfigured(true);
     }
