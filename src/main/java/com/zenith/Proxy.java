@@ -246,6 +246,7 @@ public class Proxy {
     private void serverConnectionTest() {
         if (!CONFIG.server.enabled) return;
         if (server == null || !server.isListening()) return;
+        if (!CONFIG.server.ping.enabled) return;
         var address = CONFIG.server.getProxyAddress();
         if (address.startsWith("localhost")) {
             SERVER_LOG.debug("Proxy IP is set to localhost, skipping connection test");
