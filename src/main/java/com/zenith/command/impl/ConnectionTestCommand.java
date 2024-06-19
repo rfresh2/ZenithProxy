@@ -1,6 +1,7 @@
 package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.zenith.Proxy;
 import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
@@ -46,6 +47,39 @@ public class ConnectionTestCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("connectionTest")
             .executes(c -> {
+                if (!CONFIG.server.enabled) {
+                    c.getSource().getEmbed()
+                        .title("ZenithProxy Server Is Disabled")
+                        .errorColor()
+                        .description("""
+                            Not running connection test.
+                            
+                            Enable the server in the config.json
+                            """);
+                    return;
+                }
+                if (Proxy.getInstance().getServer() == null || !Proxy.getInstance().getServer().isListening()) {
+                    c.getSource().getEmbed()
+                        .title("ZenithProxy Server Not Listening")
+                        .errorColor()
+                        .description("""
+                            Not running connection test.
+                            
+                            The ZenithProxy server is not listening for connections
+                            """);
+                    return;
+                }
+                if (!CONFIG.server.ping.enabled) {
+                    c.getSource().getEmbed()
+                        .title("Pings Disabled")
+                        .errorColor()
+                        .description("""
+                            Pings must be enabled to perform the connection test.
+                            
+                            See `help serverConnection` to configure pings
+                            """);
+                    return;
+                }
                 var proxyAddress = CONFIG.server.getProxyAddress();
                 if (proxyAddress.startsWith("localhost")) {
                     // we could still test if we queried for our own IP
