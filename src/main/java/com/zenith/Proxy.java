@@ -4,6 +4,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.zenith.cache.CacheResetType;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.api.crafthead.CraftheadApi;
+import com.zenith.feature.api.mcstatus.MCStatusApi;
 import com.zenith.feature.api.minotar.MinotarApi;
 import com.zenith.feature.api.prioban.PriobanApi;
 import com.zenith.feature.autoupdater.AutoUpdater;
@@ -167,6 +168,7 @@ public class Proxy {
             EXECUTOR.scheduleAtFixedRate(this::updatePrioBanStatus, 0L, 1L, TimeUnit.DAYS);
             EXECUTOR.scheduleAtFixedRate(this::twoB2tTimeLimitKickWarningTick, twoB2tTimeLimit.minusMinutes(10L).toMinutes(), 1L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
+            EXECUTOR.schedule(this::serverConnectionTest, 10L, TimeUnit.SECONDS);
             if (CONFIG.server.enabled && CONFIG.server.ping.favicon)
                 EXECUTOR.submit(this::updateFavicon);
             boolean connected = false;
@@ -235,6 +237,34 @@ public class Proxy {
                 stop();
             }
         }, 30, TimeUnit.SECONDS);
+    }
+
+    private void serverConnectionTest() {
+        if (!CONFIG.server.enabled) return;
+        if (server == null || !server.isListening()) return;
+        var address = CONFIG.server.getProxyAddress();
+        if (address.startsWith("localhost")) {
+            SERVER_LOG.debug("Proxy IP is set to localhost, skipping connection test");
+            return;
+        }
+        MCStatusApi.INSTANCE.getMCServerStatus(CONFIG.server.getProxyAddress())
+            .ifPresentOrElse(response -> {
+                if (response.online()) {
+                    SERVER_LOG.debug("Connection test successful: {}", address);
+                } else {
+                    SERVER_LOG.error(
+                        """
+                        Unable to connect to configured `proxyIP`: {}
+                        
+                        This test is most likely failing due to your firewall needing to be disabled.
+                        
+                        For instructions on how to disable the firewall consult with your VPS provider. Each provider varies in steps.
+                        """, address);
+                }
+            }, () -> {
+                SERVER_LOG.debug("Failed trying to perform connection test");
+                // reschedule another attempt?
+            });
     }
 
     private void maxPlaytimeTick() {
