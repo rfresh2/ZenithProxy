@@ -59,9 +59,9 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
 
     private ServerStatusInfo createServerStatusInfo(@Nullable Session session) {
         return new ServerStatusInfo(
-            getVersionInfo(session),
-            getPlayerInfo(),
             getMotd(),
+            getPlayerInfo(),
+            getVersionInfo(session),
             Proxy.getInstance().getServerIcon(),
             false
         );
