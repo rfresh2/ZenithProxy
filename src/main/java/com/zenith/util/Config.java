@@ -13,7 +13,6 @@ import static java.util.Arrays.asList;
 
 
 public final class Config {
-    public boolean deprecationWarning_1_20_6 = true;
     public final Authentication authentication = new Authentication();
     public final Client client = new Client();
     public final Debug debug = new Debug();
