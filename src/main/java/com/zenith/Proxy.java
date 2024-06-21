@@ -198,8 +198,8 @@ public class Proxy {
                 DEFAULT_LOG.warn("Switch to a stable release with the `channel` command");
             }
             if (CONFIG.deprecationWarning_1_20_6) {
-                DEFAULT_LOG.info("1.20.6 support has been discontinued, please update to 1.21!");
-                DEFAULT_LOG.info("Command to update: `channel set <java/linux> 1.21.0`");
+                DEFAULT_LOG.warn("ZenithProxy for 1.20.6 has been deprecated and will no longer receive updates or support.");
+                DEFAULT_LOG.warn("Update to 1.21: `channel set <java/linux> 1.21.0`");
             }
             if (!connected) {
                 DEFAULT_LOG.info("Proxy IP: {}", CONFIG.server.getProxyAddress());

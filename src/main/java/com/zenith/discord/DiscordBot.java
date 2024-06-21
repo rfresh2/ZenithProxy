@@ -170,7 +170,7 @@ public class DiscordBot {
                         """
                         **ZenithProxy for 1.20.6 has been deprecated and will no longer receive updates or support.**
                         
-                        Update to 1.21.0: `channel set java/linux 1.21.0`
+                        Update to 1.21.0: `channel set <java/linux> 1.21.0`
                         
                         To disable this warning: `debug deprecationWarning off`
                         """)
