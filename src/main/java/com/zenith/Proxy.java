@@ -243,6 +243,7 @@ public class Proxy {
     }
 
     private void serverConnectionTest() {
+        if (!CONFIG.server.connectionTestOnStart) return;
         if (!CONFIG.server.enabled) return;
         if (server == null || !server.isListening()) return;
         if (!CONFIG.server.ping.enabled) return;
