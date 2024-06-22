@@ -50,7 +50,8 @@ public class ServerConnectionCommand extends Command {
                 "ping lanBroadcast on/off",
                 "ping log on/off",
                 "timeout on/off",
-                "timeout <seconds>"
+                "timeout <seconds>",
+                "autoConnectOnLogin on/off"
             )
         );
     }
@@ -130,6 +131,13 @@ public class ServerConnectionCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Server Timeout Set");
                           return 1;
+                      })))
+            .then(literal("autoConnectOnLogin")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.autoConnectOnLogin = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Auto Connect On Login " + toggleStrCaps(CONFIG.client.extra.autoConnectOnLogin));
+                          return OK;
                       })));
     }
 
@@ -154,6 +162,7 @@ public class ServerConnectionCommand extends Command {
             .addField("Ping Max Players", CONFIG.server.ping.maxPlayers, false)
             .addField("Ping LAN Broadcast", toggleStr(CONFIG.server.ping.lanBroadcast), false)
             .addField("Ping Log", toggleStr(CONFIG.server.ping.logPings), false)
-            .addField("Timeout", CONFIG.server.extra.timeout.enable ? CONFIG.server.extra.timeout.seconds : toggleStr(false), false);
+            .addField("Timeout", CONFIG.server.extra.timeout.enable ? CONFIG.server.extra.timeout.seconds : toggleStr(false), false)
+            .addField("Auto Connect On Login", toggleStr(CONFIG.client.extra.autoConnectOnLogin), false);
     }
 }
