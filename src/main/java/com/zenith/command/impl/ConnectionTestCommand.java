@@ -14,6 +14,8 @@ import java.util.function.Supplier;
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
+import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
+import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
 
 public class ConnectionTestCommand extends Command {
@@ -38,7 +40,8 @@ public class ConnectionTestCommand extends Command {
             """,
             asList(
                 "",
-                "<address>"
+                "<address>",
+                "testOnStart on/off"
             )
         );
     }
@@ -126,7 +129,15 @@ public class ConnectionTestCommand extends Command {
                         This issue is not related to the server being inaccessible, try again later.
                         """);
                 return OK;
-            }));
+            }))
+            .then(literal("testOnStart")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.server.connectionTestOnStart = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Connection Test On Start " + toggleStrCaps(CONFIG.server.connectionTestOnStart))
+                              .primaryColor();
+                          return OK;
+                      })));
     }
 
     private void executeConnectionTest(

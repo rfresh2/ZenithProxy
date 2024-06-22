@@ -407,6 +407,7 @@ public final class Config {
         public long playerListsRefreshIntervalMins = 1440L; // one day as default
         public final Spectator spectator = new Spectator();
         public final RateLimiter rateLimiter = new RateLimiter();
+        public boolean connectionTestOnStart = true;
 
         public static final class RateLimiter {
             public boolean enabled = true;
