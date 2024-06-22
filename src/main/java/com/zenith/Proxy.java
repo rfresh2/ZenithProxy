@@ -160,6 +160,9 @@ public class Proxy {
             saveConfigAsync();
             MinecraftCodecHelper.useBinaryNbtComponentSerializer = CONFIG.debug.binaryNbtComponentSerializer;
             MinecraftConstants.CHUNK_SECTION_COUNT_PROVIDER = CACHE.getSectionCountProvider();
+            if (CONFIG.client.viaversion.enabled || CONFIG.server.viaversion.enabled) {
+                VIA_INITIALIZER.init();
+            }
             this.tcpManager = new TcpConnectionManager();
             startServer();
             CACHE.reset(CacheResetType.FULL);
