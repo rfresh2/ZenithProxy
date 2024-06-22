@@ -139,7 +139,7 @@ public class Proxy {
         }
         initEventHandlers();
         try {
-            if (CONFIG.debug.clearOldLogs) clearOldLogs();
+            if (CONFIG.debug.clearOldLogs) EXECUTOR.schedule(Proxy::clearOldLogs, 10L, TimeUnit.SECONDS);
             if (CONFIG.interactiveTerminal.enable) TERMINAL.start();
             MODULE.init();
             if (CONFIG.database.enabled) {
