@@ -3,6 +3,7 @@ package com.zenith.database;
 import com.zenith.Proxy;
 import com.zenith.database.dto.enums.Connectiontype;
 import com.zenith.database.dto.records.ConnectionsRecord;
+import com.zenith.event.proxy.DisconnectEvent;
 import com.zenith.event.proxy.ServerPlayerConnectedEvent;
 import com.zenith.event.proxy.ServerPlayerDisconnectedEvent;
 
@@ -13,8 +14,7 @@ import java.time.ZoneOffset;
 import java.util.UUID;
 
 import static com.github.rfresh2.EventConsumer.of;
-import static com.zenith.Shared.DATABASE_LOG;
-import static com.zenith.Shared.EVENT_BUS;
+import static com.zenith.Shared.*;
 
 public class ConnectionsDatabase extends LiveDatabase {
     public ConnectionsDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
@@ -23,9 +23,11 @@ public class ConnectionsDatabase extends LiveDatabase {
 
     @Override
     public void subscribeEvents() {
-        EVENT_BUS.subscribe(this,
-                            of(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
-                            of(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
+        EVENT_BUS.subscribe(
+            this,
+            of(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
+            of(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent),
+            of(DisconnectEvent.class, 10, this::handleDisconnectEvent) // higher priority before cache is reset
         );
     }
 
@@ -59,6 +61,15 @@ public class ConnectionsDatabase extends LiveDatabase {
 
     public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
         writeConnection(Connectiontype.LEAVE, event.playerEntry().getName(), event.playerEntry().getProfileId(), Instant.now().atOffset(ZoneOffset.UTC));
+    }
+
+    public void handleDisconnectEvent(DisconnectEvent event) {
+        if (!Proxy.getInstance().isOn2b2t()
+            || event.wasInQueue()
+            || event.onlineDuration().toMinutes() < 15) return;
+        var profile = CACHE.getProfileCache().getProfile();
+        if (profile == null || profile.getName() == null || profile.getId() == null) return;
+        writeConnection(Connectiontype.LEAVE, profile.getName(), profile.getId(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
     // todo: handle server restart
