@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ 'windows-2019', 'ubuntu-20.04', 'macos-12', 'macos-14-arm64' ]
+        os: [ 'windows-2019', 'ubuntu-20.04', 'macos-13', 'macos-14' ]
         include:
           - os: 'windows-2019'
             artifact-name: 'launcher-windows-amd64'
@@ -24,12 +24,12 @@ jobs:
             move-command: 'mv dist/__main__ dist/launch'
             zip-command: 'zip -j dist/ZenithProxy-launcher-linux-amd64.zip dist/launch'
             sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
-          - os: 'macos-12'
+          - os: 'macos-13'
             artifact-name: 'launcher-macos-amd64'
             move-command: 'mv dist/__main__ dist/launch'
             zip-command: 'zip -j dist/ZenithProxy-launcher-macos-amd64.zip dist/launch'
             sha1-command: 'shasum dist/launch | cut -d" " -f 1'
-          - os: 'macos-14-arm64'
+          - os: 'macos-14'
             artifact-name: 'launcher-macos-aarch64'
             move-command: 'mv dist/__main__ dist/launch'
             zip-command: 'zip -j dist/ZenithProxy-launcher-macos-aarch64.zip dist/launch'
