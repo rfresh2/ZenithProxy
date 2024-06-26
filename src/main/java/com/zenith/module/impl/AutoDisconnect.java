@@ -35,7 +35,7 @@ public class AutoDisconnect extends Module {
     }
 
     public void handleLowPlayerHealthEvent(final PlayerHealthChangedEvent event) {
-        if (!CONFIG.client.extra.utility.actions.autoDisconnect.enabled) return;
+        if (!CONFIG.client.extra.utility.actions.autoDisconnect.healthDisconnect) return;
         if (event.newHealth() <= CONFIG.client.extra.utility.actions.autoDisconnect.health
             && playerConnectedCheck()) {
             info("Health disconnect: {} < {}",
