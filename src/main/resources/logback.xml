@@ -52,6 +52,7 @@
         <filter class="ThresholdFilter">
             <level>TRACE</level>
         </filter>
+        <filter class="com.zenith.terminal.logback.DebugLogConfigurationFilter"/>
     </appender>
 
     <appender name="TERMINAL" class="com.zenith.terminal.logback.TerminalConsoleAppender">

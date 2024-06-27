@@ -735,6 +735,11 @@
   "name":"com.zenith.network.client.ClientSession"
 },
 {
+  "name":"com.zenith.terminal.logback.DebugLogConfigurationFilter",
+  "queryAllPublicMethods":true,
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.zenith.terminal.logback.LazyInitRollingFileAppender",
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
