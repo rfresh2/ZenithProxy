@@ -23,26 +23,30 @@ public class AutoDisconnectCommand extends Command {
             "autoDisconnect",
             CommandCategory.MODULE, """
             Configures the AutoDisconnect module.
+            
+            Every mode and setting requires the module to be enabled to be active.
+            
             Modes:
             
-              * Health: Disconnects when health is below a set threshold
+              * Health: Disconnects when health is below a set threshold level
               * Thunder: Disconnects during thunderstorms (i.e. avoid lightning burning down bases)
               * Unknown Player: Disconnects when a player not on the friends list, whitelist, or spectator whitelist is in visual range
             Multiple modes can be enabled, they are non-exclusive
             
-            Global Settings:
+            Settings non-exclusive to modes:
               * WhilePlayerConnected: If AutoDisconnect should disconnect while a player is controlling the proxy account
               * AutoClientDisconnect: Disconnects when the controlling player disconnects
               * CancelAutoReconnect: Cancels AutoReconnect when AutoDisconnect is triggered. If the proxy account has prio this is ignored and AutoReconnect is always cancelled
             """,
             asList(
-                        "on/off",
-                        "health <integer>",
-                        "thunder on/off",
-                        "unknownPlayer on/off",
-                        "whilePlayerConnected on/off",
-                        "autoClientDisconnect on/off",
-                        "cancelAutoReconnect on/off"
+                "on/off",
+                "health on/off",
+                "health <integer>",
+                "thunder on/off",
+                "unknownPlayer on/off",
+                "whilePlayerConnected on/off",
+                "autoClientDisconnect on/off",
+                "cancelAutoReconnect on/off"
             ),
             asList("autoLog")
         );
@@ -59,10 +63,16 @@ public class AutoDisconnectCommand extends Command {
                 return OK;
             }))
             .then(literal("health")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.utility.actions.autoDisconnect.healthDisconnect = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Health Disconnect " + toggleStrCaps(CONFIG.client.extra.utility.actions.autoDisconnect.healthDisconnect));
+                          return OK;
+                      }))
                       .then(argument("healthLevel", integer(1, 19)).executes(c -> {
                           CONFIG.client.extra.utility.actions.autoDisconnect.health = IntegerArgumentType.getInteger(c, "healthLevel");
                           c.getSource().getEmbed()
-                              .title("AutoDisconnect Health Updated!");
+                              .title("AutoDisconnect Health Level Updated!");
                           return 1;
                       })))
             .then(literal("cancelAutoReconnect")
@@ -106,7 +116,8 @@ public class AutoDisconnectCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("AutoDisconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.enabled), false)
-            .addField("Health", CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
+            .addField("Health Disconnect", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.healthDisconnect), false)
+            .addField("Health Level", CONFIG.client.extra.utility.actions.autoDisconnect.health, false)
             .addField("Thunder", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.thunder), false)
             .addField("UnknownPlayer", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.onUnknownPlayerInVisualRange), false)
             .addField("WhilePlayerConnected", toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.whilePlayerConnected), false)

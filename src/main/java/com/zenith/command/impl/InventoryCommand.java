@@ -11,8 +11,10 @@ import com.zenith.command.util.CommandOutputHelper;
 import com.zenith.discord.Embed;
 import com.zenith.feature.items.ContainerClickAction;
 import com.zenith.mc.item.ItemRegistry;
+import com.zenith.util.ComponentSerializer;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerActionType;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.DropItemAction;
+import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentType;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 
 import java.util.ArrayList;
@@ -141,7 +143,13 @@ public class InventoryCommand extends Command {
             var itemData = ItemRegistry.REGISTRY.get(itemStack.getId());
             sb.append("  ").append(i).append(" -> ");
             sb.append(itemData.name());
-            if (itemStack.getAmount() > 1) sb.append(" (x").append(itemStack.getAmount()).append(") ");
+            if (itemStack.getDataComponents() != null) {
+                var nameComponent = itemStack.getDataComponents().get(DataComponentType.CUSTOM_NAME);
+                if (nameComponent != null) {
+                    sb.append(" \"").append(ComponentSerializer.serializePlain(nameComponent)).append("\"");
+                }
+            }
+            if (itemStack.getAmount() > 1) sb.append(" (x").append(itemStack.getAmount()).append(")");
             if (i == heldSlot) sb.append(" [Held]");
             sb.append("\n");
         }

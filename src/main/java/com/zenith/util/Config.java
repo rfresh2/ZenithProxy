@@ -268,6 +268,7 @@ public final class Config {
 
                 public static final class AutoDisconnect {
                     public boolean enabled = false;
+                    public boolean healthDisconnect = true;
                     public boolean whilePlayerConnected = false;
                     public boolean autoClientDisconnect = false;
                     public int health = 5;
@@ -362,6 +363,7 @@ public final class Config {
         public boolean resyncTeleports = true;
         public boolean ncpStrictInventory = false;
         public boolean clientTickFixedRate = false;
+        public boolean debugLogs = false;
 
         public static final class PacketLog {
             public boolean enabled = false;

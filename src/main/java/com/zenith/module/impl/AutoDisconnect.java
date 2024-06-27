@@ -31,60 +31,52 @@ public class AutoDisconnect extends Module {
 
     @Override
     public boolean shouldBeEnabled() {
-        return CONFIG.client.extra.utility.actions.autoDisconnect.enabled
-            || CONFIG.client.extra.utility.actions.autoDisconnect.thunder
-            || CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect;
+        return CONFIG.client.extra.utility.actions.autoDisconnect.enabled;
     }
 
     public void handleLowPlayerHealthEvent(final PlayerHealthChangedEvent event) {
-        if (CONFIG.client.extra.utility.actions.autoDisconnect.enabled) {
-            if (event.newHealth() <= CONFIG.client.extra.utility.actions.autoDisconnect.health) {
-                if (shouldDisconnect()) {
-                    info("Health disconnect: {} < {}",
-                         event.newHealth(),
-                         CONFIG.client.extra.utility.actions.autoDisconnect.health);
-                    EVENT_BUS.postAsync(new HealthAutoDisconnectEvent());
-                    Proxy.getInstance().disconnect(AUTO_DISCONNECT);
-                }
-            }
+        if (!CONFIG.client.extra.utility.actions.autoDisconnect.healthDisconnect) return;
+        if (event.newHealth() <= CONFIG.client.extra.utility.actions.autoDisconnect.health
+            && playerConnectedCheck()) {
+            info("Health disconnect: {} < {}",
+                 event.newHealth(),
+                 CONFIG.client.extra.utility.actions.autoDisconnect.health);
+            EVENT_BUS.postAsync(new HealthAutoDisconnectEvent());
+            Proxy.getInstance().disconnect(AUTO_DISCONNECT);
         }
     }
 
     public void handleWeatherChangeEvent(final WeatherChangeEvent event) {
-        if (CONFIG.client.extra.utility.actions.autoDisconnect.thunder) {
-            if (CACHE.getChunkCache().isRaining() && CACHE.getChunkCache().getThunderStrength() > 0.0f) {
-                if (shouldDisconnect()) {
-                    Proxy.getInstance().disconnect(AUTO_DISCONNECT);
-                }
-            }
+        if (!CONFIG.client.extra.utility.actions.autoDisconnect.thunder) return;
+        if (CACHE.getChunkCache().isRaining()
+            && CACHE.getChunkCache().getThunderStrength() > 0.0f
+            && playerConnectedCheck()) {
+            Proxy.getInstance().disconnect(AUTO_DISCONNECT);
         }
     }
 
     public void handleProxyClientDisconnectedEvent(ProxyClientDisconnectedEvent event) {
-        if (CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
-            var connection = Proxy.getInstance().getActivePlayer();
-            if (nonNull(connection) && connection.getProfileCache().getProfile().equals(event.clientGameProfile())) {
-                info("Auto Client Disconnect");
-                Proxy.getInstance().disconnect();
-            }
+        if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) return;
+        var connection = Proxy.getInstance().getActivePlayer();
+        if (nonNull(connection) && connection.getProfileCache().getProfile().equals(event.clientGameProfile())) {
+            info("Auto Client Disconnect");
+            Proxy.getInstance().disconnect();
         }
     }
 
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
-        if (CONFIG.client.extra.utility.actions.autoDisconnect.onUnknownPlayerInVisualRange) {
-            var playerUUID = event.playerEntity().getUuid();
-            if (PLAYER_LISTS.getFriendsList().contains(playerUUID)
-                || PLAYER_LISTS.getWhitelist().contains(playerUUID)
-                || PLAYER_LISTS.getSpectatorWhitelist().contains(playerUUID)
-            ) return;
-            if (shouldDisconnect()) {
-                info("Non-friended player seen: {}", event.playerEntry().getProfile());
-                Proxy.getInstance().disconnect(AUTO_DISCONNECT);
-            }
-        }
+        if (!CONFIG.client.extra.utility.actions.autoDisconnect.onUnknownPlayerInVisualRange) return;
+        var playerUUID = event.playerEntity().getUuid();
+        if (PLAYER_LISTS.getFriendsList().contains(playerUUID)
+            || PLAYER_LISTS.getWhitelist().contains(playerUUID)
+            || PLAYER_LISTS.getSpectatorWhitelist().contains(playerUUID)
+            || !playerConnectedCheck()
+        ) return;
+        info("Unknown player: {} [{}]", event.playerEntry().getProfile());
+        Proxy.getInstance().disconnect(AUTO_DISCONNECT);
     }
 
-    private boolean shouldDisconnect() {
+    private boolean playerConnectedCheck() {
         if (Proxy.getInstance().hasActivePlayer()) {
             var whilePlayerConnected = CONFIG.client.extra.utility.actions.autoDisconnect.whilePlayerConnected;
             if (!whilePlayerConnected)
