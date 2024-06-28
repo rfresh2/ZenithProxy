@@ -35,6 +35,7 @@ public class TerminalManager {
             this.lineReader = LineReaderBuilder.builder()
                 .terminal(terminal)
                 .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
+                .option(LineReader.Option.CASE_INSENSITIVE, true)
                 .option(LineReader.Option.INSERT_TAB, false)
                 .completer(new TerminalCommandCompleter())
                 .build();
