@@ -11,6 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.*;
+import static com.zenith.feature.deathmessages.DeathMessageSchemaInstance.spaceSplit;
 
 public class DeathMessagesParser {
     private final List<DeathMessageSchemaInstance> deathMessageSchemaInstances;
@@ -21,10 +22,10 @@ public class DeathMessagesParser {
         try {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("death_message_mobs.schema")))) {
                 mobsTemp = br.lines()
-                        .filter(l -> !l.isEmpty()) //any empty lines
-                        .filter(l -> !l.startsWith("#")) //comments
-                        .sorted(Comparator.comparingInt(String::length).reversed())
-                        .collect(Collectors.toList());
+                    .filter(l -> !l.isEmpty()) //any empty lines
+                    .filter(l -> !l.startsWith("#")) //comments
+                    .sorted(Comparator.comparingInt(String::length).reversed())
+                    .collect(Collectors.toList());
             }
         } catch (final Exception e) {
             CLIENT_LOG.error("Error initializing mobs for death message parsing", e);
@@ -34,11 +35,10 @@ public class DeathMessagesParser {
         try {
             try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("death_messages.schema")))) {
                 schemaInstancesTemp = br.lines()
-                        .filter(l -> !l.isEmpty()) //any empty lines
-                        .filter(l -> !l.startsWith("#")) //comments
-                        .sorted(Comparator.comparingInt(String::length).reversed())
-                        .map(l -> new DeathMessageSchemaInstance(l, mobs))
-                        .collect(Collectors.toList());
+                    .filter(l -> !l.isEmpty()) //any empty lines
+                    .filter(l -> !l.startsWith("#")) //comments
+                    .map(l -> new DeathMessageSchemaInstance(l, mobs))
+                    .collect(Collectors.toList());
             }
         } catch (final Exception e) {
             CLIENT_LOG.error("Error initializing death message schemas", e);
@@ -47,16 +47,19 @@ public class DeathMessagesParser {
     }
 
     public Optional<DeathMessageParseResult> parse(final Component component, final String rawInput) {
-        for (final DeathMessageSchemaInstance instance : deathMessageSchemaInstances) {
-            final Optional<DeathMessageParseResult> parse = instance.parse(rawInput, getPlayerNames(component));
+        List<String> playerNames = getPlayerNames(component);
+        List<String> inputSplit = spaceSplit(rawInput);
+        for (int i = 0; i < deathMessageSchemaInstances.size(); i++) {
+            final DeathMessageSchemaInstance instance = deathMessageSchemaInstances.get(i);
+            final Optional<DeathMessageParseResult> parse = instance.parse(inputSplit, playerNames);
             if (parse.isPresent()) return parse;
         }
         if (CONFIG.database.deaths.enabled && CONFIG.database.deaths.unknownDeathDiscordMsg && DISCORD.isRunning()) {
             DISCORD.sendEmbedMessage(Embed.builder()
-                                             .title("Unknown death message")
-                                             .description(ComponentSerializer.serializeJson(component))
-                                             .addField("Message", rawInput, false)
-                                             .errorColor());
+                                         .title("Unknown death message")
+                                         .description(ComponentSerializer.serializeJson(component))
+                                         .addField("Message", rawInput, false)
+                                         .errorColor());
         }
         DEFAULT_LOG.warn("No death message schema found for '{}'", rawInput);
         return Optional.empty();

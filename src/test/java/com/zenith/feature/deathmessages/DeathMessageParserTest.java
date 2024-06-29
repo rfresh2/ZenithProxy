@@ -4,6 +4,7 @@ import com.zenith.Shared;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -14,6 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DeathMessageParserTest {
 
     private final DeathMessagesParser deathMessagesParser = new DeathMessagesParser();
+
+    @BeforeAll
+    public static void beforeAll() {
+        Shared.loadConfig();
+        Shared.loadLaunchConfig();
+    }
 
     @Test
     public void basicSuicide() {
@@ -146,8 +153,6 @@ public class DeathMessageParserTest {
     }
 
     private void parseTest(final String rawInput, final String victim, final String killerName, final KillerType killerType, final String weapon) {
-        Shared.loadConfig();
-        Shared.loadLaunchConfig();
         final var componentBuilder = Component.text();
         componentBuilder.append(Component.text(victim).clickEvent(ClickEvent.suggestCommand("/w " + victim)));
         if (killerType == KillerType.PLAYER)

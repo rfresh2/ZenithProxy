@@ -27,8 +27,8 @@ public final class DeathMessageSchemaInstance {
         return asList(in.split(" "));
     }
 
-    public Optional<DeathMessageParseResult> parse(final String deathMessageRaw, final List<String> playerNames) {
-        final WordIterator iterator = new WordIterator(deathMessageRaw);
+    public Optional<DeathMessageParseResult> parse(final List<String> input, final List<String> playerNames) {
+        final WordIterator iterator = new WordIterator(input);
         String victim = null;
         Killer killer = null;
         String weapon = null;
@@ -89,7 +89,9 @@ public final class DeathMessageSchemaInstance {
                 }
 
                 // this entire loop is horrifying
-                for (final String mobType : this.mobs) { // only works if mobs is sorted by longest first :/
+                List<String> strings = this.mobs;
+                for (int j = 0; j < strings.size(); j++) {
+                    final String mobType = strings.get(j); // only works if mobs is sorted by longest first :/
                     final List<String> mobSplit = spaceSplit(mobType);
                     if (mobSplit.get(0).equals(mcTextWord.replace(".", ""))) {
                         if (mobSplit.size() > 1) {
