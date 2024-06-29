@@ -9,6 +9,7 @@ public class ConfigurationAckHandler implements PacketHandler<ServerboundConfigu
     @Override
     public ServerboundConfigurationAcknowledgedPacket apply(final ServerboundConfigurationAcknowledgedPacket packet, final ServerConnection session) {
         session.getPacketProtocol().setState(ProtocolState.CONFIGURATION);
+        session.setAwaitingProtocolSwitch(false);
         return packet;
     }
 }

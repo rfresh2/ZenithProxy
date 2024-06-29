@@ -43,7 +43,8 @@ public class DebugCommand extends Command {
                 "teleportResync on/off",
                 "ncpStrictInventory on/off",
                 "clientTickFixedRate on/off",
-                "debugLogs on/off"
+                "debugLogs on/off",
+                "blockProtocolSwitchRaceCondition on/off"
             )
         );
     }
@@ -175,6 +176,12 @@ public class DebugCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Debug Logs " + toggleStrCaps(CONFIG.debug.debugLogs));
                 return OK;
+            })))
+            .then(literal("blockProtocolSwitchRaceCondition").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.blockProtocolSwitchRaceCondition = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Block Protocol Race Condition " + toggleStrCaps(CONFIG.debug.blockProtocolSwitchRaceCondition));
+                return OK;
             })));
     }
 
@@ -192,6 +199,7 @@ public class DebugCommand extends Command {
             .addField("NCP Strict Inventory", toggleStr(CONFIG.debug.ncpStrictInventory), false)
             .addField("Client Tick Fixed Rate", toggleStr(CONFIG.debug.clientTickFixedRate), false)
             .addField("Debug Logs", toggleStr(CONFIG.debug.debugLogs), false)
+            .addField("Block Protocol Race Condition", toggleStr(CONFIG.debug.blockProtocolSwitchRaceCondition), false)
             .primaryColor();
     }
 }

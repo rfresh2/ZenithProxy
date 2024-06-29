@@ -17,6 +17,7 @@ import com.zenith.network.server.handler.player.incoming.*;
 import com.zenith.network.server.handler.player.outgoing.ClientCommandsOutgoingHandler;
 import com.zenith.network.server.handler.player.outgoing.SystemChatOutgoingHandler;
 import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
+import com.zenith.network.server.handler.player.postoutgoing.StartConfigurationPostOutgoingHandler;
 import com.zenith.network.server.handler.shared.incoming.*;
 import com.zenith.network.server.handler.shared.outgoing.KeepAliveOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.SGameProfileOutgoingHandler;
@@ -223,6 +224,7 @@ public final class ZenithHandlerCodec {
                 .registerOutbound(ClientboundCommandsPacket.class, new ClientCommandsOutgoingHandler())
                 .registerOutbound(ClientboundSystemChatPacket.class, new SystemChatOutgoingHandler())
                 .registerPostOutbound(ClientboundLoginPacket.class, new LoginPostHandler())
+                .registerPostOutbound(ClientboundStartConfigurationPacket.class, new StartConfigurationPostOutgoingHandler())
                 .build())
             .build();
 
