@@ -364,6 +364,7 @@ public final class Config {
         public boolean ncpStrictInventory = false;
         public boolean clientTickFixedRate = false;
         public boolean debugLogs = false;
+        public boolean blockProtocolSwitchRaceCondition = true;
 
         public static final class PacketLog {
             public boolean enabled = false;

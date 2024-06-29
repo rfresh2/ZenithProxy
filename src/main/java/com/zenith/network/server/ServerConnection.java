@@ -105,6 +105,8 @@ public class ServerConnection implements Session, SessionListener {
     // we have performed the configuration phase at zenith
     // any subsequent configurations should pass through to client
     protected boolean isConfigured = false;
+    // cancel outbound packets until we have received the protocol switch ack
+    protected boolean awaitingProtocolSwitch = false;
     protected boolean allowSpectatorServerPlayerPosRotate = true;
     // allow spectator to set their camera to client
     // need to persist state to allow them in and out of this
@@ -158,12 +160,37 @@ public class ServerConnection implements Session, SessionListener {
 
     @Override
     public Packet packetSending(final Session session, final Packet packet) {
+        if (CONFIG.debug.blockProtocolSwitchRaceCondition && blockProtocolSwitchPacketSendingRaceCondition(packet)) return null;
         try {
             return ZenithHandlerCodec.SERVER_REGISTRY.handleOutgoing(packet, this);
         } catch (final Exception e) {
             SERVER_LOG.error("Failed handling packet sending: {}", packet.getClass().getSimpleName(), e);
         }
         return packet;
+    }
+
+    private boolean blockProtocolSwitchPacketSendingRaceCondition(Packet packet) {
+        if (awaitingProtocolSwitch) {
+            /**
+             * Problem: race conditions during GAME -> CONFIGURATION -> GAME from velocity server switches
+             *
+             * MCPL has a single variable for the protocol state
+             * The state is not switched until we receive configuration ACK back from the client
+             * in-between the time the server sends a start configuration until we receive the ack we can still
+             * send GAME packets which will cause the client to disconnect
+             *
+             * Its possible there's race conditions in other protocol switches as well
+             */
+
+            // re-queue packet onto event loop
+            // if the packet does not match the dest protocol state it will be cancelled by the packet error handler eventually
+            sendAsync(packet);
+            // other options:
+            //  blackhole the packet
+            //  introduce a packet queue to preserve order
+            return true;
+        }
+        return false;
     }
 
     @Override
