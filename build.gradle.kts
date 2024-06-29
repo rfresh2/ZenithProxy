@@ -5,7 +5,7 @@ import java.nio.file.Files
 plugins {
     java
     id("org.graalvm.buildtools.native") version "0.10.2"
-    id("io.github.goooler.shadow") version "8.1.7"
+    id("io.github.goooler.shadow") version "8.1.8"
     `maven-publish`
 }
 
@@ -63,7 +63,7 @@ configurations.implementation.get().extendsFrom(shade)
 dependencies {
     shade("com.zaxxer:HikariCP:5.1.0")
     shade("org.postgresql:postgresql:42.7.3")
-    val jdbiVersion = "3.45.1"
+    val jdbiVersion = "3.45.2"
     shade("org.jdbi:jdbi3-core:$jdbiVersion")
     shade("org.jdbi:jdbi3-postgres:$jdbiVersion")
     shade("com.google.guava:guava:33.2.1-jre")
@@ -114,8 +114,8 @@ dependencies {
     shade("org.jline:jline:3.26.2")
     shade("org.jline:jline-terminal-jansi:3.26.2")
     shade("ar.com.hjg:pngj:2.1.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
-    val lombokVersion = "1.18.32"
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
+    val lombokVersion = "1.18.34"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")
