@@ -9,9 +9,9 @@ public class WordIterator implements Iterator<String> {
     private final List<String> words;
     private int index;
 
-    public WordIterator(final String input) {
+    public WordIterator(final List<String> input) {
         this.index = 0;
-        this.words = DeathMessageSchemaInstance.spaceSplit(input);
+        this.words = input;
     }
 
     @Override

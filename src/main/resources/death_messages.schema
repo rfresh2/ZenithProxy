@@ -97,6 +97,8 @@ $k abused $w on $v
 
 # mobs
 # Mob types aren't highlighted in a separate color like players or weapons
+# Order of these schemas is very important as $w will match pretty much anything
+# Place more specific schemas before those ending with $w
 $v became lava whilst fighting $m
 $v became lava whilst fighting $w
 $v burned apart whilst fighting $m
@@ -210,8 +212,8 @@ $v was impaled by $m.
 $v was impaled by $w.
 $v was impaled by dripstone trying to escape $m.
 $v was impaled by dripstone trying to escape $w.
-$v was killed by $m named $w
 $v was killed by $m named $w wielding $w
+$v was killed by $m named $w
 $v was killed by $m wielding $w
 $v was killed by $m.
 $v was killed by $w.
@@ -247,8 +249,8 @@ $v was poisoned to death by $m.
 $v was poisoned to death by $w.
 $v was pummeled into multiple parts by $m and died slowly.
 $v was pummeled into multiple parts by $m named $w
-$v was pummeled into multiple parts by $m wielding $w
 $v was pummeled into multiple parts by $m wielding $w and died slowly.
+$v was pummeled into multiple parts by $m wielding $w
 $v was pummeled into multiple parts by $m.
 $v was pummeled into multiple parts by $w.
 $v was raided to death by $m wielding $w
