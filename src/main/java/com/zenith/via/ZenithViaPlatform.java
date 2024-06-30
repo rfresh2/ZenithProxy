@@ -4,7 +4,7 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.configuration.AbstractViaConfig;
 import com.zenith.Proxy;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import net.kyori.adventure.text.Component;
 import net.raphimc.vialoader.impl.platform.ViaVersionPlatformImpl;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
@@ -55,14 +55,14 @@ public class ZenithViaPlatform extends ViaVersionPlatformImpl {
         }
     }
 
-    private Optional<ServerConnection> getServerConnection(final UUID viaUuid) {
+    private Optional<ServerSession> getServerConnection(final UUID viaUuid) {
         if (viaUuid == null) return Optional.empty();
         UserConnection connectedClient = Via.getManager().getConnectionManager().getConnectedClient(viaUuid);
         var channel = connectedClient.getChannel();
         var connections = Proxy.getInstance().getActiveConnections().getArray();
         for (int i = 0; i < connections.length; i++) {
             var connection = connections[i];
-            if (connection.getSession().getChannel() == channel) {
+            if (connection.getChannel() == channel) {
                 return Optional.of(connection);
             }
         }

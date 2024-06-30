@@ -6,7 +6,7 @@ import com.zenith.event.proxy.PlayerLoginEvent;
 import com.zenith.event.proxy.ProxyClientConnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorConnectedEvent;
 import com.zenith.network.server.CustomServerInfoBuilder;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.Maps;
 import com.zenith.util.Wait;
 import net.kyori.adventure.key.Key;
@@ -32,10 +32,10 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
     public void loggedIn(Session session) {
         final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
         SERVER_LOG.info("Player connected: UUID: {}, Username: {}, Address: {}", clientGameProfile.getId(), clientGameProfile.getName(), session.getRemoteAddress());
-        EXECUTOR.execute(() -> finishLogin((ServerConnection) session));
+        EXECUTOR.execute(() -> finishLogin((ServerSession) session));
     }
 
-    private void finishLogin(ServerConnection connection) {
+    private void finishLogin(ServerSession connection) {
         final GameProfile clientGameProfile = connection.getFlag(MinecraftConstants.PROFILE_KEY);
         if (!Wait.waitUntil(() -> Proxy.getInstance().isConnected()
                                 && (Proxy.getInstance().getOnlineTimeSeconds() > 3 || Proxy.getInstance().isInQueue())

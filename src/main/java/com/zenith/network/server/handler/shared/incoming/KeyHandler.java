@@ -2,7 +2,7 @@ package com.zenith.network.server.handler.shared.incoming;
 
 import com.zenith.network.UserAuthTask;
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundKeyPacket;
 
 import javax.crypto.SecretKey;
@@ -11,10 +11,10 @@ import java.util.Arrays;
 
 import static com.zenith.Shared.EXECUTOR;
 
-public class KeyHandler implements PacketHandler<ServerboundKeyPacket, ServerConnection> {
+public class KeyHandler implements PacketHandler<ServerboundKeyPacket, ServerSession> {
 
     @Override
-    public ServerboundKeyPacket apply(final ServerboundKeyPacket packet, final ServerConnection session) {
+    public ServerboundKeyPacket apply(final ServerboundKeyPacket packet, final ServerSession session) {
         PrivateKey privateKey = session.getKeyPair().getPrivate();
         if (!Arrays.equals(session.getChallenge(), packet.getEncryptedChallenge(privateKey))) {
             session.disconnect("Invalid challenge!");

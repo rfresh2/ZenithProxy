@@ -21,6 +21,7 @@ import java.util.List;
  * serializes the packet based on the current protocol state.
  */
 public class ZViaProtocolStateHandler extends MessageToMessageEncoder<ByteBuf> {
+    public static String ID = "via-protocol-state";
     private final Session session;
 
     public ZViaProtocolStateHandler(Session session) {

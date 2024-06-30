@@ -1,15 +1,15 @@
 package com.zenith.feature.actionlimiter.handlers.outbound;
 
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.math.MathHelper;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 
 import static com.zenith.Shared.CONFIG;
 
-public class ALPlayerPositionHandler implements PacketHandler<ClientboundPlayerPositionPacket, ServerConnection> {
+public class ALPlayerPositionHandler implements PacketHandler<ClientboundPlayerPositionPacket, ServerSession> {
     @Override
-    public ClientboundPlayerPositionPacket apply(final ClientboundPlayerPositionPacket packet, final ServerConnection session) {
+    public ClientboundPlayerPositionPacket apply(final ClientboundPlayerPositionPacket packet, final ServerSession session) {
         if (CONFIG.client.extra.actionLimiter.allowMovement)
             return packet;
         if (packet.getY() <= CONFIG.client.extra.actionLimiter.movementMinY) {

@@ -1,16 +1,16 @@
 package com.zenith.feature.actionlimiter.handlers.outbound;
 
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.math.MathHelper;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 
 import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.CONFIG;
 
-public class ALLoginHandler implements PacketHandler<ClientboundLoginPacket, ServerConnection> {
+public class ALLoginHandler implements PacketHandler<ClientboundLoginPacket, ServerSession> {
     @Override
-    public ClientboundLoginPacket apply(final ClientboundLoginPacket packet, final ServerConnection session) {
+    public ClientboundLoginPacket apply(final ClientboundLoginPacket packet, final ServerSession session) {
         if (CONFIG.client.extra.actionLimiter.allowMovement)
             return packet;
         int playerX = (int) CACHE.getPlayerCache().getX();

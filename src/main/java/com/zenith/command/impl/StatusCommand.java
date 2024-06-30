@@ -9,7 +9,7 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.feature.queue.Queue;
 import com.zenith.module.impl.ReplayMod;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import discord4j.common.util.TimestampFormat;
 
 import java.time.Duration;
@@ -51,7 +51,7 @@ public class StatusCommand extends Command {
     }
 
     private String getCurrentClientUserName() {
-        ServerConnection currentConnection = Proxy.getInstance().getCurrentPlayer().get();
+        ServerSession currentConnection = Proxy.getInstance().getCurrentPlayer().get();
         if (nonNull(currentConnection)) {
             return currentConnection.getProfileCache().getProfile().getName();
         } else {

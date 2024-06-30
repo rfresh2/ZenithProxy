@@ -2,7 +2,7 @@ package com.zenith.network.server.handler.shared.incoming;
 
 import com.zenith.network.UserAuthTask;
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ServerboundCookieResponsePacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundHelloPacket;
@@ -10,9 +10,9 @@ import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundH
 import static com.zenith.Shared.EXECUTOR;
 import static com.zenith.Shared.SERVER_LOG;
 
-public class SCookieResponseHandler implements PacketHandler<ServerboundCookieResponsePacket, ServerConnection> {
+public class SCookieResponseHandler implements PacketHandler<ServerboundCookieResponsePacket, ServerSession> {
     @Override
-    public ServerboundCookieResponsePacket apply(final ServerboundCookieResponsePacket packet, final ServerConnection session) {
+    public ServerboundCookieResponsePacket apply(final ServerboundCookieResponsePacket packet, final ServerSession session) {
         if (session.isTransferring() && !session.isConfigured()) {
             var cookieKey = packet.getKey();
             session.getCookieCache().handleCookieResponse(cookieKey, packet.getPayload());

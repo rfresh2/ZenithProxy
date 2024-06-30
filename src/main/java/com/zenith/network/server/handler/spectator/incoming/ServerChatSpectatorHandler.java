@@ -7,7 +7,7 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSetCameraPacket;
@@ -19,9 +19,9 @@ import java.util.Optional;
 
 import static com.zenith.Shared.*;
 
-public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChatPacket, ServerConnection> {
+public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChatPacket, ServerSession> {
     @Override
-    public ServerboundChatPacket apply(ServerboundChatPacket packet, ServerConnection session) {
+    public ServerboundChatPacket apply(ServerboundChatPacket packet, ServerSession session) {
         if (CONFIG.inGameCommands.enable) {
             EXECUTOR.execute(() -> {
                 if (IN_GAME_COMMAND.getCommandPattern().matcher(packet.getMessage()).find()) {
@@ -41,7 +41,7 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
         return null;
     }
 
-    private void handleCommandInput(final String message, final ServerConnection session) {
+    private void handleCommandInput(final String message, final ServerSession session) {
         final String fullCommandAndArgs = message.substring(CONFIG.inGameCommands.prefix.length()).trim(); // cut off the prefix
         final String command = fullCommandAndArgs.split(" ")[0]; // first word is the command
         switch (command) {
@@ -126,7 +126,7 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                 }
                 if (CONFIG.server.viaversion.enabled) {
                     Optional<ProtocolVersion> viaClientProtocolVersion = Via.getManager().getConnectionManager().getConnectedClients().values().stream()
-                        .filter(client -> client.getChannel() == session.getSession().getChannel())
+                        .filter(client -> client.getChannel() == session.getChannel())
                         .map(con -> con.getProtocolInfo().protocolVersion())
                         .findFirst();
                     if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get().olderThan(ProtocolVersion.v1_20_5)) {

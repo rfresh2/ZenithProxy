@@ -10,7 +10,7 @@ import com.zenith.module.Module;
 import com.zenith.network.registry.PacketHandlerCodec;
 import com.zenith.network.registry.PacketHandlerStateCodec;
 import com.zenith.network.registry.ZenithHandlerCodec;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
@@ -31,7 +31,7 @@ import static com.zenith.Shared.*;
 
 public class ActionLimiter extends Module {
     private PacketHandlerCodec codec;
-    private final ReferenceSet<ServerConnection> limitedConnections = new ReferenceOpenHashSet<>();
+    private final ReferenceSet<ServerSession> limitedConnections = new ReferenceOpenHashSet<>();
 
     public ActionLimiter() {
         initializeHandlers();
@@ -41,8 +41,8 @@ public class ActionLimiter extends Module {
         codec = PacketHandlerCodec.builder()
             .setId("action-limiter")
             .setPriority(1000)
-            .setActivePredicate((session) -> shouldLimit((ServerConnection) session))
-            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
+            .setActivePredicate((session) -> shouldLimit((ServerSession) session))
+            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerSession>builder()
                 .allowUnhandled(true)
                 .registerInbound(ServerboundChatCommandPacket.class, new ALChatCommandHandler())
                 .registerInbound(ServerboundChatCommandSignedPacket.class, new ALSignedChatCommandHandler())
@@ -88,7 +88,7 @@ public class ActionLimiter extends Module {
     }
 
     public void onPlayerLoginEvent(final PlayerLoginEvent event) {
-        ServerConnection serverConnection = event.serverConnection();
+        ServerSession serverConnection = event.serverConnection();
         var profile = serverConnection.getProfileCache().getProfile();
         var proxyProfile = CACHE.getProfileCache().getProfile();
         if (profile != null && proxyProfile != null && profile.getId().equals(proxyProfile.getId()))
@@ -100,7 +100,7 @@ public class ActionLimiter extends Module {
         limitedConnections.remove(event.serverConnection());
     }
 
-    public boolean shouldLimit(final ServerConnection serverConnection) {
+    public boolean shouldLimit(final ServerSession serverConnection) {
         return limitedConnections.contains(serverConnection);
     }
 }

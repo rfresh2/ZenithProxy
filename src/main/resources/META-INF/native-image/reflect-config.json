@@ -93,7 +93,7 @@
   "name":"[Lcom.zenith.network.registry.PacketHandlerCodec;"
 },
 {
-  "name":"[Lcom.zenith.network.server.ServerConnection;"
+  "name":"[Lcom.zenith.network.server.ServerSession;"
 },
 {
   "name":"[Lfr.litarvan.openauth.microsoft.model.response.MinecraftProfile$MinecraftSkin;"

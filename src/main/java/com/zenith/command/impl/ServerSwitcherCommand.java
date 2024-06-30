@@ -10,7 +10,7 @@ import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.brigadier.CommandSource;
 import com.zenith.discord.Embed;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.Config.Server.Extra.ServerSwitcher.ServerSwitcherServer;
 
 import java.util.Optional;
@@ -79,7 +79,7 @@ public class ServerSwitcherCommand extends Command {
                         .title("Server not found");
                     return OK;
                 }
-                ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
+                ServerSession currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
                 if (currentPlayer == null) {
                     c.getSource().getEmbed()
                         .title("No player found");
@@ -87,7 +87,7 @@ public class ServerSwitcherCommand extends Command {
                 }
                 if (CONFIG.server.viaversion.enabled) {
                     Optional<ProtocolVersion> viaClientProtocolVersion = Via.getManager().getConnectionManager().getConnectedClients().values().stream()
-                        .filter(client -> client.getChannel() == currentPlayer.getSession().getChannel())
+                        .filter(client -> client.getChannel() == currentPlayer.getChannel())
                         .map(con -> con.getProtocolInfo().protocolVersion())
                         .findFirst();
                     if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get().olderThan(ProtocolVersion.v1_20_5)) {

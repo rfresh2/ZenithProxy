@@ -39,7 +39,7 @@ public class SpectatorSwapCommand extends Command {
             }
             if (CONFIG.server.viaversion.enabled) {
                 Optional<ProtocolVersion> viaClientProtocolVersion = Via.getManager().getConnectionManager().getConnectedClients().values().stream()
-                    .filter(client -> client.getChannel() == player.getSession().getChannel())
+                    .filter(client -> client.getChannel() == player.getChannel())
                     .map(con -> con.getProtocolInfo().protocolVersion())
                     .findFirst();
                 if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get().olderThan(ProtocolVersion.v1_20_5)) {

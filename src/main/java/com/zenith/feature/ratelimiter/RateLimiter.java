@@ -2,7 +2,7 @@ package com.zenith.feature.ratelimiter;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -20,7 +20,7 @@ public class RateLimiter {
             .build();
     }
 
-    public boolean isRateLimited(final ServerConnection session) {
+    public boolean isRateLimited(final ServerSession session) {
         try {
             var address = ((InetSocketAddress) session.getRemoteAddress()).getAddress();
             var time = System.currentTimeMillis();

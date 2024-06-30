@@ -2,22 +2,22 @@ package com.zenith.network.server.handler.shared.outgoing;
 
 import com.zenith.Proxy;
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
 
 import static com.zenith.Shared.*;
 
-public class ServerTablistDataOutgoingHandler implements PacketHandler<ClientboundTabListPacket, ServerConnection> {
+public class ServerTablistDataOutgoingHandler implements PacketHandler<ClientboundTabListPacket, ServerSession> {
 
     @Override
-    public ClientboundTabListPacket apply(ClientboundTabListPacket packet, ServerConnection session) {
+    public ClientboundTabListPacket apply(ClientboundTabListPacket packet, ServerSession session) {
         CACHE.getTabListCache().setLastUpdate(System.currentTimeMillis());
         return new ClientboundTabListPacket(packet.getHeader(), insertProxyDataIntoFooter(packet.getFooter(), session));
     }
 
-    public Component insertProxyDataIntoFooter(final Component footer, final ServerConnection session) {
+    public Component insertProxyDataIntoFooter(final Component footer, final ServerSession session) {
         try {
             var sessionProfile = session.getProfileCache().getProfile();
             var clientProfile = CACHE.getProfileCache().getProfile();

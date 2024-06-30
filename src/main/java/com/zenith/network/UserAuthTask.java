@@ -1,7 +1,7 @@
 package com.zenith.network;
 
 import com.zenith.feature.api.sessionserver.SessionServerApi;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
@@ -14,10 +14,10 @@ import java.util.UUID;
 import static com.zenith.Shared.CONFIG;
 
 public class UserAuthTask implements Runnable {
-    private final ServerConnection session;
+    private final ServerSession session;
     private final SecretKey key;
 
-    public UserAuthTask(ServerConnection session, SecretKey key) {
+    public UserAuthTask(ServerSession session, SecretKey key) {
         this.key = key;
         this.session = session;
     }

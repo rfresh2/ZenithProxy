@@ -2,7 +2,7 @@ package com.zenith.network.server.handler.shared.incoming;
 
 import com.zenith.feature.ratelimiter.RateLimiter;
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.MinecraftProtocol;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.packet.handshake.serverbound.ClientIntentionPacket;
@@ -10,11 +10,11 @@ import org.geysermc.mcprotocollib.protocol.packet.handshake.serverbound.ClientIn
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.SERVER_LOG;
 
-public class IntentionHandler implements PacketHandler<ClientIntentionPacket, ServerConnection> {
+public class IntentionHandler implements PacketHandler<ClientIntentionPacket, ServerSession> {
     private final RateLimiter rateLimiter = new RateLimiter(CONFIG.server.rateLimiter.rateLimitSeconds);
 
     @Override
-    public ClientIntentionPacket apply(final ClientIntentionPacket packet, final ServerConnection session) {
+    public ClientIntentionPacket apply(final ClientIntentionPacket packet, final ServerSession session) {
         MinecraftProtocol protocol = session.getPacketProtocol();
         switch (packet.getIntent()) {
             case STATUS -> protocol.setState(ProtocolState.STATUS);
@@ -36,7 +36,7 @@ public class IntentionHandler implements PacketHandler<ClientIntentionPacket, Se
         return null;
     }
 
-    private boolean handleLogin(final ClientIntentionPacket packet, final ServerConnection session, final MinecraftProtocol protocol) {
+    private boolean handleLogin(final ClientIntentionPacket packet, final ServerSession session, final MinecraftProtocol protocol) {
         protocol.setState(ProtocolState.LOGIN);
         if (CONFIG.server.rateLimiter.enabled && rateLimiter.isRateLimited(session)) {
             SERVER_LOG.info("Disconnecting {} due to rate limiting.", session.getRemoteAddress());

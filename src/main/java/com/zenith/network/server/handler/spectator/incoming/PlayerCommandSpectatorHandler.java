@@ -4,15 +4,15 @@ import com.zenith.Proxy;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSetCameraPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundPlayerCommandPacket;
 
-public class PlayerCommandSpectatorHandler implements PacketHandler<ServerboundPlayerCommandPacket, ServerConnection> {
+public class PlayerCommandSpectatorHandler implements PacketHandler<ServerboundPlayerCommandPacket, ServerSession> {
 
     @Override
-    public ServerboundPlayerCommandPacket apply(ServerboundPlayerCommandPacket packet, ServerConnection session) {
+    public ServerboundPlayerCommandPacket apply(ServerboundPlayerCommandPacket packet, ServerSession session) {
         Entity cameraTarget = session.getCameraTarget();
         if (cameraTarget != null) {
             if (packet.getState() == PlayerState.START_SNEAKING) {

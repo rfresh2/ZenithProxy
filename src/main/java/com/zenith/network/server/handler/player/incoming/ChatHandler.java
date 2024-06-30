@@ -1,15 +1,15 @@
 package com.zenith.network.server.handler.player.incoming;
 
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 
 import static com.zenith.Shared.*;
 
-public class ChatHandler implements PacketHandler<ServerboundChatPacket, ServerConnection> {
+public class ChatHandler implements PacketHandler<ServerboundChatPacket, ServerSession> {
     @Override
-    public ServerboundChatPacket apply(@NonNull ServerboundChatPacket packet, @NonNull ServerConnection session) {
+    public ServerboundChatPacket apply(@NonNull ServerboundChatPacket packet, @NonNull ServerSession session) {
         if (CONFIG.inGameCommands.enable) {
             final String message = packet.getMessage();
             if (IN_GAME_COMMAND.getCommandPattern().matcher(message).find()) {

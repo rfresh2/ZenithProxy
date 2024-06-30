@@ -12,7 +12,7 @@ import com.zenith.network.client.handler.incoming.spawn.SpawnPositionHandler;
 import com.zenith.network.client.handler.outgoing.OutgoingChatHandler;
 import com.zenith.network.client.handler.outgoing.OutgoingContainerClickHandler;
 import com.zenith.network.client.handler.postoutgoing.*;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.network.server.handler.player.incoming.*;
 import com.zenith.network.server.handler.player.outgoing.ClientCommandsOutgoingHandler;
 import com.zenith.network.server.handler.player.outgoing.SystemChatOutgoingHandler;
@@ -221,11 +221,11 @@ public final class ZenithHandlerCodec {
         final PacketHandlerCodec SERVER_PLAYER_CODEC = PacketHandlerCodec.builder()
             .setId("server-player")
             .setPriority(2)
-            .setActivePredicate((connection) -> !((ServerConnection) connection).isSpectator())
-            .state(ProtocolState.CONFIGURATION, PacketHandlerStateCodec.<ServerConnection>builder()
+            .setActivePredicate((connection) -> !((ServerSession) connection).isSpectator())
+            .state(ProtocolState.CONFIGURATION, PacketHandlerStateCodec.<ServerSession>builder()
                 .registerInbound(ServerboundClientInformationPacket.class, ClientInformationHandler.INSTANCE)
                 .build())
-            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
+            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerSession>builder()
                 .registerInbound(ServerboundChatCommandPacket.class, new ChatCommandHandler())
                 .registerOutbound(ServerboundChatCommandSignedPacket.class, new SignedChatCommandHandler())
                 .registerInbound(ServerboundChatPacket.class, new ChatHandler())
@@ -242,8 +242,8 @@ public final class ZenithHandlerCodec {
         final PacketHandlerCodec SERVER_SPECTATOR_CODEC = PacketHandlerCodec.builder()
             .setId("server-spectator")
             .setPriority(1)
-            .setActivePredicate((connection) -> ((ServerConnection) connection).isSpectator())
-            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
+            .setActivePredicate((connection) -> ((ServerSession) connection).isSpectator())
+            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerSession>builder()
                 .allowUnhandled(false)
                 .registerInbound(ServerboundMovePlayerPosRotPacket.class, new PlayerPositionRotationSpectatorHandler())
                 .registerInbound(ServerboundMovePlayerPosPacket.class, new PlayerPositionSpectatorHandler())
@@ -275,15 +275,15 @@ public final class ZenithHandlerCodec {
         final PacketHandlerCodec SERVER_SHARED_CODEC = PacketHandlerCodec.builder()
             .setId("server-shared")
             .setPriority(0)
-            .state(ProtocolState.CONFIGURATION, PacketHandlerStateCodec.<ServerConnection>builder()
+            .state(ProtocolState.CONFIGURATION, PacketHandlerStateCodec.<ServerSession>builder()
                 .registerInbound(ServerboundFinishConfigurationPacket.class, new FinishConfigurationHandler())
                 .registerInbound(ServerboundKeepAlivePacket.class, KeepAliveHandler.INSTANCE)
                 .registerOutbound(ClientboundKeepAlivePacket.class, KeepAliveOutgoingHandler.INSTANCE)
                 .build())
-            .state(ProtocolState.HANDSHAKE, PacketHandlerStateCodec.<ServerConnection>builder()
+            .state(ProtocolState.HANDSHAKE, PacketHandlerStateCodec.<ServerSession>builder()
                 .registerInbound(ClientIntentionPacket.class, new IntentionHandler())
                 .build())
-            .state(ProtocolState.LOGIN, PacketHandlerStateCodec.<ServerConnection>builder()
+            .state(ProtocolState.LOGIN, PacketHandlerStateCodec.<ServerSession>builder()
                 .registerInbound(ServerboundKeyPacket.class, new KeyHandler())
                 .registerInbound(ServerboundHelloPacket.class, new SHelloHandler())
                 .registerInbound(ServerboundCookieResponsePacket.class, new SCookieResponseHandler())
@@ -292,11 +292,11 @@ public final class ZenithHandlerCodec {
                 .registerOutbound(ClientboundGameProfilePacket.class, new SGameProfileOutgoingHandler())
                 .registerPostOutbound(ClientboundLoginCompressionPacket.class, new LoginCompressionPostOutgoingHandler())
                 .build())
-            .state(ProtocolState.STATUS, PacketHandlerStateCodec.<ServerConnection>builder()
+            .state(ProtocolState.STATUS, PacketHandlerStateCodec.<ServerSession>builder()
                 .registerInbound(ServerboundPingRequestPacket.class, PingRequestHandler.INSTANCE)
                 .registerInbound(ServerboundStatusRequestPacket.class, new StatusRequestHandler())
                 .build())
-            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
+            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerSession>builder()
                 .registerInbound(ServerboundConfigurationAcknowledgedPacket.class, new ConfigurationAckHandler())
                 .registerInbound(ServerboundKeepAlivePacket.class, KeepAliveHandler.INSTANCE)
                 .registerInbound(ServerboundPingRequestPacket.class, PingRequestHandler.INSTANCE)

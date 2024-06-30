@@ -17,7 +17,7 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.server.CustomServerInfoBuilder;
 import com.zenith.network.server.LanBroadcaster;
 import com.zenith.network.server.ProxyServerListener;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.network.server.handler.ProxyServerLoginHandler;
 import com.zenith.util.ComponentSerializer;
 import com.zenith.util.Config;
@@ -84,8 +84,8 @@ public class Proxy {
     protected TcpServer server;
     protected final Authenticator authenticator = new Authenticator();
     protected byte[] serverIcon;
-    protected final AtomicReference<ServerConnection> currentPlayer = new AtomicReference<>();
-    protected final FastArrayList<ServerConnection> activeConnections = new FastArrayList<>(ServerConnection.class);
+    protected final AtomicReference<ServerSession> currentPlayer = new AtomicReference<>();
+    protected final FastArrayList<ServerSession> activeConnections = new FastArrayList<>(ServerSession.class);
     private boolean inQueue = false;
     private int queuePosition = 0;
     @Setter @Nullable private Instant connectTime;
@@ -110,17 +110,18 @@ public class Proxy {
     }
 
     public void initEventHandlers() {
-        EVENT_BUS.subscribe(this,
-                            of(DisconnectEvent.class, this::handleDisconnectEvent),
-                            of(ConnectEvent.class, this::handleConnectEvent),
-                            of(StartQueueEvent.class, this::handleStartQueueEvent),
-                            of(QueuePositionUpdateEvent.class, this::handleQueuePositionUpdateEvent),
-                            of(QueueCompleteEvent.class, this::handleQueueCompleteEvent),
-                            of(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
-                            of(ServerRestartingEvent.class, this::handleServerRestartingEvent),
-                            of(PrioStatusEvent.class, this::handlePrioStatusEvent),
-                            of(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
-                            of(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
+        EVENT_BUS.subscribe(
+            this,
+            of(DisconnectEvent.class, this::handleDisconnectEvent),
+            of(ConnectEvent.class, this::handleConnectEvent),
+            of(StartQueueEvent.class, this::handleStartQueueEvent),
+            of(QueuePositionUpdateEvent.class, this::handleQueuePositionUpdateEvent),
+            of(QueueCompleteEvent.class, this::handleQueueCompleteEvent),
+            of(PlayerOnlineEvent.class, this::handlePlayerOnlineEvent),
+            of(ServerRestartingEvent.class, this::handleServerRestartingEvent),
+            of(PrioStatusEvent.class, this::handlePrioStatusEvent),
+            of(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
+            of(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
         );
     }
 
@@ -424,7 +425,7 @@ public class Proxy {
         var address = CONFIG.server.bind.address;
         var port = CONFIG.server.bind.port;
         SERVER_LOG.info("Starting server on {}:{}...", address, port);
-        this.server = new TcpServer(address, port, MinecraftProtocol::new, tcpManager);
+        this.server = new TcpServer(address, port, MinecraftProtocol::new, tcpManager, (socketAddress) -> new ServerSession(socketAddress.getHostName(), socketAddress.getPort(), (MinecraftProtocol) server.createPacketProtocol(), server));
         this.server.setGlobalFlag(MinecraftConstants.SERVER_CHANNEL_INITIALIZER, ZenithServerChannelInitializer.FACTORY);
         var serverInfoBuilder = new CustomServerInfoBuilder();
         this.server.setGlobalFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY, serverInfoBuilder);
@@ -525,12 +526,12 @@ public class Proxy {
         return this.loggingIn.getAndSet(false);
     }
 
-    public List<ServerConnection> getSpectatorConnections() {
+    public List<ServerSession> getSpectatorConnections() {
         var connections = getActiveConnections().getArray();
         // optimize most frequent cases as fast-paths to avoid list alloc
         if (connections.length == 0) return Collections.emptyList();
         if (connections.length == 1 && hasActivePlayer()) return Collections.emptyList();
-        final List<ServerConnection> result = new ArrayList<>(hasActivePlayer() ? connections.length - 1 : connections.length);
+        final List<ServerSession> result = new ArrayList<>(hasActivePlayer() ? connections.length - 1 : connections.length);
         for (int i = 0; i < connections.length; i++) {
             var connection = connections[i];
             if (connection.isSpectator()) {
@@ -541,12 +542,12 @@ public class Proxy {
     }
 
     public boolean hasActivePlayer() {
-        ServerConnection player = this.currentPlayer.get();
+        ServerSession player = this.currentPlayer.get();
         return player != null && player.isLoggedIn();
     }
 
-    public @Nullable ServerConnection getActivePlayer() {
-        ServerConnection player = this.currentPlayer.get();
+    public @Nullable ServerSession getActivePlayer() {
+        ServerSession player = this.currentPlayer.get();
         if (player != null && player.isLoggedIn()) return player;
         else return null;
     }
@@ -630,7 +631,7 @@ public class Proxy {
                 || !this.hasActivePlayer() // If no player is connected, nobody to warn
                 || !isOnlineOn2b2tForAtLeastDuration(twoB2tTimeLimit.minusMinutes(10L))
             ) return;
-            final ServerConnection playerConnection = this.currentPlayer.get();
+            final ServerSession playerConnection = this.currentPlayer.get();
             final Duration durationUntilKick = twoB2tTimeLimit.minus(Duration.ofSeconds(Proxy.getInstance().getOnlineTimeSeconds()));
             if (durationUntilKick.isNegative()) return; // sanity check just in case 2b's plugin changes
             var actionBarPacket = new ClientboundSetActionBarTextPacket(

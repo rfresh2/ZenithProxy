@@ -9,7 +9,7 @@ import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import com.zenith.mc.block.BlockRegistry;
 import com.zenith.mc.dimension.DimensionData;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.BrandSerializer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -89,7 +89,7 @@ public class ChunkCache implements CachedData {
                                      5L,
                                      5L,
                                      TimeUnit.MINUTES);
-        codec = MinecraftCodec.CODEC.getHelperFactory().get();
+        codec = MinecraftCodec.CODEC.getHelper();
         resetDimensionRegistry();
     }
 
@@ -143,7 +143,7 @@ public class ChunkCache implements CachedData {
     }
 
     public static void sync() {
-        final ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
+        final ServerSession currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer == null) return;
         currentPlayer.sendAsync(new ClientboundChunkBatchStartPacket());
         var chunks = new ArrayList<>(CACHE.getChunkCache().cache.values());

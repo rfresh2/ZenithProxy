@@ -12,7 +12,7 @@ import com.zenith.command.brigadier.CommandSource;
 import com.zenith.command.brigadier.DiscordCommandContext;
 import com.zenith.command.util.CommandErrorHandler;
 import com.zenith.discord.Embed;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
@@ -55,7 +55,7 @@ public abstract class Command {
     }
 
     private static boolean validateAccountOwnerInGame(final CommandContext context) {
-        final ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
+        final ServerSession currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer == null) return false;
         final GameProfile playerProfile = currentPlayer.getProfileCache().getProfile();
         if (playerProfile == null) return false;

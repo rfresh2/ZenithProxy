@@ -1,7 +1,7 @@
 package com.zenith.network.server.handler.player.outgoing;
 
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;
 import org.geysermc.mcprotocollib.protocol.data.game.command.CommandType;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundCommandsPacket;
@@ -10,9 +10,9 @@ import java.util.OptionalInt;
 
 import static com.zenith.Shared.*;
 
-public class ClientCommandsOutgoingHandler implements PacketHandler<ClientboundCommandsPacket, ServerConnection> {
+public class ClientCommandsOutgoingHandler implements PacketHandler<ClientboundCommandsPacket, ServerSession> {
     @Override
-    public ClientboundCommandsPacket apply(final ClientboundCommandsPacket packet, final ServerConnection session) {
+    public ClientboundCommandsPacket apply(final ClientboundCommandsPacket packet, final ServerSession session) {
         if (CONFIG.inGameCommands.enable && CONFIG.inGameCommands.slashCommands) {
             CommandNode[] zenithCommandNodes = COMMAND.getMCProtocolLibCommandNodesSupplier().get();
             if (CONFIG.inGameCommands.slashCommandsReplacesServerCommands) {

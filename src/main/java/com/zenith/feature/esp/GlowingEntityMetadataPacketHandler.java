@@ -1,7 +1,7 @@
 package com.zenith.feature.esp;
 
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataType;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
@@ -9,9 +9,9 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.Clie
 
 import java.util.ArrayList;
 
-public class GlowingEntityMetadataPacketHandler implements PacketHandler<ClientboundSetEntityDataPacket, ServerConnection> {
+public class GlowingEntityMetadataPacketHandler implements PacketHandler<ClientboundSetEntityDataPacket, ServerSession> {
     @Override
-    public ClientboundSetEntityDataPacket apply(final ClientboundSetEntityDataPacket packet, final ServerConnection session) {
+    public ClientboundSetEntityDataPacket apply(final ClientboundSetEntityDataPacket packet, final ServerSession session) {
         ClientboundSetEntityDataPacket p = packet;
         var metadata = packet.getMetadata();
         boolean edited = false;

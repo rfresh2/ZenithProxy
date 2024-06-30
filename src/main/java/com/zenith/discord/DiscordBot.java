@@ -9,6 +9,7 @@ import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.queue.Queue;
 import com.zenith.module.impl.AutoReconnect;
 import discord4j.common.ReactorResources;
+import discord4j.common.store.Store;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
 import discord4j.core.DiscordClientBuilder;
@@ -107,11 +108,12 @@ public class DiscordBot {
         }
         DiscordClient discordClient = buildProxiedClient(DiscordClientBuilder.create(CONFIG.discord.token)).build();
         this.client = discordClient.gateway()
-                .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
-                .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
-                .setInitialPresence(shardInfo -> disconnectedPresence)
-                .login()
-                .block(Duration.ofSeconds(20));
+            .setStore(Store.noOp())
+            .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
+            .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
+            .setInitialPresence(shardInfo -> disconnectedPresence)
+            .login()
+            .block(Duration.ofSeconds(20));
         restClient = client.getRestClient();
         mainRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
         if (CONFIG.discord.chatRelay.enable)
