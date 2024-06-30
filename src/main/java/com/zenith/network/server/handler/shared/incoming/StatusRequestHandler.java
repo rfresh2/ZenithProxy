@@ -2,7 +2,7 @@ package com.zenith.network.server.handler.shared.incoming;
 
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.data.status.ServerStatusInfo;
 import org.geysermc.mcprotocollib.protocol.data.status.handler.ServerInfoBuilder;
@@ -12,9 +12,9 @@ import org.geysermc.mcprotocollib.protocol.packet.status.serverbound.Serverbound
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.SERVER_LOG;
 
-public class StatusRequestHandler implements PacketHandler<ServerboundStatusRequestPacket, ServerConnection> {
+public class StatusRequestHandler implements PacketHandler<ServerboundStatusRequestPacket, ServerSession> {
     @Override
-    public ServerboundStatusRequestPacket apply(final ServerboundStatusRequestPacket packet, final ServerConnection session) {
+    public ServerboundStatusRequestPacket apply(final ServerboundStatusRequestPacket packet, final ServerSession session) {
         if (CONFIG.server.ping.logPings)
             SERVER_LOG.info("[Ping] Request from: {} [{}]", session.getRemoteAddress(), ProtocolVersion.getProtocol(session.getProtocolVersion()).getName());
         ServerInfoBuilder builder = session.getFlag(MinecraftConstants.SERVER_INFO_BUILDER_KEY);

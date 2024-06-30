@@ -7,7 +7,7 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.feature.spectator.entity.mob.SpectatorEntityEnderDragon;
 import com.zenith.feature.spectator.entity.mob.SpectatorEntityPlayerHead;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.math.MathHelper;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataType;
@@ -37,7 +37,7 @@ public final class SpectatorSync {
         sendSpectatorPackets(SpectatorPacketProvider::playerPosition);
     }
 
-    public static void syncSpectatorPositionToEntity(final ServerConnection spectConnection, Entity target) {
+    public static void syncSpectatorPositionToEntity(final ServerSession spectConnection, Entity target) {
         spectConnection.getSpectatorPlayerCache()
             .setX(target.getX())
             .setY(target.getY() + 1) // spawn above entity
@@ -65,7 +65,7 @@ public final class SpectatorSync {
         }
     }
 
-    private static void syncSpectatorPositionToProxiedPlayer(final ServerConnection spectConnection) {
+    private static void syncSpectatorPositionToProxiedPlayer(final ServerSession spectConnection) {
         spectConnection.getEventLoop().execute(() -> syncSpectatorPositionToEntity(spectConnection, CACHE.getPlayerCache().getThePlayer()));
     }
 
@@ -73,7 +73,7 @@ public final class SpectatorSync {
         sendSpectatorPackets(SpectatorPacketProvider::playerEquipment);
     }
 
-    private static void spawnSpectatorForOtherSessions(ServerConnection spectatorSession, ServerConnection connection) {
+    private static void spawnSpectatorForOtherSessions(ServerSession spectatorSession, ServerSession connection) {
         if (!connection.equals(Proxy.getInstance().getCurrentPlayer().get())) {
             spectatorSession.sendAsync(connection.getEntitySpawnPacket());
             spectatorSession.sendAsync(connection.getEntityMetadataPacket());
@@ -82,7 +82,7 @@ public final class SpectatorSync {
         connection.sendAsync(spectatorSession.getEntityMetadataPacket());
     }
 
-    public static EntityPlayer getSpectatorPlayerEntity(final ServerConnection session) {
+    public static EntityPlayer getSpectatorPlayerEntity(final ServerSession session) {
         EntityPlayer spectatorEntityPlayer = new EntityPlayer();
         spectatorEntityPlayer.setUuid(session.getSpectatorFakeProfileCache().getProfile().getId());
         spectatorEntityPlayer.setSelfPlayer(true);
@@ -97,7 +97,7 @@ public final class SpectatorSync {
         return spectatorEntityPlayer;
     }
 
-    public static void initSpectator(ServerConnection session, Supplier<Collection<CachedData>> cacheSupplier) {
+    public static void initSpectator(ServerSession session, Supplier<Collection<CachedData>> cacheSupplier) {
         // update spectator player cache
         EntityPlayer spectatorEntityPlayer = getSpectatorPlayerEntity(session);
         session.getSpectatorPlayerCache()
@@ -136,7 +136,7 @@ public final class SpectatorSync {
         syncPlayerEquipmentWithSpectatorsFromCache();
     }
 
-    public static void checkSpectatorPositionOutOfRender(final ServerConnection spectConnection) {
+    public static void checkSpectatorPositionOutOfRender(final ServerSession spectConnection) {
         final int spectX = (int) spectConnection.getSpectatorPlayerCache().getX() >> 4;
         final int spectZ = (int) spectConnection.getSpectatorPlayerCache().getZ() >> 4;
         final int playerX = (int) CACHE.getPlayerCache().getX() >> 4;
@@ -146,7 +146,7 @@ public final class SpectatorSync {
         }
     }
 
-    public static void updateSpectatorPosition(final ServerConnection selfSession) {
+    public static void updateSpectatorPosition(final ServerSession selfSession) {
         if (selfSession.hasCameraTarget()) {
             return;
         }
@@ -223,7 +223,7 @@ public final class SpectatorSync {
         }
     }
 
-    public static float getDisplayYaw(final ServerConnection serverConnection) {
+    public static float getDisplayYaw(final ServerSession serverConnection) {
         // idk why but dragon is displayed 180 degrees off from what you'd expect
         if (serverConnection.getSpectatorEntity() instanceof SpectatorEntityEnderDragon) {
             return serverConnection.getSpectatorPlayerCache().getYaw() - 180f;
@@ -234,7 +234,7 @@ public final class SpectatorSync {
         }
     }
 
-    public static float getDisplayPitch(final ServerConnection serverConnection) {
+    public static float getDisplayPitch(final ServerSession serverConnection) {
         if (serverConnection.getSpectatorEntity() instanceof SpectatorEntityPlayerHead) {
             return -serverConnection.getSpectatorPlayerCache().getPitch();
         }

@@ -12,7 +12,7 @@ import com.zenith.discord.DiscordBot;
 import com.zenith.discord.Embed;
 import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.feature.whitelist.PlayerListsManager;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
 import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntryAction;
@@ -58,7 +58,7 @@ public class SkinCommand extends Command {
             }));
     }
 
-    private void updateSkin(final ServerConnection session, final String playerName) {
+    private void updateSkin(final ServerSession session, final String playerName) {
         PlayerListsManager.getProfileFromUsername(playerName)
             .flatMap(profile -> SessionServerApi.INSTANCE.getProfileAndSkin(profile.uuid()))
             .ifPresentOrElse(profile -> {

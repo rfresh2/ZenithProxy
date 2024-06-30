@@ -1,7 +1,7 @@
 package com.zenith.network.server.handler.player.outgoing;
 
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -12,9 +12,9 @@ import java.util.Objects;
 import static com.zenith.Shared.*;
 import static java.util.Objects.nonNull;
 
-public class SystemChatOutgoingHandler implements PacketHandler<ClientboundSystemChatPacket, ServerConnection> {
+public class SystemChatOutgoingHandler implements PacketHandler<ClientboundSystemChatPacket, ServerSession> {
     @Override
-    public ClientboundSystemChatPacket apply(ClientboundSystemChatPacket packet, ServerConnection session) {
+    public ClientboundSystemChatPacket apply(ClientboundSystemChatPacket packet, ServerSession session) {
         try {
             final Component component = packet.getContent();
             final String message = ComponentSerializer.serializePlain(component);

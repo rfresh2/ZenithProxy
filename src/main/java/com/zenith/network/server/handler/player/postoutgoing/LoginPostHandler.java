@@ -6,7 +6,7 @@ import com.zenith.Proxy;
 import com.zenith.cache.DataCache;
 import com.zenith.event.proxy.ProxyClientLoggedInEvent;
 import com.zenith.network.registry.PostOutgoingPacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
 import net.raphimc.vialoader.netty.VLPipeline;
@@ -15,9 +15,9 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 
 import static com.zenith.Shared.*;
 
-public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLoginPacket, ServerConnection> {
+public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLoginPacket, ServerSession> {
     @Override
-    public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerConnection session) {
+    public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerSession session) {
         if (CONFIG.server.extra.whitelist.enable && !session.isWhitelistChecked()) {
             // we shouldn't be able to get to this point without whitelist checking, but just in case
             session.disconnect("Login without whitelist check?");
@@ -56,11 +56,11 @@ public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLo
         }
     }
 
-    private void checkDisableServerVia(ServerConnection session) {
+    private void checkDisableServerVia(ServerSession session) {
         if (CONFIG.server.viaversion.enabled && CONFIG.server.viaversion.autoRemoveFromPipeline) {
             // the ConnectedClients map is not populated with the connection until ClientboundLoginPacket is sent to the player
             Via.getManager().getConnectionManager().getConnectedClients().values().stream()
-                .filter(c -> c.getChannel() == session.getSession().getChannel())
+                .filter(c -> c.getChannel() == session.getChannel())
                 .findAny()
                 .filter(c -> c.getProtocolInfo().protocolVersion() == ProtocolVersion.getProtocol(session.getProtocolVersion()))
                 .ifPresent(c -> {

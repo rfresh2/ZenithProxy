@@ -5,7 +5,7 @@ import com.zenith.module.Module;
 import com.zenith.network.registry.PacketHandlerCodec;
 import com.zenith.network.registry.PacketHandlerStateCodec;
 import com.zenith.network.registry.ZenithHandlerCodec;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
 
@@ -18,7 +18,7 @@ public class ESP extends Module {
         codec = PacketHandlerCodec.builder()
             .setId("esp")
             .setPriority(1000)
-            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerConnection>builder()
+            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerSession>builder()
                 .registerOutbound(ClientboundSetEntityDataPacket.class, new GlowingEntityMetadataPacketHandler())
                 .build())
             .build();

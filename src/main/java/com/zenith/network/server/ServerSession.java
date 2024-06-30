@@ -11,20 +11,15 @@ import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
 import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.util.ComponentSerializer;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoop;
 import io.netty.handler.codec.DecoderException;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.geysermc.mcprotocollib.auth.GameProfile;
-import org.geysermc.mcprotocollib.network.Flag;
-import org.geysermc.mcprotocollib.network.Session;
-import org.geysermc.mcprotocollib.network.codec.PacketCodecHelper;
-import org.geysermc.mcprotocollib.network.event.session.SessionListener;
 import org.geysermc.mcprotocollib.network.packet.Packet;
-import org.geysermc.mcprotocollib.network.tcp.TcpSession;
+import org.geysermc.mcprotocollib.network.tcp.TcpServer;
+import org.geysermc.mcprotocollib.network.tcp.TcpServerSession;
 import org.geysermc.mcprotocollib.protocol.MinecraftProtocol;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.CollisionRule;
@@ -37,28 +32,21 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.Clie
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundLoginDisconnectPacket;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.crypto.SecretKey;
 import java.io.IOException;
-import java.net.SocketAddress;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.*;
 
-
 @Getter
 @Setter
-public class ServerConnection implements Session, SessionListener {
-    protected final TcpSession session;
+public class ServerSession extends TcpServerSession {
 
     public static final int DEFAULT_COMPRESSION_THRESHOLD = 256;
 
@@ -81,12 +69,6 @@ public class ServerConnection implements Session, SessionListener {
     // as requested by the player during login. may not be the same as what mojang api returns
     private @Nullable UUID loginProfileUUID;
     private int protocolVersion; // as reported by the client when they connected
-
-    public ServerConnection(final Session session) {
-        ThreadLocalRandom.current().nextBytes(this.challenge);
-        this.session = (TcpSession) session;
-        initSpectatorEntity();
-    }
 
     protected long lastPingId = 0L;
     protected long lastPingTime = 0L;
@@ -136,15 +118,21 @@ public class ServerConnection implements Session, SessionListener {
         return SERVER_ID;
     }
 
+    public ServerSession(final String host, final int port, final MinecraftProtocol protocol, final TcpServer server) {
+        super(host, port, protocol, server);
+        ThreadLocalRandom.current().nextBytes(this.challenge);
+        initSpectatorEntity();
+    }
+
     public EventLoop getEventLoop() {
-        return this.session.getChannel().eventLoop();
+        return getChannel().eventLoop();
     }
 
     @Override
-    public void packetReceived(Session session, Packet packet) {
+    public void callPacketReceived(Packet packet) {
         try {
             Packet p = packet;
-            var state = session.getPacketProtocol().getState(); // storing this before handlers might mutate it on the session
+            var state = getPacketProtocol().getState(); // storing this before handlers might mutate it on the session
             p = ZenithHandlerCodec.SERVER_REGISTRY.handleInbound(p, this);
             if (p != null && !isSpectator() && (state == ProtocolState.GAME || state == ProtocolState.CONFIGURATION)) {
                 if (state == ProtocolState.CONFIGURATION && !isConfigured()) return;
@@ -156,7 +144,7 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public Packet packetSending(final Session session, final Packet packet) {
+    public Packet callPacketSending(Packet packet) {
         if (CONFIG.debug.blockProtocolSwitchRaceCondition && blockProtocolSwitchPacketSendingRaceCondition(packet)) return null;
         try {
             return ZenithHandlerCodec.SERVER_REGISTRY.handleOutgoing(packet, this);
@@ -191,7 +179,7 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public void packetSent(Session session, Packet packet) {
+    public void callPacketSent(Packet packet) {
         try {
             ZenithHandlerCodec.SERVER_REGISTRY.handlePostOutgoing(packet, this);
         } catch (final Exception e) {
@@ -200,26 +188,27 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     @Override
-    public boolean packetError(final Session session, final Throwable throwable) {
+    public boolean callPacketError(Throwable throwable) {
         SERVER_LOG.debug("", throwable);
         return isLoggedIn;
     }
 
     @Override
-    public void connected(final Session session) {
-    }
-
-    @Override
-    public void disconnecting(final Session session, final Component reason, final Throwable cause) {
+    public void callConnected() {
 
     }
 
     @Override
-    public void disconnected(final Session session, final Component reason, final Throwable cause) {
+    public void callDisconnecting(Component reason, Throwable cause) {
+
+    }
+
+    @Override
+    public void callDisconnected(Component reason, Throwable cause) {
         Proxy.getInstance().getActiveConnections().remove(this);
         if (!this.isPlayer && cause != null && !(cause instanceof DecoderException || cause instanceof IOException)) {
             // any scanners or TCP connections established result in a lot of these coming in even when they are not actually speaking mc protocol
-            SERVER_LOG.warn(String.format("Connection disconnected: %s", session.getRemoteAddress()), cause);
+            SERVER_LOG.warn(String.format("Connection disconnected: %s", getRemoteAddress()), cause);
             return;
         }
         if (this.isPlayer) {
@@ -229,7 +218,7 @@ public class ServerConnection implements Session, SessionListener {
                 SERVER_LOG.info("Player disconnected: UUID: {}, Username: {}, Address: {}, Reason {}",
                                 Optional.ofNullable(this.profileCache.getProfile()).map(GameProfile::getId).orElse(null),
                                 Optional.ofNullable(this.profileCache.getProfile()).map(GameProfile::getName).orElse(null),
-                                session.getRemoteAddress(),
+                                getRemoteAddress(),
                                 reasonStr,
                                 cause);
                 try {
@@ -248,10 +237,31 @@ public class ServerConnection implements Session, SessionListener {
                 EVENT_BUS.postAsync(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
         }
-        ServerConnection serverConnection = Proxy.getInstance().getCurrentPlayer().get();
+        ServerSession serverConnection = Proxy.getInstance().getCurrentPlayer().get();
         if (serverConnection != null) {
             serverConnection.syncTeamMembers();
         }
+    }
+
+    @Override
+    public void disconnect(@Nullable final Component reason, final Throwable cause) {
+        var disconnectPacket = getDisconnectPacket(reason);
+        if (disconnectPacket != null) {
+            send(disconnectPacket, future -> super.disconnect(reason, cause));
+        } else {
+            super.disconnect(reason, cause);
+        }
+    }
+
+    private @Nullable Packet getDisconnectPacket(@Nullable final Component reason) {
+        if (reason == null) return null;
+        MinecraftProtocol protocol = getPacketProtocol();
+        if (protocol.getState() == ProtocolState.LOGIN) {
+            return new ClientboundLoginDisconnectPacket(reason);
+        } else if (protocol.getState() == ProtocolState.GAME) {
+            return new ClientboundDisconnectPacket(reason);
+        }
+        return null;
     }
 
     public void setLoggedIn() {
@@ -260,63 +270,9 @@ public class ServerConnection implements Session, SessionListener {
             Proxy.getInstance().getActiveConnections().add(this);
     }
 
-    @Override
-    public Future<Void> send(@NonNull Packet packet) {
-        return this.session.send(packet);
-    }
-
     public void sendAsyncAlert(final String minedown) {
         // todo: gradient colors?
         this.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&bZenithProxy&7]&r " + minedown), false));
-    }
-
-    @Override
-    public void send(@NonNull final Packet packet, @NonNull final ChannelFutureListener channelFutureListener) {
-        this.session.send(packet, channelFutureListener);
-    }
-
-    public Future<Void> sendDirect(@NotNull Packet packet) {
-        return this.session.sendDirect(packet);
-    }
-
-    @Override
-    public void sendDelayedDirect(@NonNull final Packet packet) {
-        this.session.sendDelayedDirect(packet);
-    }
-
-    @Override
-    public void flush() {
-        this.session.flush();
-    }
-
-    @Override
-    public void sendBundleDirect(@NotNull final @NonNull Packet... packets) {
-        this.session.sendBundleDirect(packets);
-    }
-
-    @Override
-    public void sendBundleDirect(@NonNull final List<Packet> packets) {
-        this.session.sendBundleDirect(packets);
-    }
-
-    @Override
-    public void sendBundle(@NonNull final List<Packet> packets) {
-        this.session.sendBundle(packets);
-    }
-
-    @Override
-    public void sendBundle(@NotNull final @NonNull Packet... packets) {
-        this.session.sendBundle(packets);
-    }
-
-    @Override
-    public void sendAsync(@NonNull final Packet packet) {
-        this.session.sendAsync(packet);
-    }
-
-    @Override
-    public void sendScheduledAsync(@NonNull final Packet packet, final long delay, final TimeUnit unit) {
-        this.session.sendScheduledAsync(packet, delay, unit);
     }
 
     public boolean isActivePlayer() {
@@ -368,7 +324,7 @@ public class ServerConnection implements Session, SessionListener {
     }
 
     public void initializeTeam() {
-        session.send(new ClientboundSetPlayerTeamPacket(
+        send(new ClientboundSetPlayerTeamPacket(
             teamName,
             displayName,
             prefix,
@@ -384,7 +340,7 @@ public class ServerConnection implements Session, SessionListener {
 
     public synchronized void syncTeamMembers() {
         final List<String> teamMembers = Proxy.getInstance().getSpectatorConnections().stream()
-            .map(ServerConnection::getSpectatorEntityUUID)
+            .map(ServerSession::getSpectatorEntityUUID)
             .map(UUID::toString)
             .collect(Collectors.toCollection(ArrayList::new));
         if (!teamMembers.isEmpty()) teamMembers.add(profileCache.getProfile().getName());
@@ -410,219 +366,5 @@ public class ServerConnection implements Session, SessionListener {
         }
         this.currentTeamMembers = teamMembers;
         SERVER_LOG.debug("Synced Team members: {} for {}", currentTeamMembers, this.profileCache.getProfile().getName());
-    }
-
-    //
-    //
-    //
-    // SESSION METHOD IMPLEMENTATIONS
-    //
-    //
-    //
-
-    @Override
-    public void connect() {
-        this.session.connect();
-    }
-
-    @Override
-    public void connect(boolean wait) {
-        this.session.connect(wait);
-    }
-
-    @Override
-    public String getHost() {
-        return this.session.getHost();
-    }
-
-    @Override
-    public int getPort() {
-        return this.session.getPort();
-    }
-
-    @Override
-    public SocketAddress getLocalAddress() {
-        return this.session.getLocalAddress();
-    }
-
-    @Override
-    public SocketAddress getRemoteAddress() {
-        return this.session.getRemoteAddress();
-    }
-
-    @Override
-    public MinecraftProtocol getPacketProtocol() {
-        return this.session.getPacketProtocol();
-    }
-
-    @Override
-    public PacketCodecHelper getCodecHelper() {
-        return session.getCodecHelper();
-    }
-
-    @Override
-    public Map<String, Object> getFlags() {
-        return this.session.getFlags();
-    }
-
-    @Override
-    public boolean hasFlag(Flag<?> flag) {
-        return this.session.hasFlag(flag);
-    }
-
-    @Override
-    public <T> T getFlag(Flag<T> key) {
-        return this.session.getFlag(key);
-    }
-
-    @Override
-    public <T> T getFlag(Flag<T> key, T def) {
-        return this.session.getFlag(key, def);
-    }
-
-    @Override
-    public <T> void setFlag(Flag<T> flag, T value) {
-        this.session.setFlag(flag, value);
-    }
-
-    @Override
-    public void setFlags(final Map<String, Object> map) {
-        this.session.setFlags(map);
-    }
-
-    @Override
-    public List<SessionListener> getListeners() {
-        return this.session.getListeners();
-    }
-
-    @Override
-    public void addListener(SessionListener listener) {
-        this.session.addListener(listener);
-    }
-
-    @Override
-    public void removeListener(SessionListener listener) {
-        this.session.removeListener(listener);
-    }
-
-    @Override
-    public void callPacketReceived(Packet packet) {
-        this.session.callPacketReceived(packet);
-    }
-
-    @Override
-    public Packet callPacketSending(final Packet packet) {
-        return this.session.callPacketSending(packet);
-    }
-
-    @Override
-    public void callConnected() {
-        this.session.callConnected();
-    }
-
-    @Override
-    public void callDisconnecting(final Component reason, final Throwable cause) {
-        this.session.callDisconnecting(reason, cause);
-    }
-
-    @Override
-    public void callDisconnected(final Component reason, final Throwable cause) {
-        this.session.callDisconnected(reason, cause);
-    }
-
-    @Override
-    public void callPacketSent(Packet packet) {
-        this.session.callPacketSent(packet);
-    }
-
-    @Override
-    public boolean callPacketError(final Throwable throwable) {
-        return this.session.callPacketError(throwable);
-    }
-
-    @Override
-    public int getCompressionThreshold() {
-        return this.session.getCompressionThreshold();
-    }
-
-    @Override
-    public void setCompressionThreshold(int threshold, int level, boolean validateCompression) {
-        this.session.setCompressionThreshold(threshold, level, validateCompression);
-    }
-
-    @Override
-    public void enableEncryption(SecretKey key) {
-        this.session.enableEncryption(key);
-    }
-
-    @Override
-    public int getConnectTimeout() {
-        return this.session.getConnectTimeout();
-    }
-
-    @Override
-    public void setConnectTimeout(int timeout) {
-        this.session.setConnectTimeout(timeout);
-    }
-
-    @Override
-    public int getReadTimeout() {
-        return this.session.getReadTimeout();
-    }
-
-    @Override
-    public void setReadTimeout(int timeout) {
-        this.session.setReadTimeout(timeout);
-    }
-
-    @Override
-    public int getWriteTimeout() {
-        return this.session.getWriteTimeout();
-    }
-
-    @Override
-    public void setWriteTimeout(int timeout) {
-        this.session.setWriteTimeout(timeout);
-    }
-
-    @Override
-    public boolean isConnected() {
-        return this.session.isConnected();
-    }
-
-    @Override
-    public void disconnect(String reason) {
-        disconnect(Component.text(reason));
-    }
-
-    @Override
-    public void disconnect(String reason, Throwable cause) {
-        disconnect(Component.text(reason), cause);
-    }
-
-    @Override
-    public void disconnect(@Nullable final Component reason) {
-        disconnect(reason, null);
-    }
-
-    @Override
-    public void disconnect(@Nullable final Component reason, final Throwable cause) {
-        var disconnectPacket = getDisconnectPacket(reason);
-        if (disconnectPacket != null) {
-            send(disconnectPacket, future -> this.session.disconnect(reason, cause));
-        } else {
-            this.session.disconnect(reason, cause);
-        }
-    }
-
-    private @Nullable Packet getDisconnectPacket(@Nullable final Component reason) {
-        if (reason == null) return null;
-        MinecraftProtocol protocol = session.getPacketProtocol();
-        if (protocol.getState() == ProtocolState.LOGIN) {
-            return new ClientboundLoginDisconnectPacket(reason);
-        } else if (protocol.getState() == ProtocolState.GAME) {
-            return new ClientboundDisconnectPacket(reason);
-        }
-        return null;
     }
 }

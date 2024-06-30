@@ -4,7 +4,7 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.brigadier.CommandSource;
 import com.zenith.discord.Embed;
 import com.zenith.feature.whitelist.PlayerList;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.ComponentSerializer;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
@@ -36,13 +36,13 @@ public class CommandOutputHelper {
         }
     }
 
-    public void logEmbedOutputToInGame(final Embed embed, final ServerConnection session) {
+    public void logEmbedOutputToInGame(final Embed embed, final ServerSession session) {
         if (!embed.isTitlePresent()) return;
         var component = ComponentSerializer.deserializeEmbed(embed);
         session.sendAsync(new ClientboundSystemChatPacket(component, false));
     }
 
-    public void logMultiLineOutputToInGame(final CommandContext commandContext, final ServerConnection session) {
+    public void logMultiLineOutputToInGame(final CommandContext commandContext, final ServerSession session) {
         commandContext.getMultiLineOutput().forEach(line -> session.sendAsync(new ClientboundSystemChatPacket(Component.text(line), false)));
     }
 

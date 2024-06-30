@@ -1,15 +1,15 @@
 package com.zenith.feature.actionlimiter.handlers.outbound;
 
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.math.MathHelper;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundMoveVehiclePacket;
 
 import static com.zenith.Shared.CONFIG;
 
-public class ALCMoveVehicleHandler implements PacketHandler<ClientboundMoveVehiclePacket, ServerConnection> {
+public class ALCMoveVehicleHandler implements PacketHandler<ClientboundMoveVehiclePacket, ServerSession> {
     @Override
-    public ClientboundMoveVehiclePacket apply(final ClientboundMoveVehiclePacket packet, final ServerConnection session) {
+    public ClientboundMoveVehiclePacket apply(final ClientboundMoveVehiclePacket packet, final ServerSession session) {
         if (CONFIG.client.extra.actionLimiter.allowMovement)
             return packet;
         if (packet.getY() <= CONFIG.client.extra.actionLimiter.movementMinY) {

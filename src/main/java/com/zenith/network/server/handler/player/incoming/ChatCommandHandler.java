@@ -1,7 +1,7 @@
 package com.zenith.network.server.handler.player.incoming;
 
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.ComponentSerializer;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
@@ -9,9 +9,9 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.zenith.Shared.*;
 
-public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandPacket, ServerConnection> {
+public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandPacket, ServerSession> {
     @Override
-    public ServerboundChatCommandPacket apply(final ServerboundChatCommandPacket packet, final ServerConnection session) {
+    public ServerboundChatCommandPacket apply(final ServerboundChatCommandPacket packet, final ServerSession session) {
         final String command = packet.getCommand();
         if (command.isBlank()) return packet;
         if (CONFIG.inGameCommands.slashCommands
@@ -26,7 +26,7 @@ public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandP
 
     private @Nullable ServerboundChatCommandPacket replaceExtraChatServerCommands(
         final ServerboundChatCommandPacket packet,
-        final ServerConnection session
+        final ServerSession session
     ) {
         final String command = packet.getCommand();
         final String commandLowercased = command.toLowerCase().split(" ")[0];

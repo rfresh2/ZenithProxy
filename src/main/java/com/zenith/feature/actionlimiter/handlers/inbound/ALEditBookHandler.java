@@ -1,14 +1,14 @@
 package com.zenith.feature.actionlimiter.handlers.inbound;
 
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundEditBookPacket;
 
 import static com.zenith.Shared.CONFIG;
 
-public class ALEditBookHandler implements PacketHandler<ServerboundEditBookPacket, ServerConnection> {
+public class ALEditBookHandler implements PacketHandler<ServerboundEditBookPacket, ServerSession> {
     @Override
-    public ServerboundEditBookPacket apply(final ServerboundEditBookPacket packet, final ServerConnection session) {
+    public ServerboundEditBookPacket apply(final ServerboundEditBookPacket packet, final ServerSession session) {
         if(!CONFIG.client.extra.actionLimiter.allowBookSigning
             // if title is not null, the book is being signed
             && packet.getTitle() != null) {

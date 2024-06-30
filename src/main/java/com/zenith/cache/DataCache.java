@@ -14,7 +14,7 @@ import com.zenith.cache.data.scoreboard.ScoreboardCache;
 import com.zenith.cache.data.stats.StatisticsCache;
 import com.zenith.cache.data.tab.TabListCache;
 import com.zenith.cache.data.team.TeamCache;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -64,7 +64,7 @@ public class DataCache {
         return true;
     }
 
-    public static void sendCacheData(final Collection<CachedData> cacheData, final ServerConnection connection) {
+    public static void sendCacheData(final Collection<CachedData> cacheData, final ServerSession connection) {
         cacheData.forEach(data -> {
             String msg = data.getSendingMessage();
             if (msg == null) SERVER_LOG.debug("Sending data to client {}", data.getClass().getSimpleName());

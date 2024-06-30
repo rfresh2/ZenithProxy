@@ -2,7 +2,7 @@ package com.zenith.network.server.handler.shared.incoming;
 
 import com.zenith.network.KeepAliveTask;
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.ServerLoginHandler;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
@@ -10,9 +10,9 @@ import org.geysermc.mcprotocollib.protocol.packet.configuration.serverbound.Serv
 
 import static com.zenith.Shared.EXECUTOR;
 
-public class FinishConfigurationHandler implements PacketHandler<ServerboundFinishConfigurationPacket, ServerConnection> {
+public class FinishConfigurationHandler implements PacketHandler<ServerboundFinishConfigurationPacket, ServerSession> {
     @Override
-    public ServerboundFinishConfigurationPacket apply(final ServerboundFinishConfigurationPacket packet, final ServerConnection session) {
+    public ServerboundFinishConfigurationPacket apply(final ServerboundFinishConfigurationPacket packet, final ServerSession session) {
         session.getPacketProtocol().setState(ProtocolState.GAME);
         if (!session.isConfigured()) {
             ServerLoginHandler handler = session.getFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY);

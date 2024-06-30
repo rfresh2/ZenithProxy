@@ -4,7 +4,7 @@ import com.zenith.Proxy;
 import com.zenith.event.proxy.ProxySpectatorLoggedInEvent;
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.registry.PostOutgoingPacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
@@ -18,9 +18,9 @@ import java.util.EnumSet;
 import static com.zenith.Shared.*;
 import static org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode.SPECTATOR;
 
-public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<ClientboundLoginPacket, ServerConnection> {
+public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<ClientboundLoginPacket, ServerSession> {
     @Override
-    public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerConnection session) {
+    public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerSession session) {
         if (CONFIG.server.extra.whitelist.enable && !session.isWhitelistChecked()) {
             // we shouldn't be able to get to this point without whitelist checking, but just in case
             session.disconnect("Login without whitelist check?");
@@ -58,7 +58,7 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
             }
         }
         session.setLoggedIn();
-        ServerConnection currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
+        ServerSession currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer != null) currentPlayer.syncTeamMembers();
         SpectatorSync.syncPlayerEquipmentWithSpectatorsFromCache();
         // send command help

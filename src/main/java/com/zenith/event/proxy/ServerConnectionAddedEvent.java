@@ -1,5 +1,5 @@
 package com.zenith.event.proxy;
 
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 
-public record ServerConnectionAddedEvent(ServerConnection serverConnection) { }
+public record ServerConnectionAddedEvent(ServerSession serverConnection) { }

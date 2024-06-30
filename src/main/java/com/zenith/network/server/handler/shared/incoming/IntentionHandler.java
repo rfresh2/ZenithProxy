@@ -2,18 +2,18 @@ package com.zenith.network.server.handler.shared.incoming;
 
 import com.zenith.feature.ratelimiter.RateLimiter;
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.MinecraftProtocol;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.packet.handshake.serverbound.ClientIntentionPacket;
 
 import static com.zenith.Shared.CONFIG;
 
-public class IntentionHandler implements PacketHandler<ClientIntentionPacket, ServerConnection> {
+public class IntentionHandler implements PacketHandler<ClientIntentionPacket, ServerSession> {
     private final RateLimiter rateLimiter = new RateLimiter(CONFIG.server.rateLimiter.rateLimitSeconds);
 
     @Override
-    public ClientIntentionPacket apply(final ClientIntentionPacket packet, final ServerConnection session) {
+    public ClientIntentionPacket apply(final ClientIntentionPacket packet, final ServerSession session) {
         MinecraftProtocol protocol = session.getPacketProtocol();
         switch (packet.getIntent()) {
             case STATUS -> protocol.setState(ProtocolState.STATUS);

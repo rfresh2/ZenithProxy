@@ -1,15 +1,15 @@
 package com.zenith.feature.actionlimiter.handlers.inbound;
 
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerAction;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundPlayerActionPacket;
 
 import static com.zenith.Shared.CONFIG;
 
-public class ALPlayerActionHandler implements PacketHandler<ServerboundPlayerActionPacket, ServerConnection> {
+public class ALPlayerActionHandler implements PacketHandler<ServerboundPlayerActionPacket, ServerSession> {
     @Override
-    public ServerboundPlayerActionPacket apply(final ServerboundPlayerActionPacket packet, final ServerConnection session) {
+    public ServerboundPlayerActionPacket apply(final ServerboundPlayerActionPacket packet, final ServerSession session) {
         if (!CONFIG.client.extra.actionLimiter.allowBlockBreaking && (
             packet.getAction() == PlayerAction.START_DIGGING
             || packet.getAction() == PlayerAction.FINISH_DIGGING

@@ -4,7 +4,7 @@ import com.zenith.Proxy;
 import com.zenith.event.proxy.NonWhitelistedPlayerConnectedEvent;
 import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.network.registry.PacketHandler;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.Wait;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.auth.GameProfile;
@@ -16,12 +16,12 @@ import java.util.UUID;
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
-public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGameProfilePacket, ServerConnection> {
+public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGameProfilePacket, ServerSession> {
     // can be anything really, just needs to be unique and not taken by a real player seen in-game
     private static final UUID spectatorFakeUUID = UUID.fromString("c9560dfb-a792-4226-ad06-db1b6dc40b95");
 
     @Override
-    public ClientboundGameProfilePacket apply(@NonNull ClientboundGameProfilePacket packet, @NonNull ServerConnection session) {
+    public ClientboundGameProfilePacket apply(@NonNull ClientboundGameProfilePacket packet, @NonNull ServerSession session) {
         try {
             // finishLogin will send a second ClientboundGameProfilePacket, just return it as is
             if (session.isWhitelistChecked()) return packet;
@@ -57,7 +57,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
         }
     }
 
-    private void finishLogin(ServerConnection session) {
+    private void finishLogin(ServerSession session) {
         final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
         synchronized (this) {
             if (!Proxy.getInstance().isConnected()) {

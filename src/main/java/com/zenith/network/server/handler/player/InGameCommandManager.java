@@ -3,7 +3,7 @@ package com.zenith.network.server.handler.player;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.brigadier.CommandSource;
 import com.zenith.command.util.CommandOutputHelper;
-import com.zenith.network.server.ServerConnection;
+import com.zenith.network.server.ServerSession;
 import com.zenith.util.ComponentSerializer;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
@@ -19,7 +19,7 @@ public class InGameCommandManager {
     // this is specific to CONTROLLING account commands - not spectator player commands!
     // true = command was handled
     // false = command was not handled
-    public boolean handleInGameCommand(final String message, final @NonNull ServerConnection session, final boolean printUnhandled) {
+    public boolean handleInGameCommand(final String message, final @NonNull ServerSession session, final boolean printUnhandled) {
         TERMINAL_LOG.info(session.getProfileCache().getProfile().getName() + " executed in-game command: " + message);
         final String command = message.split(" ")[0]; // first word is the command
         if (command.equals("help") && CONFIG.inGameCommands.enable && !CONFIG.inGameCommands.slashCommands) {
@@ -44,7 +44,7 @@ public class InGameCommandManager {
         return Pattern.compile("[" + CONFIG.inGameCommands.prefix + "]\\w+");
     }
 
-    private boolean executeInGameCommand(final String command, final ServerConnection session, final boolean printUnhandled) {
+    private boolean executeInGameCommand(final String command, final ServerSession session, final boolean printUnhandled) {
         final CommandContext commandContext = CommandContext.create(command, CommandSource.IN_GAME_PLAYER);
         var parse = COMMAND.parse(commandContext);
         if (!COMMAND.hasCommandNode(parse)) return false;

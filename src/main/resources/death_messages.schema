@@ -427,3 +427,5 @@ $v was violently separated by explosives.
 $v was violently severed by explosives.
 $v withered away.
 The Zone claims $v's life.
+# incorrect grammar, is this a named mob? "$v was pricked to death <by> a pufferfish"?
+$v was pricked to death a pufferfish

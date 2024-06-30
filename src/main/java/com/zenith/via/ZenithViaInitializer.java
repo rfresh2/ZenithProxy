@@ -13,6 +13,7 @@ import net.raphimc.vialoader.impl.platform.ViaBackwardsPlatformImpl;
 import net.raphimc.vialoader.netty.VLPipeline;
 import net.raphimc.vialoader.netty.ViaCodec;
 import org.geysermc.mcprotocollib.network.Session;
+import org.geysermc.mcprotocollib.network.tcp.TcpPacketCodec;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -63,8 +64,8 @@ public class ZenithViaInitializer {
             init();
             UserConnectionImpl userConnection = new UserConnectionImpl(channel, true);
             new ProtocolPipelineImpl(userConnection);
-            channel.pipeline().addBefore("codec", "via-protocol-state", new ZViaProtocolStateHandler(client));
-            channel.pipeline().addBefore("via-protocol-state", VLPipeline.VIA_CODEC_NAME, new ViaCodec(userConnection));
+            channel.pipeline().addBefore(TcpPacketCodec.ID, ZViaProtocolStateHandler.ID, new ZViaProtocolStateHandler(client));
+            channel.pipeline().addBefore(ZViaProtocolStateHandler.ID, VLPipeline.VIA_CODEC_NAME, new ViaCodec(userConnection));
         }
     }
 
@@ -73,7 +74,7 @@ public class ZenithViaInitializer {
         init();
         var userConnection = new UserConnectionImpl(channel, false);
         new ProtocolPipelineImpl(userConnection);
-        channel.pipeline().addBefore("codec", VLPipeline.VIA_CODEC_NAME, new ViaCodec(userConnection));
+        channel.pipeline().addBefore(TcpPacketCodec.ID, VLPipeline.VIA_CODEC_NAME, new ViaCodec(userConnection));
     }
 
     private void updateClientViaProtocolVersion() {
