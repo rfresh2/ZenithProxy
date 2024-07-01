@@ -105,6 +105,10 @@ public class Proxy {
         SLF4JBridgeHandler.install();
         if (System.getProperty("io.netty.leakDetection.level") == null)
             ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.DISABLED);
+        if (System.getProperty("reactor.schedulers.defaultPoolSize") == null)
+            System.setProperty("reactor.schedulers.defaultPoolSize", "1");
+        if (System.getProperty("reactor.schedulers.defaultBoundedElasticOnVirtualThreads") == null)
+            System.setProperty("reactor.schedulers.defaultBoundedElasticOnVirtualThreads", "true");
         instance = new Proxy();
         instance.start();
     }
