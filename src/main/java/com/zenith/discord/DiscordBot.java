@@ -9,6 +9,7 @@ import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.queue.Queue;
 import com.zenith.module.impl.AutoReconnect;
 import discord4j.common.ReactorResources;
+import discord4j.common.sinks.EmissionStrategy;
 import discord4j.common.store.Store;
 import discord4j.common.util.Snowflake;
 import discord4j.core.DiscordClient;
@@ -34,6 +35,7 @@ import discord4j.gateway.intent.Intent;
 import discord4j.gateway.intent.IntentSet;
 import discord4j.rest.RestClient;
 import discord4j.rest.entity.RestChannel;
+import discord4j.rest.request.RequestQueueFactory;
 import discord4j.rest.request.RouterOptions;
 import discord4j.rest.util.Color;
 import discord4j.rest.util.Image;
@@ -44,6 +46,7 @@ import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.ProxyProvider;
+import reactor.util.concurrent.Queues;
 
 import java.io.ByteArrayInputStream;
 import java.time.Duration;
@@ -106,7 +109,11 @@ public class DiscordBot {
         } catch (final NumberFormatException e) {
             throw new RuntimeException("Invalid account owner role ID set: " + CONFIG.discord.accountOwnerRoleId);
         }
-        DiscordClient discordClient = buildProxiedClient(DiscordClientBuilder.create(CONFIG.discord.token)).build();
+        DiscordClient discordClient = buildProxiedClient(DiscordClientBuilder.create(CONFIG.discord.token))
+            .setRequestQueueFactory(RequestQueueFactory.createFromSink(
+                spec -> spec.multicast().onBackpressureBuffer(Queues.SMALL_BUFFER_SIZE, false),
+                EmissionStrategy.timeoutDrop(Duration.ofSeconds(3))))
+            .build();
         this.client = discordClient.gateway()
             .setStore(Store.noOp())
             .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
