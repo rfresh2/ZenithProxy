@@ -522,9 +522,11 @@ public class DiscordBot {
         HttpClient httpClient = HttpClient.create().resolver(DefaultAddressResolverGroup.INSTANCE).compress(true).followRedirect(true).secure();
         if (CONFIG.discord.connectionProxy.enabled)
             httpClient = getProxiedHttpClient(httpClient);
-        builder.setReactorResources(new ReactorResources(httpClient,
-                                                         DEFAULT_TIMER_TASK_SCHEDULER.get(),
-                                                         DEFAULT_BLOCKING_TASK_SCHEDULER.get()));
+        builder.setReactorResources(new ReactorResources(
+            httpClient,
+            DEFAULT_TIMER_TASK_SCHEDULER.get(),
+            DEFAULT_BLOCKING_TASK_SCHEDULER.get())
+        );
         return builder;
     }
 

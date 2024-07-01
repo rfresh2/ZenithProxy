@@ -211,7 +211,7 @@ tasks {
 
         exclude(listOf(
             "module-info.class", "META-INF/licenses/**", "META-INF/maven/**", "META-INF/proguard/**",
-            "META-INF/gradle/**", "META-INF/versions/**", "META-INF/native-image/io.netty/**/native-image.properties" ,
+            "META-INF/gradle/**", "META-INF/native-image/io.netty/**/native-image.properties" ,
             "about.html", "bungee.yml", "plugin.yml", "velocity-plugin.json", "fabric.mod.json", "OSGI-INF/**"
         ))
 
@@ -244,7 +244,8 @@ tasks {
             attributes(mapOf(
                 "Implementation-Title" to "ZenithProxy",
                 "Implementation-Version" to project.version,
-                "Main-Class" to "com.zenith.Proxy"
+                "Main-Class" to "com.zenith.Proxy",
+                "Multi-Release" to "true"
             ))
         }
     }
