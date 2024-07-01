@@ -143,6 +143,7 @@ public class Proxy {
             if (CONFIG.debug.clearOldLogs) EXECUTOR.schedule(Proxy::clearOldLogs, 10L, TimeUnit.SECONDS);
             if (CONFIG.interactiveTerminal.enable) TERMINAL.start();
             MODULE.init();
+            this.tcpManager = new TcpConnectionManager();
             if (CONFIG.database.enabled) {
                 DATABASE.start();
                 DEFAULT_LOG.info("Started Databases");
@@ -164,7 +165,6 @@ public class Proxy {
             if (CONFIG.client.viaversion.enabled || CONFIG.server.viaversion.enabled) {
                 VIA_INITIALIZER.init();
             }
-            this.tcpManager = new TcpConnectionManager();
             startServer();
             CACHE.reset(CacheResetType.FULL);
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
