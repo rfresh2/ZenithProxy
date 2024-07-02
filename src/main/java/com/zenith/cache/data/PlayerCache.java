@@ -6,6 +6,7 @@ import com.zenith.cache.CachedData;
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.cache.data.entity.EntityPlayer;
+import com.zenith.cache.data.inventory.Container;
 import com.zenith.cache.data.inventory.InventoryCache;
 import com.zenith.util.math.MutableVec3i;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
@@ -177,7 +178,7 @@ public class PlayerCache implements CachedData {
 
     public ItemStack getEquipment(final EquipmentSlot slot) {
         var inventory = this.inventoryCache.getPlayerInventory();
-        if (inventory == null) return null;
+        if (inventory == null) return Container.EMPTY_STACK;
         return switch (slot) {
             case HELMET -> inventory.getItemStack(5);
             case CHESTPLATE -> inventory.getItemStack(6);
