@@ -15,22 +15,23 @@ public class GlowingEntityMetadataPacketHandler implements PacketHandler<Clientb
         ClientboundSetEntityDataPacket p = packet;
         var metadata = packet.getMetadata();
         boolean edited = false;
-        for (EntityMetadata<?, ?> entityMetadata : metadata) {
+        for (int i = 0; i < metadata.size(); i++) {
+            final EntityMetadata<?, ?> entityMetadata = metadata.get(i);
             if (entityMetadata.getId() == 0 && entityMetadata.getType() == MetadataType.BYTE) {
                 ByteEntityMetadata byteMetadata = (ByteEntityMetadata) entityMetadata;
-                byte b = byteMetadata.getPrimitiveValue();
-                // add glowing effect
-                byteMetadata.setValue((byte) (b | 0x40));
+                var newMetadata = new ByteEntityMetadata(0, MetadataType.BYTE, (byte) (byteMetadata.getPrimitiveValue() | 0x40));
+                var newMetadataList = new ArrayList<>(metadata);
+                newMetadataList.set(i, newMetadata);
+                p = packet.withMetadata(newMetadataList);
                 edited = true;
                 break;
             }
         }
         if (!edited) {
-            byte b = 0x40;
-            metadata = new ArrayList<>(metadata.size() + 1);
-            metadata.addAll(packet.getMetadata());
-            metadata.add(new ByteEntityMetadata(0, MetadataType.BYTE, b));
-            p = new ClientboundSetEntityDataPacket(packet.getEntityId(), metadata);
+            var newMetadata = new ArrayList<EntityMetadata<?, ?>>(metadata.size() + 1);
+            newMetadata.addAll(packet.getMetadata());
+            newMetadata.add(new ByteEntityMetadata(0, MetadataType.BYTE, (byte) 0x40));
+            p = packet.withMetadata(newMetadata);
         }
         return p;
     }
