@@ -97,82 +97,6 @@ public class DiscordBot {
         eventListener.subscribeEvents();
     }
 
-    public void createClient() {
-        if (CONFIG.discord.channelId.isEmpty()) throw new RuntimeException("Discord bot is enabled but channel id is not set");
-        if (CONFIG.discord.chatRelay.enable) {
-            if (CONFIG.discord.chatRelay.channelId.isEmpty()) throw new RuntimeException("Discord chat relay is enabled and channel id is not set");
-            if (CONFIG.discord.channelId.equals(CONFIG.discord.chatRelay.channelId)) throw new RuntimeException("Discord channel id and chat relay channel id cannot be the same");
-        }
-        if (CONFIG.discord.accountOwnerRoleId.isEmpty()) throw new RuntimeException("Discord account owner role id is not set");
-        try {
-            Snowflake.of(CONFIG.discord.accountOwnerRoleId);
-        } catch (final NumberFormatException e) {
-            throw new RuntimeException("Invalid account owner role ID set: " + CONFIG.discord.accountOwnerRoleId);
-        }
-        DiscordClient discordClient = buildProxiedClient(DiscordClientBuilder.create(CONFIG.discord.token))
-            .setRequestQueueFactory(RequestQueueFactory.createFromSink(
-                spec -> spec.multicast().onBackpressureBuffer(Queues.SMALL_BUFFER_SIZE, false),
-                EmissionStrategy.timeoutDrop(Duration.ofSeconds(3))))
-            .build();
-        this.client = discordClient.gateway()
-            .setStore(Store.noOp())
-            .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
-            .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
-            .setInitialPresence(shardInfo -> disconnectedPresence)
-            .login()
-            .block(Duration.ofSeconds(20));
-        restClient = client.getRestClient();
-        mainRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
-        if (CONFIG.discord.chatRelay.enable)
-            relayRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId));
-        client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(event -> {
-            if (CONFIG.discord.chatRelay.enable && !CONFIG.discord.chatRelay.channelId.isEmpty() && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))) {
-                if (!event.getMember().get().getId().equals(this.client.getSelfId())) {
-                    EVENT_BUS.postAsync(new DiscordMessageSentEvent(sanitizeRelayInputMessage(event.getMessage().getContent()), event));
-                    return;
-                }
-            }
-            if (!event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.channelId))) {
-                return;
-            }
-            final String message = event.getMessage().getContent();
-            if (!message.startsWith(CONFIG.discord.prefix)) {
-                return;
-            }
-            try {
-                final String inputMessage = message.substring(1);
-                DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", inputMessage);
-                final CommandContext context = DiscordCommandContext.create(inputMessage, event, mainRestChannel);
-                COMMAND.execute(context);
-                final MultipartRequest<MessageCreateRequest> request = commandEmbedOutputToMessage(context);
-                if (request != null) {
-                    DISCORD_LOG.debug("Discord bot response: {}", request.getJsonPayload());
-                    mainChannelMessageQueue.add(request);
-                    CommandOutputHelper.logEmbedOutputToTerminal(context.getEmbed());
-                }
-                if (!context.getMultiLineOutput().isEmpty()) {
-                    for (final String line : context.getMultiLineOutput()) {
-                        mainChannelMessageQueue.add(MessageCreateSpec.builder().content(line).build().asRequest());
-                    }
-                    CommandOutputHelper.logMultiLineOutputToTerminal(context);
-                }
-            } catch (final Exception e) {
-                DISCORD_LOG.error("Failed processing discord command: {}", message, e);
-            }
-        });
-        if (LAUNCH_CONFIG.release_channel.endsWith(".pre")) {
-            sendEmbedMessage(Embed.builder()
-                                 .title("ZenithProxy Prerelease")
-                                 .description("""
-                                              You are currently using a ZenithProxy prerelease
-                                              
-                                              Prereleases include experiments that may contain bugs and are not always updated with fixes
-                                              
-                                              Switch to a stable release with the `channel` command
-                                              """));
-        }
-    }
-
     public synchronized void start() {
         createClient();
         initEventHandlers();
@@ -187,32 +111,6 @@ public class DiscordBot {
         if (CONFIG.discord.chatRelay.enable)
             this.relayChannelMessageQueueProcessFuture = EXECUTOR.scheduleAtFixedRate(this::processRelayMessageQueue, 0L, 100L, TimeUnit.MILLISECONDS);
         this.isRunning = true;
-    }
-
-    public void setBotNickname(final String nick) {
-        try {
-            final Id guildId = mainRestChannel.getData().block(BLOCK_TIMEOUT).guildId().get();
-            this.client.getGuildById(Snowflake.of(guildId))
-                .flatMap(g -> g.changeSelfNickname(nick))
-                .block(BLOCK_TIMEOUT);
-        } catch (final Exception e) {
-            DISCORD_LOG.warn("Failed updating bot's nickname. Check that the bot has correct permissions");
-            DISCORD_LOG.debug("Failed updating bot's nickname. Check that the bot has correct permissions", e);
-        }
-    }
-
-    public void setBotDescription(String description) {
-        try {
-            restClient.getApplicationService()
-                .modifyCurrentApplicationInfo(ApplicationEditSpec.builder()
-                                               .description(description)
-                                               .build()
-                                               .asRequest())
-                .block(BLOCK_TIMEOUT);
-        } catch (final Exception e) {
-            DISCORD_LOG.warn("Failed updating bot's description. Check that the bot has correct permissions");
-            DISCORD_LOG.debug("Failed updating bot's description", e);
-        }
     }
 
     public synchronized void stop(boolean clearQueue) {
@@ -241,6 +139,86 @@ public class DiscordBot {
             this.relayChannelMessageQueue.clear();
         }
         this.isRunning = false;
+    }
+
+    public void createClient() {
+        if (CONFIG.discord.channelId.isEmpty()) throw new RuntimeException("Discord bot is enabled but channel id is not set");
+        if (CONFIG.discord.chatRelay.enable) {
+            if (CONFIG.discord.chatRelay.channelId.isEmpty()) throw new RuntimeException("Discord chat relay is enabled and channel id is not set");
+            if (CONFIG.discord.channelId.equals(CONFIG.discord.chatRelay.channelId)) throw new RuntimeException("Discord channel id and chat relay channel id cannot be the same");
+        }
+        if (CONFIG.discord.accountOwnerRoleId.isEmpty()) throw new RuntimeException("Discord account owner role id is not set");
+        try {
+            Snowflake.of(CONFIG.discord.accountOwnerRoleId);
+        } catch (final NumberFormatException e) {
+            throw new RuntimeException("Invalid account owner role ID set: " + CONFIG.discord.accountOwnerRoleId);
+        }
+        client = buildGatewayClient();
+        restClient = client.getRestClient();
+        mainRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.channelId));
+        if (CONFIG.discord.chatRelay.enable)
+            relayRestChannel = restClient.getChannelById(Snowflake.of(CONFIG.discord.chatRelay.channelId));
+        client.getEventDispatcher().on(MessageCreateEvent.class).subscribe(this::handleDiscordMessageCreateEvent);
+        if (LAUNCH_CONFIG.release_channel.endsWith(".pre")) {
+            sendEmbedMessage(Embed.builder()
+                                 .title("ZenithProxy Prerelease")
+                                 .description(
+                                     """
+                                     You are currently using a ZenithProxy prerelease
+                                              
+                                     Prereleases include experiments that may contain bugs and are not always updated with fixes
+                                              
+                                     Switch to a stable release with the `channel` command
+                                     """));
+        }
+    }
+
+    private GatewayDiscordClient buildGatewayClient() {
+        DiscordClient discordClient = buildProxiedClient(DiscordClientBuilder.create(CONFIG.discord.token))
+            .setRequestQueueFactory(RequestQueueFactory.createFromSink(
+                spec -> spec.multicast().onBackpressureBuffer(Queues.SMALL_BUFFER_SIZE, false),
+                EmissionStrategy.timeoutDrop(Duration.ofSeconds(3))))
+            .build();
+        return discordClient.gateway()
+            .setStore(Store.noOp())
+            .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
+            .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
+            .setInitialPresence(shardInfo -> disconnectedPresence)
+            .login()
+            .block(Duration.ofSeconds(20));
+    }
+
+    private void handleDiscordMessageCreateEvent(final MessageCreateEvent event) {
+        if (CONFIG.discord.chatRelay.enable
+            && !CONFIG.discord.chatRelay.channelId.isEmpty()
+            && event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.chatRelay.channelId))
+            && !event.getMember().get().getId().equals(this.client.getSelfId())) {
+            EVENT_BUS.postAsync(new DiscordMessageSentEvent(sanitizeRelayInputMessage(event.getMessage().getContent()), event));
+            return;
+        }
+        if (!event.getMessage().getChannelId().equals(Snowflake.of(CONFIG.discord.channelId))) return;
+        final String message = event.getMessage().getContent();
+        if (!message.startsWith(CONFIG.discord.prefix)) return;
+        try {
+            final String inputMessage = message.substring(1);
+            DISCORD_LOG.info(event.getMember().map(User::getTag).orElse("unknown user") + " (" + event.getMember().get().getId().asString() +") executed discord command: {}", inputMessage);
+            final CommandContext context = DiscordCommandContext.create(inputMessage, event, mainRestChannel);
+            COMMAND.execute(context);
+            final MultipartRequest<MessageCreateRequest> request = commandEmbedOutputToMessage(context);
+            if (request != null) {
+                DISCORD_LOG.debug("Discord bot response: {}", request.getJsonPayload());
+                mainChannelMessageQueue.add(request);
+                CommandOutputHelper.logEmbedOutputToTerminal(context.getEmbed());
+            }
+            if (!context.getMultiLineOutput().isEmpty()) {
+                for (final String line : context.getMultiLineOutput()) {
+                    mainChannelMessageQueue.add(MessageCreateSpec.builder().content(line).build().asRequest());
+                }
+                CommandOutputHelper.logMultiLineOutputToTerminal(context);
+            }
+        } catch (final Exception e) {
+            DISCORD_LOG.error("Failed processing discord command: {}", message, e);
+        }
     }
 
     private MultipartRequest<MessageCreateRequest> commandEmbedOutputToMessage(final CommandContext context) {
@@ -335,6 +313,32 @@ public class DiscordBot {
     private ClientPresence getOnlinePresence() {
         return ClientPresence.of(Status.ONLINE, ClientActivity.custom(
       (Proxy.getInstance().isOn2b2t() ? "2b2t" : CONFIG.client.server.address) + " [" + Proxy.getInstance().getOnlineTimeString() + "]"));
+    }
+
+    public void setBotNickname(final String nick) {
+        try {
+            final Id guildId = mainRestChannel.getData().block(BLOCK_TIMEOUT).guildId().get();
+            this.client.getGuildById(Snowflake.of(guildId))
+                .flatMap(g -> g.changeSelfNickname(nick))
+                .block(BLOCK_TIMEOUT);
+        } catch (final Exception e) {
+            DISCORD_LOG.warn("Failed updating bot's nickname. Check that the bot has correct permissions");
+            DISCORD_LOG.debug("Failed updating bot's nickname. Check that the bot has correct permissions", e);
+        }
+    }
+
+    public void setBotDescription(String description) {
+        try {
+            restClient.getApplicationService()
+                .modifyCurrentApplicationInfo(ApplicationEditSpec.builder()
+                                                  .description(description)
+                                                  .build()
+                                                  .asRequest())
+                .block(BLOCK_TIMEOUT);
+        } catch (final Exception e) {
+            DISCORD_LOG.warn("Failed updating bot's description. Check that the bot has correct permissions");
+            DISCORD_LOG.debug("Failed updating bot's description", e);
+        }
     }
 
     private void handleProxyUpdateComplete() {
