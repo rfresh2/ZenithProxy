@@ -2,6 +2,7 @@ package com.zenith.module.impl;
 
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityStandard;
+import com.zenith.cache.data.inventory.Container;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.module.EntityFishHookSpawnEvent;
 import com.zenith.event.module.SplashSoundEffectEvent;
@@ -155,6 +156,6 @@ public class AutoFish extends AbstractInventoryModule {
 
     @Override
     public boolean itemPredicate(final ItemStack itemStack) {
-        return itemStack.getId() == ItemRegistry.FISHING_ROD.id();
+        return itemStack != Container.EMPTY_STACK && itemStack.getId() == ItemRegistry.FISHING_ROD.id();
     }
 }
