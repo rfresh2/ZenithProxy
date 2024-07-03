@@ -39,6 +39,7 @@ public class ChatRelayCommand extends Command {
                 "whisperMentions on/off",
                 "nameMentions on/off",
                 "mentionsWhileConnected on/off",
+                "ignoreQueue on/off",
                 "sendMessages on/off"
             )
         );
@@ -115,6 +116,13 @@ public class ChatRelayCommand extends Command {
                                 .title("Mentions While Connected " + toggleStrCaps(CONFIG.discord.chatRelay.mentionWhileConnected));
                             return 1;
                       })))
+            .then(literal("ignoreQueue")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.discord.chatRelay.ignoreQueue = getToggle(c, "toggle");
+                            c.getSource().getEmbed()
+                                .title("Ignore Queue " + toggleStrCaps(CONFIG.discord.chatRelay.ignoreQueue));
+                            return 1;
+                      })))
             .then(literal("sendMessages")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.discord.chatRelay.sendMessages = getToggle(c, "toggle");
@@ -136,6 +144,7 @@ public class ChatRelayCommand extends Command {
             .addField("Whisper Mentions", toggleStr(CONFIG.discord.chatRelay.mentionRoleOnWhisper), false)
             .addField("Name Mentions", toggleStr(CONFIG.discord.chatRelay.mentionRoleOnNameMention), false)
             .addField("Mentions While Connected", toggleStr(CONFIG.discord.chatRelay.mentionWhileConnected), false)
+            .addField("Ignore Queue", toggleStr(CONFIG.discord.chatRelay.ignoreQueue), false)
             .addField("Send Messages", toggleStr(CONFIG.discord.chatRelay.sendMessages), false)
             .primaryColor();
     }
