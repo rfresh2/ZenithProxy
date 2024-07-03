@@ -157,7 +157,7 @@ public final class Config {
             }
 
             public static final class AutoTotem {
-                public boolean enabled = true;
+                public boolean enabled = false;
                 public boolean inGame = false;
                 public int healthThreshold = 20;
                 public boolean noTotemsAlert = false;
@@ -167,7 +167,7 @@ public final class Config {
             }
 
             public static final class AntiLeak {
-                public boolean enabled = true;
+                public boolean enabled = false;
                 // checks if numbers in chat are within a range from your coords
                 public boolean rangeCheck = true;
                 // the factor to divide and multiply your coords by to get the range
@@ -175,7 +175,7 @@ public final class Config {
             }
 
             public static final class KillAura {
-                public boolean enabled = true;
+                public boolean enabled = false;
                 public boolean targetPlayers = false;
                 public boolean targetHostileMobs = true;
                 public boolean targetNeutralMobs = false;
@@ -189,7 +189,7 @@ public final class Config {
             }
 
             public static final class AutoEat {
-                public boolean enabled = true;
+                public boolean enabled = false;
                 public int healthThreshold = 10;
                 public int hungerThreshold = 10;
                 public boolean warning = true;
@@ -209,7 +209,7 @@ public final class Config {
 
             public static final class AntiAFK {
                 public Actions actions = new Actions();
-                public boolean enabled = true;
+                public boolean enabled = false;
 
                 public static final class Actions {
                     public boolean walk = true;
@@ -294,7 +294,7 @@ public final class Config {
             }
 
             public static final class AutoRespawn {
-                public boolean enabled = true;
+                public boolean enabled = false;
                 public int delayMillis = 100;
             }
 
