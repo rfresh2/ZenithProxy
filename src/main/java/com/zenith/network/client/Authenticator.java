@@ -79,7 +79,7 @@ public class Authenticator {
         MinecraftAuth.LOGGER = new MCAuthLoggerBridge();
     }
 
-    private static final File AUTH_CACHE_FILE = new File("mc_auth_cache.json");
+    private static final File AUTH_CACHE_FILE = new File(System.getenv("MC_AUTH_CACHE_FILE") != null ? System.getenv("MC_AUTH_CACHE_FILE") : "mc_auth_cache.json");
 
     public void clearAuthCache() {
         try {
