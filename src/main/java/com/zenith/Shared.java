@@ -53,8 +53,8 @@ public class Shared {
     public static final Logger DISCORD_LOG = LoggerFactory.getLogger("Discord");
     public static final Logger DATABASE_LOG = LoggerFactory.getLogger("Database");
     public static final Logger TERMINAL_LOG = LoggerFactory.getLogger("Terminal");
-    public static final File CONFIG_FILE = new File("config.json");
-    public static final File LAUNCH_CONFIG_FILE = new File("launch_config.json");
+    public static final File CONFIG_FILE = new File(System.getenv("CONFIG_FILE") != null ? System.getenv("CONFIG_FILE") : "config.json");
+    public static final File LAUNCH_CONFIG_FILE = new File(System.getenv("LAUNCH_CONFIG_FILE") != null ? System.getenv("LAUNCH_CONFIG_FILE") : "config.json");
     public static final String SERVER_RESTARTING = "Server restarting";
     public static final String SYSTEM_DISCONNECT = "System disconnect";
     public static final String MANUAL_DISCONNECT = "Manual Disconnect";
