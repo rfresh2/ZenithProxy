@@ -20,7 +20,6 @@ public class DataGenerator implements DedicatedServerModInitializer {
     public static Logger LOG = LoggerFactory.getLogger("ZenithProxy");
     public static Path dataDir = resolveDataDir();
     public static Gson gson = new GsonBuilder()
-        .setPrettyPrinting()
         .setLenient()
         .disableHtmlEscaping()
         .create();
