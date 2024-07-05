@@ -22,31 +22,32 @@ class GitHubAPI:
             "Connection": "close",
         }
 
-    def get_releases(self, params):
-        try:
-            response = requests.get(self.get_base_url(), headers=self.get_headers(), params=params, timeout=10)
-            return response.json() if response.status_code == 200 else None
-        except Exception as e:
-            print("Failed to get releases:", e)
-            return None
-
     def get_latest_release_and_ver(self, channel):
-        releases = self.get_releases({"per_page": 100})
-        if releases:
+        try:
+            response = requests.get(self.get_base_url(), headers=self.get_headers(), params={"per_page": 100}, timeout=10)
+            if response.status_code != 200:
+                return None
+            releases = response.json()
             latest_release = max(
                 (r for r in releases if not r["draft"] and r["tag_name"].endswith("+" + channel)),
                 key=lambda r: r["published_at"],
                 default=None,
             )
             return (latest_release["id"], latest_release["tag_name"]) if latest_release else None
+        except Exception as e:
+            print("Failed to get releases:", e)
+        return None
 
-    def get_release_for_ver(self, target_version):
-        for page in range(1, 10):
-            releases = self.get_releases({"per_page": 100, "page": page})
-            if releases:
-                for release in releases:
-                    if not release["draft"] and release["tag_name"] == target_version:
-                        return release["id"], release["tag_name"]
+    def get_release_for_ver(self, tag_name):
+        url = f"{self.get_base_url()}/tags/{tag_name}"
+        try:
+            response = requests.get(url, headers=self.get_headers(), timeout=10)
+            if response.status_code == 200:
+                release = response.json()
+                return release["id"], release["tag_name"]
+        except Exception as e:
+            print("Failed to get release for version:", e)
+        return None
 
     def get_asset_id(self, release_id, asset_name, tag=False):
         url = f"{self.get_base_url()}/{'tags/' if tag else ''}{release_id}"
