@@ -40,6 +40,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.zenith.Shared.*;
@@ -245,12 +246,17 @@ public class ServerSession extends TcpServerSession {
 
     @Override
     public void disconnect(@Nullable final Component reason, final Throwable cause) {
-        var disconnectPacket = getDisconnectPacket(reason);
-        if (disconnectPacket != null) {
-            send(disconnectPacket, future -> super.disconnect(reason, cause));
-        } else {
-            super.disconnect(reason, cause);
+        if (this.getChannel() != null && this.getChannel().isActive()) {
+            var disconnectPacket = getDisconnectPacket(reason);
+            if (disconnectPacket != null) {
+                try {
+                    send(disconnectPacket).get(1L, TimeUnit.SECONDS);
+                } catch (final Exception e) {
+                    // fall through
+                }
+            }
         }
+        super.disconnect(reason, cause);
     }
 
     private @Nullable Packet getDisconnectPacket(@Nullable final Component reason) {
