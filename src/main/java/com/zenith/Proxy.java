@@ -137,10 +137,10 @@ public class Proxy {
         if (exeReleaseVersion == null) {
             DEFAULT_LOG.warn("Detected unofficial ZenithProxy development build!");
         } else if (!LAUNCH_CONFIG.version.equals(exeReleaseVersion)) {
-            DEFAULT_LOG.error("launch_config.json version and actual ZenithProxy version do not match!");
+            DEFAULT_LOG.warn("launch_config.json version: {} and embedded ZenithProxy version: {} do not match!", LAUNCH_CONFIG.version, exeReleaseVersion);
             if (LAUNCH_CONFIG.auto_update)
-                DEFAULT_LOG.error("AutoUpdater is enabled but will break!");
-            DEFAULT_LOG.error("Use the official launcher: https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3");
+                DEFAULT_LOG.warn("AutoUpdater is enabled but will break!");
+            DEFAULT_LOG.warn("Use the official launcher: https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3");
         }
         initEventHandlers();
         try {

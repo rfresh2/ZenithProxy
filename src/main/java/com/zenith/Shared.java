@@ -138,7 +138,7 @@ public class Shared {
     }
 
     private static @Nullable String readResourceTxt(final String name) {
-        try (InputStream in = Shared.class.getResourceAsStream(name)) {
+        try (InputStream in = Shared.class.getClassLoader().getResourceAsStream(name)) {
             if (in == null) return null;
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
                 return reader.readLine();
