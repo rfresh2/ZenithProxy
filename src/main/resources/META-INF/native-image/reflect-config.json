@@ -563,6 +563,13 @@
   "methods":[{"name":"<init>","parameterTypes":["boolean","java.lang.String","int","java.lang.String"] }]
 },
 {
+  "name":"com.zenith.feature.api.mcsrvstatus.model.MCSrvStatusResponse",
+  "allDeclaredFields":true,
+  "queryAllDeclaredMethods":true,
+  "queryAllDeclaredConstructors":true,
+  "methods":[{"name":"<init>","parameterTypes":["boolean","java.lang.String","int"] }]
+},
+{
   "name":"com.zenith.feature.api.minetools.model.MinetoolsProfileResponse",
   "allDeclaredFields":true,
   "queryAllDeclaredMethods":true,

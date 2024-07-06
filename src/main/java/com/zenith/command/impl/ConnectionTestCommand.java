@@ -7,7 +7,7 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
-import com.zenith.feature.api.mcstatus.MCStatusApi;
+import com.zenith.feature.api.mcsrvstatus.MCSrvStatusApi;
 
 import java.util.function.Supplier;
 
@@ -145,13 +145,13 @@ public class ConnectionTestCommand extends Command {
         String address,
         Supplier<String> descriptionOnFailure,
         Supplier<String> descriptionOnInternalFailure) {
-        MCStatusApi.INSTANCE.getMCServerStatus(address).ifPresentOrElse(response -> {
+        MCSrvStatusApi.INSTANCE.getMCSrvStatus(address).ifPresentOrElse(response -> {
             if (response.online()) {
                 embed
                     .title("Connection Test Successful")
                     .successColor()
                     .addField("Address", address, false)
-                    .addField("Host Response", response.host(), false)
+                    .addField("Host Response", response.ip(), false)
                     .addField("Port Response", response.port(), false);
             } else {
                 embed

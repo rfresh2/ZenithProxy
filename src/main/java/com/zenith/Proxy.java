@@ -4,7 +4,7 @@ import ch.qos.logback.classic.LoggerContext;
 import com.zenith.cache.CacheResetType;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.api.crafthead.CraftheadApi;
-import com.zenith.feature.api.mcstatus.MCStatusApi;
+import com.zenith.feature.api.mcsrvstatus.MCSrvStatusApi;
 import com.zenith.feature.api.minotar.MinotarApi;
 import com.zenith.feature.api.prioban.PriobanApi;
 import com.zenith.feature.autoupdater.AutoUpdater;
@@ -257,7 +257,7 @@ public class Proxy {
             SERVER_LOG.debug("Proxy IP is set to localhost, skipping connection test");
             return;
         }
-        MCStatusApi.INSTANCE.getMCServerStatus(CONFIG.server.getProxyAddress())
+        MCSrvStatusApi.INSTANCE.getMCSrvStatus(CONFIG.server.getProxyAddress())
             .ifPresentOrElse(response -> {
                 if (response.online()) {
                     SERVER_LOG.debug("Connection test successful: {}", address);
