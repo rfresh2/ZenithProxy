@@ -9,6 +9,7 @@ import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.queue.Queue;
 import com.zenith.module.impl.AutoReconnect;
 import discord4j.common.ReactorResources;
+import discord4j.common.close.CloseException;
 import discord4j.common.sinks.EmissionStrategy;
 import discord4j.common.store.Store;
 import discord4j.common.util.Snowflake;
@@ -35,6 +36,7 @@ import discord4j.gateway.intent.Intent;
 import discord4j.gateway.intent.IntentSet;
 import discord4j.rest.RestClient;
 import discord4j.rest.entity.RestChannel;
+import discord4j.rest.http.client.ClientException;
 import discord4j.rest.request.RequestQueueFactory;
 import discord4j.rest.request.RouterOptions;
 import discord4j.rest.util.Color;
@@ -179,13 +181,27 @@ public class DiscordBot {
                 spec -> spec.multicast().onBackpressureBuffer(Queues.SMALL_BUFFER_SIZE, false),
                 EmissionStrategy.timeoutDrop(Duration.ofSeconds(3))))
             .build();
-        return discordClient.gateway()
-            .setStore(Store.noOp())
-            .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
-            .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
-            .setInitialPresence(shardInfo -> disconnectedPresence)
-            .login()
-            .block(Duration.ofSeconds(20));
+        try {
+            return discordClient.gateway()
+                .setStore(Store.noOp())
+                .setGatewayReactorResources(reactorResources -> GatewayReactorResources.builder(discordClient.getCoreResources().getReactorResources()).build())
+                .setEnabledIntents((IntentSet.of(Intent.MESSAGE_CONTENT, Intent.GUILD_MESSAGES)))
+                .setInitialPresence(shardInfo -> disconnectedPresence)
+                .login()
+                .block(Duration.ofSeconds(20));
+        } catch (final CloseException e) {
+            if (e.getReason().map(r -> r.contains("Disallowed intent")).orElse(false)) {
+                DISCORD_LOG.error("Enable Message Content intent on the Discord developer's website. For help see: https://github.com/rfresh2/ZenithProxy/?tab=readme-ov-file#discord-bot-setup");
+            } else {
+                DISCORD_LOG.error("Failed logging into discord: {}", e.getReason().orElse(e.getMessage()));
+            }
+            throw e;
+        } catch (final ClientException e) {
+            if (e.getStatus().code() == 401) {
+                DISCORD_LOG.error("Invalid or incorrect discord token");
+            }
+            throw e;
+        }
     }
 
     private void handleDiscordMessageCreateEvent(final MessageCreateEvent event) {

@@ -158,7 +158,7 @@ public class Proxy {
                     DISCORD.start();
                 } catch (final Throwable e) {
                     err = true;
-                    DISCORD_LOG.error("Failed starting discord bot", e);
+                    DISCORD_LOG.error("Failed starting discord bot: {}", e.getMessage());
                 }
                 if (!err) DISCORD_LOG.info("Started Discord Bot");
             }
