@@ -136,7 +136,7 @@ public class Proxy {
         @Nullable String exeReleaseVersion = getExecutableReleaseVersion();
         if (exeReleaseVersion == null) {
             DEFAULT_LOG.warn("Detected unofficial ZenithProxy development build!");
-        } else if (!LAUNCH_CONFIG.version.equals(exeReleaseVersion)) {
+        } else if (!LAUNCH_CONFIG.version.split("\\+")[0].equals(exeReleaseVersion.split("\\+")[0])) {
             DEFAULT_LOG.warn("launch_config.json version: {} and embedded ZenithProxy version: {} do not match!", LAUNCH_CONFIG.version, exeReleaseVersion);
             if (LAUNCH_CONFIG.auto_update)
                 DEFAULT_LOG.warn("AutoUpdater is enabled but will break!");
