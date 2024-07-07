@@ -29,6 +29,8 @@
   }, {
     "pattern":"\\QMETA-INF/services/java.util.spi.ResourceBundleControlProvider\\E"
   }, {
+    "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.event.DataComponentValueConverterRegistry$Provider\\E"
+  }, {
     "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer$Provider\\E"
   }, {
     "pattern":"\\QMETA-INF/services/net.kyori.adventure.text.serializer.gson.GsonComponentSerializer$Provider\\E"
@@ -275,9 +277,9 @@
   }, {
     "pattern":"\\Qyggdrasil_session_pubkey.der\\E"
   }, {
-    "pattern":"\\Qzenith_release.txt\\E"
-  }, {
     "pattern":"\\Qzenith_commit.txt\\E"
+  }, {
+    "pattern":"\\Qzenith_release.txt\\E"
   }, {
     "pattern":"java.base:\\Qjdk/internal/icu/impl/data/icudt72b/nfkc.nrm\\E"
   }, {

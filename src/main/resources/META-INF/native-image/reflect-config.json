@@ -1562,6 +1562,10 @@
   "fields":[{"name":"value"}]
 },
 {
+  "name":"java.util.concurrent.atomic.AtomicStampedReference",
+  "fields":[{"name":"pair"}]
+},
+{
   "name":"java.util.concurrent.atomic.Striped64",
   "fields":[{"name":"base"}, {"name":"cellsBusy"}]
 },
@@ -2187,6 +2191,18 @@
 {
   "name":"reactor.core.scheduler.BoundedElasticScheduler$BoundedState",
   "fields":[{"name":"markCount"}]
+},
+{
+  "name":"reactor.core.scheduler.BoundedElasticThreadPerTaskScheduler",
+  "fields":[{"name":"state"}]
+},
+{
+  "name":"reactor.core.scheduler.BoundedElasticThreadPerTaskScheduler$BoundedServices",
+  "fields":[{"name":"activeExecutorsState"}]
+},
+{
+  "name":"reactor.core.scheduler.BoundedElasticThreadPerTaskScheduler$SequentialThreadPerTaskExecutor",
+  "fields":[{"name":"size"}, {"name":"wipAndRefCnt"}]
 },
 {
   "name":"reactor.core.scheduler.ParallelScheduler",

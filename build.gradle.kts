@@ -239,6 +239,8 @@ tasks {
             exclude(dependency("com.viaversion:viaversion:.*"))
             exclude(dependency("com.viaversion:viabackwards:.*"))
             exclude(dependency("net.raphimc:ViaLoader:.*"))
+            exclude(dependency("net.kyori:adventure-api:.*"))
+            exclude(dependency("net.kyori:adventure-text-serializer-gson:.*"))
         }
         manifest {
             attributes(mapOf(
