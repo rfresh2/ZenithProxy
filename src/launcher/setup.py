@@ -24,7 +24,6 @@ def setup_execute(config):
             else:
                 print("Invalid input. Enter 1 or 2")
     else:
-        print("Auto-selecting the java release channel based on current system")
         release_channel = "java"
     print("")
     while True:
@@ -65,8 +64,8 @@ def setup_execute(config):
         print("")
 
     while True:
-        print("Input the port ZenithProxy will be hosted on.")
-        print("If you are unsure, just press enter; port 25565 will be selected.")
+        print("Select the port ZenithProxy will be hosted on.")
+        print("If you are unsure, just press enter to use 25565 by default.")
         port = input("> ")
         if port == "":
             port = 25565
@@ -81,13 +80,14 @@ def setup_execute(config):
     print("")
 
     while True:
-        print("Are you running ZenithProxy on a PC or other computer in your home? (y/n)")
-        print("If you are running this on a VPS or server, enter 'n'.")
+        print("Select the type of environment you are running ZenithProxy on.")
+        print("1. PC or other computer in your home")
+        print("2. VPS or server outside your home")
         i1 = input("> ")
-        if i1 == "y":
+        if i1 == "1":
             ip = "localhost"
             break
-        elif i1 == "n":
+        elif i1 == "2":
             print("Attempting to determine IP for players to connect to...")
             response = requests.get("https://api.ipify.org", timeout=10)
             if response.status_code == 200:
@@ -99,7 +99,7 @@ def setup_execute(config):
                 ip = "localhost"
                 break
         else:
-            print("Invalid input. Enter y or n")
+            print("Invalid input. Enter 1 or 2.")
     print("")
 
     while True:
