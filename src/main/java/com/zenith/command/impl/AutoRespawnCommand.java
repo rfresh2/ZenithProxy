@@ -41,7 +41,7 @@ public class AutoRespawnCommand extends Command {
                 return OK;
             }))
             .then(literal("delay").then(argument("delay", integer(0)).executes(c -> {
-                CONFIG.client.extra.autoRespawn.delayMillis = IntegerArgumentType.getInteger(c, "delayMs");
+                CONFIG.client.extra.autoRespawn.delayMillis = IntegerArgumentType.getInteger(c, "delay");
                 c.getSource().getEmbed()
                     .title("AutoRespawn Delay Updated!");
                 return 1;
