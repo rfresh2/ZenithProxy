@@ -395,6 +395,8 @@ public class Proxy {
         this.client.setReadTimeout(CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : 0);
         this.client.setFlag(MinecraftConstants.CLIENT_CHANNEL_INITIALIZER, ZenithClientChannelInitializer.FACTORY);
         this.client.connect(true);
+        // wait for connection state to stabilize
+        Wait.waitUntil(() -> this.client.isConnected() || this.client.isDisconnected(), 30);
     }
 
     @Nullable
@@ -452,8 +454,8 @@ public class Proxy {
         }
     }
 
-    public @NonNull MinecraftProtocol logIn() {
-        loggingIn.set(true);
+    public synchronized @NonNull MinecraftProtocol logIn() {
+        if (!loggingIn.compareAndSet(false, true)) throw new RuntimeException("Already logging in!");
         AUTH_LOG.info("Logging in {}...", CONFIG.authentication.username);
         MinecraftProtocol minecraftProtocol = null;
         for (int tries = 0; tries < 3; tries++) {
@@ -462,8 +464,7 @@ public class Proxy {
             AUTH_LOG.warn("Failed login attempt " + (tries + 1));
             Wait.wait((int) (3 + (Math.random() * 7.0)));
         }
-        if (!loggingIn.get()) throw new RuntimeException("Login Cancelled");
-        loggingIn.set(false);
+        if (!loggingIn.compareAndSet(true, false)) throw new RuntimeException("Login Cancelled");
         if (minecraftProtocol == null) throw new RuntimeException("Auth failed");
         var username = minecraftProtocol.getProfile().getName();
         var uuid = minecraftProtocol.getProfile().getId();
