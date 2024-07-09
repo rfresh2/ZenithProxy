@@ -112,7 +112,7 @@ dependencies {
     shade("com.viaversion:viaversion:5.0.1")
     shade("com.viaversion:viabackwards:5.0.1")
     shade("org.jline:jline:3.26.2")
-    shade("org.jline:jline-terminal-jansi:3.26.2")
+    shade("org.jline:jline-terminal-jni:3.26.2")
     shade("ar.com.hjg:pngj:2.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
     val lombokVersion = "1.18.34"
@@ -218,13 +218,7 @@ tasks {
         minimize {
             exclude(dependency("org.slf4j:slf4j-api:.*"))
             exclude(dependency("ch.qos.logback:.*:.*"))
-            exclude(dependency("org.jline:jline:.*"))
-            exclude(dependency("org.jline:jline-terminal-jansi:.*"))
-            exclude(dependency("org.jline:jline-native:.*"))
-            exclude(dependency("org.jline:jline-terminal:.*"))
-            exclude(dependency("org.fusesource.jansi:jansi:.*"))
-            exclude(dependency("com.github.mwiede:jsch:.*"))
-            exclude(dependency("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:.*"))
+            exclude(dependency("org.jline:.*:.*"))
             exclude(dependency("com.github.rfresh2.Discord4j:discord4j-core:.*"))
             exclude(dependency("com.github.ben-manes.caffeine:caffeine:.*"))
             exclude(dependency("org.postgresql:postgresql:.*"))
