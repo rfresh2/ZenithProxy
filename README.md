@@ -8,7 +8,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/MC-1.21-brightgreen.svg" alt="Minecraft"/>
-  <img src="https://img.shields.io/badge/MC-1.20.6-brightgreen.svg" alt="Minecraft"/>
+  <img src="https://img.shields.io/badge/MC-1.20.6-yellow.svg" alt="Minecraft"/>
   <img src="https://img.shields.io/badge/MC-1.20.4-brightgreen.svg" alt="Minecraft"/>
   <img src="https://img.shields.io/badge/MC-1.20.1-yellow.svg" alt="Minecraft"/>
   <img src="https://img.shields.io/badge/MC-1.12.2-yellow.svg" alt="Minecraft"/>
