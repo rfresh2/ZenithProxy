@@ -69,21 +69,27 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                         session.disconnect("Failed to connect to server", e);
                         return;
                     }
+                    if (!Wait.waitUntil(() -> {
+                        var client = Proxy.getInstance().getClient();
+                        return client != null
+                            && CACHE.getProfileCache().getProfile() != null
+                            && (client.isOnline() || client.isInQueue());
+                    }, 15)) {
+                        SERVER_LOG.info("Timed out waiting for the proxy to login");
+                        session.disconnect("Timed out waiting for the proxy to login");
+                        return;
+                    }
                 } else {
                     session.disconnect("Not connected to server!");
                     return;
                 }
             }
         }
-        if (!Wait.waitUntil(() -> {
-            var client = Proxy.getInstance().getClient();
-            return client != null
-                && CACHE.getProfileCache().getProfile() != null
-                && (client.isOnline()
-                || (client.isInQueue() && Proxy.getInstance().getQueuePosition() > 1));
-        }, 15)) {
-            SERVER_LOG.info("Timed out waiting for the proxy to login");
-            session.disconnect("Timed out waiting for the proxy to login");
+        var client = Proxy.getInstance().getClient();
+        if (client == null
+            || CACHE.getProfileCache().getProfile() == null
+            || !(client.isOnline() || client.isInQueue())) {
+            session.disconnect("Not connected to server!");
             return;
         }
         // avoid race condition if player disconnects sometime during our wait
