@@ -38,7 +38,7 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
     private void finishLogin(ServerSession connection) {
         final GameProfile clientGameProfile = connection.getFlag(MinecraftConstants.PROFILE_KEY);
         if (!Wait.waitUntil(() -> Proxy.getInstance().isConnected()
-                                && (Proxy.getInstance().getOnlineTimeSeconds() > 3 || Proxy.getInstance().isInQueue())
+                                && (Proxy.getInstance().getOnlineTimeSeconds() > 1 || Proxy.getInstance().isInQueue())
                                 && CACHE.getPlayerCache().getEntityId() != -1
                                 && nonNull(CACHE.getProfileCache().getProfile())
                                 && nonNull(CACHE.getPlayerCache().getGameMode())
