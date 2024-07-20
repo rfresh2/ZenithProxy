@@ -72,16 +72,16 @@ dependencies {
     shade("org.slf4j:jul-to-slf4j:2.0.13")
     shade("com.mojang:brigadier:1.2.9")
     shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
-    shade("com.github.rfresh2:SimpleEventBus:3c2c6e7a0a")
-    shade("com.github.rfresh2.Discord4j:discord4j-core:8032e232c1") {
+    shade("com.github.rfresh2:SimpleEventBus:5f274a132a")
+    shade("com.github.rfresh2.Discord4j:discord4j-core:ea8be190d8") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:61cc61b0bb") {
+    shade("com.github.rfresh2:MCProtocolLib:ac51c943d6") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
     }
     shade("net.raphimc:MinecraftAuth:4.0.2")
-    val nettyVersion = "4.1.111.Final"
+    val nettyVersion = "4.1.112.Final"
     shade("io.netty:netty-codec-haproxy:$nettyVersion")
     shade("io.netty:netty-codec-dns:$nettyVersion")
     shade("io.netty:netty-codec-http2:$nettyVersion")
