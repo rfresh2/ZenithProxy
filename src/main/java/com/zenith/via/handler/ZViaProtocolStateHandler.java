@@ -34,7 +34,8 @@ public class ZViaProtocolStateHandler extends MessageToMessageEncoder<ByteBuf> {
         try {
             var packetId = session.getCodecHelper().readVarInt(in);
             var packetProtocol = session.getPacketProtocol();
-            var serverboundClass = packetProtocol.getServerboundClass(packetId);
+            var packetRegistry = packetProtocol.getPacketRegistry();
+            var serverboundClass = packetRegistry.getServerboundClass(packetId);
             if (serverboundClass == ServerboundLoginAcknowledgedPacket.class
                 || serverboundClass == ServerboundConfigurationAcknowledgedPacket.class)
                 packetProtocol.setState(ProtocolState.CONFIGURATION);
