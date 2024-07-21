@@ -204,6 +204,7 @@ public abstract class LockingDatabase extends Database {
             } catch (final Exception e2) {
                 DATABASE_LOG.error("Error releasing lock in try lock process exception", e2);
             }
+            Wait.wait(30);
         }
     }
 
