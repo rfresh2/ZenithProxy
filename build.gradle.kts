@@ -75,11 +75,11 @@ dependencies {
     shade("com.github.rfresh2.discord4j:discord4j-core:3.4.2.3") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:1.20.4.5") {
+    shade("com.github.rfresh2:MCProtocolLib:1.21.0.4") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
     }
-    shade("net.raphimc:MinecraftAuth:4.0.2")
+    shade("net.raphimc:MinecraftAuth:4.1.0")
     val nettyVersion = "4.1.112.Final"
     shade("io.netty:netty-codec-haproxy:$nettyVersion")
     shade("io.netty:netty-codec-dns:$nettyVersion")
@@ -96,7 +96,7 @@ dependencies {
     shade("de.themoep:minedown-adventure:1.7.3-SNAPSHOT")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
-    shade("org.redisson:redisson:3.32.0") {
+    shade("org.redisson:redisson:3.33.0") {
         exclude(group = "io.netty")
     }
     val fastutilVersion = "8.5.14"
@@ -110,8 +110,8 @@ dependencies {
     shade("net.raphimc:ViaLoader:3.0.1")
     shade("com.viaversion:viaversion:5.0.1")
     shade("com.viaversion:viabackwards:5.0.1")
-    shade("org.jline:jline:3.26.2")
-    shade("org.jline:jline-terminal-jni:3.26.2")
+    shade("org.jline:jline:3.26.3")
+    shade("org.jline:jline-terminal-jni:3.26.3")
     shade("ar.com.hjg:pngj:2.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
     val lombokVersion = "1.18.34"
