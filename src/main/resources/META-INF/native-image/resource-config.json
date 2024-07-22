@@ -288,6 +288,8 @@
     "pattern":"java.base:\\Qsun/net/idn/uidna.spp\\E"
   }]},
   "bundles":[{
+    "name":"org.postgresql.translation.messages"
+  }, {
     "name":"sun.awt.resources.awt",
     "classNames":["sun.awt.resources.awt"]
   }]

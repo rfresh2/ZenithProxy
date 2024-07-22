@@ -1444,6 +1444,10 @@
   "name":"java.sql.Date"
 },
 {
+  "name":"java.sql.SQLException",
+  "fields":[{"name":"next"}]
+},
+{
   "name":"java.sql.Timestamp"
 },
 {
@@ -1490,6 +1494,10 @@
 },
 {
   "name":"java.util.ArrayList",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"java.util.Collections$UnmodifiableMap",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
