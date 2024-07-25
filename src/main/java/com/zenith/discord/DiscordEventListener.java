@@ -378,10 +378,13 @@ public class DiscordEventListener {
         } else {
             queueLength = Queue.getQueueStatus().regular();
         }
-        sendEmbedMessage(Embed.builder()
-                             .title("Active Hours Connect Triggered")
-                             .addField("ETA", Queue.getQueueEta(queueLength), false)
-                             .primaryColor());
+        var embed = Embed.builder()
+            .title("Active Hours Connect Triggered")
+            .addField("ETA", Queue.getQueueEta(queueLength), false)
+            .primaryColor();
+        if (event.willWait())
+            embed.addField("Info", "Waiting 1 minute to avoid 2b2t reconnect queue skip", false);
+        sendEmbedMessage(embed);
     }
 
     public void handleServerChatReceivedEvent(ServerChatReceivedEvent event) {
