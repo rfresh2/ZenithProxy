@@ -74,11 +74,18 @@ public class ActiveHours extends Module {
             if (nowPlusQueueWait.isAfter(activeTime.minus(timeRange))
                 && nowPlusQueueWait.isBefore(activeTime.plus(timeRange))) {
                 info("Connect triggered for registered time: {}", activeTime);
-                EVENT_BUS.postAsync(new ActiveHoursConnectEvent());
+                EVENT_BUS.postAsync(new ActiveHoursConnectEvent(proxy.isConnected() && proxy.isOn2b2t()));
                 this.lastActiveHoursConnect = Instant.now();
-                proxy.disconnect(SYSTEM_DISCONNECT);
-                EXECUTOR.schedule(proxy::connectAndCatchExceptions, 1, TimeUnit.MINUTES);
-                break;
+                if (proxy.isConnected()) {
+                    proxy.disconnect(SYSTEM_DISCONNECT);
+                    if (proxy.isOn2b2t()) {
+                        info("Waiting 1 minute to avoid reconnect queue skip");
+                        EXECUTOR.schedule(proxy::connectAndCatchExceptions, 1, TimeUnit.MINUTES);
+                        return;
+                    }
+                }
+                proxy.connectAndCatchExceptions();
+                return;
             }
         }
     }
