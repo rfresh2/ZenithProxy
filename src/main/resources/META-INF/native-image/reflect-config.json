@@ -742,6 +742,9 @@
   "name":"com.zenith.network.client.ClientSession"
 },
 {
+  "name":"com.zenith.network.server.ServerSession"
+},
+{
   "name":"com.zenith.terminal.logback.DebugLogConfigurationFilter",
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]

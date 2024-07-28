@@ -127,6 +127,8 @@
   }, {
     "pattern":"\\Qassets/viaversion/data/damage-types-1.19.4.nbt\\E"
   }, {
+    "pattern":"\\Qassets/viaversion/data/damage-types-1.20.3.nbt\\E"
+  }, {
     "pattern":"\\Qassets/viaversion/data/dimension-registry-1.16.2.nbt\\E"
   }, {
     "pattern":"\\Qassets/viaversion/data/en_US.properties\\E"
