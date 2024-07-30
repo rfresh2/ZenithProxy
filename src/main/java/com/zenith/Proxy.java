@@ -373,6 +373,7 @@ public class Proxy {
 
     public synchronized void connect(final String address, final int port) {
         if (this.isConnected()) throw new IllegalStateException("Already connected!");
+        if (this.client != null && !this.client.isDisconnected()) throw new IllegalStateException("Not Disconnected!");
         this.connectTime = Instant.now();
         final MinecraftProtocol minecraftProtocol;
         try {
