@@ -72,7 +72,7 @@ dependencies {
     shade("com.mojang:brigadier:1.2.9")
     shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
     shade("com.github.rfresh2:SimpleEventBus:1.2")
-    shade("com.github.rfresh2.discord4j:discord4j-core:3.4.3.6") {
+    shade("com.github.rfresh2.discord4j:discord4j-core:3.4.3.7") {
         exclude(group = "io.netty")
     }
     shade("com.github.rfresh2:MCProtocolLib:1.21.0.5") {
@@ -218,7 +218,7 @@ tasks {
             exclude(dependency("org.slf4j:slf4j-api:.*"))
             exclude(dependency("ch.qos.logback:.*:.*"))
             exclude(dependency("org.jline:.*:.*"))
-            exclude(dependency("com.github.rfresh2.Discord4j:discord4j-core:.*"))
+            exclude(dependency("com.github.rfresh2.discord4j:discord4j-core:.*"))
             exclude(dependency("com.github.ben-manes.caffeine:caffeine:.*"))
             exclude(dependency("org.postgresql:postgresql:.*"))
             exclude(dependency("io.netty:netty-codec-http:.*"))
