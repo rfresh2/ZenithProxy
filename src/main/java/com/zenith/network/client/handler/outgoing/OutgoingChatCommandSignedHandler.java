@@ -6,12 +6,11 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.Serverbound
 
 import static com.zenith.Shared.CACHE;
 
-public class OutgoingSignedChatCommandHandler implements PacketHandler<ServerboundChatCommandSignedPacket, ClientSession> {
+public class OutgoingChatCommandSignedHandler implements PacketHandler<ServerboundChatCommandSignedPacket, ClientSession> {
     @Override
     public ServerboundChatCommandSignedPacket apply(final ServerboundChatCommandSignedPacket packet, final ClientSession session) {
-        var cacheTimestamp= CACHE.getChatCache().getLastChatTimestamp();
-        long timeStamp = packet.getTimeStamp();
-        if (timeStamp < cacheTimestamp) packet.setTimeStamp(cacheTimestamp);
+        final var cacheTimestamp = CACHE.getChatCache().getLastChatTimestamp();
+        if (packet.getTimeStamp() < cacheTimestamp) packet.setTimeStamp(cacheTimestamp);
         CACHE.getChatCache().setLastChatTimestamp(packet.getTimeStamp());
         return packet;
     }

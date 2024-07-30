@@ -9,6 +9,7 @@ import com.zenith.network.client.handler.incoming.scoreboard.*;
 import com.zenith.network.client.handler.incoming.spawn.AddEntityHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddExperienceOrbHandler;
 import com.zenith.network.client.handler.incoming.spawn.SpawnPositionHandler;
+import com.zenith.network.client.handler.outgoing.OutgoingChatCommandSignedHandler;
 import com.zenith.network.client.handler.outgoing.OutgoingChatHandler;
 import com.zenith.network.client.handler.outgoing.OutgoingContainerClickHandler;
 import com.zenith.network.client.handler.postoutgoing.*;
@@ -201,6 +202,7 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ClientboundAddEntityPacket.class, new AddEntityHandler())
                 .registerInbound(ClientboundSetDefaultSpawnPositionPacket.class, new SpawnPositionHandler())
                 .registerOutbound(ServerboundChatPacket.class, new OutgoingChatHandler())
+                .registerOutbound(ServerboundChatCommandSignedPacket.class, new OutgoingChatCommandSignedHandler())
                 .registerOutbound(ServerboundContainerClickPacket.class, new OutgoingContainerClickHandler())
                 .registerPostOutbound(ServerboundAcceptTeleportationPacket.class, new PostOutgoingAcceptTeleportHandler())
                 .registerPostOutbound(ServerboundConfigurationAcknowledgedPacket.class, new PostOutgoingConfigurationAckHandler())
