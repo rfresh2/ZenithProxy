@@ -39,6 +39,10 @@ public class Language implements Generator {
         "slot"
     );
 
+    static ObjectSet<String> exact = ObjectSet.of(
+        "block.minecraft.set_spawn"
+    );
+
     @Override
     public void generate() {
         try {
@@ -47,7 +51,7 @@ public class Language implements Generator {
             for (var it = json.entrySet().iterator(); it.hasNext(); ) {
                 var entry = it.next();
                 var prefix = entry.getKey().split("\\.")[0];
-                if (!prefixes.contains(prefix)) {
+                if (!(prefixes.contains(prefix) || exact.contains(entry.getKey()))) {
                     it.remove();
                 }
             }
