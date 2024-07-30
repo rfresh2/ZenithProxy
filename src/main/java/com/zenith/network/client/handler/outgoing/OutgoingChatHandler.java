@@ -21,9 +21,12 @@ public class OutgoingChatHandler implements PacketHandler<ServerboundChatPacket,
         final OutboundChatEvent outboundChatEvent = new OutboundChatEvent(packet);
         EVENT_BUS.post(outboundChatEvent);
         if (outboundChatEvent.isCancelled()) return null;
-        final var cacheTimestamp = CACHE.getChatCache().getLastChatTimestamp();
-        if (packet.getTimeStamp() < cacheTimestamp) packet.setTimeStamp(cacheTimestamp);
-        CACHE.getChatCache().setLastChatTimestamp(packet.getTimeStamp());
+        // todo: needs rework if we ever want to support chat signing
+        var lastChatTimestamp = CACHE.getChatCache().getLastChatTimestamp();
+        var currentTime = System.currentTimeMillis();
+        var packetTime = Math.max(lastChatTimestamp+1, currentTime);
+        packet.setTimeStamp(packetTime);
+        CACHE.getChatCache().setLastChatTimestamp(packetTime);
         return packet;
     }
 }
