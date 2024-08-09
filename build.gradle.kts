@@ -62,7 +62,7 @@ configurations.implementation.get().extendsFrom(shade)
 dependencies {
     shade("com.zaxxer:HikariCP:5.1.0")
     shade("org.postgresql:postgresql:42.7.3")
-    val jdbiVersion = "3.45.2"
+    val jdbiVersion = "3.45.3"
     shade("org.jdbi:jdbi3-core:$jdbiVersion")
     shade("org.jdbi:jdbi3-postgres:$jdbiVersion")
     shade("com.google.guava:guava:33.2.1-jre")
@@ -96,7 +96,7 @@ dependencies {
     shade("de.themoep:minedown-adventure:1.7.3-SNAPSHOT")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
-    shade("org.redisson:redisson:3.33.0") {
+    shade("org.redisson:redisson:3.34.1") {
         exclude(group = "io.netty")
     }
     val fastutilVersion = "8.5.14"
@@ -108,8 +108,8 @@ dependencies {
     shade("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
     shade("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
     shade("net.raphimc:ViaLoader:3.0.2")
-    shade("com.viaversion:viaversion:5.0.2")
-    shade("com.viaversion:viabackwards:5.0.2")
+    shade("com.viaversion:viaversion:5.0.3")
+    shade("com.viaversion:viabackwards:5.0.3")
     shade("org.jline:jline:3.26.3")
     shade("org.jline:jline-terminal-jni:3.26.3")
     shade("ar.com.hjg:pngj:2.1.0")
