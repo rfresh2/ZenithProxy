@@ -16,7 +16,7 @@ import static com.zenith.Shared.*;
 public class AutoRespawn extends Module {
     private static final int tickEventRespawnDelay = 100;
     private int tickCounter = 0;
-    private Timer tickTimer = Timer.newTickTimer();
+    private Timer tickTimer = Timer.createTickTimer();
     public AutoRespawn() {
         super();
     }

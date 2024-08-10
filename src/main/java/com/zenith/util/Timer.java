@@ -2,7 +2,7 @@ package com.zenith.util;
 
 public class Timer {
 
-    public static Timer newTickTimer() {
+    public static Timer createTickTimer() {
         return new Timer(50L);
     }
 

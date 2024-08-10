@@ -16,7 +16,7 @@ import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class Spook extends Module {
-    private final Timer searchTimer = Timer.newTickTimer();
+    private final Timer searchTimer = Timer.createTickTimer();
     // list (used as a stack) of most recently seen player entity ID's
     private final IntArrayList playerTargetStack = new IntArrayList();
     private int targetEntity = -1;

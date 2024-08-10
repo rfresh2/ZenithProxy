@@ -21,10 +21,10 @@ import static com.zenith.Shared.*;
 import static java.util.Arrays.asList;
 
 public class AntiAFK extends Module {
-    private final Timer swingTickTimer = Timer.newTickTimer();
-    private final Timer startWalkTickTimer = Timer.newTickTimer();
-    private final Timer rotateTimer = Timer.newTickTimer();
-    private final Timer jumpTimer = Timer.newTickTimer();
+    private final Timer swingTickTimer = Timer.createTickTimer();
+    private final Timer startWalkTickTimer = Timer.createTickTimer();
+    private final Timer rotateTimer = Timer.createTickTimer();
+    private final Timer jumpTimer = Timer.createTickTimer();
     private boolean shouldWalk = false;
     private final List<WalkDirection> walkDirections = asList(
             new WalkDirection(1, 0), new WalkDirection(-1, 0),

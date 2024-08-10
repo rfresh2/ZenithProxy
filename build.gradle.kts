@@ -52,7 +52,7 @@ repositories {
             includeGroup("net.lenni0451")
         }
     }
-    maven("https://repo1.maven.org/maven2/") { name = "maven central" }
+    mavenCentral()
     mavenLocal()
 }
 
