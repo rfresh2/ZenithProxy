@@ -15,7 +15,7 @@ import static com.zenith.Shared.*;
 
 public class PlayerInventoryManager {
     private static final InventoryActionRequest DEFAULT_ACTION_REQUEST = new InventoryActionRequest(null, Collections.emptyList(), Integer.MIN_VALUE);
-    private final Timer tickTimer = Timer.newTickTimer();
+    private final Timer tickTimer = Timer.createTickTimer();
     private final int actionDelayTicks = 5;
     private InventoryActionRequest currentActionRequest = DEFAULT_ACTION_REQUEST;
 

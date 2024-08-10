@@ -22,7 +22,7 @@ import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class AutoFish extends AbstractInventoryModule {
-    private final Timer castTimer = Timer.newTickTimer();
+    private final Timer castTimer = Timer.createTickTimer();
     private int fishHookEntityId = -1;
     private Hand rodHand = Hand.MAIN_HAND;
     private int delay = 0;
