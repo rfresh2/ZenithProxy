@@ -82,6 +82,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             if (!Proxy.getInstance().isConnected()) {
                     if (CONFIG.client.extra.autoConnectOnLogin && !onlySpectator.orElse(false)) {
                     try {
+                        SERVER_LOG.info("Auto connecting client on player login...");
                         Proxy.getInstance().connect();
                     } catch (final Throwable e) {
                         SERVER_LOG.info("Failed `autoConnectOnLogin` client connect", e);
@@ -99,6 +100,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                         return;
                     }
                 } else {
+                    SERVER_LOG.info("Disconnecting: {} [{}] : Not connected to server (AutoConnectOnLogin)!", clientGameProfile.getName(), clientGameProfile.getId());
                     session.disconnect("Not connected to server!");
                     return;
                 }
@@ -108,6 +110,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
         if (client == null
             || CACHE.getProfileCache().getProfile() == null
             || !(client.isOnline() || client.isInQueue())) {
+            SERVER_LOG.info("Disconnecting: {} [{}] : Not connected to server!", clientGameProfile.getName(), clientGameProfile.getId());
             session.disconnect("Not connected to server!");
             return;
         }
@@ -116,6 +119,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
         SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", clientGameProfile.getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
         session.getProfileCache().setProfile(clientGameProfile);
         if (!onlySpectator.orElse(false) && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
+            SERVER_LOG.info("Logging in {} [{}] as controlling player", clientGameProfile.getName(), clientGameProfile.getId().toString());
             session.sendAsync(new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile(), false));
             return;
         }
