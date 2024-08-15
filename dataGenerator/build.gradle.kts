@@ -1,17 +1,16 @@
 plugins {
-    id("fabric-loom") version "1.6-SNAPSHOT"
+    id("fabric-loom") version "1.7-SNAPSHOT"
 }
 
 group = "com.zenith"
 version = "1.0.0"
 
 repositories {
-    mavenLocal() {
+    mavenLocal {
         content { includeGroup("com.zenith") }
     }
     mavenCentral()
-    maven("https://jitpack.io") {
-        name = "jitpack.io"
+    maven("https://maven.2b2t.vc/releases") {
         content { includeGroupByRegex("com.github.rfresh2.*") }
     }
     maven("https://maven.parchmentmc.org")
@@ -27,7 +26,7 @@ loom {
         }
     }
 }
-val lombokVersion = "1.18.32"
+val lombokVersion = "1.18.34"
 
 dependencies {
     minecraft("com.mojang:minecraft:1.20.4")
@@ -38,7 +37,7 @@ dependencies {
     modImplementation("net.fabricmc:fabric-loader:0.15.10")
     modImplementation("net.fabricmc.fabric-api:fabric-api:0.97.0+1.20.4")
     implementation("com.squareup:javapoet:1.13.0")
-    implementation("com.github.rfresh2:MCProtocolLib:960b52b436") {
+    implementation("com.github.rfresh2:MCProtocolLib:1.20.4.8") {
         exclude("*")
     }
     implementation("com.zenith:ZenithProxy:1.20.4") {
