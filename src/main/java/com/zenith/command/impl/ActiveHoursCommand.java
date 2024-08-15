@@ -29,7 +29,7 @@ public class ActiveHoursCommand extends Command {
 
     @Override
     public CommandUsage commandUsage() {
-        return CommandUsage.args(
+        return CommandUsage.full(
             "activeHours",
             CommandCategory.MODULE,
             """
@@ -50,6 +50,9 @@ public class ActiveHoursCommand extends Command {
                 "status",
                 "forceReconnect on/off",
                 "queueEtaCalc on/off"
+            ),
+            asList(
+                "schedule"
             )
         );
     }
