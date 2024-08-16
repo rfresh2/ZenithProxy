@@ -2,6 +2,7 @@ package com.zenith;
 
 import ch.qos.logback.classic.LoggerContext;
 import com.zenith.cache.CacheResetType;
+import com.zenith.discord.Embed;
 import com.zenith.event.proxy.*;
 import com.zenith.feature.api.crafthead.CraftheadApi;
 import com.zenith.feature.api.mcsrvstatus.MCSrvStatusApi;
@@ -206,6 +207,7 @@ public class Proxy {
                 DEFAULT_LOG.warn("Switch to a stable release with the `channel` command");
             }
             if (!connected) {
+                DEFAULT_LOG.info("Commands Help: https://github.com/rfresh2/ZenithProxy/wiki/Commands");
                 DEFAULT_LOG.info("Proxy IP: {}", CONFIG.server.getProxyAddress());
                 DEFAULT_LOG.info("Use the `connect` command to log in!");
             }
@@ -241,6 +243,20 @@ public class Proxy {
         EXECUTOR.schedule(() -> {
             if (server == null || !server.isListening()) {
                 SERVER_LOG.error("Server is not listening and unable to quick restart, performing full restart...");
+                if (DISCORD.isRunning()) {
+                    DISCORD.sendEmbedMessage(
+                        Embed.builder()
+                            .title("ZenithProxy Server Error")
+                            .description(
+                                """
+                                 The ZenithProxy MC server was unable to start correctly.
+                                 
+                                 Most likely the port you have configured: %s is already in use by another application or another ZenithProxy instance.
+                                 
+                                 This ZenithProxy instance will now restart, although this is unlikely to fix the issue.
+                                 """.formatted(CONFIG.server.bind.port))
+                            .errorColor());
+                }
                 CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = true;
                 stop();
             }
@@ -264,11 +280,15 @@ public class Proxy {
                 } else {
                     SERVER_LOG.error(
                         """
-                        Unable to connect to configured `proxyIP`: {}
+                        Unable to ping the configured `proxyIP`: {}
                         
-                        This test is most likely failing due to your firewall needing to be disabled.
+                        If you are actually able to connect to ZenithProxy you can disable this test: `connectionTest testOnStart off`
+                        
+                        This test is most likely failing due to your firewall needing to be disabled. Or the configured Proxy IP is incorrect.
                         
                         For instructions on how to disable the firewall consult with your VPS provider. Each provider varies in steps.
+                        
+                        To set the Proxy IP: `serverConnection proxyIP <ip>`
                         """, address);
                 }
             }, () -> {
@@ -522,7 +542,7 @@ public class Proxy {
         try {
             return URI.create(String.format("https://minotar.net/helm/%s/64", playerName)).toURL();
         } catch (MalformedURLException e) {
-            SERVER_LOG.error("Failed to get avatar URL for player: " + playerName, e);
+            SERVER_LOG.error("Failed to get avatar URL for player: {}", playerName, e);
             throw new UncheckedIOException(e);
         }
     }
@@ -697,7 +717,7 @@ public class Proxy {
             } else if (event.wasInQueue() && event.queuePosition() <= 1) {
                 CLIENT_LOG.warn("""
                                 You have likely been kicked due to being IP banned by 2b2t.
-                                                              
+                                
                                 To check, try connecting and waiting through queue with the same account from a different IP.
                                 """);
             }

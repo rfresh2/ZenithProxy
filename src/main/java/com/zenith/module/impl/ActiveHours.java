@@ -41,52 +41,57 @@ public class ActiveHours extends Module {
     }
 
     private void handleActiveHoursTick() {
-        var activeHoursConfig = CONFIG.client.extra.utility.actions.activeHours;
-        var proxy = Proxy.getInstance();
-        if (proxy.isOn2b2t() && (proxy.isPrio() && proxy.isConnected())) return;
-        if (proxy.hasActivePlayer() && !activeHoursConfig.forceReconnect) return;
-        if (lastActiveHoursConnect.isAfter(Instant.now().minus(Duration.ofHours(1)))) return;
+        try {
+            var activeHoursConfig = CONFIG.client.extra.utility.actions.activeHours;
+            var proxy = Proxy.getInstance();
+            if (proxy.isOn2b2t() && (proxy.isPrio() && proxy.isConnected())) return;
+            if (proxy.hasActivePlayer() && !activeHoursConfig.forceReconnect) return;
+            if (lastActiveHoursConnect.isAfter(Instant.now().minus(Duration.ofHours(1)))) return;
 
-        var queueLength = proxy.isOn2b2t()
-            ? proxy.isPrio()
+            var queueLength = proxy.isOn2b2t()
+                ? proxy.isPrio()
                 ? Queue.getQueueStatus().prio()
                 : Queue.getQueueStatus().regular()
-            : 0;
-        var queueWaitSeconds = activeHoursConfig.queueEtaCalc ? Queue.getQueueWait(queueLength) : 0;
-        var nowPlusQueueWait = LocalDateTime.now(ZoneId.of(activeHoursConfig.timeZoneId))
-            .plusSeconds(queueWaitSeconds)
-            .atZone(ZoneId.of(activeHoursConfig.timeZoneId))
-            .toInstant();
-        var activeTimes = activeHoursConfig.activeTimes.stream()
-            .flatMap(activeTime -> {
-                var activeHourToday = ZonedDateTime.of(
-                    LocalDate.now(ZoneId.of(activeHoursConfig.timeZoneId)),
-                    LocalTime.of(activeTime.hour(), activeTime.minute()),
-                    ZoneId.of(activeHoursConfig.timeZoneId));
-                var activeHourTomorrow = activeHourToday.plusDays(1L);
-                return Stream.of(activeHourToday, activeHourTomorrow);
-            })
-            .map(ChronoZonedDateTime::toInstant)
-            .toList();
-        // active hour within 10 mins range of now
-        var timeRange = Duration.ofMinutes(5); // x2
-        for (Instant activeTime : activeTimes) {
-            if (nowPlusQueueWait.isAfter(activeTime.minus(timeRange))
-                && nowPlusQueueWait.isBefore(activeTime.plus(timeRange))) {
-                info("Connect triggered for registered time: {}", activeTime);
-                EVENT_BUS.postAsync(new ActiveHoursConnectEvent(proxy.isConnected() && proxy.isOn2b2t()));
-                this.lastActiveHoursConnect = Instant.now();
-                if (proxy.isConnected()) {
-                    proxy.disconnect(SYSTEM_DISCONNECT);
-                    if (proxy.isOn2b2t()) {
-                        info("Waiting 1 minute to avoid reconnect queue skip");
-                        EXECUTOR.schedule(proxy::connectAndCatchExceptions, 1, TimeUnit.MINUTES);
-                        return;
+                : 0;
+            var queueWaitSeconds = activeHoursConfig.queueEtaCalc ? Queue.getQueueWait(queueLength) : 0;
+            var nowPlusQueueWait = LocalDateTime.now(ZoneId.of(activeHoursConfig.timeZoneId))
+                .plusSeconds(queueWaitSeconds)
+                .atZone(ZoneId.of(activeHoursConfig.timeZoneId))
+                .toInstant();
+            var activeTimes = activeHoursConfig.activeTimes.stream()
+                .flatMap(activeTime -> {
+                    var activeHourToday = ZonedDateTime.of(
+                        LocalDate.now(ZoneId.of(activeHoursConfig.timeZoneId)),
+                        LocalTime.of(activeTime.hour(), activeTime.minute()),
+                        ZoneId.of(activeHoursConfig.timeZoneId));
+                    var activeHourTomorrow = activeHourToday.plusDays(1L);
+                    return Stream.of(activeHourToday, activeHourTomorrow);
+                })
+                .map(ChronoZonedDateTime::toInstant)
+                .toList();
+            var timeRange = queueWaitSeconds > 28800 // extend range if queue wait is very long
+                ? Duration.ofMinutes(15) // x2
+                : Duration.ofMinutes(5);
+            for (Instant activeTime : activeTimes) {
+                if (nowPlusQueueWait.isAfter(activeTime.minus(timeRange))
+                    && nowPlusQueueWait.isBefore(activeTime.plus(timeRange))) {
+                    info("Connect triggered for registered time: {}", activeTime);
+                    EVENT_BUS.postAsync(new ActiveHoursConnectEvent(proxy.isConnected() && proxy.isOn2b2t()));
+                    this.lastActiveHoursConnect = Instant.now();
+                    if (proxy.isConnected()) {
+                        proxy.disconnect(SYSTEM_DISCONNECT);
+                        if (proxy.isOn2b2t()) {
+                            info("Waiting 1 minute to avoid reconnect queue skip");
+                            EXECUTOR.schedule(proxy::connectAndCatchExceptions, 1, TimeUnit.MINUTES);
+                            return;
+                        }
                     }
+                    proxy.connectAndCatchExceptions();
+                    return;
                 }
-                proxy.connectAndCatchExceptions();
-                return;
             }
+        } catch (final Exception e) {
+            error("Error in active hours tick", e);
         }
     }
 
