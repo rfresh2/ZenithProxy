@@ -139,12 +139,8 @@ public class ReplayRecording implements Closeable {
     }
 
     private void writeToFile(final long time, final MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
-        int t = (int) time;
-        if (t == 0) {
-            startT = System.currentTimeMillis();
-        } else {
-            t = (int) (time - startT);
-        }
+        int t = time == 0 ? 0 : (int) (time - startT);
+        if (t == 0) startT = System.currentTimeMillis();
         final ByteBuf packetBuf = ALLOC.heapBuffer();
         try {
             packetBuf.writeInt(t);
@@ -211,7 +207,7 @@ public class ReplayRecording implements Closeable {
             SpectatorPacketProvider.playerEquipment().forEach(p -> writePacket(time, (MinecraftPacket) p, session));
         } else if (packet instanceof ServerboundSwingPacket) {
             SpectatorPacketProvider.playerSwing().forEach(p -> writePacket(time, (MinecraftPacket) p, session));
-        } else if (packet instanceof ServerboundPlayerCommandPacket commandPacket) {
+        } else if (packet instanceof ServerboundPlayerCommandPacket) {
             SpectatorPacketProvider.playerSneak().forEach(p -> writePacket(time, (MinecraftPacket) p, session));
         }
         /**
@@ -223,7 +219,7 @@ public class ReplayRecording implements Closeable {
     }
 
     public void handleInboundPacket(long time, final MinecraftPacket packet, final Session session) {
-        if (packet instanceof ClientboundLoginPacket loginPacket) {
+        if (packet instanceof ClientboundLoginPacket) {
             recordSelfSpawn = true;
             if (preConnectSyncNeeded) {
                 writeToFile(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile()), session, ProtocolState.LOGIN);
@@ -235,7 +231,7 @@ public class ReplayRecording implements Closeable {
             }
         }
         writePacket(time, packet, session);
-        if (packet instanceof ClientboundRespawnPacket respawnPacket) {
+        if (packet instanceof ClientboundRespawnPacket) {
             final long t = time;
             SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(t, (MinecraftPacket) p, session));
         }
