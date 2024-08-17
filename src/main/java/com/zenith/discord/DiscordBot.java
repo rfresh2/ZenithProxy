@@ -167,9 +167,9 @@ public class DiscordBot {
                                  .description(
                                      """
                                      You are currently using a ZenithProxy prerelease
-                                              
+                                     
                                      Prereleases include experiments that may contain bugs and are not always updated with fixes
-                                              
+                                     
                                      Switch to a stable release with the `channel` command
                                      """));
         }
