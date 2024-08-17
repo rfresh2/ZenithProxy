@@ -60,7 +60,7 @@ public class AutoDisconnect extends Module {
         var connection = Proxy.getInstance().getActivePlayer();
         if (nonNull(connection) && connection.getProfileCache().getProfile().equals(event.clientGameProfile())) {
             info("Auto Client Disconnect");
-            Proxy.getInstance().disconnect();
+            Proxy.getInstance().disconnect(AUTO_DISCONNECT);
         }
     }
 

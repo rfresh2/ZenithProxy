@@ -51,13 +51,23 @@ public class AutoReconnect extends Module {
     }
 
     public void handleDisconnectEvent(DisconnectEvent event) {
-        if (!CONFIG.client.extra.utility.actions.autoDisconnect.autoClientDisconnect) {
-            // skip autoreconnect when we want to sync client disconnect
-            if (CONFIG.client.extra.autoReconnect.enabled && isReconnectableDisconnect(event.reason())) {
-                if (autoReconnectIsInProgress()) return;
-                this.autoReconnectFuture = EXECUTOR.submit(this::autoReconnectRunnable);
-            }
+        if (shouldAutoDisconnectCancelAutoReconnect(event)) {
+            info("Cancelling AutoReconnect due to AutoDisconnect cancelAutoReconnect");
+            return;
         }
+        if (isReconnectableDisconnect(event.reason())) {
+            if (autoReconnectIsInProgress()) {
+                debug("AutoReconnect already in progress, not starting another");
+                return;
+            }
+            this.autoReconnectFuture = EXECUTOR.submit(this::autoReconnectRunnable);
+        } else {
+            info("Cancelling AutoReconnect because disconnect reason is not reconnectable");
+        }
+    }
+
+    public boolean shouldAutoDisconnectCancelAutoReconnect(DisconnectEvent event) {
+        return CONFIG.client.extra.utility.actions.autoDisconnect.enabled && CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect && AUTO_DISCONNECT.equals(event.reason());
     }
 
     public void handleConnectEvent(ConnectEvent event) {

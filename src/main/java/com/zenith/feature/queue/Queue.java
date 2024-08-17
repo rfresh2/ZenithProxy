@@ -35,6 +35,10 @@ public class Queue {
         // maybe due to losing internet?
         if (lastUpdate.isAfter(Instant.now().minus(Duration.ofMinutes(CONFIG.server.queueStatusRefreshMinutes)))) return;
         lastUpdate = Instant.now();
+        updateQueueStatusNow();
+    }
+
+    public static void updateQueueStatusNow() {
         if (!pingUpdate()) {
             if (!apiUpdate()) {
                 SERVER_LOG.error("Failed updating queue status. Is the network down?");

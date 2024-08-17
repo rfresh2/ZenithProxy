@@ -726,6 +726,7 @@ public class Proxy {
 
     public void handleConnectEvent(ConnectEvent event) {
         this.connectTime = Instant.now();
+        if (isOn2b2t()) EXECUTOR.execute(Queue::updateQueueStatusNow);
     }
 
     public void handleStartQueueEvent(StartQueueEvent event) {
