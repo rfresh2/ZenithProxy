@@ -107,14 +107,17 @@ public class DiscordEventListener {
     }
 
     public void handleDisconnectEvent(DisconnectEvent event) {
+        var category = DisconnectReasonInfo.getDisconnectCategory(event.reason());
         var embed = Embed.builder()
             .title("Proxy Disconnected")
-            .addField("Reason", "[" + event.reason() + "](" + DisconnectReasonInfo.getDisconnectCategory(event.reason()).getWikiURL() + ")", false)
+            .addField("Reason", event.reason(), false)
+            .addField("Why?", category.getWikiURL(), false)
+            .addField("Category", category.toString(), false)
             .addField("Online Duration", formatDuration(event.onlineDuration()), false)
             .errorColor();
         if (Proxy.getInstance().isOn2b2t()
             && !Proxy.getInstance().isPrio()
-            && event.reason().startsWith("You have lost connection")) {
+            && category == DisconnectReasonInfo.DisconnectCategory.KICK) {
             if (event.onlineDuration().toSeconds() >= 0L
                 && event.onlineDuration().toSeconds() <= 1L) {
                 embed.description("""
