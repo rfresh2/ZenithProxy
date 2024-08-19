@@ -11,6 +11,7 @@ import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
 import com.zenith.network.registry.ZenithHandlerCodec;
 import com.zenith.util.ComponentSerializer;
+import io.netty.channel.ChannelException;
 import io.netty.channel.EventLoop;
 import io.netty.handler.codec.DecoderException;
 import lombok.Getter;
@@ -207,9 +208,9 @@ public class ServerSession extends TcpServerSession {
     @Override
     public void callDisconnected(Component reason, Throwable cause) {
         Proxy.getInstance().getActiveConnections().remove(this);
-        if (!this.isPlayer && cause != null && !(cause instanceof DecoderException || cause instanceof IOException)) {
+        if (!this.isPlayer && cause != null && !(cause instanceof DecoderException || cause instanceof IOException || cause instanceof ChannelException)) {
             // any scanners or TCP connections established result in a lot of these coming in even when they are not actually speaking mc protocol
-            SERVER_LOG.warn(String.format("Connection disconnected: %s", getRemoteAddress()), cause);
+            SERVER_LOG.debug("Connection disconnected: {}", getRemoteAddress(), cause);
             return;
         }
         if (this.isPlayer) {
