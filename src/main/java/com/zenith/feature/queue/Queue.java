@@ -34,11 +34,12 @@ public class Queue {
         // prevent certain situations where users get a ton of these requests queued up somehow
         // maybe due to losing internet?
         if (lastUpdate.isAfter(Instant.now().minus(Duration.ofMinutes(CONFIG.server.queueStatusRefreshMinutes)))) return;
-        lastUpdate = Instant.now();
         updateQueueStatusNow();
     }
 
     public static void updateQueueStatusNow() {
+        if (lastUpdate.isAfter(Instant.now().minus(Duration.ofSeconds(5)))) return; // avoid getting rate limited by tcpshield
+        lastUpdate = Instant.now();
         if (!pingUpdate()) {
             if (!apiUpdate()) {
                 SERVER_LOG.error("Failed updating queue status. Is the network down?");
