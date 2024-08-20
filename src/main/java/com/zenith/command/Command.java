@@ -5,7 +5,6 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
-import com.zenith.Proxy;
 import com.zenith.command.brigadier.CaseInsensitiveLiteralArgumentBuilder;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.brigadier.CommandSource;
@@ -40,7 +39,7 @@ public abstract class Command {
             final boolean allowed = switch (context.getSource()) {
                 case DISCORD -> validateAccountOwnerDiscord(context);
                 case TERMINAL -> true;
-                case IN_GAME_PLAYER -> validateAccountOwnerInGame(context);
+                case IN_GAME_PLAYER,SPECTATOR -> validatePlayerIsAccountOwner(context);
             };
             if (!allowed) {
                 context.getEmbed()
@@ -54,8 +53,8 @@ public abstract class Command {
         }
     }
 
-    private static boolean validateAccountOwnerInGame(final CommandContext context) {
-        final ServerSession currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
+    private static boolean validatePlayerIsAccountOwner(final CommandContext context) {
+        final ServerSession currentPlayer = context.getInGamePlayerInfo().session();
         if (currentPlayer == null) return false;
         final GameProfile playerProfile = currentPlayer.getProfileCache().getProfile();
         if (playerProfile == null) return false;
@@ -190,8 +189,11 @@ public abstract class Command {
             .ifPresent(exception -> context.getEmbed()
                 .addField("Error", exception.getMessage(), false));
         postPopulate(context.getEmbed());
+        if (!context.getEmbed().isTitlePresent()) {
+            context.getEmbed()
+                .title("Invalid command usage");
+        }
         context.getEmbed()
-                .title("Invalid command usage")
                 .addField("Usage", commandUsage().serialize(context.getSource()), false)
                 .errorColor();
     }

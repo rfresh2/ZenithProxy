@@ -35,6 +35,9 @@ public class SpectatorCommand extends Command {
             Players who are regular whitelisted (i.e. with the `whitelist` command) can always join as spectators regardless.
             
             Spectator entities control what entity is used to represent spectators in-game.
+            
+            Full commands allow spectators access to all standard ZenithProxy commands like `connect`, `disconnect`, etc.
+            If this is disabled, spectators only have access to a limited set of core commands.
             """,
             asList(
                 "on/off",
@@ -43,7 +46,9 @@ public class SpectatorCommand extends Command {
                 "whitelist clear",
                 "entity list",
                 "entity <entity>",
-                "chat on/off"
+                "chat on/off",
+                "fullCommands on/off",
+                "fullCommands requireRegularWhitelist on/off"
             )
         );
     }
@@ -132,7 +137,22 @@ public class SpectatorCommand extends Command {
                                 .primaryColor()
                                 .description(spectatorWhitelist());
                             return 1;
-                      })));
+                      })))
+            .then(literal("fullCommands").requires(Command::validateAccountOwner)
+                      .then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.server.spectator.fullCommandsEnabled = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Full Spectator Commands " + toggleStrCaps(CONFIG.server.spectator.fullCommandsEnabled))
+                              .primaryColor();
+                          return OK;
+                      }))
+                      .then(literal("requireRegularWhitelist").then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.server.spectator.fullCommandsRequireRegularWhitelist = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Full Spectator Commands Require Regular Whitelist " + toggleStrCaps(CONFIG.server.spectator.fullCommandsRequireRegularWhitelist))
+                              .primaryColor();
+                          return OK;
+                      }))));
     }
 
     private String spectatorWhitelist() {
@@ -148,6 +168,8 @@ public class SpectatorCommand extends Command {
         builder
             .addField("Spectators", toggleStr(CONFIG.server.spectator.allowSpectator), false)
             .addField("Chat", toggleStr(CONFIG.server.spectator.spectatorPublicChatEnabled), false)
-            .addField("Entity", CONFIG.server.spectator.spectatorEntity, false);
+            .addField("Entity", CONFIG.server.spectator.spectatorEntity, false)
+            .addField("Full Commands", toggleStr(CONFIG.server.spectator.fullCommandsEnabled), false)
+            .addField("Full Commands Require Regular Whitelist", toggleStr(CONFIG.server.spectator.fullCommandsRequireRegularWhitelist), false);
     }
 }

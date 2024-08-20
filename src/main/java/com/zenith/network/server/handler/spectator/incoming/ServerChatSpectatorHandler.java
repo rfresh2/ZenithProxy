@@ -22,7 +22,12 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
             EXECUTOR.execute(() -> {
                 if (IN_GAME_COMMAND.getCommandPattern().matcher(packet.getMessage()).find()) {
                     TERMINAL_LOG.info("{} executed spectator command: {}", session.getProfileCache().getProfile().getName(), packet.getMessage());
-                    handleCommandInput(packet.getMessage(), session);
+                    if (CONFIG.server.spectator.fullCommandsEnabled && (!CONFIG.server.spectator.fullCommandsRequireRegularWhitelist || PLAYER_LISTS.getWhitelist().contains(session.getProfileCache().getProfile()))) {
+                        final String fullCommandAndArgs = packet.getMessage().substring(CONFIG.inGameCommands.prefix.length()).trim(); // cut off the prefix
+                        IN_GAME_COMMAND.handleInGameCommandSpectator(fullCommandAndArgs, session, true);
+                    } else {
+                        handleCommandInput(packet.getMessage(), session);
+                    }
                 } else {
                     var chatMessage = ComponentSerializer.minedown("&c" + session.getProfileCache().getProfile().getName() + " > " + packet.getMessage() + "&r");
                     SERVER_LOG.info("{}", ComponentSerializer.serializeJson(chatMessage));

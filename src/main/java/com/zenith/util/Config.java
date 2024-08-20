@@ -419,6 +419,8 @@ public final class Config {
             public boolean allowSpectator = true;
             public String spectatorEntity = "cat";
             public boolean spectatorPublicChatEnabled = true;
+            public boolean fullCommandsEnabled = false;
+            public boolean fullCommandsRequireRegularWhitelist = true;
             public ArrayList<PlayerEntry> whitelist = new ArrayList<>();
         }
 

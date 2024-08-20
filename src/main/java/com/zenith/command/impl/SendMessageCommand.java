@@ -12,6 +12,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
+import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.SERVER_LOG;
 import static java.util.Arrays.asList;
 
@@ -39,11 +40,23 @@ public class SendMessageCommand extends Command {
                               var connections = Proxy.getInstance().getActiveConnections().getArray();
                               for (int i = 0; i < connections.length; i++) {
                                   var connection = connections[i];
-                                  connection.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&c" + senderName + " > " + message + "&r"), false));
+                                  connection.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&c" + senderName + " > " + message + "&r"),
+                                                                                       false));
                               }
                               SERVER_LOG.info("{}", ComponentSerializer.serializeJson(chatMessage));
                               c.getSource().setSensitiveInput(true);
                               c.getSource().setNoOutput(true);
+                          } else if (c.getSource().getSource() == CommandSource.SPECTATOR) {
+                              var session = c.getSource().getInGamePlayerInfo().session();
+                              if (CONFIG.server.spectator.spectatorPublicChatEnabled) {
+                                  Proxy.getInstance().getClient().sendAsync(new ServerboundChatPacket(message));
+                                  c.getSource().getEmbed()
+                                      .title("Sent Message!")
+                                      .description(message);
+                              } else {
+                                  session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cSpectator chat disabled&r"), false));
+                                  c.getSource().setNoOutput(true);
+                              }
                           } else {
                               if (Proxy.getInstance().isConnected() && !message.isBlank()) {
                                   Proxy.getInstance().getClient().sendAsync(new ServerboundChatPacket(message));
