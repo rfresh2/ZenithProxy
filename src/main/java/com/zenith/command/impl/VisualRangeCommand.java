@@ -1,6 +1,7 @@
 package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
@@ -8,11 +9,14 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.VisualRange;
 import com.zenith.util.Config;
+import org.geysermc.mcprotocollib.auth.GameProfile;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
-import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.MODULE;
+import static com.zenith.Shared.*;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static java.util.Arrays.asList;
@@ -38,6 +42,7 @@ public class VisualRangeCommand extends Command {
             """,
             asList(
                         "on/off",
+                        "list",
                         "enter on/off",
                         "enter mention on/off",
                         "leave on/off",
@@ -60,6 +65,40 @@ public class VisualRangeCommand extends Command {
                 c.getSource().getEmbed()
                     .title("VisualRange " + toggleStrCaps(CONFIG.client.extra.visualRange.enabled));
                 return OK;
+            }))
+            .then(literal("list").executes(c -> {
+                var players = CACHE.getEntityCache().getEntities().values().stream().filter(e -> e instanceof EntityPlayer).map(e -> (EntityPlayer) e).toList();
+                var friends = new ArrayList<GameProfile>();
+                var nonFriends = new ArrayList<GameProfile>();
+                for (EntityPlayer p : players) {
+                    if (p.isSelfPlayer()) continue;
+                    var playerEntry = CACHE.getTabListCache().get(p.getUuid());
+                    if (playerEntry.isEmpty()) {
+                        DEFAULT_LOG.warn("Failed to find player entry for {}", p.getUuid());
+                        continue;
+                    }
+                    if (PLAYER_LISTS.getFriendsList().contains(playerEntry.get().getProfile()) || PLAYER_LISTS.getWhitelist().contains(playerEntry.get().getProfile())) {
+                        friends.add(playerEntry.get().getProfile());
+                    } else {
+                        nonFriends.add(playerEntry.get().getProfile());
+                    }
+                }
+                if (friends.isEmpty() && nonFriends.isEmpty()) {
+                    c.getSource().getEmbed()
+                        .title("VisualRange Players")
+                        .description("No players in visual range")
+                        .primaryColor();
+                    return;
+                }
+                c.getSource().getEmbed()
+                    .title("VisualRange Players")
+                    .description("**Friends/Whitelisted Players**\n"
+                                     + friends.stream().map(GameProfile::getName).collect(Collectors.joining("\n"))
+                                     + "\n\n"
+                                     + "**Non-Friends/Non-Whitelisted Players**\n"
+                                     + nonFriends.stream().map(GameProfile::getName).collect(Collectors.joining("\n"))
+                    )
+                    .primaryColor();
             }))
             .then(literal("enter")
                       .then(argument("toggle", toggle()).executes(c -> {
