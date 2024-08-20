@@ -81,6 +81,9 @@ public class CommandManager {
         new SkinCommand(),
         new SpammerCommand(),
         new SpectatorCommand(),
+        new SpectatorEntityCommand(),
+        new SpectatorEntityToggleCommand(),
+        new SpectatorPlayerCamCommand(),
         new SpectatorSwapCommand(),
         new SpookCommand(),
         new StalkCommand(),
@@ -186,7 +189,7 @@ public class CommandManager {
         //      abstract the embed builder output to a mutable intermediary?
         return switch (source) {
             case DISCORD -> CONFIG.discord.prefix;
-            case IN_GAME_PLAYER -> CONFIG.inGameCommands.slashCommands ? "/" : CONFIG.inGameCommands.prefix;
+            case IN_GAME_PLAYER, SPECTATOR -> CONFIG.inGameCommands.slashCommands ? "/" : CONFIG.inGameCommands.prefix;
             case TERMINAL -> "";
         };
     }
@@ -199,7 +202,7 @@ public class CommandManager {
                 .map(Suggestion::getText)
                 .toList();
         } catch (final Exception e) {
-            TERMINAL_LOG.warn("Failed to get command completions for input: " + input);
+            TERMINAL_LOG.warn("Failed to get command completions for input: {}", input);
             return List.of();
         }
     }

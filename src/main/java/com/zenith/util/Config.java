@@ -360,6 +360,7 @@ public final class Config {
         public boolean sendChunksBeforePlayerSpawn = false;
         public boolean binaryNbtComponentSerializer = true;
         public boolean kickDisconnect = false;
+        public boolean kickDisconnectInventoryMode = false;
         public boolean resyncTeleports = true;
         public boolean ncpStrictInventory = false;
         public boolean clientTickFixedRate = false;
@@ -420,6 +421,8 @@ public final class Config {
             public boolean allowSpectator = true;
             public String spectatorEntity = "cat";
             public boolean spectatorPublicChatEnabled = true;
+            public boolean fullCommandsEnabled = false;
+            public boolean fullCommandsRequireRegularWhitelist = true;
             public ArrayList<PlayerEntry> whitelist = new ArrayList<>();
         }
 
