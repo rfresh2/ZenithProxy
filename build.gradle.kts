@@ -62,13 +62,13 @@ configurations.implementation.get().extendsFrom(shade)
 dependencies {
     shade("com.zaxxer:HikariCP:5.1.0")
     shade("org.postgresql:postgresql:42.7.3")
-    val jdbiVersion = "3.45.3"
+    val jdbiVersion = "3.45.4"
     shade("org.jdbi:jdbi3-core:$jdbiVersion")
     shade("org.jdbi:jdbi3-postgres:$jdbiVersion")
-    shade("com.google.guava:guava:33.2.1-jre")
-    shade("ch.qos.logback:logback-classic:1.5.6")
-    shade("org.slf4j:slf4j-api:2.0.13")
-    shade("org.slf4j:jul-to-slf4j:2.0.13")
+    shade("com.google.guava:guava:33.3.0-jre")
+    shade("ch.qos.logback:logback-classic:1.5.7")
+    shade("org.slf4j:slf4j-api:2.0.16")
+    shade("org.slf4j:jul-to-slf4j:2.0.16")
     shade("com.mojang:brigadier:1.2.9")
     shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
     shade("com.github.rfresh2:SimpleEventBus:1.2")
@@ -113,7 +113,7 @@ dependencies {
     shade("org.jline:jline:3.26.3")
     shade("org.jline:jline-terminal-jni:3.26.3")
     shade("ar.com.hjg:pngj:2.1.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.0")
     val lombokVersion = "1.18.34"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
