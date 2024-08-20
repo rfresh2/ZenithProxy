@@ -35,6 +35,7 @@ import net.raphimc.minecraftauth.responsehandler.exception.MinecraftRequestExcep
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.BuiltinFlags;
 import org.geysermc.mcprotocollib.network.ProxyInfo;
+import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.network.tcp.TcpConnectionManager;
 import org.geysermc.mcprotocollib.network.tcp.TcpServer;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
@@ -47,6 +48,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundSoundPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.LoggerFactory;
@@ -364,11 +366,15 @@ public class Proxy {
     public void kickDisconnect(final String reason, final Throwable cause) {
         if (!isConnected()) return;
         var client = this.client;
+
         try {
-            // out of order timestamp causes server to kick us
+            Packet p = CONFIG.debug.kickDisconnectInventoryMode
+                // non-existent slot
+                ? new ServerboundSetCarriedItemPacket(10)
+                // out of order timestamp
+                : new ServerboundChatPacket("", -1L, 0L, null, 0, BitSet.valueOf(new byte[20]));
             // must send direct to avoid our mitigation in the outgoing packet handler
-            client.sendDirect(new ServerboundChatPacket("", -1L, 0L, null, 0, BitSet.valueOf(new byte[20])))
-                .get();
+            client.sendDirect(p).get();
         } catch (final Exception e) {
             CLIENT_LOG.error("Error performing kick disconnect", e);
         }

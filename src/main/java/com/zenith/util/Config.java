@@ -360,6 +360,7 @@ public final class Config {
         public boolean sendChunksBeforePlayerSpawn = false;
         public boolean binaryNbtComponentSerializer = true;
         public boolean kickDisconnect = false;
+        public boolean kickDisconnectInventoryMode = false;
         public boolean resyncTeleports = true;
         public boolean ncpStrictInventory = false;
         public boolean clientTickFixedRate = false;
