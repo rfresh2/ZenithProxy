@@ -26,6 +26,9 @@ public class UpdateCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("update").requires(Command::validateAccountOwner).executes(c -> {
             try {
+                if (!LAUNCH_CONFIG.auto_update) {
+                    DEFAULT_LOG.error("Auto update is disabled. No update will be applied");
+                }
                 EVENT_BUS.post(new UpdateStartEvent(Proxy.getInstance().getAutoUpdater().getNewVersion()));
                 CONFIG.discord.isUpdating = true;
                 if (Proxy.getInstance().isConnected()) {

@@ -404,10 +404,14 @@ public class DiscordBot {
     Embed getUpdateMessage(final Optional<String> newVersion) {
         String verString = "Current Version: `" + escape(LAUNCH_CONFIG.version) + "`";
         if (newVersion.isPresent()) verString += "\nNew Version: `" + escape(newVersion.get()) + "`";
-        return Embed.builder()
+        var embed = Embed.builder()
             .title("Updating and restarting...")
             .description(verString)
             .primaryColor();
+        if (!LAUNCH_CONFIG.auto_update) {
+            embed.addField("Info", "`autoUpdate` must be enabled for new updates to apply", false);
+        }
+        return embed;
     }
 
     public static boolean isAllowedChatCharacter(char c0) {
