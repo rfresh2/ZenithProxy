@@ -5,6 +5,8 @@ import org.cloudburstmc.math.vector.Vector3d;
 
 import java.time.Duration;
 
+import static com.zenith.Shared.DEFAULT_LOG;
+
 @UtilityClass
 public class MathHelper {
     public static double squareLen(double a, double b, double c) {
@@ -113,19 +115,16 @@ public class MathHelper {
     }
 
     public static boolean isPitchInRange(float pitch1, float pitch2, float range) {
-        pitch1 = wrapPitch(pitch1);
-        pitch2 = wrapPitch(pitch2);
-        // Half circle wraps around at [-90, 90]
-        // although pitch values should never exceed this range
-        float difference = pitch1 - pitch2;
-        difference = Math.abs(difference);
-        return difference <= range;
+        if (pitch1 < -90 || pitch1 > 90 || pitch2 < -90 || pitch2 > 90) {
+            DEFAULT_LOG.warn("Pitch value out of range: {} {}", pitch1, pitch2);
+            return false; // pitch values should never exceed [-90, 90] as there is no wrapping
+        }
+        return Math.abs(pitch1 - pitch2) <= range;
     }
 
     public static boolean isYawInRange(float yaw1, float yaw2, float range) {
         yaw1 = wrapYaw(yaw1);
         yaw2 = wrapYaw(yaw2);
-
         float difference = yaw1 - yaw2;
         // Circle wraps around at [-180, 180]
         // yaw values can and will exceed this range
@@ -134,8 +133,7 @@ public class MathHelper {
         } else if (difference < -180) {
             difference += 360;
         }
-        difference = Math.abs(difference);
-        return difference <= range;
+        return Math.abs(difference) <= range;
     }
 
     public static Vector3d calculateRayEndPos(double x, double y, double z, double yaw, double pitch, double maxDistance) {
