@@ -120,8 +120,8 @@ public class AutoFish extends AbstractInventoryModule {
 
     private boolean hasRotation() {
         var sim = MODULE.get(PlayerSimulation.class);
-        return MathHelper.isNear(MathHelper.wrapYaw(sim.getYaw()), CONFIG.client.extra.autoFish.yaw, 0.1f)
-            && MathHelper.isNear(MathHelper.wrapPitch(sim.getPitch()), CONFIG.client.extra.autoFish.pitch, 0.1f);
+        return MathHelper.isYawInRange(sim.getYaw(), CONFIG.client.extra.autoFish.yaw, 0.1f)
+            && MathHelper.isPitchInRange(sim.getPitch(), CONFIG.client.extra.autoFish.pitch, 0.1f);
     }
 
     private boolean isRodInHand() {

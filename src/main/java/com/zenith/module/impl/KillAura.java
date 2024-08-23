@@ -182,8 +182,8 @@ public class KillAura extends AbstractInventoryModule {
     private boolean hasRotation(final Entity entity) {
         var rotation = Pathing.shortestRotationTo(entity);
         var sim = MODULE.get(PlayerSimulation.class);
-        boolean yawNear = MathHelper.isNear(MathHelper.wrapYaw(sim.getYaw()), MathHelper.wrapYaw(rotation.getX()), 0.1f);
-        boolean pitchNear = MathHelper.isNear(MathHelper.wrapPitch(sim.getPitch()), MathHelper.wrapPitch(rotation.getY()), 0.1f);
+        boolean yawNear = MathHelper.isYawInRange(sim.getYaw(), rotation.getX(), 0.1f);
+        boolean pitchNear = MathHelper.isPitchInRange(sim.getPitch(), rotation.getY(), 0.1f);
         return yawNear && pitchNear;
     }
 
