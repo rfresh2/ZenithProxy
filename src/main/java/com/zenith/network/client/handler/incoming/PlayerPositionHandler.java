@@ -12,15 +12,19 @@ import lombok.NonNull;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PositionElement;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 
-import static com.zenith.Shared.CACHE;
-import static com.zenith.Shared.MODULE;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
 public class PlayerPositionHandler implements ClientEventLoopPacketHandler<ClientboundPlayerPositionPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundPlayerPositionPacket packet, @NonNull ClientSession session) {
         PlayerCache cache = CACHE.getPlayerCache();
+        var teleportQueue = cache.getTeleportQueue();
         cache.getTeleportQueue().enqueue(packet.getTeleportId());
+        while (teleportQueue.size() > 100) {
+            var id = teleportQueue.dequeueInt();
+            CLIENT_LOG.debug("Teleport queue larger than 100, dropping oldest entry. Dropped teleport: {} Last teleport: {}", id, packet.getTeleportId());
+        }
         cache
                 .setX((packet.getRelative().contains(PositionElement.X) ? cache.getX() : 0.0d) + packet.getX())
                 .setY((packet.getRelative().contains(PositionElement.Y) ? cache.getY() : 0.0d) + packet.getY())

@@ -43,7 +43,7 @@ public class AuthCommand extends Command {
                 "clear",
                 "attempts <int>",
                 "alwaysRefreshOnLogin on/off",
-                "type <deviceCode/emailAndPassword/deviceCode2/meteor/prism>",
+                "type <deviceCode/emailAndPassword/deviceCode2/prism>",
                 "email <email>",
                 "password <password>",
                 "mention on/off",
@@ -104,15 +104,6 @@ public class AuthCommand extends Command {
                       }))
                       .then(literal("deviceCode2").executes(c -> {
                           CONFIG.authentication.accountType = Config.Authentication.AccountType.DEVICE_CODE_WITHOUT_DEVICE_TOKEN;
-                          c.getSource().getEmbed()
-                              .title("Authentication Type Set")
-                              .primaryColor();
-                          Proxy.getInstance().cancelLogin();
-                          Proxy.getInstance().getAuthenticator().clearAuthCache();
-                          return 1;
-                      }))
-                      .then(literal("meteor").executes(c -> {
-                          CONFIG.authentication.accountType = Config.Authentication.AccountType.LOCAL_WEBSERVER;
                           c.getSource().getEmbed()
                               .title("Authentication Type Set")
                               .primaryColor();
@@ -219,7 +210,6 @@ public class AuthCommand extends Command {
             case DEVICE_CODE -> "deviceCode";
             case MSA -> "emailAndPassword";
             case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> "deviceCode2";
-            case LOCAL_WEBSERVER -> "meteor";
             case PRISM -> "prism";
         };
     }
