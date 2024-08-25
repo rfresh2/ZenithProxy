@@ -43,7 +43,6 @@ public final class Config {
         public enum AccountType {
             @SerializedName("msa") MSA,
             @SerializedName("device_code") DEVICE_CODE,
-            @SerializedName("local_webserver") LOCAL_WEBSERVER,
             @SerializedName("device_code_without_device_token") DEVICE_CODE_WITHOUT_DEVICE_TOKEN,
             @SerializedName("prism") PRISM
         }

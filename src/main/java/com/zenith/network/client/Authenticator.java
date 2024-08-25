@@ -14,7 +14,6 @@ import net.raphimc.minecraftauth.MinecraftAuth;
 import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession;
 import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession.FullJavaSession;
 import net.raphimc.minecraftauth.step.msa.StepCredentialsMsaCode;
-import net.raphimc.minecraftauth.step.msa.StepLocalWebServer;
 import net.raphimc.minecraftauth.step.msa.StepMsaDeviceCode;
 import net.raphimc.minecraftauth.util.MicrosoftConstants;
 import org.geysermc.mcprotocollib.auth.GameProfile;
@@ -57,15 +56,6 @@ public class Authenticator {
         .credentials()
         .withDeviceToken("Win32")
         .sisuTitleAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
-        .buildMinecraftJavaProfileStep(false);
-    @Getter(lazy = true) private final StepFullJavaSession localWebserverStep = MinecraftAuth.builder()
-        .withTimeout(300)
-        // meteor client id lol don't sue me
-        .withClientId("4673b348-3efa-4f6a-bbb6-34e141cdc638").withScope(MicrosoftConstants.SCOPE2)
-        .withRedirectUri("http://127.0.0.1")
-        .localWebServer()
-        .withDeviceToken("Win32")
-        .regularAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
         .buildMinecraftJavaProfileStep(false);
     @Getter(lazy = true) private final StepFullJavaSession prismDeviceCodeAuthStep = MinecraftAuth.builder()
         .withTimeout(300)
@@ -170,11 +160,6 @@ public class Authenticator {
     }
 
     @SneakyThrows
-    private FullJavaSession localWebserverLogin() {
-        return getLocalWebserverStep().getFromInput(createHttpClient(), new StepLocalWebServer.LocalWebServerCallback(this::onLocalWebServer));
-    }
-
-    @SneakyThrows
     private FullJavaSession prismDeviceCodeLogin() {
         return getPrismDeviceCodeAuthStep().getFromInput(createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
     }
@@ -193,7 +178,6 @@ public class Authenticator {
         return switch (CONFIG.authentication.accountType) {
             case MSA -> getMsaAuthStep();
             case DEVICE_CODE -> getDeviceCodeAuthStep();
-            case LOCAL_WEBSERVER -> getLocalWebserverStep();
             case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> getDeviceCodeAuthWithoutDeviceTokenStep();
             case PRISM -> getPrismDeviceCodeAuthStep();
         };
@@ -203,15 +187,9 @@ public class Authenticator {
         return switch (CONFIG.authentication.accountType) {
             case MSA -> msaLogin();
             case DEVICE_CODE -> deviceCodeLogin();
-            case LOCAL_WEBSERVER -> localWebserverLogin();
             case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> withoutDeviceTokenLogin();
             case PRISM -> prismDeviceCodeLogin();
         };
-    }
-
-    private void onLocalWebServer(final StepLocalWebServer.LocalWebServer server) {
-        AUTH_LOG.info("Login Here: {}", server.getAuthenticationUrl());
-        if (CONFIG.authentication.openBrowserOnLogin) tryOpenBrowser(server.getAuthenticationUrl());
     }
 
     private void onDeviceCode(final StepMsaDeviceCode.MsaDeviceCode code) {
