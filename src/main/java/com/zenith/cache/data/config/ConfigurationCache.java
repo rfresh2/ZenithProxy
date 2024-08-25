@@ -6,7 +6,6 @@ import com.zenith.cache.CachedData;
 import lombok.Data;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.network.packet.Packet;
-import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundResourcePackPushPacket;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundUpdateTagsPacket;
 import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundRegistryDataPacket;
 import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundUpdateEnabledFeaturesPacket;
@@ -31,13 +30,14 @@ public class ConfigurationCache implements CachedData {
     public void getPackets(@NonNull final Consumer<Packet> consumer) {
         consumer.accept(new ClientboundRegistryDataPacket(this.registry));
         consumer.accept(new ClientboundUpdateEnabledFeaturesPacket(this.enabledFeatures));
-        resourcePacks.forEach((uuid, resourcePack) -> consumer.accept(new ClientboundResourcePackPushPacket(
-            resourcePack.id(),
-            resourcePack.url(),
-            resourcePack.hash(),
-            resourcePack.required(),
-            resourcePack.prompt()
-        )));
+        // todo: we need to make the zenith mc server wait until the player has sent a response to the resource pack prompt(s)
+//        resourcePacks.forEach((uuid, resourcePack) -> consumer.accept(new ClientboundResourcePackPushPacket(
+//            resourcePack.id(),
+//            resourcePack.url(),
+//            resourcePack.hash(),
+//            resourcePack.required(),
+//            resourcePack.prompt()
+//        )));
         consumer.accept(new ClientboundUpdateTagsPacket(this.tags));
     }
 
