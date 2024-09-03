@@ -42,7 +42,7 @@ public class ServerConnectionCommand extends Command {
             """,
             asList(
                 "proxyIP <ip>",
-                "bind port <port>",
+                "port <port>",
                 "ping on/off",
                 "ping onlinePlayers on/off",
                 "ping onlinePlayerCount on/off",
