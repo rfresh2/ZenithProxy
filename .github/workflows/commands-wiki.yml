@@ -52,7 +52,7 @@ jobs:
           ls -lah
 
       - name: Download job artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v4.1.7
         with:
           merge-multiple: true
           path: artifacts/
