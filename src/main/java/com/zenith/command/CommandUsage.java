@@ -51,6 +51,7 @@ public class CommandUsage {
             + usageLines.stream()
             .map(line -> "\n" + COMMAND.getCommandPrefix(commandSource) + name + " " + line)
             .collect(Collectors.joining());
+        result += "\n\n[Commands Help Wiki](https://gg.gg/1bvpn4)";
         if (result.length() > 1024) {
             DEFAULT_LOG.error("Command usage too long", new RuntimeException());
             return this.shortSerialize(commandSource);
