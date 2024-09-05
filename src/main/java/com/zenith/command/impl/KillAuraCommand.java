@@ -35,6 +35,7 @@ public class KillAuraCommand extends Command {
                                         "attackDelay <ticks>",
                                         "targetPlayers on/off",
                                         "targetHostileMobs on/off",
+                                        "targetHostileMobs onlyAggressive on/off",
                                         "targetNeutralMobs on/off",
                                         "targetNeutralMobs onlyAggressive on/off",
                                         "targetArmorStands on/off",
@@ -71,6 +72,12 @@ public class KillAuraCommand extends Command {
                             return OK;
                       })))
             .then(literal("targetHostileMobs")
+                      .then(literal("onlyAggressive").then(argument("toggle", toggle()).executes(c -> {
+                          CONFIG.client.extra.killAura.onlyHostileAggressive = getToggle(c, "toggle");
+                          c.getSource().getEmbed()
+                              .title("Target Hostile Mobs Only Aggressive " + toggleStrCaps(CONFIG.client.extra.killAura.onlyHostileAggressive));
+                          return OK;
+                      })))
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.killAura.targetHostileMobs = getToggle(c, "toggle");
                             c.getSource().getEmbed()
@@ -162,6 +169,7 @@ public class KillAuraCommand extends Command {
             .addField("Target Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs), false)
             .addField("Target Custom", toggleStr(CONFIG.client.extra.killAura.targetCustom), false)
             .addField("Only Aggressive Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.onlyNeutralAggressive), false)
+            .addField("Only Aggressive Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.onlyHostileAggressive), false)
             .addField("Target Armor Stands", toggleStr(CONFIG.client.extra.killAura.targetArmorStands), false)
             .addField("Weapon Switching", toggleStr(CONFIG.client.extra.killAura.switchWeapon), false)
             .addField("Attack Delay Ticks", CONFIG.client.extra.killAura.attackDelayTicks, false)

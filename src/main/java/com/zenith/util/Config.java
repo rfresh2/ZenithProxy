@@ -180,6 +180,7 @@ public final class Config {
                 public boolean targetNeutralMobs = false;
                 public boolean targetCustom = false;
                 public boolean onlyNeutralAggressive = true;
+                public boolean onlyHostileAggressive = true;
                 public boolean switchWeapon = true;
                 public boolean targetArmorStands = false;
                 public int attackDelayTicks = 10;
