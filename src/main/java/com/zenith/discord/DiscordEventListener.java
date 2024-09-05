@@ -586,7 +586,7 @@ public class DiscordEventListener {
         final var embed = Embed.builder()
             .title("Microsoft Device Code Login")
             .primaryColor()
-            .description("Login Here: " + event.deviceCode().getDirectVerificationUri());
+            .description("Login Here: " + event.deviceCode().getDirectVerificationUri() + " \nCode: " + event.deviceCode().getUserCode());
         if (CONFIG.discord.mentionRoleOnDeviceCodeAuth)
             sendEmbedMessage(mentionAccountOwner(), embed);
         else

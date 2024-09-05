@@ -136,29 +136,30 @@ public class KillAura extends AbstractInventoryModule {
 
         } else if (entity instanceof EntityStandard e) {
             if (CONFIG.client.extra.killAura.targetHostileMobs) {
-                if (hostileEntities.contains(e.getEntityType())) return true;
+                if (hostileEntities.contains(e.getEntityType()))
+                    return !CONFIG.client.extra.killAura.onlyHostileAggressive || isAggressive(entity);
             }
             if (CONFIG.client.extra.killAura.targetArmorStands) {
                 if (e.getEntityType() == EntityType.ARMOR_STAND) return true;
             }
             if (CONFIG.client.extra.killAura.targetNeutralMobs) {
-                if (neutralEntities.contains(e.getEntityType())) {
-                    if (CONFIG.client.extra.killAura.onlyNeutralAggressive) {
-                        // https://wiki.vg/Entity_metadata#Mob
-                        var byteMetadata = entity.getMetadata().get(15);
-                        if (byteMetadata == null) return false;
-                        if (byteMetadata instanceof ByteEntityMetadata byteData) {
-                            var data = byteData.getPrimitiveValue() & 0x04;
-                            return data != 0;
-                        }
-                        return false;
-                    }
-                    return true;
-                }
+                if (neutralEntities.contains(e.getEntityType()))
+                    return !CONFIG.client.extra.killAura.onlyNeutralAggressive || isAggressive(entity);
             }
             if (CONFIG.client.extra.killAura.targetCustom) {
                 return CONFIG.client.extra.killAura.customTargets.contains(e.getEntityType());
             }
+        }
+        return false;
+    }
+
+    private static boolean isAggressive(final Entity entity) {
+        // https://wiki.vg/Entity_metadata#Mob
+        var byteMetadata = entity.getMetadata().get(15);
+        if (byteMetadata == null) return false;
+        if (byteMetadata instanceof ByteEntityMetadata byteData) {
+            var data = byteData.getPrimitiveValue() & 0x04;
+            return data != 0;
         }
         return false;
     }
