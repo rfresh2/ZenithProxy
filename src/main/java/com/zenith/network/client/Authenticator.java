@@ -193,7 +193,7 @@ public class Authenticator {
     }
 
     private void onDeviceCode(final StepMsaDeviceCode.MsaDeviceCode code) {
-        AUTH_LOG.error("Login Here: {}", code.getDirectVerificationUri());
+        AUTH_LOG.error("Login Here: {} with code: {}", code.getDirectVerificationUri(), code.getUserCode());
         EVENT_BUS.postAsync(new MsaDeviceCodeLoginEvent(code));
         if (CONFIG.authentication.openBrowserOnLogin) tryOpenBrowser(code.getDirectVerificationUri());
     }
