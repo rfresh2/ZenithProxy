@@ -213,6 +213,10 @@ public class Proxy {
                 DEFAULT_LOG.info("Proxy IP: {}", CONFIG.server.getProxyAddress());
                 DEFAULT_LOG.info("Use the `connect` command to log in!");
             }
+            if (CONFIG.deprecationWarning_1_20_4) {
+                DEFAULT_LOG.info("1.20.4 support has been discontinued, please update to 1.21!");
+                DEFAULT_LOG.info("Command to update: `channel set java/linux 1.21.0`");
+            }
             Wait.waitSpinLoop();
         } catch (Exception e) {
             DEFAULT_LOG.error("", e);

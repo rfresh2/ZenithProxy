@@ -173,6 +173,20 @@ public class DiscordBot {
                                      Switch to a stable release with the `channel` command
                                      """));
         }
+        if (CONFIG.deprecationWarning_1_20_4) {
+            sendEmbedMessage(
+                Embed.builder()
+                    .title("1.20.4 Deprecated")
+                    .description(
+                        """
+                        **ZenithProxy for 1.20.4 has been deprecated and will no longer receive updates or support.**
+                        
+                        Update to 1.21: `channel set <java/linux> 1.21.0`
+                        
+                        To disable this warning: `debug deprecationWarning off`
+                        """)
+            );
+        }
     }
 
     private GatewayDiscordClient buildGatewayClient() {
