@@ -1,12 +1,12 @@
 package com.zenith.terminal.logback;
 
 import ch.qos.logback.core.joran.spi.NoAutoStart;
-import ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP;
+import ch.qos.logback.core.rolling.SizeAndTimeBasedFileNamingAndTriggeringPolicy;
 
 import java.io.File;
 
 @NoAutoStart
-public class StartupSizeAndTimeBasedTriggeringPolicy<E> extends SizeAndTimeBasedFNATP<E> {
+public class StartupSizeAndTimeBasedTriggeringPolicy<E> extends SizeAndTimeBasedFileNamingAndTriggeringPolicy<E> {
     private boolean started = false;
 
     @Override

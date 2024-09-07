@@ -226,7 +226,7 @@
   "methods":[{"name":"setFileNamePattern","parameterTypes":["java.lang.String"] }, {"name":"setParent","parameterTypes":["ch.qos.logback.core.FileAppender"] }]
 },
 {
-  "name":"ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP",
+  "name":"ch.qos.logback.core.rolling.SizeAndTimeBasedFileNamingAndTriggeringPolicy",
   "methods":[{"name":"setMaxFileSize","parameterTypes":["ch.qos.logback.core.util.FileSize"] }]
 },
 {
