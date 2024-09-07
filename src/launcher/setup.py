@@ -26,20 +26,24 @@ def setup_execute(config):
     else:
         release_channel = "java"
     print("")
-    while True:
-        print("Select a Minecraft version: (1/2)")
-        print("1. 1.20.4")
-        print("2. 1.21.0")
-        i1 = input("> ")
-        if i1 == "1":
-            minecraft_version = "1.20.4"
-            break
-        elif i1 == "2":
-            minecraft_version = "1.21.0"
-            break
-        else:
-            print("Invalid input. Enter 1 or 2")
-    print("")
+
+    # while True:
+    #     print("Select a Minecraft version: (1/2)")
+    #     print("1. 1.20.4")
+    #     print("2. 1.21.0")
+    #     i1 = input("> ")
+    #     if i1 == "1":
+    #         minecraft_version = "1.20.4"
+    #         break
+    #     elif i1 == "2":
+    #         minecraft_version = "1.21.0"
+    #         break
+    #     else:
+    #         print("Invalid input. Enter 1 or 2")
+    # print("")
+
+    minecraft_version = "1.21.0"
+
     config.auto_update = True
     config.auto_update_launcher = True
     config.release_channel = release_channel + "." + minecraft_version

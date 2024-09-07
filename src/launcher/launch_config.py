@@ -29,7 +29,7 @@ def read_launch_config_file():
 class LaunchConfig:
     auto_update = True
     auto_update_launcher = True
-    release_channel = "java.1.20.4"
+    release_channel = "java.1.21.0"
     version = "0.0.0"
     local_version = "0.0.0"
     repo_owner = "rfresh2"
