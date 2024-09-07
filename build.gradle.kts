@@ -66,7 +66,7 @@ dependencies {
     shade("org.jdbi:jdbi3-core:$jdbiVersion")
     shade("org.jdbi:jdbi3-postgres:$jdbiVersion")
     shade("com.google.guava:guava:33.3.0-jre")
-    shade("ch.qos.logback:logback-classic:1.5.7")
+    shade("ch.qos.logback:logback-classic:1.5.8")
     shade("org.slf4j:slf4j-api:2.0.16")
     shade("org.slf4j:jul-to-slf4j:2.0.16")
     shade("com.mojang:brigadier:1.2.9")
@@ -80,7 +80,7 @@ dependencies {
         exclude(group = "io.netty")
     }
     shade("net.raphimc:MinecraftAuth:4.1.0")
-    val nettyVersion = "4.1.112.Final"
+    val nettyVersion = "4.1.113.Final"
     shade("io.netty:netty-codec-haproxy:$nettyVersion")
     shade("io.netty:netty-codec-dns:$nettyVersion")
     shade("io.netty:netty-codec-http2:$nettyVersion")
