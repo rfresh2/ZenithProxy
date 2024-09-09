@@ -96,7 +96,7 @@ dependencies {
     shade("de.themoep:minedown-adventure:1.7.3-SNAPSHOT")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
-    shade("org.redisson:redisson:3.35.0") {
+    shade("org.redisson:redisson:3.36.0") {
         exclude(group = "io.netty")
     }
     val fastutilVersion = "8.5.14"
