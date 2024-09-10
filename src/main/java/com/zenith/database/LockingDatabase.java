@@ -42,7 +42,7 @@ public abstract class LockingDatabase extends Database {
     public abstract Instant getLastEntryTime();
 
     public int getMaxQueueLength() {
-        return defaultMaxQueueLen;
+        return lockAcquired.get() ? 500 : defaultMaxQueueLen;
     }
 
     /**
@@ -106,7 +106,7 @@ public abstract class LockingDatabase extends Database {
         Wait.wait(20); // buffer for any lock releasers to finish up remaining writes
         syncQueue();
         if (isNull(queryExecutorFuture) || queryExecutorFuture.isDone()) {
-            queryExecutorFuture = EXECUTOR.scheduleWithFixedDelay(this::processQueue, 0L, 250, TimeUnit.MILLISECONDS);
+            queryExecutorFuture = EXECUTOR.scheduleWithFixedDelay(this::processQueue, 0L, 50, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -213,10 +213,12 @@ public abstract class LockingDatabase extends Database {
     }
 
     protected void insert(final Instant instant, final Runnable liveRunnable, final HandleConsumer query) {
-        final int size = insertQueue.size();
-        if (size > getMaxQueueLength()) {
+        if (insertQueue.size() > getMaxQueueLength()) {
+            if (lockAcquired.get()) {
+                DATABASE_LOG.warn("Insert queue size: {} > {} : Flushing {} entries in DB: {}", insertQueue.size(), getMaxQueueLength(), insertQueue.size() - getMaxQueueLength(), getLockKey());
+            }
             synchronized (insertQueue) {
-                for (int i = 0; i < getMaxQueueLength() / 5; i++) {
+                while (insertQueue.size() > getMaxQueueLength() / 2) {
                     insertQueue.poll();
                 }
             }
@@ -238,7 +240,7 @@ public abstract class LockingDatabase extends Database {
                 DATABASE_LOG.error("{} Database queue process exception", getLockKey(), e);
             }
         }
-        Wait.waitRandomMs(100); // adds some jitter
+        Wait.waitRandomMs(50); // adds some jitter
     }
 
 
