@@ -24,6 +24,9 @@ public final class ConnectionPool {
         config.setPassword(CONFIG.database.password);
         config.setMaximumPoolSize(1);
         config.setConnectionTimeout(5000);
+        config.addDataSourceProperty("loginTimeout", 60);
+        config.addDataSourceProperty("tcpKeepAlive", true);
+        config.addDataSourceProperty("socketTimeout", 60);
         config.setKeepaliveTime(Duration.ofMinutes(1).toMillis());
         config.setMaxLifetime(Duration.ofMinutes(5).toMillis());
         return new HikariDataSource(config);
