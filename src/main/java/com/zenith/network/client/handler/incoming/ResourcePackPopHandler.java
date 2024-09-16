@@ -10,7 +10,11 @@ public class ResourcePackPopHandler implements PacketHandler<ClientboundResource
     public static final ResourcePackPopHandler INSTANCE = new ResourcePackPopHandler();
     @Override
     public ClientboundResourcePackPopPacket apply(final ClientboundResourcePackPopPacket packet, final ClientSession session) {
-        CACHE.getConfigurationCache().getResourcePacks().remove(packet.getId());
+        if (packet.getId() == null) {
+            CACHE.getConfigurationCache().getResourcePacks().clear();
+        } else {
+            CACHE.getConfigurationCache().getResourcePacks().remove(packet.getId());
+        }
         return packet;
     }
 }
