@@ -26,6 +26,7 @@ import com.zenith.network.server.handler.player.InGameCommandManager;
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Config;
 import com.zenith.util.LaunchConfig;
+import com.zenith.util.Wait;
 import com.zenith.via.ZenithViaInitializer;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -100,6 +101,9 @@ public class Shared {
             DEFAULT_LOG.info("Config loaded.");
         } catch (final Throwable e) {
             DEFAULT_LOG.error("Unable to load config!", e);
+            DEFAULT_LOG.error("config.json must be manually fixed or deleted");
+            DEFAULT_LOG.error("Shutting down in 10s");
+            Wait.wait(10);
             System.exit(1);
         }
     }
@@ -125,6 +129,9 @@ public class Shared {
             DEFAULT_LOG.info("Launch config loaded.");
         } catch (final Throwable e) {
             DEFAULT_LOG.error("Unable to load launch config!", e);
+            DEFAULT_LOG.error("launch_config.json must be manually fixed or deleted");
+            DEFAULT_LOG.error("Shutting down in 10s");
+            Wait.wait(10);
             System.exit(1);
         }
     }
