@@ -70,6 +70,7 @@ public final class Config {
 
         public static final class ClientViaVersion {
             public boolean enabled = false;
+            public boolean disableOn2b2t = true;
             public boolean autoProtocolVersion = true;
             public int protocolVersion = 762; // 1.19.4
         }

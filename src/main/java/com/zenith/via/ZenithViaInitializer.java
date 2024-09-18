@@ -58,7 +58,7 @@ public class ZenithViaInitializer {
         if (CONFIG.client.viaversion.autoProtocolVersion) updateClientViaProtocolVersion();
         if (CONFIG.client.viaversion.protocolVersion == MinecraftCodec.CODEC.getProtocolVersion()) {
             CLIENT_LOG.warn("ViaVersion enabled but the protocol is the same as ours, connecting without ViaVersion");
-        } else if (Proxy.getInstance().isOn2b2t()) {
+        } else if (CONFIG.client.viaversion.disableOn2b2t && Proxy.getInstance().isOn2b2t()) {
             CLIENT_LOG.warn("ViaVersion enabled but server set to 2b2t.org, connecting without ViaVersion");
         } else {
             init();
