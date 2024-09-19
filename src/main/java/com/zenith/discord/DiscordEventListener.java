@@ -8,6 +8,7 @@ import com.zenith.feature.deathmessages.KillerType;
 import com.zenith.feature.queue.Queue;
 import com.zenith.util.DisconnectReasonInfo;
 import discord4j.core.event.domain.interaction.ButtonInteractionEvent;
+import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.component.Button;
 import discord4j.core.object.entity.User;
 import discord4j.core.object.presence.ClientPresence;
@@ -84,7 +85,8 @@ public class DiscordEventListener {
             of(ReplayStartedEvent.class, this::handleReplayStartedEvent),
             of(ReplayStoppedEvent.class, this::handleReplayStoppedEvent),
             of(PlayerTotemPopAlertEvent.class, this::handleTotemPopEvent),
-            of(NoTotemsEvent.class, this::handleNoTotemsEvent)
+            of(NoTotemsEvent.class, this::handleNoTotemsEvent),
+            of(PrivateMessageSendEvent.class, this::handlePrivateMessageSendEvent)
         );
     }
 
@@ -512,13 +514,41 @@ public class DiscordEventListener {
                 // abort if reply is not to a message sent by us
                 if (bot.client.getSelfId().asLong() != messageData.author().id().asLong()) return;
                 final EmbedData embed = messageData.embeds().getFirst();
-                final String sender = bot.extractRelayEmbedSenderUsername(embed.color(), embed.description().get());
-                Proxy.getInstance().getClient().sendAsync(new ServerboundChatPacket("/w " + sender + " " + event.message()));
+                if (!embed.color().isAbsent() && embed.color().get().equals(PRIVATE_MESSAGE_EMBED_COLOR.getRGB())) {
+                    // replying to private message
+                    sendPrivateMessage(event.message(), event.event());
+                } else {
+                    final String sender = bot.extractRelayEmbedSenderUsername(embed.color(), embed.description().get());
+                    boolean pm = false;
+                    var connections = Proxy.getInstance().getActiveConnections().getArray();
+                    for (int i = 0; i < connections.length; i++) {
+                        var connection = connections[i];
+                        var name = connection.getProfileCache().getProfile().getName();
+                        if (sender.equals(name)) {
+                            sendPrivateMessage(event.message(), event.event());
+                            pm = true;
+                            break;
+                        }
+                    }
+                    if (!pm) Proxy.getInstance().getClient().sendAsync(new ServerboundChatPacket("/w " + sender + " " + event.message()));
+                }
             } catch (final Exception e) {
                 DISCORD_LOG.error("Error performing chat relay reply", e);
             }
-        } else Proxy.getInstance().getClient().sendAsync(new ServerboundChatPacket(event.message()));
+        } else {
+            if (event.message().startsWith(CONFIG.discord.prefix)) { // send as private message
+                sendPrivateMessage(event.message().substring(CONFIG.discord.prefix.length()), event.event());
+            } else {
+                Proxy.getInstance().getClient().sendAsync(new ServerboundChatPacket(event.message()));
+            }
+        }
         bot.lastRelaymessage = Optional.of(Instant.now());
+    }
+
+    private void sendPrivateMessage(String message, MessageCreateEvent event) {
+        EVENT_BUS.postAsync(new PrivateMessageSendEvent(
+            event.getMessage().getAuthor().map(User::getTag).orElse("discord"),
+            message));
     }
 
     public void handleUpdateStartEvent(UpdateStartEvent event) {
@@ -664,6 +694,21 @@ public class DiscordEventListener {
             sendEmbedMessage(mentionAccountOwner(), embed);
         else
             sendEmbedMessage(embed);
+    }
+
+    static final Color PRIVATE_MESSAGE_EMBED_COLOR = Color.RED;
+
+    public void handlePrivateMessageSendEvent(final PrivateMessageSendEvent event) {
+        var embed = Embed.builder()
+            .description(escape("**" + event.getSenderName() + "**: " + event.getStringContents()))
+            .color(PRIVATE_MESSAGE_EMBED_COLOR)
+            .timestamp(Instant.now());
+        if (event.getSenderUUID() != null) {
+            embed.footer("Private Message", Proxy.getInstance().getAvatarURL(event.getSenderUUID()).toString());
+        } else {
+            embed.footer("Private Message", null);
+        }
+        sendRelayEmbedMessage(embed);
     }
 
     /**

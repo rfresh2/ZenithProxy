@@ -4,6 +4,7 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.zenith.Proxy;
 import com.zenith.cache.data.entity.Entity;
+import com.zenith.event.proxy.PrivateMessageSendEvent;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.registry.PacketHandler;
@@ -33,13 +34,7 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                         handleCommandInput(packet.getMessage(), session);
                     }
                 } else {
-                    var chatMessage = ComponentSerializer.minedown("&c" + session.getProfileCache().getProfile().getName() + " > " + packet.getMessage() + "&r");
-                    SERVER_LOG.info("{}", ComponentSerializer.serializeJson(chatMessage));
-                    var connections = Proxy.getInstance().getActiveConnections().getArray();
-                    for (int i = 0; i < connections.length; i++) {
-                        var connection = connections[i];
-                        connection.send(new ClientboundSystemChatPacket(chatMessage, false));
-                    }
+                    EVENT_BUS.postAsync(new PrivateMessageSendEvent(session.getProfileCache().getProfile().getId(), session.getProfileCache().getProfile().getName(), packet.getMessage()));
                 }
             });
         }

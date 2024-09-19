@@ -472,6 +472,7 @@ public class DiscordBot {
     }
 
     public void sendRelayEmbedMessage(Embed embedCreateSpec) {
+        if (!CONFIG.discord.chatRelay.enable) return;
         relayChannelMessageQueue.add(MessageCreateSpec.builder()
                                         .addEmbed(embedCreateSpec.toSpec())
                                         .build().asRequest());
@@ -487,6 +488,7 @@ public class DiscordBot {
     }
 
     public void sendRelayEmbedMessage(String message, Embed embed) {
+        if (!CONFIG.discord.chatRelay.enable) return;
         relayChannelMessageQueue.add(MessageCreateSpec.builder()
                                          .content(message)
                                          .addEmbed(embed.toSpec())
@@ -501,6 +503,7 @@ public class DiscordBot {
     }
 
     public void sendRelayMessage(final String message) {
+        if (!CONFIG.discord.chatRelay.enable) return;
         relayChannelMessageQueue.add(MessageCreateSpec.builder()
                                          .content(message)
                                          .build().asRequest());

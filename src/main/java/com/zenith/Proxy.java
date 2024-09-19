@@ -128,7 +128,8 @@ public class Proxy {
             of(ServerRestartingEvent.class, this::handleServerRestartingEvent),
             of(PrioStatusEvent.class, this::handlePrioStatusEvent),
             of(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
-            of(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent)
+            of(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent),
+            of(PrivateMessageSendEvent.class, this::handlePrivateMessageSendEvent)
         );
     }
 
@@ -769,11 +770,11 @@ public class Proxy {
         if (!isOn2b2t()) return;
         if (event.prio() == CONFIG.authentication.prio) {
             if (isPrio.isEmpty()) {
-                CLIENT_LOG.info("Prio Detected: " + event.prio());
+                CLIENT_LOG.info("Prio Detected: {}", event.prio());
                 this.isPrio = Optional.of(event.prio());
             }
         } else {
-            CLIENT_LOG.info("Prio Change Detected: " + event.prio());
+            CLIENT_LOG.info("Prio Change Detected: {}", event.prio());
             EVENT_BUS.postAsync(new PrioStatusUpdateEvent(event.prio()));
             this.isPrio = Optional.of(event.prio());
             CONFIG.authentication.prio = event.prio();
@@ -793,5 +794,15 @@ public class Proxy {
         var serverConnection = getCurrentPlayer().get();
         if (nonNull(serverConnection) && serverConnection.isLoggedIn())
             serverConnection.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&b" + event.playerEntry().getName() + "&r&e disconnected"), false));
+    }
+
+    public void handlePrivateMessageSendEvent(PrivateMessageSendEvent event) {
+        if (!isConnected()) return;
+        CHAT_LOG.info("{}", ComponentSerializer.serializeJson(event.getContents()));
+        var connections = getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            connection.sendAsync(new ClientboundSystemChatPacket(event.getContents(), false));
+        }
     }
 }
