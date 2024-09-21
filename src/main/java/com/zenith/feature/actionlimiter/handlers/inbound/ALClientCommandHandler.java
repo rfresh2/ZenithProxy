@@ -9,8 +9,7 @@ import static com.zenith.Shared.CONFIG;
 public class ALClientCommandHandler implements PacketHandler<ServerboundClientCommandPacket, ServerSession> {
     @Override
     public ServerboundClientCommandPacket apply(final ServerboundClientCommandPacket packet, final ServerSession session) {
-        if (CONFIG.client.extra.actionLimiter.allowRespawn)
-            return packet;
+        if (CONFIG.client.extra.actionLimiter.allowRespawn) return packet;
         session.disconnect("ActionLimiter: Respawn not allowed");
         return null;
     }

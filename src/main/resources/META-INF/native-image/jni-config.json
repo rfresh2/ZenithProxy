@@ -92,22 +92,6 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"org.fusesource.jansi.internal.CLibrary",
-  "fields":[{"name":"HAVE_ISATTY"}, {"name":"HAVE_TTYNAME"}, {"name":"TCSADRAIN"}, {"name":"TCSAFLUSH"}, {"name":"TCSANOW"}, {"name":"TIOCGETD"}, {"name":"TIOCGWINSZ"}, {"name":"TIOCSETD"}, {"name":"TIOCSWINSZ"}]
-},
-{
-  "name":"org.fusesource.jansi.internal.CLibrary$Termios",
-  "fields":[{"name":"SIZEOF"}, {"name":"c_cc"}, {"name":"c_cflag"}, {"name":"c_iflag"}, {"name":"c_ispeed"}, {"name":"c_lflag"}, {"name":"c_oflag"}, {"name":"c_ospeed"}]
-},
-{
-  "name":"org.fusesource.jansi.internal.CLibrary$WinSize",
-  "fields":[{"name":"SIZEOF"}, {"name":"ws_col"}, {"name":"ws_row"}, {"name":"ws_xpixel"}, {"name":"ws_ypixel"}]
-},
-{
-  "name":"org.fusesource.jansi.internal.Kernel32",
-  "fields":[{"name":"BACKGROUND_BLUE"}, {"name":"BACKGROUND_GREEN"}, {"name":"BACKGROUND_INTENSITY"}, {"name":"BACKGROUND_RED"}, {"name":"COMMON_LVB_GRID_HORIZONTAL"}, {"name":"COMMON_LVB_GRID_LVERTICAL"}, {"name":"COMMON_LVB_GRID_RVERTICAL"}, {"name":"COMMON_LVB_LEADING_BYTE"}, {"name":"COMMON_LVB_REVERSE_VIDEO"}, {"name":"COMMON_LVB_TRAILING_BYTE"}, {"name":"COMMON_LVB_UNDERSCORE"}, {"name":"FOREGROUND_BLUE"}, {"name":"FOREGROUND_GREEN"}, {"name":"FOREGROUND_INTENSITY"}, {"name":"FOREGROUND_RED"}, {"name":"FORMAT_MESSAGE_FROM_SYSTEM"}, {"name":"INVALID_HANDLE_VALUE"}, {"name":"STD_ERROR_HANDLE"}, {"name":"STD_INPUT_HANDLE"}, {"name":"STD_OUTPUT_HANDLE"}]
-},
-{
   "name":"org.jline.nativ.CLibrary",
   "fields":[{"name":"TCSADRAIN"}, {"name":"TCSAFLUSH"}, {"name":"TCSANOW"}, {"name":"TIOCGWINSZ"}, {"name":"TIOCSWINSZ"}]
 },

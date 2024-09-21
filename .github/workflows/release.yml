@@ -16,7 +16,7 @@ jobs:
       - name: Setup GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '22'
+          java-version: '23'
           distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 

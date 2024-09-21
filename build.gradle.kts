@@ -12,10 +12,10 @@ plugins {
 group = "com.zenith"
 version = "1.21.0"
 
-val javaVersion22 = JavaLanguageVersion.of(22)
+val javaVersion23 = JavaLanguageVersion.of(23)
 val javaVersion21 = JavaLanguageVersion.of(21)
 val javaLauncherProvider21 = javaToolchains.launcherFor { languageVersion = javaVersion21 }
-val javaLauncherProvider22 = javaToolchains.launcherFor { languageVersion = javaVersion22 }
+val javaLauncherProvider23 = javaToolchains.launcherFor { languageVersion = javaVersion23 }
 java { toolchain { languageVersion = javaVersion21 } }
 
 repositories {
@@ -75,7 +75,7 @@ dependencies {
     shade("com.github.rfresh2.discord4j:discord4j-core:3.4.3.8") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:1.21.0.9") {
+    shade("com.github.rfresh2:MCProtocolLib:1.21.0.10") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
     }
@@ -258,7 +258,7 @@ tasks {
 graalvmNative {
     binaries {
         named("main") {
-            javaLauncher = javaLauncherProvider22
+            javaLauncher = javaLauncherProvider23
             imageName = "ZenithProxy"
             mainClass = "com.zenith.Proxy"
             quickBuild = false
@@ -270,6 +270,8 @@ graalvmNative {
                 "-H:+ReportExceptionStackTraces",
                 "-H:DeadlockWatchdogInterval=30",
                 "-H:IncludeLocales=en",
+                "-H:+CompactingOldGen",
+//                "--emit build-report",
                 "-R:MaxHeapSize=200m",
                 "-march=x86-64-v3",
                 "--gc=serial",
@@ -281,6 +283,7 @@ graalvmNative {
             if (pgoPath != null) {
                 println("Using PGO profile: $pgoPath")
                 buildArgs.add("--pgo=$pgoPath")
+                buildArgs.add("-H:+PGOPrintProfileQuality")
             } else {
                 val pgoInstrument = System.getenv("GRAALVM_PGO_INSTRUMENT")
                 if (pgoInstrument != null) {
