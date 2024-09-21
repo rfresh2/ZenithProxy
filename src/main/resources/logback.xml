@@ -76,6 +76,10 @@
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
     </logger>
+    <logger name="org.geysermc" level="DEBUG">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="DEBUG_FILE"/>
+    </logger>
     <logger name="ViaVersion" level="INFO">
         <appender-ref ref="FILE"/>
         <appender-ref ref="DEBUG_FILE"/>
