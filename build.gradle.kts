@@ -5,7 +5,7 @@ import java.nio.file.Files
 plugins {
     java
     id("org.graalvm.buildtools.native") version "0.10.3"
-    id("com.gradleup.shadow") version "8.3.1"
+    id("com.gradleup.shadow") version "8.3.2"
     `maven-publish`
 }
 
@@ -60,12 +60,12 @@ val shade: Configuration by configurations.creating
 configurations.implementation.get().extendsFrom(shade)
 
 dependencies {
-    shade("com.zaxxer:HikariCP:5.1.0")
+    shade("com.zaxxer:HikariCP:6.0.0")
     shade("org.postgresql:postgresql:42.7.4")
     val jdbiVersion = "3.45.4"
     shade("org.jdbi:jdbi3-core:$jdbiVersion")
     shade("org.jdbi:jdbi3-postgres:$jdbiVersion")
-    shade("com.google.guava:guava:33.3.0-jre")
+    shade("com.google.guava:guava:33.3.1-jre")
     shade("ch.qos.logback:logback-classic:1.5.8")
     shade("org.slf4j:slf4j-api:2.0.16")
     shade("org.slf4j:jul-to-slf4j:2.0.16")
@@ -110,8 +110,8 @@ dependencies {
     shade("net.raphimc:ViaLoader:3.0.2")
     shade("com.viaversion:viaversion:5.0.3")
     shade("com.viaversion:viabackwards:5.0.3")
-    shade("org.jline:jline:3.26.3")
-    shade("org.jline:jline-terminal-jni:3.26.3")
+    shade("org.jline:jline:3.27.0")
+    shade("org.jline:jline-terminal-jni:3.27.0")
     shade("ar.com.hjg:pngj:2.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.0")
     val lombokVersion = "1.18.34"
