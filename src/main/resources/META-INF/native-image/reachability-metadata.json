@@ -1453,6 +1453,19 @@
       ]
     },
     {
+      "type": "com.zenith.feature.api.vcapi.model.QueueEtaEquationResponse",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "double",
+            "double"
+          ]
+        }
+      ]
+    },
+    {
       "type": "com.zenith.feature.api.vcapi.model.QueueResponse",
       "allDeclaredFields": true,
       "methods": [

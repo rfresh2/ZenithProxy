@@ -1,10 +1,7 @@
 package com.zenith.feature.api.vcapi;
 
 import com.zenith.feature.api.Api;
-import com.zenith.feature.api.vcapi.model.PlaytimeResponse;
-import com.zenith.feature.api.vcapi.model.QueueResponse;
-import com.zenith.feature.api.vcapi.model.SeenResponse;
-import com.zenith.feature.api.vcapi.model.StatsResponse;
+import com.zenith.feature.api.vcapi.model.*;
 
 import java.util.Optional;
 
@@ -29,5 +26,9 @@ public class VcApi extends Api {
 
     public Optional<QueueResponse> getQueue() {
         return get("/queue", QueueResponse.class);
+    }
+
+    public Optional<QueueEtaEquationResponse> getQueueEtaEquation() {
+        return get("/queue/eta-equation", QueueEtaEquationResponse.class);
     }
 }
