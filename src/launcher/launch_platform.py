@@ -31,7 +31,7 @@ def validate_linux_cpu_flags():
         return False
 
 
-def validate_linux_glibc_version():
+def validate_linux_glibc_version(config):
     try:
         output = subprocess.check_output(["ldd", "--version"], stderr=subprocess.STDOUT, text=True)
         # ldd (Ubuntu GLIBC 2.35-0ubuntu3.4) 2.35
@@ -39,10 +39,16 @@ def validate_linux_glibc_version():
         version = output.splitlines()[0].split(" ")[-1]
         version = version.split(".")
         if int(version[0]) != 2:
-            print("Unsupported OS for linux release channel. " + "\nglibc version too low: " + ".".join(version))
+            print("Unsupported OS for linux release channel.\nglibc version too low: " + ".".join(version))
             return False
-        if int(version[1]) < 31:
-            print("Unsupported OS for linux release channel. " + "\nglibc version too low: " + ".".join(version))
+        mc_version = config.get_mc_version()
+        old_versions = ["1.12.2", "1.20.1", "1.20.4", "1.20.6", "1.21.0"]
+        if mc_version in old_versions:
+            glibc_minor_version_min = 31
+        else:
+            glibc_minor_version_min = 35
+        if int(version[1]) < glibc_minor_version_min:
+            print("Unsupported OS for linux release channel.\nglibc version too low: " + ".".join(version))
             return False
         return True
     except Exception as e:
@@ -50,13 +56,13 @@ def validate_linux_glibc_version():
         return False
 
 
-def validate_linux_system():
+def validate_linux_system(config):
     try:
         return (
             get_platform_os() == OperatingSystem.LINUX
             and get_platform_arch() == CpuArch.AMD64
             and validate_linux_cpu_flags()
-            and validate_linux_glibc_version()
+            and validate_linux_glibc_version(config)
         )
     except Exception:
         return False
@@ -81,7 +87,7 @@ def validate_system_with_config(config):
     elif config.release_channel.startswith("java"):
         return validate_java_system(config)
     elif config.release_channel.startswith("linux"):
-        return validate_linux_system()
+        return validate_linux_system(config)
     else:
         return False
 

@@ -9,7 +9,7 @@ from utils import critical_error
 
 
 def setup_execute(config):
-    if validate_linux_system():  # otherwise we will always select java
+    if validate_linux_system(config):  # otherwise we will always select java
         while True:
             print("Select a ZenithProxy platform: (1/2)")
             print("1. java")
