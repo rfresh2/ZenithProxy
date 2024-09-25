@@ -1,13 +1,18 @@
-name: 1.21.0 Build and Release
+name: 1.21.0 PreRelease Build and Release
 
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+\+1.21.0'
+      - '[0-9]+.[0-9]+.[0-9]+\+1.21.0.pre'
 
 jobs:
   build-java-and-linux-amd64:
-    runs-on: ubuntu-20.04
+    # uses ubuntu 22
+    # but we need to retain 20 compat for main releases
+    # should be increased for future mc version channels as we can't support it forver
+
+    # 32gb memory needed for instrumenting
+    runs-on: ubicloud-standard-8
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -45,10 +50,9 @@ jobs:
           name: ZenithProxy-java
           path: build/libs/ZenithProxy.jar
 
-      - name: Download GraalVM Profile
+      - name: Enable GraalVM Profile Instrumenting
         run: |
-          wget https://cdn.2b2t.vc/profile.iprof
-          echo "GRAALVM_PGO_PATH=$(pwd)/profile.iprof" >> "$GITHUB_ENV"
+          echo "GRAALVM_PGO_INSTRUMENT=true" >> "$GITHUB_ENV"
 
       - name: Build ZenithProxy Linux Native
         uses: gradle/gradle-build-action@v3
