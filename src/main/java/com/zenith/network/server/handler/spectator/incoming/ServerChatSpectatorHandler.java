@@ -55,6 +55,7 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                 session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7&cplayercam &7- &8Set camera to the player"), false));
                 session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7&cetoggle &7- &8Hide your entity from yourself"), false));
                 session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7&ce &7- &8List spectator entities. Change with \"!e <entity>\""), false));
+                session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7&cswap &7- &8Swap from spectator to controlling the player"), false));
             }
             case "m" -> {
                 if (CONFIG.server.spectator.spectatorPublicChatEnabled) {
