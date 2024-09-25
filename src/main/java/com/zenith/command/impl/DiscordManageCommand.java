@@ -32,11 +32,14 @@ public class DiscordManageCommand extends Command {
         return CommandUsage.args(
             "discord",
             CommandCategory.MANAGE,
-            "Manages the Discord bot's configuration",
+            """
+            Manages the Discord bot's configuration.
+            
+            The relay is configured using the `chatRelay` command
+            """,
             asList(
                 "on/off",
                 "channel <channel ID>",
-                "relayChannel <channel ID>",
                 "token <token>",
                 "role <role ID>",
                 "manageProfileImage on/off",
