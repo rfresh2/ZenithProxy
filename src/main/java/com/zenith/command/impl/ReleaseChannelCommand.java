@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -147,7 +148,6 @@ public class ReleaseChannelCommand extends Command {
             return false;
         }
 
-        // check if we have glibc > 2.30
         try {
             final ProcessBuilder processBuilder = new ProcessBuilder("ldd",  "--version");
             processBuilder.redirectErrorStream(true);
@@ -167,8 +167,11 @@ public class ReleaseChannelCommand extends Command {
                 DEFAULT_LOG.warn("Linux release channel selected but glibc version is less than 2.31");
                 return false;
             }
-            if (minor < 31) {
-                DEFAULT_LOG.warn("Linux release channel selected but glibc version is less than 2.31");
+            var mcVersion = LAUNCH_CONFIG.getMcVersion();
+            var oldVersions = Set.of("1.12.2", "1.20.1", "1.20.4", "1.20.6", "1.21.0");
+            var minorVersionMin = mcVersion == null || oldVersions.contains(mcVersion) ? 31 : 35;
+            if (minor < minorVersionMin) {
+                DEFAULT_LOG.warn("Linux release channel selected but glibc version is less than 2.{}", minorVersionMin);
                 return false;
             }
         } catch (final Throwable e) {

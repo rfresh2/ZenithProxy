@@ -96,6 +96,16 @@ def is_pyinstaller_bundle():
     return getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS")
 
 
+def is_nuitka_bundle():
+    return "__compiled__" in globals()
+
+
+def executable_path():
+    if is_nuitka_bundle():
+        return sys.argv[0]
+    return sys.executable
+
+
 class PlatformError(Exception):
     pass
 

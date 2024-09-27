@@ -23,7 +23,7 @@ print("ZenithProxy Launcher Initializing...")
 # Certain platforms like mac seem to not have the correct cwd set correctly when double clicking the executable
 if launch_platform.is_pyinstaller_bundle():
     current_cwd = os.getcwd()
-    executable_path = sys.executable
+    executable_path = launch_platform.executable_path()
     expected_cwd = os.path.dirname(executable_path)
     if current_cwd != expected_cwd:
         os.chdir(expected_cwd)

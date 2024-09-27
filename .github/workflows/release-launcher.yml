@@ -12,13 +12,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ 'windows-2019', 'ubuntu-20.04', 'macos-13', 'macos-14' ]
+        os: [ 'ubuntu-20.04', 'macos-13', 'macos-14' ]
         include:
-          - os: 'windows-2019'
-            artifact-name: 'launcher-windows-amd64'
-            move-command: 'Move-Item -Path .\dist\__main__.exe -Destination .\dist\launch.exe'
-            zip-command: 'Compress-Archive -Path .\dist\launch.exe -DestinationPath .\dist\ZenithProxy-launcher-windows-amd64.zip'
-            sha1-command: '(Get-FileHash -Path dist\launch.exe -Algorithm sha1).Hash.ToLower()'
           - os: 'ubuntu-20.04'
             artifact-name: 'launcher-linux-amd64'
             move-command: 'mv dist/__main__ dist/launch'
@@ -76,6 +71,50 @@ jobs:
         with:
           name: ${{ matrix.artifact-name }}.sha1
           path: ZenithProxy-${{ matrix.artifact-name }}.sha1
+
+  build-windows:
+    runs-on: windows-2019
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.python_version }}
+
+      - name: Install Dependencies
+        run: |
+          pip install -r ./src/launcher/requirements.txt
+
+      - uses: Nuitka/Nuitka-Action@main
+        with:
+          nuitka-version: main
+          script-name: src/launcher/__main__.py
+          standalone: true
+          onefile: true
+          windows-icon-from-ico: src/launcher/icon.ico
+          output-file: "launch"
+          output-dir: "dist"
+          enable-plugins: "upx"
+
+      - name: Create zip
+        run: |
+          Compress-Archive -Path .\dist\launch.exe -DestinationPath .\dist\ZenithProxy-launcher-windows-amd64.zip
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: launcher-windows-amd64
+          path: dist/ZenithProxy-launcher-windows-amd64.zip
+
+      - name: Get Binary Hash
+        run: (Get-FileHash -Path dist\launch.exe -Algorithm sha1).Hash.ToLower() > ZenithProxy-launcher-windows-amd64.sha1
+
+      - name: Upload Launcher Hash Version
+        uses: actions/upload-artifact@v4
+        with:
+          name: launcher-windows-amd64.sha1
+          path: ZenithProxy-launcher-windows-amd64.sha1
 
   build-linux-aarch64:
     runs-on: 'ubuntu-latest'
@@ -157,6 +196,7 @@ jobs:
   release-artifacts:
     needs:
       - build-matrix
+      - build-windows
       - build-linux-aarch64
       - package-python
     runs-on: ubuntu-latest
@@ -170,6 +210,12 @@ jobs:
       - name: Compile Hashes
         run: |
           cat artifacts/*.sha1 > hashes.txt
+
+      - name: Upload hashes.txt
+        uses: actions/upload-artifact@v4
+        with:
+          name: hashes
+          path: hashes.txt
 
       - name: Publish Release Artifacts
         uses: ncipollo/release-action@v1

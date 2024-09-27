@@ -2,7 +2,6 @@ import hashlib
 import io
 import os
 import subprocess
-import sys
 import tempfile
 
 import launch_platform
@@ -18,7 +17,7 @@ def update_launcher_exec(config, api):
         return
     print("Checking for launcher update...")
     try:
-        is_pyinstaller = launch_platform.is_pyinstaller_bundle()
+        is_pyinstaller = launch_platform.is_pyinstaller_bundle() or launch_platform.is_nuitka_bundle()
         os_platform = launch_platform.get_platform_os()
         os_arch = launch_platform.get_platform_arch()
         launcher_asset_file_name = get_launcher_asset_zip_file_name(is_pyinstaller, os_platform, os_arch)
@@ -71,7 +70,7 @@ def get_launcher_asset_zip_file_name(is_pyinstaller, os_platform, os_arch):
 # The executable name we're currently running
 def get_current_launcher_executable_name(is_pyinstaller):
     if is_pyinstaller:
-        return os.path.basename(sys.executable)
+        return os.path.basename(launch_platform.executable_path())
     else:
         return "launcher-py.zip"  # could be anything really, we don't have a way to determine this correctly
 
