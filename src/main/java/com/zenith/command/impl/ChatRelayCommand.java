@@ -63,8 +63,9 @@ public class ChatRelayCommand extends Command {
                 if (CONFIG.discord.chatRelay.enable && CONFIG.discord.chatRelay.channelId.isEmpty()) {
                     c.getSource().getEmbed()
                         .title("Error")
-                        .description("Chat Relay channel must be set: `chatRelay channel <channelId>")
+                        .description("Chat Relay channel must be set: `chatRelay channel <channelId>`")
                         .errorColor();
+                    CONFIG.discord.chatRelay.enable = false;
                     return OK;
                 }
                 EXECUTOR.execute(this::restartDiscordBot);
