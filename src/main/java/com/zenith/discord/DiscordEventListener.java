@@ -175,7 +175,8 @@ public class DiscordEventListener {
         sendEmbedMessage(Embed.builder()
                              .title("Player Death")
                              .errorColor()
-                             .addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), false));
+                             .addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), false)
+                             .addField("Dimension", CACHE.getChunkCache().getCurrentDimension().name(), false));
     }
 
     public void handleSelfDeathMessageEvent(SelfDeathMessageEvent event) {
