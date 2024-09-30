@@ -70,9 +70,9 @@ dependencies {
     shade("org.slf4j:slf4j-api:2.0.16")
     shade("org.slf4j:jul-to-slf4j:2.0.16")
     shade("com.mojang:brigadier:1.2.9")
-    shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.17.2")
+    shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0")
     shade("com.github.rfresh2:SimpleEventBus:1.2")
-    shade("com.github.rfresh2.discord4j:discord4j-core:3.4.3.8") {
+    shade("com.github.rfresh2.discord4j:discord4j-core:3.4.3.9") {
         exclude(group = "io.netty")
     }
     shade("com.github.rfresh2:MCProtocolLib:1.21.0.10") {
@@ -115,7 +115,7 @@ dependencies {
     shade("org.jline:jline:3.27.0")
     shade("org.jline:jline-terminal-jni:3.27.0")
     shade("ar.com.hjg:pngj:2.1.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.1")
     val lombokVersion = "1.18.34"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
