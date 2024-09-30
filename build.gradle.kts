@@ -79,7 +79,9 @@ dependencies {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
     }
-    shade("net.raphimc:MinecraftAuth:4.1.0")
+    shade("net.raphimc:MinecraftAuth:4.1.1") {
+        exclude(group = "io.jsonwebtoken")
+    }
     val nettyVersion = "4.1.113.Final"
     shade("io.netty:netty-codec-haproxy:$nettyVersion")
     shade("io.netty:netty-codec-dns:$nettyVersion")
@@ -226,9 +228,6 @@ tasks {
             exclude(dependency("io.netty:netty-resolver-dns:.*"))
             exclude(dependency("org.cloudburstmc.math:api:.*"))
             exclude(dependency("org.cloudburstmc.math:immutable:.*"))
-            exclude(dependency("io.jsonwebtoken:jjwt-api:.*"))
-            exclude(dependency("io.jsonwebtoken:jjwt-gson:.*"))
-            exclude(dependency("io.jsonwebtoken:jjwt-impl:.*"))
             exclude(dependency("com.viaversion:viaversion:.*"))
             exclude(dependency("com.viaversion:viabackwards:.*"))
             exclude(dependency("net.raphimc:ViaLoader:.*"))
