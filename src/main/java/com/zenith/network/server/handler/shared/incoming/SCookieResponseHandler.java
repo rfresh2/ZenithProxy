@@ -24,6 +24,7 @@ public class SCookieResponseHandler implements PacketHandler<ServerboundCookieRe
                     EXECUTOR.execute(new UserAuthTask(session, null));
                 }
             }
+            return null;
         }
         SERVER_LOG.debug("Received unrequested cookie response: {}", packet.getKey());
         // shouldn't ever get here
