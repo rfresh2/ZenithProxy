@@ -21,7 +21,10 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
                 case MOVE_TO_HOTBAR_SLOT -> moveToHotbarSlot();
                 case DROP_ITEM -> dropItem();
                 // todo: implement the other action types
-                default -> null;
+                default -> {
+                    CLIENT_LOG.debug("[{}, {}, {}] Unhandled container action type", slotId, actionType, param);
+                    yield null;
+                }
             };
         } catch (final Exception e) {
             CLIENT_LOG.error("Error processing container click action: {}", this, e);
@@ -33,9 +36,15 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
         if (slotId == -999) return clickDropItem(); // special case for dropping items
         var mouseStack = CACHE.getPlayerCache().getInventoryCache().getMouseStack();
         ItemStack predictedMouseStack = Container.EMPTY_STACK;
-        if (!(param instanceof final ClickItemAction clickItemAction)) return null;
+        if (!(param instanceof final ClickItemAction clickItemAction)) {
+            CLIENT_LOG.debug("[{}, {}, {}] Invalid click item action", slotId, actionType, param);
+            return null;
+        }
         final ItemStack clickStack = CACHE.getPlayerCache().getPlayerInventory().get(slotId);
-        if (isStackEmpty(mouseStack) && isStackEmpty(clickStack)) return null;
+        if (isStackEmpty(mouseStack) && isStackEmpty(clickStack)) {
+            CLIENT_LOG.debug("[{}, {}, {}] Both mouse stack and click stack empty", slotId, actionType, param);
+            return null;
+        }
         final Int2ObjectMap<ItemStack> changedSlots = new Int2ObjectArrayMap<>();
 
         switch (clickItemAction) {
@@ -87,9 +96,15 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
      */
     private ServerboundContainerClickPacket clickDropItem() {
         var mouseStack = CACHE.getPlayerCache().getInventoryCache().getMouseStack();
-        if (isStackEmpty(mouseStack)) return null; // can't drop if mouse stack is empty
+        if (isStackEmpty(mouseStack)) {
+            CLIENT_LOG.debug("[{}, {}, {}] Can't drop empty mouse stack", slotId, actionType, param);
+            return null; // can't drop if mouse stack is empty
+        }
         ItemStack predictedMouseStack = Container.EMPTY_STACK;
-        if (!(param instanceof final ClickItemAction clickItemAction)) return null;
+        if (!(param instanceof final ClickItemAction clickItemAction)) {
+            CLIENT_LOG.debug("[{}, {}, {}] Not ClickItemAction param", slotId, actionType, param);
+            return null;
+        }
         predictedMouseStack = switch (clickItemAction) {
             case LEFT_CLICK -> // drop the entire stack from the mouse stack
                 Container.EMPTY_STACK;
@@ -111,17 +126,29 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
 
     private ServerboundContainerClickPacket moveToHotbarSlot() {
         var mouseStack = CACHE.getPlayerCache().getInventoryCache().getMouseStack();
-        if (!isStackEmpty(mouseStack)) return null; // can't swap if mouse stack is not empty
-        if (!(param instanceof MoveToHotbarAction moveToHotbarAction)) return null;
+        if (!isStackEmpty(mouseStack)) {
+            CLIENT_LOG.debug("[{}, {}, {}] Can't move to hotbar, mouse stack is not empty", slotId, actionType, param);
+            return null; // can't swap if mouse stack is not empty
+        }
+        if (!(param instanceof MoveToHotbarAction moveToHotbarAction)) {
+            CLIENT_LOG.debug("[{}, {}, {}] Not MoveToHotbarAction", slotId, actionType, param);
+            return null;
+        }
         final ItemStack clickStack = CACHE.getPlayerCache().getPlayerInventory().get(slotId);
-        if (isStackEmpty(clickStack)) return null; // can't swap if clickStack is empty
+        if (isStackEmpty(clickStack)) {
+            CLIENT_LOG.debug("[{}, {}, {}] Can't swap empty stack", slotId, actionType, param);
+            return null; // can't swap if clickStack is empty
+        }
         Int2ObjectMap<ItemStack> changedSlots = new Int2ObjectArrayMap<>();
         int hotBarSlot = -1;
         switch (moveToHotbarAction) {
             case SLOT_1, SLOT_2, SLOT_3, SLOT_4, SLOT_5, SLOT_6, SLOT_7, SLOT_8, SLOT_9 -> // swap the clickStack with the item in the hotbar slot
                 hotBarSlot = moveToHotbarAction.getId() + 36;
             case OFF_HAND -> hotBarSlot = 45;
-            default -> { return null; }
+            default -> {
+                CLIENT_LOG.debug("[{}, {}, {}] Unhandled action param", slotId, actionType, param);
+                return null;
+            }
         }
         final ItemStack swapStack = CACHE.getPlayerCache().getPlayerInventory().get(hotBarSlot);
         changedSlots.put(hotBarSlot, clickStack);
@@ -142,10 +169,19 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
 
     private ServerboundContainerClickPacket dropItem() {
         var mouseStack = CACHE.getPlayerCache().getInventoryCache().getMouseStack();
-        if (!isStackEmpty(mouseStack)) return null; // can't drop if mouse stack is not empty
-        if (!(param instanceof DropItemAction dropItemAction)) return null;
+        if (!isStackEmpty(mouseStack)) {
+            CLIENT_LOG.debug("[{}, {}, {}] Can't drop as mouse stack not empty", slotId, actionType, param);
+            return null; // can't drop if mouse stack is not empty
+        }
+        if (!(param instanceof DropItemAction dropItemAction)) {
+            CLIENT_LOG.debug("[{}, {}, {}] Not DropItemAction", slotId, actionType, param);
+            return null;
+        }
         final ItemStack clickStack = CACHE.getPlayerCache().getPlayerInventory().get(slotId);
-        if (isStackEmpty(clickStack)) return null; // can't drop if clickStack is empty
+        if (isStackEmpty(clickStack)) {
+            CLIENT_LOG.debug("[{}, {}, {}] Can't drop empty click stack", slotId, actionType, param);
+            return null; // can't drop if clickStack is empty
+        }
         final Int2ObjectMap<ItemStack> changedSlots = new Int2ObjectArrayMap<>();
 
         switch (dropItemAction) {
