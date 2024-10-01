@@ -193,7 +193,10 @@ public record ContainerClickAction(int slotId, ContainerActionType actionType, C
                         : new ItemStack(clickStack.getId(), clickStack.getAmount() - 1, clickStack.getDataComponents()));
             case DROP_SELECTED_STACK -> // drop the entire stack from the selected slot
                 changedSlots.put(slotId, Container.EMPTY_STACK);
-            default -> { return null; }
+            default -> {
+                CLIENT_LOG.debug("[{}, {}, {}] Unhandled drop item action", slotId, actionType, param);
+                return null;
+            }
         }
         return new ServerboundContainerClickPacket(
             0,
