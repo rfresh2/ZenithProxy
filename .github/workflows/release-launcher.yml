@@ -95,7 +95,6 @@ jobs:
           windows-icon-from-ico: src/launcher/icon.ico
           output-file: "launch"
           output-dir: "dist"
-          enable-plugins: "upx"
 
       - name: Create zip
         run: |
