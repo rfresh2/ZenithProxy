@@ -52,7 +52,7 @@ def launch_java(config):
         jar_command = "-jar " + config.launch_dir.replace("/", "\\") + "ZenithProxy.jar"
     else:
         jar_command = "-jar " + config.launch_dir + "ZenithProxy.jar"
-    run_script = f"{java_executable} {jvm_args} {jar_command}"
+    run_script = f"\"{java_executable}\" {jvm_args} {jar_command}"
     try:
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
