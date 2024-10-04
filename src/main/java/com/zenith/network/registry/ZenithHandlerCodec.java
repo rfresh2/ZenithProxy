@@ -174,6 +174,7 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ClientboundPingPacket.class, PingHandler.INSTANCE)
                 .registerInbound(ClientboundPlayerAbilitiesPacket.class, new PlayerAbilitiesHandler())
                 .registerInbound(ClientboundCustomPayloadPacket.class, CustomPayloadHandler.INSTANCE)
+                .registerInbound(ClientboundDisguisedChatPacket.class, new DisguisedChatHandler())
                 .registerInbound(ClientboundRecipePacket.class, new UnlockRecipeHandler())
                 .registerInbound(ClientboundSetPlayerTeamPacket.class, new TeamHandler())
                 .registerInbound(ClientboundSetObjectivePacket.class, new SetObjectiveHandler())
