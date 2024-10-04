@@ -129,6 +129,10 @@ public final class Config {
                 public boolean enterAlertMention = true;
                 public boolean leaveAlert = true;
                 public boolean logoutAlert = true;
+                public boolean enterWhisper = true;
+                public String enterWhisperMessage = "AAAAAAAAAAAAAAAAAAAAAAAA";
+                public int enterWhisperCooldownSeconds = 30;
+                public boolean enterWhisperWhilePlayerConnected = false;
                 public boolean replayRecording = false;
                 public ReplayRecordingMode replayRecordingMode = ReplayRecordingMode.ENEMY;
                 public int replayRecordingCooldownMins = 5;

@@ -16,9 +16,12 @@ import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
+import static com.mojang.brigadier.arguments.StringArgumentType.getString;
+import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.zenith.Shared.*;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
+import static com.zenith.discord.DiscordBot.escape;
 import static java.util.Arrays.asList;
 
 public class VisualRangeCommand extends Command {
@@ -41,17 +44,20 @@ public class VisualRangeCommand extends Command {
             To add players to the friends list see the `friends` command.
             """,
             asList(
-                        "on/off",
-                        "list",
-                        "enter on/off",
-                        "enter mention on/off",
-                        "leave on/off",
-                        "logout on/off",
-                        "ignoreFriends on/off",
-                        "replayRecording on/off",
-                        "replayRecording mode <enemy/all>",
-                        "replayRecording cooldown <minutes>"
-                ),
+                "on/off",
+                "list",
+                "enter on/off",
+                "enter mention on/off",
+                "enter whisper on/off",
+                "enter whisper message <message>",
+                "enter whisper cooldown <seconds>",
+                "leave on/off",
+                "logout on/off",
+                "ignoreFriends on/off",
+                "replayRecording on/off",
+                "replayRecording mode <enemy/all>",
+                "replayRecording cooldown <minutes>"
+            ),
             asList("vr")
         );
     }
@@ -112,7 +118,30 @@ public class VisualRangeCommand extends Command {
                             c.getSource().getEmbed()
                                 .title("VisualRange Enter Mentions " + toggleStrCaps(CONFIG.client.extra.visualRange.enterAlertMention));
                             return OK;
-                      }))))
+                      })))
+                      .then(literal("whisper")
+                                .then(argument("toggle", toggle()).executes(c -> {
+                                    CONFIG.client.extra.visualRange.enterWhisper = getToggle(c, "toggle");
+                                    c.getSource().getEmbed()
+                                        .title("VisualRange Enter Whisper " + toggleStrCaps(CONFIG.client.extra.visualRange.enterWhisper));
+                                    return OK;
+                                }))
+                                .then(literal("message")
+                                          .then(argument("message", greedyString()).executes(c -> {
+                                              var msg = getString(c, "message");
+                                              CONFIG.client.extra.visualRange.enterWhisperMessage = msg.substring(0, Math.min(msg.length(), 236));
+                                              c.getSource().getEmbed()
+                                                  .title("VisualRange Enter Whisper Message Set");
+                                              return OK;
+                                          })))
+                                .then(literal("cooldown")
+                                          .then(argument("seconds", integer(0)).executes(c -> {
+                                              CONFIG.client.extra.visualRange.enterWhisperCooldownSeconds = getInteger(c, "seconds");
+                                              MODULE.get(VisualRange.class).updateCooldown();
+                                              c.getSource().getEmbed()
+                                                  .title("VisualRange Enter Whisper Cooldown Set");
+                                              return OK;
+                                          })))))
             .then(literal("ignoreFriends")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.visualRange.ignoreFriends = getToggle(c, "toggle");
@@ -168,6 +197,9 @@ public class VisualRangeCommand extends Command {
             .addField("VisualRange", toggleStr(CONFIG.client.extra.visualRange.enabled), false)
             .addField("Enter Alerts", toggleStr(CONFIG.client.extra.visualRange.enterAlert), false)
             .addField("Enter Mentions", toggleStr(CONFIG.client.extra.visualRange.enterAlertMention), false)
+            .addField("Enter Whisper", toggleStr(CONFIG.client.extra.visualRange.enterWhisper), false)
+            .addField("Enter Whisper Message", escape(CONFIG.client.extra.visualRange.enterWhisperMessage), false)
+            .addField("Enter Whisper Cooldown", CONFIG.client.extra.visualRange.enterWhisperCooldownSeconds + "s", false)
             .addField("Ignore Friends", toggleStr(CONFIG.client.extra.visualRange.ignoreFriends), false)
             .addField("Leave Alerts", toggleStr(CONFIG.client.extra.visualRange.leaveAlert), false)
             .addField("Logout Alerts", toggleStr(CONFIG.client.extra.visualRange.logoutAlert), false)
