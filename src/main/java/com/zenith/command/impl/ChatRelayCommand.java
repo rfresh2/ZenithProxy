@@ -74,7 +74,7 @@ public class ChatRelayCommand extends Command {
                 return OK;
             }))
             .then(literal("channel").requires(Command::validateAccountOwner).then(argument("channelId", wordWithChars()).executes(c -> {
-                String channelId = getString(c, "channel ID");
+                String channelId = getString(c, "channelId");
                 if (CHANNEL_ID_PATTERN.matcher(channelId).matches())
                     channelId = channelId.substring(2, channelId.length() - 1);
                 try {
