@@ -137,7 +137,6 @@ public class VisualRangeCommand extends Command {
                                 .then(literal("cooldown")
                                           .then(argument("seconds", integer(0)).executes(c -> {
                                               CONFIG.client.extra.visualRange.enterWhisperCooldownSeconds = getInteger(c, "seconds");
-                                              MODULE.get(VisualRange.class).updateCooldown();
                                               c.getSource().getEmbed()
                                                   .title("VisualRange Enter Whisper Cooldown Set");
                                               return OK;

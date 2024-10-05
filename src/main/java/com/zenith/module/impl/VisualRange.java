@@ -1,7 +1,5 @@
 package com.zenith.module.impl;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.module.VisualRangeEnterEvent;
@@ -15,19 +13,17 @@ import com.zenith.util.Config.Client.Extra.ReplayMod.AutoRecordMode;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Instant;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static java.util.Objects.isNull;
 
 public class VisualRange extends Module {
 
     private @Nullable ScheduledFuture<?> visualRangeLeaveRecordingStopFuture;
-    private Cache<String, String> whisperedPlayersCache = CacheBuilder.newBuilder()
-        .expireAfterWrite(CONFIG.client.extra.visualRange.enterWhisperCooldownSeconds, TimeUnit.SECONDS)
-        .build();
+    private Instant lastWhisper = Instant.EPOCH;
 
     @Override
     public void subscribeEvents() {
@@ -43,12 +39,6 @@ public class VisualRange extends Module {
     @Override
     public boolean shouldBeEnabled() {
         return CONFIG.client.extra.visualRange.enabled;
-    }
-
-    public void updateCooldown() {
-        whisperedPlayersCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(CONFIG.client.extra.visualRange.enterWhisperCooldownSeconds, TimeUnit.SECONDS)
-            .build();
     }
 
     public void handleNewPlayerInVisualRangeEvent(NewPlayerInVisualRangeEvent event) {
@@ -74,10 +64,9 @@ public class VisualRange extends Module {
     public void enterWhisperHandler(VisualRangeEnterEvent event) {
         if (!CONFIG.client.extra.visualRange.enterWhisper) return;
         if (CONFIG.client.extra.visualRange.enterWhisperWhilePlayerConnected && Proxy.getInstance().hasActivePlayer()) return;
-        if (isNull(whisperedPlayersCache.getIfPresent(event.playerEntry().getName()))) {
-            whisperedPlayersCache.put(event.playerEntry().getName(), event.playerEntry().getName());
-            sendClientPacketAsync(new ServerboundChatCommandPacket("w " + event.playerEntry().getName() + " " + CONFIG.client.extra.visualRange.enterWhisperMessage));
-        }
+        if (Instant.now().minusSeconds(CONFIG.client.extra.visualRange.enterWhisperCooldownSeconds).isBefore(lastWhisper)) return;
+        lastWhisper = Instant.now();
+        sendClientPacketAsync(new ServerboundChatCommandPacket("w " + event.playerEntry().getName() + " " + CONFIG.client.extra.visualRange.enterWhisperMessage));
     }
 
     public void handlePlayerLeftVisualRangeEvent(final PlayerLeftVisualRangeEvent event) {
