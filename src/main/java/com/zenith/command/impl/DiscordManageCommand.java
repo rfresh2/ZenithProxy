@@ -42,6 +42,7 @@ public class DiscordManageCommand extends Command {
                 "channel <channel ID>",
                 "token <token>",
                 "role <role ID>",
+                "relayChannel <channelId>",
                 "manageProfileImage on/off",
                 "manageNickname on/off",
                 "manageDescription on/off",
@@ -100,8 +101,8 @@ public class DiscordManageCommand extends Command {
                           return 1;
                       })))
             .then(literal("relayChannel")
-                      .then(argument("channel ID", wordWithChars()).executes(c -> {
-                          String channelId = getString(c, "channel ID");
+                      .then(argument("channelId", wordWithChars()).executes(c -> {
+                          String channelId = getString(c, "channelId");
                           if (CHANNEL_ID_PATTERN.matcher(channelId).matches())
                               channelId = channelId.substring(2, channelId.length() - 1);
                           try {

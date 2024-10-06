@@ -8,6 +8,7 @@ import com.zenith.command.brigadier.CommandContext;
 import com.zenith.command.brigadier.CommandSource;
 import com.zenith.discord.Embed;
 import discord4j.common.util.Snowflake;
+import discord4j.core.util.MentionUtil;
 
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -179,6 +180,7 @@ public class ChatRelayCommand extends Command {
     public void postPopulate(final Embed builder) {
         builder
             .addField("Chat Relay", toggleStr(CONFIG.discord.chatRelay.enable), false)
+            .addField("Channel", getChannelMention(CONFIG.discord.chatRelay.channelId), false)
             .addField("Connection Messages", toggleStr(CONFIG.discord.chatRelay.connectionMessages), false)
             .addField("Public Chats", toggleStr(CONFIG.discord.chatRelay.publicChats), false)
             .addField("Whispers", toggleStr(CONFIG.discord.chatRelay.whispers), false)
@@ -190,6 +192,16 @@ public class ChatRelayCommand extends Command {
             .addField("Ignore Queue", toggleStr(CONFIG.discord.chatRelay.ignoreQueue), false)
             .addField("Send Messages", toggleStr(CONFIG.discord.chatRelay.sendMessages), false)
             .primaryColor();
+    }
+
+    private String getChannelMention(final String channelId) {
+        try {
+            return MentionUtil.forChannel(Snowflake.of(channelId));
+        } catch (final Exception e) {
+            // these channels might be unset on purpose
+            DEFAULT_LOG.debug("Invalid channel ID: {}", channelId, e);
+            return "";
+        }
     }
 
     private void restartDiscordBot() {
