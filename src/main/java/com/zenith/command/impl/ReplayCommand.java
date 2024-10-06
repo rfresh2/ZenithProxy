@@ -43,7 +43,7 @@ public class ReplayCommand extends Command {
                 "stop",
                 "discordUpload on/off",
                 "maxRecordingTime <minutes>",
-                "autoRecordMode <off/proxyConnected/playerConnected>"
+                "autoRecordMode <off/proxyConnected/playerConnected/health>"
             )
         );
     }

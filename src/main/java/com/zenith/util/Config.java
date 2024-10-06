@@ -129,7 +129,7 @@ public final class Config {
                 public boolean enterAlertMention = true;
                 public boolean leaveAlert = true;
                 public boolean logoutAlert = true;
-                public boolean enterWhisper = true;
+                public boolean enterWhisper = false;
                 public String enterWhisperMessage = "AAAAAAAAAAAAAAAAAAAAAAAA";
                 public int enterWhisperCooldownSeconds = 30;
                 public boolean enterWhisperWhilePlayerConnected = false;
@@ -249,12 +249,14 @@ public final class Config {
                 public boolean sendRecordingsToDiscord = false;
                 public int maxRecordingTimeMins = 0;
                 public AutoRecordMode autoRecordMode = AutoRecordMode.NONE;
+                public int replayRecordingHealthThreshold = 5;
 
                 @Getter
                 public enum AutoRecordMode {
                     NONE("off"),
                     PROXY_CONNECTED("proxyConnected"),
-                    PLAYER_CONNECTED("playerConnected");
+                    PLAYER_CONNECTED("playerConnected"),
+                    HEALTH("health");
                     private final String name;
 
                     AutoRecordMode(String name) {

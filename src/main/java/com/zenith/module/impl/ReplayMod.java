@@ -1,6 +1,7 @@
 package com.zenith.module.impl;
 
 import com.zenith.event.module.ClientTickEvent;
+import com.zenith.event.module.PlayerHealthChangedEvent;
 import com.zenith.event.module.ReplayStartedEvent;
 import com.zenith.event.module.ReplayStoppedEvent;
 import com.zenith.event.proxy.ConnectEvent;
@@ -16,9 +17,13 @@ import com.zenith.util.Config.Client.Extra.ReplayMod.AutoRecordMode;
 import org.geysermc.mcprotocollib.network.Session;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftPacket;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BooleanSupplier;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
@@ -28,6 +33,7 @@ public class ReplayMod extends Module {
     private final Path replayDirectory = Paths.get("replays");
     private ReplayRecording replayRecording = new ReplayRecording(replayDirectory);
     private final ReplayModPersistentEventListener persistentEventListener = new ReplayModPersistentEventListener(this);
+    private @Nullable ScheduledFuture<?> delayedRecordingStopFuture;
 
     public ReplayMod() {
         super();
@@ -59,6 +65,33 @@ public class ReplayMod extends Module {
     public void onDisable() {
         ZenithHandlerCodec.CLIENT_REGISTRY.unregister(codec);
         stopRecording();
+    }
+
+    public synchronized void startDelayedRecordingStop(int delaySeconds, BooleanSupplier condition) {
+        cancelDelayedRecordingStop();
+        scheduleRecordingStop(delaySeconds, condition);
+    }
+
+    private synchronized void cancelDelayedRecordingStop() {
+        if (delayedRecordingStopFuture != null && !delayedRecordingStopFuture.isDone()) {
+            debug("Cancelling delayed recording stop");
+            delayedRecordingStopFuture.cancel(false);
+            delayedRecordingStopFuture = null;
+        }
+    }
+
+    private synchronized void scheduleRecordingStop(int delaySeconds, BooleanSupplier condition) {
+        delayedRecordingStopFuture = EXECUTOR.schedule(() -> disableReplayRecordingConditional(condition), delaySeconds, TimeUnit.SECONDS);
+    }
+
+    private void disableReplayRecordingConditional(BooleanSupplier condition) {
+        if (!isEnabled()) return;
+        if (condition.getAsBoolean()) {
+            info("Delayed recording stop condition met");
+            disable();
+        } else {
+            scheduleRecordingStop(30, condition);
+        }
     }
 
     public void onClientTick(final ClientTickEvent event) {
@@ -95,6 +128,7 @@ public class ReplayMod extends Module {
      * Consumers should call enable/disable instead of start/stop recording
      */
     private void startRecording() {
+        cancelDelayedRecordingStop();
         info("Starting recording");
         this.replayRecording = new ReplayRecording(replayDirectory);
         try {
@@ -122,11 +156,20 @@ public class ReplayMod extends Module {
             EVENT_BUS.postAsync(new ReplayStoppedEvent(null));
         }
         inGameAlert("&cRecording stopped");
+        cancelDelayedRecordingStop();
     }
 
     public void handleProxyClientDisconnectedEvent(final ProxyClientDisconnectedEvent event) {
         if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PLAYER_CONNECTED) {
             info("Stopping recording due to player disconnect");
+            disable();
+        }
+    }
+
+    public void handleHealthChangeEvent(PlayerHealthChangedEvent event) {
+        if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.HEALTH
+            && event.newHealth() > CONFIG.client.extra.replayMod.replayRecordingHealthThreshold) {
+            info("Stopping recording due to health above: {}", CONFIG.client.extra.replayMod.replayRecordingHealthThreshold);
             disable();
         }
     }
@@ -145,19 +188,37 @@ public class ReplayMod extends Module {
             EVENT_BUS.subscribe(
                 this,
                 of(ProxyClientConnectedEvent.class, this::handleProxyClientConnectedEvent),
-                of(ConnectEvent.class, this::handleConnectEvent));
+                of(ConnectEvent.class, this::handleConnectEvent),
+                of(PlayerHealthChangedEvent.class, this::handleHealthChangeEvent)
+            );
         }
 
         public void handleProxyClientConnectedEvent(final ProxyClientConnectedEvent event) {
+            if (instance.isEnabled()) return;
             if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PLAYER_CONNECTED) {
                 instance.info("Starting recording because player connected");
-                MODULE.get(ReplayMod.class).enable();
+                instance.enable();
             }
         }
 
         public void handleConnectEvent(ConnectEvent event) {
+            if (instance.isEnabled()) return;
             if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PROXY_CONNECTED) {
-                MODULE.get(ReplayMod.class).enable();
+                instance.info("Starting recording because proxy connected");
+                instance.enable();
+            }
+        }
+
+        public void handleHealthChangeEvent(PlayerHealthChangedEvent event) {
+            if (instance.isEnabled()) return;
+            if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.HEALTH
+                && event.newHealth() <= CONFIG.client.extra.replayMod.replayRecordingHealthThreshold) {
+                instance.info("Starting recording because health is below {}", CONFIG.client.extra.replayMod.replayRecordingHealthThreshold);
+                instance.enable();
+                instance.startDelayedRecordingStop(
+                    30,
+                    () -> CACHE.getPlayerCache().getThePlayer().getHealth() > CONFIG.client.extra.replayMod.replayRecordingHealthThreshold
+                );
             }
         }
     }
