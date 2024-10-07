@@ -43,7 +43,8 @@ public class ReplayCommand extends Command {
                 "stop",
                 "discordUpload on/off",
                 "maxRecordingTime <minutes>",
-                "autoRecordMode <off/proxyConnected/playerConnected/health>"
+                "autoRecord mode <off/proxyConnected/playerConnected/health>",
+                "autoRecord health <integer>"
             )
         );
     }
@@ -89,23 +90,31 @@ public class ReplayCommand extends Command {
                     .title("Max Recording Time Set");
                 return 1;
             })))
-            .then(literal("autoRecordMode").then(argument("mode", string()).executes(c -> {
-                var modeStr = getString(c, "mode").toLowerCase();
-                var foundMode = Arrays.stream(AutoRecordMode.values())
-                    .filter(mode -> mode.getName().toLowerCase().equals(modeStr))
-                    .findFirst();
-                if (foundMode.isEmpty()) {
-                    c.getSource().getEmbed()
-                        .title("Invalid Mode")
-                        .description("Available Modes: " + Arrays.toString(AutoRecordMode.values()));
-                    return 1;
-                } else {
-                    CONFIG.client.extra.replayMod.autoRecordMode = foundMode.get();
-                    c.getSource().getEmbed()
-                        .title("Auto Record Mode Set");
-                }
-                return 1;
-            })));
+            .then(literal("autoRecord")
+                      .then(literal("mode").then(argument("mode", string()).executes(c -> {
+                          var modeStr = getString(c, "mode").toLowerCase();
+                          var foundMode = Arrays.stream(AutoRecordMode.values())
+                              .filter(mode -> mode.getName().toLowerCase().equals(modeStr))
+                              .findFirst();
+                          if (foundMode.isEmpty()) {
+                              c.getSource().getEmbed()
+                                  .title("Invalid Mode")
+                                  .description("Available Modes: " + Arrays.toString(AutoRecordMode.values()));
+                              return 1;
+                          } else {
+                              MODULE.get(ReplayMod.class).disable();
+                              CONFIG.client.extra.replayMod.autoRecordMode = foundMode.get();
+                              c.getSource().getEmbed()
+                                  .title("Auto Record Mode Set");
+                          }
+                          return 1;
+                      })))
+                      .then(literal("health").then(argument("health", integer(0, 20)).executes(c -> {
+                          CONFIG.client.extra.replayMod.replayRecordingHealthThreshold = getInteger(c, "health");
+                          c.getSource().getEmbed()
+                              .title("Auto Record Health Set");
+                          return 1;
+                      }))));
     }
 
     @Override
