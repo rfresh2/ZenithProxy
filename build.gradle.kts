@@ -98,7 +98,7 @@ dependencies {
     shade("de.themoep:minedown-adventure:1.7.3-SNAPSHOT")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
-    shade("org.redisson:redisson:3.36.0") {
+    shade("org.redisson:redisson:3.37.0") {
         exclude(group = "io.netty")
     }
     val fastutilVersion = "8.5.14"
@@ -274,9 +274,7 @@ graalvmNative {
                 "-R:MaxHeapSize=200m",
                 "-march=x86-64-v3",
                 "--gc=serial",
-                "-J-XX:MaxRAMPercentage=90",
-                "--initialize-at-build-time=org.redisson.misc.BiHashMap",
-                "--initialize-at-build-time=org.redisson.liveobject.core.RedissonObjectBuilder\$CodecMethodRef"
+                "-J-XX:MaxRAMPercentage=90"
             )
             val pgoPath = System.getenv("GRAALVM_PGO_PATH")
             if (pgoPath != null) {
