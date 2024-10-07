@@ -5,7 +5,7 @@ import java.nio.file.Files
 plugins {
     java
     id("org.graalvm.buildtools.native") version "0.10.3"
-    id("com.gradleup.shadow") version "8.3.2"
+    id("com.gradleup.shadow") version "8.3.3"
     `maven-publish`
 }
 
@@ -82,7 +82,7 @@ dependencies {
     shade("net.raphimc:MinecraftAuth:4.1.1") {
         exclude(group = "io.jsonwebtoken")
     }
-    val nettyVersion = "4.1.113.Final"
+    val nettyVersion = "4.1.114.Final"
     shade("io.netty:netty-codec-haproxy:$nettyVersion")
     shade("io.netty:netty-codec-dns:$nettyVersion")
     shade("io.netty:netty-codec-http2:$nettyVersion")
@@ -115,7 +115,7 @@ dependencies {
     shade("org.jline:jline:3.27.0")
     shade("org.jline:jline-terminal-jni:3.27.0")
     shade("ar.com.hjg:pngj:2.1.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.2")
     val lombokVersion = "1.18.34"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
