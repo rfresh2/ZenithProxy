@@ -98,7 +98,13 @@ public class DebugCommand extends Command {
                                     c.getSource().getEmbed()
                                         .title("Packet Log Filter Set: " + CONFIG.debug.packetLog.packetFilter);
                                     return OK;
-                                }))))
+                                })))
+                      .then(literal("logLevelDebug").then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.debug.packetLog.logLevelDebug = getToggle(c, "toggle");
+                            c.getSource().getEmbed()
+                                .title("Log Level Debug " + toggleStrCaps(CONFIG.debug.packetLog.logLevelDebug));
+                          return OK;
+                      }))))
             .then(literal("sync")
                         .then(literal("inventory").executes(c -> {
                             PlayerCache.sync();

@@ -372,6 +372,7 @@ public final class Config {
 
         public static final class PacketLog {
             public boolean enabled = false;
+            public boolean logLevelDebug = true;
             public PacketLogConfig clientPacketLog = new PacketLogConfig();
             public PacketLogConfig serverPacketLog = new PacketLogConfig();
             // todo: could be more flexible, but this can cover the most basic use cases

@@ -6,6 +6,8 @@ import org.geysermc.mcprotocollib.network.Session;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.slf4j.Logger;
+import org.slf4j.event.Level;
+import org.slf4j.spi.LoggingEventBuilder;
 
 import java.util.EnumMap;
 import java.util.function.Supplier;
@@ -17,6 +19,7 @@ class PacketLogPacketHandlerCodec extends PacketHandlerCodec {
     private final Supplier<PacketLogConfig> packetLogConfigSupplier;
     private PacketLogConfig packetLogConfig;
     private final Logger logger;
+    private final LoggingEventBuilder log;
 
     public PacketLogPacketHandlerCodec(
         final String id,
@@ -25,6 +28,7 @@ class PacketLogPacketHandlerCodec extends PacketHandlerCodec {
     ) {
         super(Integer.MAX_VALUE, id, new EnumMap<>(ProtocolState.class), (session) -> CONFIG.debug.packetLog.enabled);
         this.logger = logger;
+        this.log = logger.atLevel(CONFIG.debug.packetLog.logLevelDebug ? Level.DEBUG : Level.INFO);
         this.packetLogConfigSupplier = packetLogConfigSupplier;
     }
 
@@ -37,21 +41,21 @@ class PacketLogPacketHandlerCodec extends PacketHandlerCodec {
     @Override
     public <P extends Packet, S extends Session> P handleInbound(@NonNull P packet, @NonNull S session) {
         if (getPacketLogConfig().received && shouldLog(packet))
-            logger.debug("[{}] [{}] Received: {}", System.currentTimeMillis(), session.getClass().getSimpleName(), getPacketLogConfig().receivedBody ? packet : packet.getClass().getSimpleName());
+            log.log("[{}] [{}] Received: {}", System.currentTimeMillis(), session.getClass().getSimpleName(), getPacketLogConfig().receivedBody ? packet : packet.getClass().getSimpleName());
         return packet;
     }
 
     @Override
     public <P extends Packet, S extends Session> P handleOutgoing(@NonNull P packet, @NonNull S session) {
         if (getPacketLogConfig().preSent && shouldLog(packet))
-            logger.debug("[{}] [{}] Sending: {}", System.currentTimeMillis(), session.getClass().getSimpleName(), getPacketLogConfig().preSentBody ? packet : packet.getClass().getSimpleName());
+            log.log("[{}] [{}] Sending: {}", System.currentTimeMillis(), session.getClass().getSimpleName(), getPacketLogConfig().preSentBody ? packet : packet.getClass().getSimpleName());
         return packet;
     }
 
     @Override
     public <P extends Packet, S extends Session> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
         if (getPacketLogConfig().postSent && shouldLog(packet))
-            logger.debug("[{}] [{}] Sent: {}", System.currentTimeMillis(), session.getClass().getSimpleName(), getPacketLogConfig().postSentBody ? packet : packet.getClass().getSimpleName());
+            log.log("[{}] [{}] Sent: {}", System.currentTimeMillis(), session.getClass().getSimpleName(), getPacketLogConfig().postSentBody ? packet : packet.getClass().getSimpleName());
     }
 
     private boolean shouldLog(Packet packet) {
