@@ -13,7 +13,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.github.rfresh2.EventConsumer.of;
-import static com.zenith.Shared.*;
+import static com.zenith.Shared.CLIENT_LOG;
+import static com.zenith.Shared.EVENT_BUS;
 import static java.util.Objects.nonNull;
 
 public class ClientTickManager {
@@ -55,9 +56,7 @@ public class ClientTickManager {
             CLIENT_LOG.debug("Starting Client Ticks");
             EVENT_BUS.post(ClientTickEvent.Starting.INSTANCE);
             var eventLoop = Proxy.getInstance().getClient().getClientEventLoop();
-            this.clientTickFuture = CONFIG.debug.clientTickFixedRate
-                ? eventLoop.scheduleAtFixedRate(tickRunnable, 0, 50, TimeUnit.MILLISECONDS)
-                : eventLoop.scheduleWithFixedDelay(tickRunnable, 0, 50, TimeUnit.MILLISECONDS);
+            this.clientTickFuture = eventLoop.scheduleWithFixedDelay(tickRunnable, 0, 50, TimeUnit.MILLISECONDS);
         }
     }
 

@@ -364,15 +364,11 @@ public final class Config {
         public final PacketLog packetLog = new PacketLog();
         public final Server server = new Server();
         public boolean clearOldLogs = false;
-        public boolean sendChunksBeforePlayerSpawn = false;
         public boolean binaryNbtComponentSerializer = true;
         public boolean kickDisconnect = false;
-        public boolean kickDisconnectInventoryMode = false;
         public boolean resyncTeleports = true;
         public boolean ncpStrictInventory = false;
-        public boolean clientTickFixedRate = false;
         public boolean debugLogs = false;
-        public boolean blockProtocolSwitchRaceCondition = true;
 
         public static final class PacketLog {
             public boolean enabled = false;

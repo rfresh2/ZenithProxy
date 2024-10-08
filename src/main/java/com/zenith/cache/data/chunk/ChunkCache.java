@@ -34,7 +34,6 @@ import org.geysermc.mcprotocollib.protocol.data.game.level.notify.RainStrengthVa
 import org.geysermc.mcprotocollib.protocol.data.game.level.notify.ThunderStrengthValue;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundCustomPayloadPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.*;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.border.ClientboundInitializeBorderPacket;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +42,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -355,13 +353,6 @@ public class ChunkCache implements CachedData {
                     chunk.lightUpdateData));
             }
             consumer.accept(new ClientboundChunkBatchFinishedPacket(this.cache.size()));
-            if (CONFIG.debug.sendChunksBeforePlayerSpawn) {
-                // todo: this will not handle spectator player cache pos correctly, but we don't have
-                //  enough context here to know if this is the spectator or not
-                //  at worst, the spectator pos is 1 block off from where we should spawn them anyway
-                var player = CACHE.getPlayerCache();
-                consumer.accept(new ClientboundPlayerPositionPacket(player.getX(), player.getY(), player.getZ(), player.getYaw(), player.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
-            }
         } catch (Exception e) {
             CLIENT_LOG.error("Error getting ChunkData packets from cache", e);
         }

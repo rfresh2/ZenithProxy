@@ -47,7 +47,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import static com.zenith.Shared.CLIENT_LOG;
-import static com.zenith.Shared.CONFIG;
 import static java.util.Objects.nonNull;
 import static org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot.*;
 
@@ -110,8 +109,7 @@ public class PlayerCache implements CachedData {
             actionId.get(),
             container.getContents().toArray(new ItemStack[0]),
             null));
-        if (!CONFIG.debug.sendChunksBeforePlayerSpawn)
-            consumer.accept(new ClientboundPlayerPositionPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
+        consumer.accept(new ClientboundPlayerPositionPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
         consumer.accept(new ClientboundSetDefaultSpawnPositionPacket(spawnPosition.getX(), spawnPosition.getY(), spawnPosition.getZ(), 0.0f));
         consumer.accept(new ClientboundSetCarriedItemPacket(heldItemSlot));
     }

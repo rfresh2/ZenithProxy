@@ -150,7 +150,7 @@ public class ServerSession extends TcpServerSession {
 
     @Override
     public Packet callPacketSending(Packet packet) {
-        if (CONFIG.debug.blockProtocolSwitchRaceCondition && blockProtocolSwitchPacketSendingRaceCondition(packet)) return null;
+        if (blockProtocolSwitchPacketSendingRaceCondition(packet)) return null;
         try {
             return ZenithHandlerCodec.SERVER_REGISTRY.handleOutgoing(packet, this);
         } catch (final Exception e) {
