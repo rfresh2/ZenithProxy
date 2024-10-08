@@ -3,8 +3,10 @@ package com.zenith.feature.queue.mcping.data;
 import com.google.gson.annotations.SerializedName;
 import com.zenith.feature.queue.mcping.rawData.ExtraDescription;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class ExtraResponse extends MCResponse {
 
     @SerializedName("description")

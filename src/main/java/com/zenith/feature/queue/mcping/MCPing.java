@@ -31,7 +31,6 @@ public class MCPing {
     public static final int PROTOCOL_VERSION_DISCOVERY = -1;
     private static final String IP_REGEX = "\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b";
     private static final EventLoopGroup EVENT_LOOP_GROUP = new NioEventLoopGroup(1, new ThreadFactoryBuilder().setNameFormat("MCPing-%d").build());
-    private static final Class<NioDatagramChannel> DATAGRAM_CHANNEL_CLASS = NioDatagramChannel.class;
 
     public int getProtocolVersion(String hostname, int port, int timeout, boolean resolveDns) throws IOException {
         final InetSocketAddress address;
@@ -58,7 +57,7 @@ public class MCPing {
         if(!hostname.matches(IP_REGEX) && !hostname.equalsIgnoreCase("localhost")) {
             AddressedEnvelope<DnsResponse, InetSocketAddress> envelope = null;
             try (DnsNameResolver resolver = new DnsNameResolverBuilder(EVENT_LOOP_GROUP.next())
-                .channelType(DATAGRAM_CHANNEL_CLASS)
+                .datagramChannelType(NioDatagramChannel.class)
                 .build()) {
                 envelope = resolver.query(new DefaultDnsQuestion(srvRecord, DnsRecordType.SRV)).get();
 
