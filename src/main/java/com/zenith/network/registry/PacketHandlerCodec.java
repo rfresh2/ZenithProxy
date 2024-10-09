@@ -31,15 +31,15 @@ public class PacketHandlerCodec {
     }
 
     public <P extends Packet, S extends Session> P handleInbound(@NonNull P packet, @NonNull S session) {
-        return getCodec(session.getPacketProtocol().getState()).handleInbound(packet, session);
+        return getCodec(session.getPacketProtocol().getInboundState()).handleInbound(packet, session);
     }
 
     public <P extends Packet, S extends Session> P handleOutgoing(@NonNull P packet, @NonNull S session) {
-        return getCodec(session.getPacketProtocol().getState()).handleOutgoing(packet, session);
+        return getCodec(session.getPacketProtocol().getOutboundState()).handleOutgoing(packet, session);
     }
 
     public <P extends Packet, S extends Session> void handlePostOutgoing(@NonNull P packet, @NonNull S session) {
-        getCodec(session.getPacketProtocol().getState()).handlePostOutgoing(packet, session);
+        getCodec(session.getPacketProtocol().getOutboundState()).handlePostOutgoing(packet, session);
     }
 
     @Getter

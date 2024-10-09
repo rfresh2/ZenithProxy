@@ -24,7 +24,7 @@ public class ClientPacketPingTask implements Runnable {
     public void run() {
         if (CONFIG.client.ping.mode != Config.Client.Ping.Mode.PACKET) return;
         if (session.isDisconnected()) return;
-        if (session.getPacketProtocol().getState() == ProtocolState.GAME) {
+        if (session.getPacketProtocol().getOutboundState() == ProtocolState.GAME) {
             var id = System.currentTimeMillis();
             try {
                 session.send(new ServerboundPingRequestPacket(id), f -> {

@@ -11,7 +11,7 @@ import static com.zenith.Shared.CACHE;
 public class PostOutgoingConfigurationAckHandler implements PostOutgoingPacketHandler<ServerboundConfigurationAcknowledgedPacket, ClientSession> {
     @Override
     public void accept(final ServerboundConfigurationAcknowledgedPacket packet, final ClientSession session) {
-        session.getPacketProtocol().setState(ProtocolState.CONFIGURATION); // GAME -> CONFIGURATION
+        session.getPacketProtocol().setOutboundState(ProtocolState.CONFIGURATION); // GAME -> CONFIGURATION
         CACHE.reset(CacheResetType.PROTOCOL_SWITCH);
     }
 }

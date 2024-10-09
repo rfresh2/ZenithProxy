@@ -1,6 +1,7 @@
 package com.zenith.network;
 
 import com.zenith.network.server.ServerSession;
+import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundKeepAlivePacket;
 
 import java.util.concurrent.TimeUnit;
@@ -19,7 +20,10 @@ public class KeepAliveTask implements Runnable {
         if (this.session.isConnected()) {
             session.setLastPingTime(System.currentTimeMillis());
             session.setLastPingId((int) session.getLastPingTime());
-            this.session.sendAsync(new ClientboundKeepAlivePacket(session.getLastPingId()));
+            var state = session.getPacketProtocol().getOutboundState();
+            if (state == ProtocolState.CONFIGURATION || state == ProtocolState.GAME) {
+                this.session.sendAsync(new ClientboundKeepAlivePacket(session.getLastPingId()));
+            }
             EXECUTOR.schedule(this, 2L, TimeUnit.SECONDS);
         }
     }

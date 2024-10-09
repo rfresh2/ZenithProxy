@@ -6,7 +6,6 @@ import com.viaversion.viaversion.connection.UserConnectionImpl;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import com.zenith.Proxy;
 import com.zenith.util.Wait;
-import com.zenith.via.handler.ZViaProtocolStateHandler;
 import io.netty.channel.Channel;
 import net.raphimc.vialoader.ViaLoader;
 import net.raphimc.vialoader.impl.platform.ViaBackwardsPlatformImpl;
@@ -64,8 +63,7 @@ public class ZenithViaInitializer {
             init();
             UserConnectionImpl userConnection = new UserConnectionImpl(channel, true);
             new ProtocolPipelineImpl(userConnection);
-            channel.pipeline().addBefore(TcpPacketCodec.ID, ZViaProtocolStateHandler.ID, new ZViaProtocolStateHandler(client));
-            channel.pipeline().addBefore(ZViaProtocolStateHandler.ID, VLPipeline.VIA_CODEC_NAME, new ViaCodec(userConnection));
+            channel.pipeline().addBefore(TcpPacketCodec.ID, VLPipeline.VIA_CODEC_NAME, new ViaCodec(userConnection));
         }
     }
 

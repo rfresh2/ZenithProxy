@@ -1,5 +1,7 @@
 package com.zenith.network.server;
 
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.zenith.Proxy;
 import com.zenith.cache.data.PlayerCache;
 import com.zenith.cache.data.ServerProfileCache;
@@ -90,7 +92,6 @@ public class ServerSession extends TcpServerSession {
     // any subsequent configurations should pass through to client
     protected boolean isConfigured = false;
     // cancel outbound packets until we have received the protocol switch ack
-    protected boolean awaitingProtocolSwitch = false;
     protected boolean allowSpectatorServerPlayerPosRotate = true;
     // allow spectator to set their camera to client
     // need to persist state to allow them in and out of this
@@ -137,7 +138,7 @@ public class ServerSession extends TcpServerSession {
     public void callPacketReceived(Packet packet) {
         try {
             Packet p = packet;
-            var state = getPacketProtocol().getState(); // storing this before handlers might mutate it on the session
+            var state = getPacketProtocol().getInboundState(); // storing this before handlers might mutate it on the session
             p = ZenithHandlerCodec.SERVER_REGISTRY.handleInbound(p, this);
             if (p != null && !isSpectator() && (state == ProtocolState.GAME || state == ProtocolState.CONFIGURATION)) {
                 if (state == ProtocolState.CONFIGURATION && !isConfigured()) return;
@@ -150,37 +151,12 @@ public class ServerSession extends TcpServerSession {
 
     @Override
     public Packet callPacketSending(Packet packet) {
-        if (blockProtocolSwitchPacketSendingRaceCondition(packet)) return null;
         try {
             return ZenithHandlerCodec.SERVER_REGISTRY.handleOutgoing(packet, this);
         } catch (final Exception e) {
             SERVER_LOG.error("Failed handling packet sending: {}", packet.getClass().getSimpleName(), e);
         }
         return packet;
-    }
-
-    private boolean blockProtocolSwitchPacketSendingRaceCondition(Packet packet) {
-        if (awaitingProtocolSwitch) {
-            /**
-             * Problem: race conditions during GAME -> CONFIGURATION -> GAME from velocity server switches
-             *
-             * MCPL has a single variable for the protocol state
-             * The state is not switched until we receive configuration ACK back from the client
-             * in-between the time the server sends a start configuration until we receive the ack we can still
-             * send GAME packets which will cause the client to disconnect
-             *
-             * Its possible there's race conditions in other protocol switches as well
-             */
-
-            // re-queue packet onto event loop
-            // if the packet does not match the dest protocol state it will be cancelled by the packet error handler eventually
-            sendAsync(packet);
-            // other options:
-            //  blackhole the packet
-            //  introduce a packet queue to preserve order
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -266,9 +242,9 @@ public class ServerSession extends TcpServerSession {
     private @Nullable Packet getDisconnectPacket(@Nullable final Component reason) {
         if (reason == null) return null;
         MinecraftProtocol protocol = getPacketProtocol();
-        if (protocol.getState() == ProtocolState.LOGIN) {
+        if (protocol.getOutboundState() == ProtocolState.LOGIN) {
             return new ClientboundLoginDisconnectPacket(reason);
-        } else if (protocol.getState() == ProtocolState.GAME) {
+        } else if (protocol.getOutboundState() == ProtocolState.GAME) {
             return new ClientboundDisconnectPacket(reason);
         }
         return null;
@@ -378,10 +354,20 @@ public class ServerSession extends TcpServerSession {
         SERVER_LOG.debug("Synced Team members: {} for {}", currentTeamMembers, this.profileCache.getProfile().getName());
     }
 
+    public boolean canTransfer() {
+        if (CONFIG.server.viaversion.enabled) {
+            var viaClientProtocolVersion = Via.getManager().getConnectionManager().getConnectedClients().values().stream()
+                .filter(client -> client.getChannel() == getChannel())
+                .map(con -> con.getProtocolInfo().protocolVersion())
+                .findFirst();
+            return !(viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get().olderThan(ProtocolVersion.v1_20_5));
+        }
+        return true;
+    }
+
     public void transfer(final String address, final int port) {
         cookieCache.getStoreSrcPacket(this::sendAsync);
         sendAsync(new ClientboundTransferPacket(address, port));
-        disconnect(Component.text("Transferring to " + address + ":" + port));
     }
 
     public void transferToSpectator(final String address, final int port) {

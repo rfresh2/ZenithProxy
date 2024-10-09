@@ -8,6 +8,6 @@ import org.geysermc.mcprotocollib.protocol.packet.configuration.serverbound.Serv
 public class PostOutgoingFinishConfigurationHandler implements PostOutgoingPacketHandler<ServerboundFinishConfigurationPacket, ClientSession> {
     @Override
     public void accept(final ServerboundFinishConfigurationPacket packet, final ClientSession session) {
-        session.getPacketProtocol().setState(ProtocolState.GAME); // CONFIGURATION -> GAME
+        session.getPacketProtocol().setOutboundState(ProtocolState.GAME); // CONFIGURATION -> GAME
     }
 }

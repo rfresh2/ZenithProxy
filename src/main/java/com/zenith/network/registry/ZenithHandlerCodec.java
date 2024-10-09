@@ -18,13 +18,11 @@ import com.zenith.network.server.handler.player.incoming.*;
 import com.zenith.network.server.handler.player.outgoing.ClientCommandsOutgoingHandler;
 import com.zenith.network.server.handler.player.outgoing.SystemChatOutgoingHandler;
 import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
-import com.zenith.network.server.handler.player.postoutgoing.StartConfigurationPostOutgoingHandler;
 import com.zenith.network.server.handler.shared.incoming.*;
 import com.zenith.network.server.handler.shared.outgoing.KeepAliveOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.SGameProfileOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
-import com.zenith.network.server.handler.shared.postoutgoing.LoginCompressionPostOutgoingHandler;
-import com.zenith.network.server.handler.shared.postoutgoing.PingPostOutgoingHandler;
+import com.zenith.network.server.handler.shared.postoutgoing.*;
 import com.zenith.network.server.handler.spectator.incoming.InteractEntitySpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.PlayerCommandSpectatorHandler;
 import com.zenith.network.server.handler.spectator.incoming.ServerChatSpectatorHandler;
@@ -85,7 +83,6 @@ public final class ZenithHandlerCodec {
             .setPriority(0)
             .state(ProtocolState.HANDSHAKE, PacketHandlerStateCodec.<ClientSession>builder()
                 .allowUnhandled(false)
-                .registerPostOutbound(ClientIntentionPacket.class, new PostOutgoingClientIntentionHandler())
                 .build())
             .state(ProtocolState.STATUS, PacketHandlerStateCodec.<ClientSession>builder()
                 .allowUnhandled(false)
@@ -101,7 +98,6 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ClientboundLoginDisconnectPacket.class, new LoginDisconnectHandler())
                 .registerInbound(ClientboundCustomQueryPacket.class, new CCustomQueryHandler())
                 .registerInbound(ClientboundCookieRequestPacket.class, new CCookieRequestHandler())
-                .registerPostOutbound(ServerboundLoginAcknowledgedPacket.class, new PostOutgoingLoginAckHandler())
                 .build())
             .state(ProtocolState.CONFIGURATION, PacketHandlerStateCodec.<ClientSession>builder()
                 .allowUnhandled(false)
@@ -239,7 +235,6 @@ public final class ZenithHandlerCodec {
                 .registerOutbound(ClientboundCommandsPacket.class, new ClientCommandsOutgoingHandler())
                 .registerOutbound(ClientboundSystemChatPacket.class, new SystemChatOutgoingHandler())
                 .registerPostOutbound(ClientboundLoginPacket.class, new LoginPostHandler())
-                .registerPostOutbound(ClientboundStartConfigurationPacket.class, new StartConfigurationPostOutgoingHandler())
                 .build())
             .build();
 
@@ -272,6 +267,7 @@ public final class ZenithHandlerCodec {
                 .registerOutbound(ClientboundContainerSetDataPacket.class, new ContainerSetDataSpectatorOutgoingHandler())
                 .registerOutbound(ClientboundPlayerAbilitiesPacket.class, new PlayerAbilitiesSpectatorOutgoingHandler())
                 .registerOutbound(ClientboundRespawnPacket.class, new RespawnSpectatorOutgoingPacket())
+                .registerOutbound(ClientboundStartConfigurationPacket.class, new StartConfigurationSpectatorOutgoingHandler())
                 .registerPostOutbound(ClientboundLoginPacket.class, new LoginSpectatorPostHandler())
                 .build())
             .build();
@@ -283,6 +279,7 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ServerboundFinishConfigurationPacket.class, new FinishConfigurationHandler())
                 .registerInbound(ServerboundKeepAlivePacket.class, KeepAliveHandler.INSTANCE)
                 .registerOutbound(ClientboundKeepAlivePacket.class, KeepAliveOutgoingHandler.INSTANCE)
+                .registerPostOutbound(ClientboundFinishConfigurationPacket.class, new ClientFinishConfigurationPostOutgoingHandler())
                 .build())
             .state(ProtocolState.HANDSHAKE, PacketHandlerStateCodec.<ServerSession>builder()
                 .registerInbound(ClientIntentionPacket.class, new IntentionHandler())
@@ -292,7 +289,6 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ServerboundHelloPacket.class, new SHelloHandler())
                 .registerInbound(ServerboundCookieResponsePacket.class, new SCookieResponseHandler())
                 .registerInbound(ServerboundLoginAcknowledgedPacket.class, new LoginAckHandler())
-                // state is switched to game and connection is set to spectator in SGameProfileOutgoingHandler
                 .registerOutbound(ClientboundGameProfilePacket.class, new SGameProfileOutgoingHandler())
                 .registerPostOutbound(ClientboundLoginCompressionPacket.class, new LoginCompressionPostOutgoingHandler())
                 .build())
@@ -308,6 +304,8 @@ public final class ZenithHandlerCodec {
                 .registerPostOutbound(ClientboundPingPacket.class, new PingPostOutgoingHandler())
                 .registerOutbound(ClientboundTabListPacket.class, new ServerTablistDataOutgoingHandler())
                 .registerOutbound(ClientboundKeepAlivePacket.class, KeepAliveOutgoingHandler.INSTANCE)
+                .registerPostOutbound(ClientboundStartConfigurationPacket.class, new ClientStartConfigurationPostOutgoingHandler())
+                .registerPostOutbound(ClientboundTransferPacket.class, new TransferPostOutgoingHandler())
                 .build())
             .build();
 

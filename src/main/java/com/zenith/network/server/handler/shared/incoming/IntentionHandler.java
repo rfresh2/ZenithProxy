@@ -17,7 +17,10 @@ public class IntentionHandler implements PacketHandler<ClientIntentionPacket, Se
     public ClientIntentionPacket apply(final ClientIntentionPacket packet, final ServerSession session) {
         MinecraftProtocol protocol = session.getPacketProtocol();
         switch (packet.getIntent()) {
-            case STATUS -> protocol.setState(ProtocolState.STATUS);
+            case STATUS -> {
+                protocol.setOutboundState(ProtocolState.STATUS);
+                session.switchInboundState(ProtocolState.STATUS);
+            }
             case LOGIN -> {
                 if (handleLogin(packet, session, protocol)) return null;
             }
@@ -37,7 +40,7 @@ public class IntentionHandler implements PacketHandler<ClientIntentionPacket, Se
     }
 
     private boolean handleLogin(final ClientIntentionPacket packet, final ServerSession session, final MinecraftProtocol protocol) {
-        protocol.setState(ProtocolState.LOGIN);
+        protocol.setOutboundState(ProtocolState.LOGIN);
         if (CONFIG.server.rateLimiter.enabled && rateLimiter.isRateLimited(session)) {
             SERVER_LOG.info("Disconnecting {} due to rate limiting.", session.getRemoteAddress());
             session.disconnect("Login Rate Limited.");
@@ -47,11 +50,14 @@ public class IntentionHandler implements PacketHandler<ClientIntentionPacket, Se
             SERVER_LOG.info("Disconnecting {} due to outdated server version.", session.getRemoteAddress());
             session.disconnect("Outdated server! I'm still on " + protocol.getCodec()
                 .getMinecraftVersion() + ".");
+            return true;
         } else if (packet.getProtocolVersion() < protocol.getCodec().getProtocolVersion()) {
             SERVER_LOG.info("Disconnecting {} due to outdated client version.", session.getRemoteAddress());
             session.disconnect("Outdated client! Please use " + protocol.getCodec()
                 .getMinecraftVersion() + ".");
+            return true;
         }
+        session.switchInboundState(ProtocolState.LOGIN);
         return false;
     }
 }

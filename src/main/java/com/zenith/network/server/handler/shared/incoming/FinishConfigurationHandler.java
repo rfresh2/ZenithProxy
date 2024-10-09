@@ -13,7 +13,7 @@ import static com.zenith.Shared.EXECUTOR;
 public class FinishConfigurationHandler implements PacketHandler<ServerboundFinishConfigurationPacket, ServerSession> {
     @Override
     public ServerboundFinishConfigurationPacket apply(final ServerboundFinishConfigurationPacket packet, final ServerSession session) {
-        session.getPacketProtocol().setState(ProtocolState.GAME);
+        session.switchInboundState(ProtocolState.GAME);
         if (!session.isConfigured()) {
             ServerLoginHandler handler = session.getFlag(MinecraftConstants.SERVER_LOGIN_HANDLER_KEY);
             if (handler != null) {

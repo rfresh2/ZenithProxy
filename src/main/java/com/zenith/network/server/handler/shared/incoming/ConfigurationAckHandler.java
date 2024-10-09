@@ -8,8 +8,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.Serverbound
 public class ConfigurationAckHandler implements PacketHandler<ServerboundConfigurationAcknowledgedPacket, ServerSession> {
     @Override
     public ServerboundConfigurationAcknowledgedPacket apply(final ServerboundConfigurationAcknowledgedPacket packet, final ServerSession session) {
-        session.getPacketProtocol().setState(ProtocolState.CONFIGURATION);
-        session.setAwaitingProtocolSwitch(false);
+        session.switchInboundState(ProtocolState.CONFIGURATION);
         return packet;
     }
 }
