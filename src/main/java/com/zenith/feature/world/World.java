@@ -93,7 +93,7 @@ public class World {
             EntityType entityType = entity.getEntityType();
             if (!(entityType == EntityType.BOAT || entityType == EntityType.SHULKER))
                 continue;
-            if (CACHE.getPlayerCache().getThePlayer().isInVehicle())
+            if (entity.getPassengerIds().contains(CACHE.getPlayerCache().getThePlayer().getEntityId()))
                 continue;
             var entityData = ENTITY_DATA.getEntityData(entityType);
             if (entityData == null) continue;
