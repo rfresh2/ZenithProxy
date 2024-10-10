@@ -308,9 +308,8 @@ public class PlayerSimulation extends Module {
         // in-place velocity update
         adjustMovementForSneaking(velocity);
 
-        List<LocalizedCollisionBox> blockCollisionBoxes = World.getSolidBlockCollisionBoxes(playerCollisionBox.stretch(velocity.getX(),
-                                                                                                                       velocity.getY(),
-                                                                                                                       velocity.getZ()));
+        List<LocalizedCollisionBox> blockCollisionBoxes = World.getIntersectingCollisionBoxes(
+            playerCollisionBox.stretch(velocity.getX(), velocity.getY(), velocity.getZ()));
         MutableVec3d adjustedMovement = adjustMovementForCollisions(velocity, playerCollisionBox, blockCollisionBoxes);
         boolean isYAdjusted = velocity.getY() != adjustedMovement.getY();
         boolean isXAdjusted = velocity.getX() != adjustedMovement.getX();

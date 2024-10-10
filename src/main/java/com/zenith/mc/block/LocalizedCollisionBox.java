@@ -108,6 +108,12 @@ public class LocalizedCollisionBox {
             && this.maxY >= other.minY && this.minY <= other.maxY;
     }
 
+    public boolean intersects(double oMinX, double oMinY, double oMinZ, double oMaxX, double oMaxY, double oMaxZ) {
+        return this.maxX >= oMinX && this.minX <= oMaxX
+            && this.maxZ >= oMinZ && this.minZ <= oMaxZ
+            && this.maxY >= oMinY && this.minY <= oMaxY;
+    }
+
     public @Nullable RayIntersection rayIntersection(
         final double x1, final double y1, final double z1, // start pos
         final double x2, final double y2, final double z2 // end pos

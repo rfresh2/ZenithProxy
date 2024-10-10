@@ -63,8 +63,14 @@ public class World {
         return blockData;
     }
 
-    public List<LocalizedCollisionBox> getSolidBlockCollisionBoxes(final LocalizedCollisionBox cb) {
+    public List<LocalizedCollisionBox> getIntersectingCollisionBoxes(final LocalizedCollisionBox cb) {
         final List<LocalizedCollisionBox> boundingBoxList = new ArrayList<>();
+        getSolidBlockCollisionBoxes(cb, boundingBoxList);
+        getEntityCollisionBoxes(cb, boundingBoxList);
+        return boundingBoxList;
+    }
+
+    public void getSolidBlockCollisionBoxes(final LocalizedCollisionBox cb, final List<LocalizedCollisionBox> results) {
         LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
         for (int i = 0; i < blockPosList.size(); i++) {
             var blockPos = blockPosList.getLong(i);
@@ -75,11 +81,30 @@ public class World {
             if (blockState.isSolidBlock()) {
                 List<CollisionBox> collisionBoxes = blockState.getCollisionBoxes();
                 for (int j = 0; j < collisionBoxes.size(); j++) {
-                    boundingBoxList.add(new LocalizedCollisionBox(collisionBoxes.get(j), x, y, z));
+                    results.add(new LocalizedCollisionBox(collisionBoxes.get(j), x, y, z));
                 }
             }
         }
-        return boundingBoxList;
+    }
+
+    public void getEntityCollisionBoxes(final LocalizedCollisionBox cb, final List<LocalizedCollisionBox> results) {
+        for (var entity : CACHE.getEntityCache().getEntities().values()) {
+            var entityData = ENTITY_DATA.getEntityData(entity.getEntityType());
+            if (entityData == null) continue;
+            var x = entity.getX();
+            var y = entity.getY();
+            var z = entity.getZ();
+            double halfW = entityData.width() / 2.0;
+            double minX = x - halfW;
+            double minY = y;
+            double minZ = z - halfW;
+            double maxX = x + halfW;
+            double maxY = y + entityData.height();
+            double maxZ = z + halfW;
+            if (cb.intersects(minX, minY, minZ, maxX, maxY, maxZ)) {
+                results.add(new LocalizedCollisionBox(new CollisionBox(-halfW, halfW, 0.0, entityData.height(), -halfW, halfW), x, y, z));
+            }
+        }
     }
 
     public boolean isTouchingWater(final LocalizedCollisionBox cb) {
