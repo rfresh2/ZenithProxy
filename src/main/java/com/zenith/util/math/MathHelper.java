@@ -73,6 +73,10 @@ public class MathHelper {
         return Math.max(min, Math.min(max, value));
     }
 
+    public static double clamp(final double value, final double min, final double max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
     public static double distance2d(double x1, double y1, double x2, double y2) {
         return Math.sqrt(square(x1 - x2) + square(y1 - y2));
     }
@@ -187,5 +191,11 @@ public class MathHelper {
         i |= i >> 8;
         i |= i >> 16;
         return i + 1;
+    }
+
+    public static long getSeed(int x, int y, int z) {
+        long l = (long)(x * 3129871) ^ (long)z * 116129781L ^ (long)y;
+        l = l * l * 42317861L + l * 11L;
+        return l >> 16;
     }
 }

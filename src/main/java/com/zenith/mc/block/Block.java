@@ -11,5 +11,8 @@ public record Block(
     int minStateId,
     int maxStateId,
     int mapColorId,
+    BlockOffsetType offsetType,
+    float maxHorizontalOffset,
+    float maxVerticalOffset,
     @Nullable BlockEntityType blockEntityType
 ) implements RegistryData { }
