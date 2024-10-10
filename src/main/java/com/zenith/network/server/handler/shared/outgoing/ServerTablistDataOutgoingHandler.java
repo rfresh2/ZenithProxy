@@ -23,20 +23,21 @@ public class ServerTablistDataOutgoingHandler implements PacketHandler<Clientbou
             var clientProfile = CACHE.getProfileCache().getProfile();
             var sessionProfileName = sessionProfile == null ? "Unknown" : sessionProfile.getName();
             var clientProfileName = clientProfile == null ? "Unknown" : clientProfile.getName();
-            return footer.append(Component.text().appendNewline().append(ComponentSerializer.minedown("&b&lZenithProxy&r")).build())
+            return footer.append(Component.text().appendNewline().append(ComponentSerializer.minimessage("<aqua><bold>ZenithProxy")).build())
                 .append(Component.text()
                             .appendNewline()
-                            .append(ComponentSerializer.minedown(
-                             "&b&l " + sessionProfileName
-                                 + " &r&7[&r&3" + session.getPing() + "ms&r&7]&r&7"
-                                 + " -> &r&b&l" + clientProfileName
-                                 + " &r&7[&r&3" + Proxy.getInstance().getClient().getPing() + "ms&r&7]&r"
+                            .append(ComponentSerializer.minimessage(
+                             "<aqua><bold> " + sessionProfileName
+                                 + " </bold><gray>[<dark_aqua>" + session.getPing() + "ms<gray>]"
+                                 + " <gray>-> <aqua><bold>" + clientProfileName
+                                 + " </bold><gray>[<dark_aqua>" + Proxy.getInstance().getClient().getPing() + "ms<gray>]"
                             )).build())
                 .append(Component.text()
                          .appendNewline()
-                         .append(ComponentSerializer.minedown(
-                             "&9Online: &r&b&l" + Proxy.getInstance().getOnlineTimeString() + " &r&7-&r &r&9TPS: &r&b&l" +
-                                 TPS.getTPS() + "&r")).build());
+                         .append(ComponentSerializer.minimessage(
+                             "<blue>Online: <aqua><bold>" + Proxy.getInstance().getOnlineTimeString()
+                                 + "</bold> <gray>- <blue>TPS: <aqua><bold>" + TPS.getTPS()))
+                            .build());
         } catch (final Exception e) {
             SERVER_LOG.warn("Failed injecting proxy info to tablist footer", e);
             return footer;

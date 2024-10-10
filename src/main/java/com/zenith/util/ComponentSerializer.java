@@ -2,13 +2,13 @@ package com.zenith.util;
 
 import com.zenith.discord.Embed;
 import com.zenith.discord.EmbedSerializer;
-import de.themoep.minedown.adventure.MineDown;
 import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.flattener.ComponentFlattener;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
@@ -73,17 +73,8 @@ public final class ComponentSerializer {
         return builder.toString();
     }
 
-    public static Component minedown(String message, String... replacements) {
-        return new MineDown(message)
-            .urlDetection(false) // this uses a url matching regex by default that adds mem usage and isn't needed
-            .replace(replacements)
-            .toComponent();
-    }
-
-    public static Component minedown(String message) {
-        return new MineDown(message)
-            .urlDetection(false) // this uses a url matching regex by default that adds mem usage and isn't needed
-            .toComponent();
+    public static Component minimessage(String message) {
+        return MiniMessage.miniMessage().deserialize(message);
     }
 
     public static Component deserializeEmbed(final Embed embed) {

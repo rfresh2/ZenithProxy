@@ -35,7 +35,7 @@ public class SpectatorPlayerCamCommand extends Command {
                 session.setCameraTarget(null);
                 session.sendAsync(new ClientboundSetCameraPacket(session.getSpectatorSelfEntityId()));
                 SpectatorSync.syncSpectatorPositionToEntity(session, existingTarget);
-                session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9Exited playercam!&r"), false));
+                session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<blue>Exited playercam!"), false));
             } else {
                 session.setCameraTarget(CACHE.getPlayerCache().getThePlayer());
                 session.sendAsync(new ClientboundSetCameraPacket(CACHE.getPlayerCache().getEntityId()));
@@ -44,7 +44,7 @@ public class SpectatorPlayerCamCommand extends Command {
                     var connection = connections[i];
                     connection.sendAsync(new ClientboundRemoveEntitiesPacket(new int[]{session.getSpectatorEntityId()}));
                 }
-                session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9Entered playercam!&r"), false));
+                session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<blue>Entered playercam!"), false));
             }
             c.getSource().setNoOutput(true);
         });

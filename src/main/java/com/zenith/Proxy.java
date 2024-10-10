@@ -661,7 +661,7 @@ public class Proxy {
             final Duration durationUntilKick = twoB2tTimeLimit.minus(Duration.ofSeconds(Proxy.getInstance().getOnlineTimeSeconds()));
             if (durationUntilKick.isNegative()) return; // sanity check just in case 2b's plugin changes
             var actionBarPacket = new ClientboundSetActionBarTextPacket(
-                ComponentSerializer.minedown((durationUntilKick.toMinutes() <= 3 ? "&c" : "&9") + twoB2tTimeLimit.toHours() + "hr kick in: " + durationUntilKick.toMinutes() + "m"));
+                ComponentSerializer.minimessage((durationUntilKick.toMinutes() <= 3 ? "<red>" : "<blue>") + twoB2tTimeLimit.toHours() + "hr kick in: " + durationUntilKick.toMinutes() + "m"));
             playerConnection.sendAsync(actionBarPacket);
             // each packet will reset text render timer for 3 seconds
             for (int i = 1; i <= 7; i++) { // render the text for about 10 seconds total
@@ -779,14 +779,14 @@ public class Proxy {
         if (!CONFIG.client.extra.chat.showConnectionMessages) return;
         var serverConnection = getCurrentPlayer().get();
         if (nonNull(serverConnection) && serverConnection.isLoggedIn())
-            serverConnection.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&b" + event.playerEntry().getName() + "&r&e connected"), false));
+            serverConnection.send(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<aqua" + event.playerEntry().getName() + "<yellow> connected"), false));
     }
 
     public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
         if (!CONFIG.client.extra.chat.showConnectionMessages) return;
         var serverConnection = getCurrentPlayer().get();
         if (nonNull(serverConnection) && serverConnection.isLoggedIn())
-            serverConnection.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&b" + event.playerEntry().getName() + "&r&e disconnected"), false));
+            serverConnection.send(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<aqua>" + event.playerEntry().getName() + "<yellow> disconnected"), false));
     }
 
     public void handlePrivateMessageSendEvent(PrivateMessageSendEvent event) {

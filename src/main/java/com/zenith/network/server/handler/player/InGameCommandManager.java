@@ -24,10 +24,10 @@ public class InGameCommandManager {
         final String command = message.split(" ")[0]; // first word is the command
         if (command.equals("help") && CONFIG.inGameCommands.enable && !CONFIG.inGameCommands.slashCommands) {
             session.sendAsync(new ClientboundSystemChatPacket(
-                ComponentSerializer.minedown("&9&lIn Game commands"),
+                ComponentSerializer.minimessage("<blue><bold>In Game commands"),
                 false));
             session.sendAsync(new ClientboundSystemChatPacket(
-                ComponentSerializer.minedown("&aPrefix : \"" + CONFIG.inGameCommands.prefix + "\""),
+                ComponentSerializer.minimessage("<green>Prefix : \"" + CONFIG.inGameCommands.prefix + "\""),
                 false));
         }
         return executeInGameCommand(message, session, printUnhandled);
@@ -55,7 +55,7 @@ public class InGameCommandManager {
             CommandOutputHelper.logMultiLineOutputToInGame(commandContext, session);
             if (!commandContext.isNoOutput() && !embed.isTitlePresent() && commandContext.getMultiLineOutput().isEmpty()) {
                 if (printUnhandled) {
-                    session.sendAsyncAlert("&cUnknown command!");
+                    session.sendAsyncAlert("<red>Unknown command!");
                 }
                 return;
             }
@@ -84,7 +84,7 @@ public class InGameCommandManager {
         CommandOutputHelper.logMultiLineOutputToInGame(commandContext, session);
         if (!commandContext.isNoOutput() && !embed.isTitlePresent() && commandContext.getMultiLineOutput().isEmpty()) {
             if (printUnhandled) {
-                session.sendAsyncAlert("&cUnknown command!");
+                session.sendAsyncAlert("<red>Unknown command!");
             }
             return;
         }

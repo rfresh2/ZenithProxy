@@ -57,9 +57,9 @@ public class AntiLeak extends Module {
         } else event.cancel();
         if (event.isCancelled()) {
             info("Cancelled chat message: " + message);
-            inGameAlertActivePlayer("&cCancelled Chat");
+            inGameAlertActivePlayer("<red>Cancelled Chat");
             if (Proxy.getInstance().hasActivePlayer())
-                Proxy.getInstance().getCurrentPlayer().get().sendAsyncAlert(moduleLogPrefix + "&cCancelled Chat");
+                Proxy.getInstance().getCurrentPlayer().get().sendAsyncAlert(moduleLogPrefix + "<red>Cancelled Chat");
         }
     }
 }

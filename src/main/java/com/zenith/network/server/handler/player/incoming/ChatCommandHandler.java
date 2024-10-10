@@ -32,13 +32,12 @@ public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandP
         // todo: replace these by executing `extraChat <cmd>`?
         return switch (commandLowercased) {
             case "ignorelist" -> {
-                CONFIG.client.extra.chat.ignoreList.forEach(s -> session.send(new ClientboundSystemChatPacket(
-                    ComponentSerializer.minedown(
-                        "&c" + s.getUsername()), true)));
+                CONFIG.client.extra.chat.ignoreList.forEach(s -> session.send(
+                    new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<red>" + s.getUsername()), true)));
                 yield false;
             }
             case "ignoredeathmsgs" -> { // todo
-                session.sendAsyncAlert("&cNot implemented yet");
+                session.sendAsyncAlert("<red>Not implemented yet");
                 yield false;
             }
             case "ignore" -> {
@@ -47,40 +46,40 @@ public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandP
                     final String player = split[1];
                     if (PLAYER_LISTS.getIgnoreList().contains(player)) {
                         PLAYER_LISTS.getIgnoreList().remove(player);
-                        session.sendAsyncAlert("&cRemoved " + player + " from ignore list");
+                        session.sendAsyncAlert("<red>Removed " + player + " from ignore list");
                         yield false;
                     }
                     PLAYER_LISTS.getIgnoreList().add(player).ifPresentOrElse(
-                        ignoreEntry -> session.sendAsyncAlert("&cAdded " + ignoreEntry.getUsername() + " to ignore list"),
-                        () -> session.sendAsyncAlert("&cFailed to add " + player + " to ignore list")
+                        ignoreEntry -> session.sendAsyncAlert("<red>Added " + ignoreEntry.getUsername() + " to ignore list"),
+                        () -> session.sendAsyncAlert("<red>Failed to add " + player + " to ignore list")
                     );
                 } else {
-                    session.sendAsyncAlert("&cInvalid syntax. Usage: /ignore <name>");
+                    session.sendAsyncAlert("<red>Invalid syntax. Usage: /ignore \\<name>");
                 }
                 yield false;
             }
             case "togglechat" -> {
                 CONFIG.client.extra.chat.hideChat = !CONFIG.client.extra.chat.hideChat;
                 saveConfigAsync();
-                session.sendAsyncAlert("&cChat toggled " + (CONFIG.client.extra.chat.hideChat ? "off" : "on") + "&r");
+                session.sendAsyncAlert("<red>Chat toggled " + (CONFIG.client.extra.chat.hideChat ? "off" : "on"));
                 yield false;
             }
             case "toggleprivatemsgs" -> {
                 CONFIG.client.extra.chat.hideWhispers = !CONFIG.client.extra.chat.hideWhispers;
                 saveConfigAsync();
-                session.sendAsyncAlert("&cWhispers messages toggled " + (CONFIG.client.extra.chat.hideWhispers ? "off" : "on") + "&r");
+                session.sendAsyncAlert("<red>Whispers messages toggled " + (CONFIG.client.extra.chat.hideWhispers ? "off" : "on"));
                 yield false;
             }
             case "toggledeathmsgs" -> {
                 CONFIG.client.extra.chat.hideDeathMessages = !CONFIG.client.extra.chat.hideDeathMessages;
                 saveConfigAsync();
-                session.sendAsyncAlert("&cDeath messages toggled " + (CONFIG.client.extra.chat.hideDeathMessages ? "off" : "on") + "&r");
+                session.sendAsyncAlert("<red>Death messages toggled " + (CONFIG.client.extra.chat.hideDeathMessages ? "off" : "on"));
                 yield false;
             }
             case "toggleconnectionmsgs" -> {
                 CONFIG.client.extra.chat.showConnectionMessages = !CONFIG.client.extra.chat.showConnectionMessages;
                 saveConfigAsync();
-                session.sendAsyncAlert("&cConnection messages toggled " + (CONFIG.client.extra.chat.showConnectionMessages ? "on" : "off") + "&r");
+                session.sendAsyncAlert("<red>Connection messages toggled " + (CONFIG.client.extra.chat.showConnectionMessages ? "on" : "off"));
                 yield false;
             }
             default -> true;

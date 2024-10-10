@@ -113,7 +113,7 @@ public abstract class Module {
         MODULE_LOG.warn(moduleLogPrefix + msg, args);
     }
 
-    protected final String moduleAlertPrefix = "&7[&b" + this.getClass().getSimpleName() + "&7]&r ";
+    protected final String moduleAlertPrefix = "<gray>[<aqua>" + this.getClass().getSimpleName() + "<gray>]<reset> ";
 
     public void inGameAlert(String minedown) {
         var connections = Proxy.getInstance().getActiveConnections().getArray();

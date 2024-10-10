@@ -49,11 +49,11 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
             var connection = connections[i];
             if (connection.equals(session)) continue;
             connection.sendAsync(new ClientboundSystemChatPacket(
-                ComponentSerializer.minedown("&9" + session.getProfileCache().getProfile().getName() + " connected!&r"), false
+                ComponentSerializer.minimessage("<blue>" + session.getProfileCache().getProfile().getName() + " connected!"), false
             ));
             if (connection.equals(Proxy.getInstance().getCurrentPlayer().get())) {
                 connection.sendAsync(new ClientboundSystemChatPacket(
-                    ComponentSerializer.minedown("&9Send private messages: \"!m <message>\"&r"), false
+                    ComponentSerializer.minimessage("<blue>Send private messages: \"!m \\<message>\""), false
                 ));
             }
         }
@@ -62,10 +62,10 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
         if (currentPlayer != null) currentPlayer.syncTeamMembers();
         SpectatorSync.syncPlayerEquipmentWithSpectatorsFromCache();
         // send command help
-        session.sendAsyncAlert("&aSpectating &r&c" + CACHE.getProfileCache().getProfile().getName());
+        session.sendAsyncAlert("<green>Spectating <red>" + CACHE.getProfileCache().getProfile().getName());
         if (CONFIG.inGameCommands.enable) {
-            session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&aCommand Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
-            session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&chelp &7- &8List Commands"), false));
+            session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<green>Command Prefix : \"" + CONFIG.inGameCommands.prefix + "\""), false));
+            session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<red>help <gray>- <dark_gray>List Commands"), false));
         }
     }
 }

@@ -108,13 +108,13 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
 
     public Component getMotd() {
         var sb = new StringBuilder(150);
-        sb.append("&f[&r&b").append(CONFIG.authentication.username).append("&r&f]&r - ");
+        sb.append("<white>[<aqua>").append(CONFIG.authentication.username).append("<white>] <reset>- ");
         if (Proxy.getInstance().isConnected()) {
             sb
                 .append(getMotdStatus())
-                .append("\n&bOnline for:&r &f[&r").append(Proxy.getInstance().getOnlineTimeString()).append("&f]&r");
-        } else sb.append("&cDisconnected&r");
-        return ComponentSerializer.minedown(sb.toString());
+                .append("<reset>\n<aqua>Online for: <white>[<reset>").append(Proxy.getInstance().getOnlineTimeString()).append("<white>]");
+        } else sb.append("<red>Disconnected");
+        return ComponentSerializer.minimessage(sb.toString());
     }
 
     private String getMotdStatus() { // in minedown formatted string
@@ -122,21 +122,21 @@ public class CustomServerInfoBuilder implements ServerInfoBuilder {
         if (proxy.isInQueue()) {
             var sb = new StringBuilder(100);
             var prio = proxy.isPrio();
-            if (prio) sb.append("&cIn Prio Queue&r");
-            else sb.append("&cIn Queue&r");
-            sb.append(" &f[&r&b");
+            if (prio) sb.append("<red>In Prio Queue");
+            else sb.append("<red>In Queue");
+            sb.append(" <white>[<aqua>");
             var qPos = proxy.getQueuePosition();
             var qUndefined = qPos == Integer.MAX_VALUE;
             if (!qUndefined) {
                 sb.append(qPos).append(" / ");
                 sb.append(prio ? Queue.getQueueStatus().prio() : Queue.getQueueStatus().regular());
             } else sb.append("Queueing");
-            sb.append("&r&f]&r");
+            sb.append("<white>]");
             if (!qUndefined)
-                sb.append(" - &cETA&r &f[&r&b").append(Queue.getQueueEta(qPos)).append("&r&f]&r");
+                sb.append(" <reset>- <red>ETA <white>[<aqua>").append(Queue.getQueueEta(qPos)).append("<white>]");
             return sb.toString();
         } else {
-            return "&aIn Game&r";
+            return "<green>In Game";
         }
     }
 }

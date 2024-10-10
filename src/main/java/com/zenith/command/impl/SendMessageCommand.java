@@ -49,7 +49,7 @@ public class SendMessageCommand extends Command {
                                       .title("Sent Message!")
                                       .description(message);
                               } else {
-                                  session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cSpectator chat disabled&r"), false));
+                                  session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<red>Spectator chat disabled"), false));
                                   c.getSource().setNoOutput(true);
                               }
                           } else {

@@ -3823,6 +3823,9 @@
       "allDeclaredFields": true
     },
     {
+      "type": "org.geysermc.mcprotocollib.network.tcp.FlushHandler"
+    },
+    {
       "type": "org.geysermc.mcprotocollib.network.tcp.TcpClientChannelInitializer"
     },
     {

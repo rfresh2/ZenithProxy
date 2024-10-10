@@ -37,7 +37,7 @@ public class SpectatorEntityCommand extends Command {
         return command("spectatorEntity").requires(c -> Command.validateCommandSource(c, CommandSource.SPECTATOR))
             .executes(c -> {
                 var session = c.getSource().getInGamePlayerInfo().session();
-                session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cEntity id's: " + String.join(", ", SpectatorEntityRegistry.getEntityIdentifiers()) + "&r"), false));
+                session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<red>Entity id's: " + String.join(", ", SpectatorEntityRegistry.getEntityIdentifiers())), false));
                 c.getSource().setNoOutput(true);
             })
             .then(argument("entity", word()).executes(c -> {
@@ -56,10 +56,10 @@ public class SpectatorEntityCommand extends Command {
                             SpectatorSync.updateSpectatorPosition(session);
                         }
                     }
-                    session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9Updated entity to: " + entityId + "&r"), false));
+                    session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<blue>Updated entity to: " + entityId), false));
                 } else {
-                    session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cNo entity found with id: " + entityId + "&r"), false));
-                    session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cValid id's: " + String.join(", ", SpectatorEntityRegistry.getEntityIdentifiers()) + "&r"), false));
+                    session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<red>No entity found with id: " + entityId), false));
+                    session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<red>Valid id's: " + String.join(", ", SpectatorEntityRegistry.getEntityIdentifiers())), false));
                 }
                 c.getSource().setNoOutput(true);
                 return OK;

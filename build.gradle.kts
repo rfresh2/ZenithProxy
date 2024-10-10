@@ -95,7 +95,7 @@ dependencies {
     shade("io.netty:netty-transport-native-epoll:$nettyVersion:linux-x86_64")
     shade("io.netty:netty-transport-native-unix-common:$nettyVersion:linux-x86_64")
     shade("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
-    shade("de.themoep:minedown-adventure:1.7.3-SNAPSHOT")
+    shade("net.kyori:adventure-text-minimessage:4.17.0")
     shade("org.cloudburstmc.math:api:2.0")
     shade("org.cloudburstmc.math:immutable:2.0")
     shade("org.redisson:redisson:3.37.0") {

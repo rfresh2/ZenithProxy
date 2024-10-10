@@ -4,6 +4,7 @@ import com.zenith.util.ComponentSerializer;
 import lombok.Data;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -14,7 +15,8 @@ public class PrivateMessageSendEvent {
     private final String senderName;
     private final String stringContents;
     @Getter(lazy = true)
-    private final Component contents = ComponentSerializer.minedown("&c" + senderName + " > " + stringContents + "&r");
+    private final Component contents = ComponentSerializer.minimessage("<red>" + senderName + " > ")
+        .append(Component.text(stringContents).color(NamedTextColor.RED));
 
     public PrivateMessageSendEvent(@Nullable UUID senderUUID, String senderName, String stringContents) {
         this.senderUUID = senderUUID;

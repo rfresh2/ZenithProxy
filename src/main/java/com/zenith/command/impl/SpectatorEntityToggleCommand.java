@@ -34,7 +34,7 @@ public class SpectatorEntityToggleCommand extends Command {
             } else {
                 session.sendAsync(new ClientboundRemoveEntitiesPacket(new int[]{session.getSpectatorEntityId()}));
             }
-            session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9Show self entity toggled " + (session.isShowSelfEntity() ? "on!" : "off!") + "&r"), false));
+            session.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<blue>Show self entity toggled " + (session.isShowSelfEntity() ? "on!" : "off!")), false));
             c.getSource().setNoOutput(true);
         });
     }

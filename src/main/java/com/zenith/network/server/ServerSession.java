@@ -213,7 +213,7 @@ public class ServerSession extends TcpServerSession {
                 for (int i = 0; i < connections.length; i++) {
                     var connection = connections[i];
                     connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.spectatorEntityId}));
-                    connection.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&9" + profileCache.getProfile().getName() + " disconnected&r"), false));
+                    connection.send(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<blue>" + profileCache.getProfile().getName() + " disconnected"), false));
                 }
                 EVENT_BUS.postAsync(new ProxySpectatorDisconnectedEvent(profileCache.getProfile()));
             }
@@ -256,9 +256,9 @@ public class ServerSession extends TcpServerSession {
             Proxy.getInstance().getActiveConnections().add(this);
     }
 
-    public void sendAsyncAlert(final String minedown) {
-        // todo: gradient colors?
-        this.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&7[&bZenithProxy&7]&r " + minedown), false));
+    public void sendAsyncAlert(final String minimessage) {
+        this.sendAsync(new ClientboundSystemChatPacket(
+            ComponentSerializer.minimessage("<gray>[<aqua>ZenithProxy<gray>] <reset>" + minimessage), false));
     }
 
     public boolean isActivePlayer() {

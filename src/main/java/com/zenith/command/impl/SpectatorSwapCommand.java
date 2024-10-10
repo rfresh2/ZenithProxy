@@ -63,11 +63,11 @@ public class SpectatorSwapCommand extends Command {
                 c.getSource().setNoOutput(true);
                 if (spectatorProfile == null) return;
                 if (!PLAYER_LISTS.getWhitelist().contains(spectatorProfile.getId())) {
-                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cYou are not whitelisted!&r"), false));
+                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<red>You are not whitelisted!"), false));
                     return;
                 }
                 if (Proxy.getInstance().getActivePlayer() != null) {
-                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cSomeone is already controlling the player!&r"), false));
+                    session.send(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<red>Someone is already controlling the player!"), false));
                     return;
                 }
                 if (CONFIG.server.viaversion.enabled) {
@@ -76,7 +76,7 @@ public class SpectatorSwapCommand extends Command {
                         .map(con -> con.getProtocolInfo().protocolVersion())
                         .findFirst();
                     if (viaClientProtocolVersion.isPresent() && viaClientProtocolVersion.get().olderThan(ProtocolVersion.v1_20_5)) {
-                        session.send(new ClientboundSystemChatPacket(ComponentSerializer.minedown("&cUnsupported Client MC Version&r"), false));
+                        session.send(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<red>Unsupported Client MC Version"), false));
                         return;
                     }
                 }

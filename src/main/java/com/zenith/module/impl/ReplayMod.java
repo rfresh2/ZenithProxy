@@ -134,7 +134,7 @@ public class ReplayMod extends Module {
         try {
             this.replayRecording.startRecording();
             EVENT_BUS.postAsync(new ReplayStartedEvent());
-            inGameAlert("&cRecording started");
+            inGameAlert("<red>Recording started");
         } catch (final Exception e) {
             error("Failed to start recording", e);
             disable();
@@ -155,7 +155,7 @@ public class ReplayMod extends Module {
         } else {
             EVENT_BUS.postAsync(new ReplayStoppedEvent(null));
         }
-        inGameAlert("&cRecording stopped");
+        inGameAlert("<red>Recording stopped");
         cancelDelayedRecordingStop();
     }
 
