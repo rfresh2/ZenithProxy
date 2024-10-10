@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
 import lombok.experimental.UtilityClass;
 import org.geysermc.mcprotocollib.protocol.data.game.chunk.ChunkSection;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -89,7 +90,12 @@ public class World {
 
     public void getEntityCollisionBoxes(final LocalizedCollisionBox cb, final List<LocalizedCollisionBox> results) {
         for (var entity : CACHE.getEntityCache().getEntities().values()) {
-            var entityData = ENTITY_DATA.getEntityData(entity.getEntityType());
+            EntityType entityType = entity.getEntityType();
+            if (!(entityType == EntityType.BOAT || entityType == EntityType.SHULKER))
+                continue;
+            if (CACHE.getPlayerCache().getThePlayer().isInVehicle())
+                continue;
+            var entityData = ENTITY_DATA.getEntityData(entityType);
             if (entityData == null) continue;
             var x = entity.getX();
             var y = entity.getY();
@@ -101,8 +107,8 @@ public class World {
             double maxX = x + halfW;
             double maxY = y + entityData.height();
             double maxZ = z + halfW;
-            if (cb.intersects(minX, minY, minZ, maxX, maxY, maxZ)) {
-                results.add(new LocalizedCollisionBox(new CollisionBox(-halfW, halfW, 0.0, entityData.height(), -halfW, halfW), x, y, z));
+            if (cb.intersects(minX, maxX, minY, maxY, minZ, maxZ)) {
+                results.add(new LocalizedCollisionBox(-halfW, halfW, 0.0, entityData.height(), -halfW, halfW, x, y, z));
             }
         }
     }

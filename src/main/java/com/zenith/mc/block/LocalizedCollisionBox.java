@@ -37,6 +37,18 @@ public class LocalizedCollisionBox {
         this.z = z;
     }
 
+    public LocalizedCollisionBox(double minX, double maxX, double minY, double maxY, double minZ, double maxZ, double x, double y, double z) {
+        this.minX = minX + x;
+        this.maxX = maxX + x;
+        this.minY = minY + y;
+        this.maxY = maxY + y;
+        this.minZ = minZ + z;
+        this.maxZ = maxZ + z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
     public LocalizedCollisionBox stretch(double x, double y, double z) {
         return new LocalizedCollisionBox(x < 0.0 ? getMinX() + x : getMinX(),
                                          x > 0.0 ? getMaxX() + x : getMaxX(),
@@ -108,10 +120,11 @@ public class LocalizedCollisionBox {
             && this.maxY >= other.minY && this.minY <= other.maxY;
     }
 
-    public boolean intersects(double oMinX, double oMinY, double oMinZ, double oMaxX, double oMaxY, double oMaxZ) {
+    public boolean intersects(double oMinX, double oMaxX, double oMinY, double oMaxY, double oMinZ, double oMaxZ) {
         return this.maxX >= oMinX && this.minX <= oMaxX
             && this.maxZ >= oMinZ && this.minZ <= oMaxZ
             && this.maxY >= oMinY && this.minY <= oMaxY;
+
     }
 
     public @Nullable RayIntersection rayIntersection(
