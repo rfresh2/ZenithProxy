@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 
 public class EntityDataManager {
-    private final Reference2ObjectMap<EntityType, EntityData> entityTypeToData = new Reference2ObjectOpenHashMap<>(130);
+    private final Reference2ObjectMap<EntityType, EntityData> entityTypeToData = new Reference2ObjectOpenHashMap<>(EntityRegistry.REGISTRY.size());
 
     public EntityDataManager() {
         init();

@@ -16,14 +16,22 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import static com.zenith.Shared.OBJECT_MAPPER;
 
 public class BlockDataManager {
-    private final Int2ObjectOpenHashMap<Block> blockStateIdToBlock = new Int2ObjectOpenHashMap<>(26684);
-    private final Int2ObjectOpenHashMap<List<CollisionBox>> blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(26684);
+    private final Int2ObjectOpenHashMap<Block> blockStateIdToBlock;
+    private final Int2ObjectOpenHashMap<List<CollisionBox>> blockStateIdToCollisionBoxes;
 
     public BlockDataManager() {
+        int blockStateIdCount = BlockRegistry.REGISTRY.getIdMap().int2ObjectEntrySet().stream()
+            .map(Map.Entry::getValue)
+            .map(Block::maxStateId)
+            .max(Integer::compareTo)
+            .orElseThrow();
+        blockStateIdToBlock = new Int2ObjectOpenHashMap<>(blockStateIdCount);
+        blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(blockStateIdCount);
         init();
     }
 

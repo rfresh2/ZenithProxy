@@ -30,4 +30,8 @@ public class Registry<T extends RegistryData> {
         }
         return null;
     }
+
+    public int size() {
+        return idMap.size();
+    }
 }
