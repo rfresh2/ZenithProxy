@@ -24,12 +24,12 @@ public record BlockState(Block block, int id) {
         for (int i = 0; i < collisionBoxes.size(); i++) {
             var collisionBox = collisionBoxes.get(i);
             localizedCollisionBoxes.add(new LocalizedCollisionBox(
-                collisionBox.minX() + offsetVec.getX(),
-                collisionBox.maxX() + offsetVec.getX(),
-                collisionBox.minY() + offsetVec.getY(),
-                collisionBox.maxY() + offsetVec.getY(),
-                collisionBox.minZ() + offsetVec.getZ(),
-                collisionBox.maxZ() + offsetVec.getZ(),
+                collisionBox.minX() + offsetVec.getX() + x,
+                collisionBox.maxX() + offsetVec.getX() + x,
+                collisionBox.minY() + offsetVec.getY() + y,
+                collisionBox.maxY() + offsetVec.getY() + y,
+                collisionBox.minZ() + offsetVec.getZ() + z,
+                collisionBox.maxZ() + offsetVec.getZ() + z,
                 x, y, z
             ));
         }
