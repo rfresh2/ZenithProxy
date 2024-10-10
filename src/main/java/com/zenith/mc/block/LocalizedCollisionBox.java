@@ -37,18 +37,6 @@ public class LocalizedCollisionBox {
         this.z = z;
     }
 
-    public LocalizedCollisionBox(double minX, double maxX, double minY, double maxY, double minZ, double maxZ, double x, double y, double z) {
-        this.minX = minX + x;
-        this.maxX = maxX + x;
-        this.minY = minY + y;
-        this.maxY = maxY + y;
-        this.minZ = minZ + z;
-        this.maxZ = maxZ + z;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-
     public LocalizedCollisionBox stretch(double x, double y, double z) {
         return new LocalizedCollisionBox(x < 0.0 ? getMinX() + x : getMinX(),
                                          x > 0.0 ? getMaxX() + x : getMaxX(),

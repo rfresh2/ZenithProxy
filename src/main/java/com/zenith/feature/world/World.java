@@ -108,7 +108,7 @@ public class World {
             double maxY = y + entityData.height();
             double maxZ = z + halfW;
             if (cb.intersects(minX, maxX, minY, maxY, minZ, maxZ)) {
-                results.add(new LocalizedCollisionBox(-halfW, halfW, 0.0, entityData.height(), -halfW, halfW, x, y, z));
+                results.add(new LocalizedCollisionBox(-halfW + x, halfW + x, 0.0 + y, entityData.height() + y, -halfW + z, halfW + z, x, y, z));
             }
         }
     }
