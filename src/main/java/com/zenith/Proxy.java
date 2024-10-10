@@ -254,6 +254,8 @@ public class Proxy {
                                  
                                  Most likely the port you have configured: %s is already in use by another application or another ZenithProxy instance.
                                  
+                                 To change ports use the command: `serverConnection port <port>`
+                                 
                                  This ZenithProxy instance will now restart, although this is unlikely to fix the issue.
                                  """.formatted(CONFIG.server.bind.port))
                             .errorColor());

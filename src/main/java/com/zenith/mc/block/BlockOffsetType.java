@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum BlockOffsetType {
     NONE((blockState, x, y, z) -> MutableVec3d.ZERO),
     XZ((blockState, x, y, z) -> {
-        long seed = MathHelper.getSeed(x, y, z);
+        long seed = MathHelper.getSeed(x, 0, z);
         float maxHorizontalOffset = blockState.block().maxHorizontalOffset();
         double xOffset = MathHelper.clamp(((double)((float)(seed & 15L) / 15.0F) - 0.5) * 0.5, -maxHorizontalOffset, maxHorizontalOffset);
         double zOffset = MathHelper.clamp(((double)((float)(seed >> 8 & 15L) / 15.0F) - 0.5) * 0.5, -maxHorizontalOffset, maxHorizontalOffset);
