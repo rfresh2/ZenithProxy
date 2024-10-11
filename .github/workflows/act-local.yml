@@ -31,10 +31,13 @@ jobs:
       - name: Elevate wrapper permissions
         run: chmod +x ./gradlew
 
-      - name: Build ZenithProxy
-        uses: gradle/gradle-build-action@v3
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
-          arguments: jarBuild
+          dependency-graph: generate-and-submit
+
+      - name: Build ZenithProxy Java
+        run: ./gradlew jarBuild
 #
 #      - name: Set ACT Runner Env Variables
 #        run: |
@@ -46,10 +49,8 @@ jobs:
           wget https://cdn.2b2t.vc/profile.iprof
           echo "GRAALVM_PGO_PATH=$(pwd)/profile.iprof" >> "$GITHUB_ENV"
 
-      - name: Build ZenithProxy
-        uses: gradle/gradle-build-action@v3
-        with:
-          arguments: nativeCompile
+      - name: Build ZenithProxy Linux Native
+        run: ./gradlew nativeCompile
 
 #      - name: Enable GraalVM Profile Instrumenting
 #        run: |

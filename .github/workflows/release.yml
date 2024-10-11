@@ -33,11 +33,13 @@ jobs:
         run: |
           echo "RELEASE_TAG=${{ github.ref_name }}" >> "$GITHUB_ENV"
 
-      - name: Build ZenithProxy Java
-        uses: gradle/gradle-build-action@v3
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
           dependency-graph: generate-and-submit
-          arguments: jarBuild
+
+      - name: Build ZenithProxy Java
+        run: ./gradlew jarBuild
 
       - name: Upload Java Artifact
         uses: actions/upload-artifact@v4
@@ -51,9 +53,7 @@ jobs:
           echo "GRAALVM_PGO_PATH=$(pwd)/profile.iprof" >> "$GITHUB_ENV"
 
       - name: Build ZenithProxy Linux Native
-        uses: gradle/gradle-build-action@v3
-        with:
-          arguments: nativeCompile
+        run: ./gradlew nativeCompile
 
       - name: Elevate binary permissions
         run: chmod +x build/native/nativeCompile/*
