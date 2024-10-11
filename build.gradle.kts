@@ -50,6 +50,9 @@ repositories {
     mavenLocal()
 }
 
+val shade: Configuration by configurations.creating
+shade.extendsFrom(configurations.implementation.get())
+
 dependencies {
     implementation("com.zaxxer:HikariCP:6.0.0")
     implementation("org.postgresql:postgresql:42.7.4")
@@ -198,7 +201,7 @@ tasks {
         archiveBaseName = project.name
         archiveClassifier = ""
         archiveVersion = ""
-        configurations = listOf(project.configurations.implementation.get())
+        configurations = listOf(shade)
 
         exclude(listOf(
             "module-info.class", "META-INF/licenses/**", "META-INF/maven/**", "META-INF/proguard/**",
