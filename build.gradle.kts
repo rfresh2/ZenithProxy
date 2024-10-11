@@ -73,9 +73,6 @@ dependencies {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
     }
-    implementation("net.raphimc:MinecraftAuth:4.1.1") {
-        exclude(group = "io.jsonwebtoken")
-    }
     val nettyVersion = "4.1.114.Final"
     implementation("io.netty:netty-codec-haproxy:$nettyVersion")
     implementation("io.netty:netty-codec-dns:$nettyVersion")
