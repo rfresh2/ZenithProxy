@@ -6,6 +6,7 @@ import com.zenith.feature.world.MovementInputRequest;
 import com.zenith.feature.world.Pathing;
 import com.zenith.feature.world.World;
 import com.zenith.mc.block.*;
+import com.zenith.mc.enchantment.EnchantmentRegistry;
 import com.zenith.module.Module;
 import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;
@@ -14,6 +15,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
+import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentType;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundExplodePacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
@@ -54,6 +56,7 @@ public class PlayerSimulation extends Module {
     private double fallDistance;
     @Getter private boolean isTouchingWater;
     private int ticksSinceLastPositionPacketSent;
+    private MutableVec3d stuckSpeedMultiplier = new MutableVec3d(0, 0, 0);
     private MutableVec3d velocity = new MutableVec3d(0, 0, 0);
     private Input movementInput = new Input();
     private int waitTicks = 0;
@@ -276,9 +279,7 @@ public class PlayerSimulation extends Module {
             float waterSpeed = 0.02f;
             updateVelocity(waterSpeed, movementInputVec);
             move();
-            velocity.setX(velocity.getX() * 0.8f);
-            velocity.setY(velocity.getY() * 0.8f);
-            velocity.setZ(velocity.getZ() * 0.8f);
+            velocity.multiply(0.8f);
             double d;
             if (falling && Math.abs(velocity.getY() - 0.005) >= 0.003 && Math.abs(velocity.getY() - gravity / 16.0) < 0.003) {
                 d = -0.003;
@@ -296,34 +297,39 @@ public class PlayerSimulation extends Module {
             float friction = this.onGround ? floorSlipperiness * 0.91f : 0.91F;
             applyMovementInput(movementInputVec, floorSlipperiness);
             if (!isFlying) velocity.setY(velocity.getY() - gravity);
-            velocity.setX(velocity.getX() * (double) friction);
-            velocity.setY(velocity.getY() * 0.9800000190734863);
-            velocity.setZ(velocity.getZ() * (double) friction);
+            velocity.set(velocity.getX() * (double) friction,
+                         velocity.getY() * 0.9800000190734863,
+                         velocity.getZ() * (double) friction);
         }
     }
 
     private void move() {
-        // todo: movement slowing from certain blocks like cobweb
+        MutableVec3d localVelocity = new MutableVec3d(velocity);
+        if (stuckSpeedMultiplier.lengthSquared() > 1.0E-7) {
+            localVelocity.multiply(stuckSpeedMultiplier.getX(), stuckSpeedMultiplier.getY(), stuckSpeedMultiplier.getZ());
+            stuckSpeedMultiplier.set(0, 0, 0);
+            velocity.set(0, 0, 0);
+        }
 
         // in-place velocity update
-        adjustMovementForSneaking(velocity);
+        adjustMovementForSneaking(localVelocity);
 
         List<LocalizedCollisionBox> blockCollisionBoxes = World.getIntersectingCollisionBoxes(
-            playerCollisionBox.stretch(velocity.getX(), velocity.getY(), velocity.getZ()));
-        MutableVec3d adjustedMovement = adjustMovementForCollisions(velocity, playerCollisionBox, blockCollisionBoxes);
-        boolean isYAdjusted = velocity.getY() != adjustedMovement.getY();
-        boolean isXAdjusted = velocity.getX() != adjustedMovement.getX();
-        boolean isZAdjusted = velocity.getZ() != adjustedMovement.getZ();
+            playerCollisionBox.stretch(localVelocity.getX(), localVelocity.getY(), localVelocity.getZ()));
+        MutableVec3d adjustedMovement = adjustMovementForCollisions(localVelocity, playerCollisionBox, blockCollisionBoxes);
+        boolean isYAdjusted = localVelocity.getY() != adjustedMovement.getY();
+        boolean isXAdjusted = localVelocity.getX() != adjustedMovement.getX();
+        boolean isZAdjusted = localVelocity.getZ() != adjustedMovement.getZ();
         if (onGround && (isXAdjusted || isZAdjusted)) {
             // attempt to step up in xz direction block
-            MutableVec3d stepUpAdjustedVec = adjustMovementForCollisions(new MutableVec3d(velocity.getX(), stepHeight, velocity.getZ()),
+            MutableVec3d stepUpAdjustedVec = adjustMovementForCollisions(new MutableVec3d(localVelocity.getX(), stepHeight, localVelocity.getZ()),
                                                                          playerCollisionBox,
                                                                          blockCollisionBoxes);
             MutableVec3d stepUpWithMoveXZAdjustedVec = adjustMovementForCollisions(new MutableVec3d(0.0, stepHeight, 0.0),
-                                                                                   playerCollisionBox.stretch(velocity.getX(), 0.0, velocity.getZ()),
+                                                                                   playerCollisionBox.stretch(localVelocity.getX(), 0.0, localVelocity.getZ()),
                                                                                    blockCollisionBoxes);
             if (stepUpWithMoveXZAdjustedVec.getY() < this.stepHeight) {
-                MutableVec3d stepUpAndMoveVec = adjustMovementForCollisions(new MutableVec3d(velocity.getX(), 0.0, velocity.getZ()),
+                MutableVec3d stepUpAndMoveVec = adjustMovementForCollisions(new MutableVec3d(localVelocity.getX(), 0.0, localVelocity.getZ()),
                                                                             playerCollisionBox.move(stepUpWithMoveXZAdjustedVec.getX(),
                                                                                                     stepUpWithMoveXZAdjustedVec.getY(),
                                                                                                     stepUpWithMoveXZAdjustedVec.getZ()),
@@ -335,7 +341,7 @@ public class PlayerSimulation extends Module {
             }
 
             if (stepUpAdjustedVec.horizontalLengthSquared() > adjustedMovement.horizontalLengthSquared()) {
-                stepUpAdjustedVec.add(adjustMovementForCollisions(new MutableVec3d(0.0, -stepUpAdjustedVec.getY() + velocity.getY(), 0.0),
+                stepUpAdjustedVec.add(adjustMovementForCollisions(new MutableVec3d(0.0, -stepUpAdjustedVec.getY() + localVelocity.getY(), 0.0),
                                                                   playerCollisionBox.move(stepUpAdjustedVec.getX(),
                                                                                           stepUpAdjustedVec.getY(),
                                                                                           stepUpAdjustedVec.getZ()),
@@ -343,12 +349,11 @@ public class PlayerSimulation extends Module {
                 adjustedMovement = stepUpAdjustedVec;
             }
         }
-        this.setOnGround(isYAdjusted && velocity.getY() < 0.0, adjustedMovement);
+        this.setOnGround(isYAdjusted && localVelocity.getY() < 0.0, adjustedMovement);
 
         final LocalizedCollisionBox movedPlayerCollisionBox = playerCollisionBox.move(adjustedMovement.getX(),
                                                                                       adjustedMovement.getY(),
                                                                                       adjustedMovement.getZ());
-
         if (isXAdjusted) {
             velocity.setX(0.0);
         }
@@ -371,15 +376,62 @@ public class PlayerSimulation extends Module {
     }
 
     private void tryCheckInsideBlocks() {
-        var collidingBlockStates = World.getCollidingBlockStates(playerCollisionBox);
+        var collidingBlockStates = World.getCollidingLocalizedBlockStates(playerCollisionBox);
         if (collidingBlockStates.isEmpty()) return;
         for (int i = 0; i < collidingBlockStates.size(); i++) {
-            var blockState = collidingBlockStates.get(i);
-            if (blockState.id() == BlockRegistry.BUBBLE_COLUMN.minStateId()) {
-                velocity.setY(Math.max(-0.3, velocity.getY() - 0.03));
-            } else if (blockState.id() == BlockRegistry.BUBBLE_COLUMN.maxStateId()) {
-                velocity.setY(Math.min(0.7, velocity.getY() + 0.06));
+            var localState = collidingBlockStates.get(i);
+            if (localState.blockState().id() == BlockRegistry.BUBBLE_COLUMN.minStateId()) {
+                if (World.getBlockAtBlockPos(localState.x(), localState.y() + 1, localState.z()) == BlockRegistry.AIR) {
+                    velocity.setY(Math.max(-0.9, velocity.getY() - 0.03));
+                } else {
+                    velocity.setY(Math.max(-0.3, velocity.getY() - 0.03));
+                }
+            } else if (localState.blockState().id() == BlockRegistry.BUBBLE_COLUMN.maxStateId()) {
+                if (World.getBlockAtBlockPos(localState.x(), localState.y() + 1, localState.z()) == BlockRegistry.AIR) {
+                    velocity.setY(Math.min(1.8, velocity.getY() + 0.1));
+                } else {
+                    velocity.setY(Math.min(0.7, velocity.getY() + 0.06));
+                }
+            } else if (localState.blockState().block() == BlockRegistry.COBWEB) {
+                fallDistance = 0.0;
+                stuckSpeedMultiplier.set(0.25, 0.05, 0.25);
+            } else if (localState.blockState().block() == BlockRegistry.HONEY_BLOCK) {
+                if (isSlidingDownHoneyBlock(localState.x(), localState.y(), localState.z())) {
+                    if (velocity.getY() < -0.13) {
+                        double d = -0.05 / velocity.getY();
+                        velocity.multiply(d, 1, d);
+                        velocity.setY(-0.05);
+                    } else {
+                        velocity.setY(-0.05);
+                    }
+                }
+            } else if (localState.blockState().block() == BlockRegistry.POWDER_SNOW) {
+                int floorX = MathHelper.floorI(getX());
+                int floorY = MathHelper.floorI(getY());
+                int floorZ = MathHelper.floorI(getZ());
+                if (floorX == localState.x() && floorY == localState.y() && floorZ == localState.z()) {
+                    fallDistance = 0.0;
+                    stuckSpeedMultiplier.set(0.9, 1.5, 0.9);
+                }
+            } else if (localState.blockState().block() == BlockRegistry.SWEET_BERRY_BUSH) {
+                fallDistance = 0.0;
+                stuckSpeedMultiplier.set(0.8, 0.75, 0.8);
             }
+        }
+    }
+
+    private boolean isSlidingDownHoneyBlock(int x, int y, int z) {
+        if (onGround) {
+            return false;
+        } else if (getY() > (double)y + 0.9375 - 1.0E-7) {
+            return false;
+        } else if (velocity.getY() >= -0.08) {
+            return false;
+        } else {
+            double xDiff = Math.abs((double)x + 0.5 - getX());
+            double zDiff = Math.abs((double)z + 0.5 - getZ());
+            double inBB = 0.4375 + 0.3;
+            return xDiff + 1.0E-7 > inBB || zDiff + 1.0E-7 > inBB;
         }
     }
 
@@ -575,13 +627,16 @@ public class PlayerSimulation extends Module {
     }
 
     private float getBlockSpeedFactor(Block block) {
-        if (block.name().equals("honey_block")) return 0.4f;
-        if (block.name().equals("soul_sand")) {
+        if (block == BlockRegistry.HONEY_BLOCK) return 0.4f;
+        if (block == BlockRegistry.SOUL_SAND) {
             ItemStack bootsItemStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.BOOTS);
-            if (bootsItemStack != null) {
-                // todo: check if soul speed enchantment is on boots
-                // todo: create enchantment parser helper class
-//                if (bootsItemStack.getNbt().containsKey(EnchantmentTypes.SOUL_SPEED)) return 1.0f;
+            if (bootsItemStack != null && bootsItemStack.getDataComponents() != null) {
+                var enchantComponents = bootsItemStack.getDataComponents().get(DataComponentType.ENCHANTMENTS);
+                if (enchantComponents != null && enchantComponents.getEnchantments() != null) {
+                    if (enchantComponents.getEnchantments().containsKey(EnchantmentRegistry.SOUL_SPEED.id())) {
+                        return 1.0f;
+                    }
+                }
             }
             return 0.4f;
         }
@@ -589,9 +644,7 @@ public class PlayerSimulation extends Module {
     }
 
     public void handleSetMotion(final double motionX, final double motionY, final double motionZ) {
-        this.velocity.setX(motionX);
-        this.velocity.setY(motionY);
-        this.velocity.setZ(motionZ);
+        this.velocity.set(motionX, motionY, motionZ);
     }
 
     public void handleExplosion(final ClientboundExplodePacket packet) {

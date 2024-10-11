@@ -178,6 +178,18 @@ public class World {
         return blockStates;
     }
 
+    public List<LocalizedBlockState> getCollidingLocalizedBlockStates(final LocalizedCollisionBox cb) {
+        final List<LocalizedBlockState> blockStates = new ArrayList<>(0);
+        LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
+        for (int i = 0; i < blockPosList.size(); i++) {
+            var blockPos = blockPosList.getLong(i);
+            var blockState = getBlockState(blockPos);
+            if (blockState.id() == 0) continue; // air
+            blockStates.add(new LocalizedBlockState(blockState, BlockPos.getX(blockPos), BlockPos.getY(blockPos), BlockPos.getZ(blockPos)));
+        }
+        return blockStates;
+    }
+
     public static boolean isSpaceEmpty(final LocalizedCollisionBox cb) {
         LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
         for (int i = 0; i < blockPosList.size(); i++) {

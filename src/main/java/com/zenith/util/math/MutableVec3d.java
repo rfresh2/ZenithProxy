@@ -14,6 +14,18 @@ public class MutableVec3d {
 
     public static MutableVec3d ZERO = new MutableVec3d(0, 0, 0);
 
+    public MutableVec3d(final MutableVec3d velocity) {
+        this.x = velocity.x;
+        this.y = velocity.y;
+        this.z = velocity.z;
+    }
+
+    public void set(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
     public void multiply(double value) {
         this.x *= value;
         this.y *= value;
