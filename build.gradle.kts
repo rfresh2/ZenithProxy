@@ -69,7 +69,7 @@ dependencies {
     implementation("com.github.rfresh2.discord4j:discord4j-core:3.4.3.9") {
         exclude(group = "io.netty")
     }
-    implementation("com.github.rfresh2:MCProtocolLib:1.21.0.13") {
+    implementation("com.github.rfresh2:MCProtocolLib:1.21.0.14") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
     }
