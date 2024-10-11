@@ -6,6 +6,7 @@ import com.zenith.network.registry.PacketHandler;
 import net.kyori.adventure.text.Component;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundTransferPacket;
 
+import static com.zenith.Shared.CLIENT_LOG;
 import static com.zenith.Shared.EXECUTOR;
 
 public class CTransferHandler implements PacketHandler<ClientboundTransferPacket, ClientSession> {
@@ -23,7 +24,14 @@ public class CTransferHandler implements PacketHandler<ClientboundTransferPacket
         //  we need a persistent cookie store and we also need to connect with transfer intention
         //  but these should only matter in cases of server networks where they actually require cookies
         //  and knowing which connections are transfers or not (i.e. to block or allow them)
-        EXECUTOR.execute(() -> Proxy.getInstance().connect(packet.getHost(), packet.getPort()));
+        EXECUTOR.execute(() -> {
+            try {
+                Proxy.getInstance().connect(packet.getHost(), packet.getPort());
+            } catch (final Exception e) {
+                CLIENT_LOG.error("Error connecting to transfer destination: {}:{}", packet.getHost(), packet.getPort(), e);
+            }
+
+        });
         return null;
     }
 }

@@ -23,30 +23,24 @@ repositories {
         content { includeGroupByRegex("com.github.rfresh2.*") }
     }
     maven("https://libraries.minecraft.net") {
-        name = "minecraft"
         content { includeGroup("com.mojang") }
     }
     maven("https://repo.opencollab.dev/maven-releases/") {
-        name = "opencollab-release"
         content { includeGroupByRegex("org.cloudburstmc.*") }
     }
     maven("https://papermc.io/repo/repository/maven-public/") {
-        name = "paper"
         content { includeGroup("com.velocitypowered") }
     }
     maven("https://repo.minebench.de/") {
-        name = "minebench"
         content { includeGroup("de.themoep") }
     }
     maven("https://repo.viaversion.com") {
-        name = "ViaVersion"
         content {
             includeGroup("com.viaversion")
             includeGroup("net.raphimc")
         }
     }
     maven("https://maven.lenni0451.net/releases") {
-        name = "Lenni0451"
         content {
             includeGroup("net.raphimc")
             includeGroup("net.lenni0451")
@@ -56,65 +50,62 @@ repositories {
     mavenLocal()
 }
 
-val shade: Configuration by configurations.creating
-configurations.implementation.get().extendsFrom(shade)
-
 dependencies {
-    shade("com.zaxxer:HikariCP:6.0.0")
-    shade("org.postgresql:postgresql:42.7.4")
+    implementation("com.zaxxer:HikariCP:6.0.0")
+    implementation("org.postgresql:postgresql:42.7.4")
     val jdbiVersion = "3.45.4"
-    shade("org.jdbi:jdbi3-core:$jdbiVersion")
-    shade("org.jdbi:jdbi3-postgres:$jdbiVersion")
-    shade("com.google.guava:guava:33.3.1-jre")
-    shade("ch.qos.logback:logback-classic:1.5.8")
-    shade("org.slf4j:slf4j-api:2.0.16")
-    shade("org.slf4j:jul-to-slf4j:2.0.16")
-    shade("com.mojang:brigadier:1.2.9")
-    shade("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0")
-    shade("com.github.rfresh2:SimpleEventBus:1.2")
-    shade("com.github.rfresh2.discord4j:discord4j-core:3.4.3.9") {
+    implementation("org.jdbi:jdbi3-core:$jdbiVersion")
+    implementation("org.jdbi:jdbi3-postgres:$jdbiVersion")
+    implementation("com.google.guava:guava:33.3.1-jre")
+    implementation("ch.qos.logback:logback-classic:1.5.8")
+    implementation("org.slf4j:slf4j-api:2.0.16")
+    implementation("org.slf4j:jul-to-slf4j:2.0.16")
+    implementation("com.mojang:brigadier:1.2.9")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0")
+    implementation("com.github.rfresh2:SimpleEventBus:1.2")
+    implementation("com.github.rfresh2.discord4j:discord4j-core:3.4.3.9") {
         exclude(group = "io.netty")
     }
-    shade("com.github.rfresh2:MCProtocolLib:1.21.0.13") {
+    implementation("com.github.rfresh2:MCProtocolLib:1.21.0.13") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
     }
-    shade("net.raphimc:MinecraftAuth:4.1.1") {
+    implementation("net.raphimc:MinecraftAuth:4.1.1") {
         exclude(group = "io.jsonwebtoken")
     }
     val nettyVersion = "4.1.114.Final"
-    shade("io.netty:netty-codec-haproxy:$nettyVersion")
-    shade("io.netty:netty-codec-dns:$nettyVersion")
-    shade("io.netty:netty-codec-http2:$nettyVersion")
-    shade("io.netty:netty-codec-http:$nettyVersion")
-    shade("io.netty:netty-codec-socks:$nettyVersion")
-    shade("io.netty:netty-handler-proxy:$nettyVersion")
-    shade("io.netty:netty-handler:$nettyVersion")
-    shade("io.netty:netty-resolver-dns:$nettyVersion")
-    shade("io.netty:netty-transport-classes-epoll:$nettyVersion")
-    shade("io.netty:netty-transport-native-epoll:$nettyVersion:linux-x86_64")
-    shade("io.netty:netty-transport-native-unix-common:$nettyVersion:linux-x86_64")
-    shade("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
-    shade("net.kyori:adventure-text-minimessage:4.17.0")
-    shade("org.cloudburstmc.math:api:2.0")
-    shade("org.cloudburstmc.math:immutable:2.0")
-    shade("org.redisson:redisson:3.37.0") {
+    implementation("io.netty:netty-codec-haproxy:$nettyVersion")
+    implementation("io.netty:netty-codec-dns:$nettyVersion")
+    implementation("io.netty:netty-codec-http2:$nettyVersion")
+    implementation("io.netty:netty-codec-http:$nettyVersion")
+    implementation("io.netty:netty-codec-socks:$nettyVersion")
+    implementation("io.netty:netty-handler-proxy:$nettyVersion")
+    implementation("io.netty:netty-handler:$nettyVersion")
+    implementation("io.netty:netty-resolver-dns:$nettyVersion")
+    implementation("io.netty:netty-transport-classes-epoll:$nettyVersion")
+    implementation("io.netty:netty-transport-native-epoll:$nettyVersion:linux-x86_64")
+    implementation("io.netty:netty-transport-native-unix-common:$nettyVersion:linux-x86_64")
+    implementation("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
+    implementation("net.kyori:adventure-text-minimessage:4.17.0")
+    implementation("org.cloudburstmc.math:api:2.0")
+    implementation("org.cloudburstmc.math:immutable:2.0")
+    implementation("org.redisson:redisson:3.37.0") {
         exclude(group = "io.netty")
     }
     val fastutilVersion = "8.5.14"
-    shade("com.github.rfresh2.fastutil.maps:object-object-maps:$fastutilVersion")
-    shade("com.github.rfresh2.fastutil.maps:int-object-maps:$fastutilVersion")
-    shade("com.github.rfresh2.fastutil.maps:object-int-maps:$fastutilVersion")
-    shade("com.github.rfresh2.fastutil.maps:long-object-maps:$fastutilVersion")
-    shade("com.github.rfresh2.fastutil.maps:int-int-maps:$fastutilVersion")
-    shade("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
-    shade("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
-    shade("net.raphimc:ViaLoader:3.0.2")
-    shade("com.viaversion:viaversion:5.0.3")
-    shade("com.viaversion:viabackwards:5.0.3")
-    shade("org.jline:jline:3.27.0")
-    shade("org.jline:jline-terminal-jni:3.27.0")
-    shade("ar.com.hjg:pngj:2.1.0")
+    implementation("com.github.rfresh2.fastutil.maps:object-object-maps:$fastutilVersion")
+    implementation("com.github.rfresh2.fastutil.maps:int-object-maps:$fastutilVersion")
+    implementation("com.github.rfresh2.fastutil.maps:object-int-maps:$fastutilVersion")
+    implementation("com.github.rfresh2.fastutil.maps:long-object-maps:$fastutilVersion")
+    implementation("com.github.rfresh2.fastutil.maps:int-int-maps:$fastutilVersion")
+    implementation("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
+    implementation("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
+    implementation("net.raphimc:ViaLoader:3.0.2")
+    implementation("com.viaversion:viaversion:5.0.3")
+    implementation("com.viaversion:viabackwards:5.0.3")
+    implementation("org.jline:jline:3.27.0")
+    implementation("org.jline:jline-terminal-jni:3.27.0")
+    implementation("ar.com.hjg:pngj:2.1.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.2")
     val lombokVersion = "1.18.34"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
@@ -204,11 +195,10 @@ tasks {
     jar { enabled = false }
     shadowJar {
         from(collectReachabilityMetadata)
-        archiveBaseName.set(project.name)
-        archiveClassifier.set("")
-        archiveVersion.set("")
-
-        configurations = listOf(shade)
+        archiveBaseName = project.name
+        archiveClassifier = ""
+        archiveVersion = ""
+        configurations = listOf(project.configurations.implementation.get())
 
         exclude(listOf(
             "module-info.class", "META-INF/licenses/**", "META-INF/maven/**", "META-INF/proguard/**",
