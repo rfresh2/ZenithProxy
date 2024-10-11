@@ -72,6 +72,7 @@ dependencies {
     implementation("com.github.rfresh2:MCProtocolLib:1.21.0.14") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
+        exclude(group = "io.jsonwebtoken")
     }
     implementation("net.raphimc:MinecraftAuth:4.1.1") {
         exclude(group = "io.jsonwebtoken")
