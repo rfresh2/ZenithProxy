@@ -6,16 +6,12 @@ import com.zenith.feature.world.MovementInputRequest;
 import com.zenith.feature.world.Pathing;
 import com.zenith.feature.world.World;
 import com.zenith.mc.block.*;
-import com.zenith.mc.enchantment.EnchantmentRegistry;
 import com.zenith.module.Module;
 import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;
 import lombok.Getter;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
-import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
-import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentType;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundExplodePacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
@@ -371,7 +367,7 @@ public class PlayerSimulation extends Module {
         this.z = ((movedPlayerCollisionBox.getMinZ() + movedPlayerCollisionBox.getMaxZ()) / 2.0);
         syncPlayerCollisionBox();
         tryCheckInsideBlocks();
-        float velocityMultiplier = this.getBlockSpeedFactor();
+        float velocityMultiplier = MathHelper.lerp(CACHE.getPlayerCache().getThePlayer().getMovementEfficiency(), this.getBlockSpeedFactor(), 1.0f);
         velocity.multiply(velocityMultiplier, 1.0, velocityMultiplier);
     }
 
@@ -627,19 +623,7 @@ public class PlayerSimulation extends Module {
     }
 
     private float getBlockSpeedFactor(Block block) {
-        if (block == BlockRegistry.HONEY_BLOCK) return 0.4f;
-        if (block == BlockRegistry.SOUL_SAND) {
-            ItemStack bootsItemStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.BOOTS);
-            if (bootsItemStack != null && bootsItemStack.getDataComponents() != null) {
-                var enchantComponents = bootsItemStack.getDataComponents().get(DataComponentType.ENCHANTMENTS);
-                if (enchantComponents != null && enchantComponents.getEnchantments() != null) {
-                    if (enchantComponents.getEnchantments().containsKey(EnchantmentRegistry.SOUL_SPEED.id())) {
-                        return 1.0f;
-                    }
-                }
-            }
-            return 0.4f;
-        }
+        if (block == BlockRegistry.HONEY_BLOCK || block == BlockRegistry.SOUL_SAND) return 0.4f;
         return 1.0f;
     }
 

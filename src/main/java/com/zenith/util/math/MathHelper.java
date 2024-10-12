@@ -101,6 +101,10 @@ public class MathHelper {
         return start + delta * (end - start);
     }
 
+    public static float lerp(float delta, float start, float end) {
+        return start + delta * (end - start);
+    }
+
     public static long lfloor(double d) {
         long i = (long)d;
         return d < (double)i ? i - 1L : i;

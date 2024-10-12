@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.zenith.Shared.CACHE;
 import static com.zenith.Shared.SERVER_LOG;
 
 
@@ -37,6 +36,7 @@ public class EntityPlayer extends EntityLiving {
     protected int totalExperience;
     protected int level;
     protected float experience;
+    protected float movementEfficiency = 0.0f;
     protected float speed = 0.10000000149011612f;
 
     public EntityPlayer() {
@@ -56,27 +56,18 @@ public class EntityPlayer extends EntityLiving {
     @Override
     public void updateAttributes(final List<Attribute> attributes) {
         super.updateAttributes(attributes);
-        if (this.selfPlayer) {
-            // todo: apply and update any other relevant attributes for sim, e.g. health, attack speed, flying speed
-            for (int i = 0; i < attributes.size(); i++) {
-                final Attribute attribute = attributes.get(i);
-                if (attribute.getType() == AttributeType.Builtin.GENERIC_MOVEMENT_SPEED) {
-                    updateSpeed();
-                    break;
-                }
-            }
-        }
+        if (this.selfPlayer) updateSpeed();
     }
 
     private void updateSpeed() {
-        final Attribute movementSpeedAttribute = CACHE.getPlayerCache()
-            .getThePlayer()
-            .getAttributes()
-            .get(AttributeType.Builtin.GENERIC_MOVEMENT_SPEED);
-        if (movementSpeedAttribute == null)
-            this.speed = 0.10000000149011612f;
-        else
-            this.speed = applyAttributeModifiers(movementSpeedAttribute);
+        var movementSpeedAttribute = getAttributes().get(AttributeType.Builtin.GENERIC_MOVEMENT_SPEED);
+        this.speed = movementSpeedAttribute == null
+            ? 0.10000000149011612f
+            : applyAttributeModifiers(movementSpeedAttribute);
+        var movementEfficiencyAttribute = getAttributes().get(AttributeType.Builtin.GENERIC_MOVEMENT_EFFICIENCY);
+        this.movementEfficiency = movementEfficiencyAttribute == null
+            ? 0.0f
+            : applyAttributeModifiers(movementEfficiencyAttribute);
     }
 
     private float applyAttributeModifiers(final Attribute attribute) {
