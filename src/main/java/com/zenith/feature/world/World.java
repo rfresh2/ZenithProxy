@@ -125,6 +125,20 @@ public class World {
         return false;
     }
 
+    public boolean isTouchingLava(final LocalizedCollisionBox cb) {
+        // adjust collision box slightly to avoid false positives at borders?
+        final LocalizedCollisionBox box = cb.stretch(-0.001, -0.001, -0.001);
+        LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
+        for (int i = 0; i < blockPosList.size(); i++) {
+            var blockPos = blockPosList.getLong(i);
+            final Block blockAtBlockPos = getBlockAtBlockPos(blockPos);
+            if (blockAtBlockPos == BlockRegistry.LAVA)
+                if (BlockPos.getY(blockPos) + 1.0 >= box.getMinY())
+                    return true;
+        }
+        return false;
+    }
+
     public boolean isWater(Block block) {
         return block == BlockRegistry.WATER
             || block == BlockRegistry.BUBBLE_COLUMN;

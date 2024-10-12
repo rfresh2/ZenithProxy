@@ -52,6 +52,7 @@ public class PlayerSimulation extends Module {
     private boolean wasGliding;
     private double fallDistance;
     @Getter private boolean isTouchingWater;
+    private boolean isTouchingLava;
     private int ticksSinceLastPositionPacketSent;
     private MutableVec3d stuckSpeedMultiplier = new MutableVec3d(0, 0, 0);
     private MutableVec3d velocity = new MutableVec3d(0, 0, 0);
@@ -64,6 +65,8 @@ public class PlayerSimulation extends Module {
     private boolean forceUpdateSupportingBlockPos = false;
     private Optional<BlockPos> supportingBlockPos = Optional.empty();
     private int jumpingCooldown;
+    private boolean horizontalCollision = false;
+    private boolean verticalCollision = false;
 
     @Override
     public void subscribeEvents() {
@@ -164,7 +167,8 @@ public class PlayerSimulation extends Module {
         updateMovementState();
         isSneaking = movementInput.sneaking;
         isSprinting = movementInput.sprinting;
-        this.isTouchingWater = World.isTouchingWater(playerCollisionBox);
+        isTouchingWater = World.isTouchingWater(playerCollisionBox);
+        isTouchingLava = World.isTouchingLava(playerCollisionBox);
 
         if (movementInput.isJumping()) {
             if (this.onGround && jumpingCooldown == 0 && !isTouchingWater) {
@@ -286,6 +290,7 @@ public class PlayerSimulation extends Module {
             }
             updateVelocity(waterSpeed, movementInputVec);
             move();
+            // todo: check if on climbable block here
             velocity.multiply(waterSlowdown, 0.8f, waterSlowdown);
             double d;
             if (falling && Math.abs(velocity.getY() - 0.005) >= 0.003 && Math.abs(velocity.getY() - gravity / 16.0) < 0.003) {
@@ -294,10 +299,22 @@ public class PlayerSimulation extends Module {
                 d = velocity.getY() - gravity / 16.0;
             }
             velocity.setY(d);
-            // todo: additional logic for sprinting, swimming, and collisions affecting velocity
-            //  this seems sufficient for falling into water and doing basic walking though
-
-            // todo: lava movement
+            // todo: autojump when near shore block. need more checks for water level collisions
+//            if (horizontalCollision && World.isFree(playerCollisionBox.move(0, 0.6 - getY() + beforeMoveY, 0))) {
+//                velocity.setY(0.3);
+//            }
+        } else if (isTouchingLava) {
+            updateVelocity(0.02f, movementInputVec);
+            move();
+            // todo: fluid height conditional here, different y velocity calc when below 0.4
+            velocity.multiply(0.5);
+            if (gravity != 0.0) {
+                velocity.add(0, -gravity / 4.0, 0);
+            }
+            // todo: autojump when near shore block. need more checks for water level collisions
+//            if (horizontalCollision && World.isFree(playerCollisionBox.move(velocity.getX(), velocity.getY() + 0.6 - getY() + beforeMoveY, velocity.getZ()))) {
+//                velocity.setY(0.3);
+//            }
         } else {
             final Block floorBlock = World.getBlockAtBlockPos(getVelocityAffectingPos());
             float floorSlipperiness = BLOCK_DATA.getBlockSlipperiness(floorBlock);
@@ -356,6 +373,8 @@ public class PlayerSimulation extends Module {
                 adjustedMovement = stepUpAdjustedVec;
             }
         }
+        horizontalCollision = isXAdjusted || isZAdjusted;
+        verticalCollision = isYAdjusted;
         this.setOnGround(isYAdjusted && localVelocity.getY() < 0.0, adjustedMovement);
 
         final LocalizedCollisionBox movedPlayerCollisionBox = playerCollisionBox.move(adjustedMovement.getX(),
