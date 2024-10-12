@@ -58,10 +58,13 @@ public class EntityPlayer extends EntityLiving {
         super.updateAttributes(attributes);
         if (this.selfPlayer) {
             // todo: apply and update any other relevant attributes for sim, e.g. health, attack speed, flying speed
-            attributes.stream()
-                .filter(attribute -> attribute.getType() == AttributeType.Builtin.GENERIC_MOVEMENT_SPEED)
-                .findAny()
-                .ifPresent(a -> updateSpeed());
+            for (int i = 0; i < attributes.size(); i++) {
+                final Attribute attribute = attributes.get(i);
+                if (attribute.getType() == AttributeType.Builtin.GENERIC_MOVEMENT_SPEED) {
+                    updateSpeed();
+                    break;
+                }
+            }
         }
     }
 

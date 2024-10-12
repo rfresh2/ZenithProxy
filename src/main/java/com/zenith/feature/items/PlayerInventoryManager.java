@@ -23,8 +23,15 @@ public class PlayerInventoryManager {
         EVENT_BUS.subscribe(
             this,
             // after modules, before player simulation
-            EventConsumer.of(ClientBotTick.class, -5000, this::handleTick)
+            EventConsumer.of(ClientBotTick.class, -5000, this::handleTick),
+            EventConsumer.of(ClientBotTick.Starting.class, this::handleBotTickStarting)
         );
+    }
+
+    private void handleBotTickStarting(ClientBotTick.Starting event) {
+        var openContainerId = CACHE.getPlayerCache().getInventoryCache().getOpenContainerId();
+        if (openContainerId == 0) return;
+        Proxy.getInstance().getClient().sendAsync(new ServerboundContainerClosePacket(openContainerId));
     }
 
     public synchronized boolean isOwner(Object owner) {
