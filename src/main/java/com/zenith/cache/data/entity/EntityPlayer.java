@@ -36,6 +36,7 @@ public class EntityPlayer extends EntityLiving {
     protected int totalExperience;
     protected int level;
     protected float experience;
+    protected float waterMovementEfficiency = 0.0f;
     protected float movementEfficiency = 0.0f;
     protected float speed = 0.10000000149011612f;
 
@@ -68,6 +69,10 @@ public class EntityPlayer extends EntityLiving {
         this.movementEfficiency = movementEfficiencyAttribute == null
             ? 0.0f
             : applyAttributeModifiers(movementEfficiencyAttribute);
+        var waterMovementEfficiencyAttribute = getAttributes().get(AttributeType.Builtin.GENERIC_WATER_MOVEMENT_EFFICIENCY);
+        this.waterMovementEfficiency = waterMovementEfficiencyAttribute == null
+            ? 0.0f
+            : applyAttributeModifiers(waterMovementEfficiencyAttribute);
     }
 
     private float applyAttributeModifiers(final Attribute attribute) {

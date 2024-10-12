@@ -10,6 +10,7 @@ import com.zenith.module.Module;
 import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;
 import lombok.Getter;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundExplodePacket;
@@ -272,10 +273,20 @@ public class PlayerSimulation extends Module {
     private void travel(MutableVec3d movementInputVec) {
         if (isTouchingWater) {
             boolean falling = velocity.getY() <= 0.0;
+            float waterSlowdown = isSprinting ? 0.9f : 0.8f;
             float waterSpeed = 0.02f;
+            float waterMovementEfficiency = CACHE.getPlayerCache().getThePlayer().getWaterMovementEfficiency();
+            if (!onGround) waterMovementEfficiency *= 0.5f;
+            if (waterMovementEfficiency > 0.0f) {
+                waterSlowdown += (0.54600006F - waterSlowdown) * waterMovementEfficiency;
+                waterSpeed += (getSpeed() - waterSpeed) * waterMovementEfficiency;
+            }
+            if (CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().containsKey(Effect.DOLPHINS_GRACE)) {
+                waterSlowdown = 0.96f;
+            }
             updateVelocity(waterSpeed, movementInputVec);
             move();
-            velocity.multiply(0.8f);
+            velocity.multiply(waterSlowdown, 0.8f, waterSlowdown);
             double d;
             if (falling && Math.abs(velocity.getY() - 0.005) >= 0.003 && Math.abs(velocity.getY() - gravity / 16.0) < 0.003) {
                 d = -0.003;
