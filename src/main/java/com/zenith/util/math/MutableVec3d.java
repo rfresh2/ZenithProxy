@@ -54,6 +54,10 @@ public class MutableVec3d {
         return this.x * this.x + this.y * this.y + this.z * this.z;
     }
 
+    public double length() {
+        return Math.sqrt(this.lengthSquared());
+    }
+
     public void normalize() {
         double d = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
         if (d < 1.0E-4) {
@@ -69,6 +73,10 @@ public class MutableVec3d {
 
     public double horizontalLengthSquared() {
         return this.x * this.x + this.z * this.z;
+    }
+
+    public double horizontalDistance() {
+        return Math.sqrt(this.horizontalLengthSquared());
     }
 
     public double distance2d(double x, double z) {

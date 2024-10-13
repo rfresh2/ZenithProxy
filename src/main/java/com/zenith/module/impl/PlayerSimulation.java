@@ -11,6 +11,7 @@ import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;
 import lombok.Getter;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundExplodePacket;
@@ -43,6 +44,7 @@ public class PlayerSimulation extends Module {
     private boolean isSprinting;
     private boolean lastSprinting;
     private boolean isFlying;
+    private boolean isFallFlying;
     private boolean canFly;
     private boolean wasFlying;
     private boolean isSwimming;
@@ -165,6 +167,13 @@ public class PlayerSimulation extends Module {
         if (Math.abs(velocity.getZ()) < 0.003) velocity.setZ(0);
 
         updateMovementState();
+        var fallFlyingMetadata = CACHE.getPlayerCache().getThePlayer().getMetadata().get(0);
+        if (fallFlyingMetadata instanceof ByteEntityMetadata byteEntityMetadata) {
+            var b = byteEntityMetadata.getPrimitiveValue();
+            isFallFlying = (b & 0x80) != 0;
+        } else {
+            isFallFlying = false;
+        }
         isSneaking = movementInput.sneaking;
         isSprinting = movementInput.sprinting;
         isTouchingWater = World.isTouchingWater(playerCollisionBox);
@@ -315,6 +324,31 @@ public class PlayerSimulation extends Module {
 //            if (horizontalCollision && World.isFree(playerCollisionBox.move(velocity.getX(), velocity.getY() + 0.6 - getY() + beforeMoveY, velocity.getZ()))) {
 //                velocity.setY(0.3);
 //            }
+        } else if (isFallFlying) {
+            if (velocity.getY() > -0.5 && fallDistance < 1) {
+                fallDistance = 1;
+            }
+            var lookAngle = MathHelper.calculateViewVector(yaw, pitch);
+            float fx = pitch * (float) (Math.PI / 180.0);
+            double i = Math.sqrt(lookAngle.getX() * lookAngle.getX() + lookAngle.getZ() * lookAngle.getZ());
+            double j = velocity.horizontalDistance();
+            double k = lookAngle.length();
+            double l = Math.cos(fx);
+            l = l * l * Math.min(1.0, k / 0.4);
+            velocity.add(0, gravity * (-1.0 + l * 0.75), 0);
+            if (velocity.getY() < 0 && i > 0) {
+                double m = velocity.getY() * -0.1 * l;
+                velocity.add(lookAngle.getX() * m / i, m, lookAngle.getZ() * m / i);
+            }
+            if (fx < 0 && i > 0) {
+                double m = j * -Math.sin(fx) * 0.04;
+                velocity.add(-lookAngle.getX() * m / i, m * 3.2, -lookAngle.getZ() * m / i);
+            }
+            if (i > 0) {
+                velocity.add((lookAngle.getX() / i * j - velocity.getX()) * 0.1, 0, (lookAngle.getZ() / i * j - velocity.getZ()) * 0.1);
+            }
+            velocity.multiply(0.99, 0.98, 0.99);
+            move();
         } else {
             final Block floorBlock = World.getBlockAtBlockPos(getVelocityAffectingPos());
             float floorSlipperiness = BLOCK_DATA.getBlockSlipperiness(floorBlock);
