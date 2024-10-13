@@ -6,6 +6,7 @@ import com.zenith.feature.world.MovementInputRequest;
 import com.zenith.feature.world.Pathing;
 import com.zenith.feature.world.World;
 import com.zenith.mc.block.*;
+import com.zenith.mc.dimension.DimensionRegistry;
 import com.zenith.module.Module;
 import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;
@@ -179,6 +180,8 @@ public class PlayerSimulation extends Module {
         isTouchingWater = World.isTouchingWater(playerCollisionBox);
         isTouchingLava = World.isTouchingLava(playerCollisionBox);
 
+        updateFluidHeightAndDoFluidPushing();
+
         if (movementInput.isJumping()) {
             if (this.onGround && jumpingCooldown == 0 && !isTouchingWater) {
                 jump();
@@ -274,7 +277,7 @@ public class PlayerSimulation extends Module {
 
     public synchronized void handlePlayerPosRotate(final int teleportId) {
         syncFromCache(false);
-        CLIENT_LOG.debug("Server teleport to: {}, {}, {}", this.x, this.y, this.z);
+        CLIENT_LOG.warn("Server teleport {} to: {}, {}, {}", teleportId, this.x, this.y, this.z);
         sendClientPacket(new ServerboundAcceptTeleportationPacket(teleportId));
         sendClientPacket(new ServerboundMovePlayerPosRotPacket(false, this.x, this.y, this.z, this.yaw, this.pitch));
     }
@@ -748,6 +751,64 @@ public class PlayerSimulation extends Module {
 
     private float getSpeed() {
         return CACHE.getPlayerCache().getThePlayer().getSpeed();
+    }
+
+    // todo: clean up and optimize
+    //  also handle missing edge cases:
+    //      waterlogged blocks
+    //      lava and water next to each other
+    private void updateFluidHeightAndDoFluidPushing() {
+        int floorX = MathHelper.floorI(playerCollisionBox.getMinX() + 0.001);
+        int ceilX = MathHelper.ceilI(playerCollisionBox.getMaxX() - 0.001);
+        int floorY = MathHelper.floorI(playerCollisionBox.getMinY() + 0.001);
+        int ceilY = MathHelper.ceilI(playerCollisionBox.getMaxY() - 0.001);
+        int floorZ = MathHelper.floorI(playerCollisionBox.getMinZ() + 0.001);
+        int ceilZ = MathHelper.ceilI(playerCollisionBox.getMaxZ() - 0.001);
+        double d2 = 0.0;
+        MutableVec3d vec3d = new MutableVec3d(0, 0, 0);
+        int n7 = 0;
+        boolean water = false;
+
+        for (int x = floorX; x < ceilX; x++) {
+            for (int y = floorY; y < ceilY; y++) {
+                for (int z = floorZ; z < ceilZ; z++) {
+                    double fluidHeightToWorld;
+                    var blockState = World.getBlockState(x, y, z);
+                    if (blockState.block() != BlockRegistry.WATER && blockState.block() != BlockRegistry.LAVA) continue;
+                    var localBlockState = new LocalizedBlockState(blockState, x, y, z);
+                    float fluidHeight = World.getFluidHeight(localBlockState);
+                    if (fluidHeight == 0 || (fluidHeightToWorld = y + fluidHeight) < playerCollisionBox.getMinY() + 0.001) continue;
+                    water = blockState.block() == BlockRegistry.WATER;
+                    d2 = Math.max(fluidHeightToWorld - playerCollisionBox.getMinY() + 0.001, d2);
+                    if (!isFlying) {
+                        var vec = World.getFluidFlow(localBlockState);
+                        if (d2 < 0.4) {
+                            vec.multiply(d2);
+                        }
+                        vec3d.add(vec);
+                        n7++;
+                    }
+                }
+            }
+        }
+
+        if (vec3d.lengthSquared() > 0) {
+            if (n7 > 0) {
+                vec3d.multiply(1.0 / n7);
+            }
+            if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
+                vec3d.normalize();
+            }
+            double multiplier;
+            if (water) multiplier = 0.014;
+            else {
+                var currentDim = CACHE.getChunkCache().getCurrentDimension();
+                if (currentDim != null && currentDim.id() == DimensionRegistry.THE_NETHER.id()) multiplier = 0.007;
+                else multiplier = 0.0023333333333333335;
+            }
+            vec3d.multiply(multiplier);
+            velocity.add(vec3d);
+        }
     }
 
     private boolean resyncTeleport() {
