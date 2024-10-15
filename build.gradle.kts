@@ -101,7 +101,7 @@ dependencies {
     implementation("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
     implementation("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
     implementation("net.raphimc:ViaLoader:3.0.3")
-    implementation("com.viaversion:viaversion:5.0.4")
+    implementation("com.viaversion:viaversion:5.0.5")
     implementation("com.viaversion:viabackwards:5.0.4")
     implementation("org.jline:jline:3.27.0")
     implementation("org.jline:jline-terminal-jni:3.27.0")
