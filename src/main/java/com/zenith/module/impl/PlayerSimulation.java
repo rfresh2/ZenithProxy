@@ -177,10 +177,7 @@ public class PlayerSimulation extends Module {
         }
         isSneaking = movementInput.sneaking;
         isSprinting = movementInput.sprinting;
-        isTouchingWater = World.isTouchingWater(playerCollisionBox);
-        isTouchingLava = World.isTouchingLava(playerCollisionBox);
-
-        updateFluidHeightAndDoFluidPushing();
+        updateInWaterStateAndDoFluidPushing();
 
         if (movementInput.isJumping()) {
             if (this.onGround && jumpingCooldown == 0 && !isTouchingWater) {
@@ -753,11 +750,36 @@ public class PlayerSimulation extends Module {
         return CACHE.getPlayerCache().getThePlayer().getSpeed();
     }
 
-    // todo: clean up and optimize
+    private void updateInWaterStateAndDoFluidPushing() {
+        updateInWaterStateAndDoWaterCurrentPushing();
+        var currentDim = CACHE.getChunkCache().getCurrentDimension();
+        double lavaSpeedMult = currentDim != null && currentDim.id() == DimensionRegistry.THE_NETHER.id()
+            ? 0.007
+            : 0.0023333333333333335;
+        if (updateFluidHeightAndDoFluidPushing(false, lavaSpeedMult)) {
+            fallDistance = 0;
+            isTouchingLava = true;
+        } else {
+            isTouchingLava = false;
+        }
+    }
+
+    private void updateInWaterStateAndDoWaterCurrentPushing() {
+        // todo: handle if we are in a boat
+
+        if (updateFluidHeightAndDoFluidPushing(true, 0.014)) {
+            fallDistance = 0;
+            isTouchingWater = true;
+        } else {
+            isTouchingWater = false;
+        }
+    }
+
+        // todo: clean up and optimize
     //  also handle missing edge cases:
     //      waterlogged blocks
     //      lava and water next to each other
-    private void updateFluidHeightAndDoFluidPushing() {
+    private boolean updateFluidHeightAndDoFluidPushing(boolean waterFluid, double motionScale) {
         int floorX = MathHelper.floorI(playerCollisionBox.getMinX() + 0.001);
         int ceilX = MathHelper.ceilI(playerCollisionBox.getMaxX() - 0.001);
         int floorY = MathHelper.floorI(playerCollisionBox.getMinY() + 0.001);
@@ -767,19 +789,23 @@ public class PlayerSimulation extends Module {
         double d2 = 0.0;
         MutableVec3d vec3d = new MutableVec3d(0, 0, 0);
         int n7 = 0;
-        boolean water = false;
+        boolean touched = false;
 
         for (int x = floorX; x < ceilX; x++) {
             for (int y = floorY; y < ceilY; y++) {
                 for (int z = floorZ; z < ceilZ; z++) {
                     double fluidHeightToWorld;
                     var blockState = World.getBlockState(x, y, z);
-                    if (blockState.block() != BlockRegistry.WATER && blockState.block() != BlockRegistry.LAVA) continue;
+                    if (waterFluid) {
+                        if (blockState.block() != BlockRegistry.WATER) continue;
+                    } else {
+                        if (blockState.block() != BlockRegistry.LAVA) continue;
+                    }
                     var localBlockState = new LocalizedBlockState(blockState, x, y, z);
                     float fluidHeight = World.getFluidHeight(localBlockState);
                     if (fluidHeight == 0 || (fluidHeightToWorld = y + fluidHeight) < playerCollisionBox.getMinY() + 0.001) continue;
-                    water = blockState.block() == BlockRegistry.WATER;
-                    d2 = Math.max(fluidHeightToWorld - playerCollisionBox.getMinY() + 0.001, d2);
+                    touched = true;
+                    d2 = Math.max(fluidHeightToWorld - (playerCollisionBox.getMinY() + 0.001), d2);
                     if (!isFlying) {
                         var vec = World.getFluidFlow(localBlockState);
                         if (d2 < 0.4) {
@@ -799,16 +825,10 @@ public class PlayerSimulation extends Module {
             if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
                 vec3d.normalize();
             }
-            double multiplier;
-            if (water) multiplier = 0.014;
-            else {
-                var currentDim = CACHE.getChunkCache().getCurrentDimension();
-                if (currentDim != null && currentDim.id() == DimensionRegistry.THE_NETHER.id()) multiplier = 0.007;
-                else multiplier = 0.0023333333333333335;
-            }
-            vec3d.multiply(multiplier);
+            vec3d.multiply(motionScale);
             velocity.add(vec3d);
         }
+        return touched;
     }
 
     private boolean resyncTeleport() {

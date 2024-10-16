@@ -272,7 +272,7 @@ public class World {
     }
 
     public static MutableVec3d getFluidFlow(LocalizedBlockState localBlockState) {
-        float fluidHeight = getFluidHeight(localBlockState);
+        float fluidHeight = Math.min(getFluidHeight(localBlockState), 8 / 9f);
         if (fluidHeight == 0) return new MutableVec3d(0, 0, 0);
         double d0 = 0;
         double d1 = 0;
@@ -284,11 +284,10 @@ public class World {
             if (affectsFlow(localBlockState, x, y, z)) {
                 float f1 = 0.0F;
                 var offsetState = new LocalizedBlockState(getBlockState(x, y, z), x, y , z);
-                float offsetFluidHeight = getFluidHeight(offsetState);
+                float offsetFluidHeight = Math.min(getFluidHeight(offsetState), 8 / 9f);
                 if (offsetFluidHeight == 0) {
-                    if (affectsFlow(offsetState, x, y - 1, z)) {
-                        var offsetBelowFluidHeight = getFluidHeight(new LocalizedBlockState(getBlockState(x, y - 1, z), x, y - 1, z));
-                        offsetFluidHeight = Math.min(offsetBelowFluidHeight, 8 / 9f);
+                    if (affectsFlow(localBlockState, x, y - 1, z)) {
+                        offsetFluidHeight = Math.min(getFluidHeight(new LocalizedBlockState(getBlockState(x, y - 1, z), x, y - 1, z)), 8 / 9f);
                         if (offsetFluidHeight > 0) {
                             f1 = fluidHeight - (offsetFluidHeight - 0.8888889F);
                         }
