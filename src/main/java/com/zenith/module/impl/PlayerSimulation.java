@@ -15,6 +15,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundExplodePacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
@@ -765,7 +766,14 @@ public class PlayerSimulation extends Module {
     }
 
     private void updateInWaterStateAndDoWaterCurrentPushing() {
-        // todo: handle if we are in a boat
+        if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
+            var vehicle = CACHE.getEntityCache().get(CACHE.getPlayerCache().getThePlayer().getVehicleId());
+            // todo: check if boat is underwater
+            if (vehicle != null && vehicle.getEntityType() == EntityType.BOAT) {
+                isTouchingWater = false;
+                return;
+            }
+        }
 
         if (updateFluidHeightAndDoFluidPushing(true, 0.014)) {
             fallDistance = 0;
@@ -775,7 +783,7 @@ public class PlayerSimulation extends Module {
         }
     }
 
-        // todo: clean up and optimize
+    // todo: clean up and optimize
     //  also handle missing edge cases:
     //      waterlogged blocks
     //      lava and water next to each other
