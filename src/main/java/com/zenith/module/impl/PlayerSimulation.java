@@ -275,7 +275,7 @@ public class PlayerSimulation extends Module {
 
     public synchronized void handlePlayerPosRotate(final int teleportId) {
         syncFromCache(false);
-        CLIENT_LOG.warn("Server teleport {} to: {}, {}, {}", teleportId, this.x, this.y, this.z);
+        CLIENT_LOG.debug("Server teleport {} to: {}, {}, {}", teleportId, this.x, this.y, this.z);
         sendClientPacket(new ServerboundAcceptTeleportationPacket(teleportId));
         sendClientPacket(new ServerboundMovePlayerPosRotPacket(false, this.x, this.y, this.z, this.yaw, this.pitch));
     }
