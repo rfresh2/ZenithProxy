@@ -8,7 +8,7 @@ import static com.zenith.Shared.BLOCK_DATA;
 /**
  * @param id palette blockstate id
  */
-public record BlockState(Block block, int id) {
+public record BlockState(Block block, int id, int x, int y, int z) {
     public boolean isSolidBlock() {
         return block.isBlock();
     }
@@ -17,7 +17,7 @@ public record BlockState(Block block, int id) {
         return BLOCK_DATA.getCollisionBoxesFromBlockStateId(id);
     }
 
-    public List<LocalizedCollisionBox> getLocalizedCollisionBoxes(int x, int y, int z) {
+    public List<LocalizedCollisionBox> getLocalizedCollisionBoxes() {
         var collisionBoxes = getCollisionBoxes();
         var offsetVec = block.offsetType().getOffsetFunction().offset(this, x, y, z);
         final List<LocalizedCollisionBox> localizedCollisionBoxes = new ArrayList<>(collisionBoxes.size());

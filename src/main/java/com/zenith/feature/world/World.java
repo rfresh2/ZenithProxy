@@ -48,7 +48,7 @@ public class World {
     }
 
     public BlockState getBlockState(final int x, final int y, final int z) {
-        return new BlockState(getBlockAtBlockPos(x, y, z), getBlockStateId(x, y, z));
+        return new BlockState(getBlockAtBlockPos(x, y, z), getBlockStateId(x, y, z), x, y, z);
     }
 
     public Block getBlockAtBlockPos(final BlockPos blockPos) {
@@ -82,7 +82,7 @@ public class World {
             var z = BlockPos.getZ(blockPos);
             final BlockState blockState = getBlockState(blockPos);
             if (blockState.isSolidBlock()) {
-                var collisionBoxes = blockState.getLocalizedCollisionBoxes(x, y, z);
+                var collisionBoxes = blockState.getLocalizedCollisionBoxes();
                 results.addAll(collisionBoxes);
             }
         }
@@ -113,34 +113,6 @@ public class World {
         }
     }
 
-    public boolean isTouchingWater(final LocalizedCollisionBox cb) {
-        // adjust collision box slightly to avoid false positives at borders?
-        final LocalizedCollisionBox box = cb.stretch(-0.001, -0.001, -0.001);
-        LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
-        for (int i = 0; i < blockPosList.size(); i++) {
-            var blockPos = blockPosList.getLong(i);
-            final Block blockAtBlockPos = getBlockAtBlockPos(blockPos);
-            if (isWater(blockAtBlockPos))
-                if (BlockPos.getY(blockPos) + 1.0 >= box.getMinY())
-                    return true;
-        }
-        return false;
-    }
-
-    public boolean isTouchingLava(final LocalizedCollisionBox cb) {
-        // adjust collision box slightly to avoid false positives at borders?
-        final LocalizedCollisionBox box = cb.stretch(-0.001, -0.001, -0.001);
-        LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
-        for (int i = 0; i < blockPosList.size(); i++) {
-            var blockPos = blockPosList.getLong(i);
-            final Block blockAtBlockPos = getBlockAtBlockPos(blockPos);
-            if (blockAtBlockPos == BlockRegistry.LAVA)
-                if (BlockPos.getY(blockPos) + 1.0 >= box.getMinY())
-                    return true;
-        }
-        return false;
-    }
-
     public boolean isWater(Block block) {
         return block == BlockRegistry.WATER
             || block == BlockRegistry.BUBBLE_COLUMN;
@@ -148,24 +120,6 @@ public class World {
 
     public boolean isFluid(Block block) {
         return isWater(block) || block == BlockRegistry.LAVA;
-    }
-
-    public List<BlockPos> getBlockPosListInCollisionBox(final LocalizedCollisionBox cb) {
-        int minX = MathHelper.floorI(cb.getMinX());
-        int maxX = MathHelper.ceilI(cb.getMaxX());
-        int minY = MathHelper.floorI(cb.getMinY());
-        int maxY = MathHelper.ceilI(cb.getMaxY());
-        int minZ = MathHelper.floorI(cb.getMinZ());
-        int maxZ = MathHelper.ceilI(cb.getMaxZ());
-        final List<BlockPos> blockPosList = new ArrayList<>((maxX - minX) * (maxY - minY) * (maxZ - minZ));
-        for (int x = minX; x < maxX; x++) {
-            for (int y = minY; y < maxY; y++) {
-                for (int z = minZ; z < maxZ; z++) {
-                    blockPosList.add(new BlockPos(x, y, z));
-                }
-            }
-        }
-        return blockPosList;
     }
 
     public LongList getBlockPosLongListInCollisionBox(final LocalizedCollisionBox cb) {
@@ -198,26 +152,11 @@ public class World {
         return blockStates;
     }
 
-    public List<LocalizedBlockState> getCollidingLocalizedBlockStates(final LocalizedCollisionBox cb) {
-        final List<LocalizedBlockState> blockStates = new ArrayList<>(0);
-        LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
-        for (int i = 0; i < blockPosList.size(); i++) {
-            var blockPos = blockPosList.getLong(i);
-            var blockState = getBlockState(blockPos);
-            if (blockState.id() == 0) continue; // air
-            blockStates.add(new LocalizedBlockState(blockState, BlockPos.getX(blockPos), BlockPos.getY(blockPos), BlockPos.getZ(blockPos)));
-        }
-        return blockStates;
-    }
-
     public static boolean isSpaceEmpty(final LocalizedCollisionBox cb) {
         LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
         for (int i = 0; i < blockPosList.size(); i++) {
             var blockPos = blockPosList.getLong(i);
-            var x = BlockPos.getX(blockPos);
-            var y = BlockPos.getY(blockPos);
-            var z = BlockPos.getZ(blockPos);
-            var blockStateCBs = getBlockState(blockPos).getLocalizedCollisionBoxes(x, y, z);
+            var blockStateCBs = getBlockState(blockPos).getLocalizedCollisionBoxes();
             for (int j = 0; j < blockStateCBs.size(); j++) {
                 if (blockStateCBs.get(j).intersects(cb)) return false;
             }
@@ -231,10 +170,11 @@ public class World {
         LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
         for (int i = 0; i < blockPosList.size(); i++) {
             var blockPos2 = blockPosList.getLong(i);
-            var x = BlockPos.getX(blockPos2);
-            var y = BlockPos.getY(blockPos2);
-            var z = BlockPos.getZ(blockPos2);
-            var blockStateCBs = getBlockState(blockPos2).getLocalizedCollisionBoxes(x, y, z);
+            var blockState = getBlockState(blockPos2);
+            var x = blockState.x();
+            var y = blockState.y();
+            var z = blockState.z();
+            var blockStateCBs = getBlockState(blockPos2).getLocalizedCollisionBoxes();
             for (int j = 0; j < blockStateCBs.size(); j++) {
                 if (blockStateCBs.get(j).intersects(cb)) {
                     final double curDist = MathHelper.distanceSq3d(x, y, z, cb.getX(), cb.getY(), cb.getZ());
@@ -249,81 +189,82 @@ public class World {
         return Optional.ofNullable(supportingBlock);
     }
 
-    public static float getFluidHeight(LocalizedBlockState localBlockState) {
-        var block = localBlockState.blockState().block();
+    public static float getFluidHeight(BlockState localBlockState) {
+        var block = localBlockState.block();
         // todo: support waterlogged blocks
         if (block != BlockRegistry.WATER && block != BlockRegistry.LAVA) return 0f;
         if (block == BlockRegistry.WATER) {
             if (World.getBlockAtBlockPos(localBlockState.x(), localBlockState.y() + 1, localBlockState.z()) == BlockRegistry.WATER) {
                 return 1;
             }
-            int level = localBlockState.blockState().id() - localBlockState.blockState().block().minStateId();
+            int level = localBlockState.id() - localBlockState.block().minStateId();
             if ((level & 0x8) == 8) return 8 / 9f;
             return (8 - level) / 9f;
         } else if (block == BlockRegistry.LAVA) {
             if (World.getBlockAtBlockPos(localBlockState.x(), localBlockState.y() + 1, localBlockState.z()) == BlockRegistry.LAVA) {
                 return 1;
             }
-            int level = localBlockState.blockState().id() - localBlockState.blockState().block().minStateId();
+            int level = localBlockState.id() - localBlockState.block().minStateId();
             if (level >= 8) return 8 / 9f;
             return (8 - level) / 9f;
         }
         return 8 / 9f;
     }
 
-    public static MutableVec3d getFluidFlow(LocalizedBlockState localBlockState) {
+    public static MutableVec3d getFluidFlow(BlockState localBlockState) {
         float fluidHeight = Math.min(getFluidHeight(localBlockState), 8 / 9f);
         if (fluidHeight == 0) return new MutableVec3d(0, 0, 0);
-        double d0 = 0;
-        double d1 = 0;
-        var directions = asList(new Direction(0, -1), new Direction(1, 0), new Direction(0, 1), new Direction(-1, 0));
-        for (var dir : directions) {
+        double flowX = 0;
+        double flowZ = 0;
+        for (var dir : Direction.HORIZONTALS) {
             int x = localBlockState.x() + dir.x;
             int y = localBlockState.y();
             int z = localBlockState.z() + dir.z;
             if (affectsFlow(localBlockState, x, y, z)) {
-                float f1 = 0.0F;
-                var offsetState = new LocalizedBlockState(getBlockState(x, y, z), x, y , z);
+                float fluidHDiffMult = 0.0F;
+                var offsetState = getBlockState(x, y, z);
                 float offsetFluidHeight = Math.min(getFluidHeight(offsetState), 8 / 9f);
                 if (offsetFluidHeight == 0) {
                     if (affectsFlow(localBlockState, x, y - 1, z)) {
-                        offsetFluidHeight = Math.min(getFluidHeight(new LocalizedBlockState(getBlockState(x, y - 1, z), x, y - 1, z)), 8 / 9f);
+                        offsetFluidHeight = Math.min(getFluidHeight(getBlockState(x, y - 1, z)), 8 / 9f);
                         if (offsetFluidHeight > 0) {
-                            f1 = fluidHeight - (offsetFluidHeight - 0.8888889F);
+                            fluidHDiffMult = fluidHeight - (offsetFluidHeight - 0.8888889F);
                         }
                     }
                 } else if (offsetFluidHeight > 0) {
-                    f1 = fluidHeight - offsetFluidHeight;
+                    fluidHDiffMult = fluidHeight - offsetFluidHeight;
                 }
 
-                if (f1 != 0) {
-                    d0 += (float) dir.x * f1;
-                    d1 += (float) dir.z * f1;
+                if (fluidHDiffMult != 0) {
+                    flowX += (float) dir.x * fluidHDiffMult;
+                    flowZ += (float) dir.z * fluidHDiffMult;
                 }
             }
         }
-        var vec3d = new MutableVec3d(d0, 0, d1);
+        var flowVec = new MutableVec3d(flowX, 0, flowZ);
 
-        if (isFluid(localBlockState.blockState().block()) && (localBlockState.blockState().id() - localBlockState.blockState().block().minStateId() >= 8)) {
-            for (var dir : directions) {
-                var bs = getBlockState(localBlockState.x() + dir.x, localBlockState.y(), localBlockState.z() + dir.z);
-                var bsAbove = getBlockState(localBlockState.x() + dir.x, localBlockState.y() + 1, localBlockState.z() + dir.z);
-                if (bs.isSolidBlock() || bsAbove.isSolidBlock()) {
-                    vec3d.normalize();
-                    vec3d.add(0, -6, 0);
+        if (isFluid(localBlockState.block()) && (localBlockState.id() - localBlockState.block().minStateId() >= 8)) {
+            for (var dir : Direction.HORIZONTALS) {
+                var blockState = getBlockState(localBlockState.x() + dir.x, localBlockState.y(), localBlockState.z() + dir.z);
+                var blockStateAbove = getBlockState(localBlockState.x() + dir.x, localBlockState.y() + 1, localBlockState.z() + dir.z);
+                if (blockState.isSolidBlock() || blockStateAbove.isSolidBlock()) {
+                    flowVec.normalize();
+                    flowVec.add(0, -6, 0);
                     break;
                 }
             }
         }
-        vec3d.normalize();
-        return vec3d;
+        flowVec.normalize();
+        return flowVec;
     }
 
-    private static boolean affectsFlow(LocalizedBlockState inType, int x, int y, int z) {
+    private static boolean affectsFlow(BlockState inType, int x, int y, int z) {
         var blockState = getBlockState(x, y, z);
-        return !isFluid(blockState.block()) || blockState.block() == inType.blockState().block();
+        return !isFluid(blockState.block()) || blockState.block() == inType.block();
     }
 
 
-    record Direction(int x, int z) {}
+    record Direction(int x, int z) {
+        static List<Direction> HORIZONTALS = asList(new Direction(0, -1), new Direction(1, 0), new Direction(0, 1), new Direction(-1, 0));
+    }
 }

@@ -436,26 +436,26 @@ public class PlayerSimulation extends Module {
     }
 
     private void tryCheckInsideBlocks() {
-        var collidingBlockStates = World.getCollidingLocalizedBlockStates(playerCollisionBox);
+        var collidingBlockStates = World.getCollidingBlockStates(playerCollisionBox);
         if (collidingBlockStates.isEmpty()) return;
         for (int i = 0; i < collidingBlockStates.size(); i++) {
             var localState = collidingBlockStates.get(i);
-            if (localState.blockState().id() == BlockRegistry.BUBBLE_COLUMN.minStateId()) {
+            if (localState.id() == BlockRegistry.BUBBLE_COLUMN.minStateId()) {
                 if (World.getBlockAtBlockPos(localState.x(), localState.y() + 1, localState.z()) == BlockRegistry.AIR) {
                     velocity.setY(Math.max(-0.9, velocity.getY() - 0.03));
                 } else {
                     velocity.setY(Math.max(-0.3, velocity.getY() - 0.03));
                 }
-            } else if (localState.blockState().id() == BlockRegistry.BUBBLE_COLUMN.maxStateId()) {
+            } else if (localState.id() == BlockRegistry.BUBBLE_COLUMN.maxStateId()) {
                 if (World.getBlockAtBlockPos(localState.x(), localState.y() + 1, localState.z()) == BlockRegistry.AIR) {
                     velocity.setY(Math.min(1.8, velocity.getY() + 0.1));
                 } else {
                     velocity.setY(Math.min(0.7, velocity.getY() + 0.06));
                 }
-            } else if (localState.blockState().block() == BlockRegistry.COBWEB) {
+            } else if (localState.block() == BlockRegistry.COBWEB) {
                 fallDistance = 0.0;
                 stuckSpeedMultiplier.set(0.25, 0.05, 0.25);
-            } else if (localState.blockState().block() == BlockRegistry.HONEY_BLOCK) {
+            } else if (localState.block() == BlockRegistry.HONEY_BLOCK) {
                 if (isSlidingDownHoneyBlock(localState.x(), localState.y(), localState.z())) {
                     if (velocity.getY() < -0.13) {
                         double d = -0.05 / velocity.getY();
@@ -465,7 +465,7 @@ public class PlayerSimulation extends Module {
                         velocity.setY(-0.05);
                     }
                 }
-            } else if (localState.blockState().block() == BlockRegistry.POWDER_SNOW) {
+            } else if (localState.block() == BlockRegistry.POWDER_SNOW) {
                 int floorX = MathHelper.floorI(getX());
                 int floorY = MathHelper.floorI(getY());
                 int floorZ = MathHelper.floorI(getZ());
@@ -473,7 +473,7 @@ public class PlayerSimulation extends Module {
                     fallDistance = 0.0;
                     stuckSpeedMultiplier.set(0.9, 1.5, 0.9);
                 }
-            } else if (localState.blockState().block() == BlockRegistry.SWEET_BERRY_BUSH) {
+            } else if (localState.block() == BlockRegistry.SWEET_BERRY_BUSH) {
                 fallDistance = 0.0;
                 stuckSpeedMultiplier.set(0.8, 0.75, 0.8);
             }
@@ -786,9 +786,9 @@ public class PlayerSimulation extends Module {
         int ceilY = MathHelper.ceilI(playerCollisionBox.getMaxY() - 0.001);
         int floorZ = MathHelper.floorI(playerCollisionBox.getMinZ() + 0.001);
         int ceilZ = MathHelper.ceilI(playerCollisionBox.getMaxZ() - 0.001);
-        double d2 = 0.0;
-        MutableVec3d vec3d = new MutableVec3d(0, 0, 0);
-        int n7 = 0;
+        double topFluidHDelta = 0.0;
+        MutableVec3d pushVec = new MutableVec3d(0, 0, 0);
+        int affectingFluidsCount = 0;
         boolean touched = false;
 
         for (int x = floorX; x < ceilX; x++) {
@@ -801,32 +801,31 @@ public class PlayerSimulation extends Module {
                     } else {
                         if (blockState.block() != BlockRegistry.LAVA) continue;
                     }
-                    var localBlockState = new LocalizedBlockState(blockState, x, y, z);
-                    float fluidHeight = World.getFluidHeight(localBlockState);
+                    float fluidHeight = World.getFluidHeight(blockState);
                     if (fluidHeight == 0 || (fluidHeightToWorld = y + fluidHeight) < playerCollisionBox.getMinY() + 0.001) continue;
                     touched = true;
-                    d2 = Math.max(fluidHeightToWorld - (playerCollisionBox.getMinY() + 0.001), d2);
+                    topFluidHDelta = Math.max(fluidHeightToWorld - (playerCollisionBox.getMinY() + 0.001), topFluidHDelta);
                     if (!isFlying) {
-                        var vec = World.getFluidFlow(localBlockState);
-                        if (d2 < 0.4) {
-                            vec.multiply(d2);
+                        var flowVec = World.getFluidFlow(blockState);
+                        if (topFluidHDelta < 0.4) {
+                            flowVec.multiply(topFluidHDelta);
                         }
-                        vec3d.add(vec);
-                        n7++;
+                        pushVec.add(flowVec);
+                        affectingFluidsCount++;
                     }
                 }
             }
         }
 
-        if (vec3d.lengthSquared() > 0) {
-            if (n7 > 0) {
-                vec3d.multiply(1.0 / n7);
+        if (pushVec.lengthSquared() > 0) {
+            if (affectingFluidsCount > 0) {
+                pushVec.multiply(1.0 / affectingFluidsCount);
             }
             if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
-                vec3d.normalize();
+                pushVec.normalize();
             }
-            vec3d.multiply(motionScale);
-            velocity.add(vec3d);
+            pushVec.multiply(motionScale);
+            velocity.add(pushVec);
         }
         return touched;
     }
