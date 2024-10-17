@@ -141,7 +141,7 @@ public class World {
     }
 
     public List<BlockState> getCollidingBlockStates(final LocalizedCollisionBox cb) {
-        final List<BlockState> blockStates = new ArrayList<>(0);
+        final List<BlockState> blockStates = new ArrayList<>(4);
         LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
         for (int i = 0; i < blockPosList.size(); i++) {
             var blockPos = blockPosList.getLong(i);
