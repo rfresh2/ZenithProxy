@@ -44,7 +44,7 @@ public abstract class Module {
     }
 
     public synchronized void syncEnabledFromConfig() {
-        setEnabled(shouldBeEnabled());
+        setEnabled(enabledSetting());
     }
 
     public void onEnable() { }
@@ -53,7 +53,7 @@ public abstract class Module {
 
     public abstract void subscribeEvents();
 
-    public abstract boolean shouldBeEnabled();
+    public abstract boolean enabledSetting();
 
     public void sendClientPacketAsync(final Packet packet) {
         ClientSession clientSession = Proxy.getInstance().getClient();

@@ -34,11 +34,11 @@ public class AutoEat extends AbstractInventoryModule {
     }
 
     public boolean isEating() {
-        return shouldBeEnabled() && isEating;
+        return enabledSetting() && isEating;
     }
 
     @Override
-    public boolean shouldBeEnabled() {
+    public boolean enabledSetting() {
         return CONFIG.client.extra.autoEat.enabled;
     }
 

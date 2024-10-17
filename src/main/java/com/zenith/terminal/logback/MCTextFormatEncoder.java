@@ -12,7 +12,7 @@ public class MCTextFormatEncoder extends PatternLayoutEncoder {
     @Override
     public void start() {
         // insert our converter for minecraft text components, also should work for normal log messages
-        Map patternRuleRegistry = (Map) context.getObject(CoreConstants.PATTERN_RULE_REGISTRY);
+        Map<String, String> patternRuleRegistry = (Map<String, String>) context.getObject(CoreConstants.PATTERN_RULE_REGISTRY);
         if (isNull(patternRuleRegistry)) {
             patternRuleRegistry = new ConcurrentHashMap<>();
         }

@@ -19,7 +19,7 @@ public class AntiLeak extends Module {
     }
 
     @Override
-    public boolean shouldBeEnabled() {
+    public boolean enabledSetting() {
         return CONFIG.client.extra.antiLeak.enabled;
     }
 

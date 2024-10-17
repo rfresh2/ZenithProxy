@@ -73,7 +73,7 @@ public class ActionLimiter extends Module {
     }
 
     @Override
-    public boolean shouldBeEnabled() {
+    public boolean enabledSetting() {
         return CONFIG.client.extra.actionLimiter.enabled;
     }
 

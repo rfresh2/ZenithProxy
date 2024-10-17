@@ -28,7 +28,7 @@ public class ESP extends Module {
     public void subscribeEvents() {}
 
     @Override
-    public boolean shouldBeEnabled() {
+    public boolean enabledSetting() {
         return CONFIG.server.extra.esp.enable;
     }
 

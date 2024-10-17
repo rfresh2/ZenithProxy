@@ -36,18 +36,13 @@ public final class SpectatorEntityRegistry {
     }
 
     public static SpectatorEntity getSpectatorEntityWithDefault(final String identifier) {
-        SpectatorEntity spectatorEntity = spectatorEntityMap.get(identifier);
-        if (isNull(spectatorEntity)) {
-            SERVER_LOG.error("Unknown Spectator Entity Identifier: " + identifier);
-            return spectatorEntityMap.get("cat");
-        }
-        return spectatorEntity;
+        return getSpectatorEntity(identifier).orElse(spectatorEntityMap.get("cat"));
     }
 
     public static Optional<SpectatorEntity> getSpectatorEntity(final String identifier) {
         SpectatorEntity spectatorEntity = spectatorEntityMap.get(identifier);
         if (isNull(spectatorEntity)) {
-            SERVER_LOG.error("Unknown Spectator Entity Identifier: " + identifier);
+            SERVER_LOG.error("Unknown Spectator Entity Identifier: {}", identifier);
             return Optional.empty();
         }
         return Optional.of(spectatorEntity);

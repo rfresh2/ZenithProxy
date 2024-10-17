@@ -3,7 +3,7 @@ package com.zenith.feature.queue;
 import com.zenith.feature.api.vcapi.VcApi;
 import com.zenith.feature.api.vcapi.model.QueueEtaEquationResponse;
 import com.zenith.feature.queue.mcping.MCPing;
-import com.zenith.feature.queue.mcping.data.FinalResponse;
+import com.zenith.feature.queue.mcping.data.MCResponse;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -78,10 +78,10 @@ public class Queue {
 
     public static boolean pingUpdate() {
         try {
-            final FinalResponse pingWithDetails = mcPing.ping("connect.2b2t.org", 25565, 3000, false);
-            final String queueStr = pingWithDetails.getPlayers().getSample().get(1).getName();
+            final MCResponse pingWithDetails = mcPing.ping("connect.2b2t.org", 25565, 3000, false);
+            final String queueStr = pingWithDetails.players().sample().get(1).name();
             final Matcher regularQMatcher = digitPattern.matcher(queueStr.substring(queueStr.lastIndexOf(" ")));
-            final String prioQueueStr = pingWithDetails.getPlayers().getSample().get(2).getName();
+            final String prioQueueStr = pingWithDetails.players().sample().get(2).name();
             final Matcher prioQMatcher = digitPattern.matcher(prioQueueStr.substring(prioQueueStr.lastIndexOf(" ")));
             if (!queueStr.contains("Queue")) {
                 throw new IOException("Queue string doesn't contain Queue: " + queueStr);

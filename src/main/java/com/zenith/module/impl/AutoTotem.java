@@ -44,7 +44,7 @@ public class AutoTotem extends AbstractInventoryModule {
     }
 
     @Override
-    public boolean shouldBeEnabled() {
+    public boolean enabledSetting() {
         return CONFIG.client.extra.autoTotem.enabled;
     }
 

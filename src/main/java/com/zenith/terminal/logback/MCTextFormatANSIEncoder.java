@@ -12,7 +12,7 @@ public class MCTextFormatANSIEncoder extends PatternLayoutEncoder {
 
     @Override
     public void start() {
-        Map patternRuleRegistry = (Map) context.getObject(CoreConstants.PATTERN_RULE_REGISTRY);
+        Map<String, String> patternRuleRegistry = (Map<String, String>) context.getObject(CoreConstants.PATTERN_RULE_REGISTRY);
         if (isNull(patternRuleRegistry)) {
             patternRuleRegistry = new ConcurrentHashMap<>();
         }

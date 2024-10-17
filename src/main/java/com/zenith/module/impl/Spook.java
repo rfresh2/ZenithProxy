@@ -34,7 +34,7 @@ public class Spook extends Module {
     }
 
     @Override
-    public boolean shouldBeEnabled() {
+    public boolean enabledSetting() {
         return CONFIG.client.extra.spook.enabled;
     }
 
@@ -102,8 +102,8 @@ public class Spook extends Module {
     private int findNearestTarget() {
         return CACHE.getEntityCache().getEntities().values().stream()
             .filter(entity -> entity instanceof EntityPlayer)
-            .filter(e -> e != CACHE.getPlayerCache().getThePlayer())
             .map(entity -> (EntityPlayer) entity)
+            .filter(e -> !e.isSelfPlayer())
             .min((e1, e2) -> (int) (getDistanceToPlayer(e1) - getDistanceToPlayer(e2)))
             .map(Entity::getEntityId)
             .orElse(-1);

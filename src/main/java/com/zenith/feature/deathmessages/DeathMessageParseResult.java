@@ -7,5 +7,4 @@ public record DeathMessageParseResult(
     Optional<Killer> killer,
     Optional<String> weapon,
     DeathMessageSchemaInstance deathMessageSchemaInstance
-) {
-}
+) { }

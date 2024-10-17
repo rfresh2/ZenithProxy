@@ -51,7 +51,7 @@ public class AntiAFK extends Module {
     }
 
     @Override
-    public boolean shouldBeEnabled() {
+    public boolean enabledSetting() {
         return CONFIG.client.extra.antiafk.enabled;
     }
 

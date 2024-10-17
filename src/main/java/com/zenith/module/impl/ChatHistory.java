@@ -37,7 +37,7 @@ public class ChatHistory extends Module {
     }
 
     @Override
-    public boolean shouldBeEnabled() {
+    public boolean enabledSetting() {
         return CONFIG.server.extra.chatHistory.enable;
     }
 

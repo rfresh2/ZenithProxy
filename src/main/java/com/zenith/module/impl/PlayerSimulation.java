@@ -85,7 +85,7 @@ public class PlayerSimulation extends Module {
     }
 
     @Override
-    public boolean shouldBeEnabled() {
+    public boolean enabledSetting() {
         return true;
     }
 

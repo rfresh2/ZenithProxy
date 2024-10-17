@@ -1,12 +1,5 @@
 package com.zenith.feature.queue.mcping.rawData;
 
-import com.google.gson.annotations.SerializedName;
-import lombok.Data;
+import java.util.List;
 
-@Data
-public class ExtraDescription {
-    @SerializedName("extra")
-    private Extra[] extra = new Extra[0];
-    @SerializedName("text")
-    private String text = "";
-}
+public record ExtraDescription(String text, List<Extra> extra) { }

@@ -35,7 +35,7 @@ public class AutoMend extends AbstractInventoryModule {
     }
 
     @Override
-    public boolean shouldBeEnabled() {
+    public boolean enabledSetting() {
         return CONFIG.client.extra.autoMend.enabled;
     }
 

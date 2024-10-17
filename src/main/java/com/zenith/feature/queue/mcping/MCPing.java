@@ -3,9 +3,10 @@ package com.zenith.feature.queue.mcping;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import com.zenith.feature.queue.mcping.data.ExtraResponse;
-import com.zenith.feature.queue.mcping.data.FinalResponse;
-import com.zenith.feature.queue.mcping.rawData.*;
+import com.zenith.feature.queue.mcping.data.MCResponse;
+import com.zenith.feature.queue.mcping.rawData.Player;
+import com.zenith.feature.queue.mcping.rawData.Players;
+import com.zenith.feature.queue.mcping.rawData.Version;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.AddressedEnvelope;
 import io.netty.channel.EventLoopGroup;
@@ -20,7 +21,6 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.zenith.Shared.OBJECT_MAPPER;
 
@@ -42,7 +42,7 @@ public class MCPing {
         return versionNode.get("protocol").asInt();
     }
 
-    public FinalResponse ping(String hostname, int port, int timeout, boolean resolveDns) throws IOException {
+    public MCResponse ping(String hostname, int port, int timeout, boolean resolveDns) throws IOException {
         final InetSocketAddress address;
         if (resolveDns) address = resolveAddress(hostname, port);
         else address = new InetSocketAddress(hostname, port);
@@ -94,63 +94,35 @@ public class MCPing {
         }
     }
 
-    public FinalResponse parsePing(final String json) {
+    public MCResponse parsePing(final String json) {
         try {
             var jsonTree = OBJECT_MAPPER.readTree(json);
             var versionNode = jsonTree.get("version");
             var protocol = versionNode.get("protocol").asInt();
             var versionName = versionNode.get("name").asText();
-            var version = new Version();
-            version.setName(versionName);
-            version.setProtocol(protocol);
+            var version = new Version(versionName, protocol);
             var playersNode = jsonTree.get("players");
             var online = playersNode.get("online").asInt();
             var max = playersNode.get("max").asInt();
             var sampleNode = (ArrayNode) (playersNode.get("sample"));
-            var playersList = new ArrayList<Player>();
-            sampleNode.forEach(playerListNode -> {
-                var player = new Player();
+            var playersList = new ArrayList<Player>(sampleNode.size());
+            for (JsonNode playerListNode : sampleNode) {
                 JsonNode nameNode = playerListNode.get("name");
+                String name = null;
                 if (nameNode != null && nameNode.isTextual())
-                    player.setName(nameNode.asText());
+                    name = nameNode.asText();
                 JsonNode idNode = playerListNode.get("id");
+                String id = null;
                 if (idNode != null && idNode.isTextual())
-                    player.setId(idNode.asText());
+                    id = idNode.asText();
+                var player = new Player(name, id);
                 playersList.add(player);
-            });
-            var players = new Players();
-            players.setMax(max);
-            players.setOnline(online);
-            players.setSample(playersList);
-
+            }
+            var players = new Players(max, online, playersList);
             var descriptionNode = jsonTree.get("description");
-            var descriptionExtraNode = descriptionNode.withArrayProperty("extra");
-            final List<Extra> extras = new ArrayList<>();
-            descriptionExtraNode.forEach(node -> {
-                if (node.isObject()) {
-                    var extra = new Extra();
-                    JsonNode colorNode = node.get("color");
-                    if (colorNode != null && colorNode.isTextual())
-                        extra.setColor(colorNode.asText());
-                    JsonNode boldNode = node.get("bold");
-                    if (boldNode != null && boldNode.isBoolean())
-                        extra.setBold(boldNode.asBoolean());
-                    JsonNode textNode = node.get("text");
-                    if (textNode != null && textNode.isTextual())
-                        extra.setText(textNode.asText());
-                    extras.add(extra);
-                }
-            });
-            var description = new ExtraDescription();
-            description.setText(descriptionNode.get("text").asText());
-            description.setExtra(extras.toArray(new Extra[0]));
+            var descriptionText = descriptionNode.get("text").asText();
             var favicon = jsonTree.get("favicon").asText();
-            var extraResponse = new ExtraResponse();
-            extraResponse.setVersion(version);
-            extraResponse.setPlayers(players);
-            extraResponse.setDescription(description);
-            extraResponse.setFavicon(favicon);
-            return extraResponse.toFinalResponse();
+            return new MCResponse(players, version, favicon, descriptionText);
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }

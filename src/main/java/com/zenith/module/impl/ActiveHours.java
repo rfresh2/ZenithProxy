@@ -24,7 +24,7 @@ public class ActiveHours extends Module {
     }
 
     @Override
-    public boolean shouldBeEnabled() {
+    public boolean enabledSetting() {
         return CONFIG.client.extra.utility.actions.activeHours.enabled;
     }
 

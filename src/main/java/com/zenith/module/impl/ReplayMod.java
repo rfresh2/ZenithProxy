@@ -51,7 +51,7 @@ public class ReplayMod extends Module {
     }
 
     @Override
-    public boolean shouldBeEnabled() {
+    public boolean enabledSetting() {
         return false;
     }
 
