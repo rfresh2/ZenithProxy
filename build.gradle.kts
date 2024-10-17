@@ -54,18 +54,6 @@ val shade: Configuration by configurations.creating
 shade.extendsFrom(configurations.implementation.get())
 
 dependencies {
-    implementation("com.zaxxer:HikariCP:6.0.0")
-    implementation("org.postgresql:postgresql:42.7.4")
-    val jdbiVersion = "3.45.4"
-    implementation("org.jdbi:jdbi3-core:$jdbiVersion")
-    implementation("org.jdbi:jdbi3-postgres:$jdbiVersion")
-    implementation("com.google.guava:guava:33.3.1-jre")
-    implementation("ch.qos.logback:logback-classic:1.5.10")
-    implementation("org.slf4j:slf4j-api:2.0.16")
-    implementation("org.slf4j:jul-to-slf4j:2.0.16")
-    implementation("com.mojang:brigadier:1.2.9")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0")
-    implementation("com.github.rfresh2:SimpleEventBus:1.2")
     implementation("com.github.rfresh2.discord4j:discord4j-core:3.4.3.9") {
         exclude(group = "io.netty")
     }
@@ -92,6 +80,7 @@ dependencies {
     implementation("org.redisson:redisson:3.37.0") {
         exclude(group = "io.netty")
     }
+    implementation("com.github.rfresh2:SimpleEventBus:1.2")
     val fastutilVersion = "8.5.14"
     implementation("com.github.rfresh2.fastutil.maps:object-object-maps:$fastutilVersion")
     implementation("com.github.rfresh2.fastutil.maps:int-object-maps:$fastutilVersion")
@@ -106,6 +95,15 @@ dependencies {
     implementation("org.jline:jline:3.27.0")
     implementation("org.jline:jline-terminal-jni:3.27.0")
     implementation("ar.com.hjg:pngj:2.1.0")
+    implementation("com.zaxxer:HikariCP:6.0.0")
+    implementation("org.postgresql:postgresql:42.7.4")
+    implementation("org.jdbi:jdbi3-postgres:3.45.4")
+    implementation("com.google.guava:guava:33.3.1-jre")
+    implementation("ch.qos.logback:logback-classic:1.5.10")
+    implementation("org.slf4j:slf4j-api:2.0.16")
+    implementation("org.slf4j:jul-to-slf4j:2.0.16")
+    implementation("com.mojang:brigadier:1.2.9")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.2")
     val lombokVersion = "1.18.34"
     compileOnly("org.projectlombok:lombok:$lombokVersion")

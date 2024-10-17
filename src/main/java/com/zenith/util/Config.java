@@ -113,6 +113,7 @@ public final class Config {
             public boolean prioStatusChangeMention = true;
             public boolean killMessage = true;
             public boolean logChatMessages = true;
+            public boolean serverRestartReconnect = true;
             public final ActionLimiter actionLimiter = new ActionLimiter();
             public final VisualRange visualRange = new VisualRange();
             public final AutoArmor autoArmor = new AutoArmor();

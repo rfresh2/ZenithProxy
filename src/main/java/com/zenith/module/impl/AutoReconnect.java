@@ -56,14 +56,18 @@ public class AutoReconnect extends Module {
             return;
         }
         if (isReconnectableDisconnect(event.reason())) {
-            if (autoReconnectIsInProgress()) {
-                debug("AutoReconnect already in progress, not starting another");
-                return;
-            }
-            this.autoReconnectFuture = EXECUTOR.submit(this::autoReconnectRunnable);
+            scheduleAutoReconnect(CONFIG.client.extra.autoReconnect.delaySeconds);
         } else {
             info("Cancelling AutoReconnect because disconnect reason is not reconnectable");
         }
+    }
+
+    public void scheduleAutoReconnect(final int delaySeconds) {
+        if (autoReconnectIsInProgress()) {
+            info("AutoReconnect already in progress, not starting another");
+            return;
+        }
+        this.autoReconnectFuture = EXECUTOR.submit(() -> autoReconnectRunnable(delaySeconds));
     }
 
     public boolean shouldAutoDisconnectCancelAutoReconnect(DisconnectEvent event) {
@@ -74,9 +78,9 @@ public class AutoReconnect extends Module {
         cancelAutoReconnect();
     }
 
-    private void autoReconnectRunnable() {
+    private void autoReconnectRunnable(int delaySeconds) {
         try {
-            delayBeforeReconnect();
+            delayBeforeReconnect(delaySeconds);
             if (Thread.currentThread().isInterrupted()) return;
             EXECUTOR.execute(() -> {
                 try {
@@ -91,8 +95,8 @@ public class AutoReconnect extends Module {
         }
     }
 
-    private void delayBeforeReconnect() {
-        final int countdown = CONFIG.client.extra.autoReconnect.delaySeconds;
+    private void delayBeforeReconnect(int delaySeconds) {
+        final int countdown = delaySeconds;
         EVENT_BUS.postAsync(new AutoReconnectEvent(countdown));
         // random jitter to help prevent multiple clients from logging in at the same time
         Wait.wait((((int) (Math.random() * 5))) % 10);

@@ -753,12 +753,27 @@ public class Proxy {
     }
 
     public void handleServerRestartingEvent(ServerRestartingEvent event) {
-        if (!this.isPrio() && isNull(getCurrentPlayer().get())) {
-            EXECUTOR.schedule(() -> {
-                if (isNull(getCurrentPlayer().get()))
-                    disconnect(SERVER_RESTARTING);
-            }, ((int) (Math.random() * 20)), TimeUnit.SECONDS);
-        }
+        if (!CONFIG.client.extra.serverRestartReconnect
+            || !CONFIG.client.extra.autoReconnect.enabled
+            || !isOn2b2t()
+            || isPrio()
+            || !isNull(getCurrentPlayer().get())
+            || isInQueue()) return;
+        EXECUTOR.schedule(() -> {
+            if (DISCORD.isRunning()) {
+                DISCORD.sendEmbedMessage(
+                    Embed.builder()
+                        .title("Server Restart Reconnect")
+                        .description("AutoReconnecting to end of queue to get back into server as quick as possible")
+                        .successColor());
+            } else {
+                CLIENT_LOG.warn("AutoReconnecting to end of queue to get back into server as quick as possible");
+            }
+            if (isNull(getCurrentPlayer().get())) {
+                disconnect(SYSTEM_DISCONNECT);
+            }
+            MODULE.get(AutoReconnect.class).scheduleAutoReconnect(60);
+        }, ((int) (Math.random() * 20)), TimeUnit.SECONDS);
     }
 
     public void handlePrioStatusEvent(PrioStatusEvent event) {
