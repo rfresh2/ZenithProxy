@@ -12,16 +12,20 @@ import static com.zenith.Shared.CLIENT_LOG;
 public class TeleportEntityHandler implements ClientEventLoopPacketHandler<ClientboundTeleportEntityPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundTeleportEntityPacket packet, @NonNull ClientSession session) {
-        Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
+        Entity entity = CACHE.getEntityCache().get(packet.getId());
         if (entity != null) {
-            entity.setX(packet.getX())
-                    .setY(packet.getY())
-                    .setZ(packet.getZ())
-                    .setYaw(packet.getYaw())
-                    .setPitch(packet.getPitch());
+            entity
+                .setX(packet.getX())
+                .setY(packet.getY())
+                .setZ(packet.getZ())
+                .setVelX(packet.getDeltaX())
+                .setVelY(packet.getDeltaY())
+                .setVelZ(packet.getDeltaZ())
+                .setYaw(packet.getYaw())
+                .setPitch(packet.getPitch());
             return true;
         } else {
-            CLIENT_LOG.debug("Received ServerEntityTeleportPacket for invalid entity (id={})", packet.getEntityId());
+            CLIENT_LOG.debug("Received ServerEntityTeleportPacket for invalid entity (id={})", packet.getId());
             return false;
         }
     }

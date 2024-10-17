@@ -4,8 +4,8 @@ import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
-import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundLoginCompressionPacket;
+import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundLoginFinishedPacket;
 
 import javax.crypto.SecretKey;
 import java.util.Optional;
@@ -55,7 +55,7 @@ public class UserAuthTask implements Runnable {
             this.session.send(new ClientboundLoginCompressionPacket(threshold));
         } else {
             session.setCompressionThreshold(threshold, CONFIG.server.compressionLevel, true);
-            session.send(new ClientboundGameProfilePacket(profile, false));
+            session.send(new ClientboundLoginFinishedPacket(profile));
         }
     }
 }

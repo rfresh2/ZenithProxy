@@ -31,7 +31,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundEntityEventPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerAbilitiesPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundSetCarriedItemPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundSetHeldSlotPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.inventory.ClientboundContainerSetContentPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.inventory.ClientboundOpenScreenPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundGameEventPacket;
@@ -109,9 +109,9 @@ public class PlayerCache implements CachedData {
             actionId.get(),
             container.getContents().toArray(new ItemStack[0]),
             null));
-        consumer.accept(new ClientboundPlayerPositionPacket(this.getX(), this.getY(), this.getZ(), this.getYaw(), this.getPitch(), ThreadLocalRandom.current().nextInt(16, 1024)));
+        consumer.accept(new ClientboundPlayerPositionPacket(ThreadLocalRandom.current().nextInt(16, 1024), this.getX(), this.getY(), this.getZ(), this.getVelX(), this.getVelY(), this.getVelZ(), this.getYaw(), this.getPitch()));
         consumer.accept(new ClientboundSetDefaultSpawnPositionPacket(spawnPosition.getX(), spawnPosition.getY(), spawnPosition.getZ(), 0.0f));
-        consumer.accept(new ClientboundSetCarriedItemPacket(heldItemSlot));
+        consumer.accept(new ClientboundSetHeldSlotPacket(heldItemSlot));
     }
 
     @Override
@@ -250,6 +250,33 @@ public class PlayerCache implements CachedData {
 
     public PlayerCache setPitch(float pitch)    {
         this.thePlayer.setPitch(pitch);
+        return this;
+    }
+
+    public double getVelX()    {
+        return this.thePlayer.getVelX();
+    }
+
+    public PlayerCache setVelX(double velX)    {
+        this.thePlayer.setVelX(velX);
+        return this;
+    }
+
+    public double getVelY()    {
+        return this.thePlayer.getVelY();
+    }
+
+    public PlayerCache setVelY(double velY)    {
+        this.thePlayer.setVelY(velY);
+        return this;
+    }
+
+    public double getVelZ()    {
+        return this.thePlayer.getVelZ();
+    }
+
+    public PlayerCache setVelZ(double velZ)    {
+        this.thePlayer.setVelZ(velZ);
         return this;
     }
 

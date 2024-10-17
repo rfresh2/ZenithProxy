@@ -61,15 +61,15 @@ public class EntityPlayer extends EntityLiving {
     }
 
     private void updateSpeed() {
-        var movementSpeedAttribute = getAttributes().get(AttributeType.Builtin.GENERIC_MOVEMENT_SPEED);
+        var movementSpeedAttribute = getAttributes().get(AttributeType.Builtin.MOVEMENT_SPEED);
         this.speed = movementSpeedAttribute == null
             ? 0.10000000149011612f
             : applyAttributeModifiers(movementSpeedAttribute);
-        var movementEfficiencyAttribute = getAttributes().get(AttributeType.Builtin.GENERIC_MOVEMENT_EFFICIENCY);
+        var movementEfficiencyAttribute = getAttributes().get(AttributeType.Builtin.MOVEMENT_EFFICIENCY);
         this.movementEfficiency = movementEfficiencyAttribute == null
             ? 0.0f
             : applyAttributeModifiers(movementEfficiencyAttribute);
-        var waterMovementEfficiencyAttribute = getAttributes().get(AttributeType.Builtin.GENERIC_WATER_MOVEMENT_EFFICIENCY);
+        var waterMovementEfficiencyAttribute = getAttributes().get(AttributeType.Builtin.WATER_MOVEMENT_EFFICIENCY);
         this.waterMovementEfficiency = waterMovementEfficiencyAttribute == null
             ? 0.0f
             : applyAttributeModifiers(waterMovementEfficiencyAttribute);

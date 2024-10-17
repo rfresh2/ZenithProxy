@@ -23,7 +23,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.S
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClosePacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.*;
-import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
+import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundLoginFinishedPacket;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -86,7 +86,7 @@ public class ReplayRecording implements Closeable {
 
     // Start recording while we already have a logged in session
     private void lateStartRecording() {
-        writePacket0(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile(), false), Proxy.getInstance().getClient(), ProtocolState.LOGIN);
+        writePacket0(0, new ClientboundLoginFinishedPacket(CACHE.getProfileCache().getProfile()), Proxy.getInstance().getClient(), ProtocolState.LOGIN);
         CACHE.getConfigurationCache().getPackets(packet -> writePacket0(System.currentTimeMillis(), (MinecraftPacket) packet, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION));
         writePacket0(System.currentTimeMillis(), new ClientboundCustomPayloadPacket(Key.key("minecraft:brand"), CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
         writePacket0(System.currentTimeMillis(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
@@ -109,7 +109,8 @@ public class ReplayRecording implements Closeable {
                 CACHE.getChunkCache().isDebug(),
                 CACHE.getChunkCache().isFlat(),
                 CACHE.getPlayerCache().getLastDeathPos(),
-                CACHE.getPlayerCache().getPortalCooldown()
+                CACHE.getPlayerCache().getPortalCooldown(),
+                CACHE.getChunkCache().getSeaLevel()
             ),
             false
         ), Proxy.getInstance().getClient());
@@ -228,7 +229,7 @@ public class ReplayRecording implements Closeable {
         if (packet instanceof ClientboundLoginPacket) {
             recordSelfSpawn = true;
             if (preConnectSyncNeeded) {
-                writeToFile(0, new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile(), false), session, ProtocolState.LOGIN);
+                writeToFile(0, new ClientboundLoginFinishedPacket(CACHE.getProfileCache().getProfile()), session, ProtocolState.LOGIN);
                 CACHE.getConfigurationCache().getPackets(packet2 -> writeToFile(System.currentTimeMillis(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION));
                 writeToFile(System.currentTimeMillis(), new ClientboundCustomPayloadPacket(Key.key("minecraft:brand"), CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
                 writeToFile(System.currentTimeMillis(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);

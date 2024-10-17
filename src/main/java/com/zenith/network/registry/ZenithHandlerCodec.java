@@ -20,7 +20,7 @@ import com.zenith.network.server.handler.player.outgoing.SystemChatOutgoingHandl
 import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
 import com.zenith.network.server.handler.shared.incoming.*;
 import com.zenith.network.server.handler.shared.outgoing.KeepAliveOutgoingHandler;
-import com.zenith.network.server.handler.shared.outgoing.SGameProfileOutgoingHandler;
+import com.zenith.network.server.handler.shared.outgoing.SLoginFinishedOutgoingHandler;
 import com.zenith.network.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
 import com.zenith.network.server.handler.shared.postoutgoing.*;
 import com.zenith.network.server.handler.spectator.incoming.InteractEntitySpectatorHandler;
@@ -94,7 +94,7 @@ public final class ZenithHandlerCodec {
                 .allowUnhandled(false)
                 .registerInbound(ClientboundHelloPacket.class, new CHelloHandler())
                 .registerInbound(ClientboundLoginCompressionPacket.class, new CLoginCompressionHandler())
-                .registerInbound(ClientboundGameProfilePacket.class, new CGameProfileHandler())
+                .registerInbound(ClientboundLoginFinishedPacket.class, new CLoginFinishedHandler())
                 .registerInbound(ClientboundLoginDisconnectPacket.class, new LoginDisconnectHandler())
                 .registerInbound(ClientboundCustomQueryPacket.class, new CCustomQueryHandler())
                 .registerInbound(ClientboundCookieRequestPacket.class, new CCookieRequestHandler())
@@ -135,7 +135,7 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ClientboundGameEventPacket.class, new GameEventHandler())
                 .registerInbound(ClientboundLoginPacket.class, new LoginHandler())
                 .registerInbound(ClientboundSectionBlocksUpdatePacket.class, new SectionBlocksUpdateHandler())
-                .registerInbound(ClientboundSetCarriedItemPacket.class, new SetCarriedItemHandler())
+                .registerInbound(ClientboundSetHeldSlotPacket.class, new SetCarriedItemHandler())
                 .registerInbound(ClientboundSetChunkCacheCenterPacket.class, new SetChunkCacheCenterHandler())
                 .registerInbound(ClientboundSetChunkCacheRadiusPacket.class, new SetChunkCacheRadiusHandler())
                 .registerInbound(ClientboundSetSimulationDistancePacket.class, new SetSimulationDistanceHandler())
@@ -171,7 +171,7 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ClientboundPlayerAbilitiesPacket.class, new PlayerAbilitiesHandler())
                 .registerInbound(ClientboundCustomPayloadPacket.class, CustomPayloadHandler.INSTANCE)
                 .registerInbound(ClientboundDisguisedChatPacket.class, new DisguisedChatHandler())
-                .registerInbound(ClientboundRecipePacket.class, new UnlockRecipeHandler())
+//                .registerInbound(ClientboundRecipePacket.class, new UnlockRecipeHandler())
                 .registerInbound(ClientboundSetPlayerTeamPacket.class, new TeamHandler())
                 .registerInbound(ClientboundSetObjectivePacket.class, new SetObjectiveHandler())
                 .registerInbound(ClientboundSetDisplayObjectivePacket.class, new SetDisplayObjectiveHandler())
@@ -255,7 +255,7 @@ public final class ZenithHandlerCodec {
                 .registerOutbound(ClientboundContainerSetContentPacket.class, new ContainerSetContentSpectatorOutgoingHandler())
                 .registerOutbound(ClientboundPlaceGhostRecipePacket.class, new PlaceGhostRecipeSpectatorOutgoingHandler())
                 .registerOutbound(ClientboundOpenScreenPacket.class, new OpenScreenSpectatorOutgoingHandler())
-                .registerOutbound(ClientboundSetCarriedItemPacket.class, new SetCarriedItemSpectatorOutgoingHandler())
+                .registerOutbound(ClientboundSetHeldSlotPacket.class, new SetCarriedItemSpectatorOutgoingHandler())
                 .registerOutbound(ClientboundSetHealthPacket.class, new SetHealthSpectatorOutgoingHandler())
                 .registerOutbound(ClientboundPlayerPositionPacket.class, new PlayerPositionSpectatorOutgoingHandler())
                 .registerOutbound(ClientboundSetExperiencePacket.class, new SetExperienceSpectatorOutgoingHandler())
@@ -289,7 +289,7 @@ public final class ZenithHandlerCodec {
                 .registerInbound(ServerboundHelloPacket.class, new SHelloHandler())
                 .registerInbound(ServerboundCookieResponsePacket.class, new SCookieResponseHandler())
                 .registerInbound(ServerboundLoginAcknowledgedPacket.class, new LoginAckHandler())
-                .registerOutbound(ClientboundGameProfilePacket.class, new SGameProfileOutgoingHandler())
+                .registerOutbound(ClientboundLoginFinishedPacket.class, new SLoginFinishedOutgoingHandler())
                 .registerPostOutbound(ClientboundLoginCompressionPacket.class, new LoginCompressionPostOutgoingHandler())
                 .build())
             .state(ProtocolState.STATUS, PacketHandlerStateCodec.<ServerSession>builder()

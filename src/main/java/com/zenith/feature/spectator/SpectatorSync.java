@@ -46,12 +46,15 @@ public final class SpectatorSync {
             .setPitch(target.getPitch());
         spectConnection.setAllowSpectatorServerPlayerPosRotate(true);
         spectConnection.send(new ClientboundPlayerPositionPacket(
-                spectConnection.getSpectatorPlayerCache().getX(),
-                spectConnection.getSpectatorPlayerCache().getY(),
-                spectConnection.getSpectatorPlayerCache().getZ(),
-                spectConnection.getSpectatorPlayerCache().getYaw(),
-                spectConnection.getSpectatorPlayerCache().getPitch(),
-                12345
+            12345,
+            spectConnection.getSpectatorPlayerCache().getX(),
+            spectConnection.getSpectatorPlayerCache().getY(),
+            spectConnection.getSpectatorPlayerCache().getZ(),
+            spectConnection.getSpectatorPlayerCache().getVelX(),
+            spectConnection.getSpectatorPlayerCache().getVelY(),
+            spectConnection.getSpectatorPlayerCache().getVelZ(),
+            spectConnection.getSpectatorPlayerCache().getYaw(),
+            spectConnection.getSpectatorPlayerCache().getPitch()
         ));
         spectConnection.setAllowSpectatorServerPlayerPosRotate(false);
         updateSpectatorPosition(spectConnection);
@@ -175,6 +178,9 @@ public final class SpectatorSync {
                 newX,
                 newY,
                 newZ,
+                0,
+                0,
+                0,
                 getDisplayYaw(selfSession),
                 getDisplayPitch(selfSession),
                 false

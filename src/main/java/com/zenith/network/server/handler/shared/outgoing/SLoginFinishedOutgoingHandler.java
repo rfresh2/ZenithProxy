@@ -9,7 +9,7 @@ import com.zenith.util.Wait;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
-import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundGameProfilePacket;
+import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundLoginFinishedPacket;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -17,14 +17,14 @@ import java.util.UUID;
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
-public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGameProfilePacket, ServerSession> {
+public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundLoginFinishedPacket, ServerSession> {
     // can be anything really, just needs to be unique and not taken by a real player seen in-game
     private static final UUID spectatorFakeUUID = UUID.fromString("c9560dfb-a792-4226-ad06-db1b6dc40b95");
 
     @Override
-    public ClientboundGameProfilePacket apply(@NonNull ClientboundGameProfilePacket packet, @NonNull ServerSession session) {
+    public ClientboundLoginFinishedPacket apply(@NonNull ClientboundLoginFinishedPacket packet, @NonNull ServerSession session) {
         try {
-            // finishLogin will send a second ClientboundGameProfilePacket, just return it as is
+            // finishLogin will send a second ClientboundLoginFinishedPacket, just return it as is
             if (session.isWhitelistChecked()) return packet;
             final GameProfile clientGameProfile = session.getFlag(MinecraftConstants.PROFILE_KEY);
             if (isNull(clientGameProfile)) {
@@ -120,7 +120,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
         session.getProfileCache().setProfile(clientGameProfile);
         if (!onlySpectator.orElse(false) && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
             SERVER_LOG.info("Logging in {} [{}] as controlling player", clientGameProfile.getName(), clientGameProfile.getId().toString());
-            session.sendAsync(new ClientboundGameProfilePacket(CACHE.getProfileCache().getProfile(), false));
+            session.sendAsync(new ClientboundLoginFinishedPacket(CACHE.getProfileCache().getProfile()));
             return;
         }
         if (onlySpectator.isPresent() && !onlySpectator.get()) { // the above operation failed and we don't want to be put into spectator
@@ -142,7 +142,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
             spectatorFakeProfile.setProperties(clientGameProfile.getProperties());
         }
         session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
-        session.sendAsync(new ClientboundGameProfilePacket(spectatorFakeProfile, false));
+        session.sendAsync(new ClientboundLoginFinishedPacket(spectatorFakeProfile));
         return;
     }
 }

@@ -76,6 +76,8 @@ public class ChunkCache implements CachedData {
     protected long hashedSeed;
     protected boolean debug;
     protected boolean flat;
+    protected int seaLevel;
+
     // todo: also cache world border size changes
     //  doesn't particularly matter on 2b2t tho
     protected WorldBorderData worldBorderData = WorldBorderData.DEFAULT;

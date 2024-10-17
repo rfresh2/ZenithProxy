@@ -19,7 +19,8 @@ public class RespawnSpectatorOutgoingPacket implements PacketHandler<Clientbound
                 packet.getCommonPlayerSpawnInfo().isDebug(),
                 packet.getCommonPlayerSpawnInfo().isFlat(),
                 packet.getCommonPlayerSpawnInfo().getLastDeathPos(),
-                packet.getCommonPlayerSpawnInfo().getPortalCooldown()
+                packet.getCommonPlayerSpawnInfo().getPortalCooldown(),
+                packet.getCommonPlayerSpawnInfo().getSeaLevel()
             ),
             packet.isKeepMetadata(),
             packet.isKeepAttributeModifiers()

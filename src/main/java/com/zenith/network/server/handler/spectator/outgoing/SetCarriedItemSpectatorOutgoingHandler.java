@@ -2,11 +2,11 @@ package com.zenith.network.server.handler.spectator.outgoing;
 
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerSession;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundSetCarriedItemPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundSetHeldSlotPacket;
 
-public class SetCarriedItemSpectatorOutgoingHandler implements PacketHandler<ClientboundSetCarriedItemPacket, ServerSession> {
+public class SetCarriedItemSpectatorOutgoingHandler implements PacketHandler<ClientboundSetHeldSlotPacket, ServerSession> {
     @Override
-    public ClientboundSetCarriedItemPacket apply(ClientboundSetCarriedItemPacket packet, ServerSession session) {
+    public ClientboundSetHeldSlotPacket apply(ClientboundSetHeldSlotPacket packet, ServerSession session) {
         return null;
     }
 }

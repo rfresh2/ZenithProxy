@@ -35,6 +35,7 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
                 0,
                 SPECTATOR,
                 null,
+                0,
                 null,
                 0,
                 null,

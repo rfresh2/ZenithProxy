@@ -75,7 +75,8 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                     CACHE.getChunkCache().isDebug(),
                     CACHE.getChunkCache().isFlat(),
                     CACHE.getPlayerCache().getLastDeathPos(),
-                    CACHE.getPlayerCache().getPortalCooldown()
+                    CACHE.getPlayerCache().getPortalCooldown(),
+                    CACHE.getChunkCache().getSeaLevel()
                 ),
                 false
             ));
@@ -100,7 +101,8 @@ public class ProxyServerLoginHandler implements ServerLoginHandler {
                     CACHE.getChunkCache().isDebug(),
                     CACHE.getChunkCache().isFlat(),
                     CACHE.getPlayerCache().getLastDeathPos(),
-                    CACHE.getPlayerCache().getPortalCooldown()
+                    CACHE.getPlayerCache().getPortalCooldown(),
+                    CACHE.getChunkCache().getSeaLevel()
                 ),
                 false
             ));

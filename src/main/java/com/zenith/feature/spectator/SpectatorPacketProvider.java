@@ -29,6 +29,9 @@ public class SpectatorPacketProvider {
                 CACHE.getPlayerCache().getX(),
                 CACHE.getPlayerCache().getY(),
                 CACHE.getPlayerCache().getZ(),
+                CACHE.getPlayerCache().getVelX(),
+                CACHE.getPlayerCache().getVelY(),
+                CACHE.getPlayerCache().getVelZ(),
                 CACHE.getPlayerCache().getYaw(),
                 CACHE.getPlayerCache().getPitch(),
                 false

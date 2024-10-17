@@ -5,7 +5,7 @@ import com.zenith.mc.Registry;
 import org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType;
 
 public final class BlockRegistry {
-    public static final Registry<Block> REGISTRY = new Registry<Block>(1060);
+    public static final Registry<Block> REGISTRY = new Registry<Block>(1084);
 
     public static final Block AIR = REGISTRY.register(new Block(0, "air", false, 0, 0, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
@@ -47,2083 +47,2131 @@ public final class BlockRegistry {
 
     public static final Block DARK_OAK_PLANKS = REGISTRY.register(new Block(19, "dark_oak_planks", true, 21, 21, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_PLANKS = REGISTRY.register(new Block(20, "mangrove_planks", true, 22, 22, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_WOOD = REGISTRY.register(new Block(20, "pale_oak_wood", true, 22, 24, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO_PLANKS = REGISTRY.register(new Block(21, "bamboo_planks", true, 23, 23, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_PLANKS = REGISTRY.register(new Block(21, "pale_oak_planks", true, 25, 25, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO_MOSAIC = REGISTRY.register(new Block(22, "bamboo_mosaic", true, 24, 24, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_PLANKS = REGISTRY.register(new Block(22, "mangrove_planks", true, 26, 26, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OAK_SAPLING = REGISTRY.register(new Block(23, "oak_sapling", false, 25, 26, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_PLANKS = REGISTRY.register(new Block(23, "bamboo_planks", true, 27, 27, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPRUCE_SAPLING = REGISTRY.register(new Block(24, "spruce_sapling", false, 27, 28, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_MOSAIC = REGISTRY.register(new Block(24, "bamboo_mosaic", true, 28, 28, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIRCH_SAPLING = REGISTRY.register(new Block(25, "birch_sapling", false, 29, 30, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OAK_SAPLING = REGISTRY.register(new Block(25, "oak_sapling", false, 29, 30, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JUNGLE_SAPLING = REGISTRY.register(new Block(26, "jungle_sapling", false, 31, 32, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPRUCE_SAPLING = REGISTRY.register(new Block(26, "spruce_sapling", false, 31, 32, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ACACIA_SAPLING = REGISTRY.register(new Block(27, "acacia_sapling", false, 33, 34, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIRCH_SAPLING = REGISTRY.register(new Block(27, "birch_sapling", false, 33, 34, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHERRY_SAPLING = REGISTRY.register(new Block(28, "cherry_sapling", false, 35, 36, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JUNGLE_SAPLING = REGISTRY.register(new Block(28, "jungle_sapling", false, 35, 36, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_OAK_SAPLING = REGISTRY.register(new Block(29, "dark_oak_sapling", false, 37, 38, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_SAPLING = REGISTRY.register(new Block(29, "acacia_sapling", false, 37, 38, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_PROPAGULE = REGISTRY.register(new Block(30, "mangrove_propagule", false, 39, 78, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block CHERRY_SAPLING = REGISTRY.register(new Block(30, "cherry_sapling", false, 39, 40, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BEDROCK = REGISTRY.register(new Block(31, "bedrock", true, 79, 79, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_OAK_SAPLING = REGISTRY.register(new Block(31, "dark_oak_sapling", false, 41, 42, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WATER = REGISTRY.register(new Block(32, "water", false, 80, 95, 12, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_SAPLING = REGISTRY.register(new Block(32, "pale_oak_sapling", false, 43, 44, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LAVA = REGISTRY.register(new Block(33, "lava", false, 96, 111, 4, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_PROPAGULE = REGISTRY.register(new Block(33, "mangrove_propagule", false, 45, 84, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block SAND = REGISTRY.register(new Block(34, "sand", true, 112, 112, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BEDROCK = REGISTRY.register(new Block(34, "bedrock", true, 85, 85, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SUSPICIOUS_SAND = REGISTRY.register(new Block(35, "suspicious_sand", true, 113, 116, 2, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BRUSHABLE_BLOCK));
+    public static final Block WATER = REGISTRY.register(new Block(35, "water", false, 86, 101, 12, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_SAND = REGISTRY.register(new Block(36, "red_sand", true, 117, 117, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LAVA = REGISTRY.register(new Block(36, "lava", false, 102, 117, 4, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRAVEL = REGISTRY.register(new Block(37, "gravel", true, 118, 118, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SAND = REGISTRY.register(new Block(37, "sand", true, 118, 118, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SUSPICIOUS_GRAVEL = REGISTRY.register(new Block(38, "suspicious_gravel", true, 119, 122, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BRUSHABLE_BLOCK));
+    public static final Block SUSPICIOUS_SAND = REGISTRY.register(new Block(38, "suspicious_sand", true, 119, 122, 2, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BRUSHABLE_BLOCK));
 
-    public static final Block GOLD_ORE = REGISTRY.register(new Block(39, "gold_ore", true, 123, 123, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_SAND = REGISTRY.register(new Block(39, "red_sand", true, 123, 123, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_GOLD_ORE = REGISTRY.register(new Block(40, "deepslate_gold_ore", true, 124, 124, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRAVEL = REGISTRY.register(new Block(40, "gravel", true, 124, 124, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block IRON_ORE = REGISTRY.register(new Block(41, "iron_ore", true, 125, 125, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SUSPICIOUS_GRAVEL = REGISTRY.register(new Block(41, "suspicious_gravel", true, 125, 128, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BRUSHABLE_BLOCK));
 
-    public static final Block DEEPSLATE_IRON_ORE = REGISTRY.register(new Block(42, "deepslate_iron_ore", true, 126, 126, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GOLD_ORE = REGISTRY.register(new Block(42, "gold_ore", true, 129, 129, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COAL_ORE = REGISTRY.register(new Block(43, "coal_ore", true, 127, 127, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEEPSLATE_GOLD_ORE = REGISTRY.register(new Block(43, "deepslate_gold_ore", true, 130, 130, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_COAL_ORE = REGISTRY.register(new Block(44, "deepslate_coal_ore", true, 128, 128, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block IRON_ORE = REGISTRY.register(new Block(44, "iron_ore", true, 131, 131, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block NETHER_GOLD_ORE = REGISTRY.register(new Block(45, "nether_gold_ore", true, 129, 129, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEEPSLATE_IRON_ORE = REGISTRY.register(new Block(45, "deepslate_iron_ore", true, 132, 132, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OAK_LOG = REGISTRY.register(new Block(46, "oak_log", true, 130, 132, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COAL_ORE = REGISTRY.register(new Block(46, "coal_ore", true, 133, 133, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPRUCE_LOG = REGISTRY.register(new Block(47, "spruce_log", true, 133, 135, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEEPSLATE_COAL_ORE = REGISTRY.register(new Block(47, "deepslate_coal_ore", true, 134, 134, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIRCH_LOG = REGISTRY.register(new Block(48, "birch_log", true, 136, 138, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block NETHER_GOLD_ORE = REGISTRY.register(new Block(48, "nether_gold_ore", true, 135, 135, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JUNGLE_LOG = REGISTRY.register(new Block(49, "jungle_log", true, 139, 141, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OAK_LOG = REGISTRY.register(new Block(49, "oak_log", true, 136, 138, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ACACIA_LOG = REGISTRY.register(new Block(50, "acacia_log", true, 142, 144, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPRUCE_LOG = REGISTRY.register(new Block(50, "spruce_log", true, 139, 141, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHERRY_LOG = REGISTRY.register(new Block(51, "cherry_log", true, 145, 147, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIRCH_LOG = REGISTRY.register(new Block(51, "birch_log", true, 142, 144, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_OAK_LOG = REGISTRY.register(new Block(52, "dark_oak_log", true, 148, 150, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JUNGLE_LOG = REGISTRY.register(new Block(52, "jungle_log", true, 145, 147, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_LOG = REGISTRY.register(new Block(53, "mangrove_log", true, 151, 153, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_LOG = REGISTRY.register(new Block(53, "acacia_log", true, 148, 150, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_ROOTS = REGISTRY.register(new Block(54, "mangrove_roots", true, 154, 155, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHERRY_LOG = REGISTRY.register(new Block(54, "cherry_log", true, 151, 153, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MUDDY_MANGROVE_ROOTS = REGISTRY.register(new Block(55, "muddy_mangrove_roots", true, 156, 158, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_OAK_LOG = REGISTRY.register(new Block(55, "dark_oak_log", true, 154, 156, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO_BLOCK = REGISTRY.register(new Block(56, "bamboo_block", true, 159, 161, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_LOG = REGISTRY.register(new Block(56, "pale_oak_log", true, 157, 159, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_SPRUCE_LOG = REGISTRY.register(new Block(57, "stripped_spruce_log", true, 162, 164, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_LOG = REGISTRY.register(new Block(57, "mangrove_log", true, 160, 162, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_BIRCH_LOG = REGISTRY.register(new Block(58, "stripped_birch_log", true, 165, 167, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_ROOTS = REGISTRY.register(new Block(58, "mangrove_roots", true, 163, 164, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_JUNGLE_LOG = REGISTRY.register(new Block(59, "stripped_jungle_log", true, 168, 170, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MUDDY_MANGROVE_ROOTS = REGISTRY.register(new Block(59, "muddy_mangrove_roots", true, 165, 167, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_ACACIA_LOG = REGISTRY.register(new Block(60, "stripped_acacia_log", true, 171, 173, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_BLOCK = REGISTRY.register(new Block(60, "bamboo_block", true, 168, 170, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_CHERRY_LOG = REGISTRY.register(new Block(61, "stripped_cherry_log", true, 174, 176, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_SPRUCE_LOG = REGISTRY.register(new Block(61, "stripped_spruce_log", true, 171, 173, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_DARK_OAK_LOG = REGISTRY.register(new Block(62, "stripped_dark_oak_log", true, 177, 179, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_BIRCH_LOG = REGISTRY.register(new Block(62, "stripped_birch_log", true, 174, 176, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_OAK_LOG = REGISTRY.register(new Block(63, "stripped_oak_log", true, 180, 182, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_JUNGLE_LOG = REGISTRY.register(new Block(63, "stripped_jungle_log", true, 177, 179, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_MANGROVE_LOG = REGISTRY.register(new Block(64, "stripped_mangrove_log", true, 183, 185, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_ACACIA_LOG = REGISTRY.register(new Block(64, "stripped_acacia_log", true, 180, 182, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_BAMBOO_BLOCK = REGISTRY.register(new Block(65, "stripped_bamboo_block", true, 186, 188, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_CHERRY_LOG = REGISTRY.register(new Block(65, "stripped_cherry_log", true, 183, 185, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OAK_WOOD = REGISTRY.register(new Block(66, "oak_wood", true, 189, 191, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_DARK_OAK_LOG = REGISTRY.register(new Block(66, "stripped_dark_oak_log", true, 186, 188, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPRUCE_WOOD = REGISTRY.register(new Block(67, "spruce_wood", true, 192, 194, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_PALE_OAK_LOG = REGISTRY.register(new Block(67, "stripped_pale_oak_log", true, 189, 191, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIRCH_WOOD = REGISTRY.register(new Block(68, "birch_wood", true, 195, 197, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_OAK_LOG = REGISTRY.register(new Block(68, "stripped_oak_log", true, 192, 194, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JUNGLE_WOOD = REGISTRY.register(new Block(69, "jungle_wood", true, 198, 200, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_MANGROVE_LOG = REGISTRY.register(new Block(69, "stripped_mangrove_log", true, 195, 197, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ACACIA_WOOD = REGISTRY.register(new Block(70, "acacia_wood", true, 201, 203, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_BAMBOO_BLOCK = REGISTRY.register(new Block(70, "stripped_bamboo_block", true, 198, 200, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHERRY_WOOD = REGISTRY.register(new Block(71, "cherry_wood", true, 204, 206, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OAK_WOOD = REGISTRY.register(new Block(71, "oak_wood", true, 201, 203, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_OAK_WOOD = REGISTRY.register(new Block(72, "dark_oak_wood", true, 207, 209, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPRUCE_WOOD = REGISTRY.register(new Block(72, "spruce_wood", true, 204, 206, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_WOOD = REGISTRY.register(new Block(73, "mangrove_wood", true, 210, 212, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIRCH_WOOD = REGISTRY.register(new Block(73, "birch_wood", true, 207, 209, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_OAK_WOOD = REGISTRY.register(new Block(74, "stripped_oak_wood", true, 213, 215, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JUNGLE_WOOD = REGISTRY.register(new Block(74, "jungle_wood", true, 210, 212, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_SPRUCE_WOOD = REGISTRY.register(new Block(75, "stripped_spruce_wood", true, 216, 218, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_WOOD = REGISTRY.register(new Block(75, "acacia_wood", true, 213, 215, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_BIRCH_WOOD = REGISTRY.register(new Block(76, "stripped_birch_wood", true, 219, 221, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHERRY_WOOD = REGISTRY.register(new Block(76, "cherry_wood", true, 216, 218, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_JUNGLE_WOOD = REGISTRY.register(new Block(77, "stripped_jungle_wood", true, 222, 224, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_OAK_WOOD = REGISTRY.register(new Block(77, "dark_oak_wood", true, 219, 221, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_ACACIA_WOOD = REGISTRY.register(new Block(78, "stripped_acacia_wood", true, 225, 227, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_WOOD = REGISTRY.register(new Block(78, "mangrove_wood", true, 222, 224, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_CHERRY_WOOD = REGISTRY.register(new Block(79, "stripped_cherry_wood", true, 228, 230, 42, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_OAK_WOOD = REGISTRY.register(new Block(79, "stripped_oak_wood", true, 225, 227, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_DARK_OAK_WOOD = REGISTRY.register(new Block(80, "stripped_dark_oak_wood", true, 231, 233, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_SPRUCE_WOOD = REGISTRY.register(new Block(80, "stripped_spruce_wood", true, 228, 230, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_MANGROVE_WOOD = REGISTRY.register(new Block(81, "stripped_mangrove_wood", true, 234, 236, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_BIRCH_WOOD = REGISTRY.register(new Block(81, "stripped_birch_wood", true, 231, 233, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OAK_LEAVES = REGISTRY.register(new Block(82, "oak_leaves", true, 237, 264, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_JUNGLE_WOOD = REGISTRY.register(new Block(82, "stripped_jungle_wood", true, 234, 236, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPRUCE_LEAVES = REGISTRY.register(new Block(83, "spruce_leaves", true, 265, 292, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_ACACIA_WOOD = REGISTRY.register(new Block(83, "stripped_acacia_wood", true, 237, 239, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIRCH_LEAVES = REGISTRY.register(new Block(84, "birch_leaves", true, 293, 320, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_CHERRY_WOOD = REGISTRY.register(new Block(84, "stripped_cherry_wood", true, 240, 242, 42, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JUNGLE_LEAVES = REGISTRY.register(new Block(85, "jungle_leaves", true, 321, 348, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_DARK_OAK_WOOD = REGISTRY.register(new Block(85, "stripped_dark_oak_wood", true, 243, 245, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ACACIA_LEAVES = REGISTRY.register(new Block(86, "acacia_leaves", true, 349, 376, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_PALE_OAK_WOOD = REGISTRY.register(new Block(86, "stripped_pale_oak_wood", true, 246, 248, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHERRY_LEAVES = REGISTRY.register(new Block(87, "cherry_leaves", true, 377, 404, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_MANGROVE_WOOD = REGISTRY.register(new Block(87, "stripped_mangrove_wood", true, 249, 251, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_OAK_LEAVES = REGISTRY.register(new Block(88, "dark_oak_leaves", true, 405, 432, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OAK_LEAVES = REGISTRY.register(new Block(88, "oak_leaves", true, 252, 279, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_LEAVES = REGISTRY.register(new Block(89, "mangrove_leaves", true, 433, 460, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPRUCE_LEAVES = REGISTRY.register(new Block(89, "spruce_leaves", true, 280, 307, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block AZALEA_LEAVES = REGISTRY.register(new Block(90, "azalea_leaves", true, 461, 488, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIRCH_LEAVES = REGISTRY.register(new Block(90, "birch_leaves", true, 308, 335, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block FLOWERING_AZALEA_LEAVES = REGISTRY.register(new Block(91, "flowering_azalea_leaves", true, 489, 516, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JUNGLE_LEAVES = REGISTRY.register(new Block(91, "jungle_leaves", true, 336, 363, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPONGE = REGISTRY.register(new Block(92, "sponge", true, 517, 517, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_LEAVES = REGISTRY.register(new Block(92, "acacia_leaves", true, 364, 391, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WET_SPONGE = REGISTRY.register(new Block(93, "wet_sponge", true, 518, 518, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHERRY_LEAVES = REGISTRY.register(new Block(93, "cherry_leaves", true, 392, 419, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GLASS = REGISTRY.register(new Block(94, "glass", true, 519, 519, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_OAK_LEAVES = REGISTRY.register(new Block(94, "dark_oak_leaves", true, 420, 447, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LAPIS_ORE = REGISTRY.register(new Block(95, "lapis_ore", true, 520, 520, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_LEAVES = REGISTRY.register(new Block(95, "pale_oak_leaves", true, 448, 475, 49, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_LAPIS_ORE = REGISTRY.register(new Block(96, "deepslate_lapis_ore", true, 521, 521, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_LEAVES = REGISTRY.register(new Block(96, "mangrove_leaves", true, 476, 503, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LAPIS_BLOCK = REGISTRY.register(new Block(97, "lapis_block", true, 522, 522, 32, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block AZALEA_LEAVES = REGISTRY.register(new Block(97, "azalea_leaves", true, 504, 531, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DISPENSER = REGISTRY.register(new Block(98, "dispenser", true, 523, 534, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.DISPENSER));
+    public static final Block FLOWERING_AZALEA_LEAVES = REGISTRY.register(new Block(98, "flowering_azalea_leaves", true, 532, 559, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SANDSTONE = REGISTRY.register(new Block(99, "sandstone", true, 535, 535, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPONGE = REGISTRY.register(new Block(99, "sponge", true, 560, 560, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHISELED_SANDSTONE = REGISTRY.register(new Block(100, "chiseled_sandstone", true, 536, 536, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WET_SPONGE = REGISTRY.register(new Block(100, "wet_sponge", true, 561, 561, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CUT_SANDSTONE = REGISTRY.register(new Block(101, "cut_sandstone", true, 537, 537, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GLASS = REGISTRY.register(new Block(101, "glass", true, 562, 562, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block NOTE_BLOCK = REGISTRY.register(new Block(102, "note_block", true, 538, 1687, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LAPIS_ORE = REGISTRY.register(new Block(102, "lapis_ore", true, 563, 563, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_BED = REGISTRY.register(new Block(103, "white_bed", true, 1688, 1703, 8, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block DEEPSLATE_LAPIS_ORE = REGISTRY.register(new Block(103, "deepslate_lapis_ore", true, 564, 564, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_BED = REGISTRY.register(new Block(104, "orange_bed", true, 1704, 1719, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block LAPIS_BLOCK = REGISTRY.register(new Block(104, "lapis_block", true, 565, 565, 32, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MAGENTA_BED = REGISTRY.register(new Block(105, "magenta_bed", true, 1720, 1735, 16, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block DISPENSER = REGISTRY.register(new Block(105, "dispenser", true, 566, 577, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.DISPENSER));
 
-    public static final Block LIGHT_BLUE_BED = REGISTRY.register(new Block(106, "light_blue_bed", true, 1736, 1751, 17, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block SANDSTONE = REGISTRY.register(new Block(106, "sandstone", true, 578, 578, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block YELLOW_BED = REGISTRY.register(new Block(107, "yellow_bed", true, 1752, 1767, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block CHISELED_SANDSTONE = REGISTRY.register(new Block(107, "chiseled_sandstone", true, 579, 579, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIME_BED = REGISTRY.register(new Block(108, "lime_bed", true, 1768, 1783, 19, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block CUT_SANDSTONE = REGISTRY.register(new Block(108, "cut_sandstone", true, 580, 580, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PINK_BED = REGISTRY.register(new Block(109, "pink_bed", true, 1784, 1799, 20, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block NOTE_BLOCK = REGISTRY.register(new Block(109, "note_block", true, 581, 1730, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRAY_BED = REGISTRY.register(new Block(110, "gray_bed", true, 1800, 1815, 21, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block WHITE_BED = REGISTRY.register(new Block(110, "white_bed", true, 1731, 1746, 8, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block LIGHT_GRAY_BED = REGISTRY.register(new Block(111, "light_gray_bed", true, 1816, 1831, 22, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block ORANGE_BED = REGISTRY.register(new Block(111, "orange_bed", true, 1747, 1762, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block CYAN_BED = REGISTRY.register(new Block(112, "cyan_bed", true, 1832, 1847, 23, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block MAGENTA_BED = REGISTRY.register(new Block(112, "magenta_bed", true, 1763, 1778, 16, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block PURPLE_BED = REGISTRY.register(new Block(113, "purple_bed", true, 1848, 1863, 24, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block LIGHT_BLUE_BED = REGISTRY.register(new Block(113, "light_blue_bed", true, 1779, 1794, 17, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block BLUE_BED = REGISTRY.register(new Block(114, "blue_bed", true, 1864, 1879, 25, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block YELLOW_BED = REGISTRY.register(new Block(114, "yellow_bed", true, 1795, 1810, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block BROWN_BED = REGISTRY.register(new Block(115, "brown_bed", true, 1880, 1895, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block LIME_BED = REGISTRY.register(new Block(115, "lime_bed", true, 1811, 1826, 19, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block GREEN_BED = REGISTRY.register(new Block(116, "green_bed", true, 1896, 1911, 27, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block PINK_BED = REGISTRY.register(new Block(116, "pink_bed", true, 1827, 1842, 20, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block RED_BED = REGISTRY.register(new Block(117, "red_bed", true, 1912, 1927, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block GRAY_BED = REGISTRY.register(new Block(117, "gray_bed", true, 1843, 1858, 21, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block BLACK_BED = REGISTRY.register(new Block(118, "black_bed", true, 1928, 1943, 29, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
+    public static final Block LIGHT_GRAY_BED = REGISTRY.register(new Block(118, "light_gray_bed", true, 1859, 1874, 22, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block POWERED_RAIL = REGISTRY.register(new Block(119, "powered_rail", false, 1944, 1967, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CYAN_BED = REGISTRY.register(new Block(119, "cyan_bed", true, 1875, 1890, 23, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block DETECTOR_RAIL = REGISTRY.register(new Block(120, "detector_rail", false, 1968, 1991, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PURPLE_BED = REGISTRY.register(new Block(120, "purple_bed", true, 1891, 1906, 24, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block STICKY_PISTON = REGISTRY.register(new Block(121, "sticky_piston", true, 1992, 2003, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLUE_BED = REGISTRY.register(new Block(121, "blue_bed", true, 1907, 1922, 25, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block COBWEB = REGISTRY.register(new Block(122, "cobweb", false, 2004, 2004, 3, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BROWN_BED = REGISTRY.register(new Block(122, "brown_bed", true, 1923, 1938, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block SHORT_GRASS = REGISTRY.register(new Block(123, "short_grass", false, 2005, 2005, 7, BlockOffsetType.XYZ, 0.25f, 0.2f, null));
+    public static final Block GREEN_BED = REGISTRY.register(new Block(123, "green_bed", true, 1939, 1954, 27, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block FERN = REGISTRY.register(new Block(124, "fern", false, 2006, 2006, 7, BlockOffsetType.XYZ, 0.25f, 0.2f, null));
+    public static final Block RED_BED = REGISTRY.register(new Block(124, "red_bed", true, 1955, 1970, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block DEAD_BUSH = REGISTRY.register(new Block(125, "dead_bush", false, 2007, 2007, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACK_BED = REGISTRY.register(new Block(125, "black_bed", true, 1971, 1986, 29, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BED));
 
-    public static final Block SEAGRASS = REGISTRY.register(new Block(126, "seagrass", false, 2008, 2008, 12, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POWERED_RAIL = REGISTRY.register(new Block(126, "powered_rail", false, 1987, 2010, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TALL_SEAGRASS = REGISTRY.register(new Block(127, "tall_seagrass", false, 2009, 2010, 12, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block DETECTOR_RAIL = REGISTRY.register(new Block(127, "detector_rail", false, 2011, 2034, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PISTON = REGISTRY.register(new Block(128, "piston", true, 2011, 2022, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STICKY_PISTON = REGISTRY.register(new Block(128, "sticky_piston", true, 2035, 2046, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PISTON_HEAD = REGISTRY.register(new Block(129, "piston_head", true, 2023, 2046, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COBWEB = REGISTRY.register(new Block(129, "cobweb", false, 2047, 2047, 3, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_WOOL = REGISTRY.register(new Block(130, "white_wool", true, 2047, 2047, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SHORT_GRASS = REGISTRY.register(new Block(130, "short_grass", false, 2048, 2048, 7, BlockOffsetType.XYZ, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_WOOL = REGISTRY.register(new Block(131, "orange_wool", true, 2048, 2048, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block FERN = REGISTRY.register(new Block(131, "fern", false, 2049, 2049, 7, BlockOffsetType.XYZ, 0.25f, 0.2f, null));
 
-    public static final Block MAGENTA_WOOL = REGISTRY.register(new Block(132, "magenta_wool", true, 2049, 2049, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_BUSH = REGISTRY.register(new Block(132, "dead_bush", false, 2050, 2050, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_BLUE_WOOL = REGISTRY.register(new Block(133, "light_blue_wool", true, 2050, 2050, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SEAGRASS = REGISTRY.register(new Block(133, "seagrass", false, 2051, 2051, 12, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block YELLOW_WOOL = REGISTRY.register(new Block(134, "yellow_wool", true, 2051, 2051, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TALL_SEAGRASS = REGISTRY.register(new Block(134, "tall_seagrass", false, 2052, 2053, 12, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block LIME_WOOL = REGISTRY.register(new Block(135, "lime_wool", true, 2052, 2052, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PISTON = REGISTRY.register(new Block(135, "piston", true, 2054, 2065, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PINK_WOOL = REGISTRY.register(new Block(136, "pink_wool", true, 2053, 2053, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PISTON_HEAD = REGISTRY.register(new Block(136, "piston_head", true, 2066, 2089, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRAY_WOOL = REGISTRY.register(new Block(137, "gray_wool", true, 2054, 2054, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_WOOL = REGISTRY.register(new Block(137, "white_wool", true, 2090, 2090, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_GRAY_WOOL = REGISTRY.register(new Block(138, "light_gray_wool", true, 2055, 2055, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_WOOL = REGISTRY.register(new Block(138, "orange_wool", true, 2091, 2091, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CYAN_WOOL = REGISTRY.register(new Block(139, "cyan_wool", true, 2056, 2056, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MAGENTA_WOOL = REGISTRY.register(new Block(139, "magenta_wool", true, 2092, 2092, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPLE_WOOL = REGISTRY.register(new Block(140, "purple_wool", true, 2057, 2057, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_BLUE_WOOL = REGISTRY.register(new Block(140, "light_blue_wool", true, 2093, 2093, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLUE_WOOL = REGISTRY.register(new Block(141, "blue_wool", true, 2058, 2058, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block YELLOW_WOOL = REGISTRY.register(new Block(141, "yellow_wool", true, 2094, 2094, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BROWN_WOOL = REGISTRY.register(new Block(142, "brown_wool", true, 2059, 2059, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIME_WOOL = REGISTRY.register(new Block(142, "lime_wool", true, 2095, 2095, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GREEN_WOOL = REGISTRY.register(new Block(143, "green_wool", true, 2060, 2060, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_WOOL = REGISTRY.register(new Block(143, "pink_wool", true, 2096, 2096, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_WOOL = REGISTRY.register(new Block(144, "red_wool", true, 2061, 2061, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRAY_WOOL = REGISTRY.register(new Block(144, "gray_wool", true, 2097, 2097, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLACK_WOOL = REGISTRY.register(new Block(145, "black_wool", true, 2062, 2062, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_GRAY_WOOL = REGISTRY.register(new Block(145, "light_gray_wool", true, 2098, 2098, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MOVING_PISTON = REGISTRY.register(new Block(146, "moving_piston", false, 2063, 2074, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.PISTON));
+    public static final Block CYAN_WOOL = REGISTRY.register(new Block(146, "cyan_wool", true, 2099, 2099, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DANDELION = REGISTRY.register(new Block(147, "dandelion", false, 2075, 2075, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block PURPLE_WOOL = REGISTRY.register(new Block(147, "purple_wool", true, 2100, 2100, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TORCHFLOWER = REGISTRY.register(new Block(148, "torchflower", false, 2076, 2076, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block BLUE_WOOL = REGISTRY.register(new Block(148, "blue_wool", true, 2101, 2101, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POPPY = REGISTRY.register(new Block(149, "poppy", false, 2077, 2077, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block BROWN_WOOL = REGISTRY.register(new Block(149, "brown_wool", true, 2102, 2102, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLUE_ORCHID = REGISTRY.register(new Block(150, "blue_orchid", false, 2078, 2078, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block GREEN_WOOL = REGISTRY.register(new Block(150, "green_wool", true, 2103, 2103, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ALLIUM = REGISTRY.register(new Block(151, "allium", false, 2079, 2079, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block RED_WOOL = REGISTRY.register(new Block(151, "red_wool", true, 2104, 2104, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block AZURE_BLUET = REGISTRY.register(new Block(152, "azure_bluet", false, 2080, 2080, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block BLACK_WOOL = REGISTRY.register(new Block(152, "black_wool", true, 2105, 2105, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_TULIP = REGISTRY.register(new Block(153, "red_tulip", false, 2081, 2081, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block MOVING_PISTON = REGISTRY.register(new Block(153, "moving_piston", false, 2106, 2117, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.PISTON));
 
-    public static final Block ORANGE_TULIP = REGISTRY.register(new Block(154, "orange_tulip", false, 2082, 2082, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block DANDELION = REGISTRY.register(new Block(154, "dandelion", false, 2118, 2118, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_TULIP = REGISTRY.register(new Block(155, "white_tulip", false, 2083, 2083, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block TORCHFLOWER = REGISTRY.register(new Block(155, "torchflower", false, 2119, 2119, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block PINK_TULIP = REGISTRY.register(new Block(156, "pink_tulip", false, 2084, 2084, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block POPPY = REGISTRY.register(new Block(156, "poppy", false, 2120, 2120, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block OXEYE_DAISY = REGISTRY.register(new Block(157, "oxeye_daisy", false, 2085, 2085, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block BLUE_ORCHID = REGISTRY.register(new Block(157, "blue_orchid", false, 2121, 2121, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block CORNFLOWER = REGISTRY.register(new Block(158, "cornflower", false, 2086, 2086, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block ALLIUM = REGISTRY.register(new Block(158, "allium", false, 2122, 2122, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block WITHER_ROSE = REGISTRY.register(new Block(159, "wither_rose", false, 2087, 2087, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block AZURE_BLUET = REGISTRY.register(new Block(159, "azure_bluet", false, 2123, 2123, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block LILY_OF_THE_VALLEY = REGISTRY.register(new Block(160, "lily_of_the_valley", false, 2088, 2088, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block RED_TULIP = REGISTRY.register(new Block(160, "red_tulip", false, 2124, 2124, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block BROWN_MUSHROOM = REGISTRY.register(new Block(161, "brown_mushroom", false, 2089, 2089, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_TULIP = REGISTRY.register(new Block(161, "orange_tulip", false, 2125, 2125, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block RED_MUSHROOM = REGISTRY.register(new Block(162, "red_mushroom", false, 2090, 2090, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_TULIP = REGISTRY.register(new Block(162, "white_tulip", false, 2126, 2126, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block GOLD_BLOCK = REGISTRY.register(new Block(163, "gold_block", true, 2091, 2091, 30, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_TULIP = REGISTRY.register(new Block(163, "pink_tulip", false, 2127, 2127, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block IRON_BLOCK = REGISTRY.register(new Block(164, "iron_block", true, 2092, 2092, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OXEYE_DAISY = REGISTRY.register(new Block(164, "oxeye_daisy", false, 2128, 2128, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block BRICKS = REGISTRY.register(new Block(165, "bricks", true, 2093, 2093, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CORNFLOWER = REGISTRY.register(new Block(165, "cornflower", false, 2129, 2129, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block TNT = REGISTRY.register(new Block(166, "tnt", true, 2094, 2095, 4, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WITHER_ROSE = REGISTRY.register(new Block(166, "wither_rose", false, 2130, 2130, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block BOOKSHELF = REGISTRY.register(new Block(167, "bookshelf", true, 2096, 2096, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LILY_OF_THE_VALLEY = REGISTRY.register(new Block(167, "lily_of_the_valley", false, 2131, 2131, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block CHISELED_BOOKSHELF = REGISTRY.register(new Block(168, "chiseled_bookshelf", true, 2097, 2352, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CHISELED_BOOKSHELF));
+    public static final Block BROWN_MUSHROOM = REGISTRY.register(new Block(168, "brown_mushroom", false, 2132, 2132, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MOSSY_COBBLESTONE = REGISTRY.register(new Block(169, "mossy_cobblestone", true, 2353, 2353, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_MUSHROOM = REGISTRY.register(new Block(169, "red_mushroom", false, 2133, 2133, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OBSIDIAN = REGISTRY.register(new Block(170, "obsidian", true, 2354, 2354, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GOLD_BLOCK = REGISTRY.register(new Block(170, "gold_block", true, 2134, 2134, 30, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TORCH = REGISTRY.register(new Block(171, "torch", false, 2355, 2355, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block IRON_BLOCK = REGISTRY.register(new Block(171, "iron_block", true, 2135, 2135, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WALL_TORCH = REGISTRY.register(new Block(172, "wall_torch", false, 2356, 2359, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BRICKS = REGISTRY.register(new Block(172, "bricks", true, 2136, 2136, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block FIRE = REGISTRY.register(new Block(173, "fire", false, 2360, 2871, 4, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TNT = REGISTRY.register(new Block(173, "tnt", true, 2137, 2138, 4, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SOUL_FIRE = REGISTRY.register(new Block(174, "soul_fire", false, 2872, 2872, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BOOKSHELF = REGISTRY.register(new Block(174, "bookshelf", true, 2139, 2139, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPAWNER = REGISTRY.register(new Block(175, "spawner", true, 2873, 2873, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.MOB_SPAWNER));
+    public static final Block CHISELED_BOOKSHELF = REGISTRY.register(new Block(175, "chiseled_bookshelf", true, 2140, 2395, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CHISELED_BOOKSHELF));
 
-    public static final Block OAK_STAIRS = REGISTRY.register(new Block(176, "oak_stairs", true, 2874, 2953, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MOSSY_COBBLESTONE = REGISTRY.register(new Block(176, "mossy_cobblestone", true, 2396, 2396, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHEST = REGISTRY.register(new Block(177, "chest", true, 2954, 2977, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CHEST));
+    public static final Block OBSIDIAN = REGISTRY.register(new Block(177, "obsidian", true, 2397, 2397, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block REDSTONE_WIRE = REGISTRY.register(new Block(178, "redstone_wire", false, 2978, 4273, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TORCH = REGISTRY.register(new Block(178, "torch", false, 2398, 2398, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DIAMOND_ORE = REGISTRY.register(new Block(179, "diamond_ore", true, 4274, 4274, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WALL_TORCH = REGISTRY.register(new Block(179, "wall_torch", false, 2399, 2402, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_DIAMOND_ORE = REGISTRY.register(new Block(180, "deepslate_diamond_ore", true, 4275, 4275, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block FIRE = REGISTRY.register(new Block(180, "fire", false, 2403, 2914, 4, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DIAMOND_BLOCK = REGISTRY.register(new Block(181, "diamond_block", true, 4276, 4276, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SOUL_FIRE = REGISTRY.register(new Block(181, "soul_fire", false, 2915, 2915, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRAFTING_TABLE = REGISTRY.register(new Block(182, "crafting_table", true, 4277, 4277, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPAWNER = REGISTRY.register(new Block(182, "spawner", true, 2916, 2916, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.MOB_SPAWNER));
 
-    public static final Block WHEAT = REGISTRY.register(new Block(183, "wheat", false, 4278, 4285, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CREAKING_HEART = REGISTRY.register(new Block(183, "creaking_heart", true, 2917, 2925, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CREAKING_HEART));
 
-    public static final Block FARMLAND = REGISTRY.register(new Block(184, "farmland", true, 4286, 4293, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OAK_STAIRS = REGISTRY.register(new Block(184, "oak_stairs", true, 2926, 3005, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block FURNACE = REGISTRY.register(new Block(185, "furnace", true, 4294, 4301, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.FURNACE));
+    public static final Block CHEST = REGISTRY.register(new Block(185, "chest", true, 3006, 3029, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CHEST));
 
-    public static final Block OAK_SIGN = REGISTRY.register(new Block(186, "oak_sign", false, 4302, 4333, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block REDSTONE_WIRE = REGISTRY.register(new Block(186, "redstone_wire", false, 3030, 4325, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPRUCE_SIGN = REGISTRY.register(new Block(187, "spruce_sign", false, 4334, 4365, 34, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block DIAMOND_ORE = REGISTRY.register(new Block(187, "diamond_ore", true, 4326, 4326, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIRCH_SIGN = REGISTRY.register(new Block(188, "birch_sign", false, 4366, 4397, 2, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block DEEPSLATE_DIAMOND_ORE = REGISTRY.register(new Block(188, "deepslate_diamond_ore", true, 4327, 4327, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ACACIA_SIGN = REGISTRY.register(new Block(189, "acacia_sign", false, 4398, 4429, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block DIAMOND_BLOCK = REGISTRY.register(new Block(189, "diamond_block", true, 4328, 4328, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHERRY_SIGN = REGISTRY.register(new Block(190, "cherry_sign", false, 4430, 4461, 36, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block CRAFTING_TABLE = REGISTRY.register(new Block(190, "crafting_table", true, 4329, 4329, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JUNGLE_SIGN = REGISTRY.register(new Block(191, "jungle_sign", false, 4462, 4493, 10, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block WHEAT = REGISTRY.register(new Block(191, "wheat", false, 4330, 4337, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_OAK_SIGN = REGISTRY.register(new Block(192, "dark_oak_sign", false, 4494, 4525, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block FARMLAND = REGISTRY.register(new Block(192, "farmland", true, 4338, 4345, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_SIGN = REGISTRY.register(new Block(193, "mangrove_sign", false, 4526, 4557, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block FURNACE = REGISTRY.register(new Block(193, "furnace", true, 4346, 4353, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.FURNACE));
 
-    public static final Block BAMBOO_SIGN = REGISTRY.register(new Block(194, "bamboo_sign", false, 4558, 4589, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block OAK_SIGN = REGISTRY.register(new Block(194, "oak_sign", false, 4354, 4385, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block OAK_DOOR = REGISTRY.register(new Block(195, "oak_door", true, 4590, 4653, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPRUCE_SIGN = REGISTRY.register(new Block(195, "spruce_sign", false, 4386, 4417, 34, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block LADDER = REGISTRY.register(new Block(196, "ladder", true, 4654, 4661, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIRCH_SIGN = REGISTRY.register(new Block(196, "birch_sign", false, 4418, 4449, 2, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block RAIL = REGISTRY.register(new Block(197, "rail", false, 4662, 4681, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_SIGN = REGISTRY.register(new Block(197, "acacia_sign", false, 4450, 4481, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block COBBLESTONE_STAIRS = REGISTRY.register(new Block(198, "cobblestone_stairs", true, 4682, 4761, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHERRY_SIGN = REGISTRY.register(new Block(198, "cherry_sign", false, 4482, 4513, 36, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block OAK_WALL_SIGN = REGISTRY.register(new Block(199, "oak_wall_sign", false, 4762, 4769, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block JUNGLE_SIGN = REGISTRY.register(new Block(199, "jungle_sign", false, 4514, 4545, 10, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block SPRUCE_WALL_SIGN = REGISTRY.register(new Block(200, "spruce_wall_sign", false, 4770, 4777, 34, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block DARK_OAK_SIGN = REGISTRY.register(new Block(200, "dark_oak_sign", false, 4546, 4577, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block BIRCH_WALL_SIGN = REGISTRY.register(new Block(201, "birch_wall_sign", false, 4778, 4785, 2, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block PALE_OAK_SIGN = REGISTRY.register(new Block(201, "pale_oak_sign", false, 4578, 4609, 14, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block ACACIA_WALL_SIGN = REGISTRY.register(new Block(202, "acacia_wall_sign", false, 4786, 4793, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block MANGROVE_SIGN = REGISTRY.register(new Block(202, "mangrove_sign", false, 4610, 4641, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block CHERRY_WALL_SIGN = REGISTRY.register(new Block(203, "cherry_wall_sign", false, 4794, 4801, 36, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block BAMBOO_SIGN = REGISTRY.register(new Block(203, "bamboo_sign", false, 4642, 4673, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block JUNGLE_WALL_SIGN = REGISTRY.register(new Block(204, "jungle_wall_sign", false, 4802, 4809, 10, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block OAK_DOOR = REGISTRY.register(new Block(204, "oak_door", true, 4674, 4737, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_OAK_WALL_SIGN = REGISTRY.register(new Block(205, "dark_oak_wall_sign", false, 4810, 4817, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block LADDER = REGISTRY.register(new Block(205, "ladder", true, 4738, 4745, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_WALL_SIGN = REGISTRY.register(new Block(206, "mangrove_wall_sign", false, 4818, 4825, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block RAIL = REGISTRY.register(new Block(206, "rail", false, 4746, 4765, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO_WALL_SIGN = REGISTRY.register(new Block(207, "bamboo_wall_sign", false, 4826, 4833, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block COBBLESTONE_STAIRS = REGISTRY.register(new Block(207, "cobblestone_stairs", true, 4766, 4845, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OAK_HANGING_SIGN = REGISTRY.register(new Block(208, "oak_hanging_sign", false, 4834, 4897, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block OAK_WALL_SIGN = REGISTRY.register(new Block(208, "oak_wall_sign", false, 4846, 4853, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block SPRUCE_HANGING_SIGN = REGISTRY.register(new Block(209, "spruce_hanging_sign", false, 4898, 4961, 34, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block SPRUCE_WALL_SIGN = REGISTRY.register(new Block(209, "spruce_wall_sign", false, 4854, 4861, 34, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block BIRCH_HANGING_SIGN = REGISTRY.register(new Block(210, "birch_hanging_sign", false, 4962, 5025, 2, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block BIRCH_WALL_SIGN = REGISTRY.register(new Block(210, "birch_wall_sign", false, 4862, 4869, 2, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block ACACIA_HANGING_SIGN = REGISTRY.register(new Block(211, "acacia_hanging_sign", false, 5026, 5089, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block ACACIA_WALL_SIGN = REGISTRY.register(new Block(211, "acacia_wall_sign", false, 4870, 4877, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block CHERRY_HANGING_SIGN = REGISTRY.register(new Block(212, "cherry_hanging_sign", false, 5090, 5153, 42, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block CHERRY_WALL_SIGN = REGISTRY.register(new Block(212, "cherry_wall_sign", false, 4878, 4885, 36, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block JUNGLE_HANGING_SIGN = REGISTRY.register(new Block(213, "jungle_hanging_sign", false, 5154, 5217, 10, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block JUNGLE_WALL_SIGN = REGISTRY.register(new Block(213, "jungle_wall_sign", false, 4886, 4893, 10, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block DARK_OAK_HANGING_SIGN = REGISTRY.register(new Block(214, "dark_oak_hanging_sign", false, 5218, 5281, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block DARK_OAK_WALL_SIGN = REGISTRY.register(new Block(214, "dark_oak_wall_sign", false, 4894, 4901, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block CRIMSON_HANGING_SIGN = REGISTRY.register(new Block(215, "crimson_hanging_sign", false, 5282, 5345, 53, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block PALE_OAK_WALL_SIGN = REGISTRY.register(new Block(215, "pale_oak_wall_sign", false, 4902, 4909, 14, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block WARPED_HANGING_SIGN = REGISTRY.register(new Block(216, "warped_hanging_sign", false, 5346, 5409, 56, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block MANGROVE_WALL_SIGN = REGISTRY.register(new Block(216, "mangrove_wall_sign", false, 4910, 4917, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block MANGROVE_HANGING_SIGN = REGISTRY.register(new Block(217, "mangrove_hanging_sign", false, 5410, 5473, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block BAMBOO_WALL_SIGN = REGISTRY.register(new Block(217, "bamboo_wall_sign", false, 4918, 4925, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block BAMBOO_HANGING_SIGN = REGISTRY.register(new Block(218, "bamboo_hanging_sign", false, 5474, 5537, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block OAK_HANGING_SIGN = REGISTRY.register(new Block(218, "oak_hanging_sign", false, 4926, 4989, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block OAK_WALL_HANGING_SIGN = REGISTRY.register(new Block(219, "oak_wall_hanging_sign", true, 5538, 5545, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block SPRUCE_HANGING_SIGN = REGISTRY.register(new Block(219, "spruce_hanging_sign", false, 4990, 5053, 34, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block SPRUCE_WALL_HANGING_SIGN = REGISTRY.register(new Block(220, "spruce_wall_hanging_sign", true, 5546, 5553, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block BIRCH_HANGING_SIGN = REGISTRY.register(new Block(220, "birch_hanging_sign", false, 5054, 5117, 2, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block BIRCH_WALL_HANGING_SIGN = REGISTRY.register(new Block(221, "birch_wall_hanging_sign", true, 5554, 5561, 2, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block ACACIA_HANGING_SIGN = REGISTRY.register(new Block(221, "acacia_hanging_sign", false, 5118, 5181, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block ACACIA_WALL_HANGING_SIGN = REGISTRY.register(new Block(222, "acacia_wall_hanging_sign", true, 5562, 5569, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block CHERRY_HANGING_SIGN = REGISTRY.register(new Block(222, "cherry_hanging_sign", false, 5182, 5245, 42, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block CHERRY_WALL_HANGING_SIGN = REGISTRY.register(new Block(223, "cherry_wall_hanging_sign", true, 5570, 5577, 42, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block JUNGLE_HANGING_SIGN = REGISTRY.register(new Block(223, "jungle_hanging_sign", false, 5246, 5309, 10, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block JUNGLE_WALL_HANGING_SIGN = REGISTRY.register(new Block(224, "jungle_wall_hanging_sign", true, 5578, 5585, 10, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block DARK_OAK_HANGING_SIGN = REGISTRY.register(new Block(224, "dark_oak_hanging_sign", false, 5310, 5373, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block DARK_OAK_WALL_HANGING_SIGN = REGISTRY.register(new Block(225, "dark_oak_wall_hanging_sign", true, 5586, 5593, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block PALE_OAK_HANGING_SIGN = REGISTRY.register(new Block(225, "pale_oak_hanging_sign", false, 5374, 5437, 14, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block MANGROVE_WALL_HANGING_SIGN = REGISTRY.register(new Block(226, "mangrove_wall_hanging_sign", true, 5594, 5601, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block CRIMSON_HANGING_SIGN = REGISTRY.register(new Block(226, "crimson_hanging_sign", false, 5438, 5501, 53, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block CRIMSON_WALL_HANGING_SIGN = REGISTRY.register(new Block(227, "crimson_wall_hanging_sign", true, 5602, 5609, 53, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block WARPED_HANGING_SIGN = REGISTRY.register(new Block(227, "warped_hanging_sign", false, 5502, 5565, 56, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block WARPED_WALL_HANGING_SIGN = REGISTRY.register(new Block(228, "warped_wall_hanging_sign", true, 5610, 5617, 56, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block MANGROVE_HANGING_SIGN = REGISTRY.register(new Block(228, "mangrove_hanging_sign", false, 5566, 5629, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block BAMBOO_WALL_HANGING_SIGN = REGISTRY.register(new Block(229, "bamboo_wall_hanging_sign", true, 5618, 5625, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
+    public static final Block BAMBOO_HANGING_SIGN = REGISTRY.register(new Block(229, "bamboo_hanging_sign", false, 5630, 5693, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block LEVER = REGISTRY.register(new Block(230, "lever", false, 5626, 5649, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OAK_WALL_HANGING_SIGN = REGISTRY.register(new Block(230, "oak_wall_hanging_sign", true, 5694, 5701, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block STONE_PRESSURE_PLATE = REGISTRY.register(new Block(231, "stone_pressure_plate", false, 5650, 5651, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPRUCE_WALL_HANGING_SIGN = REGISTRY.register(new Block(231, "spruce_wall_hanging_sign", true, 5702, 5709, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block IRON_DOOR = REGISTRY.register(new Block(232, "iron_door", true, 5652, 5715, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIRCH_WALL_HANGING_SIGN = REGISTRY.register(new Block(232, "birch_wall_hanging_sign", true, 5710, 5717, 2, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block OAK_PRESSURE_PLATE = REGISTRY.register(new Block(233, "oak_pressure_plate", false, 5716, 5717, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_WALL_HANGING_SIGN = REGISTRY.register(new Block(233, "acacia_wall_hanging_sign", true, 5718, 5725, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block SPRUCE_PRESSURE_PLATE = REGISTRY.register(new Block(234, "spruce_pressure_plate", false, 5718, 5719, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHERRY_WALL_HANGING_SIGN = REGISTRY.register(new Block(234, "cherry_wall_hanging_sign", true, 5726, 5733, 42, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block BIRCH_PRESSURE_PLATE = REGISTRY.register(new Block(235, "birch_pressure_plate", false, 5720, 5721, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JUNGLE_WALL_HANGING_SIGN = REGISTRY.register(new Block(235, "jungle_wall_hanging_sign", true, 5734, 5741, 10, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block JUNGLE_PRESSURE_PLATE = REGISTRY.register(new Block(236, "jungle_pressure_plate", false, 5722, 5723, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_OAK_WALL_HANGING_SIGN = REGISTRY.register(new Block(236, "dark_oak_wall_hanging_sign", true, 5742, 5749, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block ACACIA_PRESSURE_PLATE = REGISTRY.register(new Block(237, "acacia_pressure_plate", false, 5724, 5725, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_WALL_HANGING_SIGN = REGISTRY.register(new Block(237, "pale_oak_wall_hanging_sign", true, 5750, 5757, 14, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block CHERRY_PRESSURE_PLATE = REGISTRY.register(new Block(238, "cherry_pressure_plate", false, 5726, 5727, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_WALL_HANGING_SIGN = REGISTRY.register(new Block(238, "mangrove_wall_hanging_sign", true, 5758, 5765, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block DARK_OAK_PRESSURE_PLATE = REGISTRY.register(new Block(239, "dark_oak_pressure_plate", false, 5728, 5729, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_WALL_HANGING_SIGN = REGISTRY.register(new Block(239, "crimson_wall_hanging_sign", true, 5766, 5773, 53, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block MANGROVE_PRESSURE_PLATE = REGISTRY.register(new Block(240, "mangrove_pressure_plate", false, 5730, 5731, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_WALL_HANGING_SIGN = REGISTRY.register(new Block(240, "warped_wall_hanging_sign", true, 5774, 5781, 56, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block BAMBOO_PRESSURE_PLATE = REGISTRY.register(new Block(241, "bamboo_pressure_plate", false, 5732, 5733, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_WALL_HANGING_SIGN = REGISTRY.register(new Block(241, "bamboo_wall_hanging_sign", true, 5782, 5789, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HANGING_SIGN));
 
-    public static final Block REDSTONE_ORE = REGISTRY.register(new Block(242, "redstone_ore", true, 5734, 5735, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LEVER = REGISTRY.register(new Block(242, "lever", false, 5790, 5813, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_REDSTONE_ORE = REGISTRY.register(new Block(243, "deepslate_redstone_ore", true, 5736, 5737, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STONE_PRESSURE_PLATE = REGISTRY.register(new Block(243, "stone_pressure_plate", false, 5814, 5815, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block REDSTONE_TORCH = REGISTRY.register(new Block(244, "redstone_torch", false, 5738, 5739, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block IRON_DOOR = REGISTRY.register(new Block(244, "iron_door", true, 5816, 5879, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block REDSTONE_WALL_TORCH = REGISTRY.register(new Block(245, "redstone_wall_torch", false, 5740, 5747, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OAK_PRESSURE_PLATE = REGISTRY.register(new Block(245, "oak_pressure_plate", false, 5880, 5881, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STONE_BUTTON = REGISTRY.register(new Block(246, "stone_button", false, 5748, 5771, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPRUCE_PRESSURE_PLATE = REGISTRY.register(new Block(246, "spruce_pressure_plate", false, 5882, 5883, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SNOW = REGISTRY.register(new Block(247, "snow", false, 5772, 5779, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIRCH_PRESSURE_PLATE = REGISTRY.register(new Block(247, "birch_pressure_plate", false, 5884, 5885, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ICE = REGISTRY.register(new Block(248, "ice", true, 5780, 5780, 5, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JUNGLE_PRESSURE_PLATE = REGISTRY.register(new Block(248, "jungle_pressure_plate", false, 5886, 5887, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SNOW_BLOCK = REGISTRY.register(new Block(249, "snow_block", true, 5781, 5781, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_PRESSURE_PLATE = REGISTRY.register(new Block(249, "acacia_pressure_plate", false, 5888, 5889, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CACTUS = REGISTRY.register(new Block(250, "cactus", true, 5782, 5797, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHERRY_PRESSURE_PLATE = REGISTRY.register(new Block(250, "cherry_pressure_plate", false, 5890, 5891, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CLAY = REGISTRY.register(new Block(251, "clay", true, 5798, 5798, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_OAK_PRESSURE_PLATE = REGISTRY.register(new Block(251, "dark_oak_pressure_plate", false, 5892, 5893, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SUGAR_CANE = REGISTRY.register(new Block(252, "sugar_cane", false, 5799, 5814, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_PRESSURE_PLATE = REGISTRY.register(new Block(252, "pale_oak_pressure_plate", false, 5894, 5895, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JUKEBOX = REGISTRY.register(new Block(253, "jukebox", true, 5815, 5816, 10, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.JUKEBOX));
+    public static final Block MANGROVE_PRESSURE_PLATE = REGISTRY.register(new Block(253, "mangrove_pressure_plate", false, 5896, 5897, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OAK_FENCE = REGISTRY.register(new Block(254, "oak_fence", true, 5817, 5848, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_PRESSURE_PLATE = REGISTRY.register(new Block(254, "bamboo_pressure_plate", false, 5898, 5899, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block NETHERRACK = REGISTRY.register(new Block(255, "netherrack", true, 5849, 5849, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block REDSTONE_ORE = REGISTRY.register(new Block(255, "redstone_ore", true, 5900, 5901, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SOUL_SAND = REGISTRY.register(new Block(256, "soul_sand", true, 5850, 5850, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEEPSLATE_REDSTONE_ORE = REGISTRY.register(new Block(256, "deepslate_redstone_ore", true, 5902, 5903, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SOUL_SOIL = REGISTRY.register(new Block(257, "soul_soil", true, 5851, 5851, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block REDSTONE_TORCH = REGISTRY.register(new Block(257, "redstone_torch", false, 5904, 5905, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BASALT = REGISTRY.register(new Block(258, "basalt", true, 5852, 5854, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block REDSTONE_WALL_TORCH = REGISTRY.register(new Block(258, "redstone_wall_torch", false, 5906, 5913, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_BASALT = REGISTRY.register(new Block(259, "polished_basalt", true, 5855, 5857, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STONE_BUTTON = REGISTRY.register(new Block(259, "stone_button", false, 5914, 5937, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SOUL_TORCH = REGISTRY.register(new Block(260, "soul_torch", false, 5858, 5858, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SNOW = REGISTRY.register(new Block(260, "snow", false, 5938, 5945, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SOUL_WALL_TORCH = REGISTRY.register(new Block(261, "soul_wall_torch", false, 5859, 5862, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ICE = REGISTRY.register(new Block(261, "ice", true, 5946, 5946, 5, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GLOWSTONE = REGISTRY.register(new Block(262, "glowstone", true, 5863, 5863, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SNOW_BLOCK = REGISTRY.register(new Block(262, "snow_block", true, 5947, 5947, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block NETHER_PORTAL = REGISTRY.register(new Block(263, "nether_portal", false, 5864, 5865, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CACTUS = REGISTRY.register(new Block(263, "cactus", true, 5948, 5963, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CARVED_PUMPKIN = REGISTRY.register(new Block(264, "carved_pumpkin", true, 5866, 5869, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CLAY = REGISTRY.register(new Block(264, "clay", true, 5964, 5964, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JACK_O_LANTERN = REGISTRY.register(new Block(265, "jack_o_lantern", true, 5870, 5873, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SUGAR_CANE = REGISTRY.register(new Block(265, "sugar_cane", false, 5965, 5980, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CAKE = REGISTRY.register(new Block(266, "cake", true, 5874, 5880, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JUKEBOX = REGISTRY.register(new Block(266, "jukebox", true, 5981, 5982, 10, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.JUKEBOX));
 
-    public static final Block REPEATER = REGISTRY.register(new Block(267, "repeater", true, 5881, 5944, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OAK_FENCE = REGISTRY.register(new Block(267, "oak_fence", true, 5983, 6014, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_STAINED_GLASS = REGISTRY.register(new Block(268, "white_stained_glass", true, 5945, 5945, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block NETHERRACK = REGISTRY.register(new Block(268, "netherrack", true, 6015, 6015, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_STAINED_GLASS = REGISTRY.register(new Block(269, "orange_stained_glass", true, 5946, 5946, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SOUL_SAND = REGISTRY.register(new Block(269, "soul_sand", true, 6016, 6016, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MAGENTA_STAINED_GLASS = REGISTRY.register(new Block(270, "magenta_stained_glass", true, 5947, 5947, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SOUL_SOIL = REGISTRY.register(new Block(270, "soul_soil", true, 6017, 6017, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_BLUE_STAINED_GLASS = REGISTRY.register(new Block(271, "light_blue_stained_glass", true, 5948, 5948, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BASALT = REGISTRY.register(new Block(271, "basalt", true, 6018, 6020, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block YELLOW_STAINED_GLASS = REGISTRY.register(new Block(272, "yellow_stained_glass", true, 5949, 5949, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_BASALT = REGISTRY.register(new Block(272, "polished_basalt", true, 6021, 6023, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIME_STAINED_GLASS = REGISTRY.register(new Block(273, "lime_stained_glass", true, 5950, 5950, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SOUL_TORCH = REGISTRY.register(new Block(273, "soul_torch", false, 6024, 6024, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PINK_STAINED_GLASS = REGISTRY.register(new Block(274, "pink_stained_glass", true, 5951, 5951, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SOUL_WALL_TORCH = REGISTRY.register(new Block(274, "soul_wall_torch", false, 6025, 6028, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRAY_STAINED_GLASS = REGISTRY.register(new Block(275, "gray_stained_glass", true, 5952, 5952, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GLOWSTONE = REGISTRY.register(new Block(275, "glowstone", true, 6029, 6029, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_GRAY_STAINED_GLASS = REGISTRY.register(new Block(276, "light_gray_stained_glass", true, 5953, 5953, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block NETHER_PORTAL = REGISTRY.register(new Block(276, "nether_portal", false, 6030, 6031, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CYAN_STAINED_GLASS = REGISTRY.register(new Block(277, "cyan_stained_glass", true, 5954, 5954, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CARVED_PUMPKIN = REGISTRY.register(new Block(277, "carved_pumpkin", true, 6032, 6035, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPLE_STAINED_GLASS = REGISTRY.register(new Block(278, "purple_stained_glass", true, 5955, 5955, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JACK_O_LANTERN = REGISTRY.register(new Block(278, "jack_o_lantern", true, 6036, 6039, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLUE_STAINED_GLASS = REGISTRY.register(new Block(279, "blue_stained_glass", true, 5956, 5956, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CAKE = REGISTRY.register(new Block(279, "cake", true, 6040, 6046, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BROWN_STAINED_GLASS = REGISTRY.register(new Block(280, "brown_stained_glass", true, 5957, 5957, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block REPEATER = REGISTRY.register(new Block(280, "repeater", true, 6047, 6110, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GREEN_STAINED_GLASS = REGISTRY.register(new Block(281, "green_stained_glass", true, 5958, 5958, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_STAINED_GLASS = REGISTRY.register(new Block(281, "white_stained_glass", true, 6111, 6111, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_STAINED_GLASS = REGISTRY.register(new Block(282, "red_stained_glass", true, 5959, 5959, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_STAINED_GLASS = REGISTRY.register(new Block(282, "orange_stained_glass", true, 6112, 6112, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLACK_STAINED_GLASS = REGISTRY.register(new Block(283, "black_stained_glass", true, 5960, 5960, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MAGENTA_STAINED_GLASS = REGISTRY.register(new Block(283, "magenta_stained_glass", true, 6113, 6113, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OAK_TRAPDOOR = REGISTRY.register(new Block(284, "oak_trapdoor", true, 5961, 6024, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_BLUE_STAINED_GLASS = REGISTRY.register(new Block(284, "light_blue_stained_glass", true, 6114, 6114, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPRUCE_TRAPDOOR = REGISTRY.register(new Block(285, "spruce_trapdoor", true, 6025, 6088, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block YELLOW_STAINED_GLASS = REGISTRY.register(new Block(285, "yellow_stained_glass", true, 6115, 6115, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIRCH_TRAPDOOR = REGISTRY.register(new Block(286, "birch_trapdoor", true, 6089, 6152, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIME_STAINED_GLASS = REGISTRY.register(new Block(286, "lime_stained_glass", true, 6116, 6116, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JUNGLE_TRAPDOOR = REGISTRY.register(new Block(287, "jungle_trapdoor", true, 6153, 6216, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_STAINED_GLASS = REGISTRY.register(new Block(287, "pink_stained_glass", true, 6117, 6117, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ACACIA_TRAPDOOR = REGISTRY.register(new Block(288, "acacia_trapdoor", true, 6217, 6280, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRAY_STAINED_GLASS = REGISTRY.register(new Block(288, "gray_stained_glass", true, 6118, 6118, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHERRY_TRAPDOOR = REGISTRY.register(new Block(289, "cherry_trapdoor", true, 6281, 6344, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_GRAY_STAINED_GLASS = REGISTRY.register(new Block(289, "light_gray_stained_glass", true, 6119, 6119, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_OAK_TRAPDOOR = REGISTRY.register(new Block(290, "dark_oak_trapdoor", true, 6345, 6408, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CYAN_STAINED_GLASS = REGISTRY.register(new Block(290, "cyan_stained_glass", true, 6120, 6120, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_TRAPDOOR = REGISTRY.register(new Block(291, "mangrove_trapdoor", true, 6409, 6472, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PURPLE_STAINED_GLASS = REGISTRY.register(new Block(291, "purple_stained_glass", true, 6121, 6121, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO_TRAPDOOR = REGISTRY.register(new Block(292, "bamboo_trapdoor", true, 6473, 6536, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLUE_STAINED_GLASS = REGISTRY.register(new Block(292, "blue_stained_glass", true, 6122, 6122, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STONE_BRICKS = REGISTRY.register(new Block(293, "stone_bricks", true, 6537, 6537, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BROWN_STAINED_GLASS = REGISTRY.register(new Block(293, "brown_stained_glass", true, 6123, 6123, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MOSSY_STONE_BRICKS = REGISTRY.register(new Block(294, "mossy_stone_bricks", true, 6538, 6538, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GREEN_STAINED_GLASS = REGISTRY.register(new Block(294, "green_stained_glass", true, 6124, 6124, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRACKED_STONE_BRICKS = REGISTRY.register(new Block(295, "cracked_stone_bricks", true, 6539, 6539, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_STAINED_GLASS = REGISTRY.register(new Block(295, "red_stained_glass", true, 6125, 6125, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHISELED_STONE_BRICKS = REGISTRY.register(new Block(296, "chiseled_stone_bricks", true, 6540, 6540, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACK_STAINED_GLASS = REGISTRY.register(new Block(296, "black_stained_glass", true, 6126, 6126, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PACKED_MUD = REGISTRY.register(new Block(297, "packed_mud", true, 6541, 6541, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OAK_TRAPDOOR = REGISTRY.register(new Block(297, "oak_trapdoor", true, 6127, 6190, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MUD_BRICKS = REGISTRY.register(new Block(298, "mud_bricks", true, 6542, 6542, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPRUCE_TRAPDOOR = REGISTRY.register(new Block(298, "spruce_trapdoor", true, 6191, 6254, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block INFESTED_STONE = REGISTRY.register(new Block(299, "infested_stone", true, 6543, 6543, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIRCH_TRAPDOOR = REGISTRY.register(new Block(299, "birch_trapdoor", true, 6255, 6318, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block INFESTED_COBBLESTONE = REGISTRY.register(new Block(300, "infested_cobblestone", true, 6544, 6544, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JUNGLE_TRAPDOOR = REGISTRY.register(new Block(300, "jungle_trapdoor", true, 6319, 6382, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block INFESTED_STONE_BRICKS = REGISTRY.register(new Block(301, "infested_stone_bricks", true, 6545, 6545, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_TRAPDOOR = REGISTRY.register(new Block(301, "acacia_trapdoor", true, 6383, 6446, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block INFESTED_MOSSY_STONE_BRICKS = REGISTRY.register(new Block(302, "infested_mossy_stone_bricks", true, 6546, 6546, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHERRY_TRAPDOOR = REGISTRY.register(new Block(302, "cherry_trapdoor", true, 6447, 6510, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block INFESTED_CRACKED_STONE_BRICKS = REGISTRY.register(new Block(303, "infested_cracked_stone_bricks", true, 6547, 6547, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_OAK_TRAPDOOR = REGISTRY.register(new Block(303, "dark_oak_trapdoor", true, 6511, 6574, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block INFESTED_CHISELED_STONE_BRICKS = REGISTRY.register(new Block(304, "infested_chiseled_stone_bricks", true, 6548, 6548, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_TRAPDOOR = REGISTRY.register(new Block(304, "pale_oak_trapdoor", true, 6575, 6638, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BROWN_MUSHROOM_BLOCK = REGISTRY.register(new Block(305, "brown_mushroom_block", true, 6549, 6612, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_TRAPDOOR = REGISTRY.register(new Block(305, "mangrove_trapdoor", true, 6639, 6702, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_MUSHROOM_BLOCK = REGISTRY.register(new Block(306, "red_mushroom_block", true, 6613, 6676, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_TRAPDOOR = REGISTRY.register(new Block(306, "bamboo_trapdoor", true, 6703, 6766, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MUSHROOM_STEM = REGISTRY.register(new Block(307, "mushroom_stem", true, 6677, 6740, 3, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STONE_BRICKS = REGISTRY.register(new Block(307, "stone_bricks", true, 6767, 6767, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block IRON_BARS = REGISTRY.register(new Block(308, "iron_bars", true, 6741, 6772, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MOSSY_STONE_BRICKS = REGISTRY.register(new Block(308, "mossy_stone_bricks", true, 6768, 6768, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHAIN = REGISTRY.register(new Block(309, "chain", true, 6773, 6778, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRACKED_STONE_BRICKS = REGISTRY.register(new Block(309, "cracked_stone_bricks", true, 6769, 6769, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GLASS_PANE = REGISTRY.register(new Block(310, "glass_pane", true, 6779, 6810, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHISELED_STONE_BRICKS = REGISTRY.register(new Block(310, "chiseled_stone_bricks", true, 6770, 6770, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PUMPKIN = REGISTRY.register(new Block(311, "pumpkin", true, 6811, 6811, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PACKED_MUD = REGISTRY.register(new Block(311, "packed_mud", true, 6771, 6771, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MELON = REGISTRY.register(new Block(312, "melon", true, 6812, 6812, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MUD_BRICKS = REGISTRY.register(new Block(312, "mud_bricks", true, 6772, 6772, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ATTACHED_PUMPKIN_STEM = REGISTRY.register(new Block(313, "attached_pumpkin_stem", false, 6813, 6816, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block INFESTED_STONE = REGISTRY.register(new Block(313, "infested_stone", true, 6773, 6773, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ATTACHED_MELON_STEM = REGISTRY.register(new Block(314, "attached_melon_stem", false, 6817, 6820, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block INFESTED_COBBLESTONE = REGISTRY.register(new Block(314, "infested_cobblestone", true, 6774, 6774, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PUMPKIN_STEM = REGISTRY.register(new Block(315, "pumpkin_stem", false, 6821, 6828, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block INFESTED_STONE_BRICKS = REGISTRY.register(new Block(315, "infested_stone_bricks", true, 6775, 6775, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MELON_STEM = REGISTRY.register(new Block(316, "melon_stem", false, 6829, 6836, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block INFESTED_MOSSY_STONE_BRICKS = REGISTRY.register(new Block(316, "infested_mossy_stone_bricks", true, 6776, 6776, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block VINE = REGISTRY.register(new Block(317, "vine", false, 6837, 6868, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block INFESTED_CRACKED_STONE_BRICKS = REGISTRY.register(new Block(317, "infested_cracked_stone_bricks", true, 6777, 6777, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GLOW_LICHEN = REGISTRY.register(new Block(318, "glow_lichen", false, 6869, 6996, 61, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block INFESTED_CHISELED_STONE_BRICKS = REGISTRY.register(new Block(318, "infested_chiseled_stone_bricks", true, 6778, 6778, 9, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OAK_FENCE_GATE = REGISTRY.register(new Block(319, "oak_fence_gate", true, 6997, 7028, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BROWN_MUSHROOM_BLOCK = REGISTRY.register(new Block(319, "brown_mushroom_block", true, 6779, 6842, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BRICK_STAIRS = REGISTRY.register(new Block(320, "brick_stairs", true, 7029, 7108, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_MUSHROOM_BLOCK = REGISTRY.register(new Block(320, "red_mushroom_block", true, 6843, 6906, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STONE_BRICK_STAIRS = REGISTRY.register(new Block(321, "stone_brick_stairs", true, 7109, 7188, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MUSHROOM_STEM = REGISTRY.register(new Block(321, "mushroom_stem", true, 6907, 6970, 3, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MUD_BRICK_STAIRS = REGISTRY.register(new Block(322, "mud_brick_stairs", true, 7189, 7268, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block IRON_BARS = REGISTRY.register(new Block(322, "iron_bars", true, 6971, 7002, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MYCELIUM = REGISTRY.register(new Block(323, "mycelium", true, 7269, 7270, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHAIN = REGISTRY.register(new Block(323, "chain", true, 7003, 7008, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LILY_PAD = REGISTRY.register(new Block(324, "lily_pad", true, 7271, 7271, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GLASS_PANE = REGISTRY.register(new Block(324, "glass_pane", true, 7009, 7040, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block NETHER_BRICKS = REGISTRY.register(new Block(325, "nether_bricks", true, 7272, 7272, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PUMPKIN = REGISTRY.register(new Block(325, "pumpkin", true, 7041, 7041, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block NETHER_BRICK_FENCE = REGISTRY.register(new Block(326, "nether_brick_fence", true, 7273, 7304, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MELON = REGISTRY.register(new Block(326, "melon", true, 7042, 7042, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block NETHER_BRICK_STAIRS = REGISTRY.register(new Block(327, "nether_brick_stairs", true, 7305, 7384, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ATTACHED_PUMPKIN_STEM = REGISTRY.register(new Block(327, "attached_pumpkin_stem", false, 7043, 7046, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block NETHER_WART = REGISTRY.register(new Block(328, "nether_wart", false, 7385, 7388, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ATTACHED_MELON_STEM = REGISTRY.register(new Block(328, "attached_melon_stem", false, 7047, 7050, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ENCHANTING_TABLE = REGISTRY.register(new Block(329, "enchanting_table", true, 7389, 7389, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.ENCHANTING_TABLE));
+    public static final Block PUMPKIN_STEM = REGISTRY.register(new Block(329, "pumpkin_stem", false, 7051, 7058, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BREWING_STAND = REGISTRY.register(new Block(330, "brewing_stand", true, 7390, 7397, 6, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BREWING_STAND));
+    public static final Block MELON_STEM = REGISTRY.register(new Block(330, "melon_stem", false, 7059, 7066, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CAULDRON = REGISTRY.register(new Block(331, "cauldron", true, 7398, 7398, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block VINE = REGISTRY.register(new Block(331, "vine", false, 7067, 7098, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WATER_CAULDRON = REGISTRY.register(new Block(332, "water_cauldron", true, 7399, 7401, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GLOW_LICHEN = REGISTRY.register(new Block(332, "glow_lichen", false, 7099, 7226, 61, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LAVA_CAULDRON = REGISTRY.register(new Block(333, "lava_cauldron", true, 7402, 7402, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OAK_FENCE_GATE = REGISTRY.register(new Block(333, "oak_fence_gate", true, 7227, 7258, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POWDER_SNOW_CAULDRON = REGISTRY.register(new Block(334, "powder_snow_cauldron", true, 7403, 7405, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BRICK_STAIRS = REGISTRY.register(new Block(334, "brick_stairs", true, 7259, 7338, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block END_PORTAL = REGISTRY.register(new Block(335, "end_portal", false, 7406, 7406, 29, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.END_PORTAL));
+    public static final Block STONE_BRICK_STAIRS = REGISTRY.register(new Block(335, "stone_brick_stairs", true, 7339, 7418, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block END_PORTAL_FRAME = REGISTRY.register(new Block(336, "end_portal_frame", true, 7407, 7414, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MUD_BRICK_STAIRS = REGISTRY.register(new Block(336, "mud_brick_stairs", true, 7419, 7498, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block END_STONE = REGISTRY.register(new Block(337, "end_stone", true, 7415, 7415, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MYCELIUM = REGISTRY.register(new Block(337, "mycelium", true, 7499, 7500, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DRAGON_EGG = REGISTRY.register(new Block(338, "dragon_egg", true, 7416, 7416, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LILY_PAD = REGISTRY.register(new Block(338, "lily_pad", true, 7501, 7501, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block REDSTONE_LAMP = REGISTRY.register(new Block(339, "redstone_lamp", true, 7417, 7418, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block NETHER_BRICKS = REGISTRY.register(new Block(339, "nether_bricks", true, 7502, 7502, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COCOA = REGISTRY.register(new Block(340, "cocoa", true, 7419, 7430, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block NETHER_BRICK_FENCE = REGISTRY.register(new Block(340, "nether_brick_fence", true, 7503, 7534, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SANDSTONE_STAIRS = REGISTRY.register(new Block(341, "sandstone_stairs", true, 7431, 7510, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block NETHER_BRICK_STAIRS = REGISTRY.register(new Block(341, "nether_brick_stairs", true, 7535, 7614, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block EMERALD_ORE = REGISTRY.register(new Block(342, "emerald_ore", true, 7511, 7511, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block NETHER_WART = REGISTRY.register(new Block(342, "nether_wart", false, 7615, 7618, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_EMERALD_ORE = REGISTRY.register(new Block(343, "deepslate_emerald_ore", true, 7512, 7512, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ENCHANTING_TABLE = REGISTRY.register(new Block(343, "enchanting_table", true, 7619, 7619, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.ENCHANTING_TABLE));
 
-    public static final Block ENDER_CHEST = REGISTRY.register(new Block(344, "ender_chest", true, 7513, 7520, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.ENDER_CHEST));
+    public static final Block BREWING_STAND = REGISTRY.register(new Block(344, "brewing_stand", true, 7620, 7627, 6, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BREWING_STAND));
 
-    public static final Block TRIPWIRE_HOOK = REGISTRY.register(new Block(345, "tripwire_hook", false, 7521, 7536, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CAULDRON = REGISTRY.register(new Block(345, "cauldron", true, 7628, 7628, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TRIPWIRE = REGISTRY.register(new Block(346, "tripwire", false, 7537, 7664, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WATER_CAULDRON = REGISTRY.register(new Block(346, "water_cauldron", true, 7629, 7631, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block EMERALD_BLOCK = REGISTRY.register(new Block(347, "emerald_block", true, 7665, 7665, 33, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LAVA_CAULDRON = REGISTRY.register(new Block(347, "lava_cauldron", true, 7632, 7632, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPRUCE_STAIRS = REGISTRY.register(new Block(348, "spruce_stairs", true, 7666, 7745, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POWDER_SNOW_CAULDRON = REGISTRY.register(new Block(348, "powder_snow_cauldron", true, 7633, 7635, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIRCH_STAIRS = REGISTRY.register(new Block(349, "birch_stairs", true, 7746, 7825, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block END_PORTAL = REGISTRY.register(new Block(349, "end_portal", false, 7636, 7636, 29, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.END_PORTAL));
 
-    public static final Block JUNGLE_STAIRS = REGISTRY.register(new Block(350, "jungle_stairs", true, 7826, 7905, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block END_PORTAL_FRAME = REGISTRY.register(new Block(350, "end_portal_frame", true, 7637, 7644, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COMMAND_BLOCK = REGISTRY.register(new Block(351, "command_block", true, 7906, 7917, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.COMMAND_BLOCK));
+    public static final Block END_STONE = REGISTRY.register(new Block(351, "end_stone", true, 7645, 7645, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BEACON = REGISTRY.register(new Block(352, "beacon", true, 7918, 7918, 31, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BEACON));
+    public static final Block DRAGON_EGG = REGISTRY.register(new Block(352, "dragon_egg", true, 7646, 7646, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COBBLESTONE_WALL = REGISTRY.register(new Block(353, "cobblestone_wall", true, 7919, 8242, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block REDSTONE_LAMP = REGISTRY.register(new Block(353, "redstone_lamp", true, 7647, 7648, 37, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MOSSY_COBBLESTONE_WALL = REGISTRY.register(new Block(354, "mossy_cobblestone_wall", true, 8243, 8566, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COCOA = REGISTRY.register(new Block(354, "cocoa", true, 7649, 7660, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block FLOWER_POT = REGISTRY.register(new Block(355, "flower_pot", true, 8567, 8567, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SANDSTONE_STAIRS = REGISTRY.register(new Block(355, "sandstone_stairs", true, 7661, 7740, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_TORCHFLOWER = REGISTRY.register(new Block(356, "potted_torchflower", true, 8568, 8568, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block EMERALD_ORE = REGISTRY.register(new Block(356, "emerald_ore", true, 7741, 7741, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_OAK_SAPLING = REGISTRY.register(new Block(357, "potted_oak_sapling", true, 8569, 8569, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEEPSLATE_EMERALD_ORE = REGISTRY.register(new Block(357, "deepslate_emerald_ore", true, 7742, 7742, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_SPRUCE_SAPLING = REGISTRY.register(new Block(358, "potted_spruce_sapling", true, 8570, 8570, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ENDER_CHEST = REGISTRY.register(new Block(358, "ender_chest", true, 7743, 7750, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.ENDER_CHEST));
 
-    public static final Block POTTED_BIRCH_SAPLING = REGISTRY.register(new Block(359, "potted_birch_sapling", true, 8571, 8571, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TRIPWIRE_HOOK = REGISTRY.register(new Block(359, "tripwire_hook", false, 7751, 7766, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_JUNGLE_SAPLING = REGISTRY.register(new Block(360, "potted_jungle_sapling", true, 8572, 8572, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TRIPWIRE = REGISTRY.register(new Block(360, "tripwire", false, 7767, 7894, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_ACACIA_SAPLING = REGISTRY.register(new Block(361, "potted_acacia_sapling", true, 8573, 8573, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block EMERALD_BLOCK = REGISTRY.register(new Block(361, "emerald_block", true, 7895, 7895, 33, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_CHERRY_SAPLING = REGISTRY.register(new Block(362, "potted_cherry_sapling", true, 8574, 8574, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPRUCE_STAIRS = REGISTRY.register(new Block(362, "spruce_stairs", true, 7896, 7975, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_DARK_OAK_SAPLING = REGISTRY.register(new Block(363, "potted_dark_oak_sapling", true, 8575, 8575, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIRCH_STAIRS = REGISTRY.register(new Block(363, "birch_stairs", true, 7976, 8055, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_MANGROVE_PROPAGULE = REGISTRY.register(new Block(364, "potted_mangrove_propagule", true, 8576, 8576, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JUNGLE_STAIRS = REGISTRY.register(new Block(364, "jungle_stairs", true, 8056, 8135, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_FERN = REGISTRY.register(new Block(365, "potted_fern", true, 8577, 8577, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COMMAND_BLOCK = REGISTRY.register(new Block(365, "command_block", true, 8136, 8147, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.COMMAND_BLOCK));
 
-    public static final Block POTTED_DANDELION = REGISTRY.register(new Block(366, "potted_dandelion", true, 8578, 8578, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BEACON = REGISTRY.register(new Block(366, "beacon", true, 8148, 8148, 31, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BEACON));
 
-    public static final Block POTTED_POPPY = REGISTRY.register(new Block(367, "potted_poppy", true, 8579, 8579, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COBBLESTONE_WALL = REGISTRY.register(new Block(367, "cobblestone_wall", true, 8149, 8472, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_BLUE_ORCHID = REGISTRY.register(new Block(368, "potted_blue_orchid", true, 8580, 8580, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MOSSY_COBBLESTONE_WALL = REGISTRY.register(new Block(368, "mossy_cobblestone_wall", true, 8473, 8796, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_ALLIUM = REGISTRY.register(new Block(369, "potted_allium", true, 8581, 8581, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block FLOWER_POT = REGISTRY.register(new Block(369, "flower_pot", true, 8797, 8797, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_AZURE_BLUET = REGISTRY.register(new Block(370, "potted_azure_bluet", true, 8582, 8582, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_TORCHFLOWER = REGISTRY.register(new Block(370, "potted_torchflower", true, 8798, 8798, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_RED_TULIP = REGISTRY.register(new Block(371, "potted_red_tulip", true, 8583, 8583, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_OAK_SAPLING = REGISTRY.register(new Block(371, "potted_oak_sapling", true, 8799, 8799, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_ORANGE_TULIP = REGISTRY.register(new Block(372, "potted_orange_tulip", true, 8584, 8584, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_SPRUCE_SAPLING = REGISTRY.register(new Block(372, "potted_spruce_sapling", true, 8800, 8800, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_WHITE_TULIP = REGISTRY.register(new Block(373, "potted_white_tulip", true, 8585, 8585, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_BIRCH_SAPLING = REGISTRY.register(new Block(373, "potted_birch_sapling", true, 8801, 8801, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_PINK_TULIP = REGISTRY.register(new Block(374, "potted_pink_tulip", true, 8586, 8586, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_JUNGLE_SAPLING = REGISTRY.register(new Block(374, "potted_jungle_sapling", true, 8802, 8802, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_OXEYE_DAISY = REGISTRY.register(new Block(375, "potted_oxeye_daisy", true, 8587, 8587, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_ACACIA_SAPLING = REGISTRY.register(new Block(375, "potted_acacia_sapling", true, 8803, 8803, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_CORNFLOWER = REGISTRY.register(new Block(376, "potted_cornflower", true, 8588, 8588, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_CHERRY_SAPLING = REGISTRY.register(new Block(376, "potted_cherry_sapling", true, 8804, 8804, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_LILY_OF_THE_VALLEY = REGISTRY.register(new Block(377, "potted_lily_of_the_valley", true, 8589, 8589, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_DARK_OAK_SAPLING = REGISTRY.register(new Block(377, "potted_dark_oak_sapling", true, 8805, 8805, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_WITHER_ROSE = REGISTRY.register(new Block(378, "potted_wither_rose", true, 8590, 8590, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_PALE_OAK_SAPLING = REGISTRY.register(new Block(378, "potted_pale_oak_sapling", true, 8806, 8806, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_RED_MUSHROOM = REGISTRY.register(new Block(379, "potted_red_mushroom", true, 8591, 8591, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_MANGROVE_PROPAGULE = REGISTRY.register(new Block(379, "potted_mangrove_propagule", true, 8807, 8807, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_BROWN_MUSHROOM = REGISTRY.register(new Block(380, "potted_brown_mushroom", true, 8592, 8592, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_FERN = REGISTRY.register(new Block(380, "potted_fern", true, 8808, 8808, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_DEAD_BUSH = REGISTRY.register(new Block(381, "potted_dead_bush", true, 8593, 8593, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_DANDELION = REGISTRY.register(new Block(381, "potted_dandelion", true, 8809, 8809, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_CACTUS = REGISTRY.register(new Block(382, "potted_cactus", true, 8594, 8594, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_POPPY = REGISTRY.register(new Block(382, "potted_poppy", true, 8810, 8810, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CARROTS = REGISTRY.register(new Block(383, "carrots", false, 8595, 8602, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_BLUE_ORCHID = REGISTRY.register(new Block(383, "potted_blue_orchid", true, 8811, 8811, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTATOES = REGISTRY.register(new Block(384, "potatoes", false, 8603, 8610, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_ALLIUM = REGISTRY.register(new Block(384, "potted_allium", true, 8812, 8812, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OAK_BUTTON = REGISTRY.register(new Block(385, "oak_button", false, 8611, 8634, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_AZURE_BLUET = REGISTRY.register(new Block(385, "potted_azure_bluet", true, 8813, 8813, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPRUCE_BUTTON = REGISTRY.register(new Block(386, "spruce_button", false, 8635, 8658, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_RED_TULIP = REGISTRY.register(new Block(386, "potted_red_tulip", true, 8814, 8814, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIRCH_BUTTON = REGISTRY.register(new Block(387, "birch_button", false, 8659, 8682, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_ORANGE_TULIP = REGISTRY.register(new Block(387, "potted_orange_tulip", true, 8815, 8815, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JUNGLE_BUTTON = REGISTRY.register(new Block(388, "jungle_button", false, 8683, 8706, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_WHITE_TULIP = REGISTRY.register(new Block(388, "potted_white_tulip", true, 8816, 8816, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ACACIA_BUTTON = REGISTRY.register(new Block(389, "acacia_button", false, 8707, 8730, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_PINK_TULIP = REGISTRY.register(new Block(389, "potted_pink_tulip", true, 8817, 8817, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHERRY_BUTTON = REGISTRY.register(new Block(390, "cherry_button", false, 8731, 8754, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_OXEYE_DAISY = REGISTRY.register(new Block(390, "potted_oxeye_daisy", true, 8818, 8818, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_OAK_BUTTON = REGISTRY.register(new Block(391, "dark_oak_button", false, 8755, 8778, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_CORNFLOWER = REGISTRY.register(new Block(391, "potted_cornflower", true, 8819, 8819, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_BUTTON = REGISTRY.register(new Block(392, "mangrove_button", false, 8779, 8802, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_LILY_OF_THE_VALLEY = REGISTRY.register(new Block(392, "potted_lily_of_the_valley", true, 8820, 8820, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO_BUTTON = REGISTRY.register(new Block(393, "bamboo_button", false, 8803, 8826, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_WITHER_ROSE = REGISTRY.register(new Block(393, "potted_wither_rose", true, 8821, 8821, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SKELETON_SKULL = REGISTRY.register(new Block(394, "skeleton_skull", true, 8827, 8858, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block POTTED_RED_MUSHROOM = REGISTRY.register(new Block(394, "potted_red_mushroom", true, 8822, 8822, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SKELETON_WALL_SKULL = REGISTRY.register(new Block(395, "skeleton_wall_skull", true, 8859, 8866, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block POTTED_BROWN_MUSHROOM = REGISTRY.register(new Block(395, "potted_brown_mushroom", true, 8823, 8823, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WITHER_SKELETON_SKULL = REGISTRY.register(new Block(396, "wither_skeleton_skull", true, 8867, 8898, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block POTTED_DEAD_BUSH = REGISTRY.register(new Block(396, "potted_dead_bush", true, 8824, 8824, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WITHER_SKELETON_WALL_SKULL = REGISTRY.register(new Block(397, "wither_skeleton_wall_skull", true, 8899, 8906, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block POTTED_CACTUS = REGISTRY.register(new Block(397, "potted_cactus", true, 8825, 8825, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ZOMBIE_HEAD = REGISTRY.register(new Block(398, "zombie_head", true, 8907, 8938, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block CARROTS = REGISTRY.register(new Block(398, "carrots", false, 8826, 8833, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ZOMBIE_WALL_HEAD = REGISTRY.register(new Block(399, "zombie_wall_head", true, 8939, 8946, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block POTATOES = REGISTRY.register(new Block(399, "potatoes", false, 8834, 8841, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PLAYER_HEAD = REGISTRY.register(new Block(400, "player_head", true, 8947, 8978, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block OAK_BUTTON = REGISTRY.register(new Block(400, "oak_button", false, 8842, 8865, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PLAYER_WALL_HEAD = REGISTRY.register(new Block(401, "player_wall_head", true, 8979, 8986, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block SPRUCE_BUTTON = REGISTRY.register(new Block(401, "spruce_button", false, 8866, 8889, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CREEPER_HEAD = REGISTRY.register(new Block(402, "creeper_head", true, 8987, 9018, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block BIRCH_BUTTON = REGISTRY.register(new Block(402, "birch_button", false, 8890, 8913, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CREEPER_WALL_HEAD = REGISTRY.register(new Block(403, "creeper_wall_head", true, 9019, 9026, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block JUNGLE_BUTTON = REGISTRY.register(new Block(403, "jungle_button", false, 8914, 8937, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DRAGON_HEAD = REGISTRY.register(new Block(404, "dragon_head", true, 9027, 9058, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block ACACIA_BUTTON = REGISTRY.register(new Block(404, "acacia_button", false, 8938, 8961, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DRAGON_WALL_HEAD = REGISTRY.register(new Block(405, "dragon_wall_head", true, 9059, 9066, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block CHERRY_BUTTON = REGISTRY.register(new Block(405, "cherry_button", false, 8962, 8985, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PIGLIN_HEAD = REGISTRY.register(new Block(406, "piglin_head", true, 9067, 9098, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block DARK_OAK_BUTTON = REGISTRY.register(new Block(406, "dark_oak_button", false, 8986, 9009, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PIGLIN_WALL_HEAD = REGISTRY.register(new Block(407, "piglin_wall_head", true, 9099, 9106, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
+    public static final Block PALE_OAK_BUTTON = REGISTRY.register(new Block(407, "pale_oak_button", false, 9010, 9033, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ANVIL = REGISTRY.register(new Block(408, "anvil", true, 9107, 9110, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_BUTTON = REGISTRY.register(new Block(408, "mangrove_button", false, 9034, 9057, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHIPPED_ANVIL = REGISTRY.register(new Block(409, "chipped_anvil", true, 9111, 9114, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_BUTTON = REGISTRY.register(new Block(409, "bamboo_button", false, 9058, 9081, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DAMAGED_ANVIL = REGISTRY.register(new Block(410, "damaged_anvil", true, 9115, 9118, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SKELETON_SKULL = REGISTRY.register(new Block(410, "skeleton_skull", true, 9082, 9113, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block TRAPPED_CHEST = REGISTRY.register(new Block(411, "trapped_chest", true, 9119, 9142, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.TRAPPED_CHEST));
+    public static final Block SKELETON_WALL_SKULL = REGISTRY.register(new Block(411, "skeleton_wall_skull", true, 9114, 9121, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block LIGHT_WEIGHTED_PRESSURE_PLATE = REGISTRY.register(new Block(412, "light_weighted_pressure_plate", false, 9143, 9158, 30, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WITHER_SKELETON_SKULL = REGISTRY.register(new Block(412, "wither_skeleton_skull", true, 9122, 9153, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block HEAVY_WEIGHTED_PRESSURE_PLATE = REGISTRY.register(new Block(413, "heavy_weighted_pressure_plate", false, 9159, 9174, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WITHER_SKELETON_WALL_SKULL = REGISTRY.register(new Block(413, "wither_skeleton_wall_skull", true, 9154, 9161, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block COMPARATOR = REGISTRY.register(new Block(414, "comparator", true, 9175, 9190, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.COMPARATOR));
+    public static final Block ZOMBIE_HEAD = REGISTRY.register(new Block(414, "zombie_head", true, 9162, 9193, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block DAYLIGHT_DETECTOR = REGISTRY.register(new Block(415, "daylight_detector", true, 9191, 9222, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.DAYLIGHT_DETECTOR));
+    public static final Block ZOMBIE_WALL_HEAD = REGISTRY.register(new Block(415, "zombie_wall_head", true, 9194, 9201, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block REDSTONE_BLOCK = REGISTRY.register(new Block(416, "redstone_block", true, 9223, 9223, 4, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PLAYER_HEAD = REGISTRY.register(new Block(416, "player_head", true, 9202, 9233, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block NETHER_QUARTZ_ORE = REGISTRY.register(new Block(417, "nether_quartz_ore", true, 9224, 9224, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PLAYER_WALL_HEAD = REGISTRY.register(new Block(417, "player_wall_head", true, 9234, 9241, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block HOPPER = REGISTRY.register(new Block(418, "hopper", true, 9225, 9234, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HOPPER));
+    public static final Block CREEPER_HEAD = REGISTRY.register(new Block(418, "creeper_head", true, 9242, 9273, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block QUARTZ_BLOCK = REGISTRY.register(new Block(419, "quartz_block", true, 9235, 9235, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CREEPER_WALL_HEAD = REGISTRY.register(new Block(419, "creeper_wall_head", true, 9274, 9281, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block CHISELED_QUARTZ_BLOCK = REGISTRY.register(new Block(420, "chiseled_quartz_block", true, 9236, 9236, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DRAGON_HEAD = REGISTRY.register(new Block(420, "dragon_head", true, 9282, 9313, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block QUARTZ_PILLAR = REGISTRY.register(new Block(421, "quartz_pillar", true, 9237, 9239, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DRAGON_WALL_HEAD = REGISTRY.register(new Block(421, "dragon_wall_head", true, 9314, 9321, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block QUARTZ_STAIRS = REGISTRY.register(new Block(422, "quartz_stairs", true, 9240, 9319, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PIGLIN_HEAD = REGISTRY.register(new Block(422, "piglin_head", true, 9322, 9353, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block ACTIVATOR_RAIL = REGISTRY.register(new Block(423, "activator_rail", false, 9320, 9343, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PIGLIN_WALL_HEAD = REGISTRY.register(new Block(423, "piglin_wall_head", true, 9354, 9361, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SKULL));
 
-    public static final Block DROPPER = REGISTRY.register(new Block(424, "dropper", true, 9344, 9355, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.DROPPER));
+    public static final Block ANVIL = REGISTRY.register(new Block(424, "anvil", true, 9362, 9365, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_TERRACOTTA = REGISTRY.register(new Block(425, "white_terracotta", true, 9356, 9356, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHIPPED_ANVIL = REGISTRY.register(new Block(425, "chipped_anvil", true, 9366, 9369, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_TERRACOTTA = REGISTRY.register(new Block(426, "orange_terracotta", true, 9357, 9357, 37, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DAMAGED_ANVIL = REGISTRY.register(new Block(426, "damaged_anvil", true, 9370, 9373, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MAGENTA_TERRACOTTA = REGISTRY.register(new Block(427, "magenta_terracotta", true, 9358, 9358, 38, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TRAPPED_CHEST = REGISTRY.register(new Block(427, "trapped_chest", true, 9374, 9397, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.TRAPPED_CHEST));
 
-    public static final Block LIGHT_BLUE_TERRACOTTA = REGISTRY.register(new Block(428, "light_blue_terracotta", true, 9359, 9359, 39, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_WEIGHTED_PRESSURE_PLATE = REGISTRY.register(new Block(428, "light_weighted_pressure_plate", false, 9398, 9413, 30, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block YELLOW_TERRACOTTA = REGISTRY.register(new Block(429, "yellow_terracotta", true, 9360, 9360, 40, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block HEAVY_WEIGHTED_PRESSURE_PLATE = REGISTRY.register(new Block(429, "heavy_weighted_pressure_plate", false, 9414, 9429, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIME_TERRACOTTA = REGISTRY.register(new Block(430, "lime_terracotta", true, 9361, 9361, 41, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COMPARATOR = REGISTRY.register(new Block(430, "comparator", true, 9430, 9445, 0, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.COMPARATOR));
 
-    public static final Block PINK_TERRACOTTA = REGISTRY.register(new Block(431, "pink_terracotta", true, 9362, 9362, 42, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DAYLIGHT_DETECTOR = REGISTRY.register(new Block(431, "daylight_detector", true, 9446, 9477, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.DAYLIGHT_DETECTOR));
 
-    public static final Block GRAY_TERRACOTTA = REGISTRY.register(new Block(432, "gray_terracotta", true, 9363, 9363, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block REDSTONE_BLOCK = REGISTRY.register(new Block(432, "redstone_block", true, 9478, 9478, 4, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_GRAY_TERRACOTTA = REGISTRY.register(new Block(433, "light_gray_terracotta", true, 9364, 9364, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block NETHER_QUARTZ_ORE = REGISTRY.register(new Block(433, "nether_quartz_ore", true, 9479, 9479, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CYAN_TERRACOTTA = REGISTRY.register(new Block(434, "cyan_terracotta", true, 9365, 9365, 45, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block HOPPER = REGISTRY.register(new Block(434, "hopper", true, 9480, 9489, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.HOPPER));
 
-    public static final Block PURPLE_TERRACOTTA = REGISTRY.register(new Block(435, "purple_terracotta", true, 9366, 9366, 46, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block QUARTZ_BLOCK = REGISTRY.register(new Block(435, "quartz_block", true, 9490, 9490, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLUE_TERRACOTTA = REGISTRY.register(new Block(436, "blue_terracotta", true, 9367, 9367, 47, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHISELED_QUARTZ_BLOCK = REGISTRY.register(new Block(436, "chiseled_quartz_block", true, 9491, 9491, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BROWN_TERRACOTTA = REGISTRY.register(new Block(437, "brown_terracotta", true, 9368, 9368, 48, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block QUARTZ_PILLAR = REGISTRY.register(new Block(437, "quartz_pillar", true, 9492, 9494, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GREEN_TERRACOTTA = REGISTRY.register(new Block(438, "green_terracotta", true, 9369, 9369, 49, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block QUARTZ_STAIRS = REGISTRY.register(new Block(438, "quartz_stairs", true, 9495, 9574, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_TERRACOTTA = REGISTRY.register(new Block(439, "red_terracotta", true, 9370, 9370, 50, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACTIVATOR_RAIL = REGISTRY.register(new Block(439, "activator_rail", false, 9575, 9598, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLACK_TERRACOTTA = REGISTRY.register(new Block(440, "black_terracotta", true, 9371, 9371, 51, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DROPPER = REGISTRY.register(new Block(440, "dropper", true, 9599, 9610, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.DROPPER));
 
-    public static final Block WHITE_STAINED_GLASS_PANE = REGISTRY.register(new Block(441, "white_stained_glass_pane", true, 9372, 9403, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_TERRACOTTA = REGISTRY.register(new Block(441, "white_terracotta", true, 9611, 9611, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_STAINED_GLASS_PANE = REGISTRY.register(new Block(442, "orange_stained_glass_pane", true, 9404, 9435, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_TERRACOTTA = REGISTRY.register(new Block(442, "orange_terracotta", true, 9612, 9612, 37, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MAGENTA_STAINED_GLASS_PANE = REGISTRY.register(new Block(443, "magenta_stained_glass_pane", true, 9436, 9467, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MAGENTA_TERRACOTTA = REGISTRY.register(new Block(443, "magenta_terracotta", true, 9613, 9613, 38, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_BLUE_STAINED_GLASS_PANE = REGISTRY.register(new Block(444, "light_blue_stained_glass_pane", true, 9468, 9499, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_BLUE_TERRACOTTA = REGISTRY.register(new Block(444, "light_blue_terracotta", true, 9614, 9614, 39, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block YELLOW_STAINED_GLASS_PANE = REGISTRY.register(new Block(445, "yellow_stained_glass_pane", true, 9500, 9531, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block YELLOW_TERRACOTTA = REGISTRY.register(new Block(445, "yellow_terracotta", true, 9615, 9615, 40, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIME_STAINED_GLASS_PANE = REGISTRY.register(new Block(446, "lime_stained_glass_pane", true, 9532, 9563, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIME_TERRACOTTA = REGISTRY.register(new Block(446, "lime_terracotta", true, 9616, 9616, 41, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PINK_STAINED_GLASS_PANE = REGISTRY.register(new Block(447, "pink_stained_glass_pane", true, 9564, 9595, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_TERRACOTTA = REGISTRY.register(new Block(447, "pink_terracotta", true, 9617, 9617, 42, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRAY_STAINED_GLASS_PANE = REGISTRY.register(new Block(448, "gray_stained_glass_pane", true, 9596, 9627, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRAY_TERRACOTTA = REGISTRY.register(new Block(448, "gray_terracotta", true, 9618, 9618, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_GRAY_STAINED_GLASS_PANE = REGISTRY.register(new Block(449, "light_gray_stained_glass_pane", true, 9628, 9659, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_GRAY_TERRACOTTA = REGISTRY.register(new Block(449, "light_gray_terracotta", true, 9619, 9619, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CYAN_STAINED_GLASS_PANE = REGISTRY.register(new Block(450, "cyan_stained_glass_pane", true, 9660, 9691, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CYAN_TERRACOTTA = REGISTRY.register(new Block(450, "cyan_terracotta", true, 9620, 9620, 45, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPLE_STAINED_GLASS_PANE = REGISTRY.register(new Block(451, "purple_stained_glass_pane", true, 9692, 9723, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PURPLE_TERRACOTTA = REGISTRY.register(new Block(451, "purple_terracotta", true, 9621, 9621, 46, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLUE_STAINED_GLASS_PANE = REGISTRY.register(new Block(452, "blue_stained_glass_pane", true, 9724, 9755, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLUE_TERRACOTTA = REGISTRY.register(new Block(452, "blue_terracotta", true, 9622, 9622, 47, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BROWN_STAINED_GLASS_PANE = REGISTRY.register(new Block(453, "brown_stained_glass_pane", true, 9756, 9787, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BROWN_TERRACOTTA = REGISTRY.register(new Block(453, "brown_terracotta", true, 9623, 9623, 48, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GREEN_STAINED_GLASS_PANE = REGISTRY.register(new Block(454, "green_stained_glass_pane", true, 9788, 9819, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GREEN_TERRACOTTA = REGISTRY.register(new Block(454, "green_terracotta", true, 9624, 9624, 49, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_STAINED_GLASS_PANE = REGISTRY.register(new Block(455, "red_stained_glass_pane", true, 9820, 9851, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_TERRACOTTA = REGISTRY.register(new Block(455, "red_terracotta", true, 9625, 9625, 50, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLACK_STAINED_GLASS_PANE = REGISTRY.register(new Block(456, "black_stained_glass_pane", true, 9852, 9883, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACK_TERRACOTTA = REGISTRY.register(new Block(456, "black_terracotta", true, 9626, 9626, 51, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ACACIA_STAIRS = REGISTRY.register(new Block(457, "acacia_stairs", true, 9884, 9963, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_STAINED_GLASS_PANE = REGISTRY.register(new Block(457, "white_stained_glass_pane", true, 9627, 9658, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHERRY_STAIRS = REGISTRY.register(new Block(458, "cherry_stairs", true, 9964, 10043, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_STAINED_GLASS_PANE = REGISTRY.register(new Block(458, "orange_stained_glass_pane", true, 9659, 9690, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_OAK_STAIRS = REGISTRY.register(new Block(459, "dark_oak_stairs", true, 10044, 10123, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MAGENTA_STAINED_GLASS_PANE = REGISTRY.register(new Block(459, "magenta_stained_glass_pane", true, 9691, 9722, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_STAIRS = REGISTRY.register(new Block(460, "mangrove_stairs", true, 10124, 10203, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_BLUE_STAINED_GLASS_PANE = REGISTRY.register(new Block(460, "light_blue_stained_glass_pane", true, 9723, 9754, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO_STAIRS = REGISTRY.register(new Block(461, "bamboo_stairs", true, 10204, 10283, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block YELLOW_STAINED_GLASS_PANE = REGISTRY.register(new Block(461, "yellow_stained_glass_pane", true, 9755, 9786, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO_MOSAIC_STAIRS = REGISTRY.register(new Block(462, "bamboo_mosaic_stairs", true, 10284, 10363, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIME_STAINED_GLASS_PANE = REGISTRY.register(new Block(462, "lime_stained_glass_pane", true, 9787, 9818, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SLIME_BLOCK = REGISTRY.register(new Block(463, "slime_block", true, 10364, 10364, 1, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_STAINED_GLASS_PANE = REGISTRY.register(new Block(463, "pink_stained_glass_pane", true, 9819, 9850, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BARRIER = REGISTRY.register(new Block(464, "barrier", true, 10365, 10366, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRAY_STAINED_GLASS_PANE = REGISTRY.register(new Block(464, "gray_stained_glass_pane", true, 9851, 9882, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT = REGISTRY.register(new Block(465, "light", false, 10367, 10398, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_GRAY_STAINED_GLASS_PANE = REGISTRY.register(new Block(465, "light_gray_stained_glass_pane", true, 9883, 9914, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block IRON_TRAPDOOR = REGISTRY.register(new Block(466, "iron_trapdoor", true, 10399, 10462, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CYAN_STAINED_GLASS_PANE = REGISTRY.register(new Block(466, "cyan_stained_glass_pane", true, 9915, 9946, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PRISMARINE = REGISTRY.register(new Block(467, "prismarine", true, 10463, 10463, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PURPLE_STAINED_GLASS_PANE = REGISTRY.register(new Block(467, "purple_stained_glass_pane", true, 9947, 9978, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PRISMARINE_BRICKS = REGISTRY.register(new Block(468, "prismarine_bricks", true, 10464, 10464, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLUE_STAINED_GLASS_PANE = REGISTRY.register(new Block(468, "blue_stained_glass_pane", true, 9979, 10010, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_PRISMARINE = REGISTRY.register(new Block(469, "dark_prismarine", true, 10465, 10465, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BROWN_STAINED_GLASS_PANE = REGISTRY.register(new Block(469, "brown_stained_glass_pane", true, 10011, 10042, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PRISMARINE_STAIRS = REGISTRY.register(new Block(470, "prismarine_stairs", true, 10466, 10545, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GREEN_STAINED_GLASS_PANE = REGISTRY.register(new Block(470, "green_stained_glass_pane", true, 10043, 10074, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PRISMARINE_BRICK_STAIRS = REGISTRY.register(new Block(471, "prismarine_brick_stairs", true, 10546, 10625, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_STAINED_GLASS_PANE = REGISTRY.register(new Block(471, "red_stained_glass_pane", true, 10075, 10106, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_PRISMARINE_STAIRS = REGISTRY.register(new Block(472, "dark_prismarine_stairs", true, 10626, 10705, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACK_STAINED_GLASS_PANE = REGISTRY.register(new Block(472, "black_stained_glass_pane", true, 10107, 10138, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PRISMARINE_SLAB = REGISTRY.register(new Block(473, "prismarine_slab", true, 10706, 10711, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_STAIRS = REGISTRY.register(new Block(473, "acacia_stairs", true, 10139, 10218, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PRISMARINE_BRICK_SLAB = REGISTRY.register(new Block(474, "prismarine_brick_slab", true, 10712, 10717, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHERRY_STAIRS = REGISTRY.register(new Block(474, "cherry_stairs", true, 10219, 10298, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_PRISMARINE_SLAB = REGISTRY.register(new Block(475, "dark_prismarine_slab", true, 10718, 10723, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_OAK_STAIRS = REGISTRY.register(new Block(475, "dark_oak_stairs", true, 10299, 10378, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SEA_LANTERN = REGISTRY.register(new Block(476, "sea_lantern", true, 10724, 10724, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_STAIRS = REGISTRY.register(new Block(476, "pale_oak_stairs", true, 10379, 10458, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block HAY_BLOCK = REGISTRY.register(new Block(477, "hay_block", true, 10725, 10727, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_STAIRS = REGISTRY.register(new Block(477, "mangrove_stairs", true, 10459, 10538, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_CARPET = REGISTRY.register(new Block(478, "white_carpet", true, 10728, 10728, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_STAIRS = REGISTRY.register(new Block(478, "bamboo_stairs", true, 10539, 10618, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_CARPET = REGISTRY.register(new Block(479, "orange_carpet", true, 10729, 10729, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_MOSAIC_STAIRS = REGISTRY.register(new Block(479, "bamboo_mosaic_stairs", true, 10619, 10698, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MAGENTA_CARPET = REGISTRY.register(new Block(480, "magenta_carpet", true, 10730, 10730, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SLIME_BLOCK = REGISTRY.register(new Block(480, "slime_block", true, 10699, 10699, 1, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_BLUE_CARPET = REGISTRY.register(new Block(481, "light_blue_carpet", true, 10731, 10731, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BARRIER = REGISTRY.register(new Block(481, "barrier", true, 10700, 10701, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block YELLOW_CARPET = REGISTRY.register(new Block(482, "yellow_carpet", true, 10732, 10732, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT = REGISTRY.register(new Block(482, "light", false, 10702, 10733, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIME_CARPET = REGISTRY.register(new Block(483, "lime_carpet", true, 10733, 10733, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block IRON_TRAPDOOR = REGISTRY.register(new Block(483, "iron_trapdoor", true, 10734, 10797, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PINK_CARPET = REGISTRY.register(new Block(484, "pink_carpet", true, 10734, 10734, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PRISMARINE = REGISTRY.register(new Block(484, "prismarine", true, 10798, 10798, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRAY_CARPET = REGISTRY.register(new Block(485, "gray_carpet", true, 10735, 10735, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PRISMARINE_BRICKS = REGISTRY.register(new Block(485, "prismarine_bricks", true, 10799, 10799, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_GRAY_CARPET = REGISTRY.register(new Block(486, "light_gray_carpet", true, 10736, 10736, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_PRISMARINE = REGISTRY.register(new Block(486, "dark_prismarine", true, 10800, 10800, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CYAN_CARPET = REGISTRY.register(new Block(487, "cyan_carpet", true, 10737, 10737, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PRISMARINE_STAIRS = REGISTRY.register(new Block(487, "prismarine_stairs", true, 10801, 10880, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPLE_CARPET = REGISTRY.register(new Block(488, "purple_carpet", true, 10738, 10738, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PRISMARINE_BRICK_STAIRS = REGISTRY.register(new Block(488, "prismarine_brick_stairs", true, 10881, 10960, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLUE_CARPET = REGISTRY.register(new Block(489, "blue_carpet", true, 10739, 10739, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_PRISMARINE_STAIRS = REGISTRY.register(new Block(489, "dark_prismarine_stairs", true, 10961, 11040, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BROWN_CARPET = REGISTRY.register(new Block(490, "brown_carpet", true, 10740, 10740, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PRISMARINE_SLAB = REGISTRY.register(new Block(490, "prismarine_slab", true, 11041, 11046, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GREEN_CARPET = REGISTRY.register(new Block(491, "green_carpet", true, 10741, 10741, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PRISMARINE_BRICK_SLAB = REGISTRY.register(new Block(491, "prismarine_brick_slab", true, 11047, 11052, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_CARPET = REGISTRY.register(new Block(492, "red_carpet", true, 10742, 10742, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_PRISMARINE_SLAB = REGISTRY.register(new Block(492, "dark_prismarine_slab", true, 11053, 11058, 31, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLACK_CARPET = REGISTRY.register(new Block(493, "black_carpet", true, 10743, 10743, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SEA_LANTERN = REGISTRY.register(new Block(493, "sea_lantern", true, 11059, 11059, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TERRACOTTA = REGISTRY.register(new Block(494, "terracotta", true, 10744, 10744, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block HAY_BLOCK = REGISTRY.register(new Block(494, "hay_block", true, 11060, 11062, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COAL_BLOCK = REGISTRY.register(new Block(495, "coal_block", true, 10745, 10745, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_CARPET = REGISTRY.register(new Block(495, "white_carpet", true, 11063, 11063, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PACKED_ICE = REGISTRY.register(new Block(496, "packed_ice", true, 10746, 10746, 5, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_CARPET = REGISTRY.register(new Block(496, "orange_carpet", true, 11064, 11064, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SUNFLOWER = REGISTRY.register(new Block(497, "sunflower", false, 10747, 10748, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block MAGENTA_CARPET = REGISTRY.register(new Block(497, "magenta_carpet", true, 11065, 11065, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LILAC = REGISTRY.register(new Block(498, "lilac", false, 10749, 10750, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block LIGHT_BLUE_CARPET = REGISTRY.register(new Block(498, "light_blue_carpet", true, 11066, 11066, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ROSE_BUSH = REGISTRY.register(new Block(499, "rose_bush", false, 10751, 10752, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block YELLOW_CARPET = REGISTRY.register(new Block(499, "yellow_carpet", true, 11067, 11067, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PEONY = REGISTRY.register(new Block(500, "peony", false, 10753, 10754, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block LIME_CARPET = REGISTRY.register(new Block(500, "lime_carpet", true, 11068, 11068, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TALL_GRASS = REGISTRY.register(new Block(501, "tall_grass", false, 10755, 10756, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block PINK_CARPET = REGISTRY.register(new Block(501, "pink_carpet", true, 11069, 11069, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LARGE_FERN = REGISTRY.register(new Block(502, "large_fern", false, 10757, 10758, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block GRAY_CARPET = REGISTRY.register(new Block(502, "gray_carpet", true, 11070, 11070, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_BANNER = REGISTRY.register(new Block(503, "white_banner", false, 10759, 10774, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block LIGHT_GRAY_CARPET = REGISTRY.register(new Block(503, "light_gray_carpet", true, 11071, 11071, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_BANNER = REGISTRY.register(new Block(504, "orange_banner", false, 10775, 10790, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block CYAN_CARPET = REGISTRY.register(new Block(504, "cyan_carpet", true, 11072, 11072, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MAGENTA_BANNER = REGISTRY.register(new Block(505, "magenta_banner", false, 10791, 10806, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block PURPLE_CARPET = REGISTRY.register(new Block(505, "purple_carpet", true, 11073, 11073, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_BLUE_BANNER = REGISTRY.register(new Block(506, "light_blue_banner", false, 10807, 10822, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block BLUE_CARPET = REGISTRY.register(new Block(506, "blue_carpet", true, 11074, 11074, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block YELLOW_BANNER = REGISTRY.register(new Block(507, "yellow_banner", false, 10823, 10838, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block BROWN_CARPET = REGISTRY.register(new Block(507, "brown_carpet", true, 11075, 11075, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIME_BANNER = REGISTRY.register(new Block(508, "lime_banner", false, 10839, 10854, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block GREEN_CARPET = REGISTRY.register(new Block(508, "green_carpet", true, 11076, 11076, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PINK_BANNER = REGISTRY.register(new Block(509, "pink_banner", false, 10855, 10870, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block RED_CARPET = REGISTRY.register(new Block(509, "red_carpet", true, 11077, 11077, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRAY_BANNER = REGISTRY.register(new Block(510, "gray_banner", false, 10871, 10886, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block BLACK_CARPET = REGISTRY.register(new Block(510, "black_carpet", true, 11078, 11078, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_GRAY_BANNER = REGISTRY.register(new Block(511, "light_gray_banner", false, 10887, 10902, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block TERRACOTTA = REGISTRY.register(new Block(511, "terracotta", true, 11079, 11079, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CYAN_BANNER = REGISTRY.register(new Block(512, "cyan_banner", false, 10903, 10918, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block COAL_BLOCK = REGISTRY.register(new Block(512, "coal_block", true, 11080, 11080, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPLE_BANNER = REGISTRY.register(new Block(513, "purple_banner", false, 10919, 10934, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block PACKED_ICE = REGISTRY.register(new Block(513, "packed_ice", true, 11081, 11081, 5, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLUE_BANNER = REGISTRY.register(new Block(514, "blue_banner", false, 10935, 10950, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block SUNFLOWER = REGISTRY.register(new Block(514, "sunflower", false, 11082, 11083, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block BROWN_BANNER = REGISTRY.register(new Block(515, "brown_banner", false, 10951, 10966, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block LILAC = REGISTRY.register(new Block(515, "lilac", false, 11084, 11085, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block GREEN_BANNER = REGISTRY.register(new Block(516, "green_banner", false, 10967, 10982, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block ROSE_BUSH = REGISTRY.register(new Block(516, "rose_bush", false, 11086, 11087, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block RED_BANNER = REGISTRY.register(new Block(517, "red_banner", false, 10983, 10998, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block PEONY = REGISTRY.register(new Block(517, "peony", false, 11088, 11089, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block BLACK_BANNER = REGISTRY.register(new Block(518, "black_banner", false, 10999, 11014, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block TALL_GRASS = REGISTRY.register(new Block(518, "tall_grass", false, 11090, 11091, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_WALL_BANNER = REGISTRY.register(new Block(519, "white_wall_banner", false, 11015, 11018, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block LARGE_FERN = REGISTRY.register(new Block(519, "large_fern", false, 11092, 11093, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_WALL_BANNER = REGISTRY.register(new Block(520, "orange_wall_banner", false, 11019, 11022, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block WHITE_BANNER = REGISTRY.register(new Block(520, "white_banner", false, 11094, 11109, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block MAGENTA_WALL_BANNER = REGISTRY.register(new Block(521, "magenta_wall_banner", false, 11023, 11026, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block ORANGE_BANNER = REGISTRY.register(new Block(521, "orange_banner", false, 11110, 11125, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block LIGHT_BLUE_WALL_BANNER = REGISTRY.register(new Block(522, "light_blue_wall_banner", false, 11027, 11030, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block MAGENTA_BANNER = REGISTRY.register(new Block(522, "magenta_banner", false, 11126, 11141, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block YELLOW_WALL_BANNER = REGISTRY.register(new Block(523, "yellow_wall_banner", false, 11031, 11034, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block LIGHT_BLUE_BANNER = REGISTRY.register(new Block(523, "light_blue_banner", false, 11142, 11157, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block LIME_WALL_BANNER = REGISTRY.register(new Block(524, "lime_wall_banner", false, 11035, 11038, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block YELLOW_BANNER = REGISTRY.register(new Block(524, "yellow_banner", false, 11158, 11173, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block PINK_WALL_BANNER = REGISTRY.register(new Block(525, "pink_wall_banner", false, 11039, 11042, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block LIME_BANNER = REGISTRY.register(new Block(525, "lime_banner", false, 11174, 11189, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block GRAY_WALL_BANNER = REGISTRY.register(new Block(526, "gray_wall_banner", false, 11043, 11046, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block PINK_BANNER = REGISTRY.register(new Block(526, "pink_banner", false, 11190, 11205, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block LIGHT_GRAY_WALL_BANNER = REGISTRY.register(new Block(527, "light_gray_wall_banner", false, 11047, 11050, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block GRAY_BANNER = REGISTRY.register(new Block(527, "gray_banner", false, 11206, 11221, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block CYAN_WALL_BANNER = REGISTRY.register(new Block(528, "cyan_wall_banner", false, 11051, 11054, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block LIGHT_GRAY_BANNER = REGISTRY.register(new Block(528, "light_gray_banner", false, 11222, 11237, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block PURPLE_WALL_BANNER = REGISTRY.register(new Block(529, "purple_wall_banner", false, 11055, 11058, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block CYAN_BANNER = REGISTRY.register(new Block(529, "cyan_banner", false, 11238, 11253, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block BLUE_WALL_BANNER = REGISTRY.register(new Block(530, "blue_wall_banner", false, 11059, 11062, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block PURPLE_BANNER = REGISTRY.register(new Block(530, "purple_banner", false, 11254, 11269, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block BROWN_WALL_BANNER = REGISTRY.register(new Block(531, "brown_wall_banner", false, 11063, 11066, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block BLUE_BANNER = REGISTRY.register(new Block(531, "blue_banner", false, 11270, 11285, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block GREEN_WALL_BANNER = REGISTRY.register(new Block(532, "green_wall_banner", false, 11067, 11070, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block BROWN_BANNER = REGISTRY.register(new Block(532, "brown_banner", false, 11286, 11301, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block RED_WALL_BANNER = REGISTRY.register(new Block(533, "red_wall_banner", false, 11071, 11074, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block GREEN_BANNER = REGISTRY.register(new Block(533, "green_banner", false, 11302, 11317, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block BLACK_WALL_BANNER = REGISTRY.register(new Block(534, "black_wall_banner", false, 11075, 11078, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
+    public static final Block RED_BANNER = REGISTRY.register(new Block(534, "red_banner", false, 11318, 11333, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block RED_SANDSTONE = REGISTRY.register(new Block(535, "red_sandstone", true, 11079, 11079, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACK_BANNER = REGISTRY.register(new Block(535, "black_banner", false, 11334, 11349, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block CHISELED_RED_SANDSTONE = REGISTRY.register(new Block(536, "chiseled_red_sandstone", true, 11080, 11080, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_WALL_BANNER = REGISTRY.register(new Block(536, "white_wall_banner", false, 11350, 11353, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block CUT_RED_SANDSTONE = REGISTRY.register(new Block(537, "cut_red_sandstone", true, 11081, 11081, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_WALL_BANNER = REGISTRY.register(new Block(537, "orange_wall_banner", false, 11354, 11357, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block RED_SANDSTONE_STAIRS = REGISTRY.register(new Block(538, "red_sandstone_stairs", true, 11082, 11161, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MAGENTA_WALL_BANNER = REGISTRY.register(new Block(538, "magenta_wall_banner", false, 11358, 11361, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block OAK_SLAB = REGISTRY.register(new Block(539, "oak_slab", true, 11162, 11167, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_BLUE_WALL_BANNER = REGISTRY.register(new Block(539, "light_blue_wall_banner", false, 11362, 11365, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block SPRUCE_SLAB = REGISTRY.register(new Block(540, "spruce_slab", true, 11168, 11173, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block YELLOW_WALL_BANNER = REGISTRY.register(new Block(540, "yellow_wall_banner", false, 11366, 11369, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block BIRCH_SLAB = REGISTRY.register(new Block(541, "birch_slab", true, 11174, 11179, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIME_WALL_BANNER = REGISTRY.register(new Block(541, "lime_wall_banner", false, 11370, 11373, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block JUNGLE_SLAB = REGISTRY.register(new Block(542, "jungle_slab", true, 11180, 11185, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_WALL_BANNER = REGISTRY.register(new Block(542, "pink_wall_banner", false, 11374, 11377, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block ACACIA_SLAB = REGISTRY.register(new Block(543, "acacia_slab", true, 11186, 11191, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRAY_WALL_BANNER = REGISTRY.register(new Block(543, "gray_wall_banner", false, 11378, 11381, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block CHERRY_SLAB = REGISTRY.register(new Block(544, "cherry_slab", true, 11192, 11197, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_GRAY_WALL_BANNER = REGISTRY.register(new Block(544, "light_gray_wall_banner", false, 11382, 11385, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block DARK_OAK_SLAB = REGISTRY.register(new Block(545, "dark_oak_slab", true, 11198, 11203, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CYAN_WALL_BANNER = REGISTRY.register(new Block(545, "cyan_wall_banner", false, 11386, 11389, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block MANGROVE_SLAB = REGISTRY.register(new Block(546, "mangrove_slab", true, 11204, 11209, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PURPLE_WALL_BANNER = REGISTRY.register(new Block(546, "purple_wall_banner", false, 11390, 11393, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block BAMBOO_SLAB = REGISTRY.register(new Block(547, "bamboo_slab", true, 11210, 11215, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLUE_WALL_BANNER = REGISTRY.register(new Block(547, "blue_wall_banner", false, 11394, 11397, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block BAMBOO_MOSAIC_SLAB = REGISTRY.register(new Block(548, "bamboo_mosaic_slab", true, 11216, 11221, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BROWN_WALL_BANNER = REGISTRY.register(new Block(548, "brown_wall_banner", false, 11398, 11401, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block STONE_SLAB = REGISTRY.register(new Block(549, "stone_slab", true, 11222, 11227, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GREEN_WALL_BANNER = REGISTRY.register(new Block(549, "green_wall_banner", false, 11402, 11405, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block SMOOTH_STONE_SLAB = REGISTRY.register(new Block(550, "smooth_stone_slab", true, 11228, 11233, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_WALL_BANNER = REGISTRY.register(new Block(550, "red_wall_banner", false, 11406, 11409, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block SANDSTONE_SLAB = REGISTRY.register(new Block(551, "sandstone_slab", true, 11234, 11239, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACK_WALL_BANNER = REGISTRY.register(new Block(551, "black_wall_banner", false, 11410, 11413, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BANNER));
 
-    public static final Block CUT_SANDSTONE_SLAB = REGISTRY.register(new Block(552, "cut_sandstone_slab", true, 11240, 11245, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_SANDSTONE = REGISTRY.register(new Block(552, "red_sandstone", true, 11414, 11414, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PETRIFIED_OAK_SLAB = REGISTRY.register(new Block(553, "petrified_oak_slab", true, 11246, 11251, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHISELED_RED_SANDSTONE = REGISTRY.register(new Block(553, "chiseled_red_sandstone", true, 11415, 11415, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COBBLESTONE_SLAB = REGISTRY.register(new Block(554, "cobblestone_slab", true, 11252, 11257, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CUT_RED_SANDSTONE = REGISTRY.register(new Block(554, "cut_red_sandstone", true, 11416, 11416, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BRICK_SLAB = REGISTRY.register(new Block(555, "brick_slab", true, 11258, 11263, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_SANDSTONE_STAIRS = REGISTRY.register(new Block(555, "red_sandstone_stairs", true, 11417, 11496, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STONE_BRICK_SLAB = REGISTRY.register(new Block(556, "stone_brick_slab", true, 11264, 11269, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OAK_SLAB = REGISTRY.register(new Block(556, "oak_slab", true, 11497, 11502, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MUD_BRICK_SLAB = REGISTRY.register(new Block(557, "mud_brick_slab", true, 11270, 11275, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPRUCE_SLAB = REGISTRY.register(new Block(557, "spruce_slab", true, 11503, 11508, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block NETHER_BRICK_SLAB = REGISTRY.register(new Block(558, "nether_brick_slab", true, 11276, 11281, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIRCH_SLAB = REGISTRY.register(new Block(558, "birch_slab", true, 11509, 11514, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block QUARTZ_SLAB = REGISTRY.register(new Block(559, "quartz_slab", true, 11282, 11287, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JUNGLE_SLAB = REGISTRY.register(new Block(559, "jungle_slab", true, 11515, 11520, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_SANDSTONE_SLAB = REGISTRY.register(new Block(560, "red_sandstone_slab", true, 11288, 11293, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_SLAB = REGISTRY.register(new Block(560, "acacia_slab", true, 11521, 11526, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CUT_RED_SANDSTONE_SLAB = REGISTRY.register(new Block(561, "cut_red_sandstone_slab", true, 11294, 11299, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHERRY_SLAB = REGISTRY.register(new Block(561, "cherry_slab", true, 11527, 11532, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPUR_SLAB = REGISTRY.register(new Block(562, "purpur_slab", true, 11300, 11305, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_OAK_SLAB = REGISTRY.register(new Block(562, "dark_oak_slab", true, 11533, 11538, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMOOTH_STONE = REGISTRY.register(new Block(563, "smooth_stone", true, 11306, 11306, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_SLAB = REGISTRY.register(new Block(563, "pale_oak_slab", true, 11539, 11544, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMOOTH_SANDSTONE = REGISTRY.register(new Block(564, "smooth_sandstone", true, 11307, 11307, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_SLAB = REGISTRY.register(new Block(564, "mangrove_slab", true, 11545, 11550, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMOOTH_QUARTZ = REGISTRY.register(new Block(565, "smooth_quartz", true, 11308, 11308, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_SLAB = REGISTRY.register(new Block(565, "bamboo_slab", true, 11551, 11556, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMOOTH_RED_SANDSTONE = REGISTRY.register(new Block(566, "smooth_red_sandstone", true, 11309, 11309, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_MOSAIC_SLAB = REGISTRY.register(new Block(566, "bamboo_mosaic_slab", true, 11557, 11562, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPRUCE_FENCE_GATE = REGISTRY.register(new Block(567, "spruce_fence_gate", true, 11310, 11341, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STONE_SLAB = REGISTRY.register(new Block(567, "stone_slab", true, 11563, 11568, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIRCH_FENCE_GATE = REGISTRY.register(new Block(568, "birch_fence_gate", true, 11342, 11373, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMOOTH_STONE_SLAB = REGISTRY.register(new Block(568, "smooth_stone_slab", true, 11569, 11574, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JUNGLE_FENCE_GATE = REGISTRY.register(new Block(569, "jungle_fence_gate", true, 11374, 11405, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SANDSTONE_SLAB = REGISTRY.register(new Block(569, "sandstone_slab", true, 11575, 11580, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ACACIA_FENCE_GATE = REGISTRY.register(new Block(570, "acacia_fence_gate", true, 11406, 11437, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CUT_SANDSTONE_SLAB = REGISTRY.register(new Block(570, "cut_sandstone_slab", true, 11581, 11586, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHERRY_FENCE_GATE = REGISTRY.register(new Block(571, "cherry_fence_gate", true, 11438, 11469, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PETRIFIED_OAK_SLAB = REGISTRY.register(new Block(571, "petrified_oak_slab", true, 11587, 11592, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_OAK_FENCE_GATE = REGISTRY.register(new Block(572, "dark_oak_fence_gate", true, 11470, 11501, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COBBLESTONE_SLAB = REGISTRY.register(new Block(572, "cobblestone_slab", true, 11593, 11598, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_FENCE_GATE = REGISTRY.register(new Block(573, "mangrove_fence_gate", true, 11502, 11533, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BRICK_SLAB = REGISTRY.register(new Block(573, "brick_slab", true, 11599, 11604, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO_FENCE_GATE = REGISTRY.register(new Block(574, "bamboo_fence_gate", true, 11534, 11565, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STONE_BRICK_SLAB = REGISTRY.register(new Block(574, "stone_brick_slab", true, 11605, 11610, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPRUCE_FENCE = REGISTRY.register(new Block(575, "spruce_fence", true, 11566, 11597, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MUD_BRICK_SLAB = REGISTRY.register(new Block(575, "mud_brick_slab", true, 11611, 11616, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIRCH_FENCE = REGISTRY.register(new Block(576, "birch_fence", true, 11598, 11629, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block NETHER_BRICK_SLAB = REGISTRY.register(new Block(576, "nether_brick_slab", true, 11617, 11622, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JUNGLE_FENCE = REGISTRY.register(new Block(577, "jungle_fence", true, 11630, 11661, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block QUARTZ_SLAB = REGISTRY.register(new Block(577, "quartz_slab", true, 11623, 11628, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ACACIA_FENCE = REGISTRY.register(new Block(578, "acacia_fence", true, 11662, 11693, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_SANDSTONE_SLAB = REGISTRY.register(new Block(578, "red_sandstone_slab", true, 11629, 11634, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHERRY_FENCE = REGISTRY.register(new Block(579, "cherry_fence", true, 11694, 11725, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CUT_RED_SANDSTONE_SLAB = REGISTRY.register(new Block(579, "cut_red_sandstone_slab", true, 11635, 11640, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_OAK_FENCE = REGISTRY.register(new Block(580, "dark_oak_fence", true, 11726, 11757, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PURPUR_SLAB = REGISTRY.register(new Block(580, "purpur_slab", true, 11641, 11646, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_FENCE = REGISTRY.register(new Block(581, "mangrove_fence", true, 11758, 11789, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMOOTH_STONE = REGISTRY.register(new Block(581, "smooth_stone", true, 11647, 11647, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO_FENCE = REGISTRY.register(new Block(582, "bamboo_fence", true, 11790, 11821, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMOOTH_SANDSTONE = REGISTRY.register(new Block(582, "smooth_sandstone", true, 11648, 11648, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPRUCE_DOOR = REGISTRY.register(new Block(583, "spruce_door", true, 11822, 11885, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMOOTH_QUARTZ = REGISTRY.register(new Block(583, "smooth_quartz", true, 11649, 11649, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIRCH_DOOR = REGISTRY.register(new Block(584, "birch_door", true, 11886, 11949, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMOOTH_RED_SANDSTONE = REGISTRY.register(new Block(584, "smooth_red_sandstone", true, 11650, 11650, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JUNGLE_DOOR = REGISTRY.register(new Block(585, "jungle_door", true, 11950, 12013, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPRUCE_FENCE_GATE = REGISTRY.register(new Block(585, "spruce_fence_gate", true, 11651, 11682, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ACACIA_DOOR = REGISTRY.register(new Block(586, "acacia_door", true, 12014, 12077, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIRCH_FENCE_GATE = REGISTRY.register(new Block(586, "birch_fence_gate", true, 11683, 11714, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHERRY_DOOR = REGISTRY.register(new Block(587, "cherry_door", true, 12078, 12141, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JUNGLE_FENCE_GATE = REGISTRY.register(new Block(587, "jungle_fence_gate", true, 11715, 11746, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DARK_OAK_DOOR = REGISTRY.register(new Block(588, "dark_oak_door", true, 12142, 12205, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_FENCE_GATE = REGISTRY.register(new Block(588, "acacia_fence_gate", true, 11747, 11778, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MANGROVE_DOOR = REGISTRY.register(new Block(589, "mangrove_door", true, 12206, 12269, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHERRY_FENCE_GATE = REGISTRY.register(new Block(589, "cherry_fence_gate", true, 11779, 11810, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO_DOOR = REGISTRY.register(new Block(590, "bamboo_door", true, 12270, 12333, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_OAK_FENCE_GATE = REGISTRY.register(new Block(590, "dark_oak_fence_gate", true, 11811, 11842, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block END_ROD = REGISTRY.register(new Block(591, "end_rod", true, 12334, 12339, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_FENCE_GATE = REGISTRY.register(new Block(591, "pale_oak_fence_gate", true, 11843, 11874, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHORUS_PLANT = REGISTRY.register(new Block(592, "chorus_plant", true, 12340, 12403, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_FENCE_GATE = REGISTRY.register(new Block(592, "mangrove_fence_gate", true, 11875, 11906, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHORUS_FLOWER = REGISTRY.register(new Block(593, "chorus_flower", true, 12404, 12409, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_FENCE_GATE = REGISTRY.register(new Block(593, "bamboo_fence_gate", true, 11907, 11938, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPUR_BLOCK = REGISTRY.register(new Block(594, "purpur_block", true, 12410, 12410, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPRUCE_FENCE = REGISTRY.register(new Block(594, "spruce_fence", true, 11939, 11970, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPUR_PILLAR = REGISTRY.register(new Block(595, "purpur_pillar", true, 12411, 12413, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIRCH_FENCE = REGISTRY.register(new Block(595, "birch_fence", true, 11971, 12002, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPUR_STAIRS = REGISTRY.register(new Block(596, "purpur_stairs", true, 12414, 12493, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JUNGLE_FENCE = REGISTRY.register(new Block(596, "jungle_fence", true, 12003, 12034, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block END_STONE_BRICKS = REGISTRY.register(new Block(597, "end_stone_bricks", true, 12494, 12494, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_FENCE = REGISTRY.register(new Block(597, "acacia_fence", true, 12035, 12066, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TORCHFLOWER_CROP = REGISTRY.register(new Block(598, "torchflower_crop", false, 12495, 12496, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHERRY_FENCE = REGISTRY.register(new Block(598, "cherry_fence", true, 12067, 12098, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PITCHER_CROP = REGISTRY.register(new Block(599, "pitcher_crop", true, 12497, 12506, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_OAK_FENCE = REGISTRY.register(new Block(599, "dark_oak_fence", true, 12099, 12130, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PITCHER_PLANT = REGISTRY.register(new Block(600, "pitcher_plant", false, 12507, 12508, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_FENCE = REGISTRY.register(new Block(600, "pale_oak_fence", true, 12131, 12162, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BEETROOTS = REGISTRY.register(new Block(601, "beetroots", false, 12509, 12512, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_FENCE = REGISTRY.register(new Block(601, "mangrove_fence", true, 12163, 12194, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DIRT_PATH = REGISTRY.register(new Block(602, "dirt_path", true, 12513, 12513, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_FENCE = REGISTRY.register(new Block(602, "bamboo_fence", true, 12195, 12226, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block END_GATEWAY = REGISTRY.register(new Block(603, "end_gateway", false, 12514, 12514, 29, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.END_GATEWAY));
+    public static final Block SPRUCE_DOOR = REGISTRY.register(new Block(603, "spruce_door", true, 12227, 12290, 34, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block REPEATING_COMMAND_BLOCK = REGISTRY.register(new Block(604, "repeating_command_block", true, 12515, 12526, 24, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.COMMAND_BLOCK));
+    public static final Block BIRCH_DOOR = REGISTRY.register(new Block(604, "birch_door", true, 12291, 12354, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHAIN_COMMAND_BLOCK = REGISTRY.register(new Block(605, "chain_command_block", true, 12527, 12538, 27, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.COMMAND_BLOCK));
+    public static final Block JUNGLE_DOOR = REGISTRY.register(new Block(605, "jungle_door", true, 12355, 12418, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block FROSTED_ICE = REGISTRY.register(new Block(606, "frosted_ice", true, 12539, 12542, 5, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ACACIA_DOOR = REGISTRY.register(new Block(606, "acacia_door", true, 12419, 12482, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MAGMA_BLOCK = REGISTRY.register(new Block(607, "magma_block", true, 12543, 12543, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHERRY_DOOR = REGISTRY.register(new Block(607, "cherry_door", true, 12483, 12546, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block NETHER_WART_BLOCK = REGISTRY.register(new Block(608, "nether_wart_block", true, 12544, 12544, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DARK_OAK_DOOR = REGISTRY.register(new Block(608, "dark_oak_door", true, 12547, 12610, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_NETHER_BRICKS = REGISTRY.register(new Block(609, "red_nether_bricks", true, 12545, 12545, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PALE_OAK_DOOR = REGISTRY.register(new Block(609, "pale_oak_door", true, 12611, 12674, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BONE_BLOCK = REGISTRY.register(new Block(610, "bone_block", true, 12546, 12548, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MANGROVE_DOOR = REGISTRY.register(new Block(610, "mangrove_door", true, 12675, 12738, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRUCTURE_VOID = REGISTRY.register(new Block(611, "structure_void", false, 12549, 12549, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_DOOR = REGISTRY.register(new Block(611, "bamboo_door", true, 12739, 12802, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OBSERVER = REGISTRY.register(new Block(612, "observer", true, 12550, 12561, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block END_ROD = REGISTRY.register(new Block(612, "end_rod", true, 12803, 12808, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SHULKER_BOX = REGISTRY.register(new Block(613, "shulker_box", true, 12562, 12567, 24, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block CHORUS_PLANT = REGISTRY.register(new Block(613, "chorus_plant", true, 12809, 12872, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_SHULKER_BOX = REGISTRY.register(new Block(614, "white_shulker_box", true, 12568, 12573, 8, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block CHORUS_FLOWER = REGISTRY.register(new Block(614, "chorus_flower", true, 12873, 12878, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_SHULKER_BOX = REGISTRY.register(new Block(615, "orange_shulker_box", true, 12574, 12579, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block PURPUR_BLOCK = REGISTRY.register(new Block(615, "purpur_block", true, 12879, 12879, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MAGENTA_SHULKER_BOX = REGISTRY.register(new Block(616, "magenta_shulker_box", true, 12580, 12585, 16, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block PURPUR_PILLAR = REGISTRY.register(new Block(616, "purpur_pillar", true, 12880, 12882, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_BLUE_SHULKER_BOX = REGISTRY.register(new Block(617, "light_blue_shulker_box", true, 12586, 12591, 17, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block PURPUR_STAIRS = REGISTRY.register(new Block(617, "purpur_stairs", true, 12883, 12962, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block YELLOW_SHULKER_BOX = REGISTRY.register(new Block(618, "yellow_shulker_box", true, 12592, 12597, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block END_STONE_BRICKS = REGISTRY.register(new Block(618, "end_stone_bricks", true, 12963, 12963, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIME_SHULKER_BOX = REGISTRY.register(new Block(619, "lime_shulker_box", true, 12598, 12603, 19, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block TORCHFLOWER_CROP = REGISTRY.register(new Block(619, "torchflower_crop", false, 12964, 12965, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PINK_SHULKER_BOX = REGISTRY.register(new Block(620, "pink_shulker_box", true, 12604, 12609, 20, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block PITCHER_CROP = REGISTRY.register(new Block(620, "pitcher_crop", true, 12966, 12975, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRAY_SHULKER_BOX = REGISTRY.register(new Block(621, "gray_shulker_box", true, 12610, 12615, 21, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block PITCHER_PLANT = REGISTRY.register(new Block(621, "pitcher_plant", false, 12976, 12977, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_GRAY_SHULKER_BOX = REGISTRY.register(new Block(622, "light_gray_shulker_box", true, 12616, 12621, 22, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block BEETROOTS = REGISTRY.register(new Block(622, "beetroots", false, 12978, 12981, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CYAN_SHULKER_BOX = REGISTRY.register(new Block(623, "cyan_shulker_box", true, 12622, 12627, 23, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block DIRT_PATH = REGISTRY.register(new Block(623, "dirt_path", true, 12982, 12982, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPLE_SHULKER_BOX = REGISTRY.register(new Block(624, "purple_shulker_box", true, 12628, 12633, 46, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block END_GATEWAY = REGISTRY.register(new Block(624, "end_gateway", false, 12983, 12983, 29, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.END_GATEWAY));
 
-    public static final Block BLUE_SHULKER_BOX = REGISTRY.register(new Block(625, "blue_shulker_box", true, 12634, 12639, 25, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block REPEATING_COMMAND_BLOCK = REGISTRY.register(new Block(625, "repeating_command_block", true, 12984, 12995, 24, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.COMMAND_BLOCK));
 
-    public static final Block BROWN_SHULKER_BOX = REGISTRY.register(new Block(626, "brown_shulker_box", true, 12640, 12645, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block CHAIN_COMMAND_BLOCK = REGISTRY.register(new Block(626, "chain_command_block", true, 12996, 13007, 27, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.COMMAND_BLOCK));
 
-    public static final Block GREEN_SHULKER_BOX = REGISTRY.register(new Block(627, "green_shulker_box", true, 12646, 12651, 27, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block FROSTED_ICE = REGISTRY.register(new Block(627, "frosted_ice", true, 13008, 13011, 5, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_SHULKER_BOX = REGISTRY.register(new Block(628, "red_shulker_box", true, 12652, 12657, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block MAGMA_BLOCK = REGISTRY.register(new Block(628, "magma_block", true, 13012, 13012, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLACK_SHULKER_BOX = REGISTRY.register(new Block(629, "black_shulker_box", true, 12658, 12663, 29, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
+    public static final Block NETHER_WART_BLOCK = REGISTRY.register(new Block(629, "nether_wart_block", true, 13013, 13013, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(630, "white_glazed_terracotta", true, 12664, 12667, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_NETHER_BRICKS = REGISTRY.register(new Block(630, "red_nether_bricks", true, 13014, 13014, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(631, "orange_glazed_terracotta", true, 12668, 12671, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BONE_BLOCK = REGISTRY.register(new Block(631, "bone_block", true, 13015, 13017, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MAGENTA_GLAZED_TERRACOTTA = REGISTRY.register(new Block(632, "magenta_glazed_terracotta", true, 12672, 12675, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRUCTURE_VOID = REGISTRY.register(new Block(632, "structure_void", false, 13018, 13018, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_BLUE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(633, "light_blue_glazed_terracotta", true, 12676, 12679, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OBSERVER = REGISTRY.register(new Block(633, "observer", true, 13019, 13030, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block YELLOW_GLAZED_TERRACOTTA = REGISTRY.register(new Block(634, "yellow_glazed_terracotta", true, 12680, 12683, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SHULKER_BOX = REGISTRY.register(new Block(634, "shulker_box", true, 13031, 13036, 24, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block LIME_GLAZED_TERRACOTTA = REGISTRY.register(new Block(635, "lime_glazed_terracotta", true, 12684, 12687, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_SHULKER_BOX = REGISTRY.register(new Block(635, "white_shulker_box", true, 13037, 13042, 8, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block PINK_GLAZED_TERRACOTTA = REGISTRY.register(new Block(636, "pink_glazed_terracotta", true, 12688, 12691, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_SHULKER_BOX = REGISTRY.register(new Block(636, "orange_shulker_box", true, 13043, 13048, 15, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block GRAY_GLAZED_TERRACOTTA = REGISTRY.register(new Block(637, "gray_glazed_terracotta", true, 12692, 12695, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MAGENTA_SHULKER_BOX = REGISTRY.register(new Block(637, "magenta_shulker_box", true, 13049, 13054, 16, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block LIGHT_GRAY_GLAZED_TERRACOTTA = REGISTRY.register(new Block(638, "light_gray_glazed_terracotta", true, 12696, 12699, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_BLUE_SHULKER_BOX = REGISTRY.register(new Block(638, "light_blue_shulker_box", true, 13055, 13060, 17, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block CYAN_GLAZED_TERRACOTTA = REGISTRY.register(new Block(639, "cyan_glazed_terracotta", true, 12700, 12703, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block YELLOW_SHULKER_BOX = REGISTRY.register(new Block(639, "yellow_shulker_box", true, 13061, 13066, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block PURPLE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(640, "purple_glazed_terracotta", true, 12704, 12707, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIME_SHULKER_BOX = REGISTRY.register(new Block(640, "lime_shulker_box", true, 13067, 13072, 19, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block BLUE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(641, "blue_glazed_terracotta", true, 12708, 12711, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_SHULKER_BOX = REGISTRY.register(new Block(641, "pink_shulker_box", true, 13073, 13078, 20, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block BROWN_GLAZED_TERRACOTTA = REGISTRY.register(new Block(642, "brown_glazed_terracotta", true, 12712, 12715, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRAY_SHULKER_BOX = REGISTRY.register(new Block(642, "gray_shulker_box", true, 13079, 13084, 21, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block GREEN_GLAZED_TERRACOTTA = REGISTRY.register(new Block(643, "green_glazed_terracotta", true, 12716, 12719, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_GRAY_SHULKER_BOX = REGISTRY.register(new Block(643, "light_gray_shulker_box", true, 13085, 13090, 22, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block RED_GLAZED_TERRACOTTA = REGISTRY.register(new Block(644, "red_glazed_terracotta", true, 12720, 12723, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CYAN_SHULKER_BOX = REGISTRY.register(new Block(644, "cyan_shulker_box", true, 13091, 13096, 23, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block BLACK_GLAZED_TERRACOTTA = REGISTRY.register(new Block(645, "black_glazed_terracotta", true, 12724, 12727, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PURPLE_SHULKER_BOX = REGISTRY.register(new Block(645, "purple_shulker_box", true, 13097, 13102, 46, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block WHITE_CONCRETE = REGISTRY.register(new Block(646, "white_concrete", true, 12728, 12728, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLUE_SHULKER_BOX = REGISTRY.register(new Block(646, "blue_shulker_box", true, 13103, 13108, 25, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block ORANGE_CONCRETE = REGISTRY.register(new Block(647, "orange_concrete", true, 12729, 12729, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BROWN_SHULKER_BOX = REGISTRY.register(new Block(647, "brown_shulker_box", true, 13109, 13114, 26, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block MAGENTA_CONCRETE = REGISTRY.register(new Block(648, "magenta_concrete", true, 12730, 12730, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GREEN_SHULKER_BOX = REGISTRY.register(new Block(648, "green_shulker_box", true, 13115, 13120, 27, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block LIGHT_BLUE_CONCRETE = REGISTRY.register(new Block(649, "light_blue_concrete", true, 12731, 12731, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_SHULKER_BOX = REGISTRY.register(new Block(649, "red_shulker_box", true, 13121, 13126, 28, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block YELLOW_CONCRETE = REGISTRY.register(new Block(650, "yellow_concrete", true, 12732, 12732, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACK_SHULKER_BOX = REGISTRY.register(new Block(650, "black_shulker_box", true, 13127, 13132, 29, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SHULKER_BOX));
 
-    public static final Block LIME_CONCRETE = REGISTRY.register(new Block(651, "lime_concrete", true, 12733, 12733, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(651, "white_glazed_terracotta", true, 13133, 13136, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PINK_CONCRETE = REGISTRY.register(new Block(652, "pink_concrete", true, 12734, 12734, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(652, "orange_glazed_terracotta", true, 13137, 13140, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRAY_CONCRETE = REGISTRY.register(new Block(653, "gray_concrete", true, 12735, 12735, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MAGENTA_GLAZED_TERRACOTTA = REGISTRY.register(new Block(653, "magenta_glazed_terracotta", true, 13141, 13144, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_GRAY_CONCRETE = REGISTRY.register(new Block(654, "light_gray_concrete", true, 12736, 12736, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_BLUE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(654, "light_blue_glazed_terracotta", true, 13145, 13148, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CYAN_CONCRETE = REGISTRY.register(new Block(655, "cyan_concrete", true, 12737, 12737, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block YELLOW_GLAZED_TERRACOTTA = REGISTRY.register(new Block(655, "yellow_glazed_terracotta", true, 13149, 13152, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPLE_CONCRETE = REGISTRY.register(new Block(656, "purple_concrete", true, 12738, 12738, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIME_GLAZED_TERRACOTTA = REGISTRY.register(new Block(656, "lime_glazed_terracotta", true, 13153, 13156, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLUE_CONCRETE = REGISTRY.register(new Block(657, "blue_concrete", true, 12739, 12739, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_GLAZED_TERRACOTTA = REGISTRY.register(new Block(657, "pink_glazed_terracotta", true, 13157, 13160, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BROWN_CONCRETE = REGISTRY.register(new Block(658, "brown_concrete", true, 12740, 12740, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRAY_GLAZED_TERRACOTTA = REGISTRY.register(new Block(658, "gray_glazed_terracotta", true, 13161, 13164, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GREEN_CONCRETE = REGISTRY.register(new Block(659, "green_concrete", true, 12741, 12741, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_GRAY_GLAZED_TERRACOTTA = REGISTRY.register(new Block(659, "light_gray_glazed_terracotta", true, 13165, 13168, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_CONCRETE = REGISTRY.register(new Block(660, "red_concrete", true, 12742, 12742, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CYAN_GLAZED_TERRACOTTA = REGISTRY.register(new Block(660, "cyan_glazed_terracotta", true, 13169, 13172, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLACK_CONCRETE = REGISTRY.register(new Block(661, "black_concrete", true, 12743, 12743, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PURPLE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(661, "purple_glazed_terracotta", true, 13173, 13176, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_CONCRETE_POWDER = REGISTRY.register(new Block(662, "white_concrete_powder", true, 12744, 12744, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLUE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(662, "blue_glazed_terracotta", true, 13177, 13180, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_CONCRETE_POWDER = REGISTRY.register(new Block(663, "orange_concrete_powder", true, 12745, 12745, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BROWN_GLAZED_TERRACOTTA = REGISTRY.register(new Block(663, "brown_glazed_terracotta", true, 13181, 13184, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MAGENTA_CONCRETE_POWDER = REGISTRY.register(new Block(664, "magenta_concrete_powder", true, 12746, 12746, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GREEN_GLAZED_TERRACOTTA = REGISTRY.register(new Block(664, "green_glazed_terracotta", true, 13185, 13188, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_BLUE_CONCRETE_POWDER = REGISTRY.register(new Block(665, "light_blue_concrete_powder", true, 12747, 12747, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_GLAZED_TERRACOTTA = REGISTRY.register(new Block(665, "red_glazed_terracotta", true, 13189, 13192, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block YELLOW_CONCRETE_POWDER = REGISTRY.register(new Block(666, "yellow_concrete_powder", true, 12748, 12748, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACK_GLAZED_TERRACOTTA = REGISTRY.register(new Block(666, "black_glazed_terracotta", true, 13193, 13196, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIME_CONCRETE_POWDER = REGISTRY.register(new Block(667, "lime_concrete_powder", true, 12749, 12749, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_CONCRETE = REGISTRY.register(new Block(667, "white_concrete", true, 13197, 13197, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PINK_CONCRETE_POWDER = REGISTRY.register(new Block(668, "pink_concrete_powder", true, 12750, 12750, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_CONCRETE = REGISTRY.register(new Block(668, "orange_concrete", true, 13198, 13198, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRAY_CONCRETE_POWDER = REGISTRY.register(new Block(669, "gray_concrete_powder", true, 12751, 12751, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MAGENTA_CONCRETE = REGISTRY.register(new Block(669, "magenta_concrete", true, 13199, 13199, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_GRAY_CONCRETE_POWDER = REGISTRY.register(new Block(670, "light_gray_concrete_powder", true, 12752, 12752, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_BLUE_CONCRETE = REGISTRY.register(new Block(670, "light_blue_concrete", true, 13200, 13200, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CYAN_CONCRETE_POWDER = REGISTRY.register(new Block(671, "cyan_concrete_powder", true, 12753, 12753, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block YELLOW_CONCRETE = REGISTRY.register(new Block(671, "yellow_concrete", true, 13201, 13201, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPLE_CONCRETE_POWDER = REGISTRY.register(new Block(672, "purple_concrete_powder", true, 12754, 12754, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIME_CONCRETE = REGISTRY.register(new Block(672, "lime_concrete", true, 13202, 13202, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLUE_CONCRETE_POWDER = REGISTRY.register(new Block(673, "blue_concrete_powder", true, 12755, 12755, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_CONCRETE = REGISTRY.register(new Block(673, "pink_concrete", true, 13203, 13203, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BROWN_CONCRETE_POWDER = REGISTRY.register(new Block(674, "brown_concrete_powder", true, 12756, 12756, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRAY_CONCRETE = REGISTRY.register(new Block(674, "gray_concrete", true, 13204, 13204, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GREEN_CONCRETE_POWDER = REGISTRY.register(new Block(675, "green_concrete_powder", true, 12757, 12757, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_GRAY_CONCRETE = REGISTRY.register(new Block(675, "light_gray_concrete", true, 13205, 13205, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_CONCRETE_POWDER = REGISTRY.register(new Block(676, "red_concrete_powder", true, 12758, 12758, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CYAN_CONCRETE = REGISTRY.register(new Block(676, "cyan_concrete", true, 13206, 13206, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLACK_CONCRETE_POWDER = REGISTRY.register(new Block(677, "black_concrete_powder", true, 12759, 12759, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PURPLE_CONCRETE = REGISTRY.register(new Block(677, "purple_concrete", true, 13207, 13207, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block KELP = REGISTRY.register(new Block(678, "kelp", false, 12760, 12785, 12, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLUE_CONCRETE = REGISTRY.register(new Block(678, "blue_concrete", true, 13208, 13208, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block KELP_PLANT = REGISTRY.register(new Block(679, "kelp_plant", false, 12786, 12786, 12, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BROWN_CONCRETE = REGISTRY.register(new Block(679, "brown_concrete", true, 13209, 13209, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DRIED_KELP_BLOCK = REGISTRY.register(new Block(680, "dried_kelp_block", true, 12787, 12787, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GREEN_CONCRETE = REGISTRY.register(new Block(680, "green_concrete", true, 13210, 13210, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TURTLE_EGG = REGISTRY.register(new Block(681, "turtle_egg", true, 12788, 12799, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_CONCRETE = REGISTRY.register(new Block(681, "red_concrete", true, 13211, 13211, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SNIFFER_EGG = REGISTRY.register(new Block(682, "sniffer_egg", true, 12800, 12802, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACK_CONCRETE = REGISTRY.register(new Block(682, "black_concrete", true, 13212, 13212, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_TUBE_CORAL_BLOCK = REGISTRY.register(new Block(683, "dead_tube_coral_block", true, 12803, 12803, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_CONCRETE_POWDER = REGISTRY.register(new Block(683, "white_concrete_powder", true, 13213, 13213, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_BRAIN_CORAL_BLOCK = REGISTRY.register(new Block(684, "dead_brain_coral_block", true, 12804, 12804, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_CONCRETE_POWDER = REGISTRY.register(new Block(684, "orange_concrete_powder", true, 13214, 13214, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_BUBBLE_CORAL_BLOCK = REGISTRY.register(new Block(685, "dead_bubble_coral_block", true, 12805, 12805, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MAGENTA_CONCRETE_POWDER = REGISTRY.register(new Block(685, "magenta_concrete_powder", true, 13215, 13215, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_FIRE_CORAL_BLOCK = REGISTRY.register(new Block(686, "dead_fire_coral_block", true, 12806, 12806, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_BLUE_CONCRETE_POWDER = REGISTRY.register(new Block(686, "light_blue_concrete_powder", true, 13216, 13216, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_HORN_CORAL_BLOCK = REGISTRY.register(new Block(687, "dead_horn_coral_block", true, 12807, 12807, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block YELLOW_CONCRETE_POWDER = REGISTRY.register(new Block(687, "yellow_concrete_powder", true, 13217, 13217, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TUBE_CORAL_BLOCK = REGISTRY.register(new Block(688, "tube_coral_block", true, 12808, 12808, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIME_CONCRETE_POWDER = REGISTRY.register(new Block(688, "lime_concrete_powder", true, 13218, 13218, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BRAIN_CORAL_BLOCK = REGISTRY.register(new Block(689, "brain_coral_block", true, 12809, 12809, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_CONCRETE_POWDER = REGISTRY.register(new Block(689, "pink_concrete_powder", true, 13219, 13219, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BUBBLE_CORAL_BLOCK = REGISTRY.register(new Block(690, "bubble_coral_block", true, 12810, 12810, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRAY_CONCRETE_POWDER = REGISTRY.register(new Block(690, "gray_concrete_powder", true, 13220, 13220, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block FIRE_CORAL_BLOCK = REGISTRY.register(new Block(691, "fire_coral_block", true, 12811, 12811, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_GRAY_CONCRETE_POWDER = REGISTRY.register(new Block(691, "light_gray_concrete_powder", true, 13221, 13221, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block HORN_CORAL_BLOCK = REGISTRY.register(new Block(692, "horn_coral_block", true, 12812, 12812, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CYAN_CONCRETE_POWDER = REGISTRY.register(new Block(692, "cyan_concrete_powder", true, 13222, 13222, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_TUBE_CORAL = REGISTRY.register(new Block(693, "dead_tube_coral", false, 12813, 12814, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PURPLE_CONCRETE_POWDER = REGISTRY.register(new Block(693, "purple_concrete_powder", true, 13223, 13223, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_BRAIN_CORAL = REGISTRY.register(new Block(694, "dead_brain_coral", false, 12815, 12816, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLUE_CONCRETE_POWDER = REGISTRY.register(new Block(694, "blue_concrete_powder", true, 13224, 13224, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_BUBBLE_CORAL = REGISTRY.register(new Block(695, "dead_bubble_coral", false, 12817, 12818, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BROWN_CONCRETE_POWDER = REGISTRY.register(new Block(695, "brown_concrete_powder", true, 13225, 13225, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_FIRE_CORAL = REGISTRY.register(new Block(696, "dead_fire_coral", false, 12819, 12820, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GREEN_CONCRETE_POWDER = REGISTRY.register(new Block(696, "green_concrete_powder", true, 13226, 13226, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_HORN_CORAL = REGISTRY.register(new Block(697, "dead_horn_coral", false, 12821, 12822, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_CONCRETE_POWDER = REGISTRY.register(new Block(697, "red_concrete_powder", true, 13227, 13227, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TUBE_CORAL = REGISTRY.register(new Block(698, "tube_coral", false, 12823, 12824, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACK_CONCRETE_POWDER = REGISTRY.register(new Block(698, "black_concrete_powder", true, 13228, 13228, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BRAIN_CORAL = REGISTRY.register(new Block(699, "brain_coral", false, 12825, 12826, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block KELP = REGISTRY.register(new Block(699, "kelp", false, 13229, 13254, 12, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BUBBLE_CORAL = REGISTRY.register(new Block(700, "bubble_coral", false, 12827, 12828, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block KELP_PLANT = REGISTRY.register(new Block(700, "kelp_plant", false, 13255, 13255, 12, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block FIRE_CORAL = REGISTRY.register(new Block(701, "fire_coral", false, 12829, 12830, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DRIED_KELP_BLOCK = REGISTRY.register(new Block(701, "dried_kelp_block", true, 13256, 13256, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block HORN_CORAL = REGISTRY.register(new Block(702, "horn_coral", false, 12831, 12832, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TURTLE_EGG = REGISTRY.register(new Block(702, "turtle_egg", true, 13257, 13268, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_TUBE_CORAL_FAN = REGISTRY.register(new Block(703, "dead_tube_coral_fan", false, 12833, 12834, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SNIFFER_EGG = REGISTRY.register(new Block(703, "sniffer_egg", true, 13269, 13271, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_BRAIN_CORAL_FAN = REGISTRY.register(new Block(704, "dead_brain_coral_fan", false, 12835, 12836, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_TUBE_CORAL_BLOCK = REGISTRY.register(new Block(704, "dead_tube_coral_block", true, 13272, 13272, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_BUBBLE_CORAL_FAN = REGISTRY.register(new Block(705, "dead_bubble_coral_fan", false, 12837, 12838, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_BRAIN_CORAL_BLOCK = REGISTRY.register(new Block(705, "dead_brain_coral_block", true, 13273, 13273, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_FIRE_CORAL_FAN = REGISTRY.register(new Block(706, "dead_fire_coral_fan", false, 12839, 12840, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_BUBBLE_CORAL_BLOCK = REGISTRY.register(new Block(706, "dead_bubble_coral_block", true, 13274, 13274, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_HORN_CORAL_FAN = REGISTRY.register(new Block(707, "dead_horn_coral_fan", false, 12841, 12842, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_FIRE_CORAL_BLOCK = REGISTRY.register(new Block(707, "dead_fire_coral_block", true, 13275, 13275, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TUBE_CORAL_FAN = REGISTRY.register(new Block(708, "tube_coral_fan", false, 12843, 12844, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_HORN_CORAL_BLOCK = REGISTRY.register(new Block(708, "dead_horn_coral_block", true, 13276, 13276, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BRAIN_CORAL_FAN = REGISTRY.register(new Block(709, "brain_coral_fan", false, 12845, 12846, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TUBE_CORAL_BLOCK = REGISTRY.register(new Block(709, "tube_coral_block", true, 13277, 13277, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BUBBLE_CORAL_FAN = REGISTRY.register(new Block(710, "bubble_coral_fan", false, 12847, 12848, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BRAIN_CORAL_BLOCK = REGISTRY.register(new Block(710, "brain_coral_block", true, 13278, 13278, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block FIRE_CORAL_FAN = REGISTRY.register(new Block(711, "fire_coral_fan", false, 12849, 12850, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BUBBLE_CORAL_BLOCK = REGISTRY.register(new Block(711, "bubble_coral_block", true, 13279, 13279, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block HORN_CORAL_FAN = REGISTRY.register(new Block(712, "horn_coral_fan", false, 12851, 12852, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block FIRE_CORAL_BLOCK = REGISTRY.register(new Block(712, "fire_coral_block", true, 13280, 13280, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_TUBE_CORAL_WALL_FAN = REGISTRY.register(new Block(713, "dead_tube_coral_wall_fan", false, 12853, 12860, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block HORN_CORAL_BLOCK = REGISTRY.register(new Block(713, "horn_coral_block", true, 13281, 13281, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_BRAIN_CORAL_WALL_FAN = REGISTRY.register(new Block(714, "dead_brain_coral_wall_fan", false, 12861, 12868, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_TUBE_CORAL = REGISTRY.register(new Block(714, "dead_tube_coral", false, 13282, 13283, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_BUBBLE_CORAL_WALL_FAN = REGISTRY.register(new Block(715, "dead_bubble_coral_wall_fan", false, 12869, 12876, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_BRAIN_CORAL = REGISTRY.register(new Block(715, "dead_brain_coral", false, 13284, 13285, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_FIRE_CORAL_WALL_FAN = REGISTRY.register(new Block(716, "dead_fire_coral_wall_fan", false, 12877, 12884, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_BUBBLE_CORAL = REGISTRY.register(new Block(716, "dead_bubble_coral", false, 13286, 13287, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEAD_HORN_CORAL_WALL_FAN = REGISTRY.register(new Block(717, "dead_horn_coral_wall_fan", false, 12885, 12892, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_FIRE_CORAL = REGISTRY.register(new Block(717, "dead_fire_coral", false, 13288, 13289, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TUBE_CORAL_WALL_FAN = REGISTRY.register(new Block(718, "tube_coral_wall_fan", false, 12893, 12900, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_HORN_CORAL = REGISTRY.register(new Block(718, "dead_horn_coral", false, 13290, 13291, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BRAIN_CORAL_WALL_FAN = REGISTRY.register(new Block(719, "brain_coral_wall_fan", false, 12901, 12908, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TUBE_CORAL = REGISTRY.register(new Block(719, "tube_coral", false, 13292, 13293, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BUBBLE_CORAL_WALL_FAN = REGISTRY.register(new Block(720, "bubble_coral_wall_fan", false, 12909, 12916, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BRAIN_CORAL = REGISTRY.register(new Block(720, "brain_coral", false, 13294, 13295, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block FIRE_CORAL_WALL_FAN = REGISTRY.register(new Block(721, "fire_coral_wall_fan", false, 12917, 12924, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BUBBLE_CORAL = REGISTRY.register(new Block(721, "bubble_coral", false, 13296, 13297, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block HORN_CORAL_WALL_FAN = REGISTRY.register(new Block(722, "horn_coral_wall_fan", false, 12925, 12932, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block FIRE_CORAL = REGISTRY.register(new Block(722, "fire_coral", false, 13298, 13299, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SEA_PICKLE = REGISTRY.register(new Block(723, "sea_pickle", true, 12933, 12940, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block HORN_CORAL = REGISTRY.register(new Block(723, "horn_coral", false, 13300, 13301, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLUE_ICE = REGISTRY.register(new Block(724, "blue_ice", true, 12941, 12941, 5, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_TUBE_CORAL_FAN = REGISTRY.register(new Block(724, "dead_tube_coral_fan", false, 13302, 13303, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CONDUIT = REGISTRY.register(new Block(725, "conduit", true, 12942, 12943, 31, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CONDUIT));
+    public static final Block DEAD_BRAIN_CORAL_FAN = REGISTRY.register(new Block(725, "dead_brain_coral_fan", false, 13304, 13305, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO_SAPLING = REGISTRY.register(new Block(726, "bamboo_sapling", false, 12944, 12944, 13, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block DEAD_BUBBLE_CORAL_FAN = REGISTRY.register(new Block(726, "dead_bubble_coral_fan", false, 13306, 13307, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BAMBOO = REGISTRY.register(new Block(727, "bamboo", true, 12945, 12956, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block DEAD_FIRE_CORAL_FAN = REGISTRY.register(new Block(727, "dead_fire_coral_fan", false, 13308, 13309, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_BAMBOO = REGISTRY.register(new Block(728, "potted_bamboo", true, 12957, 12957, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_HORN_CORAL_FAN = REGISTRY.register(new Block(728, "dead_horn_coral_fan", false, 13310, 13311, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block VOID_AIR = REGISTRY.register(new Block(729, "void_air", false, 12958, 12958, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TUBE_CORAL_FAN = REGISTRY.register(new Block(729, "tube_coral_fan", false, 13312, 13313, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CAVE_AIR = REGISTRY.register(new Block(730, "cave_air", false, 12959, 12959, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BRAIN_CORAL_FAN = REGISTRY.register(new Block(730, "brain_coral_fan", false, 13314, 13315, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BUBBLE_COLUMN = REGISTRY.register(new Block(731, "bubble_column", false, 12960, 12961, 12, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BUBBLE_CORAL_FAN = REGISTRY.register(new Block(731, "bubble_coral_fan", false, 13316, 13317, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_GRANITE_STAIRS = REGISTRY.register(new Block(732, "polished_granite_stairs", true, 12962, 13041, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block FIRE_CORAL_FAN = REGISTRY.register(new Block(732, "fire_coral_fan", false, 13318, 13319, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMOOTH_RED_SANDSTONE_STAIRS = REGISTRY.register(new Block(733, "smooth_red_sandstone_stairs", true, 13042, 13121, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block HORN_CORAL_FAN = REGISTRY.register(new Block(733, "horn_coral_fan", false, 13320, 13321, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MOSSY_STONE_BRICK_STAIRS = REGISTRY.register(new Block(734, "mossy_stone_brick_stairs", true, 13122, 13201, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_TUBE_CORAL_WALL_FAN = REGISTRY.register(new Block(734, "dead_tube_coral_wall_fan", false, 13322, 13329, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_DIORITE_STAIRS = REGISTRY.register(new Block(735, "polished_diorite_stairs", true, 13202, 13281, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_BRAIN_CORAL_WALL_FAN = REGISTRY.register(new Block(735, "dead_brain_coral_wall_fan", false, 13330, 13337, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MOSSY_COBBLESTONE_STAIRS = REGISTRY.register(new Block(736, "mossy_cobblestone_stairs", true, 13282, 13361, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_BUBBLE_CORAL_WALL_FAN = REGISTRY.register(new Block(736, "dead_bubble_coral_wall_fan", false, 13338, 13345, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block END_STONE_BRICK_STAIRS = REGISTRY.register(new Block(737, "end_stone_brick_stairs", true, 13362, 13441, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_FIRE_CORAL_WALL_FAN = REGISTRY.register(new Block(737, "dead_fire_coral_wall_fan", false, 13346, 13353, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STONE_STAIRS = REGISTRY.register(new Block(738, "stone_stairs", true, 13442, 13521, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEAD_HORN_CORAL_WALL_FAN = REGISTRY.register(new Block(738, "dead_horn_coral_wall_fan", false, 13354, 13361, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMOOTH_SANDSTONE_STAIRS = REGISTRY.register(new Block(739, "smooth_sandstone_stairs", true, 13522, 13601, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TUBE_CORAL_WALL_FAN = REGISTRY.register(new Block(739, "tube_coral_wall_fan", false, 13362, 13369, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMOOTH_QUARTZ_STAIRS = REGISTRY.register(new Block(740, "smooth_quartz_stairs", true, 13602, 13681, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BRAIN_CORAL_WALL_FAN = REGISTRY.register(new Block(740, "brain_coral_wall_fan", false, 13370, 13377, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRANITE_STAIRS = REGISTRY.register(new Block(741, "granite_stairs", true, 13682, 13761, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BUBBLE_CORAL_WALL_FAN = REGISTRY.register(new Block(741, "bubble_coral_wall_fan", false, 13378, 13385, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ANDESITE_STAIRS = REGISTRY.register(new Block(742, "andesite_stairs", true, 13762, 13841, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block FIRE_CORAL_WALL_FAN = REGISTRY.register(new Block(742, "fire_coral_wall_fan", false, 13386, 13393, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_NETHER_BRICK_STAIRS = REGISTRY.register(new Block(743, "red_nether_brick_stairs", true, 13842, 13921, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block HORN_CORAL_WALL_FAN = REGISTRY.register(new Block(743, "horn_coral_wall_fan", false, 13394, 13401, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_ANDESITE_STAIRS = REGISTRY.register(new Block(744, "polished_andesite_stairs", true, 13922, 14001, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SEA_PICKLE = REGISTRY.register(new Block(744, "sea_pickle", true, 13402, 13409, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DIORITE_STAIRS = REGISTRY.register(new Block(745, "diorite_stairs", true, 14002, 14081, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLUE_ICE = REGISTRY.register(new Block(745, "blue_ice", true, 13410, 13410, 5, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_GRANITE_SLAB = REGISTRY.register(new Block(746, "polished_granite_slab", true, 14082, 14087, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CONDUIT = REGISTRY.register(new Block(746, "conduit", true, 13411, 13412, 31, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CONDUIT));
 
-    public static final Block SMOOTH_RED_SANDSTONE_SLAB = REGISTRY.register(new Block(747, "smooth_red_sandstone_slab", true, 14088, 14093, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO_SAPLING = REGISTRY.register(new Block(747, "bamboo_sapling", false, 13413, 13413, 13, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block MOSSY_STONE_BRICK_SLAB = REGISTRY.register(new Block(748, "mossy_stone_brick_slab", true, 14094, 14099, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BAMBOO = REGISTRY.register(new Block(748, "bamboo", true, 13414, 13425, 7, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_DIORITE_SLAB = REGISTRY.register(new Block(749, "polished_diorite_slab", true, 14100, 14105, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_BAMBOO = REGISTRY.register(new Block(749, "potted_bamboo", true, 13426, 13426, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MOSSY_COBBLESTONE_SLAB = REGISTRY.register(new Block(750, "mossy_cobblestone_slab", true, 14106, 14111, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block VOID_AIR = REGISTRY.register(new Block(750, "void_air", false, 13427, 13427, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block END_STONE_BRICK_SLAB = REGISTRY.register(new Block(751, "end_stone_brick_slab", true, 14112, 14117, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CAVE_AIR = REGISTRY.register(new Block(751, "cave_air", false, 13428, 13428, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMOOTH_SANDSTONE_SLAB = REGISTRY.register(new Block(752, "smooth_sandstone_slab", true, 14118, 14123, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BUBBLE_COLUMN = REGISTRY.register(new Block(752, "bubble_column", false, 13429, 13430, 12, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMOOTH_QUARTZ_SLAB = REGISTRY.register(new Block(753, "smooth_quartz_slab", true, 14124, 14129, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_GRANITE_STAIRS = REGISTRY.register(new Block(753, "polished_granite_stairs", true, 13431, 13510, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRANITE_SLAB = REGISTRY.register(new Block(754, "granite_slab", true, 14130, 14135, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMOOTH_RED_SANDSTONE_STAIRS = REGISTRY.register(new Block(754, "smooth_red_sandstone_stairs", true, 13511, 13590, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ANDESITE_SLAB = REGISTRY.register(new Block(755, "andesite_slab", true, 14136, 14141, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MOSSY_STONE_BRICK_STAIRS = REGISTRY.register(new Block(755, "mossy_stone_brick_stairs", true, 13591, 13670, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_NETHER_BRICK_SLAB = REGISTRY.register(new Block(756, "red_nether_brick_slab", true, 14142, 14147, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_DIORITE_STAIRS = REGISTRY.register(new Block(756, "polished_diorite_stairs", true, 13671, 13750, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_ANDESITE_SLAB = REGISTRY.register(new Block(757, "polished_andesite_slab", true, 14148, 14153, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MOSSY_COBBLESTONE_STAIRS = REGISTRY.register(new Block(757, "mossy_cobblestone_stairs", true, 13751, 13830, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DIORITE_SLAB = REGISTRY.register(new Block(758, "diorite_slab", true, 14154, 14159, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block END_STONE_BRICK_STAIRS = REGISTRY.register(new Block(758, "end_stone_brick_stairs", true, 13831, 13910, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BRICK_WALL = REGISTRY.register(new Block(759, "brick_wall", true, 14160, 14483, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STONE_STAIRS = REGISTRY.register(new Block(759, "stone_stairs", true, 13911, 13990, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PRISMARINE_WALL = REGISTRY.register(new Block(760, "prismarine_wall", true, 14484, 14807, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMOOTH_SANDSTONE_STAIRS = REGISTRY.register(new Block(760, "smooth_sandstone_stairs", true, 13991, 14070, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_SANDSTONE_WALL = REGISTRY.register(new Block(761, "red_sandstone_wall", true, 14808, 15131, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMOOTH_QUARTZ_STAIRS = REGISTRY.register(new Block(761, "smooth_quartz_stairs", true, 14071, 14150, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MOSSY_STONE_BRICK_WALL = REGISTRY.register(new Block(762, "mossy_stone_brick_wall", true, 15132, 15455, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRANITE_STAIRS = REGISTRY.register(new Block(762, "granite_stairs", true, 14151, 14230, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRANITE_WALL = REGISTRY.register(new Block(763, "granite_wall", true, 15456, 15779, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ANDESITE_STAIRS = REGISTRY.register(new Block(763, "andesite_stairs", true, 14231, 14310, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STONE_BRICK_WALL = REGISTRY.register(new Block(764, "stone_brick_wall", true, 15780, 16103, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_NETHER_BRICK_STAIRS = REGISTRY.register(new Block(764, "red_nether_brick_stairs", true, 14311, 14390, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MUD_BRICK_WALL = REGISTRY.register(new Block(765, "mud_brick_wall", true, 16104, 16427, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_ANDESITE_STAIRS = REGISTRY.register(new Block(765, "polished_andesite_stairs", true, 14391, 14470, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block NETHER_BRICK_WALL = REGISTRY.register(new Block(766, "nether_brick_wall", true, 16428, 16751, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DIORITE_STAIRS = REGISTRY.register(new Block(766, "diorite_stairs", true, 14471, 14550, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ANDESITE_WALL = REGISTRY.register(new Block(767, "andesite_wall", true, 16752, 17075, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_GRANITE_SLAB = REGISTRY.register(new Block(767, "polished_granite_slab", true, 14551, 14556, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_NETHER_BRICK_WALL = REGISTRY.register(new Block(768, "red_nether_brick_wall", true, 17076, 17399, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMOOTH_RED_SANDSTONE_SLAB = REGISTRY.register(new Block(768, "smooth_red_sandstone_slab", true, 14557, 14562, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SANDSTONE_WALL = REGISTRY.register(new Block(769, "sandstone_wall", true, 17400, 17723, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MOSSY_STONE_BRICK_SLAB = REGISTRY.register(new Block(769, "mossy_stone_brick_slab", true, 14563, 14568, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block END_STONE_BRICK_WALL = REGISTRY.register(new Block(770, "end_stone_brick_wall", true, 17724, 18047, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_DIORITE_SLAB = REGISTRY.register(new Block(770, "polished_diorite_slab", true, 14569, 14574, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DIORITE_WALL = REGISTRY.register(new Block(771, "diorite_wall", true, 18048, 18371, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MOSSY_COBBLESTONE_SLAB = REGISTRY.register(new Block(771, "mossy_cobblestone_slab", true, 14575, 14580, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SCAFFOLDING = REGISTRY.register(new Block(772, "scaffolding", true, 18372, 18403, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block END_STONE_BRICK_SLAB = REGISTRY.register(new Block(772, "end_stone_brick_slab", true, 14581, 14586, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LOOM = REGISTRY.register(new Block(773, "loom", true, 18404, 18407, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMOOTH_SANDSTONE_SLAB = REGISTRY.register(new Block(773, "smooth_sandstone_slab", true, 14587, 14592, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BARREL = REGISTRY.register(new Block(774, "barrel", true, 18408, 18419, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BARREL));
+    public static final Block SMOOTH_QUARTZ_SLAB = REGISTRY.register(new Block(774, "smooth_quartz_slab", true, 14593, 14598, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMOKER = REGISTRY.register(new Block(775, "smoker", true, 18420, 18427, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SMOKER));
+    public static final Block GRANITE_SLAB = REGISTRY.register(new Block(775, "granite_slab", true, 14599, 14604, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLAST_FURNACE = REGISTRY.register(new Block(776, "blast_furnace", true, 18428, 18435, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BLAST_FURNACE));
+    public static final Block ANDESITE_SLAB = REGISTRY.register(new Block(776, "andesite_slab", true, 14605, 14610, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CARTOGRAPHY_TABLE = REGISTRY.register(new Block(777, "cartography_table", true, 18436, 18436, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_NETHER_BRICK_SLAB = REGISTRY.register(new Block(777, "red_nether_brick_slab", true, 14611, 14616, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block FLETCHING_TABLE = REGISTRY.register(new Block(778, "fletching_table", true, 18437, 18437, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_ANDESITE_SLAB = REGISTRY.register(new Block(778, "polished_andesite_slab", true, 14617, 14622, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRINDSTONE = REGISTRY.register(new Block(779, "grindstone", true, 18438, 18449, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DIORITE_SLAB = REGISTRY.register(new Block(779, "diorite_slab", true, 14623, 14628, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LECTERN = REGISTRY.register(new Block(780, "lectern", true, 18450, 18465, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.LECTERN));
+    public static final Block BRICK_WALL = REGISTRY.register(new Block(780, "brick_wall", true, 14629, 14952, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMITHING_TABLE = REGISTRY.register(new Block(781, "smithing_table", true, 18466, 18466, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PRISMARINE_WALL = REGISTRY.register(new Block(781, "prismarine_wall", true, 14953, 15276, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STONECUTTER = REGISTRY.register(new Block(782, "stonecutter", true, 18467, 18470, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_SANDSTONE_WALL = REGISTRY.register(new Block(782, "red_sandstone_wall", true, 15277, 15600, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BELL = REGISTRY.register(new Block(783, "bell", true, 18471, 18502, 30, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BELL));
+    public static final Block MOSSY_STONE_BRICK_WALL = REGISTRY.register(new Block(783, "mossy_stone_brick_wall", true, 15601, 15924, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LANTERN = REGISTRY.register(new Block(784, "lantern", true, 18503, 18506, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRANITE_WALL = REGISTRY.register(new Block(784, "granite_wall", true, 15925, 16248, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SOUL_LANTERN = REGISTRY.register(new Block(785, "soul_lantern", true, 18507, 18510, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STONE_BRICK_WALL = REGISTRY.register(new Block(785, "stone_brick_wall", true, 16249, 16572, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CAMPFIRE = REGISTRY.register(new Block(786, "campfire", true, 18511, 18542, 34, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CAMPFIRE));
+    public static final Block MUD_BRICK_WALL = REGISTRY.register(new Block(786, "mud_brick_wall", true, 16573, 16896, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SOUL_CAMPFIRE = REGISTRY.register(new Block(787, "soul_campfire", true, 18543, 18574, 34, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CAMPFIRE));
+    public static final Block NETHER_BRICK_WALL = REGISTRY.register(new Block(787, "nether_brick_wall", true, 16897, 17220, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SWEET_BERRY_BUSH = REGISTRY.register(new Block(788, "sweet_berry_bush", false, 18575, 18578, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ANDESITE_WALL = REGISTRY.register(new Block(788, "andesite_wall", true, 17221, 17544, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_STEM = REGISTRY.register(new Block(789, "warped_stem", true, 18579, 18581, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_NETHER_BRICK_WALL = REGISTRY.register(new Block(789, "red_nether_brick_wall", true, 17545, 17868, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_WARPED_STEM = REGISTRY.register(new Block(790, "stripped_warped_stem", true, 18582, 18584, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SANDSTONE_WALL = REGISTRY.register(new Block(790, "sandstone_wall", true, 17869, 18192, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_HYPHAE = REGISTRY.register(new Block(791, "warped_hyphae", true, 18585, 18587, 57, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block END_STONE_BRICK_WALL = REGISTRY.register(new Block(791, "end_stone_brick_wall", true, 18193, 18516, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_WARPED_HYPHAE = REGISTRY.register(new Block(792, "stripped_warped_hyphae", true, 18588, 18590, 57, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DIORITE_WALL = REGISTRY.register(new Block(792, "diorite_wall", true, 18517, 18840, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_NYLIUM = REGISTRY.register(new Block(793, "warped_nylium", true, 18591, 18591, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SCAFFOLDING = REGISTRY.register(new Block(793, "scaffolding", true, 18841, 18872, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_FUNGUS = REGISTRY.register(new Block(794, "warped_fungus", false, 18592, 18592, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LOOM = REGISTRY.register(new Block(794, "loom", true, 18873, 18876, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_WART_BLOCK = REGISTRY.register(new Block(795, "warped_wart_block", true, 18593, 18593, 58, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BARREL = REGISTRY.register(new Block(795, "barrel", true, 18877, 18888, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BARREL));
 
-    public static final Block WARPED_ROOTS = REGISTRY.register(new Block(796, "warped_roots", false, 18594, 18594, 23, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block SMOKER = REGISTRY.register(new Block(796, "smoker", true, 18889, 18896, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SMOKER));
 
-    public static final Block NETHER_SPROUTS = REGISTRY.register(new Block(797, "nether_sprouts", false, 18595, 18595, 23, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block BLAST_FURNACE = REGISTRY.register(new Block(797, "blast_furnace", true, 18897, 18904, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BLAST_FURNACE));
 
-    public static final Block CRIMSON_STEM = REGISTRY.register(new Block(798, "crimson_stem", true, 18596, 18598, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CARTOGRAPHY_TABLE = REGISTRY.register(new Block(798, "cartography_table", true, 18905, 18905, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_CRIMSON_STEM = REGISTRY.register(new Block(799, "stripped_crimson_stem", true, 18599, 18601, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block FLETCHING_TABLE = REGISTRY.register(new Block(799, "fletching_table", true, 18906, 18906, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_HYPHAE = REGISTRY.register(new Block(800, "crimson_hyphae", true, 18602, 18604, 54, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRINDSTONE = REGISTRY.register(new Block(800, "grindstone", true, 18907, 18918, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRIPPED_CRIMSON_HYPHAE = REGISTRY.register(new Block(801, "stripped_crimson_hyphae", true, 18605, 18607, 54, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LECTERN = REGISTRY.register(new Block(801, "lectern", true, 18919, 18934, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.LECTERN));
 
-    public static final Block CRIMSON_NYLIUM = REGISTRY.register(new Block(802, "crimson_nylium", true, 18608, 18608, 52, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMITHING_TABLE = REGISTRY.register(new Block(802, "smithing_table", true, 18935, 18935, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_FUNGUS = REGISTRY.register(new Block(803, "crimson_fungus", false, 18609, 18609, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STONECUTTER = REGISTRY.register(new Block(803, "stonecutter", true, 18936, 18939, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SHROOMLIGHT = REGISTRY.register(new Block(804, "shroomlight", true, 18610, 18610, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BELL = REGISTRY.register(new Block(804, "bell", true, 18940, 18971, 30, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BELL));
 
-    public static final Block WEEPING_VINES = REGISTRY.register(new Block(805, "weeping_vines", false, 18611, 18636, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LANTERN = REGISTRY.register(new Block(805, "lantern", true, 18972, 18975, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WEEPING_VINES_PLANT = REGISTRY.register(new Block(806, "weeping_vines_plant", false, 18637, 18637, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SOUL_LANTERN = REGISTRY.register(new Block(806, "soul_lantern", true, 18976, 18979, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TWISTING_VINES = REGISTRY.register(new Block(807, "twisting_vines", false, 18638, 18663, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CAMPFIRE = REGISTRY.register(new Block(807, "campfire", true, 18980, 19011, 34, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CAMPFIRE));
 
-    public static final Block TWISTING_VINES_PLANT = REGISTRY.register(new Block(808, "twisting_vines_plant", false, 18664, 18664, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SOUL_CAMPFIRE = REGISTRY.register(new Block(808, "soul_campfire", true, 19012, 19043, 34, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CAMPFIRE));
 
-    public static final Block CRIMSON_ROOTS = REGISTRY.register(new Block(809, "crimson_roots", false, 18665, 18665, 35, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block SWEET_BERRY_BUSH = REGISTRY.register(new Block(809, "sweet_berry_bush", false, 19044, 19047, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_PLANKS = REGISTRY.register(new Block(810, "crimson_planks", true, 18666, 18666, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_STEM = REGISTRY.register(new Block(810, "warped_stem", true, 19048, 19050, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_PLANKS = REGISTRY.register(new Block(811, "warped_planks", true, 18667, 18667, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_WARPED_STEM = REGISTRY.register(new Block(811, "stripped_warped_stem", true, 19051, 19053, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_SLAB = REGISTRY.register(new Block(812, "crimson_slab", true, 18668, 18673, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_HYPHAE = REGISTRY.register(new Block(812, "warped_hyphae", true, 19054, 19056, 57, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_SLAB = REGISTRY.register(new Block(813, "warped_slab", true, 18674, 18679, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_WARPED_HYPHAE = REGISTRY.register(new Block(813, "stripped_warped_hyphae", true, 19057, 19059, 57, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_PRESSURE_PLATE = REGISTRY.register(new Block(814, "crimson_pressure_plate", false, 18680, 18681, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_NYLIUM = REGISTRY.register(new Block(814, "warped_nylium", true, 19060, 19060, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_PRESSURE_PLATE = REGISTRY.register(new Block(815, "warped_pressure_plate", false, 18682, 18683, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_FUNGUS = REGISTRY.register(new Block(815, "warped_fungus", false, 19061, 19061, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_FENCE = REGISTRY.register(new Block(816, "crimson_fence", true, 18684, 18715, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_WART_BLOCK = REGISTRY.register(new Block(816, "warped_wart_block", true, 19062, 19062, 58, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_FENCE = REGISTRY.register(new Block(817, "warped_fence", true, 18716, 18747, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_ROOTS = REGISTRY.register(new Block(817, "warped_roots", false, 19063, 19063, 23, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_TRAPDOOR = REGISTRY.register(new Block(818, "crimson_trapdoor", true, 18748, 18811, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block NETHER_SPROUTS = REGISTRY.register(new Block(818, "nether_sprouts", false, 19064, 19064, 23, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_TRAPDOOR = REGISTRY.register(new Block(819, "warped_trapdoor", true, 18812, 18875, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_STEM = REGISTRY.register(new Block(819, "crimson_stem", true, 19065, 19067, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_FENCE_GATE = REGISTRY.register(new Block(820, "crimson_fence_gate", true, 18876, 18907, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_CRIMSON_STEM = REGISTRY.register(new Block(820, "stripped_crimson_stem", true, 19068, 19070, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_FENCE_GATE = REGISTRY.register(new Block(821, "warped_fence_gate", true, 18908, 18939, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_HYPHAE = REGISTRY.register(new Block(821, "crimson_hyphae", true, 19071, 19073, 54, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_STAIRS = REGISTRY.register(new Block(822, "crimson_stairs", true, 18940, 19019, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRIPPED_CRIMSON_HYPHAE = REGISTRY.register(new Block(822, "stripped_crimson_hyphae", true, 19074, 19076, 54, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_STAIRS = REGISTRY.register(new Block(823, "warped_stairs", true, 19020, 19099, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_NYLIUM = REGISTRY.register(new Block(823, "crimson_nylium", true, 19077, 19077, 52, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_BUTTON = REGISTRY.register(new Block(824, "crimson_button", false, 19100, 19123, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_FUNGUS = REGISTRY.register(new Block(824, "crimson_fungus", false, 19078, 19078, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_BUTTON = REGISTRY.register(new Block(825, "warped_button", false, 19124, 19147, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SHROOMLIGHT = REGISTRY.register(new Block(825, "shroomlight", true, 19079, 19079, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_DOOR = REGISTRY.register(new Block(826, "crimson_door", true, 19148, 19211, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WEEPING_VINES = REGISTRY.register(new Block(826, "weeping_vines", false, 19080, 19105, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_DOOR = REGISTRY.register(new Block(827, "warped_door", true, 19212, 19275, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WEEPING_VINES_PLANT = REGISTRY.register(new Block(827, "weeping_vines_plant", false, 19106, 19106, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_SIGN = REGISTRY.register(new Block(828, "crimson_sign", false, 19276, 19307, 53, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block TWISTING_VINES = REGISTRY.register(new Block(828, "twisting_vines", false, 19107, 19132, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_SIGN = REGISTRY.register(new Block(829, "warped_sign", false, 19308, 19339, 56, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block TWISTING_VINES_PLANT = REGISTRY.register(new Block(829, "twisting_vines_plant", false, 19133, 19133, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRIMSON_WALL_SIGN = REGISTRY.register(new Block(830, "crimson_wall_sign", false, 19340, 19347, 53, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block CRIMSON_ROOTS = REGISTRY.register(new Block(830, "crimson_roots", false, 19134, 19134, 35, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block WARPED_WALL_SIGN = REGISTRY.register(new Block(831, "warped_wall_sign", false, 19348, 19355, 56, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
+    public static final Block CRIMSON_PLANKS = REGISTRY.register(new Block(831, "crimson_planks", true, 19135, 19135, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block STRUCTURE_BLOCK = REGISTRY.register(new Block(832, "structure_block", true, 19356, 19359, 22, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.STRUCTURE_BLOCK));
+    public static final Block WARPED_PLANKS = REGISTRY.register(new Block(832, "warped_planks", true, 19136, 19136, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block JIGSAW = REGISTRY.register(new Block(833, "jigsaw", true, 19360, 19371, 22, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.JIGSAW));
+    public static final Block CRIMSON_SLAB = REGISTRY.register(new Block(833, "crimson_slab", true, 19137, 19142, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COMPOSTER = REGISTRY.register(new Block(834, "composter", true, 19372, 19380, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_SLAB = REGISTRY.register(new Block(834, "warped_slab", true, 19143, 19148, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TARGET = REGISTRY.register(new Block(835, "target", true, 19381, 19396, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_PRESSURE_PLATE = REGISTRY.register(new Block(835, "crimson_pressure_plate", false, 19149, 19150, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BEE_NEST = REGISTRY.register(new Block(836, "bee_nest", true, 19397, 19420, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BEEHIVE));
+    public static final Block WARPED_PRESSURE_PLATE = REGISTRY.register(new Block(836, "warped_pressure_plate", false, 19151, 19152, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BEEHIVE = REGISTRY.register(new Block(837, "beehive", true, 19421, 19444, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BEEHIVE));
+    public static final Block CRIMSON_FENCE = REGISTRY.register(new Block(837, "crimson_fence", true, 19153, 19184, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block HONEY_BLOCK = REGISTRY.register(new Block(838, "honey_block", true, 19445, 19445, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_FENCE = REGISTRY.register(new Block(838, "warped_fence", true, 19185, 19216, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block HONEYCOMB_BLOCK = REGISTRY.register(new Block(839, "honeycomb_block", true, 19446, 19446, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_TRAPDOOR = REGISTRY.register(new Block(839, "crimson_trapdoor", true, 19217, 19280, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block NETHERITE_BLOCK = REGISTRY.register(new Block(840, "netherite_block", true, 19447, 19447, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_TRAPDOOR = REGISTRY.register(new Block(840, "warped_trapdoor", true, 19281, 19344, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ANCIENT_DEBRIS = REGISTRY.register(new Block(841, "ancient_debris", true, 19448, 19448, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_FENCE_GATE = REGISTRY.register(new Block(841, "crimson_fence_gate", true, 19345, 19376, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRYING_OBSIDIAN = REGISTRY.register(new Block(842, "crying_obsidian", true, 19449, 19449, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_FENCE_GATE = REGISTRY.register(new Block(842, "warped_fence_gate", true, 19377, 19408, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RESPAWN_ANCHOR = REGISTRY.register(new Block(843, "respawn_anchor", true, 19450, 19454, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_STAIRS = REGISTRY.register(new Block(843, "crimson_stairs", true, 19409, 19488, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_CRIMSON_FUNGUS = REGISTRY.register(new Block(844, "potted_crimson_fungus", true, 19455, 19455, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_STAIRS = REGISTRY.register(new Block(844, "warped_stairs", true, 19489, 19568, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_WARPED_FUNGUS = REGISTRY.register(new Block(845, "potted_warped_fungus", true, 19456, 19456, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_BUTTON = REGISTRY.register(new Block(845, "crimson_button", false, 19569, 19592, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_CRIMSON_ROOTS = REGISTRY.register(new Block(846, "potted_crimson_roots", true, 19457, 19457, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_BUTTON = REGISTRY.register(new Block(846, "warped_button", false, 19593, 19616, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_WARPED_ROOTS = REGISTRY.register(new Block(847, "potted_warped_roots", true, 19458, 19458, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_DOOR = REGISTRY.register(new Block(847, "crimson_door", true, 19617, 19680, 53, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LODESTONE = REGISTRY.register(new Block(848, "lodestone", true, 19459, 19459, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_DOOR = REGISTRY.register(new Block(848, "warped_door", true, 19681, 19744, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLACKSTONE = REGISTRY.register(new Block(849, "blackstone", true, 19460, 19460, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_SIGN = REGISTRY.register(new Block(849, "crimson_sign", false, 19745, 19776, 53, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block BLACKSTONE_STAIRS = REGISTRY.register(new Block(850, "blackstone_stairs", true, 19461, 19540, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_SIGN = REGISTRY.register(new Block(850, "warped_sign", false, 19777, 19808, 56, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block BLACKSTONE_WALL = REGISTRY.register(new Block(851, "blackstone_wall", true, 19541, 19864, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRIMSON_WALL_SIGN = REGISTRY.register(new Block(851, "crimson_wall_sign", false, 19809, 19816, 53, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block BLACKSTONE_SLAB = REGISTRY.register(new Block(852, "blackstone_slab", true, 19865, 19870, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WARPED_WALL_SIGN = REGISTRY.register(new Block(852, "warped_wall_sign", false, 19817, 19824, 56, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SIGN));
 
-    public static final Block POLISHED_BLACKSTONE = REGISTRY.register(new Block(853, "polished_blackstone", true, 19871, 19871, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block STRUCTURE_BLOCK = REGISTRY.register(new Block(853, "structure_block", true, 19825, 19828, 22, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.STRUCTURE_BLOCK));
 
-    public static final Block POLISHED_BLACKSTONE_BRICKS = REGISTRY.register(new Block(854, "polished_blackstone_bricks", true, 19872, 19872, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block JIGSAW = REGISTRY.register(new Block(854, "jigsaw", true, 19829, 19840, 22, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.JIGSAW));
 
-    public static final Block CRACKED_POLISHED_BLACKSTONE_BRICKS = REGISTRY.register(new Block(855, "cracked_polished_blackstone_bricks", true, 19873, 19873, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COMPOSTER = REGISTRY.register(new Block(855, "composter", true, 19841, 19849, 13, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHISELED_POLISHED_BLACKSTONE = REGISTRY.register(new Block(856, "chiseled_polished_blackstone", true, 19874, 19874, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TARGET = REGISTRY.register(new Block(856, "target", true, 19850, 19865, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_BLACKSTONE_BRICK_SLAB = REGISTRY.register(new Block(857, "polished_blackstone_brick_slab", true, 19875, 19880, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BEE_NEST = REGISTRY.register(new Block(857, "bee_nest", true, 19866, 19889, 18, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BEEHIVE));
 
-    public static final Block POLISHED_BLACKSTONE_BRICK_STAIRS = REGISTRY.register(new Block(858, "polished_blackstone_brick_stairs", true, 19881, 19960, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BEEHIVE = REGISTRY.register(new Block(858, "beehive", true, 19890, 19913, 13, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.BEEHIVE));
 
-    public static final Block POLISHED_BLACKSTONE_BRICK_WALL = REGISTRY.register(new Block(859, "polished_blackstone_brick_wall", true, 19961, 20284, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block HONEY_BLOCK = REGISTRY.register(new Block(859, "honey_block", true, 19914, 19914, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GILDED_BLACKSTONE = REGISTRY.register(new Block(860, "gilded_blackstone", true, 20285, 20285, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block HONEYCOMB_BLOCK = REGISTRY.register(new Block(860, "honeycomb_block", true, 19915, 19915, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_BLACKSTONE_STAIRS = REGISTRY.register(new Block(861, "polished_blackstone_stairs", true, 20286, 20365, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block NETHERITE_BLOCK = REGISTRY.register(new Block(861, "netherite_block", true, 19916, 19916, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_BLACKSTONE_SLAB = REGISTRY.register(new Block(862, "polished_blackstone_slab", true, 20366, 20371, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ANCIENT_DEBRIS = REGISTRY.register(new Block(862, "ancient_debris", true, 19917, 19917, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_BLACKSTONE_PRESSURE_PLATE = REGISTRY.register(new Block(863, "polished_blackstone_pressure_plate", false, 20372, 20373, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRYING_OBSIDIAN = REGISTRY.register(new Block(863, "crying_obsidian", true, 19918, 19918, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_BLACKSTONE_BUTTON = REGISTRY.register(new Block(864, "polished_blackstone_button", false, 20374, 20397, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RESPAWN_ANCHOR = REGISTRY.register(new Block(864, "respawn_anchor", true, 19919, 19923, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_BLACKSTONE_WALL = REGISTRY.register(new Block(865, "polished_blackstone_wall", true, 20398, 20721, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_CRIMSON_FUNGUS = REGISTRY.register(new Block(865, "potted_crimson_fungus", true, 19924, 19924, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHISELED_NETHER_BRICKS = REGISTRY.register(new Block(866, "chiseled_nether_bricks", true, 20722, 20722, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_WARPED_FUNGUS = REGISTRY.register(new Block(866, "potted_warped_fungus", true, 19925, 19925, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRACKED_NETHER_BRICKS = REGISTRY.register(new Block(867, "cracked_nether_bricks", true, 20723, 20723, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_CRIMSON_ROOTS = REGISTRY.register(new Block(867, "potted_crimson_roots", true, 19926, 19926, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block QUARTZ_BRICKS = REGISTRY.register(new Block(868, "quartz_bricks", true, 20724, 20724, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POTTED_WARPED_ROOTS = REGISTRY.register(new Block(868, "potted_warped_roots", true, 19927, 19927, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CANDLE = REGISTRY.register(new Block(869, "candle", true, 20725, 20740, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LODESTONE = REGISTRY.register(new Block(869, "lodestone", true, 19928, 19928, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_CANDLE = REGISTRY.register(new Block(870, "white_candle", true, 20741, 20756, 3, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACKSTONE = REGISTRY.register(new Block(870, "blackstone", true, 19929, 19929, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_CANDLE = REGISTRY.register(new Block(871, "orange_candle", true, 20757, 20772, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACKSTONE_STAIRS = REGISTRY.register(new Block(871, "blackstone_stairs", true, 19930, 20009, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MAGENTA_CANDLE = REGISTRY.register(new Block(872, "magenta_candle", true, 20773, 20788, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACKSTONE_WALL = REGISTRY.register(new Block(872, "blackstone_wall", true, 20010, 20333, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_BLUE_CANDLE = REGISTRY.register(new Block(873, "light_blue_candle", true, 20789, 20804, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACKSTONE_SLAB = REGISTRY.register(new Block(873, "blackstone_slab", true, 20334, 20339, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block YELLOW_CANDLE = REGISTRY.register(new Block(874, "yellow_candle", true, 20805, 20820, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_BLACKSTONE = REGISTRY.register(new Block(874, "polished_blackstone", true, 20340, 20340, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIME_CANDLE = REGISTRY.register(new Block(875, "lime_candle", true, 20821, 20836, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_BLACKSTONE_BRICKS = REGISTRY.register(new Block(875, "polished_blackstone_bricks", true, 20341, 20341, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PINK_CANDLE = REGISTRY.register(new Block(876, "pink_candle", true, 20837, 20852, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRACKED_POLISHED_BLACKSTONE_BRICKS = REGISTRY.register(new Block(876, "cracked_polished_blackstone_bricks", true, 20342, 20342, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRAY_CANDLE = REGISTRY.register(new Block(877, "gray_candle", true, 20853, 20868, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHISELED_POLISHED_BLACKSTONE = REGISTRY.register(new Block(877, "chiseled_polished_blackstone", true, 20343, 20343, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_GRAY_CANDLE = REGISTRY.register(new Block(878, "light_gray_candle", true, 20869, 20884, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_BLACKSTONE_BRICK_SLAB = REGISTRY.register(new Block(878, "polished_blackstone_brick_slab", true, 20344, 20349, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CYAN_CANDLE = REGISTRY.register(new Block(879, "cyan_candle", true, 20885, 20900, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_BLACKSTONE_BRICK_STAIRS = REGISTRY.register(new Block(879, "polished_blackstone_brick_stairs", true, 20350, 20429, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPLE_CANDLE = REGISTRY.register(new Block(880, "purple_candle", true, 20901, 20916, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_BLACKSTONE_BRICK_WALL = REGISTRY.register(new Block(880, "polished_blackstone_brick_wall", true, 20430, 20753, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLUE_CANDLE = REGISTRY.register(new Block(881, "blue_candle", true, 20917, 20932, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GILDED_BLACKSTONE = REGISTRY.register(new Block(881, "gilded_blackstone", true, 20754, 20754, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BROWN_CANDLE = REGISTRY.register(new Block(882, "brown_candle", true, 20933, 20948, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_BLACKSTONE_STAIRS = REGISTRY.register(new Block(882, "polished_blackstone_stairs", true, 20755, 20834, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GREEN_CANDLE = REGISTRY.register(new Block(883, "green_candle", true, 20949, 20964, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_BLACKSTONE_SLAB = REGISTRY.register(new Block(883, "polished_blackstone_slab", true, 20835, 20840, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_CANDLE = REGISTRY.register(new Block(884, "red_candle", true, 20965, 20980, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_BLACKSTONE_PRESSURE_PLATE = REGISTRY.register(new Block(884, "polished_blackstone_pressure_plate", false, 20841, 20842, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLACK_CANDLE = REGISTRY.register(new Block(885, "black_candle", true, 20981, 20996, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_BLACKSTONE_BUTTON = REGISTRY.register(new Block(885, "polished_blackstone_button", false, 20843, 20866, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CANDLE_CAKE = REGISTRY.register(new Block(886, "candle_cake", true, 20997, 20998, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_BLACKSTONE_WALL = REGISTRY.register(new Block(886, "polished_blackstone_wall", true, 20867, 21190, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WHITE_CANDLE_CAKE = REGISTRY.register(new Block(887, "white_candle_cake", true, 20999, 21000, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHISELED_NETHER_BRICKS = REGISTRY.register(new Block(887, "chiseled_nether_bricks", true, 21191, 21191, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ORANGE_CANDLE_CAKE = REGISTRY.register(new Block(888, "orange_candle_cake", true, 21001, 21002, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CRACKED_NETHER_BRICKS = REGISTRY.register(new Block(888, "cracked_nether_bricks", true, 21192, 21192, 35, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MAGENTA_CANDLE_CAKE = REGISTRY.register(new Block(889, "magenta_candle_cake", true, 21003, 21004, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block QUARTZ_BRICKS = REGISTRY.register(new Block(889, "quartz_bricks", true, 21193, 21193, 14, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_BLUE_CANDLE_CAKE = REGISTRY.register(new Block(890, "light_blue_candle_cake", true, 21005, 21006, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CANDLE = REGISTRY.register(new Block(890, "candle", true, 21194, 21209, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block YELLOW_CANDLE_CAKE = REGISTRY.register(new Block(891, "yellow_candle_cake", true, 21007, 21008, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_CANDLE = REGISTRY.register(new Block(891, "white_candle", true, 21210, 21225, 3, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIME_CANDLE_CAKE = REGISTRY.register(new Block(892, "lime_candle_cake", true, 21009, 21010, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_CANDLE = REGISTRY.register(new Block(892, "orange_candle", true, 21226, 21241, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PINK_CANDLE_CAKE = REGISTRY.register(new Block(893, "pink_candle_cake", true, 21011, 21012, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MAGENTA_CANDLE = REGISTRY.register(new Block(893, "magenta_candle", true, 21242, 21257, 16, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GRAY_CANDLE_CAKE = REGISTRY.register(new Block(894, "gray_candle_cake", true, 21013, 21014, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_BLUE_CANDLE = REGISTRY.register(new Block(894, "light_blue_candle", true, 21258, 21273, 17, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHT_GRAY_CANDLE_CAKE = REGISTRY.register(new Block(895, "light_gray_candle_cake", true, 21015, 21016, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block YELLOW_CANDLE = REGISTRY.register(new Block(895, "yellow_candle", true, 21274, 21289, 18, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CYAN_CANDLE_CAKE = REGISTRY.register(new Block(896, "cyan_candle_cake", true, 21017, 21018, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIME_CANDLE = REGISTRY.register(new Block(896, "lime_candle", true, 21290, 21305, 19, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PURPLE_CANDLE_CAKE = REGISTRY.register(new Block(897, "purple_candle_cake", true, 21019, 21020, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_CANDLE = REGISTRY.register(new Block(897, "pink_candle", true, 21306, 21321, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLUE_CANDLE_CAKE = REGISTRY.register(new Block(898, "blue_candle_cake", true, 21021, 21022, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRAY_CANDLE = REGISTRY.register(new Block(898, "gray_candle", true, 21322, 21337, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BROWN_CANDLE_CAKE = REGISTRY.register(new Block(899, "brown_candle_cake", true, 21023, 21024, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_GRAY_CANDLE = REGISTRY.register(new Block(899, "light_gray_candle", true, 21338, 21353, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block GREEN_CANDLE_CAKE = REGISTRY.register(new Block(900, "green_candle_cake", true, 21025, 21026, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CYAN_CANDLE = REGISTRY.register(new Block(900, "cyan_candle", true, 21354, 21369, 23, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RED_CANDLE_CAKE = REGISTRY.register(new Block(901, "red_candle_cake", true, 21027, 21028, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PURPLE_CANDLE = REGISTRY.register(new Block(901, "purple_candle", true, 21370, 21385, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BLACK_CANDLE_CAKE = REGISTRY.register(new Block(902, "black_candle_cake", true, 21029, 21030, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLUE_CANDLE = REGISTRY.register(new Block(902, "blue_candle", true, 21386, 21401, 25, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block AMETHYST_BLOCK = REGISTRY.register(new Block(903, "amethyst_block", true, 21031, 21031, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BROWN_CANDLE = REGISTRY.register(new Block(903, "brown_candle", true, 21402, 21417, 26, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BUDDING_AMETHYST = REGISTRY.register(new Block(904, "budding_amethyst", true, 21032, 21032, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GREEN_CANDLE = REGISTRY.register(new Block(904, "green_candle", true, 21418, 21433, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block AMETHYST_CLUSTER = REGISTRY.register(new Block(905, "amethyst_cluster", true, 21033, 21044, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_CANDLE = REGISTRY.register(new Block(905, "red_candle", true, 21434, 21449, 28, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LARGE_AMETHYST_BUD = REGISTRY.register(new Block(906, "large_amethyst_bud", true, 21045, 21056, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACK_CANDLE = REGISTRY.register(new Block(906, "black_candle", true, 21450, 21465, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MEDIUM_AMETHYST_BUD = REGISTRY.register(new Block(907, "medium_amethyst_bud", true, 21057, 21068, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CANDLE_CAKE = REGISTRY.register(new Block(907, "candle_cake", true, 21466, 21467, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMALL_AMETHYST_BUD = REGISTRY.register(new Block(908, "small_amethyst_bud", true, 21069, 21080, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WHITE_CANDLE_CAKE = REGISTRY.register(new Block(908, "white_candle_cake", true, 21468, 21469, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TUFF = REGISTRY.register(new Block(909, "tuff", true, 21081, 21081, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ORANGE_CANDLE_CAKE = REGISTRY.register(new Block(909, "orange_candle_cake", true, 21470, 21471, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TUFF_SLAB = REGISTRY.register(new Block(910, "tuff_slab", true, 21082, 21087, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MAGENTA_CANDLE_CAKE = REGISTRY.register(new Block(910, "magenta_candle_cake", true, 21472, 21473, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TUFF_STAIRS = REGISTRY.register(new Block(911, "tuff_stairs", true, 21088, 21167, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_BLUE_CANDLE_CAKE = REGISTRY.register(new Block(911, "light_blue_candle_cake", true, 21474, 21475, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TUFF_WALL = REGISTRY.register(new Block(912, "tuff_wall", true, 21168, 21491, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block YELLOW_CANDLE_CAKE = REGISTRY.register(new Block(912, "yellow_candle_cake", true, 21476, 21477, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_TUFF = REGISTRY.register(new Block(913, "polished_tuff", true, 21492, 21492, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIME_CANDLE_CAKE = REGISTRY.register(new Block(913, "lime_candle_cake", true, 21478, 21479, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_TUFF_SLAB = REGISTRY.register(new Block(914, "polished_tuff_slab", true, 21493, 21498, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_CANDLE_CAKE = REGISTRY.register(new Block(914, "pink_candle_cake", true, 21480, 21481, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_TUFF_STAIRS = REGISTRY.register(new Block(915, "polished_tuff_stairs", true, 21499, 21578, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GRAY_CANDLE_CAKE = REGISTRY.register(new Block(915, "gray_candle_cake", true, 21482, 21483, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_TUFF_WALL = REGISTRY.register(new Block(916, "polished_tuff_wall", true, 21579, 21902, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHT_GRAY_CANDLE_CAKE = REGISTRY.register(new Block(916, "light_gray_candle_cake", true, 21484, 21485, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHISELED_TUFF = REGISTRY.register(new Block(917, "chiseled_tuff", true, 21903, 21903, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CYAN_CANDLE_CAKE = REGISTRY.register(new Block(917, "cyan_candle_cake", true, 21486, 21487, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TUFF_BRICKS = REGISTRY.register(new Block(918, "tuff_bricks", true, 21904, 21904, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PURPLE_CANDLE_CAKE = REGISTRY.register(new Block(918, "purple_candle_cake", true, 21488, 21489, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TUFF_BRICK_SLAB = REGISTRY.register(new Block(919, "tuff_brick_slab", true, 21905, 21910, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLUE_CANDLE_CAKE = REGISTRY.register(new Block(919, "blue_candle_cake", true, 21490, 21491, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TUFF_BRICK_STAIRS = REGISTRY.register(new Block(920, "tuff_brick_stairs", true, 21911, 21990, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BROWN_CANDLE_CAKE = REGISTRY.register(new Block(920, "brown_candle_cake", true, 21492, 21493, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TUFF_BRICK_WALL = REGISTRY.register(new Block(921, "tuff_brick_wall", true, 21991, 22314, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block GREEN_CANDLE_CAKE = REGISTRY.register(new Block(921, "green_candle_cake", true, 21494, 21495, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHISELED_TUFF_BRICKS = REGISTRY.register(new Block(922, "chiseled_tuff_bricks", true, 22315, 22315, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block RED_CANDLE_CAKE = REGISTRY.register(new Block(922, "red_candle_cake", true, 21496, 21497, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CALCITE = REGISTRY.register(new Block(923, "calcite", true, 22316, 22316, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BLACK_CANDLE_CAKE = REGISTRY.register(new Block(923, "black_candle_cake", true, 21498, 21499, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TINTED_GLASS = REGISTRY.register(new Block(924, "tinted_glass", true, 22317, 22317, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block AMETHYST_BLOCK = REGISTRY.register(new Block(924, "amethyst_block", true, 21500, 21500, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POWDER_SNOW = REGISTRY.register(new Block(925, "powder_snow", false, 22318, 22318, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BUDDING_AMETHYST = REGISTRY.register(new Block(925, "budding_amethyst", true, 21501, 21501, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SCULK_SENSOR = REGISTRY.register(new Block(926, "sculk_sensor", true, 22319, 22414, 23, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SCULK_SENSOR));
+    public static final Block AMETHYST_CLUSTER = REGISTRY.register(new Block(926, "amethyst_cluster", true, 21502, 21513, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CALIBRATED_SCULK_SENSOR = REGISTRY.register(new Block(927, "calibrated_sculk_sensor", true, 22415, 22798, 23, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CALIBRATED_SCULK_SENSOR));
+    public static final Block LARGE_AMETHYST_BUD = REGISTRY.register(new Block(927, "large_amethyst_bud", true, 21514, 21525, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SCULK = REGISTRY.register(new Block(928, "sculk", true, 22799, 22799, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MEDIUM_AMETHYST_BUD = REGISTRY.register(new Block(928, "medium_amethyst_bud", true, 21526, 21537, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SCULK_VEIN = REGISTRY.register(new Block(929, "sculk_vein", false, 22800, 22927, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMALL_AMETHYST_BUD = REGISTRY.register(new Block(929, "small_amethyst_bud", true, 21538, 21549, 24, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SCULK_CATALYST = REGISTRY.register(new Block(930, "sculk_catalyst", true, 22928, 22929, 29, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SCULK_CATALYST));
+    public static final Block TUFF = REGISTRY.register(new Block(930, "tuff", true, 21550, 21550, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SCULK_SHRIEKER = REGISTRY.register(new Block(931, "sculk_shrieker", true, 22930, 22937, 29, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SCULK_SHRIEKER));
+    public static final Block TUFF_SLAB = REGISTRY.register(new Block(931, "tuff_slab", true, 21551, 21556, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COPPER_BLOCK = REGISTRY.register(new Block(932, "copper_block", true, 22938, 22938, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TUFF_STAIRS = REGISTRY.register(new Block(932, "tuff_stairs", true, 21557, 21636, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block EXPOSED_COPPER = REGISTRY.register(new Block(933, "exposed_copper", true, 22939, 22939, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TUFF_WALL = REGISTRY.register(new Block(933, "tuff_wall", true, 21637, 21960, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WEATHERED_COPPER = REGISTRY.register(new Block(934, "weathered_copper", true, 22940, 22940, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_TUFF = REGISTRY.register(new Block(934, "polished_tuff", true, 21961, 21961, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OXIDIZED_COPPER = REGISTRY.register(new Block(935, "oxidized_copper", true, 22941, 22941, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_TUFF_SLAB = REGISTRY.register(new Block(935, "polished_tuff_slab", true, 21962, 21967, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COPPER_ORE = REGISTRY.register(new Block(936, "copper_ore", true, 22942, 22942, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_TUFF_STAIRS = REGISTRY.register(new Block(936, "polished_tuff_stairs", true, 21968, 22047, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_COPPER_ORE = REGISTRY.register(new Block(937, "deepslate_copper_ore", true, 22943, 22943, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_TUFF_WALL = REGISTRY.register(new Block(937, "polished_tuff_wall", true, 22048, 22371, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OXIDIZED_CUT_COPPER = REGISTRY.register(new Block(938, "oxidized_cut_copper", true, 22944, 22944, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHISELED_TUFF = REGISTRY.register(new Block(938, "chiseled_tuff", true, 22372, 22372, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WEATHERED_CUT_COPPER = REGISTRY.register(new Block(939, "weathered_cut_copper", true, 22945, 22945, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TUFF_BRICKS = REGISTRY.register(new Block(939, "tuff_bricks", true, 22373, 22373, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block EXPOSED_CUT_COPPER = REGISTRY.register(new Block(940, "exposed_cut_copper", true, 22946, 22946, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TUFF_BRICK_SLAB = REGISTRY.register(new Block(940, "tuff_brick_slab", true, 22374, 22379, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CUT_COPPER = REGISTRY.register(new Block(941, "cut_copper", true, 22947, 22947, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TUFF_BRICK_STAIRS = REGISTRY.register(new Block(941, "tuff_brick_stairs", true, 22380, 22459, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OXIDIZED_CHISELED_COPPER = REGISTRY.register(new Block(942, "oxidized_chiseled_copper", true, 22948, 22948, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TUFF_BRICK_WALL = REGISTRY.register(new Block(942, "tuff_brick_wall", true, 22460, 22783, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WEATHERED_CHISELED_COPPER = REGISTRY.register(new Block(943, "weathered_chiseled_copper", true, 22949, 22949, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHISELED_TUFF_BRICKS = REGISTRY.register(new Block(943, "chiseled_tuff_bricks", true, 22784, 22784, 43, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block EXPOSED_CHISELED_COPPER = REGISTRY.register(new Block(944, "exposed_chiseled_copper", true, 22950, 22950, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CALCITE = REGISTRY.register(new Block(944, "calcite", true, 22785, 22785, 36, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHISELED_COPPER = REGISTRY.register(new Block(945, "chiseled_copper", true, 22951, 22951, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block TINTED_GLASS = REGISTRY.register(new Block(945, "tinted_glass", true, 22786, 22786, 21, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_OXIDIZED_CHISELED_COPPER = REGISTRY.register(new Block(946, "waxed_oxidized_chiseled_copper", true, 22952, 22952, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POWDER_SNOW = REGISTRY.register(new Block(946, "powder_snow", false, 22787, 22787, 8, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_WEATHERED_CHISELED_COPPER = REGISTRY.register(new Block(947, "waxed_weathered_chiseled_copper", true, 22953, 22953, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SCULK_SENSOR = REGISTRY.register(new Block(947, "sculk_sensor", true, 22788, 22883, 23, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SCULK_SENSOR));
 
-    public static final Block WAXED_EXPOSED_CHISELED_COPPER = REGISTRY.register(new Block(948, "waxed_exposed_chiseled_copper", true, 22954, 22954, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CALIBRATED_SCULK_SENSOR = REGISTRY.register(new Block(948, "calibrated_sculk_sensor", true, 22884, 23267, 23, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CALIBRATED_SCULK_SENSOR));
 
-    public static final Block WAXED_CHISELED_COPPER = REGISTRY.register(new Block(949, "waxed_chiseled_copper", true, 22955, 22955, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SCULK = REGISTRY.register(new Block(949, "sculk", true, 23268, 23268, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(950, "oxidized_cut_copper_stairs", true, 22956, 23035, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SCULK_VEIN = REGISTRY.register(new Block(950, "sculk_vein", false, 23269, 23396, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(951, "weathered_cut_copper_stairs", true, 23036, 23115, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SCULK_CATALYST = REGISTRY.register(new Block(951, "sculk_catalyst", true, 23397, 23398, 29, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SCULK_CATALYST));
 
-    public static final Block EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(952, "exposed_cut_copper_stairs", true, 23116, 23195, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SCULK_SHRIEKER = REGISTRY.register(new Block(952, "sculk_shrieker", true, 23399, 23406, 29, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.SCULK_SHRIEKER));
 
-    public static final Block CUT_COPPER_STAIRS = REGISTRY.register(new Block(953, "cut_copper_stairs", true, 23196, 23275, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COPPER_BLOCK = REGISTRY.register(new Block(953, "copper_block", true, 23407, 23407, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(new Block(954, "oxidized_cut_copper_slab", true, 23276, 23281, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block EXPOSED_COPPER = REGISTRY.register(new Block(954, "exposed_copper", true, 23408, 23408, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(new Block(955, "weathered_cut_copper_slab", true, 23282, 23287, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WEATHERED_COPPER = REGISTRY.register(new Block(955, "weathered_copper", true, 23409, 23409, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(new Block(956, "exposed_cut_copper_slab", true, 23288, 23293, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OXIDIZED_COPPER = REGISTRY.register(new Block(956, "oxidized_copper", true, 23410, 23410, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CUT_COPPER_SLAB = REGISTRY.register(new Block(957, "cut_copper_slab", true, 23294, 23299, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COPPER_ORE = REGISTRY.register(new Block(957, "copper_ore", true, 23411, 23411, 11, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_COPPER_BLOCK = REGISTRY.register(new Block(958, "waxed_copper_block", true, 23300, 23300, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEEPSLATE_COPPER_ORE = REGISTRY.register(new Block(958, "deepslate_copper_ore", true, 23412, 23412, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_WEATHERED_COPPER = REGISTRY.register(new Block(959, "waxed_weathered_copper", true, 23301, 23301, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OXIDIZED_CUT_COPPER = REGISTRY.register(new Block(959, "oxidized_cut_copper", true, 23413, 23413, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_EXPOSED_COPPER = REGISTRY.register(new Block(960, "waxed_exposed_copper", true, 23302, 23302, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WEATHERED_CUT_COPPER = REGISTRY.register(new Block(960, "weathered_cut_copper", true, 23414, 23414, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_OXIDIZED_COPPER = REGISTRY.register(new Block(961, "waxed_oxidized_copper", true, 23303, 23303, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block EXPOSED_CUT_COPPER = REGISTRY.register(new Block(961, "exposed_cut_copper", true, 23415, 23415, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_OXIDIZED_CUT_COPPER = REGISTRY.register(new Block(962, "waxed_oxidized_cut_copper", true, 23304, 23304, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CUT_COPPER = REGISTRY.register(new Block(962, "cut_copper", true, 23416, 23416, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_WEATHERED_CUT_COPPER = REGISTRY.register(new Block(963, "waxed_weathered_cut_copper", true, 23305, 23305, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OXIDIZED_CHISELED_COPPER = REGISTRY.register(new Block(963, "oxidized_chiseled_copper", true, 23417, 23417, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_EXPOSED_CUT_COPPER = REGISTRY.register(new Block(964, "waxed_exposed_cut_copper", true, 23306, 23306, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WEATHERED_CHISELED_COPPER = REGISTRY.register(new Block(964, "weathered_chiseled_copper", true, 23418, 23418, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_CUT_COPPER = REGISTRY.register(new Block(965, "waxed_cut_copper", true, 23307, 23307, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block EXPOSED_CHISELED_COPPER = REGISTRY.register(new Block(965, "exposed_chiseled_copper", true, 23419, 23419, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(966, "waxed_oxidized_cut_copper_stairs", true, 23308, 23387, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CHISELED_COPPER = REGISTRY.register(new Block(966, "chiseled_copper", true, 23420, 23420, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(967, "waxed_weathered_cut_copper_stairs", true, 23388, 23467, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_OXIDIZED_CHISELED_COPPER = REGISTRY.register(new Block(967, "waxed_oxidized_chiseled_copper", true, 23421, 23421, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(968, "waxed_exposed_cut_copper_stairs", true, 23468, 23547, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_WEATHERED_CHISELED_COPPER = REGISTRY.register(new Block(968, "waxed_weathered_chiseled_copper", true, 23422, 23422, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(969, "waxed_cut_copper_stairs", true, 23548, 23627, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_EXPOSED_CHISELED_COPPER = REGISTRY.register(new Block(969, "waxed_exposed_chiseled_copper", true, 23423, 23423, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(new Block(970, "waxed_oxidized_cut_copper_slab", true, 23628, 23633, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_CHISELED_COPPER = REGISTRY.register(new Block(970, "waxed_chiseled_copper", true, 23424, 23424, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(new Block(971, "waxed_weathered_cut_copper_slab", true, 23634, 23639, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(971, "oxidized_cut_copper_stairs", true, 23425, 23504, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(new Block(972, "waxed_exposed_cut_copper_slab", true, 23640, 23645, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(972, "weathered_cut_copper_stairs", true, 23505, 23584, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_CUT_COPPER_SLAB = REGISTRY.register(new Block(973, "waxed_cut_copper_slab", true, 23646, 23651, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(973, "exposed_cut_copper_stairs", true, 23585, 23664, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COPPER_DOOR = REGISTRY.register(new Block(974, "copper_door", true, 23652, 23715, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CUT_COPPER_STAIRS = REGISTRY.register(new Block(974, "cut_copper_stairs", true, 23665, 23744, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block EXPOSED_COPPER_DOOR = REGISTRY.register(new Block(975, "exposed_copper_door", true, 23716, 23779, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(new Block(975, "oxidized_cut_copper_slab", true, 23745, 23750, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OXIDIZED_COPPER_DOOR = REGISTRY.register(new Block(976, "oxidized_copper_door", true, 23780, 23843, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(new Block(976, "weathered_cut_copper_slab", true, 23751, 23756, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WEATHERED_COPPER_DOOR = REGISTRY.register(new Block(977, "weathered_copper_door", true, 23844, 23907, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(new Block(977, "exposed_cut_copper_slab", true, 23757, 23762, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_COPPER_DOOR = REGISTRY.register(new Block(978, "waxed_copper_door", true, 23908, 23971, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CUT_COPPER_SLAB = REGISTRY.register(new Block(978, "cut_copper_slab", true, 23763, 23768, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_EXPOSED_COPPER_DOOR = REGISTRY.register(new Block(979, "waxed_exposed_copper_door", true, 23972, 24035, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_COPPER_BLOCK = REGISTRY.register(new Block(979, "waxed_copper_block", true, 23769, 23769, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_OXIDIZED_COPPER_DOOR = REGISTRY.register(new Block(980, "waxed_oxidized_copper_door", true, 24036, 24099, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_WEATHERED_COPPER = REGISTRY.register(new Block(980, "waxed_weathered_copper", true, 23770, 23770, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_WEATHERED_COPPER_DOOR = REGISTRY.register(new Block(981, "waxed_weathered_copper_door", true, 24100, 24163, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_EXPOSED_COPPER = REGISTRY.register(new Block(981, "waxed_exposed_copper", true, 23771, 23771, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COPPER_TRAPDOOR = REGISTRY.register(new Block(982, "copper_trapdoor", true, 24164, 24227, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_OXIDIZED_COPPER = REGISTRY.register(new Block(982, "waxed_oxidized_copper", true, 23772, 23772, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(new Block(983, "exposed_copper_trapdoor", true, 24228, 24291, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_OXIDIZED_CUT_COPPER = REGISTRY.register(new Block(983, "waxed_oxidized_cut_copper", true, 23773, 23773, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(new Block(984, "oxidized_copper_trapdoor", true, 24292, 24355, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_WEATHERED_CUT_COPPER = REGISTRY.register(new Block(984, "waxed_weathered_cut_copper", true, 23774, 23774, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(new Block(985, "weathered_copper_trapdoor", true, 24356, 24419, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_EXPOSED_CUT_COPPER = REGISTRY.register(new Block(985, "waxed_exposed_cut_copper", true, 23775, 23775, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_COPPER_TRAPDOOR = REGISTRY.register(new Block(986, "waxed_copper_trapdoor", true, 24420, 24483, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_CUT_COPPER = REGISTRY.register(new Block(986, "waxed_cut_copper", true, 23776, 23776, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(new Block(987, "waxed_exposed_copper_trapdoor", true, 24484, 24547, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(987, "waxed_oxidized_cut_copper_stairs", true, 23777, 23856, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(new Block(988, "waxed_oxidized_copper_trapdoor", true, 24548, 24611, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(988, "waxed_weathered_cut_copper_stairs", true, 23857, 23936, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(new Block(989, "waxed_weathered_copper_trapdoor", true, 24612, 24675, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(989, "waxed_exposed_cut_copper_stairs", true, 23937, 24016, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COPPER_GRATE = REGISTRY.register(new Block(990, "copper_grate", true, 24676, 24677, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(990, "waxed_cut_copper_stairs", true, 24017, 24096, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block EXPOSED_COPPER_GRATE = REGISTRY.register(new Block(991, "exposed_copper_grate", true, 24678, 24679, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(new Block(991, "waxed_oxidized_cut_copper_slab", true, 24097, 24102, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WEATHERED_COPPER_GRATE = REGISTRY.register(new Block(992, "weathered_copper_grate", true, 24680, 24681, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(new Block(992, "waxed_weathered_cut_copper_slab", true, 24103, 24108, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OXIDIZED_COPPER_GRATE = REGISTRY.register(new Block(993, "oxidized_copper_grate", true, 24682, 24683, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(new Block(993, "waxed_exposed_cut_copper_slab", true, 24109, 24114, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_COPPER_GRATE = REGISTRY.register(new Block(994, "waxed_copper_grate", true, 24684, 24685, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_CUT_COPPER_SLAB = REGISTRY.register(new Block(994, "waxed_cut_copper_slab", true, 24115, 24120, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_EXPOSED_COPPER_GRATE = REGISTRY.register(new Block(995, "waxed_exposed_copper_grate", true, 24686, 24687, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COPPER_DOOR = REGISTRY.register(new Block(995, "copper_door", true, 24121, 24184, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_WEATHERED_COPPER_GRATE = REGISTRY.register(new Block(996, "waxed_weathered_copper_grate", true, 24688, 24689, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block EXPOSED_COPPER_DOOR = REGISTRY.register(new Block(996, "exposed_copper_door", true, 24185, 24248, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_OXIDIZED_COPPER_GRATE = REGISTRY.register(new Block(997, "waxed_oxidized_copper_grate", true, 24690, 24691, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OXIDIZED_COPPER_DOOR = REGISTRY.register(new Block(997, "oxidized_copper_door", true, 24249, 24312, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COPPER_BULB = REGISTRY.register(new Block(998, "copper_bulb", true, 24692, 24695, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WEATHERED_COPPER_DOOR = REGISTRY.register(new Block(998, "weathered_copper_door", true, 24313, 24376, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block EXPOSED_COPPER_BULB = REGISTRY.register(new Block(999, "exposed_copper_bulb", true, 24696, 24699, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_COPPER_DOOR = REGISTRY.register(new Block(999, "waxed_copper_door", true, 24377, 24440, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WEATHERED_COPPER_BULB = REGISTRY.register(new Block(1000, "weathered_copper_bulb", true, 24700, 24703, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_EXPOSED_COPPER_DOOR = REGISTRY.register(new Block(1000, "waxed_exposed_copper_door", true, 24441, 24504, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OXIDIZED_COPPER_BULB = REGISTRY.register(new Block(1001, "oxidized_copper_bulb", true, 24704, 24707, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_OXIDIZED_COPPER_DOOR = REGISTRY.register(new Block(1001, "waxed_oxidized_copper_door", true, 24505, 24568, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_COPPER_BULB = REGISTRY.register(new Block(1002, "waxed_copper_bulb", true, 24708, 24711, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_WEATHERED_COPPER_DOOR = REGISTRY.register(new Block(1002, "waxed_weathered_copper_door", true, 24569, 24632, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_EXPOSED_COPPER_BULB = REGISTRY.register(new Block(1003, "waxed_exposed_copper_bulb", true, 24712, 24715, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COPPER_TRAPDOOR = REGISTRY.register(new Block(1003, "copper_trapdoor", true, 24633, 24696, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_WEATHERED_COPPER_BULB = REGISTRY.register(new Block(1004, "waxed_weathered_copper_bulb", true, 24716, 24719, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1004, "exposed_copper_trapdoor", true, 24697, 24760, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block WAXED_OXIDIZED_COPPER_BULB = REGISTRY.register(new Block(1005, "waxed_oxidized_copper_bulb", true, 24720, 24723, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1005, "oxidized_copper_trapdoor", true, 24761, 24824, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block LIGHTNING_ROD = REGISTRY.register(new Block(1006, "lightning_rod", true, 24724, 24747, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1006, "weathered_copper_trapdoor", true, 24825, 24888, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POINTED_DRIPSTONE = REGISTRY.register(new Block(1007, "pointed_dripstone", true, 24748, 24767, 48, BlockOffsetType.XZ, 0.125f, 0.2f, null));
+    public static final Block WAXED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1007, "waxed_copper_trapdoor", true, 24889, 24952, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DRIPSTONE_BLOCK = REGISTRY.register(new Block(1008, "dripstone_block", true, 24768, 24768, 48, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1008, "waxed_exposed_copper_trapdoor", true, 24953, 25016, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CAVE_VINES = REGISTRY.register(new Block(1009, "cave_vines", false, 24769, 24820, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1009, "waxed_oxidized_copper_trapdoor", true, 25017, 25080, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CAVE_VINES_PLANT = REGISTRY.register(new Block(1010, "cave_vines_plant", false, 24821, 24822, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1010, "waxed_weathered_copper_trapdoor", true, 25081, 25144, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SPORE_BLOSSOM = REGISTRY.register(new Block(1011, "spore_blossom", false, 24823, 24823, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COPPER_GRATE = REGISTRY.register(new Block(1011, "copper_grate", true, 25145, 25146, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block AZALEA = REGISTRY.register(new Block(1012, "azalea", true, 24824, 24824, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block EXPOSED_COPPER_GRATE = REGISTRY.register(new Block(1012, "exposed_copper_grate", true, 25147, 25148, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block FLOWERING_AZALEA = REGISTRY.register(new Block(1013, "flowering_azalea", true, 24825, 24825, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WEATHERED_COPPER_GRATE = REGISTRY.register(new Block(1013, "weathered_copper_grate", true, 25149, 25150, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MOSS_CARPET = REGISTRY.register(new Block(1014, "moss_carpet", true, 24826, 24826, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OXIDIZED_COPPER_GRATE = REGISTRY.register(new Block(1014, "oxidized_copper_grate", true, 25151, 25152, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PINK_PETALS = REGISTRY.register(new Block(1015, "pink_petals", false, 24827, 24842, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_COPPER_GRATE = REGISTRY.register(new Block(1015, "waxed_copper_grate", true, 25153, 25154, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MOSS_BLOCK = REGISTRY.register(new Block(1016, "moss_block", true, 24843, 24843, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_EXPOSED_COPPER_GRATE = REGISTRY.register(new Block(1016, "waxed_exposed_copper_grate", true, 25155, 25156, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIG_DRIPLEAF = REGISTRY.register(new Block(1017, "big_dripleaf", true, 24844, 24875, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_WEATHERED_COPPER_GRATE = REGISTRY.register(new Block(1017, "waxed_weathered_copper_grate", true, 25157, 25158, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block BIG_DRIPLEAF_STEM = REGISTRY.register(new Block(1018, "big_dripleaf_stem", false, 24876, 24883, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_OXIDIZED_COPPER_GRATE = REGISTRY.register(new Block(1018, "waxed_oxidized_copper_grate", true, 25159, 25160, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMALL_DRIPLEAF = REGISTRY.register(new Block(1019, "small_dripleaf", false, 24884, 24899, 7, BlockOffsetType.XYZ, 0.25f, 0.1f, null));
+    public static final Block COPPER_BULB = REGISTRY.register(new Block(1019, "copper_bulb", true, 25161, 25164, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block HANGING_ROOTS = REGISTRY.register(new Block(1020, "hanging_roots", false, 24900, 24901, 10, BlockOffsetType.XZ, 0.25f, 0.2f, null));
+    public static final Block EXPOSED_COPPER_BULB = REGISTRY.register(new Block(1020, "exposed_copper_bulb", true, 25165, 25168, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block ROOTED_DIRT = REGISTRY.register(new Block(1021, "rooted_dirt", true, 24902, 24902, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WEATHERED_COPPER_BULB = REGISTRY.register(new Block(1021, "weathered_copper_bulb", true, 25169, 25172, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block MUD = REGISTRY.register(new Block(1022, "mud", true, 24903, 24903, 45, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block OXIDIZED_COPPER_BULB = REGISTRY.register(new Block(1022, "oxidized_copper_bulb", true, 25173, 25176, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE = REGISTRY.register(new Block(1023, "deepslate", true, 24904, 24906, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_COPPER_BULB = REGISTRY.register(new Block(1023, "waxed_copper_bulb", true, 25177, 25180, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COBBLED_DEEPSLATE = REGISTRY.register(new Block(1024, "cobbled_deepslate", true, 24907, 24907, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_EXPOSED_COPPER_BULB = REGISTRY.register(new Block(1024, "waxed_exposed_copper_bulb", true, 25181, 25184, 44, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COBBLED_DEEPSLATE_STAIRS = REGISTRY.register(new Block(1025, "cobbled_deepslate_stairs", true, 24908, 24987, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_WEATHERED_COPPER_BULB = REGISTRY.register(new Block(1025, "waxed_weathered_copper_bulb", true, 25185, 25188, 56, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COBBLED_DEEPSLATE_SLAB = REGISTRY.register(new Block(1026, "cobbled_deepslate_slab", true, 24988, 24993, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block WAXED_OXIDIZED_COPPER_BULB = REGISTRY.register(new Block(1026, "waxed_oxidized_copper_bulb", true, 25189, 25192, 55, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block COBBLED_DEEPSLATE_WALL = REGISTRY.register(new Block(1027, "cobbled_deepslate_wall", true, 24994, 25317, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block LIGHTNING_ROD = REGISTRY.register(new Block(1027, "lightning_rod", true, 25193, 25216, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_DEEPSLATE = REGISTRY.register(new Block(1028, "polished_deepslate", true, 25318, 25318, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POINTED_DRIPSTONE = REGISTRY.register(new Block(1028, "pointed_dripstone", true, 25217, 25236, 48, BlockOffsetType.XZ, 0.125f, 0.2f, null));
 
-    public static final Block POLISHED_DEEPSLATE_STAIRS = REGISTRY.register(new Block(1029, "polished_deepslate_stairs", true, 25319, 25398, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DRIPSTONE_BLOCK = REGISTRY.register(new Block(1029, "dripstone_block", true, 25237, 25237, 48, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_DEEPSLATE_SLAB = REGISTRY.register(new Block(1030, "polished_deepslate_slab", true, 25399, 25404, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CAVE_VINES = REGISTRY.register(new Block(1030, "cave_vines", false, 25238, 25289, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POLISHED_DEEPSLATE_WALL = REGISTRY.register(new Block(1031, "polished_deepslate_wall", true, 25405, 25728, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block CAVE_VINES_PLANT = REGISTRY.register(new Block(1031, "cave_vines_plant", false, 25290, 25291, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_TILES = REGISTRY.register(new Block(1032, "deepslate_tiles", true, 25729, 25729, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SPORE_BLOSSOM = REGISTRY.register(new Block(1032, "spore_blossom", false, 25292, 25292, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_TILE_STAIRS = REGISTRY.register(new Block(1033, "deepslate_tile_stairs", true, 25730, 25809, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block AZALEA = REGISTRY.register(new Block(1033, "azalea", true, 25293, 25293, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_TILE_SLAB = REGISTRY.register(new Block(1034, "deepslate_tile_slab", true, 25810, 25815, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block FLOWERING_AZALEA = REGISTRY.register(new Block(1034, "flowering_azalea", true, 25294, 25294, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_TILE_WALL = REGISTRY.register(new Block(1035, "deepslate_tile_wall", true, 25816, 26139, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MOSS_CARPET = REGISTRY.register(new Block(1035, "moss_carpet", true, 25295, 25295, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_BRICKS = REGISTRY.register(new Block(1036, "deepslate_bricks", true, 26140, 26140, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block PINK_PETALS = REGISTRY.register(new Block(1036, "pink_petals", false, 25296, 25311, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_BRICK_STAIRS = REGISTRY.register(new Block(1037, "deepslate_brick_stairs", true, 26141, 26220, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MOSS_BLOCK = REGISTRY.register(new Block(1037, "moss_block", true, 25312, 25312, 27, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_BRICK_SLAB = REGISTRY.register(new Block(1038, "deepslate_brick_slab", true, 26221, 26226, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIG_DRIPLEAF = REGISTRY.register(new Block(1038, "big_dripleaf", true, 25313, 25344, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DEEPSLATE_BRICK_WALL = REGISTRY.register(new Block(1039, "deepslate_brick_wall", true, 26227, 26550, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block BIG_DRIPLEAF_STEM = REGISTRY.register(new Block(1039, "big_dripleaf_stem", false, 25345, 25352, 7, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CHISELED_DEEPSLATE = REGISTRY.register(new Block(1040, "chiseled_deepslate", true, 26551, 26551, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block SMALL_DRIPLEAF = REGISTRY.register(new Block(1040, "small_dripleaf", false, 25353, 25368, 7, BlockOffsetType.XYZ, 0.25f, 0.1f, null));
 
-    public static final Block CRACKED_DEEPSLATE_BRICKS = REGISTRY.register(new Block(1041, "cracked_deepslate_bricks", true, 26552, 26552, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block HANGING_ROOTS = REGISTRY.register(new Block(1041, "hanging_roots", false, 25369, 25370, 10, BlockOffsetType.XZ, 0.25f, 0.2f, null));
 
-    public static final Block CRACKED_DEEPSLATE_TILES = REGISTRY.register(new Block(1042, "cracked_deepslate_tiles", true, 26553, 26553, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block ROOTED_DIRT = REGISTRY.register(new Block(1042, "rooted_dirt", true, 25371, 25371, 10, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block INFESTED_DEEPSLATE = REGISTRY.register(new Block(1043, "infested_deepslate", true, 26554, 26556, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block MUD = REGISTRY.register(new Block(1043, "mud", true, 25372, 25372, 45, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block SMOOTH_BASALT = REGISTRY.register(new Block(1044, "smooth_basalt", true, 26557, 26557, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEEPSLATE = REGISTRY.register(new Block(1044, "deepslate", true, 25373, 25375, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RAW_IRON_BLOCK = REGISTRY.register(new Block(1045, "raw_iron_block", true, 26558, 26558, 60, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COBBLED_DEEPSLATE = REGISTRY.register(new Block(1045, "cobbled_deepslate", true, 25376, 25376, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RAW_COPPER_BLOCK = REGISTRY.register(new Block(1046, "raw_copper_block", true, 26559, 26559, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COBBLED_DEEPSLATE_STAIRS = REGISTRY.register(new Block(1046, "cobbled_deepslate_stairs", true, 25377, 25456, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block RAW_GOLD_BLOCK = REGISTRY.register(new Block(1047, "raw_gold_block", true, 26560, 26560, 30, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COBBLED_DEEPSLATE_SLAB = REGISTRY.register(new Block(1047, "cobbled_deepslate_slab", true, 25457, 25462, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_AZALEA_BUSH = REGISTRY.register(new Block(1048, "potted_azalea_bush", true, 26561, 26561, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block COBBLED_DEEPSLATE_WALL = REGISTRY.register(new Block(1048, "cobbled_deepslate_wall", true, 25463, 25786, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block POTTED_FLOWERING_AZALEA_BUSH = REGISTRY.register(new Block(1049, "potted_flowering_azalea_bush", true, 26562, 26562, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_DEEPSLATE = REGISTRY.register(new Block(1049, "polished_deepslate", true, 25787, 25787, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block OCHRE_FROGLIGHT = REGISTRY.register(new Block(1050, "ochre_froglight", true, 26563, 26565, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_DEEPSLATE_STAIRS = REGISTRY.register(new Block(1050, "polished_deepslate_stairs", true, 25788, 25867, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block VERDANT_FROGLIGHT = REGISTRY.register(new Block(1051, "verdant_froglight", true, 26566, 26568, 61, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_DEEPSLATE_SLAB = REGISTRY.register(new Block(1051, "polished_deepslate_slab", true, 25868, 25873, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block PEARLESCENT_FROGLIGHT = REGISTRY.register(new Block(1052, "pearlescent_froglight", true, 26569, 26571, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block POLISHED_DEEPSLATE_WALL = REGISTRY.register(new Block(1052, "polished_deepslate_wall", true, 25874, 26197, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block FROGSPAWN = REGISTRY.register(new Block(1053, "frogspawn", false, 26572, 26572, 12, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEEPSLATE_TILES = REGISTRY.register(new Block(1053, "deepslate_tiles", true, 26198, 26198, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block REINFORCED_DEEPSLATE = REGISTRY.register(new Block(1054, "reinforced_deepslate", true, 26573, 26573, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEEPSLATE_TILE_STAIRS = REGISTRY.register(new Block(1054, "deepslate_tile_stairs", true, 26199, 26278, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block DECORATED_POT = REGISTRY.register(new Block(1055, "decorated_pot", true, 26574, 26589, 50, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.DECORATED_POT));
+    public static final Block DEEPSLATE_TILE_SLAB = REGISTRY.register(new Block(1055, "deepslate_tile_slab", true, 26279, 26284, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block CRAFTER = REGISTRY.register(new Block(1056, "crafter", true, 26590, 26637, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CRAFTER));
+    public static final Block DEEPSLATE_TILE_WALL = REGISTRY.register(new Block(1056, "deepslate_tile_wall", true, 26285, 26608, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block TRIAL_SPAWNER = REGISTRY.register(new Block(1057, "trial_spawner", true, 26638, 26649, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.TRIAL_SPAWNER));
+    public static final Block DEEPSLATE_BRICKS = REGISTRY.register(new Block(1057, "deepslate_bricks", true, 26609, 26609, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block VAULT = REGISTRY.register(new Block(1058, "vault", true, 26650, 26681, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.VAULT));
+    public static final Block DEEPSLATE_BRICK_STAIRS = REGISTRY.register(new Block(1058, "deepslate_brick_stairs", true, 26610, 26689, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 
-    public static final Block HEAVY_CORE = REGISTRY.register(new Block(1059, "heavy_core", true, 26682, 26683, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+    public static final Block DEEPSLATE_BRICK_SLAB = REGISTRY.register(new Block(1059, "deepslate_brick_slab", true, 26690, 26695, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block DEEPSLATE_BRICK_WALL = REGISTRY.register(new Block(1060, "deepslate_brick_wall", true, 26696, 27019, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block CHISELED_DEEPSLATE = REGISTRY.register(new Block(1061, "chiseled_deepslate", true, 27020, 27020, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block CRACKED_DEEPSLATE_BRICKS = REGISTRY.register(new Block(1062, "cracked_deepslate_bricks", true, 27021, 27021, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block CRACKED_DEEPSLATE_TILES = REGISTRY.register(new Block(1063, "cracked_deepslate_tiles", true, 27022, 27022, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block INFESTED_DEEPSLATE = REGISTRY.register(new Block(1064, "infested_deepslate", true, 27023, 27025, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block SMOOTH_BASALT = REGISTRY.register(new Block(1065, "smooth_basalt", true, 27026, 27026, 29, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block RAW_IRON_BLOCK = REGISTRY.register(new Block(1066, "raw_iron_block", true, 27027, 27027, 60, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block RAW_COPPER_BLOCK = REGISTRY.register(new Block(1067, "raw_copper_block", true, 27028, 27028, 15, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block RAW_GOLD_BLOCK = REGISTRY.register(new Block(1068, "raw_gold_block", true, 27029, 27029, 30, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block POTTED_AZALEA_BUSH = REGISTRY.register(new Block(1069, "potted_azalea_bush", true, 27030, 27030, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block POTTED_FLOWERING_AZALEA_BUSH = REGISTRY.register(new Block(1070, "potted_flowering_azalea_bush", true, 27031, 27031, 0, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block OCHRE_FROGLIGHT = REGISTRY.register(new Block(1071, "ochre_froglight", true, 27032, 27034, 2, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block VERDANT_FROGLIGHT = REGISTRY.register(new Block(1072, "verdant_froglight", true, 27035, 27037, 61, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block PEARLESCENT_FROGLIGHT = REGISTRY.register(new Block(1073, "pearlescent_froglight", true, 27038, 27040, 20, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block FROGSPAWN = REGISTRY.register(new Block(1074, "frogspawn", false, 27041, 27041, 12, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block REINFORCED_DEEPSLATE = REGISTRY.register(new Block(1075, "reinforced_deepslate", true, 27042, 27042, 59, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block DECORATED_POT = REGISTRY.register(new Block(1076, "decorated_pot", true, 27043, 27058, 50, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.DECORATED_POT));
+
+    public static final Block CRAFTER = REGISTRY.register(new Block(1077, "crafter", true, 27059, 27106, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.CRAFTER));
+
+    public static final Block TRIAL_SPAWNER = REGISTRY.register(new Block(1078, "trial_spawner", true, 27107, 27118, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.TRIAL_SPAWNER));
+
+    public static final Block VAULT = REGISTRY.register(new Block(1079, "vault", true, 27119, 27150, 11, BlockOffsetType.NONE, 0.25f, 0.2f, BlockEntityType.VAULT));
+
+    public static final Block HEAVY_CORE = REGISTRY.register(new Block(1080, "heavy_core", true, 27151, 27152, 6, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block PALE_MOSS_BLOCK = REGISTRY.register(new Block(1081, "pale_moss_block", true, 27153, 27153, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block PALE_MOSS_CARPET = REGISTRY.register(new Block(1082, "pale_moss_carpet", true, 27154, 27315, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
+
+    public static final Block PALE_HANGING_MOSS = REGISTRY.register(new Block(1083, "pale_hanging_moss", false, 27316, 27317, 22, BlockOffsetType.NONE, 0.25f, 0.2f, null));
 }

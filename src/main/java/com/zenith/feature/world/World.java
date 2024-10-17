@@ -91,7 +91,7 @@ public class World {
     public void getEntityCollisionBoxes(final LocalizedCollisionBox cb, final List<LocalizedCollisionBox> results) {
         for (var entity : CACHE.getEntityCache().getEntities().values()) {
             EntityType entityType = entity.getEntityType();
-            if (!(entityType == EntityType.BOAT || entityType == EntityType.SHULKER))
+            if (!(isBoat(entityType) || entityType == EntityType.SHULKER))
                 continue;
             if (entity.getPassengerIds().contains(CACHE.getPlayerCache().getThePlayer().getEntityId()))
                 continue;
@@ -111,6 +111,10 @@ public class World {
                 results.add(new LocalizedCollisionBox(minX, maxX, minY, maxY, minZ, maxZ, x, y, z));
             }
         }
+    }
+
+    public boolean isBoat(EntityType entityType) {
+        return entityType.name().contains("_BOAT") || entityType.name().contains("_RAFT");
     }
 
     public boolean isWater(Block block) {

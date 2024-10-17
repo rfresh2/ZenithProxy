@@ -15,7 +15,6 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundExplodePacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
@@ -208,8 +207,8 @@ public class PlayerSimulation extends Module {
         }
 
         if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
-            sendClientPacketsAsync(new ServerboundMovePlayerRotPacket(false, this.yaw, this.pitch),
-                                   new ServerboundPlayerInputPacket(0.0f, 0.0f, false, false));
+            sendClientPacketsAsync(new ServerboundMovePlayerRotPacket(false, horizontalCollision, this.yaw, this.pitch),
+                                   new ServerboundPlayerInputPacket(false, false, false, false, false, false, false));
             // todo: handle vehicle travel movement
         } else {
             // send movement packets based on position
@@ -236,13 +235,13 @@ public class PlayerSimulation extends Module {
             boolean shouldUpdatePos = MathHelper.squareLen(xDelta, yDelta, zDelta) > MathHelper.square(2.0E-4) || this.ticksSinceLastPositionPacketSent >= 20;
             boolean shouldUpdateRot = pitchDelta != 0.0 || yawDelta != 0.0;
             if (shouldUpdatePos && shouldUpdateRot) {
-                sendClientPacketAsync(new ServerboundMovePlayerPosRotPacket(this.onGround, this.x, this.y, this.z, this.yaw, this.pitch));
+                sendClientPacketAsync(new ServerboundMovePlayerPosRotPacket(this.onGround, horizontalCollision, this.x, this.y, this.z, this.yaw, this.pitch));
             } else if (shouldUpdatePos) {
-                sendClientPacketAsync(new ServerboundMovePlayerPosPacket(this.onGround, this.x, this.y, this.z));
+                sendClientPacketAsync(new ServerboundMovePlayerPosPacket(this.onGround, horizontalCollision, this.x, this.y, this.z));
             } else if (shouldUpdateRot) {
-                sendClientPacketAsync(new ServerboundMovePlayerRotPacket(this.onGround, this.yaw, this.pitch));
+                sendClientPacketAsync(new ServerboundMovePlayerRotPacket(this.onGround, horizontalCollision, this.yaw, this.pitch));
             } else if (this.lastOnGround != this.onGround) {
-                sendClientPacketAsync(new ServerboundMovePlayerStatusOnlyPacket(this.onGround));
+                sendClientPacketAsync(new ServerboundMovePlayerStatusOnlyPacket(this.onGround, horizontalCollision));
             }
 
             if (shouldUpdatePos) {
@@ -277,7 +276,7 @@ public class PlayerSimulation extends Module {
         syncFromCache(false);
         CLIENT_LOG.debug("Server teleport {} to: {}, {}, {}", teleportId, this.x, this.y, this.z);
         sendClientPacket(new ServerboundAcceptTeleportationPacket(teleportId));
-        sendClientPacket(new ServerboundMovePlayerPosRotPacket(false, this.x, this.y, this.z, this.yaw, this.pitch));
+        sendClientPacket(new ServerboundMovePlayerPosRotPacket(false, false, this.x, this.y, this.z, this.yaw, this.pitch));
     }
 
     public synchronized void handleRespawn() {
@@ -697,7 +696,7 @@ public class PlayerSimulation extends Module {
     }
 
     public void handleExplosion(final ClientboundExplodePacket packet) {
-        this.velocity.add(packet.getPushX(), packet.getPushY(), packet.getPushZ());
+        this.velocity.add(packet.getPlayerKnockbackX(), packet.getPlayerKnockbackY(), packet.getPlayerKnockbackZ());
     }
 
     private void syncFromCache(boolean full) {
@@ -769,7 +768,7 @@ public class PlayerSimulation extends Module {
         if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
             var vehicle = CACHE.getEntityCache().get(CACHE.getPlayerCache().getThePlayer().getVehicleId());
             // todo: check if boat is underwater
-            if (vehicle != null && vehicle.getEntityType() == EntityType.BOAT) {
+            if (vehicle != null && World.isBoat(vehicle.getEntityType())) {
                 isTouchingWater = false;
                 return;
             }
@@ -845,7 +844,7 @@ public class PlayerSimulation extends Module {
         int queuedTeleport = CACHE.getPlayerCache().getTeleportQueue().dequeueInt();
         warn("Detected teleport desync, resyncing. queuedTeleport: {}, queueSize: {}", queuedTeleport, CACHE.getPlayerCache().getTeleportQueue().size());
         sendClientPacket(new ServerboundAcceptTeleportationPacket(queuedTeleport));
-        sendClientPacket(new ServerboundMovePlayerPosRotPacket(onGround, x, y, z, yaw, pitch));
+        sendClientPacket(new ServerboundMovePlayerPosRotPacket(onGround, false, x, y, z, yaw, pitch));
         return true;
     }
 

@@ -83,7 +83,7 @@ public class SkinCommand extends Command {
                 var existingEntry = existingEntryOptional.get();
                 session.sendAsync(new ClientboundPlayerInfoRemovePacket(asList(existingProfile.getId())));
                 session.sendAsync(new ClientboundPlayerInfoUpdatePacket(EnumSet.allOf(PlayerListEntryAction.class), new PlayerListEntry[]{
-                    new PlayerListEntry(newProfile.getId(), newProfile, existingEntry.isListed(), existingEntry.getLatency(), existingEntry.getGameMode(), existingEntry.getDisplayName(), existingEntry.getSessionId(), existingEntry.getExpiresAt(), existingEntry.getPublicKey(), existingEntry.getKeySignature())
+                    new PlayerListEntry(newProfile.getId(), newProfile, existingEntry.isListed(), existingEntry.getLatency(), existingEntry.getGameMode(), existingEntry.getDisplayName(), existingEntry.getListOrder(), existingEntry.getSessionId(), existingEntry.getExpiresAt(), existingEntry.getPublicKey(), existingEntry.getKeySignature())
                 }));
                 session.sendAsync(new ClientboundRespawnPacket(
                     new PlayerSpawnInfo(
@@ -95,7 +95,8 @@ public class SkinCommand extends Command {
                         CACHE.getChunkCache().isDebug(),
                         CACHE.getChunkCache().isFlat(),
                         CACHE.getPlayerCache().getLastDeathPos(),
-                        CACHE.getPlayerCache().getPortalCooldown()
+                        CACHE.getPlayerCache().getPortalCooldown(),
+                        CACHE.getChunkCache().getSeaLevel()
                     ),
                     true,
                     true
