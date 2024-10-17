@@ -427,9 +427,9 @@ public class PlayerSimulation extends Module {
 
         // todo: apply block falling effects like bouncing off slime blocks
 
-        this.x = ((movedPlayerCollisionBox.getMinX() + movedPlayerCollisionBox.getMaxX()) / 2.0);
-        this.y = movedPlayerCollisionBox.getMinY();
-        this.z = ((movedPlayerCollisionBox.getMinZ() + movedPlayerCollisionBox.getMaxZ()) / 2.0);
+        this.x = ((movedPlayerCollisionBox.minX() + movedPlayerCollisionBox.maxX()) / 2.0);
+        this.y = movedPlayerCollisionBox.minY();
+        this.z = ((movedPlayerCollisionBox.minZ() + movedPlayerCollisionBox.maxZ()) / 2.0);
         syncPlayerCollisionBox();
         tryCheckInsideBlocks();
         float velocityMultiplier = MathHelper.lerp(CACHE.getPlayerCache().getThePlayer().getMovementEfficiency(), this.getBlockSpeedFactor(), 1.0f);
@@ -504,17 +504,17 @@ public class PlayerSimulation extends Module {
     private void updateSupportingBlockPos(boolean onGround, MutableVec3d movement) {
         if (onGround) {
             LocalizedCollisionBox box = this.playerCollisionBox;
-            LocalizedCollisionBox box2 = new LocalizedCollisionBox(box.getMinX(), box.getMaxX(), box.getMinY() - 1.0E-6, box.getMinY(), box.getMinZ(), box.getMaxZ(), x, y, z);
+            LocalizedCollisionBox box2 = new LocalizedCollisionBox(box.minX(), box.maxX(), box.minY() - 1.0E-6, box.minY(), box.minZ(), box.maxZ(), x, y, z);
             Optional<BlockPos> optional = World.findSupportingBlockPos(box2);
             if (optional.isPresent() || this.forceUpdateSupportingBlockPos) {
                 this.supportingBlockPos = optional;
             } else if (movement != null) {
-                LocalizedCollisionBox box3 = new LocalizedCollisionBox(box2.getMinX() - movement.getX(),
-                                                                       box2.getMaxX() - movement.getX(),
-                                                                       box2.getMinY(),
-                                                                       box2.getMaxY(),
-                                                                       box2.getMinZ() - movement.getZ(),
-                                                                       box2.getMaxZ() - movement.getZ(),
+                LocalizedCollisionBox box3 = new LocalizedCollisionBox(box2.minX() - movement.getX(),
+                                                                       box2.maxX() - movement.getX(),
+                                                                       box2.minY(),
+                                                                       box2.maxY(),
+                                                                       box2.minZ() - movement.getZ(),
+                                                                       box2.maxZ() - movement.getZ(),
                                                                        x,
                                                                        y,
                                                                        z);
@@ -549,7 +549,7 @@ public class PlayerSimulation extends Module {
                     )
 //                    && !blockState.isIn(BlockTags.WALLS)
 //                    && !(blockState.getBlock() instanceof FenceGateBlock)
-                    ? new BlockPos(blockPos.getX(), MathHelper.floorI(this.y - (double)offset), blockPos.getZ())
+                    ? new BlockPos(blockPos.x(), MathHelper.floorI(this.y - (double)offset), blockPos.z())
                     : blockPos;
             }
         } else {
@@ -788,12 +788,12 @@ public class PlayerSimulation extends Module {
     //      waterlogged blocks
     //      lava and water next to each other
     private boolean updateFluidHeightAndDoFluidPushing(boolean waterFluid, double motionScale) {
-        int floorX = MathHelper.floorI(playerCollisionBox.getMinX() + 0.001);
-        int ceilX = MathHelper.ceilI(playerCollisionBox.getMaxX() - 0.001);
-        int floorY = MathHelper.floorI(playerCollisionBox.getMinY() + 0.001);
-        int ceilY = MathHelper.ceilI(playerCollisionBox.getMaxY() - 0.001);
-        int floorZ = MathHelper.floorI(playerCollisionBox.getMinZ() + 0.001);
-        int ceilZ = MathHelper.ceilI(playerCollisionBox.getMaxZ() - 0.001);
+        int floorX = MathHelper.floorI(playerCollisionBox.minX() + 0.001);
+        int ceilX = MathHelper.ceilI(playerCollisionBox.maxX() - 0.001);
+        int floorY = MathHelper.floorI(playerCollisionBox.minY() + 0.001);
+        int ceilY = MathHelper.ceilI(playerCollisionBox.maxY() - 0.001);
+        int floorZ = MathHelper.floorI(playerCollisionBox.minZ() + 0.001);
+        int ceilZ = MathHelper.ceilI(playerCollisionBox.maxZ() - 0.001);
         double topFluidHDelta = 0.0;
         MutableVec3d pushVec = new MutableVec3d(0, 0, 0);
         int affectingFluidsCount = 0;
@@ -810,9 +810,9 @@ public class PlayerSimulation extends Module {
                         if (blockState.block() != BlockRegistry.LAVA) continue;
                     }
                     float fluidHeight = World.getFluidHeight(blockState);
-                    if (fluidHeight == 0 || (fluidHeightToWorld = y + fluidHeight) < playerCollisionBox.getMinY() + 0.001) continue;
+                    if (fluidHeight == 0 || (fluidHeightToWorld = y + fluidHeight) < playerCollisionBox.minY() + 0.001) continue;
                     touched = true;
-                    topFluidHDelta = Math.max(fluidHeightToWorld - (playerCollisionBox.getMinY() + 0.001), topFluidHDelta);
+                    topFluidHDelta = Math.max(fluidHeightToWorld - (playerCollisionBox.minY() + 0.001), topFluidHDelta);
                     if (!isFlying) {
                         var flowVec = World.getFluidFlow(blockState);
                         if (topFluidHDelta < 0.4) {

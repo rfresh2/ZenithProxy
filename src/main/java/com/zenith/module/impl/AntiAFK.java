@@ -139,12 +139,12 @@ public class AntiAFK extends Module {
                 shouldWalk = false;
             } else {
                 if (!MODULE.get(PlayerSimulation.class).isTouchingWater() && (CONFIG.client.extra.antiafk.actions.safeWalk || CONFIG.client.extra.antiafk.actions.sneak))
-                    PATHING.moveRotSneakTowardsBlockPos(currentPathingGoal.getX(),
-                                                        currentPathingGoal.getZ(),
+                    PATHING.moveRotSneakTowardsBlockPos(currentPathingGoal.x(),
+                                                        currentPathingGoal.z(),
                                                         MOVEMENT_PRIORITY);
                 else
-                    PATHING.moveRotTowardsBlockPos(currentPathingGoal.getX(),
-                                                    currentPathingGoal.getZ(),
+                    PATHING.moveRotTowardsBlockPos(currentPathingGoal.x(),
+                                                    currentPathingGoal.z(),
                                                     MOVEMENT_PRIORITY);
             }
         }
@@ -153,7 +153,7 @@ public class AntiAFK extends Module {
     private boolean reachedPathingGoal() {
         final int px = MathHelper.floorI(Pathing.getCurrentPlayerX());
         final int pz = MathHelper.floorI(Pathing.getCurrentPlayerZ());
-        return px == currentPathingGoal.getX() && pz == currentPathingGoal.getZ();
+        return px == currentPathingGoal.x() && pz == currentPathingGoal.z();
     }
 
     private void swingTick() {

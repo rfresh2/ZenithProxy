@@ -1,15 +1,9 @@
 package com.zenith.mc.block;
 
 import com.zenith.util.math.MathHelper;
-import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
-@Data
-public class BlockPos implements Comparable<BlockPos> {
-    private final int x;
-    private final int y;
-    private final int z;
-
+public record BlockPos(int x, int y, int z) implements Comparable<BlockPos> {
     public int getChunkX() {
         return x >> 4;
     }
@@ -27,7 +21,7 @@ public class BlockPos implements Comparable<BlockPos> {
     }
 
     public BlockPos add(final int x, final int y, final int z) {
-        return new BlockPos(getX() + x, getY() + y, getZ() + z);
+        return new BlockPos(x() + x, y() + y, z() + z);
     }
 
     public BlockPos addY(int delta) {
@@ -39,7 +33,7 @@ public class BlockPos implements Comparable<BlockPos> {
     }
 
     public BlockPos minus(BlockPos other) {
-        return new BlockPos(x - other.getX(), y - other.getY(), z - other.getZ());
+        return new BlockPos(x - other.x(), y - other.y(), z - other.z());
     }
 
     public double distance(final BlockPos other) {
@@ -47,9 +41,9 @@ public class BlockPos implements Comparable<BlockPos> {
     }
 
     public double squaredDistance(final double x, final double y, final double z) {
-        double d = (double)this.getX() + 0.5 - x;
-        double e = (double)this.getY() + 0.5 - y;
-        double f = (double)this.getZ() + 0.5 - z;
+        double d = (double) this.x() + 0.5 - x;
+        double e = (double) this.y() + 0.5 - y;
+        double f = (double) this.z() + 0.5 - z;
         return d * d + e * e + f * f;
     }
 
@@ -63,26 +57,26 @@ public class BlockPos implements Comparable<BlockPos> {
     private static final int X_OFFSET = PACKED_Y_LENGTH + PACKED_Z_LENGTH;
 
     public long asLong() {
-        return asLong(this.getX(), this.getY(), this.getZ());
+        return asLong(this.x(), this.y(), this.z());
     }
 
     public static long asLong(int x, int y, int z) {
         long l = 0L;
-        l |= ((long)x & PACKED_X_MASK) << X_OFFSET;
+        l |= ((long) x & PACKED_X_MASK) << X_OFFSET;
         l |= ((long) y & PACKED_Y_MASK);
-        return l | ((long)z & PACKED_Z_MASK) << Z_OFFSET;
+        return l | ((long) z & PACKED_Z_MASK) << Z_OFFSET;
     }
 
     public static int getX(long packedPos) {
-        return (int)(packedPos << 64 - X_OFFSET - PACKED_X_LENGTH >> 64 - PACKED_X_LENGTH);
+        return (int) (packedPos << 64 - X_OFFSET - PACKED_X_LENGTH >> 64 - PACKED_X_LENGTH);
     }
 
     public static int getY(long packedPos) {
-        return (int)(packedPos << 64 - PACKED_Y_LENGTH >> 64 - PACKED_Y_LENGTH);
+        return (int) (packedPos << 64 - PACKED_Y_LENGTH >> 64 - PACKED_Y_LENGTH);
     }
 
     public static int getZ(long packedPos) {
-        return (int)(packedPos << 64 - Z_OFFSET - PACKED_Z_LENGTH >> 64 - PACKED_Z_LENGTH);
+        return (int) (packedPos << 64 - Z_OFFSET - PACKED_Z_LENGTH >> 64 - PACKED_Z_LENGTH);
     }
 
     public static int compare(int x1, int y1, int z1, int x2, int y2, int z2) {
@@ -99,10 +93,10 @@ public class BlockPos implements Comparable<BlockPos> {
 
     @Override
     public int compareTo(@NotNull final BlockPos o) {
-        if (this.getY() == o.getY()) {
-            return this.getZ() == o.getZ() ? this.getX() - o.getX() : this.getZ() - o.getZ();
+        if (this.y() == o.y()) {
+            return this.z() == o.z() ? this.x() - o.x() : this.z() - o.z();
         } else {
-            return this.getY() - o.getY();
+            return this.y() - o.y();
         }
     }
 }

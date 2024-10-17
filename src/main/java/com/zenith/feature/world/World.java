@@ -30,7 +30,7 @@ public class World {
     }
 
     public int getBlockStateId(final BlockPos blockPos) {
-        return getBlockStateId(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        return getBlockStateId(blockPos.x(), blockPos.y(), blockPos.z());
     }
 
     public int getBlockStateId(final int x, final int y, final int z) {
@@ -40,7 +40,7 @@ public class World {
     }
 
     public BlockState getBlockState(final BlockPos blockPos) {
-        return getBlockState(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        return getBlockState(blockPos.x(), blockPos.y(), blockPos.z());
     }
 
     public BlockState getBlockState(final long blockPos) {
@@ -52,7 +52,7 @@ public class World {
     }
 
     public Block getBlockAtBlockPos(final BlockPos blockPos) {
-        return getBlockAtBlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        return getBlockAtBlockPos(blockPos.x(), blockPos.y(), blockPos.z());
     }
 
     public Block getBlockAtBlockPos(final long blockPos) {
@@ -123,12 +123,12 @@ public class World {
     }
 
     public LongList getBlockPosLongListInCollisionBox(final LocalizedCollisionBox cb) {
-        int minX = MathHelper.floorI(cb.getMinX());
-        int maxX = MathHelper.ceilI(cb.getMaxX());
-        int minY = MathHelper.floorI(cb.getMinY());
-        int maxY = MathHelper.ceilI(cb.getMaxY());
-        int minZ = MathHelper.floorI(cb.getMinZ());
-        int maxZ = MathHelper.ceilI(cb.getMaxZ());
+        int minX = MathHelper.floorI(cb.minX());
+        int maxX = MathHelper.ceilI(cb.maxX());
+        int minY = MathHelper.floorI(cb.minY());
+        int maxY = MathHelper.ceilI(cb.maxY());
+        int minZ = MathHelper.floorI(cb.minZ());
+        int maxZ = MathHelper.ceilI(cb.maxZ());
         final LongArrayList blockPosList = new LongArrayList((maxX - minX) * (maxY - minY) * (maxZ - minZ));
         for (int x = minX; x < maxX; x++) {
             for (int y = minY; y < maxY; y++) {
@@ -177,8 +177,8 @@ public class World {
             var blockStateCBs = getBlockState(blockPos2).getLocalizedCollisionBoxes();
             for (int j = 0; j < blockStateCBs.size(); j++) {
                 if (blockStateCBs.get(j).intersects(cb)) {
-                    final double curDist = MathHelper.distanceSq3d(x, y, z, cb.getX(), cb.getY(), cb.getZ());
-                    if (curDist < dist || curDist == dist && (supportingBlock == null || BlockPos.compare(supportingBlock.getX(), supportingBlock.getY(), supportingBlock.getZ(), x, y, z) < 0)) {
+                    final double curDist = MathHelper.distanceSq3d(x, y, z, cb.x(), cb.y(), cb.z());
+                    if (curDist < dist || curDist == dist && (supportingBlock == null || BlockPos.compare(supportingBlock.x(), supportingBlock.y(), supportingBlock.z(), x, y, z) < 0)) {
                         supportingBlock = new BlockPos(x, y, z);
                         dist = curDist;
                     }

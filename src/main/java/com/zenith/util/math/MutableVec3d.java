@@ -12,7 +12,8 @@ public class MutableVec3d {
     private double y;
     private double z;
 
-    public static MutableVec3d ZERO = new MutableVec3d(0, 0, 0);
+    // pls be nice and don't mutate this :)
+    public static final MutableVec3d ZERO = new MutableVec3d(0, 0, 0);
 
     public MutableVec3d(final MutableVec3d velocity) {
         this.x = velocity.x;
