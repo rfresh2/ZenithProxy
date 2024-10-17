@@ -74,7 +74,6 @@ import java.util.stream.Stream;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 
@@ -757,9 +756,10 @@ public class Proxy {
             || !CONFIG.client.extra.autoReconnect.enabled
             || !isOn2b2t()
             || isPrio()
-            || !isNull(getCurrentPlayer().get())
+            || hasActivePlayer()
             || isInQueue()) return;
         EXECUTOR.schedule(() -> {
+            if (hasActivePlayer()) return;
             if (DISCORD.isRunning()) {
                 DISCORD.sendEmbedMessage(
                     Embed.builder()
@@ -769,9 +769,7 @@ public class Proxy {
             } else {
                 CLIENT_LOG.warn("AutoReconnecting to end of queue to get back into server as quick as possible");
             }
-            if (isNull(getCurrentPlayer().get())) {
-                disconnect(SYSTEM_DISCONNECT);
-            }
+            disconnect(SYSTEM_DISCONNECT);
             MODULE.get(AutoReconnect.class).scheduleAutoReconnect(60);
         }, ((int) (Math.random() * 20)), TimeUnit.SECONDS);
     }
