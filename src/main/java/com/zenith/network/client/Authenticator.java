@@ -2,7 +2,6 @@ package com.zenith.network.client;
 
 import com.google.gson.JsonObject;
 import com.zenith.event.proxy.MsaDeviceCodeLoginEvent;
-import com.zenith.util.MCAuthLoggerBridge;
 import com.zenith.util.WebBrowserHelper;
 import com.zenith.util.math.MathHelper;
 import lombok.Getter;
@@ -16,6 +15,7 @@ import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession.FullJavaS
 import net.raphimc.minecraftauth.step.msa.StepCredentialsMsaCode;
 import net.raphimc.minecraftauth.step.msa.StepMsaDeviceCode;
 import net.raphimc.minecraftauth.util.MicrosoftConstants;
+import net.raphimc.minecraftauth.util.logging.Slf4jConsoleLogger;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.protocol.MinecraftProtocol;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
@@ -66,7 +66,7 @@ public class Authenticator {
         .buildMinecraftJavaProfileStep(false);
 
     static {
-        MinecraftAuth.LOGGER = new MCAuthLoggerBridge();
+        MinecraftAuth.LOGGER = new Slf4jConsoleLogger(AUTH_LOG);
     }
 
     private static final File AUTH_CACHE_FILE = new File("mc_auth_cache.json");
