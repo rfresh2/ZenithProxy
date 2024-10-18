@@ -49,20 +49,14 @@ public class PlayerSimulation extends Module {
     private boolean lastSprinting;
     private boolean isFlying;
     private boolean isFallFlying;
-    private boolean canFly;
-    private boolean wasFlying;
-    private boolean isSwimming;
-    private boolean wasSwimming;
-    private boolean isClimbing;
     private boolean isGliding;
-    private boolean wasGliding;
     private double fallDistance;
     @Getter private boolean isTouchingWater;
     private boolean isTouchingLava;
     private int ticksSinceLastPositionPacketSent;
-    private MutableVec3d stuckSpeedMultiplier = new MutableVec3d(0, 0, 0);
-    private MutableVec3d velocity = new MutableVec3d(0, 0, 0);
-    private Input movementInput = new Input();
+    private final MutableVec3d stuckSpeedMultiplier = new MutableVec3d(0, 0, 0);
+    private final MutableVec3d velocity = new MutableVec3d(0, 0, 0);
+    private final Input movementInput = new Input();
     private int waitTicks = 0;
     private static final CollisionBox STANDING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.8, -0.3, 0.3);
     private static final CollisionBox SNEAKING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.5, -0.3, 0.3);
@@ -82,13 +76,14 @@ public class PlayerSimulation extends Module {
 
     @Override
     public void subscribeEvents() {
-        EVENT_BUS.subscribe(this,
-                            // we want this to be one of the last thing that happens in the tick
-                            // to allow other modules to update the player's input
-                            // other modules can also do actions after this tick by setting an even lower priority
-                            of(ClientBotTick.class, -20000, this::tick),
-                            of(ClientBotTick.Starting.class, this::handleClientTickStarting),
-                            of(ClientBotTick.Stopped.class, this::handleClientTickStopped)
+        EVENT_BUS.subscribe(
+            this,
+            // we want this to be one of the last thing that happens in the tick
+            // to allow other modules to update the player's input
+            // other modules can also do actions after this tick by setting an even lower priority
+            of(ClientBotTick.class, -20000, this::tick),
+            of(ClientBotTick.Starting.class, this::handleClientTickStarting),
+            of(ClientBotTick.Stopped.class, this::handleClientTickStopped)
         );
     }
 
@@ -125,36 +120,18 @@ public class PlayerSimulation extends Module {
         return this.yaw + difference;
     }
 
-    public synchronized void doMovementInput(boolean pressingForward,
-                                             boolean pressingBack,
-                                             boolean pressingLeft,
-                                             boolean pressingRight,
-                                             boolean jumping,
-                                             boolean sneaking,
-                                             boolean sprinting
-    ) {
-        if (!pressingForward || !pressingBack) {
-            this.movementInput.pressingForward = pressingForward;
-            this.movementInput.pressingBack = pressingBack;
-        }
-        if (!pressingLeft || !pressingRight) {
-            this.movementInput.pressingLeft = pressingLeft;
-            this.movementInput.pressingRight = pressingRight;
-        }
-        this.movementInput.jumping = jumping;
-        this.movementInput.sneaking = sneaking;
-        this.movementInput.sprinting = sprinting;
-    }
-
     public synchronized void doMovementInput(final Input input) {
-        doMovementInput(input.pressingForward,
-                        input.pressingBack,
-                        input.pressingLeft,
-                        input.pressingRight,
-                        input.jumping,
-                        input.sneaking,
-                        input.sprinting
-        );
+        if (!input.pressingForward || !input.pressingBack) {
+            this.movementInput.pressingForward = input.pressingForward;
+            this.movementInput.pressingBack = input.pressingBack;
+        }
+        if (!input.pressingLeft || !input.pressingRight) {
+            this.movementInput.pressingLeft = input.pressingLeft;
+            this.movementInput.pressingRight = input.pressingRight;
+        }
+        this.movementInput.jumping = input.jumping;
+        this.movementInput.sneaking = input.sneaking;
+        this.movementInput.sprinting = input.sprinting;
     }
 
     public void doMovement(final MovementInputRequest request) {
@@ -721,7 +698,7 @@ public class PlayerSimulation extends Module {
         this.lastPitch = this.pitch;
         this.onGround = true; // todo: cache
         this.lastOnGround = true;
-        this.velocity = new MutableVec3d(0, 0, 0);
+        this.velocity.set(0, 0, 0);
         this.supportingBlockPos = Optional.empty();
         this.forceUpdateSupportingBlockPos = false;
         this.ticksSinceLastPositionPacketSent = 0;
@@ -733,6 +710,7 @@ public class PlayerSimulation extends Module {
             this.isSprinting = this.lastSprinting = CACHE.getPlayerCache().isSprinting();
         }
         syncPlayerCollisionBox();
+        updateAttributes();
     }
 
     private void updateMovementState() {
