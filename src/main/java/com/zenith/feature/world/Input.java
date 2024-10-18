@@ -4,8 +4,6 @@ import lombok.Data;
 
 @Data
 public class Input {
-    public float movementSideways;
-    public float movementForward;
     public boolean pressingForward;
     public boolean pressingBack;
     public boolean pressingLeft;
@@ -28,9 +26,11 @@ public class Input {
         this(false, false, false, false, false, false, false);
     }
 
+    public Input(Input in) {
+        this(in.pressingForward, in.pressingBack, in.pressingLeft, in.pressingRight, in.jumping, in.sneaking, in.sprinting);
+    }
+
     public void reset() {
-        movementSideways = 0;
-        movementForward = 0;
         pressingForward = false;
         pressingBack = false;
         pressingLeft = false;
@@ -38,5 +38,33 @@ public class Input {
         jumping = false;
         sneaking = false;
         sprinting = false;
+    }
+
+    public float getMovementSideways() {
+        float f = 0.0F;
+        if (pressingLeft) {
+            --f;
+        }
+        if (pressingRight) {
+            ++f;
+        }
+        if (sneaking) {
+            f *= 0.3F;
+        }
+        return f * 0.98f;
+    }
+
+    public float getMovementForward() {
+        float f = 0.0F;
+        if (pressingForward) {
+            ++f;
+        }
+        if (pressingBack) {
+            --f;
+        }
+        if (sneaking) {
+            f *= 0.3F;
+        }
+        return f * 0.98f;
     }
 }

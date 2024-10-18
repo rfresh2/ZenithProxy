@@ -61,6 +61,7 @@ public class PlayerSimulation extends Module {
     private MutableVec3d stuckSpeedMultiplier = new MutableVec3d(0, 0, 0);
     private MutableVec3d velocity = new MutableVec3d(0, 0, 0);
     private Input movementInput = new Input();
+    private Input lastSentMovementInput = new Input(movementInput);
     private int waitTicks = 0;
     private static final CollisionBox STANDING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.8, -0.3, 0.3);
     private static final CollisionBox SNEAKING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.5, -0.3, 0.3);
@@ -169,7 +170,7 @@ public class PlayerSimulation extends Module {
         if (Math.abs(velocity.getY()) < 0.003) velocity.setY(0);
         if (Math.abs(velocity.getZ()) < 0.003) velocity.setZ(0);
 
-        updateMovementState();
+        updateSprintState();
         var fallFlyingMetadata = CACHE.getPlayerCache().getThePlayer().getMetadata().get(0);
         if (fallFlyingMetadata instanceof ByteEntityMetadata byteEntityMetadata) {
             var b = byteEntityMetadata.getPrimitiveValue();
@@ -192,9 +193,7 @@ public class PlayerSimulation extends Module {
             // todo: full jump when at water surface
         } else jumpingCooldown = 0;
 
-        this.movementInput.movementForward *= 0.98f;
-        this.movementInput.movementSideways *= 0.98f;
-        final MutableVec3d movementInputVec = new MutableVec3d(movementInput.movementSideways, 0, movementInput.movementForward);
+        final MutableVec3d movementInputVec = new MutableVec3d(movementInput.getMovementSideways(), 0, movementInput.getMovementForward());
         if (isTouchingWater && isSneaking && !isFlying) velocity.setY(velocity.getY() - 0.04f);
         if (CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
             // todo: handle creative and spectator mode movement
@@ -211,22 +210,31 @@ public class PlayerSimulation extends Module {
         if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
             sendClientPacketsAsync(new ServerboundMovePlayerRotPacket(false, horizontalCollision, this.yaw, this.pitch),
                                    new ServerboundPlayerInputPacket(false, false, false, false, false, false, false));
+            lastSentMovementInput = new Input(false, false, false, false, false, false, false);
             // todo: handle vehicle travel movement
         } else {
             // send movement packets based on position
             if (wasSneaking != isSneaking) {
-                if (isSneaking) {
-                    sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SNEAKING));
-                } else {
-                    sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SNEAKING));
-                }
+                sendClientPacketAsync(new ServerboundPlayerCommandPacket(
+                    CACHE.getPlayerCache().getEntityId(),
+                    isSneaking ? PlayerState.START_SNEAKING : PlayerState.STOP_SNEAKING));
             }
             if (lastSprinting != isSprinting) {
-                if (isSprinting) {
-                    sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
-                } else {
-                    sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
-                }
+                sendClientPacketAsync(new ServerboundPlayerCommandPacket(
+                    CACHE.getPlayerCache().getEntityId(),
+                    isSprinting ? PlayerState.START_SPRINTING : PlayerState.STOP_SPRINTING));
+            }
+            if (!lastSentMovementInput.equals(movementInput)) {
+                sendClientPacketAsync(new ServerboundPlayerInputPacket(
+                    movementInput.pressingForward,
+                    movementInput.pressingBack,
+                    movementInput.pressingLeft,
+                    movementInput.pressingRight,
+                    movementInput.jumping,
+                    movementInput.sneaking,
+                    movementInput.sprinting
+                ));
+                lastSentMovementInput = new Input(movementInput);
             }
             double xDelta = this.x - this.lastX;
             double yDelta = this.y - this.lastY;
@@ -737,22 +745,10 @@ public class PlayerSimulation extends Module {
         syncPlayerCollisionBox();
     }
 
-    private void updateMovementState() {
-        float moveForward = 0.0f;
-        float moveStrafe = 0.0f;
-        if (movementInput.pressingForward) moveForward++;
-        if (movementInput.pressingBack) moveForward--;
-        if (movementInput.pressingLeft) moveStrafe++;
-        if (movementInput.pressingRight) moveStrafe--;
-        if (movementInput.sneaking) {
-            moveStrafe *= 0.3f;
-            moveForward *= 0.3f;
-        }
-        movementInput.movementSideways = moveStrafe;
-        movementInput.movementForward = moveForward;
+    private void updateSprintState() {
         if (movementInput.sprinting) {
             // cannot sprint any direction except forwards
-            if (moveForward <= 0.0f || movementInput.sneaking)
+            if (movementInput.getMovementForward() <= 0.0f || movementInput.sneaking)
                 movementInput.sprinting = false;
         }
     }
