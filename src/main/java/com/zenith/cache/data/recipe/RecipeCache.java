@@ -2,121 +2,82 @@ package com.zenith.cache.data.recipe;
 
 import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Data;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.network.packet.Packet;
+import org.geysermc.mcprotocollib.protocol.data.game.inventory.CraftingBookStateType;
+import org.geysermc.mcprotocollib.protocol.data.game.recipe.display.RecipeDisplayEntry;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundRecipeBookAddPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundRecipeBookRemovePacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundRecipeBookSettingsPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundUpdateRecipesPacket;
 
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 @Data
 public class RecipeCache implements CachedData {
-//    protected Set<Recipe> recipeRegistry = Collections.synchronizedSet(new ObjectOpenHashSet<>());
-//    protected Set<String> knownRecipes = Collections.synchronizedSet(new ObjectOpenHashSet<>());
-//    protected Set<String> displayedRecipes = Collections.synchronizedSet(new ObjectOpenHashSet<>());
-//    private boolean openCraftingBook;
-//    private boolean activateCraftingFiltering;
-//    private boolean openSmeltingBook;
-//    private boolean activateSmeltingFiltering;
-//    private boolean openBlastingBook;
-//    private boolean activateBlastingFiltering;
-//    private boolean openSmokingBook;
-//    private boolean activateSmokingFiltering;
+    protected Map<String, int[]> itemSets = new ConcurrentHashMap<>();
+    protected Set<ClientboundUpdateRecipesPacket.SelectableRecipe> stoneCutterRecipes = Collections.synchronizedSet(new ObjectOpenHashSet<>());
+    protected Map<CraftingBookStateType, ClientboundRecipeBookSettingsPacket.TypeSettings> recipeBookSettings = Collections.synchronizedMap(new EnumMap<>(CraftingBookStateType.class));
+    protected Int2ObjectMap<RecipeDisplayEntry> recipeBookEntries = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
 
     @Override
     public synchronized void getPackets(@NonNull final Consumer<Packet> consumer) {
-//        consumer.accept(new ClientboundUpdateRecipesPacket(recipeRegistry.toArray(new Recipe[0])));
-//        if (CONFIG.debug.server.cache.unlockAllRecipes) {
-//            // technically bypassing the cache here isn't vanilla
-//            // but it avoids any possible caching bugs and is useful for players
-//            final String[] allRecipeIds = recipeRegistry.stream()
-//                .map(Recipe::getIdentifier)
-//                .toArray(String[]::new);
-//            consumer.accept(new ClientboundRecipePacket(
-//                allRecipeIds,
-//                openCraftingBook,
-//                activateCraftingFiltering,
-//                openSmeltingBook,
-//                activateSmeltingFiltering,
-//                openBlastingBook,
-//                activateBlastingFiltering,
-//                openSmokingBook,
-//                activateSmokingFiltering,
-//                allRecipeIds
-//            ));
-//        } else {
-//            consumer.accept(new ClientboundRecipePacket(
-//                knownRecipes.toArray(String[]::new),
-//                openCraftingBook,
-//                activateCraftingFiltering,
-//                openSmeltingBook,
-//                activateSmeltingFiltering,
-//                openBlastingBook,
-//                activateBlastingFiltering,
-//                openSmokingBook,
-//                activateSmokingFiltering,
-//                displayedRecipes.toArray(String[]::new)
-//            ));
-//        }
+        consumer.accept(new ClientboundUpdateRecipesPacket(itemSets, new ArrayList<>(stoneCutterRecipes)));
+        consumer.accept(new ClientboundRecipeBookSettingsPacket(recipeBookSettings));
+        final List<ClientboundRecipeBookAddPacket.Entry> entries = new ArrayList<>(recipeBookEntries.size());
+        for (var entry : recipeBookEntries.int2ObjectEntrySet()) {
+            entries.add(new ClientboundRecipeBookAddPacket.Entry(entry.getValue(), false, false));
+        }
+        consumer.accept(new ClientboundRecipeBookAddPacket(entries, true));
     }
 
     @Override
     public synchronized void reset(CacheResetType type) {
         if (type == CacheResetType.FULL || type == CacheResetType.PROTOCOL_SWITCH) {
-//            this.recipeRegistry.clear();
-//            this.knownRecipes.clear();
-//            this.displayedRecipes.clear();
-//            this.openCraftingBook = false;
-//            this.activateCraftingFiltering = false;
-//            this.openSmeltingBook = false;
-//            this.activateSmeltingFiltering = false;
-//            this.openBlastingBook = false;
-//            this.activateBlastingFiltering = false;
-//            this.openSmokingBook = false;
-//            this.activateSmokingFiltering = false;
+            this.itemSets.clear();
+            this.stoneCutterRecipes.clear();
+            this.recipeBookSettings.clear();
+            this.recipeBookEntries.clear();
         }
     }
 
-//    public synchronized void setRecipeRegistry(final ClientboundUpdateRecipesPacket packet) {
-//        this.recipeRegistry.clear();
-//        this.recipeRegistry.addAll(List.of(packet.getRecipes()));
-//    }
+    public synchronized void setRecipeRegistry(final ClientboundUpdateRecipesPacket packet) {
+        this.itemSets.clear();
+        this.stoneCutterRecipes.clear();
+        this.itemSets.putAll(packet.getItemSets());
+        this.stoneCutterRecipes.addAll(packet.getStonecutterRecipes());
+    }
 
-//    public synchronized void updateUnlockedRecipes(final ClientboundRecipePacket packet) {
-//        switch (packet.getAction()) {
-//            case INIT -> {
-//                for (int i = 0; i < packet.getRecipeIdsToChange().length; i++) {
-//                    this.knownRecipes.add(packet.getRecipeIdsToChange()[i]);
-//                }
-//                for (int i = 0; i < packet.getRecipeIdsToInit().length; i++) {
-//                    this.displayedRecipes.add(packet.getRecipeIdsToInit()[i]);
-//                }
-//            }
-//            case ADD -> {
-//                for (int i = 0; i < packet.getRecipeIdsToChange().length; i++) {
-//                    var id = packet.getRecipeIdsToChange()[i];
-//                    this.knownRecipes.add(id);
-//                    this.displayedRecipes.add(id);
-//                }
-//            }
-//            case REMOVE -> {
-//                for (int i = 0; i < packet.getRecipeIdsToChange().length; i++) {
-//                    this.displayedRecipes.remove(packet.getRecipeIdsToChange()[i]);
-//                }
-//            }
-//        }
-//        this.openCraftingBook = packet.isOpenCraftingBook();
-//        this.activateCraftingFiltering = packet.isActivateCraftingFiltering();
-//        this.openSmeltingBook = packet.isOpenSmeltingBook();
-//        this.activateSmeltingFiltering = packet.isActivateSmeltingFiltering();
-//        this.openBlastingBook = packet.isOpenBlastingBook();
-//        this.activateBlastingFiltering = packet.isActivateBlastingFiltering();
-//        this.openSmokingBook = packet.isOpenSmokingBook();
-//        this.activateSmokingFiltering = packet.isActivateSmokingFiltering();
-//    }
+    public void addRecipeBookEntries(final ClientboundRecipeBookAddPacket packet) {
+        if (packet.isReplace()) {
+            this.recipeBookEntries.clear();
+        }
+        for (var entry : packet.getEntries()) {
+            int key = entry.contents().id();
+            this.recipeBookEntries.put(key, entry.contents());
+        }
+    }
 
-//    @Override
-//    public String getSendingMessage()  {
-//        return String.format("Sending %d recipes", this.recipeRegistry.size());
-//    }
+    public void setRecipeBookSettings(final ClientboundRecipeBookSettingsPacket packet) {
+        this.recipeBookSettings.putAll(packet.getStates());
+    }
+
+    public void removeRecipeBookEntries(final ClientboundRecipeBookRemovePacket packet) {
+        for (var id : packet.getRecipes()) {
+            this.recipeBookEntries.remove(id);
+        }
+    }
+
+    @Override
+    public String getSendingMessage()  {
+        return String.format("Sending %d recipes", this.itemSets.size());
+    }
 
 }

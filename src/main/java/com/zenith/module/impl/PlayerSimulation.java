@@ -16,6 +16,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEn
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundExplodePacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundClientTickEndPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.*;
@@ -78,6 +79,7 @@ public class PlayerSimulation extends Module {
                             // to allow other modules to update the player's input
                             // other modules can also do actions after this tick by setting an even lower priority
                             of(ClientBotTick.class, -20000, this::tick),
+                            of(ClientBotTick.class, -1000000, this::tickEnd),
                             of(ClientBotTick.Starting.class, this::handleClientTickStarting),
                             of(ClientBotTick.Stopped.class, this::handleClientTickStopped)
         );
@@ -263,6 +265,10 @@ public class PlayerSimulation extends Module {
         this.movementInput.reset();
     }
 
+    private void tickEnd(ClientBotTick event) {
+        sendClientPacket(new ServerboundClientTickEndPacket());
+    }
+
     private void jump() {
         this.velocity.setY(0.42);
         if (this.isSprinting) {
@@ -277,6 +283,10 @@ public class PlayerSimulation extends Module {
         CLIENT_LOG.debug("Server teleport {} to: {}, {}, {}", teleportId, this.x, this.y, this.z);
         sendClientPacket(new ServerboundAcceptTeleportationPacket(teleportId));
         sendClientPacket(new ServerboundMovePlayerPosRotPacket(false, false, this.x, this.y, this.z, this.yaw, this.pitch));
+    }
+
+    public synchronized void handlePlayerRotate() {
+        syncFromCache(false);
     }
 
     public synchronized void handleRespawn() {

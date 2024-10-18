@@ -7,13 +7,11 @@ import com.zenith.module.impl.AntiAFK;
 import com.zenith.module.impl.PlayerSimulation;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.ClientEventLoopPacketHandler;
-import com.zenith.network.server.ServerSession;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PositionElement;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundPlayerPositionPacket;
 
 import static com.zenith.Shared.*;
-import static java.util.Objects.isNull;
 
 public class PlayerPositionHandler implements ClientEventLoopPacketHandler<ClientboundPlayerPositionPacket, ClientSession> {
     @Override
@@ -34,8 +32,7 @@ public class PlayerPositionHandler implements ClientEventLoopPacketHandler<Clien
             .setVelZ((packet.getRelatives().contains(PositionElement.DELTA_Z) ? cache.getVelZ() : 0.0d) + packet.getDeltaZ())
             .setYaw((packet.getRelatives().contains(PositionElement.Y_ROT) ? cache.getYaw() : 0.0f) + packet.getYaw())
             .setPitch((packet.getRelatives().contains(PositionElement.X_ROT) ? cache.getPitch() : 0.0f) + packet.getPitch());
-        ServerSession currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
-        if (isNull(currentPlayer) || !currentPlayer.isLoggedIn()) {
+        if (!Proxy.getInstance().hasActivePlayer()) {
             MODULE.get(PlayerSimulation.class).handlePlayerPosRotate(packet.getId());
         } // else send to active player
         SpectatorSync.syncPlayerPositionWithSpectators();
