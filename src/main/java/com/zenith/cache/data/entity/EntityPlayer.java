@@ -1,5 +1,6 @@
 package com.zenith.cache.data.entity;
 
+import com.zenith.module.impl.PlayerSimulation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -8,9 +9,6 @@ import net.kyori.adventure.text.Component;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.Attribute;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeModifier;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeType;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.ModifierOperation;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundRotateHeadPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundSetEntityDataPacket;
@@ -23,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.zenith.Shared.MODULE;
 import static com.zenith.Shared.SERVER_LOG;
 
 
@@ -36,64 +35,25 @@ public class EntityPlayer extends EntityLiving {
     protected int totalExperience;
     protected int level;
     protected float experience;
-    protected float waterMovementEfficiency = 0.0f;
-    protected float movementEfficiency = 0.0f;
-    protected float speed = 0.10000000149011612f;
 
     public EntityPlayer() {
+        this(false);
+    }
+
+    public EntityPlayer(boolean selfPlayer) {
         //set health to maximum by default
         this.health = 20.0f;
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             this.equipment.put(slot, null);
         }
         this.entityType = EntityType.PLAYER;
-    }
-
-    public EntityPlayer(boolean selfPlayer) {
-        this();
         this.selfPlayer = selfPlayer;
     }
 
     @Override
     public void updateAttributes(final List<Attribute> attributes) {
         super.updateAttributes(attributes);
-        if (this.selfPlayer) updateSpeed();
-    }
-
-    private void updateSpeed() {
-        var movementSpeedAttribute = getAttributes().get(AttributeType.Builtin.GENERIC_MOVEMENT_SPEED);
-        this.speed = movementSpeedAttribute == null
-            ? 0.10000000149011612f
-            : applyAttributeModifiers(movementSpeedAttribute);
-        var movementEfficiencyAttribute = getAttributes().get(AttributeType.Builtin.GENERIC_MOVEMENT_EFFICIENCY);
-        this.movementEfficiency = movementEfficiencyAttribute == null
-            ? 0.0f
-            : applyAttributeModifiers(movementEfficiencyAttribute);
-        var waterMovementEfficiencyAttribute = getAttributes().get(AttributeType.Builtin.GENERIC_WATER_MOVEMENT_EFFICIENCY);
-        this.waterMovementEfficiency = waterMovementEfficiencyAttribute == null
-            ? 0.0f
-            : applyAttributeModifiers(waterMovementEfficiencyAttribute);
-    }
-
-    private float applyAttributeModifiers(final Attribute attribute) {
-        double value = attribute.getValue();
-        for (AttributeModifier modifier : attribute.getModifiers()) {
-            if (modifier.getOperation() == ModifierOperation.ADD) {
-                value += modifier.getAmount();
-            }
-        }
-        double e = value;
-        for (AttributeModifier modifier : attribute.getModifiers()) {
-            if (modifier.getOperation() == ModifierOperation.ADD_MULTIPLIED_BASE) {
-                e += value * modifier.getAmount();
-            }
-        }
-        for (AttributeModifier modifier : attribute.getModifiers()) {
-            if (modifier.getOperation() == ModifierOperation.ADD_MULTIPLIED_TOTAL) {
-                e *= 1.0 + modifier.getAmount();
-            }
-        }
-        return (float) e;
+        if (this.selfPlayer) MODULE.get(PlayerSimulation.class).updateAttributes();
     }
 
     public boolean isAlive() {

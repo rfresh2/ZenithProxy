@@ -12,6 +12,9 @@ import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;
 import lombok.Getter;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeModifier;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeType;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.ModifierOperation;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
@@ -28,7 +31,6 @@ import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class PlayerSimulation extends Module {
-    private double gravity = 0.08;
     @Getter private double x;
     @Getter private double y;
     @Getter private double z;
@@ -65,7 +67,13 @@ public class PlayerSimulation extends Module {
     private static final CollisionBox STANDING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.8, -0.3, 0.3);
     private static final CollisionBox SNEAKING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.5, -0.3, 0.3);
     private LocalizedCollisionBox playerCollisionBox = new LocalizedCollisionBox(STANDING_COLLISION_BOX, 0, 0, 0);
-    private float stepHeight = 0.6F;
+    private double gravity = 0.08;
+    private float stepHeight = 0.6f;
+    private float waterMovementEfficiency = 0.0f;
+    private float movementEfficiency = 0.0f;
+    private float speed = 0.10000000149011612f;
+    private float sneakSpeed = 0.3f;
+    private float jumpStrength = 0.42f;
     private boolean forceUpdateSupportingBlockPos = false;
     private Optional<BlockPos> supportingBlockPos = Optional.empty();
     private int jumpingCooldown;
@@ -265,7 +273,7 @@ public class PlayerSimulation extends Module {
     }
 
     private void jump() {
-        this.velocity.setY(0.42);
+        this.velocity.setY(jumpStrength);
         if (this.isSprinting) {
             float sprintAngle = yaw * (float) (Math.PI / 180.0);
             this.velocity.setX(this.velocity.getX() - (Math.sin(sprintAngle) * 0.2F));
@@ -289,11 +297,11 @@ public class PlayerSimulation extends Module {
             boolean falling = velocity.getY() <= 0.0;
             float waterSlowdown = isSprinting ? 0.9f : 0.8f;
             float waterSpeed = 0.02f;
-            float waterMovementEfficiency = CACHE.getPlayerCache().getThePlayer().getWaterMovementEfficiency();
-            if (!onGround) waterMovementEfficiency *= 0.5f;
-            if (waterMovementEfficiency > 0.0f) {
-                waterSlowdown += (0.54600006F - waterSlowdown) * waterMovementEfficiency;
-                waterSpeed += (getSpeed() - waterSpeed) * waterMovementEfficiency;
+            float movementEfficiency = this.waterMovementEfficiency;
+            if (!onGround) movementEfficiency *= 0.5f;
+            if (movementEfficiency > 0.0f) {
+                waterSlowdown += (0.54600006F - waterSlowdown) * movementEfficiency;
+                waterSpeed += (this.speed - waterSpeed) * movementEfficiency;
             }
             if (CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().containsKey(Effect.DOLPHINS_GRACE)) {
                 waterSlowdown = 0.96f;
@@ -432,7 +440,7 @@ public class PlayerSimulation extends Module {
         this.z = ((movedPlayerCollisionBox.minZ() + movedPlayerCollisionBox.maxZ()) / 2.0);
         syncPlayerCollisionBox();
         tryCheckInsideBlocks();
-        float velocityMultiplier = MathHelper.lerp(CACHE.getPlayerCache().getThePlayer().getMovementEfficiency(), this.getBlockSpeedFactor(), 1.0f);
+        float velocityMultiplier = MathHelper.lerp(movementEfficiency, this.getBlockSpeedFactor(), 1.0f);
         velocity.multiply(velocityMultiplier, 1.0, velocityMultiplier);
     }
 
@@ -675,7 +683,7 @@ public class PlayerSimulation extends Module {
     }
 
     private float getMovementSpeed(float slipperiness) {
-        return this.onGround ? getSpeed() * (0.21600002f / (slipperiness * slipperiness * slipperiness)) : 0.02f;
+        return this.onGround ? this.speed * (0.21600002f / (slipperiness * slipperiness * slipperiness)) : 0.02f;
     }
 
     private float getBlockSpeedFactor() {
@@ -735,8 +743,8 @@ public class PlayerSimulation extends Module {
         if (movementInput.pressingLeft) moveStrafe++;
         if (movementInput.pressingRight) moveStrafe--;
         if (movementInput.sneaking) {
-            moveStrafe *= 0.3f;
-            moveForward *= 0.3f;
+            moveStrafe *= this.sneakSpeed;
+            moveForward *= this.sneakSpeed;
         }
         movementInput.movementSideways = moveStrafe;
         movementInput.movementForward = moveForward;
@@ -745,10 +753,6 @@ public class PlayerSimulation extends Module {
             if (moveForward <= 0.0f || movementInput.sneaking)
                 movementInput.sprinting = false;
         }
-    }
-
-    private float getSpeed() {
-        return CACHE.getPlayerCache().getThePlayer().getSpeed();
     }
 
     private void updateInWaterStateAndDoFluidPushing() {
@@ -849,4 +853,36 @@ public class PlayerSimulation extends Module {
         return true;
     }
 
+    public void updateAttributes() {
+        this.speed = getAttributeValue(AttributeType.Builtin.GENERIC_MOVEMENT_SPEED, 0.10000000149011612f);
+        this.movementEfficiency = getAttributeValue(AttributeType.Builtin.GENERIC_MOVEMENT_EFFICIENCY, 0.0f);
+        this.waterMovementEfficiency = getAttributeValue(AttributeType.Builtin.GENERIC_WATER_MOVEMENT_EFFICIENCY, 0.0f);
+        this.stepHeight = getAttributeValue(AttributeType.Builtin.GENERIC_STEP_HEIGHT, 0.6f);
+        this.gravity = getAttributeValue(AttributeType.Builtin.GENERIC_GRAVITY, 0.08f);
+        this.jumpStrength = getAttributeValue(AttributeType.Builtin.GENERIC_JUMP_STRENGTH, 0.42f);
+        this.sneakSpeed = getAttributeValue(AttributeType.Builtin.PLAYER_SNEAKING_SPEED, 0.3f);
+    }
+
+    private float getAttributeValue(final AttributeType.Builtin attributeType, float defaultValue) {
+        var attribute = CACHE.getPlayerCache().getThePlayer().getAttributes().get(attributeType);
+        if (attribute == null) return defaultValue;
+        double v1 = attribute.getValue();
+        for (AttributeModifier modifier : attribute.getModifiers()) {
+            if (modifier.getOperation() == ModifierOperation.ADD) {
+                v1 += modifier.getAmount();
+            }
+        }
+        double v2 = v1;
+        for (AttributeModifier modifier : attribute.getModifiers()) {
+            if (modifier.getOperation() == ModifierOperation.ADD_MULTIPLIED_BASE) {
+                v2 += v1 * modifier.getAmount();
+            }
+        }
+        for (AttributeModifier modifier : attribute.getModifiers()) {
+            if (modifier.getOperation() == ModifierOperation.ADD_MULTIPLIED_TOTAL) {
+                v2 *= 1.0 + modifier.getAmount();
+            }
+        }
+        return (float) v2;
+    }
 }
