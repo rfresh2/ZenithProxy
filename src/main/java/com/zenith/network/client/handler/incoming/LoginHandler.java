@@ -7,6 +7,7 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.registry.PacketHandler;
 import lombok.NonNull;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.HandPreference;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.ParticleStatus;
 import org.geysermc.mcprotocollib.protocol.data.game.setting.ChatVisibility;
 import org.geysermc.mcprotocollib.protocol.data.game.setting.SkinPart;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundClientInformationPacket;
@@ -52,7 +53,8 @@ public class LoginHandler implements PacketHandler<ClientboundLoginPacket, Clien
             List.of(SkinPart.values()),
             HandPreference.RIGHT_HAND,
             false,
-            false
+            false,
+            ParticleStatus.MINIMAL
         ));
         if (!Proxy.getInstance().isOn2b2t()) {
             if (!session.isOnline()) {

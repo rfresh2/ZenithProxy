@@ -10,7 +10,7 @@ public class ClientInformationHandler implements AsyncPacketHandler<ServerboundC
     public static final ClientInformationHandler INSTANCE = new ClientInformationHandler();
     @Override
     public boolean applyAsync(ServerboundClientInformationPacket packet, ServerSession session) {
-        CACHE.getChunkCache().setRenderDistance(packet.getRenderDistance());
+        CACHE.getChunkCache().setRenderDistance(packet.getViewDistance());
         return true;
     }
 }
