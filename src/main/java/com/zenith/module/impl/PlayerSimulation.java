@@ -120,13 +120,14 @@ public class PlayerSimulation extends Module {
         return this.yaw + difference;
     }
 
-    public synchronized void doMovementInput(boolean pressingForward,
-                                             boolean pressingBack,
-                                             boolean pressingLeft,
-                                             boolean pressingRight,
-                                             boolean jumping,
-                                             boolean sneaking,
-                                             boolean sprinting
+    public synchronized void doMovementInput(
+        boolean pressingForward,
+        boolean pressingBack,
+        boolean pressingLeft,
+        boolean pressingRight,
+        boolean jumping,
+        boolean sneaking,
+        boolean sprinting
     ) {
         if (!pressingForward || !pressingBack) {
             this.movementInput.pressingForward = pressingForward;
@@ -139,16 +140,20 @@ public class PlayerSimulation extends Module {
         this.movementInput.jumping = jumping;
         this.movementInput.sneaking = sneaking;
         this.movementInput.sprinting = sprinting;
+        if (movementInput.sprinting && (movementInput.pressingBack || movementInput.sneaking)) {
+            movementInput.sprinting = false;
+        }
     }
 
     public synchronized void doMovementInput(final Input input) {
-        doMovementInput(input.pressingForward,
-                        input.pressingBack,
-                        input.pressingLeft,
-                        input.pressingRight,
-                        input.jumping,
-                        input.sneaking,
-                        input.sprinting
+        doMovementInput(
+            input.pressingForward,
+            input.pressingBack,
+            input.pressingLeft,
+            input.pressingRight,
+            input.jumping,
+            input.sneaking,
+            input.sprinting
         );
     }
 
@@ -171,7 +176,6 @@ public class PlayerSimulation extends Module {
         if (Math.abs(velocity.getY()) < 0.003) velocity.setY(0);
         if (Math.abs(velocity.getZ()) < 0.003) velocity.setZ(0);
 
-        updateSprintState();
         var fallFlyingMetadata = CACHE.getPlayerCache().getThePlayer().getMetadata().get(0);
         if (fallFlyingMetadata instanceof ByteEntityMetadata byteEntityMetadata) {
             var b = byteEntityMetadata.getPrimitiveValue();
@@ -194,39 +198,35 @@ public class PlayerSimulation extends Module {
             // todo: full jump when at water surface
         } else jumpingCooldown = 0;
 
-        final MutableVec3d movementInputVec = new MutableVec3d(getMovementInputSideways(), 0, getMovementInputForward());
+        final MutableVec3d movementInputVec = getMovementInputVec();
         if (isTouchingWater && isSneaking && !isFlying) velocity.setY(velocity.getY() - 0.04f);
         if (CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
             // todo: handle creative and spectator mode movement
             //  for now, we just stay still (unless in a vehicle)
             //  ideally we'd check if isFlying = true
             //  but we don't cache or intercept where this would be set server side yet
-            velocity.setX(0);
-            velocity.setY(0);
-            velocity.setZ(0);
+            velocity.set(0, 0, 0);
         } else {
             travel(movementInputVec);
         }
 
         if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
-            sendClientPacketsAsync(new ServerboundMovePlayerRotPacket(false, this.yaw, this.pitch),
-                                   new ServerboundPlayerInputPacket(0.0f, 0.0f, false, false));
+            sendClientPacketsAsync(
+                new ServerboundMovePlayerRotPacket(false, this.yaw, this.pitch),
+                new ServerboundPlayerInputPacket(0.0f, 0.0f, false, false)
+            );
             // todo: handle vehicle travel movement
         } else {
             // send movement packets based on position
             if (wasSneaking != isSneaking) {
-                if (isSneaking) {
-                    sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SNEAKING));
-                } else {
-                    sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SNEAKING));
-                }
+                sendClientPacketAsync(new ServerboundPlayerCommandPacket(
+                    CACHE.getPlayerCache().getEntityId(),
+                    isSneaking ? PlayerState.START_SNEAKING : PlayerState.STOP_SNEAKING));
             }
             if (lastSprinting != isSprinting) {
-                if (isSprinting) {
-                    sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_SPRINTING));
-                } else {
-                    sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.STOP_SPRINTING));
-                }
+                sendClientPacketAsync(new ServerboundPlayerCommandPacket(
+                    CACHE.getPlayerCache().getEntityId(),
+                    isSprinting ? PlayerState.START_SPRINTING : PlayerState.STOP_SPRINTING));
             }
             double xDelta = this.x - this.lastX;
             double yDelta = this.y - this.lastY;
@@ -265,32 +265,18 @@ public class PlayerSimulation extends Module {
         this.movementInput.reset();
     }
 
-    private float getMovementInputSideways() {
-        float f = 0.0F;
-        if (movementInput.pressingLeft) {
-            --f;
-        }
-        if (movementInput.pressingRight) {
-            ++f;
-        }
-        if (movementInput.sneaking) {
-            f *= sneakSpeed;
-        }
-        return f * 0.98f;
-    }
-
-    public float getMovementInputForward() {
-        float f = 0.0F;
-        if (movementInput.pressingForward) {
-            ++f;
-        }
-        if (movementInput.pressingBack) {
-            --f;
-        }
-        if (movementInput.sneaking) {
-            f *= sneakSpeed;
-        }
-        return f * 0.98f;
+    private MutableVec3d getMovementInputVec() {
+        float strafe = 0.0F;
+        if (movementInput.pressingLeft) --strafe;
+        if (movementInput.pressingRight) ++strafe;
+        if (movementInput.sneaking) strafe *= sneakSpeed;
+        strafe = strafe * 0.98f;
+        float fwd = 0.0F;
+        if (movementInput.pressingForward) ++fwd;
+        if (movementInput.pressingBack) --fwd;
+        if (movementInput.sneaking) fwd *= sneakSpeed;
+        fwd = fwd * 0.98f;
+        return new MutableVec3d(strafe, 0, fwd);
     }
 
     private void jump() {
@@ -358,24 +344,24 @@ public class PlayerSimulation extends Module {
             if (velocity.getY() > -0.5 && fallDistance < 1) {
                 fallDistance = 1;
             }
-            var lookAngle = MathHelper.calculateViewVector(yaw, pitch);
-            float fx = pitch * (float) (Math.PI / 180.0);
-            double i = Math.sqrt(lookAngle.getX() * lookAngle.getX() + lookAngle.getZ() * lookAngle.getZ());
-            double j = velocity.horizontalDistance();
-            double k = lookAngle.length();
-            double l = Math.cos(fx);
-            l = l * l * Math.min(1.0, k / 0.4);
-            velocity.add(0, gravity * (-1.0 + l * 0.75), 0);
-            if (velocity.getY() < 0 && i > 0) {
-                double m = velocity.getY() * -0.1 * l;
-                velocity.add(lookAngle.getX() * m / i, m, lookAngle.getZ() * m / i);
+            var lookVec = MathHelper.calculateViewVector(yaw, pitch);
+            float pitchRad = pitch * (float) (Math.PI / 180.0);
+            double hLookVec = Math.sqrt(lookVec.getX() * lookVec.getX() + lookVec.getZ() * lookVec.getZ());
+            double hVel = velocity.horizontalDistance();
+            double lookVecLen = lookVec.length();
+            double cosPitch = Math.cos(pitchRad);
+            cosPitch = cosPitch * cosPitch * Math.min(1.0, lookVecLen / 0.4);
+            velocity.add(0, gravity * (-1.0 + cosPitch * 0.75), 0);
+            if (velocity.getY() < 0 && hLookVec > 0) {
+                double m = velocity.getY() * -0.1 * cosPitch;
+                velocity.add(lookVec.getX() * m / hLookVec, m, lookVec.getZ() * m / hLookVec);
             }
-            if (fx < 0 && i > 0) {
-                double m = j * -Math.sin(fx) * 0.04;
-                velocity.add(-lookAngle.getX() * m / i, m * 3.2, -lookAngle.getZ() * m / i);
+            if (pitchRad < 0 && hLookVec > 0) {
+                double m = hVel * -Math.sin(pitchRad) * 0.04;
+                velocity.add(-lookVec.getX() * m / hLookVec, m * 3.2, -lookVec.getZ() * m / hLookVec);
             }
-            if (i > 0) {
-                velocity.add((lookAngle.getX() / i * j - velocity.getX()) * 0.1, 0, (lookAngle.getZ() / i * j - velocity.getZ()) * 0.1);
+            if (hLookVec > 0) {
+                velocity.add((lookVec.getX() / hLookVec * hVel - velocity.getX()) * 0.1, 0, (lookVec.getZ() / hLookVec * hVel - velocity.getZ()) * 0.1);
             }
             velocity.multiply(0.99, 0.98, 0.99);
             move();
@@ -385,9 +371,7 @@ public class PlayerSimulation extends Module {
             float friction = this.onGround ? floorSlipperiness * 0.91f : 0.91F;
             applyMovementInput(movementInputVec, floorSlipperiness);
             if (!isFlying) velocity.setY(velocity.getY() - gravity);
-            velocity.set(velocity.getX() * (double) friction,
-                         velocity.getY() * 0.9800000190734863,
-                         velocity.getZ() * (double) friction);
+            velocity.multiply(friction, 0.9800000190734863, friction);
         }
     }
 
@@ -410,18 +394,21 @@ public class PlayerSimulation extends Module {
         boolean isZAdjusted = localVelocity.getZ() != adjustedMovement.getZ();
         if (onGround && (isXAdjusted || isZAdjusted)) {
             // attempt to step up in xz direction block
-            MutableVec3d stepUpAdjustedVec = adjustMovementForCollisions(new MutableVec3d(localVelocity.getX(), stepHeight, localVelocity.getZ()),
-                                                                         playerCollisionBox,
-                                                                         blockCollisionBoxes);
-            MutableVec3d stepUpWithMoveXZAdjustedVec = adjustMovementForCollisions(new MutableVec3d(0.0, stepHeight, 0.0),
-                                                                                   playerCollisionBox.stretch(localVelocity.getX(), 0.0, localVelocity.getZ()),
-                                                                                   blockCollisionBoxes);
+            MutableVec3d stepUpAdjustedVec = adjustMovementForCollisions(
+                new MutableVec3d(localVelocity.getX(), stepHeight, localVelocity.getZ()),
+                playerCollisionBox,
+                blockCollisionBoxes);
+            MutableVec3d stepUpWithMoveXZAdjustedVec = adjustMovementForCollisions(
+                new MutableVec3d(0.0, stepHeight, 0.0),
+                playerCollisionBox.stretch(localVelocity.getX(), 0.0, localVelocity.getZ()),
+                blockCollisionBoxes);
             if (stepUpWithMoveXZAdjustedVec.getY() < this.stepHeight) {
-                MutableVec3d stepUpAndMoveVec = adjustMovementForCollisions(new MutableVec3d(localVelocity.getX(), 0.0, localVelocity.getZ()),
-                                                                            playerCollisionBox.move(stepUpWithMoveXZAdjustedVec.getX(),
-                                                                                                    stepUpWithMoveXZAdjustedVec.getY(),
-                                                                                                    stepUpWithMoveXZAdjustedVec.getZ()),
-                                                                            blockCollisionBoxes);
+                MutableVec3d stepUpAndMoveVec = adjustMovementForCollisions(
+                    new MutableVec3d(localVelocity.getX(), 0.0, localVelocity.getZ()),
+                    playerCollisionBox.move(stepUpWithMoveXZAdjustedVec.getX(),
+                                            stepUpWithMoveXZAdjustedVec.getY(),
+                                            stepUpWithMoveXZAdjustedVec.getZ()),
+                    blockCollisionBoxes);
                 stepUpAndMoveVec.add(stepUpWithMoveXZAdjustedVec);
                 if (stepUpAndMoveVec.horizontalLengthSquared() > stepUpAdjustedVec.horizontalLengthSquared()) {
                     stepUpAdjustedVec = stepUpAndMoveVec;
@@ -429,11 +416,12 @@ public class PlayerSimulation extends Module {
             }
 
             if (stepUpAdjustedVec.horizontalLengthSquared() > adjustedMovement.horizontalLengthSquared()) {
-                stepUpAdjustedVec.add(adjustMovementForCollisions(new MutableVec3d(0.0, -stepUpAdjustedVec.getY() + localVelocity.getY(), 0.0),
-                                                                  playerCollisionBox.move(stepUpAdjustedVec.getX(),
-                                                                                          stepUpAdjustedVec.getY(),
-                                                                                          stepUpAdjustedVec.getZ()),
-                                                                  blockCollisionBoxes));
+                stepUpAdjustedVec.add(adjustMovementForCollisions(
+                    new MutableVec3d(0.0, -stepUpAdjustedVec.getY() + localVelocity.getY(), 0.0),
+                    playerCollisionBox.move(stepUpAdjustedVec.getX(),
+                                            stepUpAdjustedVec.getY(),
+                                            stepUpAdjustedVec.getZ()),
+                    blockCollisionBoxes));
                 adjustedMovement = stepUpAdjustedVec;
             }
         }
@@ -441,18 +429,13 @@ public class PlayerSimulation extends Module {
         verticalCollision = isYAdjusted;
         this.setOnGround(isYAdjusted && localVelocity.getY() < 0.0, adjustedMovement);
 
-        final LocalizedCollisionBox movedPlayerCollisionBox = playerCollisionBox.move(adjustedMovement.getX(),
-                                                                                      adjustedMovement.getY(),
-                                                                                      adjustedMovement.getZ());
-        if (isXAdjusted) {
-            velocity.setX(0.0);
-        }
-        if (isYAdjusted) {
-            velocity.setY(0.0);
-        }
-        if (isZAdjusted) {
-            velocity.setZ(0.0);
-        }
+        final LocalizedCollisionBox movedPlayerCollisionBox = playerCollisionBox.move(
+            adjustedMovement.getX(),
+            adjustedMovement.getY(),
+            adjustedMovement.getZ());
+        if (isXAdjusted) velocity.setX(0.0);
+        if (isYAdjusted) velocity.setY(0.0);
+        if (isZAdjusted) velocity.setZ(0.0);
 
         // todo: apply block falling effects like bouncing off slime blocks
 
@@ -532,27 +515,26 @@ public class PlayerSimulation extends Module {
 
     private void updateSupportingBlockPos(boolean onGround, MutableVec3d movement) {
         if (onGround) {
-            LocalizedCollisionBox box = this.playerCollisionBox;
-            LocalizedCollisionBox box2 = new LocalizedCollisionBox(box.minX(), box.maxX(), box.minY() - 1.0E-6, box.minY(), box.minZ(), box.maxZ(), x, y, z);
-            Optional<BlockPos> optional = World.findSupportingBlockPos(box2);
-            if (optional.isPresent() || this.forceUpdateSupportingBlockPos) {
-                this.supportingBlockPos = optional;
+            var cb = new LocalizedCollisionBox(
+                playerCollisionBox.minX(), playerCollisionBox.maxX(),
+                playerCollisionBox.minY() - 1.0E-6, playerCollisionBox.minY(),
+                playerCollisionBox.minZ(), playerCollisionBox.maxZ(),
+                x, y, z);
+            var supportPos = World.findSupportingBlockPos(cb);
+            if (supportPos.isPresent() || this.forceUpdateSupportingBlockPos) {
+                this.supportingBlockPos = supportPos;
             } else if (movement != null) {
-                LocalizedCollisionBox box3 = new LocalizedCollisionBox(
-                    box2.minX() - movement.getX(), box2.maxX() - movement.getX(),
-                    box2.minY(), box2.maxY(),
-                    box2.minZ() - movement.getZ(), box2.maxZ() - movement.getZ(),
+                var moveAdjustedCb = new LocalizedCollisionBox(
+                    cb.minX() - movement.getX(), cb.maxX() - movement.getX(),
+                    cb.minY(), cb.maxY(),
+                    cb.minZ() - movement.getZ(), cb.maxZ() - movement.getZ(),
                     x, y, z);
-                optional = World.findSupportingBlockPos(box3);
-                this.supportingBlockPos = optional;
+                this.supportingBlockPos = supportPos = World.findSupportingBlockPos(moveAdjustedCb);
             }
-
-            this.forceUpdateSupportingBlockPos = optional.isEmpty();
+            this.forceUpdateSupportingBlockPos = supportPos.isEmpty();
         } else {
             this.forceUpdateSupportingBlockPos = false;
-            if (this.supportingBlockPos.isPresent()) {
-                this.supportingBlockPos = Optional.empty();
-            }
+            if (this.supportingBlockPos.isPresent()) this.supportingBlockPos = Optional.empty();
         }
     }
 
@@ -674,9 +656,10 @@ public class PlayerSimulation extends Module {
             movementInput.multiply(speed);
             float yawSin = (float) Math.sin(yaw * 0.017453292f);
             float yawCos = (float) Math.cos(yaw * 0.017453292f);
-            return new MutableVec3d(movementInput.getX() * (double)yawCos - movementInput.getZ() * (double)yawSin,
-                                    movementInput.getY(),
-                                    movementInput.getZ() * (double)yawCos + movementInput.getX() * (double)yawSin);
+            return new MutableVec3d(
+                movementInput.getX() * (double)yawCos - movementInput.getZ() * (double)yawSin,
+                movementInput.getY(),
+                movementInput.getZ() * (double)yawCos + movementInput.getX() * (double)yawSin);
         }
     }
 
@@ -707,16 +690,11 @@ public class PlayerSimulation extends Module {
     }
 
     private void syncFromCache(boolean full) {
-        this.x = CACHE.getPlayerCache().getX();
-        this.lastX = this.x;
-        this.y = CACHE.getPlayerCache().getY();
-        this.lastY = this.y;
-        this.z = CACHE.getPlayerCache().getZ();
-        this.lastZ = this.z;
-        this.yaw = CACHE.getPlayerCache().getYaw();
-        this.lastYaw = this.yaw;
-        this.pitch = CACHE.getPlayerCache().getPitch();
-        this.lastPitch = this.pitch;
+        this.x = this.lastX = CACHE.getPlayerCache().getX();
+        this.y = this.lastY = CACHE.getPlayerCache().getY();
+        this.z = this.lastZ = CACHE.getPlayerCache().getZ();
+        this.yaw = this.lastYaw = CACHE.getPlayerCache().getYaw();
+        this.pitch = this.lastPitch = CACHE.getPlayerCache().getPitch();
         this.onGround = true; // todo: cache
         this.lastOnGround = true;
         this.velocity.set(0, 0, 0);
@@ -732,14 +710,6 @@ public class PlayerSimulation extends Module {
         }
         syncPlayerCollisionBox();
         updateAttributes();
-    }
-
-    private void updateSprintState() {
-        if (movementInput.sprinting) {
-            // cannot sprint any direction except forwards
-            if (getMovementInputForward() <= 0.0f || movementInput.sneaking)
-                movementInput.sprinting = false;
-        }
     }
 
     private void updateInWaterStateAndDoFluidPushing() {

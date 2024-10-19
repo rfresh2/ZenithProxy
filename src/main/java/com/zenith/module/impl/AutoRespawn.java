@@ -4,7 +4,6 @@ import com.zenith.Proxy;
 import com.zenith.event.module.ClientBotTick;
 import com.zenith.event.proxy.DeathEvent;
 import com.zenith.module.Module;
-import com.zenith.util.Timer;
 import org.geysermc.mcprotocollib.protocol.data.game.ClientCommand;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundClientCommandPacket;
 
@@ -16,7 +15,7 @@ import static com.zenith.Shared.*;
 public class AutoRespawn extends Module {
     private static final int tickEventRespawnDelay = 100;
     private int tickCounter = 0;
-    private Timer tickTimer = Timer.createTickTimer();
+
     public AutoRespawn() {
         super();
     }
