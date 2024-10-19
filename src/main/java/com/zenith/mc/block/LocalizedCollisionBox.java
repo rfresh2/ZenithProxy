@@ -7,10 +7,11 @@ import org.jetbrains.annotations.Nullable;
 /**
  * CollisionBox localized to coordinates
  */
-public record LocalizedCollisionBox(double minX, double maxX,
-                                    double minY, double maxY,
-                                    double minZ, double maxZ,
-                                    double x, double y, double z
+public record LocalizedCollisionBox(
+    double minX, double maxX,
+    double minY, double maxY,
+    double minZ, double maxZ,
+    double x, double y, double z
 ) {
     public LocalizedCollisionBox(CollisionBox cb, final double x, final double y, final double z) {
         this(
@@ -22,27 +23,23 @@ public record LocalizedCollisionBox(double minX, double maxX,
     }
 
     public LocalizedCollisionBox stretch(double x, double y, double z) {
-        return new LocalizedCollisionBox(x < 0.0 ? minX() + x : minX(),
-                                         x > 0.0 ? maxX() + x : maxX(),
-                                         y < 0.0 ? minY() + y : minY(),
-                                         y > 0.0 ? maxY() + y : maxY(),
-                                         z < 0.0 ? minZ() + z : minZ(),
-                                         z > 0.0 ? maxZ() + z : maxZ(),
-                                         this.x,
-                                         this.y,
-                                         this.z);
+        return new LocalizedCollisionBox(
+            x < 0.0 ? minX() + x : minX(), x > 0.0 ? maxX() + x : maxX(),
+            y < 0.0 ? minY() + y : minY(), y > 0.0 ? maxY() + y : maxY(),
+            z < 0.0 ? minZ() + z : minZ(), z > 0.0 ? maxZ() + z : maxZ(),
+            this.x,
+            this.y,
+            this.z
+        );
     }
 
     public LocalizedCollisionBox move(final double x, final double y, final double z) {
-        return new LocalizedCollisionBox(this.minX() + x,
-                                         this.maxX() + x,
-                                         this.minY() + y,
-                                         this.maxY() + y,
-                                         this.minZ() + z,
-                                         this.maxZ() + z,
-                                         this.x + x,
-                                         this.y + y,
-                                         this.z + z);
+        return new LocalizedCollisionBox(
+            this.minX() + x, this.maxX() + x,
+            this.minY() + y, this.maxY() + y,
+            this.minZ() + z, this.maxZ() + z,
+            this.x + x, this.y + y, this.z + z
+        );
     }
 
     public double collideX(final LocalizedCollisionBox other, double x) {

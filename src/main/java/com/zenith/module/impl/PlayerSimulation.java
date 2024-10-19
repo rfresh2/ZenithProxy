@@ -120,18 +120,36 @@ public class PlayerSimulation extends Module {
         return this.yaw + difference;
     }
 
+    public synchronized void doMovementInput(boolean pressingForward,
+                                             boolean pressingBack,
+                                             boolean pressingLeft,
+                                             boolean pressingRight,
+                                             boolean jumping,
+                                             boolean sneaking,
+                                             boolean sprinting
+    ) {
+        if (!pressingForward || !pressingBack) {
+            this.movementInput.pressingForward = pressingForward;
+            this.movementInput.pressingBack = pressingBack;
+        }
+        if (!pressingLeft || !pressingRight) {
+            this.movementInput.pressingLeft = pressingLeft;
+            this.movementInput.pressingRight = pressingRight;
+        }
+        this.movementInput.jumping = jumping;
+        this.movementInput.sneaking = sneaking;
+        this.movementInput.sprinting = sprinting;
+    }
+
     public synchronized void doMovementInput(final Input input) {
-        if (!input.pressingForward || !input.pressingBack) {
-            this.movementInput.pressingForward = input.pressingForward;
-            this.movementInput.pressingBack = input.pressingBack;
-        }
-        if (!input.pressingLeft || !input.pressingRight) {
-            this.movementInput.pressingLeft = input.pressingLeft;
-            this.movementInput.pressingRight = input.pressingRight;
-        }
-        this.movementInput.jumping = input.jumping;
-        this.movementInput.sneaking = input.sneaking;
-        this.movementInput.sprinting = input.sprinting;
+        doMovementInput(input.pressingForward,
+                        input.pressingBack,
+                        input.pressingLeft,
+                        input.pressingRight,
+                        input.jumping,
+                        input.sneaking,
+                        input.sprinting
+        );
     }
 
     public void doMovement(final MovementInputRequest request) {
@@ -153,7 +171,7 @@ public class PlayerSimulation extends Module {
         if (Math.abs(velocity.getY()) < 0.003) velocity.setY(0);
         if (Math.abs(velocity.getZ()) < 0.003) velocity.setZ(0);
 
-        updateMovementState();
+        updateSprintState();
         var fallFlyingMetadata = CACHE.getPlayerCache().getThePlayer().getMetadata().get(0);
         if (fallFlyingMetadata instanceof ByteEntityMetadata byteEntityMetadata) {
             var b = byteEntityMetadata.getPrimitiveValue();
@@ -176,9 +194,7 @@ public class PlayerSimulation extends Module {
             // todo: full jump when at water surface
         } else jumpingCooldown = 0;
 
-        this.movementInput.movementForward *= 0.98f;
-        this.movementInput.movementSideways *= 0.98f;
-        final MutableVec3d movementInputVec = new MutableVec3d(movementInput.movementSideways, 0, movementInput.movementForward);
+        final MutableVec3d movementInputVec = new MutableVec3d(getMovementInputSideways(), 0, getMovementInputForward());
         if (isTouchingWater && isSneaking && !isFlying) velocity.setY(velocity.getY() - 0.04f);
         if (CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
             // todo: handle creative and spectator mode movement
@@ -247,6 +263,34 @@ public class PlayerSimulation extends Module {
             this.lastSprinting = this.isSprinting;
         }
         this.movementInput.reset();
+    }
+
+    private float getMovementInputSideways() {
+        float f = 0.0F;
+        if (movementInput.pressingLeft) {
+            --f;
+        }
+        if (movementInput.pressingRight) {
+            ++f;
+        }
+        if (movementInput.sneaking) {
+            f *= sneakSpeed;
+        }
+        return f * 0.98f;
+    }
+
+    public float getMovementInputForward() {
+        float f = 0.0F;
+        if (movementInput.pressingForward) {
+            ++f;
+        }
+        if (movementInput.pressingBack) {
+            --f;
+        }
+        if (movementInput.sneaking) {
+            f *= sneakSpeed;
+        }
+        return f * 0.98f;
     }
 
     private void jump() {
@@ -494,15 +538,11 @@ public class PlayerSimulation extends Module {
             if (optional.isPresent() || this.forceUpdateSupportingBlockPos) {
                 this.supportingBlockPos = optional;
             } else if (movement != null) {
-                LocalizedCollisionBox box3 = new LocalizedCollisionBox(box2.minX() - movement.getX(),
-                                                                       box2.maxX() - movement.getX(),
-                                                                       box2.minY(),
-                                                                       box2.maxY(),
-                                                                       box2.minZ() - movement.getZ(),
-                                                                       box2.maxZ() - movement.getZ(),
-                                                                       x,
-                                                                       y,
-                                                                       z);
+                LocalizedCollisionBox box3 = new LocalizedCollisionBox(
+                    box2.minX() - movement.getX(), box2.maxX() - movement.getX(),
+                    box2.minY(), box2.maxY(),
+                    box2.minZ() - movement.getZ(), box2.maxZ() - movement.getZ(),
+                    x, y, z);
                 optional = World.findSupportingBlockPos(box3);
                 this.supportingBlockPos = optional;
             }
@@ -517,31 +557,12 @@ public class PlayerSimulation extends Module {
     }
 
     private BlockPos getVelocityAffectingPos() {
-        return this.getPosWithYOffset(0.500001F);
-    }
-
-    private BlockPos getPosWithYOffset(float offset) {
         if (this.supportingBlockPos.isPresent()) {
             BlockPos blockPos = this.supportingBlockPos.get();
-            if (!(offset > 1.0E-5F)) {
-                return blockPos;
-            } else {
-                // todo: fences and walls calcs
-//                BlockState blockState = World.getBlockState(blockPos);
-                return
-                    (!((double)offset <= 0.5)
-//                        || !blockState.isIn(BlockTags.FENCES)
-                    )
-//                    && !blockState.isIn(BlockTags.WALLS)
-//                    && !(blockState.getBlock() instanceof FenceGateBlock)
-                    ? new BlockPos(blockPos.x(), MathHelper.floorI(this.y - (double)offset), blockPos.z())
-                    : blockPos;
-            }
+            // todo: fences and walls calcs
+            return new BlockPos(blockPos.x(), MathHelper.floorI(this.y - 0.500001), blockPos.z());
         } else {
-            int i = MathHelper.floorI(this.x);
-            int j = MathHelper.floorI(this.y - (double)offset);
-            int k = MathHelper.floorI(this.z);
-            return new BlockPos(i, j, k);
+            return new BlockPos(MathHelper.floorI(this.x), MathHelper.floorI(this.y - 0.500001), MathHelper.floorI(this.z));
         }
     }
 
@@ -713,22 +734,10 @@ public class PlayerSimulation extends Module {
         updateAttributes();
     }
 
-    private void updateMovementState() {
-        float moveForward = 0.0f;
-        float moveStrafe = 0.0f;
-        if (movementInput.pressingForward) moveForward++;
-        if (movementInput.pressingBack) moveForward--;
-        if (movementInput.pressingLeft) moveStrafe++;
-        if (movementInput.pressingRight) moveStrafe--;
-        if (movementInput.sneaking) {
-            moveStrafe *= this.sneakSpeed;
-            moveForward *= this.sneakSpeed;
-        }
-        movementInput.movementSideways = moveStrafe;
-        movementInput.movementForward = moveForward;
+    private void updateSprintState() {
         if (movementInput.sprinting) {
             // cannot sprint any direction except forwards
-            if (moveForward <= 0.0f || movementInput.sneaking)
+            if (getMovementInputForward() <= 0.0f || movementInput.sneaking)
                 movementInput.sprinting = false;
         }
     }

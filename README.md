@@ -191,8 +191,3 @@ Current limits are documented in [a discord channel](https://discord.com/channel
 
 * [Pork2b2tBot Contributors](https://github.com/PorkStudios/Pork2b2tBot/graphs/contributors)
 * [MCProtocolLib Contributors](https://github.com/GeyserMC/MCProtocolLib/graphs/contributors)
-
-### Authors
-
-* [rfresh](https://github.com/rfresh2)
-* [odpay](https://github.com/odpay)
