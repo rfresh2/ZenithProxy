@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.zenith.util.Maps;
 import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -29,9 +30,9 @@ public class BlockDataManager {
             .map(Map.Entry::getValue)
             .map(Block::maxStateId)
             .max(Integer::compareTo)
-            .orElseThrow();
-        blockStateIdToBlock = new Int2ObjectOpenHashMap<>(blockStateIdCount);
-        blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(blockStateIdCount);
+            .orElseThrow() + 1;
+        blockStateIdToBlock = new Int2ObjectOpenHashMap<>(blockStateIdCount, Maps.MAX_LOAD_FACTOR);
+        blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(blockStateIdCount, Maps.MAX_LOAD_FACTOR);
         init();
     }
 
