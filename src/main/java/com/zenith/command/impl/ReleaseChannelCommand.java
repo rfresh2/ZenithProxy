@@ -25,7 +25,7 @@ import static java.util.Arrays.asList;
 
 public class ReleaseChannelCommand extends Command {
     private static final List<String> PLATFORMS = asList("java", "linux");
-    private static final List<String> MINECRAFT_VERSIONS = asList("1.12.2", "1.20.1", "1.20.4", "1.20.6", "1.21.0");
+    private static final List<String> MINECRAFT_VERSIONS = asList("1.12.2", "1.20.1", "1.20.4", "1.20.6", "1.21.0", "1.21.2");
 
     @Override
     public CommandUsage commandUsage() {
@@ -163,14 +163,12 @@ public class ReleaseChannelCommand extends Command {
             String[] versionSplit = version.split("\\.");
             int major = Integer.parseInt(versionSplit[0]);
             int minor = Integer.parseInt(versionSplit[1]);
-            if (major != 2) {
-                DEFAULT_LOG.warn("Linux release channel selected but glibc version is less than 2.31");
-                return false;
-            }
             var mcVersion = LAUNCH_CONFIG.getMcVersion();
             var oldVersions = Set.of("1.12.2", "1.20.1", "1.20.4", "1.20.6", "1.21.0");
-            var minorVersionMin = mcVersion == null || oldVersions.contains(mcVersion) ? 31 : 35;
-            if (minor < minorVersionMin) {
+            var minorVersionMin = mcVersion == null || oldVersions.contains(mcVersion)
+                ? 31
+                : 39;
+            if (major != 2 || minor < minorVersionMin) {
                 DEFAULT_LOG.warn("Linux release channel selected but glibc version is less than 2.{}", minorVersionMin);
                 return false;
             }

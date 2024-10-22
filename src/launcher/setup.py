@@ -52,6 +52,7 @@ def setup_execute(config):
     config.repo_owner = "rfresh2"
     config.repo_name = "ZenithProxy"
     config.write_launch_config()
+    print("launch_config.json written successfully!")
 
     if os.path.exists("config.json"):
         while True:
