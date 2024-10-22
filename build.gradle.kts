@@ -57,7 +57,7 @@ dependencies {
     implementation("com.github.rfresh2.discord4j:discord4j-core:3.4.3.9") {
         exclude(group = "io.netty")
     }
-    implementation("com.github.rfresh2:MCProtocolLib:1.21.0.14") {
+    implementation("com.github.rfresh2:MCProtocolLib:1.21.0.15") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
     }
@@ -74,7 +74,6 @@ dependencies {
     implementation("io.netty:netty-transport-native-epoll:$nettyVersion:linux-x86_64")
     implementation("io.netty:netty-transport-native-unix-common:$nettyVersion:linux-x86_64")
     implementation("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
-    implementation("net.kyori:adventure-text-minimessage:4.17.0")
     implementation("org.cloudburstmc.math:api:2.0")
     implementation("org.cloudburstmc.math:immutable:2.0")
     implementation("org.redisson:redisson:3.37.0") {
