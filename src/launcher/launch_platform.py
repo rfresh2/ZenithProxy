@@ -33,22 +33,19 @@ def validate_linux_cpu_flags():
 
 def validate_linux_glibc_version(config):
     try:
-        output = subprocess.check_output(["ldd", "--version"], stderr=subprocess.STDOUT, text=True)
-        # ldd (Ubuntu GLIBC 2.35-0ubuntu3.4) 2.35
-        # get the version from the last word of the first line
-        version = output.splitlines()[0].split(" ")[-1]
-        version = version.split(".")
-        if int(version[0]) != 2:
-            print("Unsupported OS for linux release channel.\nglibc version too low: " + ".".join(version))
-            return False
         mc_version = config.get_mc_version()
         old_versions = ["1.12.2", "1.20.1", "1.20.4", "1.20.6", "1.21.0"]
         if mc_version in old_versions:
             glibc_minor_version_min = 31
         else:
-            glibc_minor_version_min = 35
-        if int(version[1]) < glibc_minor_version_min:
-            print("Unsupported OS for linux release channel.\nglibc version too low: " + ".".join(version))
+            glibc_minor_version_min = 39
+        output = subprocess.check_output(["ldd", "--version"], stderr=subprocess.STDOUT, text=True)
+        # ldd (Ubuntu GLIBC 2.35-0ubuntu3.4) 2.35
+        # get the version from the last word of the first line
+        version = output.splitlines()[0].split(" ")[-1]
+        version = version.split(".")
+        if int(version[0]) != 2 or int(version[1]) < glibc_minor_version_min:
+            print("Unsupported OS for linux release channel.\nglibc version too low: ".join(version).join("\nMin glibc version needed: 2.".join(str(glibc_minor_version_min))))
             return False
         return True
     except Exception as e:

@@ -8,7 +8,7 @@ import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
 import com.zenith.feature.queue.Queue;
-import com.zenith.module.impl.ReplayMod;
+import com.zenith.module.impl.*;
 import com.zenith.network.server.ServerSession;
 import discord4j.common.util.TimestampFormat;
 
@@ -108,32 +108,28 @@ public class StatusCommand extends Command {
                                     : CONFIG.theme.success.discord())
                                : CONFIG.theme.error.discord())
                     .thumbnail(Proxy.getInstance().getAvatarURL(CONFIG.authentication.username).toString())
-                    .addField("AutoDisconnect", "[Health: " + toggleStr(CONFIG.client.extra.utility.actions.autoDisconnect.enabled)
-                        + " (" + CONFIG.client.extra.utility.actions.autoDisconnect.health + ")]", true)
-                    .addField("AutoReconnect", toggleStr(CONFIG.client.extra.autoReconnect.enabled)
-                        + " [" + CONFIG.client.extra.autoReconnect.delaySeconds + "]", true)
-                    .addField("KillAura", toggleStr(CONFIG.client.extra.killAura.enabled), true)
-                    .addField("AutoTotem", toggleStr(CONFIG.client.extra.autoTotem.enabled), true)
-                    .addField("AutoEat", toggleStr(CONFIG.client.extra.autoEat.enabled), true)
-                    .addField("AntiAFK", toggleStr(CONFIG.client.extra.antiafk.enabled), true)
-                    .addField("AutoRespawn", toggleStr(CONFIG.client.extra.autoRespawn.enabled)
-                        + " [" + CONFIG.client.extra.autoRespawn.delayMillis + "]", true)
-                    .addField("ViaVersion", "Zenith To Server: " + toggleStr(CONFIG.client.viaversion.enabled)
-                        + "\nPlayer To Zenith: " + toggleStr(CONFIG.server.viaversion.enabled), true)
-                    .addField("VisualRange", toggleStr(CONFIG.client.extra.visualRange.enabled), true)
-                    .addField("AntiLeak", toggleStr(CONFIG.client.extra.antiLeak.enabled), true)
-                    .addField("AntiKick", toggleStr(CONFIG.client.extra.antiKick.enabled), true)
-                    .addField("AutoFish", toggleStr(CONFIG.client.extra.autoFish.enabled), true)
-                    .addField("Spook", toggleStr(CONFIG.client.extra.spook.enabled), true)
-                    .addField("Stalk", toggleStr(CONFIG.client.extra.stalk.enabled), true)
-                    .addField("Active Hours", toggleStr(CONFIG.client.extra.utility.actions.activeHours.enabled), true)
-                    .addField("AutoReply", toggleStr(CONFIG.client.extra.autoReply.enabled), true)
-                    .addField("ActionLimiter", toggleStr(CONFIG.client.extra.actionLimiter.enabled), true)
-                    .addField("Spammer", toggleStr(CONFIG.client.extra.spammer.enabled), true)
+                    .addField("AutoDisconnect", toggleStr(MODULE.get(AutoDisconnect.class).isEnabled()), true)
+                    .addField("AutoReconnect", toggleStr(MODULE.get(AutoReconnect.class).isEnabled()), true)
+                    .addField("KillAura", toggleStr(MODULE.get(KillAura.class).isEnabled()), true)
+                    .addField("AutoTotem", toggleStr(MODULE.get(AutoTotem.class).isEnabled()), true)
+                    .addField("AutoEat", toggleStr(MODULE.get(AutoEat.class).isEnabled()), true)
+                    .addField("AntiAFK", toggleStr(MODULE.get(AntiAFK.class).isEnabled()), true)
+                    .addField("AutoRespawn", toggleStr(MODULE.get(AutoRespawn.class).isEnabled()), true)
+                    .addField("ViaVersion", "Z->S: " + toggleStr(CONFIG.client.viaversion.enabled)
+                        + "\nP->Z: " + toggleStr(CONFIG.server.viaversion.enabled), true)
+                    .addField("VisualRange", toggleStr(MODULE.get(VisualRange.class).isEnabled()), true)
+                    .addField("AntiLeak", toggleStr(MODULE.get(AntiLeak.class).isEnabled()), true)
+                    .addField("AntiKick", toggleStr(MODULE.get(AntiKick.class).isEnabled()), true)
+                    .addField("AutoFish", toggleStr(MODULE.get(AutoFish.class).isEnabled()), true)
+                    .addField("Spook", toggleStr(MODULE.get(Spook.class).isEnabled()), true)
+                    .addField("Active Hours", toggleStr(MODULE.get(ActiveHours.class).isEnabled()), true)
+                    .addField("AutoReply", toggleStr(MODULE.get(AutoReply.class).isEnabled()), true)
+                    .addField("ActionLimiter", toggleStr(MODULE.get(ActionLimiter.class).isEnabled()), true)
+                    .addField("Spammer", toggleStr(MODULE.get(Spammer.class).isEnabled()), true)
                     .addField("Replay Recording", toggleStr(MODULE.get(ReplayMod.class).isEnabled()), true)
-                    .addField("ESP", toggleStr(CONFIG.server.extra.esp.enable), true)
-                    .addField("AutoArmor", toggleStr(CONFIG.client.extra.autoArmor.enabled), true)
-                    .addField("ChatHistory", toggleStr(CONFIG.server.extra.chatHistory.enable), true);
+                    .addField("ESP", toggleStr(MODULE.get(ESP.class).isEnabled()), true)
+                    .addField("AutoArmor", toggleStr(MODULE.get(AutoArmor.class).isEnabled()), true)
+                    .addField("ChatHistory", toggleStr(MODULE.get(ChatHistory.class).isEnabled()), true);
             }))
             .executes(c -> {
                 final var embed = c.getSource().getEmbed();
@@ -146,14 +142,14 @@ public class StatusCommand extends Command {
                                : CONFIG.theme.error.discord())
                     .thumbnail(Proxy.getInstance().getAvatarURL(CONFIG.authentication.username).toString())
                     .addField("Status", getStatus(), true)
-                    .addField("Connected Client", getCurrentClientUserName(), true)
-                    .addField("Online Time", getOnlineTime(), true)
+                    .addField("Controlling Player", getCurrentClientUserName(), true)
+                    .addField("Online For", getOnlineTime(), true)
                     // end row 1
                     .addField("Health",  (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                     .addField("Dimension",
                               (nonNull(CACHE.getChunkCache().getCurrentDimension()) ? CACHE.getChunkCache().getCurrentDimension().name(): "None"),
                               true)
-                    .addField("TPS", TPS.getTPS(), true)
+                    .addField("Ping", (Proxy.getInstance().isConnected() ? Proxy.getInstance().getClient().getPing() : 0) + "ms", true)
                     // end row 2
                     .addField("Proxy IP", CONFIG.server.getProxyAddress(), true)
                     .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
@@ -167,7 +163,6 @@ public class StatusCommand extends Command {
                 if (CONFIG.discord.reportCoords)
                     embed.addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true);
                 embed
-                    .addField("Chat Relay", (!CONFIG.discord.chatRelay.channelId.isEmpty() ? toggleStr(CONFIG.discord.chatRelay.enable) : "Not Configured"), true)
                     .addField("AutoUpdate", toggleStr(LAUNCH_CONFIG.auto_update), true);
                  return OK;
             });
