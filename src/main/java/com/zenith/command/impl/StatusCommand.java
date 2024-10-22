@@ -146,14 +146,14 @@ public class StatusCommand extends Command {
                                : CONFIG.theme.error.discord())
                     .thumbnail(Proxy.getInstance().getAvatarURL(CONFIG.authentication.username).toString())
                     .addField("Status", getStatus(), true)
-                    .addField("Connected Client", getCurrentClientUserName(), true)
-                    .addField("Online Time", getOnlineTime(), true)
+                    .addField("Controlling Player", getCurrentClientUserName(), true)
+                    .addField("Online For", getOnlineTime(), true)
                     // end row 1
                     .addField("Health",  (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                     .addField("Dimension",
                               (nonNull(CACHE.getChunkCache().getCurrentDimension()) ? CACHE.getChunkCache().getCurrentDimension().name(): "None"),
                               true)
-                    .addField("TPS", TPS.getTPS(), true)
+                    .addField("Ping", (Proxy.getInstance().isConnected() ? Proxy.getInstance().getClient().getPing() : 0) + "ms", true)
                     // end row 2
                     .addField("Proxy IP", CONFIG.server.getProxyAddress(), true)
                     .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
@@ -167,7 +167,6 @@ public class StatusCommand extends Command {
                 if (CONFIG.discord.reportCoords)
                     embed.addField("Coordinates", getCoordinates(CACHE.getPlayerCache()), true);
                 embed
-                    .addField("Chat Relay", (!CONFIG.discord.chatRelay.channelId.isEmpty() ? toggleStr(CONFIG.discord.chatRelay.enable) : "Not Configured"), true)
                     .addField("AutoUpdate", toggleStr(LAUNCH_CONFIG.auto_update), true);
                  return OK;
             });
