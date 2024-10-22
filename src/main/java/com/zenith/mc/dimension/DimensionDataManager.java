@@ -1,11 +1,13 @@
 package com.zenith.mc.dimension;
 
+import com.zenith.util.Maps;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DimensionDataManager {
-    private final Map<String, DimensionData> dimensionNameToData = new ConcurrentHashMap<>(DimensionRegistry.REGISTRY.size());
+    private final Map<String, DimensionData> dimensionNameToData = new ConcurrentHashMap<>(DimensionRegistry.REGISTRY.size()+1, Maps.MAX_LOAD_FACTOR);
 
     public DimensionDataManager() {
         init();

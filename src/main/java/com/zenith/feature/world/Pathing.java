@@ -31,7 +31,7 @@ public class Pathing {
      */
 
     public synchronized void moveReq(final MovementInputRequest movementInputRequest) {
-        if (movementInputRequest.priority() <= currentMovementInputRequest.priority()) return;
+        if (movementInputRequest.priority() < currentMovementInputRequest.priority()) return;
         currentMovementInputRequest = movementInputRequest;
     }
 
@@ -106,10 +106,9 @@ public class Pathing {
     }
 
     public synchronized void handleTick(final ClientBotTick event) {
-        if (currentMovementInputRequest != DEFAULT_MOVEMENT_INPUT_REQUEST) {
-            MODULE.get(PlayerSimulation.class).doMovement(currentMovementInputRequest);
-            currentMovementInputRequest = DEFAULT_MOVEMENT_INPUT_REQUEST;
-        }
+        if (currentMovementInputRequest == DEFAULT_MOVEMENT_INPUT_REQUEST) return;
+        MODULE.get(PlayerSimulation.class).doMovement(currentMovementInputRequest);
+        currentMovementInputRequest = DEFAULT_MOVEMENT_INPUT_REQUEST;
     }
 
     // todo: Pathing interface based on goals
@@ -201,16 +200,10 @@ public class Pathing {
     public static double getCurrentPlayerX() {
         return MathHelper.round(CACHE.getPlayerCache().getX(), 5);
     }
-
     public static double getCurrentPlayerY() {
         return MathHelper.round(CACHE.getPlayerCache().getY(), 5);
     }
-
     public static double getCurrentPlayerZ() {
         return MathHelper.round(CACHE.getPlayerCache().getZ(), 5);
-    }
-
-    public static Position getCurrentPlayerPos() {
-        return new Position(MathHelper.round(CACHE.getPlayerCache().getX(), 5), MathHelper.round(CACHE.getPlayerCache().getY(), 5), MathHelper.round(CACHE.getPlayerCache().getZ(), 5));
     }
 }

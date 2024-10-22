@@ -39,32 +39,4 @@ public class Input {
         sneaking = false;
         sprinting = false;
     }
-
-    public float getMovementSideways() {
-        float f = 0.0F;
-        if (pressingLeft) {
-            --f;
-        }
-        if (pressingRight) {
-            ++f;
-        }
-        if (sneaking) {
-            f *= 0.3F;
-        }
-        return f * 0.98f;
-    }
-
-    public float getMovementForward() {
-        float f = 0.0F;
-        if (pressingForward) {
-            ++f;
-        }
-        if (pressingBack) {
-            --f;
-        }
-        if (sneaking) {
-            f *= 0.3F;
-        }
-        return f * 0.98f;
-    }
 }

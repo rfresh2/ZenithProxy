@@ -41,7 +41,8 @@ public class DebugCommand extends Command {
                 "dc",
                 "teleportResync on/off",
                 "ncpStrictInventory on/off",
-                "debugLogs on/off"
+                "debugLogs on/off",
+                "restartReconnect on/off"
             )
         );
     }
@@ -166,6 +167,12 @@ public class DebugCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Debug Logs " + toggleStrCaps(CONFIG.debug.debugLogs));
                 return OK;
+            })))
+            .then(literal("serverRestartReconnect").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.serverRestartReconnect = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Restart Reconnect " + toggleStrCaps(CONFIG.client.extra.serverRestartReconnect));
+                return OK;
             })));
     }
 
@@ -181,6 +188,7 @@ public class DebugCommand extends Command {
             .addField("Teleport Resync", toggleStr(CONFIG.debug.resyncTeleports), false)
             .addField("NCP Strict Inventory", toggleStr(CONFIG.debug.ncpStrictInventory), false)
             .addField("Debug Logs", toggleStr(CONFIG.debug.debugLogs), false)
+            .addField("Server Restart Reconnect", toggleStr(CONFIG.client.extra.serverRestartReconnect), false)
             .primaryColor();
     }
 }

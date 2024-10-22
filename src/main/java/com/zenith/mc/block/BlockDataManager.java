@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.zenith.util.Maps;
 import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import org.geysermc.mcprotocollib.protocol.data.game.chunk.DataPalette;
 
 import javax.annotation.Nullable;
@@ -23,15 +25,16 @@ import static com.zenith.Shared.OBJECT_MAPPER;
 public class BlockDataManager {
     private final Int2ObjectOpenHashMap<Block> blockStateIdToBlock;
     private final Int2ObjectOpenHashMap<List<CollisionBox>> blockStateIdToCollisionBoxes;
+    private final IntOpenHashSet waterloggedStateIds = new IntOpenHashSet(9182 + 1, Maps.MAX_LOAD_FACTOR);
 
     public BlockDataManager() {
         int blockStateIdCount = BlockRegistry.REGISTRY.getIdMap().int2ObjectEntrySet().stream()
             .map(Map.Entry::getValue)
             .map(Block::maxStateId)
             .max(Integer::compareTo)
-            .orElseThrow();
-        blockStateIdToBlock = new Int2ObjectOpenHashMap<>(blockStateIdCount);
-        blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(blockStateIdCount);
+            .orElseThrow() + 1;
+        blockStateIdToBlock = new Int2ObjectOpenHashMap<>(blockStateIdCount, Maps.MAX_LOAD_FACTOR);
+        blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(blockStateIdCount, Maps.MAX_LOAD_FACTOR);
         init();
     }
 
@@ -91,6 +94,14 @@ public class BlockDataManager {
                     blockStateIdToCollisionBoxes.put(i, collisionBoxes);
                 }
             }
+            try (JsonParser waterloggedParser = OBJECT_MAPPER.createParser(getClass().getResourceAsStream(
+                "/mcdata/waterloggedBlockStateIds.json"))) {
+                TreeNode waterloggedNode = waterloggedParser.getCodec().readTree(waterloggedParser);
+                ArrayNode waterloggedArray = (ArrayNode) waterloggedNode;
+                waterloggedArray.elements().forEachRemaining((stateId) -> {
+                    waterloggedStateIds.add(stateId.asInt());
+                });
+            }
             DataPalette.GLOBAL_PALETTE_BITS_PER_ENTRY = MathHelper.log2Ceil(blockStateIdToBlock.size());
         } catch (final Exception e) {
             throw new RuntimeException(e);
@@ -107,6 +118,10 @@ public class BlockDataManager {
         List<CollisionBox> collisionBoxes = blockStateIdToCollisionBoxes.get(blockStateId);
         if (collisionBoxes == blockStateIdToCollisionBoxes.defaultReturnValue()) return null;
         return collisionBoxes;
+    }
+
+    public boolean isWaterLogged(int blockStateId) {
+        return waterloggedStateIds.contains(blockStateId);
     }
 
     public float getBlockSlipperiness(Block block) {

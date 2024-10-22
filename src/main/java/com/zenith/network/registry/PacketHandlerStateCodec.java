@@ -16,7 +16,7 @@ public class PacketHandlerStateCodec<S extends Session> {
     protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> outboundHandlers;
     @NonNull
     protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> postOutboundHandlers;
-    protected final boolean allowUnhandled;
+    protected final boolean allowUnhandledInbound;
 
     public static <S extends Session> Builder<S> builder() {
         return new Builder<>();
@@ -25,7 +25,7 @@ public class PacketHandlerStateCodec<S extends Session> {
     public <P extends Packet> P handleInbound(@NonNull P packet, @NonNull S session) {
         PacketHandler<P, S> handler = (PacketHandler<P, S>) this.inboundHandlers.get(packet.getClass());
         if (handler == null) {
-            if (allowUnhandled) return packet;
+            if (allowUnhandledInbound) return packet;
             else return null;
         } else {
             return handler.apply(packet, session);
@@ -61,7 +61,7 @@ public class PacketHandlerStateCodec<S extends Session> {
         protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> outboundHandlers = new Reference2ObjectOpenHashMap<>();
 
         protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> postOutboundHandlers = new Reference2ObjectOpenHashMap<>();
-        protected boolean allowUnhandled = true;
+        protected boolean allowUnhandledInbound = true;
 
         public PacketHandlerStateCodec.Builder<S> registerInbound(@NonNull Class<? extends Packet> packetClass, @NonNull PacketHandler<? extends Packet, S> handler) {
             this.inboundHandlers.put(packetClass, handler);
@@ -88,13 +88,13 @@ public class PacketHandlerStateCodec<S extends Session> {
             return this;
         }
 
-        public PacketHandlerStateCodec.Builder<S> allowUnhandled(final boolean allowUnhandled) {
-            this.allowUnhandled = allowUnhandled;
+        public PacketHandlerStateCodec.Builder<S> allowUnhandledInbound(final boolean allowUnhandled) {
+            this.allowUnhandledInbound = allowUnhandled;
             return this;
         }
 
         public PacketHandlerStateCodec<S> build() {
-            return new PacketHandlerStateCodec<>(this.inboundHandlers, this.outboundHandlers, this.postOutboundHandlers, this.allowUnhandled);
+            return new PacketHandlerStateCodec<>(this.inboundHandlers, this.outboundHandlers, this.postOutboundHandlers, this.allowUnhandledInbound);
         }
     }
 }

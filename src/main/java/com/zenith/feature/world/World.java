@@ -77,9 +77,6 @@ public class World {
         LongList blockPosList = getBlockPosLongListInCollisionBox(cb);
         for (int i = 0; i < blockPosList.size(); i++) {
             var blockPos = blockPosList.getLong(i);
-            var x = BlockPos.getX(blockPos);
-            var y = BlockPos.getY(blockPos);
-            var z = BlockPos.getZ(blockPos);
             final BlockState blockState = getBlockState(blockPos);
             if (blockState.isSolidBlock()) {
                 var collisionBoxes = blockState.getLocalizedCollisionBoxes();
@@ -195,8 +192,6 @@ public class World {
 
     public static float getFluidHeight(BlockState localBlockState) {
         var block = localBlockState.block();
-        // todo: support waterlogged blocks
-        if (block != BlockRegistry.WATER && block != BlockRegistry.LAVA) return 0f;
         if (block == BlockRegistry.WATER) {
             if (World.getBlockAtBlockPos(localBlockState.x(), localBlockState.y() + 1, localBlockState.z()) == BlockRegistry.WATER) {
                 return 1;
@@ -205,14 +200,19 @@ public class World {
             if ((level & 0x8) == 8) return 8 / 9f;
             return (8 - level) / 9f;
         } else if (block == BlockRegistry.LAVA) {
-            if (World.getBlockAtBlockPos(localBlockState.x(), localBlockState.y() + 1, localBlockState.z()) == BlockRegistry.LAVA) {
+            if (World.getBlockAtBlockPos(localBlockState.x(),
+                                         localBlockState.y() + 1,
+                                         localBlockState.z()) == BlockRegistry.LAVA) {
                 return 1;
             }
             int level = localBlockState.id() - localBlockState.block().minStateId();
             if (level >= 8) return 8 / 9f;
             return (8 - level) / 9f;
+        } else if (BLOCK_DATA.isWaterLogged(localBlockState.id())) {
+            return 8 / 9f;
+        } else {
+            return 0f;
         }
-        return 8 / 9f;
     }
 
     public static MutableVec3d getFluidFlow(BlockState localBlockState) {
@@ -264,7 +264,8 @@ public class World {
 
     private static boolean affectsFlow(BlockState inType, int x, int y, int z) {
         var blockState = getBlockState(x, y, z);
-        return !isFluid(blockState.block()) || blockState.block() == inType.block();
+        var inTypeWaterAndBlockIsWaterlogged = inType.block() == BlockRegistry.WATER && BLOCK_DATA.isWaterLogged(blockState.id());
+        return !isFluid(blockState.block()) || blockState.block() == inType.block() || inTypeWaterAndBlockIsWaterlogged;
     }
 
 

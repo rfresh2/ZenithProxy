@@ -43,7 +43,7 @@ public class ActionLimiter extends Module {
             .setPriority(1000)
             .setActivePredicate((session) -> shouldLimit((ServerSession) session))
             .state(ProtocolState.GAME, PacketHandlerStateCodec.<ServerSession>builder()
-                .allowUnhandled(true)
+                .allowUnhandledInbound(true)
                 .registerInbound(ServerboundChatCommandPacket.class, new ALChatCommandHandler())
                 .registerInbound(ServerboundChatCommandSignedPacket.class, new ALSignedChatCommandHandler())
                 .registerInbound(ServerboundChatPacket.class, new ALChatHandler())

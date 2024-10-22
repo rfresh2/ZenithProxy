@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.zenith.feature.map.Brightness;
 import com.zenith.util.Color;
+import com.zenith.util.Maps;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 
@@ -12,7 +13,7 @@ import static com.zenith.Shared.OBJECT_MAPPER;
 
 public class MapBlockColorManager {
     // todo: provide alternative color map? https://github.com/Godlander/vpp/blob/main/assets/minecraft/shaders/core/render/text.fsh
-    private final Int2IntMap mapColorIdToColor = new Int2IntOpenHashMap(64);
+    private final Int2IntMap mapColorIdToColor = new Int2IntOpenHashMap(64 + 1, Maps.MAX_LOAD_FACTOR);
 
     public MapBlockColorManager() {
         init();

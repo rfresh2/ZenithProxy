@@ -12,6 +12,9 @@ import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;
 import lombok.Getter;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeModifier;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeType;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.ModifierOperation;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
@@ -28,7 +31,6 @@ import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 
 public class PlayerSimulation extends Module {
-    private double gravity = 0.08;
     @Getter private double x;
     @Getter private double y;
     @Getter private double z;
@@ -47,26 +49,26 @@ public class PlayerSimulation extends Module {
     private boolean lastSprinting;
     private boolean isFlying;
     private boolean isFallFlying;
-    private boolean canFly;
-    private boolean wasFlying;
-    private boolean isSwimming;
-    private boolean wasSwimming;
-    private boolean isClimbing;
     private boolean isGliding;
-    private boolean wasGliding;
     private double fallDistance;
     @Getter private boolean isTouchingWater;
     private boolean isTouchingLava;
     private int ticksSinceLastPositionPacketSent;
-    private MutableVec3d stuckSpeedMultiplier = new MutableVec3d(0, 0, 0);
-    private MutableVec3d velocity = new MutableVec3d(0, 0, 0);
-    private Input movementInput = new Input();
+    private final MutableVec3d stuckSpeedMultiplier = new MutableVec3d(0, 0, 0);
+    private final MutableVec3d velocity = new MutableVec3d(0, 0, 0);
+    private final Input movementInput = new Input();
     private Input lastSentMovementInput = new Input(movementInput);
     private int waitTicks = 0;
     private static final CollisionBox STANDING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.8, -0.3, 0.3);
     private static final CollisionBox SNEAKING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.5, -0.3, 0.3);
     private LocalizedCollisionBox playerCollisionBox = new LocalizedCollisionBox(STANDING_COLLISION_BOX, 0, 0, 0);
-    private float stepHeight = 0.6F;
+    private double gravity = 0.08;
+    private float stepHeight = 0.6f;
+    private float waterMovementEfficiency = 0.0f;
+    private float movementEfficiency = 0.0f;
+    private float speed = 0.10000000149011612f;
+    private float sneakSpeed = 0.3f;
+    private float jumpStrength = 0.42f;
     private boolean forceUpdateSupportingBlockPos = false;
     private Optional<BlockPos> supportingBlockPos = Optional.empty();
     private int jumpingCooldown;
@@ -75,14 +77,15 @@ public class PlayerSimulation extends Module {
 
     @Override
     public void subscribeEvents() {
-        EVENT_BUS.subscribe(this,
-                            // we want this to be one of the last thing that happens in the tick
-                            // to allow other modules to update the player's input
-                            // other modules can also do actions after this tick by setting an even lower priority
-                            of(ClientBotTick.class, -20000, this::tick),
-                            of(ClientBotTick.class, -1000000, this::tickEnd),
-                            of(ClientBotTick.Starting.class, this::handleClientTickStarting),
-                            of(ClientBotTick.Stopped.class, this::handleClientTickStopped)
+        EVENT_BUS.subscribe(
+            this,
+            // we want this to be one of the last thing that happens in the tick
+            // to allow other modules to update the player's input
+            // other modules can also do actions after this tick by setting an even lower priority
+            of(ClientBotTick.class, -20000, this::tick),
+            of(ClientBotTick.class, -1000000, this::tickEnd),
+            of(ClientBotTick.Starting.class, this::handleClientTickStarting),
+            of(ClientBotTick.Stopped.class, this::handleClientTickStopped)
         );
     }
 
@@ -119,13 +122,14 @@ public class PlayerSimulation extends Module {
         return this.yaw + difference;
     }
 
-    public synchronized void doMovementInput(boolean pressingForward,
-                                             boolean pressingBack,
-                                             boolean pressingLeft,
-                                             boolean pressingRight,
-                                             boolean jumping,
-                                             boolean sneaking,
-                                             boolean sprinting
+    public synchronized void doMovementInput(
+        boolean pressingForward,
+        boolean pressingBack,
+        boolean pressingLeft,
+        boolean pressingRight,
+        boolean jumping,
+        boolean sneaking,
+        boolean sprinting
     ) {
         if (!pressingForward || !pressingBack) {
             this.movementInput.pressingForward = pressingForward;
@@ -138,16 +142,20 @@ public class PlayerSimulation extends Module {
         this.movementInput.jumping = jumping;
         this.movementInput.sneaking = sneaking;
         this.movementInput.sprinting = sprinting;
+        if (movementInput.sprinting && (movementInput.pressingBack || movementInput.sneaking)) {
+            movementInput.sprinting = false;
+        }
     }
 
     public synchronized void doMovementInput(final Input input) {
-        doMovementInput(input.pressingForward,
-                        input.pressingBack,
-                        input.pressingLeft,
-                        input.pressingRight,
-                        input.jumping,
-                        input.sneaking,
-                        input.sprinting
+        doMovementInput(
+            input.pressingForward,
+            input.pressingBack,
+            input.pressingLeft,
+            input.pressingRight,
+            input.jumping,
+            input.sneaking,
+            input.sprinting
         );
     }
 
@@ -170,7 +178,6 @@ public class PlayerSimulation extends Module {
         if (Math.abs(velocity.getY()) < 0.003) velocity.setY(0);
         if (Math.abs(velocity.getZ()) < 0.003) velocity.setZ(0);
 
-        updateSprintState();
         var fallFlyingMetadata = CACHE.getPlayerCache().getThePlayer().getMetadata().get(0);
         if (fallFlyingMetadata instanceof ByteEntityMetadata byteEntityMetadata) {
             var b = byteEntityMetadata.getPrimitiveValue();
@@ -193,23 +200,23 @@ public class PlayerSimulation extends Module {
             // todo: full jump when at water surface
         } else jumpingCooldown = 0;
 
-        final MutableVec3d movementInputVec = new MutableVec3d(movementInput.getMovementSideways(), 0, movementInput.getMovementForward());
+        final MutableVec3d movementInputVec = getMovementInputVec();
         if (isTouchingWater && isSneaking && !isFlying) velocity.setY(velocity.getY() - 0.04f);
         if (CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
             // todo: handle creative and spectator mode movement
             //  for now, we just stay still (unless in a vehicle)
             //  ideally we'd check if isFlying = true
             //  but we don't cache or intercept where this would be set server side yet
-            velocity.setX(0);
-            velocity.setY(0);
-            velocity.setZ(0);
+            velocity.set(0, 0, 0);
         } else {
             travel(movementInputVec);
         }
 
         if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
-            sendClientPacketsAsync(new ServerboundMovePlayerRotPacket(false, horizontalCollision, this.yaw, this.pitch),
-                                   new ServerboundPlayerInputPacket(false, false, false, false, false, false, false));
+            sendClientPacketsAsync(
+                new ServerboundMovePlayerRotPacket(false, horizontalCollision, this.yaw, this.pitch),
+                new ServerboundPlayerInputPacket(false, false, false, false, false, false, false)
+            );
             lastSentMovementInput = new Input(false, false, false, false, false, false, false);
             // todo: handle vehicle travel movement
         } else {
@@ -277,8 +284,22 @@ public class PlayerSimulation extends Module {
         sendClientPacket(new ServerboundClientTickEndPacket());
     }
 
+    private MutableVec3d getMovementInputVec() {
+        float strafe = 0.0F;
+        if (movementInput.pressingLeft) --strafe;
+        if (movementInput.pressingRight) ++strafe;
+        if (movementInput.sneaking) strafe *= sneakSpeed;
+        strafe = strafe * 0.98f;
+        float fwd = 0.0F;
+        if (movementInput.pressingForward) ++fwd;
+        if (movementInput.pressingBack) --fwd;
+        if (movementInput.sneaking) fwd *= sneakSpeed;
+        fwd = fwd * 0.98f;
+        return new MutableVec3d(strafe, 0, fwd);
+    }
+
     private void jump() {
-        this.velocity.setY(0.42);
+        this.velocity.setY(jumpStrength);
         if (this.isSprinting) {
             float sprintAngle = yaw * (float) (Math.PI / 180.0);
             this.velocity.setX(this.velocity.getX() - (Math.sin(sprintAngle) * 0.2F));
@@ -306,11 +327,11 @@ public class PlayerSimulation extends Module {
             boolean falling = velocity.getY() <= 0.0;
             float waterSlowdown = isSprinting ? 0.9f : 0.8f;
             float waterSpeed = 0.02f;
-            float waterMovementEfficiency = CACHE.getPlayerCache().getThePlayer().getWaterMovementEfficiency();
-            if (!onGround) waterMovementEfficiency *= 0.5f;
-            if (waterMovementEfficiency > 0.0f) {
-                waterSlowdown += (0.54600006F - waterSlowdown) * waterMovementEfficiency;
-                waterSpeed += (getSpeed() - waterSpeed) * waterMovementEfficiency;
+            float movementEfficiency = this.waterMovementEfficiency;
+            if (!onGround) movementEfficiency *= 0.5f;
+            if (movementEfficiency > 0.0f) {
+                waterSlowdown += (0.54600006F - waterSlowdown) * movementEfficiency;
+                waterSpeed += (this.speed - waterSpeed) * movementEfficiency;
             }
             if (CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().containsKey(Effect.DOLPHINS_GRACE)) {
                 waterSlowdown = 0.96f;
@@ -346,24 +367,24 @@ public class PlayerSimulation extends Module {
             if (velocity.getY() > -0.5 && fallDistance < 1) {
                 fallDistance = 1;
             }
-            var lookAngle = MathHelper.calculateViewVector(yaw, pitch);
-            float fx = pitch * (float) (Math.PI / 180.0);
-            double i = Math.sqrt(lookAngle.getX() * lookAngle.getX() + lookAngle.getZ() * lookAngle.getZ());
-            double j = velocity.horizontalDistance();
-            double k = lookAngle.length();
-            double l = Math.cos(fx);
-            l = l * l * Math.min(1.0, k / 0.4);
-            velocity.add(0, gravity * (-1.0 + l * 0.75), 0);
-            if (velocity.getY() < 0 && i > 0) {
-                double m = velocity.getY() * -0.1 * l;
-                velocity.add(lookAngle.getX() * m / i, m, lookAngle.getZ() * m / i);
+            var lookVec = MathHelper.calculateViewVector(yaw, pitch);
+            float pitchRad = pitch * (float) (Math.PI / 180.0);
+            double hLookVec = Math.sqrt(lookVec.getX() * lookVec.getX() + lookVec.getZ() * lookVec.getZ());
+            double hVel = velocity.horizontalDistance();
+            double lookVecLen = lookVec.length();
+            double cosPitch = Math.cos(pitchRad);
+            cosPitch = cosPitch * cosPitch * Math.min(1.0, lookVecLen / 0.4);
+            velocity.add(0, gravity * (-1.0 + cosPitch * 0.75), 0);
+            if (velocity.getY() < 0 && hLookVec > 0) {
+                double m = velocity.getY() * -0.1 * cosPitch;
+                velocity.add(lookVec.getX() * m / hLookVec, m, lookVec.getZ() * m / hLookVec);
             }
-            if (fx < 0 && i > 0) {
-                double m = j * -Math.sin(fx) * 0.04;
-                velocity.add(-lookAngle.getX() * m / i, m * 3.2, -lookAngle.getZ() * m / i);
+            if (pitchRad < 0 && hLookVec > 0) {
+                double m = hVel * -Math.sin(pitchRad) * 0.04;
+                velocity.add(-lookVec.getX() * m / hLookVec, m * 3.2, -lookVec.getZ() * m / hLookVec);
             }
-            if (i > 0) {
-                velocity.add((lookAngle.getX() / i * j - velocity.getX()) * 0.1, 0, (lookAngle.getZ() / i * j - velocity.getZ()) * 0.1);
+            if (hLookVec > 0) {
+                velocity.add((lookVec.getX() / hLookVec * hVel - velocity.getX()) * 0.1, 0, (lookVec.getZ() / hLookVec * hVel - velocity.getZ()) * 0.1);
             }
             velocity.multiply(0.99, 0.98, 0.99);
             move();
@@ -373,9 +394,7 @@ public class PlayerSimulation extends Module {
             float friction = this.onGround ? floorSlipperiness * 0.91f : 0.91F;
             applyMovementInput(movementInputVec, floorSlipperiness);
             if (!isFlying) velocity.setY(velocity.getY() - gravity);
-            velocity.set(velocity.getX() * (double) friction,
-                         velocity.getY() * 0.9800000190734863,
-                         velocity.getZ() * (double) friction);
+            velocity.multiply(friction, 0.9800000190734863, friction);
         }
     }
 
@@ -398,18 +417,21 @@ public class PlayerSimulation extends Module {
         boolean isZAdjusted = localVelocity.getZ() != adjustedMovement.getZ();
         if (onGround && (isXAdjusted || isZAdjusted)) {
             // attempt to step up in xz direction block
-            MutableVec3d stepUpAdjustedVec = adjustMovementForCollisions(new MutableVec3d(localVelocity.getX(), stepHeight, localVelocity.getZ()),
-                                                                         playerCollisionBox,
-                                                                         blockCollisionBoxes);
-            MutableVec3d stepUpWithMoveXZAdjustedVec = adjustMovementForCollisions(new MutableVec3d(0.0, stepHeight, 0.0),
-                                                                                   playerCollisionBox.stretch(localVelocity.getX(), 0.0, localVelocity.getZ()),
-                                                                                   blockCollisionBoxes);
+            MutableVec3d stepUpAdjustedVec = adjustMovementForCollisions(
+                new MutableVec3d(localVelocity.getX(), stepHeight, localVelocity.getZ()),
+                playerCollisionBox,
+                blockCollisionBoxes);
+            MutableVec3d stepUpWithMoveXZAdjustedVec = adjustMovementForCollisions(
+                new MutableVec3d(0.0, stepHeight, 0.0),
+                playerCollisionBox.stretch(localVelocity.getX(), 0.0, localVelocity.getZ()),
+                blockCollisionBoxes);
             if (stepUpWithMoveXZAdjustedVec.getY() < this.stepHeight) {
-                MutableVec3d stepUpAndMoveVec = adjustMovementForCollisions(new MutableVec3d(localVelocity.getX(), 0.0, localVelocity.getZ()),
-                                                                            playerCollisionBox.move(stepUpWithMoveXZAdjustedVec.getX(),
-                                                                                                    stepUpWithMoveXZAdjustedVec.getY(),
-                                                                                                    stepUpWithMoveXZAdjustedVec.getZ()),
-                                                                            blockCollisionBoxes);
+                MutableVec3d stepUpAndMoveVec = adjustMovementForCollisions(
+                    new MutableVec3d(localVelocity.getX(), 0.0, localVelocity.getZ()),
+                    playerCollisionBox.move(stepUpWithMoveXZAdjustedVec.getX(),
+                                            stepUpWithMoveXZAdjustedVec.getY(),
+                                            stepUpWithMoveXZAdjustedVec.getZ()),
+                    blockCollisionBoxes);
                 stepUpAndMoveVec.add(stepUpWithMoveXZAdjustedVec);
                 if (stepUpAndMoveVec.horizontalLengthSquared() > stepUpAdjustedVec.horizontalLengthSquared()) {
                     stepUpAdjustedVec = stepUpAndMoveVec;
@@ -417,11 +439,12 @@ public class PlayerSimulation extends Module {
             }
 
             if (stepUpAdjustedVec.horizontalLengthSquared() > adjustedMovement.horizontalLengthSquared()) {
-                stepUpAdjustedVec.add(adjustMovementForCollisions(new MutableVec3d(0.0, -stepUpAdjustedVec.getY() + localVelocity.getY(), 0.0),
-                                                                  playerCollisionBox.move(stepUpAdjustedVec.getX(),
-                                                                                          stepUpAdjustedVec.getY(),
-                                                                                          stepUpAdjustedVec.getZ()),
-                                                                  blockCollisionBoxes));
+                stepUpAdjustedVec.add(adjustMovementForCollisions(
+                    new MutableVec3d(0.0, -stepUpAdjustedVec.getY() + localVelocity.getY(), 0.0),
+                    playerCollisionBox.move(stepUpAdjustedVec.getX(),
+                                            stepUpAdjustedVec.getY(),
+                                            stepUpAdjustedVec.getZ()),
+                    blockCollisionBoxes));
                 adjustedMovement = stepUpAdjustedVec;
             }
         }
@@ -429,18 +452,13 @@ public class PlayerSimulation extends Module {
         verticalCollision = isYAdjusted;
         this.setOnGround(isYAdjusted && localVelocity.getY() < 0.0, adjustedMovement);
 
-        final LocalizedCollisionBox movedPlayerCollisionBox = playerCollisionBox.move(adjustedMovement.getX(),
-                                                                                      adjustedMovement.getY(),
-                                                                                      adjustedMovement.getZ());
-        if (isXAdjusted) {
-            velocity.setX(0.0);
-        }
-        if (isYAdjusted) {
-            velocity.setY(0.0);
-        }
-        if (isZAdjusted) {
-            velocity.setZ(0.0);
-        }
+        final LocalizedCollisionBox movedPlayerCollisionBox = playerCollisionBox.move(
+            adjustedMovement.getX(),
+            adjustedMovement.getY(),
+            adjustedMovement.getZ());
+        if (isXAdjusted) velocity.setX(0.0);
+        if (isYAdjusted) velocity.setY(0.0);
+        if (isZAdjusted) velocity.setZ(0.0);
 
         // todo: apply block falling effects like bouncing off slime blocks
 
@@ -449,7 +467,7 @@ public class PlayerSimulation extends Module {
         this.z = ((movedPlayerCollisionBox.minZ() + movedPlayerCollisionBox.maxZ()) / 2.0);
         syncPlayerCollisionBox();
         tryCheckInsideBlocks();
-        float velocityMultiplier = MathHelper.lerp(CACHE.getPlayerCache().getThePlayer().getMovementEfficiency(), this.getBlockSpeedFactor(), 1.0f);
+        float velocityMultiplier = MathHelper.lerp(movementEfficiency, this.getBlockSpeedFactor(), 1.0f);
         velocity.multiply(velocityMultiplier, 1.0, velocityMultiplier);
     }
 
@@ -521,60 +539,36 @@ public class PlayerSimulation extends Module {
 
     private void updateSupportingBlockPos(boolean onGround, MutableVec3d movement) {
         if (onGround) {
-            LocalizedCollisionBox box = this.playerCollisionBox;
-            LocalizedCollisionBox box2 = new LocalizedCollisionBox(box.minX(), box.maxX(), box.minY() - 1.0E-6, box.minY(), box.minZ(), box.maxZ(), x, y, z);
-            Optional<BlockPos> optional = World.findSupportingBlockPos(box2);
-            if (optional.isPresent() || this.forceUpdateSupportingBlockPos) {
-                this.supportingBlockPos = optional;
+            var cb = new LocalizedCollisionBox(
+                playerCollisionBox.minX(), playerCollisionBox.maxX(),
+                playerCollisionBox.minY() - 1.0E-6, playerCollisionBox.minY(),
+                playerCollisionBox.minZ(), playerCollisionBox.maxZ(),
+                x, y, z);
+            var supportPos = World.findSupportingBlockPos(cb);
+            if (supportPos.isPresent() || this.forceUpdateSupportingBlockPos) {
+                this.supportingBlockPos = supportPos;
             } else if (movement != null) {
-                LocalizedCollisionBox box3 = new LocalizedCollisionBox(box2.minX() - movement.getX(),
-                                                                       box2.maxX() - movement.getX(),
-                                                                       box2.minY(),
-                                                                       box2.maxY(),
-                                                                       box2.minZ() - movement.getZ(),
-                                                                       box2.maxZ() - movement.getZ(),
-                                                                       x,
-                                                                       y,
-                                                                       z);
-                optional = World.findSupportingBlockPos(box3);
-                this.supportingBlockPos = optional;
+                var moveAdjustedCb = new LocalizedCollisionBox(
+                    cb.minX() - movement.getX(), cb.maxX() - movement.getX(),
+                    cb.minY(), cb.maxY(),
+                    cb.minZ() - movement.getZ(), cb.maxZ() - movement.getZ(),
+                    x, y, z);
+                this.supportingBlockPos = supportPos = World.findSupportingBlockPos(moveAdjustedCb);
             }
-
-            this.forceUpdateSupportingBlockPos = optional.isEmpty();
+            this.forceUpdateSupportingBlockPos = supportPos.isEmpty();
         } else {
             this.forceUpdateSupportingBlockPos = false;
-            if (this.supportingBlockPos.isPresent()) {
-                this.supportingBlockPos = Optional.empty();
-            }
+            if (this.supportingBlockPos.isPresent()) this.supportingBlockPos = Optional.empty();
         }
     }
 
     private BlockPos getVelocityAffectingPos() {
-        return this.getPosWithYOffset(0.500001F);
-    }
-
-    private BlockPos getPosWithYOffset(float offset) {
         if (this.supportingBlockPos.isPresent()) {
             BlockPos blockPos = this.supportingBlockPos.get();
-            if (!(offset > 1.0E-5F)) {
-                return blockPos;
-            } else {
-                // todo: fences and walls calcs
-//                BlockState blockState = World.getBlockState(blockPos);
-                return
-                    (!((double)offset <= 0.5)
-//                        || !blockState.isIn(BlockTags.FENCES)
-                    )
-//                    && !blockState.isIn(BlockTags.WALLS)
-//                    && !(blockState.getBlock() instanceof FenceGateBlock)
-                    ? new BlockPos(blockPos.x(), MathHelper.floorI(this.y - (double)offset), blockPos.z())
-                    : blockPos;
-            }
+            // todo: fences and walls calcs
+            return new BlockPos(blockPos.x(), MathHelper.floorI(this.y - 0.500001), blockPos.z());
         } else {
-            int i = MathHelper.floorI(this.x);
-            int j = MathHelper.floorI(this.y - (double)offset);
-            int k = MathHelper.floorI(this.z);
-            return new BlockPos(i, j, k);
+            return new BlockPos(MathHelper.floorI(this.x), MathHelper.floorI(this.y - 0.500001), MathHelper.floorI(this.z));
         }
     }
 
@@ -686,14 +680,15 @@ public class PlayerSimulation extends Module {
             movementInput.multiply(speed);
             float yawSin = (float) Math.sin(yaw * 0.017453292f);
             float yawCos = (float) Math.cos(yaw * 0.017453292f);
-            return new MutableVec3d(movementInput.getX() * (double)yawCos - movementInput.getZ() * (double)yawSin,
-                                    movementInput.getY(),
-                                    movementInput.getZ() * (double)yawCos + movementInput.getX() * (double)yawSin);
+            return new MutableVec3d(
+                movementInput.getX() * (double)yawCos - movementInput.getZ() * (double)yawSin,
+                movementInput.getY(),
+                movementInput.getZ() * (double)yawCos + movementInput.getX() * (double)yawSin);
         }
     }
 
     private float getMovementSpeed(float slipperiness) {
-        return this.onGround ? getSpeed() * (0.21600002f / (slipperiness * slipperiness * slipperiness)) : 0.02f;
+        return this.onGround ? this.speed * (0.21600002f / (slipperiness * slipperiness * slipperiness)) : 0.02f;
     }
 
     private float getBlockSpeedFactor() {
@@ -719,19 +714,14 @@ public class PlayerSimulation extends Module {
     }
 
     private void syncFromCache(boolean full) {
-        this.x = CACHE.getPlayerCache().getX();
-        this.lastX = this.x;
-        this.y = CACHE.getPlayerCache().getY();
-        this.lastY = this.y;
-        this.z = CACHE.getPlayerCache().getZ();
-        this.lastZ = this.z;
-        this.yaw = CACHE.getPlayerCache().getYaw();
-        this.lastYaw = this.yaw;
-        this.pitch = CACHE.getPlayerCache().getPitch();
-        this.lastPitch = this.pitch;
+        this.x = this.lastX = CACHE.getPlayerCache().getX();
+        this.y = this.lastY = CACHE.getPlayerCache().getY();
+        this.z = this.lastZ = CACHE.getPlayerCache().getZ();
+        this.yaw = this.lastYaw = CACHE.getPlayerCache().getYaw();
+        this.pitch = this.lastPitch = CACHE.getPlayerCache().getPitch();
         this.onGround = true; // todo: cache
         this.lastOnGround = true;
-        this.velocity = new MutableVec3d(0, 0, 0);
+        this.velocity.set(0, 0, 0);
         this.supportingBlockPos = Optional.empty();
         this.forceUpdateSupportingBlockPos = false;
         this.ticksSinceLastPositionPacketSent = 0;
@@ -743,18 +733,7 @@ public class PlayerSimulation extends Module {
             this.isSprinting = this.lastSprinting = CACHE.getPlayerCache().isSprinting();
         }
         syncPlayerCollisionBox();
-    }
-
-    private void updateSprintState() {
-        if (movementInput.sprinting) {
-            // cannot sprint any direction except forwards
-            if (movementInput.getMovementForward() <= 0.0f || movementInput.sneaking)
-                movementInput.sprinting = false;
-        }
-    }
-
-    private float getSpeed() {
-        return CACHE.getPlayerCache().getThePlayer().getSpeed();
+        updateAttributes();
     }
 
     private void updateInWaterStateAndDoFluidPushing() {
@@ -855,4 +834,36 @@ public class PlayerSimulation extends Module {
         return true;
     }
 
+    public void updateAttributes() {
+        this.speed = getAttributeValue(AttributeType.Builtin.MOVEMENT_SPEED, 0.10000000149011612f);
+        this.movementEfficiency = getAttributeValue(AttributeType.Builtin.MOVEMENT_EFFICIENCY, 0.0f);
+        this.waterMovementEfficiency = getAttributeValue(AttributeType.Builtin.WATER_MOVEMENT_EFFICIENCY, 0.0f);
+        this.stepHeight = getAttributeValue(AttributeType.Builtin.STEP_HEIGHT, 0.6f);
+        this.gravity = getAttributeValue(AttributeType.Builtin.GRAVITY, 0.08f);
+        this.jumpStrength = getAttributeValue(AttributeType.Builtin.JUMP_STRENGTH, 0.42f);
+        this.sneakSpeed = getAttributeValue(AttributeType.Builtin.SNEAKING_SPEED, 0.3f);
+    }
+
+    private float getAttributeValue(final AttributeType.Builtin attributeType, float defaultValue) {
+        var attribute = CACHE.getPlayerCache().getThePlayer().getAttributes().get(attributeType);
+        if (attribute == null) return defaultValue;
+        double v1 = attribute.getValue();
+        for (AttributeModifier modifier : attribute.getModifiers()) {
+            if (modifier.getOperation() == ModifierOperation.ADD) {
+                v1 += modifier.getAmount();
+            }
+        }
+        double v2 = v1;
+        for (AttributeModifier modifier : attribute.getModifiers()) {
+            if (modifier.getOperation() == ModifierOperation.ADD_MULTIPLIED_BASE) {
+                v2 += v1 * modifier.getAmount();
+            }
+        }
+        for (AttributeModifier modifier : attribute.getModifiers()) {
+            if (modifier.getOperation() == ModifierOperation.ADD_MULTIPLIED_TOTAL) {
+                v2 *= 1.0 + modifier.getAmount();
+            }
+        }
+        return (float) v2;
+    }
 }

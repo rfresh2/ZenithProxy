@@ -57,7 +57,7 @@ dependencies {
     implementation("com.github.rfresh2.discord4j:discord4j-core:3.4.3.9") {
         exclude(group = "io.netty")
     }
-    implementation("com.github.rfresh2:MCProtocolLib:1.21.2.6") {
+    implementation("com.github.rfresh2:MCProtocolLib:1.21.2.7") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
     }
@@ -74,7 +74,6 @@ dependencies {
     implementation("io.netty:netty-transport-native-epoll:$nettyVersion:linux-x86_64")
     implementation("io.netty:netty-transport-native-unix-common:$nettyVersion:linux-x86_64")
     implementation("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
-    implementation("net.kyori:adventure-text-minimessage:4.17.0")
     implementation("org.cloudburstmc.math:api:2.0")
     implementation("org.cloudburstmc.math:immutable:2.0")
     implementation("org.redisson:redisson:3.37.0") {
@@ -92,19 +91,19 @@ dependencies {
     implementation("net.raphimc:ViaLoader:3.0.3")
     implementation("com.viaversion:viaversion:5.0.5")
     implementation("com.viaversion:viabackwards:5.0.4")
-    implementation("org.jline:jline:3.27.0")
-    implementation("org.jline:jline-terminal-jni:3.27.0")
+    implementation("org.jline:jline:3.27.1")
+    implementation("org.jline:jline-terminal-jni:3.27.1")
     implementation("ar.com.hjg:pngj:2.1.0")
     implementation("com.zaxxer:HikariCP:6.0.0")
     implementation("org.postgresql:postgresql:42.7.4")
-    implementation("org.jdbi:jdbi3-postgres:3.45.4")
+    implementation("org.jdbi:jdbi3-postgres:3.46.0")
     implementation("com.google.guava:guava:33.3.1-jre")
-    implementation("ch.qos.logback:logback-classic:1.5.10")
+    implementation("ch.qos.logback:logback-classic:1.5.11")
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("org.slf4j:jul-to-slf4j:2.0.16")
     implementation("com.mojang:brigadier:1.2.9")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
     val lombokVersion = "1.18.34"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
