@@ -3,6 +3,7 @@ package com.zenith.database;
 import com.zenith.Proxy;
 import com.zenith.util.Wait;
 import org.jdbi.v3.core.HandleConsumer;
+import org.redisson.RedissonShutdownException;
 import org.redisson.api.RLock;
 
 import javax.annotation.Nullable;
@@ -204,8 +205,16 @@ public abstract class LockingDatabase extends Database {
             } catch (final Exception e2) {
                 DATABASE_LOG.error("Error releasing lock in try lock process exception", e2);
             }
+            if (e instanceof RedissonShutdownException) {
+                restartRedis();
+            }
             Wait.wait(30);
         }
+    }
+
+    protected void restartRedis() {
+        rLock = null;
+        redisClient.restart();
     }
 
     public void insert(final Instant instant, final HandleConsumer query) {

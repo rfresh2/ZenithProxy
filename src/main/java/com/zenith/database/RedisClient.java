@@ -7,6 +7,8 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 
+import java.time.Instant;
+
 import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.DATABASE_LOG;
 import static java.util.Objects.isNull;
@@ -42,6 +44,26 @@ public class RedisClient {
 
     public boolean isShutDown() {
         return isNull(redissonClient) || redissonClient.isShuttingDown() || redissonClient.isShutdown();
+    }
+
+    private Instant lastRestart = Instant.EPOCH;
+
+    public void restart() {
+        synchronized (this) {
+            if (Instant.now().isBefore(lastRestart.plusSeconds(30))) {
+                DATABASE_LOG.info("Ignoring redis restart request, last restart was less than 30 seconds ago");
+                return;
+            }
+            lastRestart = Instant.now();
+            if (redissonClient != null) {
+                try {
+                    redissonClient.shutdown();
+                } catch (final Throwable e) {
+                    DATABASE_LOG.warn("Failed to shutdown redisson client", e);
+                }
+            }
+            redissonClient = buildRedisClient();
+        }
     }
 
     public static RedissonClient buildRedisClient() {
