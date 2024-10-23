@@ -96,7 +96,10 @@ dependencies {
     implementation("ar.com.hjg:pngj:2.1.0")
     implementation("com.zaxxer:HikariCP:6.0.0")
     implementation("org.postgresql:postgresql:42.7.4")
-    implementation("org.jdbi:jdbi3-postgres:3.46.0")
+    // todo: 3.46.0 introduces JFR support
+    //  but it causes a runtime exception in graalvm native image if we do not build with JFR support
+    //  which adds about 10mb to the binary size for zero benefit because we do not use jfr
+    implementation("org.jdbi:jdbi3-postgres:3.45.4")
     implementation("com.google.guava:guava:33.3.1-jre")
     implementation("ch.qos.logback:logback-classic:1.5.11")
     implementation("org.slf4j:slf4j-api:2.0.16")
@@ -261,7 +264,8 @@ graalvmNative {
                 "-R:MaxHeapSize=200m",
                 "-march=x86-64-v3",
                 "--gc=serial",
-                "-J-XX:MaxRAMPercentage=90"
+                "-J-XX:MaxRAMPercentage=90",
+//                "--enable-monitoring=jfr"
             )
             val pgoPath = System.getenv("GRAALVM_PGO_PATH")
             if (pgoPath != null) {
