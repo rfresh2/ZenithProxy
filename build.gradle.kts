@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "com.zenith"
-version = "1.21.2"
+version = "1.21.3"
 
 val javaVersion23 = JavaLanguageVersion.of(23)
 val javaVersion21 = JavaLanguageVersion.of(21)
@@ -57,7 +57,7 @@ dependencies {
     implementation("com.github.rfresh2.discord4j:discord4j-core:3.4.3.9") {
         exclude(group = "io.netty")
     }
-    implementation("com.github.rfresh2:MCProtocolLib:1.21.2.7") {
+    implementation("com.github.rfresh2:MCProtocolLib:1.21.3.1") {
         exclude(group = "io.netty.incubator")
         exclude(group = "io.netty")
     }

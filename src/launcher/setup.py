@@ -42,7 +42,7 @@ def setup_execute(config):
     #         print("Invalid input. Enter 1 or 2")
     # print("")
 
-    minecraft_version = "1.21.2"
+    minecraft_version = "1.21.3"
 
     config.auto_update = True
     config.auto_update_launcher = True

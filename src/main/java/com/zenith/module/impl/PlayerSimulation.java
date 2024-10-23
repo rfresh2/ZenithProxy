@@ -492,7 +492,7 @@ public class PlayerSimulation extends Module {
                 fallDistance = 0.0;
                 stuckSpeedMultiplier.set(0.25, 0.05, 0.25);
             } else if (localState.block() == BlockRegistry.HONEY_BLOCK) {
-                // todo: changes in 1.21.2
+                // todo: changes in 1.21.3
                 if (isSlidingDownHoneyBlock(localState.x(), localState.y(), localState.z())) {
                     if (velocity.getY() < -0.13) {
                         double d = -0.05 / velocity.getY();

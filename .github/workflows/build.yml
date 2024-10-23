@@ -5,7 +5,7 @@ on:
   pull_request:
   push:
     branches:
-      - "1.21.2"
+      - "1.21.3"
 
 jobs:
   build:

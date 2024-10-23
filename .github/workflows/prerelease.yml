@@ -1,9 +1,9 @@
-name: 1.21.2 PreRelease Build and Release
+name: 1.21.3 PreRelease Build and Release
 
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+\+1.21.2.pre'
+      - '[0-9]+.[0-9]+.[0-9]+\+1.21.3.pre'
 
 jobs:
   build-java-and-linux-amd64:
