@@ -1,6 +1,7 @@
 package com.zenith.database;
 
 import com.zenith.Proxy;
+import com.zenith.event.proxy.RedisRestartEvent;
 import com.zenith.util.Wait;
 import org.jdbi.v3.core.HandleConsumer;
 import org.redisson.RedissonShutdownException;
@@ -13,6 +14,7 @@ import java.util.Queue;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -28,6 +30,8 @@ public abstract class LockingDatabase extends Database {
     private RLock rLock;
     protected ScheduledExecutorService lockExecutorService;
     private ScheduledFuture<?> queryExecutorFuture;
+    private final AtomicBoolean redisRestarted = new AtomicBoolean(false);
+    private final Object eventListener = new Object();
 
     public LockingDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
         super(queryExecutor);
@@ -69,6 +73,7 @@ public abstract class LockingDatabase extends Database {
     public void start() {
         if (this.isRunning) return;
         super.start();
+        EVENT_BUS.subscribe(eventListener, of(RedisRestartEvent.class, e -> redisRestarted.set(true)));
         this.lockAcquired.set(false);
         synchronized (this) {
             if (isNull(lockExecutorService)) {
@@ -82,6 +87,7 @@ public abstract class LockingDatabase extends Database {
     public void stop() {
         super.stop();
         synchronized (this) {
+            EVENT_BUS.unsubscribe(eventListener);
             if (nonNull(lockExecutorService)) {
                 try {
                     lockExecutorService.submit(() -> {
@@ -163,7 +169,12 @@ public abstract class LockingDatabase extends Database {
 
     public void tryLockProcess() {
         try {
-            if (isNull(rLock) || redisClient.isShutDown()) {
+            if (redisRestarted.getAndSet(false)) {
+                releaseLock();
+                onLockReleased();
+                rLock = null;
+            }
+            if (rLock == null || redisClient.isShutDown()) {
                 try {
                     rLock = redisClient.getLock(getLockKey());
                 } catch (final Exception e) {
@@ -206,15 +217,10 @@ public abstract class LockingDatabase extends Database {
                 DATABASE_LOG.error("Error releasing lock in try lock process exception", e2);
             }
             if (e instanceof RedissonShutdownException) {
-                restartRedis();
+                redisClient.restart();
             }
             Wait.wait(30);
         }
-    }
-
-    protected void restartRedis() {
-        rLock = null;
-        redisClient.restart();
     }
 
     public void insert(final Instant instant, final HandleConsumer query) {

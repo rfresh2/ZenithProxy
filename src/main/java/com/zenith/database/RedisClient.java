@@ -1,5 +1,6 @@
 package com.zenith.database;
 
+import com.zenith.event.proxy.RedisRestartEvent;
 import io.netty.resolver.DefaultAddressResolverGroup;
 import lombok.Getter;
 import org.redisson.Redisson;
@@ -9,8 +10,7 @@ import org.redisson.config.Config;
 
 import java.time.Instant;
 
-import static com.zenith.Shared.CONFIG;
-import static com.zenith.Shared.DATABASE_LOG;
+import static com.zenith.Shared.*;
 import static java.util.Objects.isNull;
 
 @Getter
@@ -50,7 +50,8 @@ public class RedisClient {
 
     public void restart() {
         synchronized (this) {
-            if (Instant.now().isBefore(lastRestart.plusSeconds(30))) {
+            if (Instant.now().isBefore(lastRestart.plusSeconds(300))) {
+                // hacky prevention of multiple locking db instances all hitting this
                 DATABASE_LOG.info("Ignoring redis restart request, last restart was less than 30 seconds ago");
                 return;
             }
@@ -63,6 +64,7 @@ public class RedisClient {
                 }
             }
             redissonClient = buildRedisClient();
+            EVENT_BUS.postAsync(RedisRestartEvent.INSTANCE);
         }
     }
 
