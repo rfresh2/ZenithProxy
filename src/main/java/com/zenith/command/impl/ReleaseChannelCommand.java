@@ -25,7 +25,7 @@ import static java.util.Arrays.asList;
 
 public class ReleaseChannelCommand extends Command {
     private static final List<String> PLATFORMS = asList("java", "linux");
-    private static final List<String> MINECRAFT_VERSIONS = asList("1.12.2", "1.20.1", "1.20.4", "1.20.6", "1.21.0", "1.21.2");
+    private static final List<String> MINECRAFT_VERSIONS = asList("1.12.2", "1.20.1", "1.20.4", "1.20.6", "1.21.0", "1.21.3");
 
     @Override
     public CommandUsage commandUsage() {
