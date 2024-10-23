@@ -120,7 +120,7 @@ public class AutoTotem extends AbstractInventoryModule {
         }
     }
 
-    private boolean playerHealthBelowThreshold() {
+    public boolean playerHealthBelowThreshold() {
         return CACHE.getPlayerCache().getThePlayer().getHealth() <= CONFIG.client.extra.autoTotem.healthThreshold;
     }
 
