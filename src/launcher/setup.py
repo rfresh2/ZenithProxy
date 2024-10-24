@@ -123,14 +123,16 @@ def setup_execute(config):
     if discord_bot:
         print("See README.md for Discord bot setup instructions")
         print("https://github.com/rfresh2/ZenithProxy/?tab=readme-ov-file#discord-bot-setup")
+        discord_verify_verbose = False
         while True:
             print("Enter Discord bot token:")
             discord_bot_token = input("> ")
             if len(discord_bot_token) < 50:
                 print("Invalid token")
                 continue
-            if verify_discord_bot_token(discord_bot_token):
+            if verify_discord_bot_token(discord_bot_token, discord_verify_verbose):
                 break
+            discord_verify_verbose = True # verbose on second attempt
         print("")
         while True:
             print("Enter a Discord channel ID to manage ZenithProxy in:")
@@ -233,14 +235,17 @@ def rescue_invalid_system(config):
             critical_error("Invalid system for release channel:", config.release_channel)
 
 
-def verify_discord_bot_token(token):
+def verify_discord_bot_token(token, verbose=False):
     headers = {
-        "Authorization": "Bot " + token
+        "Authorization": "Bot " + token,
+        "User-Agent": "DiscordBot (https://github.com/rfresh2/ZenithProxy, 1.0)"
     }
     try:
         response = requests.get("https://discord.com/api/applications/@me", headers=headers, timeout=10)
         if response.status_code != 200:
             print("Invalid token. Discord API response code:", response.status_code)
+            if verbose:
+                print("Full Discord Response:", response.text)
             return False
         response_json = response.json()
         flags = response_json["flags"]
