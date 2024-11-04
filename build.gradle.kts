@@ -5,7 +5,7 @@ import java.nio.file.Files
 plugins {
     java
     id("org.graalvm.buildtools.native") version "0.10.3"
-    id("com.gradleup.shadow") version "8.3.3"
+    id("com.gradleup.shadow") version "8.3.5"
     `maven-publish`
 }
 
@@ -76,7 +76,7 @@ dependencies {
     implementation("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
     implementation("org.cloudburstmc.math:api:2.0")
     implementation("org.cloudburstmc.math:immutable:2.0")
-    implementation("org.redisson:redisson:3.37.0") {
+    implementation("org.redisson:redisson:3.38.1") {
         exclude(group = "io.netty")
     }
     implementation("com.github.rfresh2:SimpleEventBus:1.2")
@@ -105,7 +105,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("org.slf4j:jul-to-slf4j:2.0.16")
     implementation("com.mojang:brigadier:1.2.9")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.0")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
     val lombokVersion = "1.18.34"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
