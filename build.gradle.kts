@@ -94,7 +94,7 @@ dependencies {
     implementation("org.jline:jline:3.27.1")
     implementation("org.jline:jline-terminal-jni:3.27.1")
     implementation("ar.com.hjg:pngj:2.1.0")
-    implementation("com.zaxxer:HikariCP:6.0.0")
+    implementation("com.zaxxer:HikariCP:6.1.0")
     implementation("org.postgresql:postgresql:42.7.4")
     // todo: 3.46.0 introduces JFR support
     //  but it causes a runtime exception in graalvm native image if we do not build with JFR support
