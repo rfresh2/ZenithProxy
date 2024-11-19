@@ -71,7 +71,7 @@ dependencies {
     implementation("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
     implementation("org.cloudburstmc.math:api:2.0")
     implementation("org.cloudburstmc.math:immutable:2.0")
-    implementation("org.redisson:redisson:3.38.1") {
+    implementation("org.redisson:redisson:3.39.0") {
         exclude(group = "io.netty")
     }
     implementation("com.github.rfresh2:SimpleEventBus:1.2")
@@ -89,7 +89,7 @@ dependencies {
     implementation("org.jline:jline:3.27.1")
     implementation("org.jline:jline-terminal-jni:3.27.1")
     implementation("ar.com.hjg:pngj:2.1.0")
-    implementation("com.zaxxer:HikariCP:6.1.0")
+    implementation("com.zaxxer:HikariCP:6.2.1")
     implementation("org.postgresql:postgresql:42.7.4")
     // todo: 3.46.0 introduces JFR support
     //  but it causes a runtime exception in graalvm native image if we do not build with JFR support
@@ -102,7 +102,7 @@ dependencies {
     implementation("com.mojang:brigadier:1.3.10")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
-    val lombokVersion = "1.18.34"
+    val lombokVersion = "1.18.36"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")
