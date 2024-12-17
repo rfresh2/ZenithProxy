@@ -4,7 +4,7 @@ import java.nio.file.Files
 
 plugins {
     java
-    id("org.graalvm.buildtools.native") version "0.10.3"
+    id("org.graalvm.buildtools.native") version "0.10.4"
     id("com.gradleup.shadow") version "8.3.5"
     `maven-publish`
 }
@@ -71,7 +71,7 @@ dependencies {
     implementation("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
     implementation("org.cloudburstmc.math:api:2.0")
     implementation("org.cloudburstmc.math:immutable:2.0")
-    implementation("org.redisson:redisson:3.39.0") {
+    implementation("org.redisson:redisson:3.40.2") {
         exclude(group = "io.netty")
     }
     implementation("com.github.rfresh2:SimpleEventBus:1.2")
@@ -86,8 +86,8 @@ dependencies {
     implementation("net.raphimc:ViaLoader:3.0.4")
     implementation("com.viaversion:viaversion:5.2.0")
     implementation("com.viaversion:viabackwards:5.2.0")
-    implementation("org.jline:jline:3.27.1")
-    implementation("org.jline:jline-terminal-jni:3.27.1")
+    implementation("org.jline:jline:3.28.0")
+    implementation("org.jline:jline-terminal-jni:3.28.0")
     implementation("ar.com.hjg:pngj:2.1.0")
     implementation("com.zaxxer:HikariCP:6.2.1")
     implementation("org.postgresql:postgresql:42.7.4")
@@ -95,13 +95,13 @@ dependencies {
     //  but it causes a runtime exception in graalvm native image if we do not build with JFR support
     //  which adds about 10mb to the binary size for zero benefit because we do not use jfr
     implementation("org.jdbi:jdbi3-postgres:3.45.4")
-    implementation("com.google.guava:guava:33.3.1-jre")
+    implementation("com.google.guava:guava:33.4.0-jre")
     implementation("ch.qos.logback:logback-classic:1.5.12")
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("org.slf4j:jul-to-slf4j:2.0.16")
     implementation("com.mojang:brigadier:1.3.10")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
     val lombokVersion = "1.18.36"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
