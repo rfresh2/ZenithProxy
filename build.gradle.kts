@@ -50,7 +50,7 @@ val shade: Configuration by configurations.creating
 shade.extendsFrom(configurations.implementation.get())
 
 dependencies {
-    implementation("com.github.rfresh2.discord4j:discord4j-core:3.4.4.11") {
+    implementation("com.github.rfresh2.discord4j:discord4j-core:3.4.4.12") {
         exclude(group = "io.netty")
     }
     implementation("com.github.rfresh2:MCProtocolLib:1.21.0.25") {
@@ -96,7 +96,7 @@ dependencies {
     //  which adds about 10mb to the binary size for zero benefit because we do not use jfr
     implementation("org.jdbi:jdbi3-postgres:3.45.4")
     implementation("com.google.guava:guava:33.4.0-jre")
-    implementation("ch.qos.logback:logback-classic:1.5.15")
+    implementation("ch.qos.logback:logback-classic:1.5.16")
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("org.slf4j:jul-to-slf4j:2.0.16")
     implementation("com.mojang:brigadier:1.3.10")
