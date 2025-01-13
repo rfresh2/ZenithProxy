@@ -71,7 +71,7 @@ dependencies {
     implementation("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
     implementation("org.cloudburstmc.math:api:2.0")
     implementation("org.cloudburstmc.math:immutable:2.0")
-    implementation("org.redisson:redisson:3.41.0") {
+    implementation("org.redisson:redisson:3.43.0") {
         exclude(group = "io.netty")
     }
     implementation("com.github.rfresh2:SimpleEventBus:1.2")
