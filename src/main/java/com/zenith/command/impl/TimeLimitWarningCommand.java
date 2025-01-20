@@ -32,7 +32,7 @@ public class TimeLimitWarningCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("timeLimit")
+        return command("timeLimitWarning")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.timeLimitWarning.enabled = getToggle(c, "toggle");
                 c.getSource().getEmbed()
