@@ -56,7 +56,7 @@ dependencies {
     implementation("com.github.rfresh2:MCProtocolLib:1.21.0.25") {
         exclude(group = "io.netty")
     }
-    val nettyVersion = "4.1.116.Final"
+    val nettyVersion = "4.1.117.Final"
     implementation("io.netty:netty-codec-haproxy:$nettyVersion")
     implementation("io.netty:netty-codec-dns:$nettyVersion")
     implementation("io.netty:netty-codec-http2:$nettyVersion")
@@ -90,7 +90,7 @@ dependencies {
     implementation("org.jline:jline-terminal-jni:3.28.0")
     implementation("ar.com.hjg:pngj:2.1.0")
     implementation("com.zaxxer:HikariCP:6.2.1")
-    implementation("org.postgresql:postgresql:42.7.4")
+    implementation("org.postgresql:postgresql:42.7.5")
     // todo: 3.46.0 introduces JFR support
     //  but it causes a runtime exception in graalvm native image if we do not build with JFR support
     //  which adds about 10mb to the binary size for zero benefit because we do not use jfr
