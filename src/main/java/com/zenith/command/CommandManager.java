@@ -69,6 +69,7 @@ public class CommandManager {
         new PrioCommand(),
         new QueueStatusCommand(),
         new QueueWarningCommand(),
+        new TimeLimitWarningCommand(),
         new RaycastCommand(),
         new ReconnectCommand(),
         new ReleaseChannelCommand(),

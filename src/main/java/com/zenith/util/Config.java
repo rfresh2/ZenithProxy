@@ -124,6 +124,7 @@ public final class Config {
             public final AutoArmor autoArmor = new AutoArmor();
             public final AutoMend autoMend = new AutoMend();
             public final QueueWarning queueWarning = new QueueWarning();
+            public final TimeLimitWarning timeLimitWarning = new TimeLimitWarning();
             public final Wander wander = new Wander();
             public final Click click = new Click();
 
@@ -158,6 +159,11 @@ public final class Config {
                 public boolean enabled = true;
                 public IntArraySet warningPositions = new IntArraySet(asList(1, 2, 3, 10));
                 public IntArraySet mentionPositions = new IntArraySet();
+            }
+
+            public static final class TimeLimitWarning {
+                public boolean enabled = true;
+                public int timeLimit = 8 * 60; // 8 hours
             }
 
             public static class AutoMend {
