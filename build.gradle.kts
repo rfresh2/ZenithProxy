@@ -71,10 +71,10 @@ dependencies {
     implementation("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
     implementation("org.cloudburstmc.math:api:2.0")
     implementation("org.cloudburstmc.math:immutable:2.0")
-    implementation("org.redisson:redisson:3.43.0") {
+    implementation("org.redisson:redisson:3.44.0") {
         exclude(group = "io.netty")
     }
-    implementation("com.github.rfresh2:SimpleEventBus:1.2")
+    implementation("com.github.rfresh2:SimpleEventBus:1.3")
     val fastutilVersion = "8.5.15"
     implementation("com.github.rfresh2.fastutil.maps:object-object-maps:$fastutilVersion")
     implementation("com.github.rfresh2.fastutil.maps:int-object-maps:$fastutilVersion")
