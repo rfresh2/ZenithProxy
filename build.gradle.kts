@@ -5,7 +5,7 @@ import java.nio.file.Files
 plugins {
     java
     id("org.graalvm.buildtools.native") version "0.10.4"
-    id("com.gradleup.shadow") version "8.3.5"
+    id("com.gradleup.shadow") version "8.3.6"
     `maven-publish`
 }
 
@@ -86,8 +86,8 @@ dependencies {
     implementation("net.raphimc:ViaLoader:3.0.4")
     implementation("com.viaversion:viaversion:5.2.1")
     implementation("com.viaversion:viabackwards:5.2.1")
-    implementation("org.jline:jline:3.28.0")
-    implementation("org.jline:jline-terminal-jni:3.28.0")
+    implementation("org.jline:jline:3.29.0")
+    implementation("org.jline:jline-terminal-jni:3.29.0")
     implementation("ar.com.hjg:pngj:2.1.0")
     implementation("com.zaxxer:HikariCP:6.2.1")
     implementation("org.postgresql:postgresql:42.7.5")
