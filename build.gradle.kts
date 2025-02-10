@@ -4,7 +4,7 @@ import java.nio.file.Files
 
 plugins {
     java
-    id("org.graalvm.buildtools.native") version "0.10.4"
+    id("org.graalvm.buildtools.native") version "0.10.5"
     id("com.gradleup.shadow") version "8.3.6"
     `maven-publish`
 }
@@ -56,7 +56,7 @@ dependencies {
     implementation("com.github.rfresh2:MCProtocolLib:1.21.0.29") {
         exclude(group = "io.netty")
     }
-    val nettyVersion = "4.1.117.Final"
+    val nettyVersion = "4.1.118.Final"
     implementation("io.netty:netty-codec-haproxy:$nettyVersion")
     implementation("io.netty:netty-codec-dns:$nettyVersion")
     implementation("io.netty:netty-codec-http2:$nettyVersion")
