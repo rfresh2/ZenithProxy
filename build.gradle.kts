@@ -54,7 +54,7 @@ dependencies {
     implementation("com.github.rfresh2:MCProtocolLib:1.21.0.29") {
         exclude(group = "io.netty")
     }
-    val nettyVersion = "4.1.117.Final"
+    val nettyVersion = "4.1.118.Final"
     implementation("io.netty:netty-codec-haproxy:$nettyVersion")
     implementation("io.netty:netty-codec-dns:$nettyVersion")
     implementation("io.netty:netty-codec-http2:$nettyVersion")
