@@ -58,7 +58,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:1.21.0.32") {
         exclude(group = "io.netty")
     }
-    val nettyVersion = "4.1.118.Final"
+    val nettyVersion = "4.1.119.Final"
     api("io.netty:netty-codec-haproxy:$nettyVersion")
     api("io.netty:netty-codec-dns:$nettyVersion")
     api("io.netty:netty-codec-http2:$nettyVersion")
@@ -95,11 +95,11 @@ dependencies {
     api("org.postgresql:postgresql:42.7.5")
     api("org.jdbi:jdbi3-postgres:3.48.0")
     api("com.google.guava:guava:33.4.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.16")
-    api("org.slf4j:slf4j-api:2.0.16")
-    api("org.slf4j:jul-to-slf4j:2.0.16")
+    api("ch.qos.logback:logback-classic:1.5.17")
+    api("org.slf4j:slf4j-api:2.0.17")
+    api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3")
     testImplementation("org.junit.jupiter:junit-jupiter:5.12.0")
     val lombokVersion = "1.18.36"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
