@@ -4,7 +4,7 @@ import java.nio.file.Files
 
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "0.10.5"
+    id("org.graalvm.buildtools.native") version "0.10.6"
     id("com.gradleup.shadow") version "8.3.6"
     `maven-publish`
 }
