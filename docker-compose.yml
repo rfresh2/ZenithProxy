@@ -1,0 +1,9 @@
+services:
+  zenithproxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '25565:25565'
+    stdin_open: true  # Allow running interactively with `docker compose run -it zenithproxy`
+    tty: true
