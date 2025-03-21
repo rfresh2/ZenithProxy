@@ -1,0 +1,32 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-03-21T20:03:03+03:00",
+    "name": "Zenith",
+    "author": "vesly@vesly.dev",
+    "description": "Zenith proxy on the Pterodactyl :3",
+    "features": null,
+    "docker_images": {
+        "ghcr.io\/rfresh2\/zenith_3.0": "ghcr.io\/rfresh2\/zenith_3.0",
+        "ghcr.io\/veslydev\/zenith_3.0": "ghcr.io\/veslydev\/zenith_3.0"
+    },
+    "file_denylist": [],
+    "startup": ".\/launch",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"[Server] [INFO] Server started.\"\r\n}",
+        "logs": "{}",
+        "stop": "^^C"
+    },
+    "scripts": {
+        "installation": {
+            "script": "# installing\r\ncd \/mnt\/server\r\nwget https:\/\/github.com\/rfresh2\/ZenithProxy\/releases\/download\/launcher-v3\/ZenithProxy-launcher-linux-amd64.zip\r\n\r\n# unzipping\r\nunzip ZenithProxy-launcher-linux-amd64.zip\r\n\r\nrm ZenithProxy-launcher-linux-amd64.zip\r\n## install end\r\necho -e \"-----------------------------------------\"\r\necho -e \"Installation completed...\"\r\necho -e \"-----------------------------------------\"\r\nexit 0",
+            "container": "node:18-alpine",
+            "entrypoint": "ash"
+        }
+    },
+    "variables": []
+}

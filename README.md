@@ -130,6 +130,14 @@ This project is also used for the [2b2t.vc API](https://api.2b2t.vc) and [Discor
     * Terminal: N/A -> (e.g. `help`)
 * [Full Commands Documentation](https://github.com/rfresh2/ZenithProxy/wiki/Commands)
 
+### Pterodactyl Panel Support
+
+ZenithProxy can be easily deployed using the [Pterodactyl Panel](https://pterodactyl.io/):
+
+1. Import the [`egg-zenith.json`](https://github.com/rfresh2/ZenithProxy/blob/1.21.0/egg-zenith.json) file into your Pterodactyl Panel
+2. Create a new server using the ZenithProxy egg
+4. Start the server
+
 ### Running on Linux Servers
 
 See the [Linux Guide](https://github.com/rfresh2/ZenithProxy/wiki/Linux-Guide)

@@ -10,7 +10,8 @@
 /out/
 .DS_Store
 # any json-like file in top directory, including configs, auth cache, etc.
-/*.json*
+/*.json
+!egg-zenith.json
 *.tmp
 /.vscode
 /launcher
