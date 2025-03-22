@@ -50,7 +50,7 @@ public class SGameProfileOutgoingHandler implements PacketHandler<ClientboundGam
                 }
             }
             if (CONFIG.server.extra.whitelist.enable && !PLAYER_LISTS.getWhitelist().contains(clientGameProfile)) {
-                if (CONFIG.server.spectator.allowSpectator && PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile)) {
+                if (CONFIG.server.spectator.allowSpectator && (!CONFIG.server.spectator.whitelistEnabled || PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile))) {
                     onlySpectator = Optional.of(true);
                 } else {
                     session.disconnect(CONFIG.server.extra.whitelist.kickmsg);

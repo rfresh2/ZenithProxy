@@ -82,6 +82,16 @@ public class Embed {
         return this;
     }
 
+    // inline defaulted to false
+    public Embed addField(String name, String value) {
+        return addField(name, value, false);
+    }
+
+    // inline defaulted to false
+    public Embed addField(String name, Object value) {
+        return addField(name, value, false);
+    }
+
     public Embed footer(String text, String iconUrl) {
         footer = new Footer(text, iconUrl);
         return this;

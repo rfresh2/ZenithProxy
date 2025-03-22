@@ -1,6 +1,5 @@
 package com.zenith.network.server.handler.shared.incoming;
 
-import com.zenith.feature.ratelimiter.RateLimiter;
 import com.zenith.network.registry.PacketHandler;
 import com.zenith.network.server.ServerSession;
 import com.zenith.via.ZenithViaInitializer;
@@ -13,8 +12,6 @@ import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.SERVER_LOG;
 
 public class IntentionHandler implements PacketHandler<ClientIntentionPacket, ServerSession> {
-    private final RateLimiter rateLimiter = new RateLimiter(CONFIG.server.rateLimiter.rateLimitSeconds);
-
     @Override
     public ClientIntentionPacket apply(final ClientIntentionPacket packet, final ServerSession session) {
         MinecraftProtocol protocol = session.getPacketProtocol();
@@ -76,7 +73,7 @@ public class IntentionHandler implements PacketHandler<ClientIntentionPacket, Se
 
     private boolean handleLogin(final ClientIntentionPacket packet, final ServerSession session, final MinecraftProtocol protocol) {
         protocol.setOutboundState(ProtocolState.LOGIN);
-        if (CONFIG.server.rateLimiter.enabled && rateLimiter.isRateLimited(session)) {
+        if (CONFIG.server.loginRateLimiter.enabled && ServerSession.LOGIN_RATE_LIMITER.isRateLimited(session)) {
             SERVER_LOG.info("Disconnecting {} due to rate limiting.", session.getRemoteAddress());
             session.disconnect("Login Rate Limited.");
             return true;

@@ -2804,6 +2804,20 @@
       ]
     },
     {
+      "type": "com.zenith.util.Config$Server$LoginRateLimiter",
+      "allDeclaredFields": true
+    },
+    {
+      "type": "com.zenith.util.Config$Server$PacketRateLimiter",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "com.zenith.util.Config$Server$Ping",
       "allDeclaredFields": true,
       "methods": [

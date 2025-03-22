@@ -71,6 +71,7 @@ public class CommandManager {
         new PrioCommand(),
         new QueueStatusCommand(),
         new QueueWarningCommand(),
+        new RateLimiterCommand(),
         new RaycastCommand(),
         new ReconnectCommand(),
         new ReleaseChannelCommand(),

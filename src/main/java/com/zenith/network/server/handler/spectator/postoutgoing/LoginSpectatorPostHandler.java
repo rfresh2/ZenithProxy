@@ -23,7 +23,7 @@ import static org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMo
 public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<ClientboundLoginPacket, ServerSession> {
     @Override
     public void accept(@NonNull ClientboundLoginPacket packet, @NonNull ServerSession session) {
-        if (CONFIG.server.extra.whitelist.enable && !session.isWhitelistChecked()) {
+        if (!session.isWhitelistChecked()) {
             // we shouldn't be able to get to this point without whitelist checking, but just in case
             session.disconnect("Login without whitelist check?");
             return;

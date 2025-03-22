@@ -6,11 +6,14 @@ import com.zenith.command.Command;
 import com.zenith.command.CommandUsage;
 import com.zenith.command.brigadier.CommandCategory;
 import com.zenith.command.brigadier.CommandContext;
+import com.zenith.discord.Embed;
 import com.zenith.feature.world.InputRequest;
+import com.zenith.module.impl.PlayerSimulation;
 
 import static com.mojang.brigadier.arguments.FloatArgumentType.floatArg;
 import static com.mojang.brigadier.arguments.FloatArgumentType.getFloat;
 import static com.zenith.Shared.INPUTS;
+import static com.zenith.Shared.MODULE;
 
 public class RotateCommand extends Command {
     private static final int MOVE_PRIORITY = 1000000;
@@ -52,13 +55,13 @@ public class RotateCommand extends Command {
                         .description("Cannot rotate while player is controlling");
                     return OK;
                 }
-                INPUTS.submit(InputRequest.builder()
-                                  .yaw(yaw)
-                                  .priority(MOVE_PRIORITY)
-                                  .build());
-                c.getSource().getEmbed()
-                    .title("Rotated")
-                    .successColor();
+                doRotate(
+                    InputRequest.builder()
+                        .yaw(yaw)
+                        .priority(MOVE_PRIORITY)
+                        .build(),
+                    c.getSource().getEmbed()
+                );
                 return OK;
             })))
             .then(literal("pitch").then(argument("pitch", floatArg(-90, 90)).executes(c -> {
@@ -77,13 +80,13 @@ public class RotateCommand extends Command {
                         .description("Cannot rotate while player is controlling");
                     return OK;
                 }
-                INPUTS.submit(InputRequest.builder()
-                                  .pitch(pitch)
-                                  .priority(MOVE_PRIORITY)
-                                  .build());
-                c.getSource().getEmbed()
-                    .title("Rotated")
-                    .successColor();
+                doRotate(
+                    InputRequest.builder()
+                        .pitch(pitch)
+                        .priority(MOVE_PRIORITY)
+                        .build(),
+                    c.getSource().getEmbed()
+                );
                 return OK;
             })))
             .then(argument("yawArg", floatArg(-180, 180)).then(argument("pitchArg", floatArg(-90, 90)).executes(c -> {
@@ -103,15 +106,33 @@ public class RotateCommand extends Command {
                         .description("Cannot rotate while player is controlling");
                     return OK;
                 }
-                INPUTS.submit(InputRequest.builder()
-                                  .yaw(yaw)
-                                  .pitch(pitch)
-                                  .priority(MOVE_PRIORITY)
-                                  .build());
-                c.getSource().getEmbed()
-                    .title("Rotated")
-                    .successColor();
+                doRotate(
+                    InputRequest.builder()
+                        .yaw(yaw)
+                        .pitch(pitch)
+                        .priority(MOVE_PRIORITY)
+                        .build(),
+                    c.getSource().getEmbed()
+                );
                 return OK;
             })));
+    }
+
+    private void doRotate(InputRequest input, Embed embed) {
+        var accepted = INPUTS.submit(input)
+            .get();
+        embed
+            .addField("Yaw", MODULE.get(PlayerSimulation.class).getYaw(), false)
+            .addField("Pitch", MODULE.get(PlayerSimulation.class).getPitch(), false);
+        if (accepted) {
+            embed
+                .title("Rotated")
+                .successColor();
+        } else {
+            embed
+                .title("Error")
+                .errorColor()
+                .description("Another input has taken priority this tick, try again");
+        }
     }
 }

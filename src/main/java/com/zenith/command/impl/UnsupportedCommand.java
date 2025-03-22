@@ -34,6 +34,7 @@ public class UnsupportedCommand extends Command {
             """)
             .usageLines(
                 "whitelist on/off",
+                "spectatorWhitelist on/off",
                 "allowOfflinePlayers on/off",
                 "auth type offline",
                 "auth offlineUsername <username>"
@@ -49,6 +50,12 @@ public class UnsupportedCommand extends Command {
                 CONFIG.server.extra.whitelist.enable = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Whitelist " + toggleStrCaps(CONFIG.server.extra.whitelist.enable));
+                return OK;
+            })))
+            .then(literal("spectatorWhitelist").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.server.spectator.whitelistEnabled = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Spectator Whitelist " + toggleStrCaps(CONFIG.server.spectator.whitelistEnabled));
                 return OK;
             })))
             .then(literal("allowOfflinePlayers").then(argument("toggle", toggle()).executes(c -> {
@@ -78,10 +85,11 @@ public class UnsupportedCommand extends Command {
     @Override
     public void postPopulate(Embed builder) {
         builder
-            .addField("Whitelist", toggleStr(CONFIG.server.extra.whitelist.enable), false)
-            .addField("Allow Offline Players", toggleStr(CONFIG.server.verifyUsers), false)
-            .addField("Offline Authentication", toggleStr(CONFIG.authentication.accountType == OFFLINE), false)
-            .addField("Offline Username", escape(CONFIG.authentication.username), false)
+            .addField("Whitelist", toggleStr(CONFIG.server.extra.whitelist.enable))
+            .addField("Spectator Whitelist", toggleStr(CONFIG.server.spectator.whitelistEnabled))
+            .addField("Allow Offline Players", toggleStr(CONFIG.server.verifyUsers))
+            .addField("Offline Authentication", toggleStr(CONFIG.authentication.accountType == OFFLINE))
+            .addField("Offline Username", escape(CONFIG.authentication.username))
             .primaryColor();
     }
 }

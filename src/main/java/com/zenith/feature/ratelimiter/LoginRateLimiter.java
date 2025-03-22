@@ -8,13 +8,18 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
+import static com.zenith.Shared.CONFIG;
 import static com.zenith.Shared.SERVER_LOG;
 
-public class RateLimiter {
+public class LoginRateLimiter {
     // todo: support updating rate limit seconds at runtime?
     private final Cache<InetAddress, Long> cache;
 
-    public RateLimiter(final int rateLimitSeconds) {
+    public LoginRateLimiter() {
+        this(CONFIG.server.loginRateLimiter.rateLimitSeconds);
+    }
+
+    public LoginRateLimiter(final int rateLimitSeconds) {
         this.cache = CacheBuilder.newBuilder()
             .expireAfterWrite(rateLimitSeconds, TimeUnit.SECONDS)
             .build();
@@ -30,5 +35,10 @@ public class RateLimiter {
             SERVER_LOG.warn("Error checking rate limit for session: {}", session.getRemoteAddress(), e);
             return false;
         }
+    }
+
+    public void reset(final ServerSession session) {
+        var address = ((InetSocketAddress) session.getRemoteAddress()).getAddress();
+        cache.invalidate(address);
     }
 }

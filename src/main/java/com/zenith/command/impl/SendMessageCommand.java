@@ -28,7 +28,6 @@ public class SendMessageCommand extends Command {
             )
             .aliases(
                 "say",
-                "msg",
                 "m"
             )
             .build();

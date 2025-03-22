@@ -9,6 +9,8 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.event.proxy.ProxyClientDisconnectedEvent;
 import com.zenith.event.proxy.ProxySpectatorDisconnectedEvent;
+import com.zenith.feature.ratelimiter.LoginRateLimiter;
+import com.zenith.feature.ratelimiter.PacketRateLimiter;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
 import com.zenith.network.registry.ZenithHandlerCodec;
@@ -82,6 +84,7 @@ public class ServerSession extends TcpServerSession {
     protected boolean whitelistChecked = false;
     protected boolean isPlayer = false;
     protected boolean isLoggedIn = false;
+    protected boolean isInGame = false; // player has accepted the join game packet and spawned at correct position
     protected boolean isSpectator = false;
     // we have performed the configuration phase at zenith
     // any subsequent configurations should pass through to client
@@ -117,6 +120,8 @@ public class ServerSession extends TcpServerSession {
     private static final Component suffix = Component.text("");
     private static final boolean friendlyFire = false;
     private static final boolean seeFriendlyInvisibles = false;
+    @Getter(lazy = true) private final PacketRateLimiter packetRateLimiter = new PacketRateLimiter();
+    public static final LoginRateLimiter LOGIN_RATE_LIMITER = new LoginRateLimiter();
 
     public KeyPair getKeyPair() {
         return KEY_PAIR;
@@ -139,6 +144,13 @@ public class ServerSession extends TcpServerSession {
     @Override
     public void callPacketReceived(Packet packet) {
         try {
+            if (CONFIG.server.packetRateLimiter.enabled) {
+                if (getPacketRateLimiter().countPacket()) {
+                    getPacketRateLimiter().setActive(false); // avoid spam from subsequent queued packets
+                    disconnect(Component.text("[ZenithProxy] Packet rate limit exceeded"));
+                    return;
+                }
+            }
             Packet p = packet;
             var state = getPacketProtocol().getInboundState(); // storing this before handlers might mutate it on the session
             p = ZenithHandlerCodec.SERVER_REGISTRY.handleInbound(p, this);
@@ -384,17 +396,29 @@ public class ServerSession extends TcpServerSession {
     }
 
     public void transfer(final String address, final int port) {
-        cookieCache.getStoreSrcPacket(this::sendAsync);
-        sendAsync(new ClientboundTransferPacket(address, port));
+        LOGIN_RATE_LIMITER.reset(this);
+        cookieCache.getStoreSrcPacket(this::send);
+        send(new ClientboundTransferPacket(address, port));
+        disconnect(Component.text("Transferring to " + address + ":" + port));
     }
 
     public void transferToSpectator(final String address, final int port) {
-        cookieCache.getStoreSpectatorDestPacket(this::sendAsync, true);
+        cookieCache.getStoreSpectatorDestPacket(this::send, true);
         transfer(address, port);
     }
 
+    public void transferToSpectator() {
+        cookieCache.getStoreSpectatorDestPacket(this::send, true);
+        transfer(CONFIG.server.getProxyAddressForTransfer(), CONFIG.server.getProxyPortForTransfer());
+    }
+
     public void transferToControllingPlayer(final String address, final int port) {
-        cookieCache.getStoreSpectatorDestPacket(this::sendAsync, false);
+        cookieCache.getStoreSpectatorDestPacket(this::send, false);
         transfer(address, port);
+    }
+
+    public void transferToControllingPlayer() {
+        cookieCache.getStoreSpectatorDestPacket(this::send, false);
+        transfer(CONFIG.server.getProxyAddressForTransfer(), CONFIG.server.getProxyPortForTransfer());
     }
 }

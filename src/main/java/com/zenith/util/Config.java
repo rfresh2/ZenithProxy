@@ -479,10 +479,18 @@ public final class Config {
         public boolean healthCheck = true;
         public long playerListsRefreshIntervalMins = 1440L; // one day as default
         public final Spectator spectator = new Spectator();
-        public final RateLimiter rateLimiter = new RateLimiter();
+        public final LoginRateLimiter loginRateLimiter = new LoginRateLimiter();
         public boolean connectionTestOnStart = true;
+        public final PacketRateLimiter packetRateLimiter = new PacketRateLimiter();
 
-        public static final class RateLimiter {
+        public static final class PacketRateLimiter {
+            public boolean enabled = true;
+            public double intervalSeconds = 7.0;
+            public int maxPacketsPerInterval = 500;
+            public boolean logRate = false;
+        }
+
+        public static final class LoginRateLimiter {
             public boolean enabled = true;
             public int rateLimitSeconds = 2;
         }
@@ -495,6 +503,7 @@ public final class Config {
             public boolean fullCommandsAcceptSlashCommands = true;
             public boolean fullCommandsRequireRegularWhitelist = true;
             public boolean playerCamOnJoin = false;
+            public boolean whitelistEnabled = true;
             public ArrayList<PlayerEntry> whitelist = new ArrayList<>();
         }
 
