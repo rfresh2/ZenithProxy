@@ -63,7 +63,7 @@ public class ExtraChat extends Module {
         if (!CONFIG.client.extra.chat.showConnectionMessages) return;
         var serverConnection = Proxy.getInstance().getCurrentPlayer().get();
         if (nonNull(serverConnection) && serverConnection.isLoggedIn())
-            serverConnection.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<aqua" + event.playerEntry().getName() + "<yellow> connected"), false));
+            serverConnection.sendAsync(new ClientboundSystemChatPacket(ComponentSerializer.minimessage("<aqua>" + event.playerEntry().getName() + "<yellow> connected"), false));
     }
 
 }
