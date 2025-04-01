@@ -85,7 +85,7 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:int-int-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
-    api("com.viaversion:vialoader:4.0.1")
+    api("com.viaversion:vialoader:4.0.2")
     api("com.viaversion:viaversion:5.3.1")
     api("com.viaversion:viabackwards:5.3.1")
     api("org.jline:jline:3.29.0")
@@ -103,7 +103,7 @@ dependencies {
     api("org.jspecify:jspecify:1.0.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.12.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    val lombokVersion = "1.18.36"
+    val lombokVersion = "1.18.38"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
     testCompileOnly("org.projectlombok:lombok:$lombokVersion")
     annotationProcessor("org.projectlombok:lombok:$lombokVersion")
