@@ -748,6 +748,7 @@ public final class Config {
             public boolean mentionRoleOnWhisper = true;
             public boolean mentionRoleOnNameMention = true;
             public boolean mentionWhileConnected = false;
+            public boolean mentionResolvedOnly = false;
             public boolean connectionMessages = false;
             public boolean publicChats = true;
             public boolean whispers = true;

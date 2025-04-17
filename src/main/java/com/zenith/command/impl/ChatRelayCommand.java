@@ -28,7 +28,8 @@ public class ChatRelayCommand extends Command {
             
             The ChatRelay is a live feed of chat messages and/or connection messages from the server to a Discord channel.
             
-            Mentions can be configured when a whisper is received or your name is seen in chat.
+            Mentions can be configured when a whisper is received or your name is seen in chat. 
+            (enable resolved only if someone is abusing custom nicknames to spam you with pings)
             
             Messages typed in the ChatRelay discord channel will be sent as chat messages in-game
             Discord message replies will be sent as whispers in-game
@@ -44,6 +45,7 @@ public class ChatRelayCommand extends Command {
                 "whisperMentions on/off",
                 "nameMentions on/off",
                 "mentionsWhileConnected on/off",
+                "mentionResolvedOnly on/off",
                 "ignoreQueue on/off",
                 "sendMessages on/off"
             )
@@ -167,6 +169,13 @@ public class ChatRelayCommand extends Command {
                             CONFIG.discord.chatRelay.sendMessages = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Send Messages " + toggleStrCaps(CONFIG.discord.chatRelay.sendMessages));
+                            return OK;
+                      })))
+            .then(literal("mentionResolvedOnly")
+                      .then(argument("toggle", toggle()).executes(c -> {
+                            CONFIG.discord.chatRelay.mentionResolvedOnly = getToggle(c, "toggle");
+                            c.getSource().getEmbed()
+                                .title("Send Messages " + toggleStrCaps(CONFIG.discord.chatRelay.mentionResolvedOnly));
                             return OK;
                       })));
     }

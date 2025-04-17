@@ -124,10 +124,15 @@ public class SystemChatHandler implements ClientEventLoopPacketHandler<Clientbou
                 playerWhisperTarget = Optional.ofNullable(whisperTarget).flatMap(t -> CACHE.getTabListCache().getFromDisplayName(t));
             }
 
-            // Treat unresolved outgoing whispers as server messages and not public chat, to match what happens with incoming ones.
-            if (playerWhisperTarget.isEmpty() && decoratedWhisperTarget != null && essentialsChat) 
+            // Mark false-positive system messages caused by unresolved names, so chatRelay still handles them correctly.
+            final boolean isUnresolvedIncomingWhisper = sender.isEmpty() && playerWhisperTarget.isPresent() 
+                && playerWhisperTarget.get().getName().equalsIgnoreCase(CONFIG.authentication.username);
+            final boolean isUnresolvedWhisper = whisperTarget != null && (playerWhisperTarget.isEmpty() || sender.isEmpty());
+            final boolean isUnresolvedPublicChat = whisperTarget == null && senderName != null && sender.isEmpty();
+
+            if (isUnresolvedWhisper) 
             {
-                    sender = Optional.empty();
+                sender = Optional.empty();
             }
 
             if (Proxy.getInstance().isOn2b2t()
@@ -145,7 +150,7 @@ public class SystemChatHandler implements ClientEventLoopPacketHandler<Clientbou
             } else if (sender.isEmpty() && deathMessage.isPresent() && playerWhisperTarget.isEmpty()) {
                 EVENT_BUS.postAsync(new DeathMessageChatEvent(deathMessage.get(), component, messageString));
             } else {
-                EVENT_BUS.postAsync(new SystemChatEvent(component, messageString));
+                EVENT_BUS.postAsync(new SystemChatEvent(component, messageString, isUnresolvedPublicChat, isUnresolvedWhisper, isUnresolvedIncomingWhisper));
             }
         } catch (final Exception e) {
             CLIENT_LOG.error("Caught exception in ChatHandler. Packet: {}", packet, e);

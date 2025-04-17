@@ -603,17 +603,42 @@ public class NotificationEventListener {
     }
 
     private void handleSystemChatEvent(SystemChatEvent event) {
-        if (!CONFIG.discord.chatRelay.serverMessages) return;
+        if (event.isUnresolvedPublicChat())
+        {
+            if (!CONFIG.discord.chatRelay.publicChats) return;
+        } else if (event.isUnresolvedWhisper())
+        {
+            if (!CONFIG.discord.chatRelay.whispers) return;
+        }
+        else if (!CONFIG.discord.chatRelay.serverMessages) return;
+
         if (!CONFIG.discord.chatRelay.enable || CONFIG.discord.chatRelay.channelId.isEmpty()) return;
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
         try {
             String message = event.message();
             final String avatarURL = Proxy.getInstance().isOn2b2t() ? Proxy.getInstance().getPlayerHeadURL("Hausemaster").toString() : null;
+
+            var color = Color.MOON_YELLOW;
+            String ping = "";
+
+            if (event.isUnresolvedPublicChat()) color = Color.BLACK;
+            if (event.isUnresolvedWhisper()) color = Color.MAGENTA;
+
+            if (event.isUnresolvedIncomingWhisper() && CONFIG.discord.chatRelay.mentionRoleOnWhisper 
+                && !CONFIG.discord.chatRelay.mentionResolvedOnly)
+            {
+                if (CONFIG.discord.chatRelay.mentionWhileConnected || isNull(Proxy.getInstance().getCurrentPlayer().get()))
+                {
+                    ping = notificationMention();
+                }
+            }
+
             var embed = Embed.builder()
                 .description(escape(message))
                 .footer("\u200b", avatarURL)
-                .color(Color.MOON_YELLOW);
-            sendRelayEmbedMessage(embed);
+                .color(color);
+            sendRelayEmbedMessage(ping, embed);
+
         } catch (final Throwable e) {
             DISCORD_LOG.error("Error processing SystemChatEvent", e);
         }
