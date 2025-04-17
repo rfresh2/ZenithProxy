@@ -74,6 +74,10 @@ public class TabListCache implements CachedData {
         return this.tablist.values().stream().filter(v -> v.getName().equals(username)).findFirst();
     }
 
+    public Optional<PlayerListEntry> getFromDisplayName(final String username) {
+        return this.tablist.values().stream().filter(v -> v.getDisplayName().equals(username)).findFirst();
+    }
+
     public Collection<PlayerListEntry> getEntries() {
         return this.tablist.values();
     }

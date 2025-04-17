@@ -272,6 +272,7 @@ public final class Config {
                 public boolean hideWhispers = false;
                 public boolean hideDeathMessages = false;
                 public boolean showConnectionMessages = false;
+                public boolean essentialsFormatting = false;
             }
 
             public static final class AutoTotem {
