@@ -1,5 +1,7 @@
 package com.zenith.plugin;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.InstanceCreator;
 import com.zenith.event.plugin.PluginLoadFailureEvent;
 import com.zenith.event.plugin.PluginLoadedEvent;
 import com.zenith.plugin.api.InstancedPluginAPI;
@@ -265,16 +267,36 @@ public class PluginManager {
             PLUGIN_LOG.info("Loading plugin config...");
             File configFile = resolveConfigFile(fileName);
             T config;
-            if (configFile.exists()) {
-                try (Reader reader = new FileReader(configFile)) {
-                    config = GSON.fromJson(reader, clazz);
-                } catch (IOException e) {
-                    throw new RuntimeException("Unable to load plugin config: " + fileName, e);
+
+            try {
+                var instance = clazz.getDeclaredField("INSTANCE").get(null);
+                if (clazz.isInstance(instance)) config = (T) instance;
+                else throw new ClassCastException("Not an instance of " + clazz);
+
+                if (configFile.exists()) {
+                    try (Reader reader = new FileReader(configFile)) {
+                        // Create Gson builder with type adapter for singleton instance
+                        T finalConfig = config;
+                        var gson = new GsonBuilder()
+                                .registerTypeAdapter(clazz, (InstanceCreator<T>) type -> finalConfig)
+                                .create();
+                        config = gson.fromJson(reader, clazz);
+                    }
+                    PLUGIN_LOG.info("Plugin config: {} loaded over singleton instance.", fileName);
+                } else {
+                    PLUGIN_LOG.info("Plugin config: {} not found, using default singleton instance", fileName);
                 }
-                PLUGIN_LOG.info("Plugin config: {} loaded.", fileName);
-            } else {
-                config = clazz.getDeclaredConstructor().newInstance();
-                PLUGIN_LOG.info("Plugin config: {} not found, loaded default config", fileName);
+            } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
+                // Not a Kotlin object, handle as regular class
+                if (configFile.exists()) {
+                    try (Reader reader = new FileReader(configFile)) {
+                        config = GSON.fromJson(reader, clazz);
+                    }
+                    PLUGIN_LOG.info("Plugin config: {} loaded.", fileName);
+                } else {
+                    config = clazz.getDeclaredConstructor().newInstance();
+                    PLUGIN_LOG.info("Plugin config: {} not found, loaded default config", fileName);
+                }
             }
             return config;
         } catch (final Throwable e) {
