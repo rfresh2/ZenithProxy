@@ -42,10 +42,10 @@ public class PluginManager {
 
     public String getId(final ZenithProxyPlugin pluginInstance) {
         return pluginInstances.values().stream()
-            .filter(i -> i.getPluginInstance() == pluginInstance)
-            .findFirst()
-            .map(PluginInstance::getId)
-            .orElseThrow(() -> new RuntimeException("Plugin instance " + pluginInstance.getClass().getName() + " not found"));
+                .filter(i -> i.getPluginInstance() == pluginInstance)
+                .findFirst()
+                .map(PluginInstance::getId)
+                .orElseThrow(() -> new RuntimeException("Plugin instance " + pluginInstance.getClass().getName() + " not found"));
     }
 
     public PluginInfo getPluginInfo(final ZenithProxyPlugin pluginInstance) {
@@ -54,14 +54,15 @@ public class PluginManager {
 
     public void saveConfigs(BiConsumer<File, Object> saveFunction) {
         pluginConfigurations.values()
-            .forEach(config -> saveFunction.accept(config.file(), config.instance()));
+                .forEach(config -> saveFunction.accept(config.file(), config.instance()));
     }
 
     public List<ConfigInstance> getAllPluginConfigs() {
         return new ArrayList<>(pluginConfigurations.values());
     }
 
-    public record ConfigInstance(Object instance, Class<?> clazz, File file) { }
+    public record ConfigInstance(Object instance, Class<?> clazz, File file) {
+    }
 
     public void initialize() {
         if (initialized.compareAndSet(false, true)) {
@@ -79,11 +80,11 @@ public class PluginManager {
         int potentialPluginCount = potentialJars.size();
         if (potentialPluginCount > 0) {
             PLUGIN_LOG.warn("""
-                Plugins are not supported on the `linux` release channel.
-                Detected {} potential plugin jars in the plugins directory.
-                
-                To use plugins, switch to the `java` channel: `channel set java <mcVersion>`
-                """, potentialPluginCount);
+                    Plugins are not supported on the `linux` release channel.
+                    Detected {} potential plugin jars in the plugins directory.
+                    
+                    To use plugins, switch to the `java` channel: `channel set java <mcVersion>`
+                    """, potentialPluginCount);
         }
     }
 
@@ -151,13 +152,13 @@ public class PluginManager {
             }
 
             PLUGIN_LOG.info(
-                "Found Plugin:\n  id: {}\n  version: {}\n  description: {}\n  url: {}\n  authors: {}\n  jar: {}",
-                pluginInfo.id(),
-                pluginInfo.version(),
-                pluginInfo.description(),
-                pluginInfo.url(),
-                pluginInfo.authors(),
-                jarPath.getFileName()
+                    "Found Plugin:\n  id: {}\n  version: {}\n  description: {}\n  url: {}\n  authors: {}\n  jar: {}",
+                    pluginInfo.id(),
+                    pluginInfo.version(),
+                    pluginInfo.description(),
+                    pluginInfo.url(),
+                    pluginInfo.authors(),
+                    jarPath.getFileName()
             );
 
             pluginInstances.put(id, new PluginInstance(id, jarPath, pluginInfo, classLoader));
@@ -165,7 +166,8 @@ public class PluginManager {
             if (classLoader != null) {
                 try {
                     classLoader.close();
-                } catch (IOException ignored) { }
+                } catch (IOException ignored) {
+                }
             }
             PLUGIN_LOG.error("Error loading plugin: {}", jarPath, e);
             EVENT_BUS.postAsync(new PluginLoadFailureEvent(id, jarPath, e));
@@ -185,7 +187,14 @@ public class PluginManager {
             if (!ZenithProxyPlugin.class.isAssignableFrom(pluginClass)) {
                 throw new RuntimeException("Plugin does not implement ZenithProxyPlugin interface");
             }
-            ZenithProxyPlugin plugin = (ZenithProxyPlugin) pluginClass.getDeclaredConstructor().newInstance();
+
+            ZenithProxyPlugin plugin;
+
+            try {
+                plugin = (ZenithProxyPlugin) pluginClass.getDeclaredField("INSTANCE").get(null);
+            } catch (NoSuchFieldException e) {
+                plugin = (ZenithProxyPlugin) pluginClass.getDeclaredConstructor().newInstance();
+            }
 
             pluginInstance.setPluginInstance(plugin);
 
@@ -200,7 +209,8 @@ public class PluginManager {
         } catch (Throwable e) {
             try {
                 pluginInstance.getClassLoader().close();
-            } catch (IOException ignored) { }
+            } catch (IOException ignored) {
+            }
             PLUGIN_LOG.error("Error loading plugin: {}", pluginInstance, e);
             EVENT_BUS.postAsync(new PluginLoadFailureEvent(pluginInstance.getId(), pluginInstance.getJarPath(), e));
         }
@@ -241,9 +251,9 @@ public class PluginManager {
             }
         }
         var configInstance = new ConfigInstance(
-            config,
-            clazz,
-            configFile
+                config,
+                clazz,
+                configFile
         );
         pluginConfigurations.put(fileName, configInstance);
         return config;
