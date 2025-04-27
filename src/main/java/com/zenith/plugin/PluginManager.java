@@ -63,8 +63,7 @@ public class PluginManager {
         return new ArrayList<>(pluginConfigurations.values());
     }
 
-    public record ConfigInstance(Object instance, Class<?> clazz, File file) {
-    }
+    public record ConfigInstance(Object instance, Class<?> clazz, File file) { }
 
     public void initialize() {
         if (initialized.compareAndSet(false, true)) {
@@ -82,11 +81,11 @@ public class PluginManager {
         int potentialPluginCount = potentialJars.size();
         if (potentialPluginCount > 0) {
             PLUGIN_LOG.warn("""
-                    Plugins are not supported on the `linux` release channel.
-                    Detected {} potential plugin jars in the plugins directory.
-                    
-                    To use plugins, switch to the `java` channel: `channel set java <mcVersion>`
-                    """, potentialPluginCount);
+                Plugins are not supported on the `linux` release channel.
+                Detected {} potential plugin jars in the plugins directory.
+                
+                To use plugins, switch to the `java` channel: `channel set java <mcVersion>`
+                """, potentialPluginCount);
         }
     }
 
@@ -168,8 +167,7 @@ public class PluginManager {
             if (classLoader != null) {
                 try {
                     classLoader.close();
-                } catch (IOException ignored) {
-                }
+                } catch (IOException ignored) { }
             }
             PLUGIN_LOG.error("Error loading plugin: {}", jarPath, e);
             EVENT_BUS.postAsync(new PluginLoadFailureEvent(id, jarPath, e));
@@ -189,7 +187,6 @@ public class PluginManager {
             if (!ZenithProxyPlugin.class.isAssignableFrom(pluginClass)) {
                 throw new RuntimeException("Plugin does not implement ZenithProxyPlugin interface");
             }
-
             ZenithProxyPlugin plugin;
 
             try {
@@ -211,8 +208,7 @@ public class PluginManager {
         } catch (Throwable e) {
             try {
                 pluginInstance.getClassLoader().close();
-            } catch (IOException ignored) {
-            }
+            } catch (IOException ignored) { }
             PLUGIN_LOG.error("Error loading plugin: {}", pluginInstance, e);
             EVENT_BUS.postAsync(new PluginLoadFailureEvent(pluginInstance.getId(), pluginInstance.getJarPath(), e));
         }
@@ -267,7 +263,6 @@ public class PluginManager {
             PLUGIN_LOG.info("Loading plugin config...");
             File configFile = resolveConfigFile(fileName);
             T config;
-
             try {
                 var instance = clazz.getDeclaredField("INSTANCE").get(null);
                 if (clazz.isInstance(instance)) config = (T) instance;
@@ -287,7 +282,7 @@ public class PluginManager {
                     PLUGIN_LOG.info("Plugin config: {} not found, using default singleton instance", fileName);
                 }
             } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
-                // Not a Kotlin object, handle as regular class
+                // Not a singleton instance, handle as regular class
                 if (configFile.exists()) {
                     try (Reader reader = new FileReader(configFile)) {
                         config = GSON.fromJson(reader, clazz);
