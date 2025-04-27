@@ -1,7 +1,7 @@
 package com.zenith.plugin;
 
-import com.google.gson.GsonBuilder;
 import com.google.gson.InstanceCreator;
+import com.zenith.Globals;
 import com.zenith.event.plugin.PluginLoadFailureEvent;
 import com.zenith.event.plugin.PluginLoadedEvent;
 import com.zenith.plugin.api.InstancedPluginAPI;
@@ -26,6 +26,8 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import static com.zenith.Globals.*;
+import static com.zenith.util.KotlinUtil.getKotlinObject;
+import static com.zenith.util.KotlinUtil.isKotlinObject;
 import static java.util.Objects.requireNonNull;
 
 public class PluginManager {
@@ -44,10 +46,10 @@ public class PluginManager {
 
     public String getId(final ZenithProxyPlugin pluginInstance) {
         return pluginInstances.values().stream()
-                .filter(i -> i.getPluginInstance() == pluginInstance)
-                .findFirst()
-                .map(PluginInstance::getId)
-                .orElseThrow(() -> new RuntimeException("Plugin instance " + pluginInstance.getClass().getName() + " not found"));
+            .filter(i -> i.getPluginInstance() == pluginInstance)
+            .findFirst()
+            .map(PluginInstance::getId)
+            .orElseThrow(() -> new RuntimeException("Plugin instance " + pluginInstance.getClass().getName() + " not found"));
     }
 
     public PluginInfo getPluginInfo(final ZenithProxyPlugin pluginInstance) {
@@ -56,7 +58,7 @@ public class PluginManager {
 
     public void saveConfigs(BiConsumer<File, Object> saveFunction) {
         pluginConfigurations.values()
-                .forEach(config -> saveFunction.accept(config.file(), config.instance()));
+            .forEach(config -> saveFunction.accept(config.file(), config.instance()));
     }
 
     public List<ConfigInstance> getAllPluginConfigs() {
@@ -153,13 +155,13 @@ public class PluginManager {
             }
 
             PLUGIN_LOG.info(
-                    "Found Plugin:\n  id: {}\n  version: {}\n  description: {}\n  url: {}\n  authors: {}\n  jar: {}",
-                    pluginInfo.id(),
-                    pluginInfo.version(),
-                    pluginInfo.description(),
-                    pluginInfo.url(),
-                    pluginInfo.authors(),
-                    jarPath.getFileName()
+                "Found Plugin:\n  id: {}\n  version: {}\n  description: {}\n  url: {}\n  authors: {}\n  jar: {}",
+                pluginInfo.id(),
+                pluginInfo.version(),
+                pluginInfo.description(),
+                pluginInfo.url(),
+                pluginInfo.authors(),
+                jarPath.getFileName()
             );
 
             pluginInstances.put(id, new PluginInstance(id, jarPath, pluginInfo, classLoader));
@@ -189,9 +191,9 @@ public class PluginManager {
             }
             ZenithProxyPlugin plugin;
 
-            try {
-                plugin = (ZenithProxyPlugin) pluginClass.getDeclaredField("INSTANCE").get(null);
-            } catch (NoSuchFieldException e) {
+            if (isKotlinObject(pluginClass)) {
+                plugin = (ZenithProxyPlugin) getKotlinObject(pluginClass);
+            } else {
                 plugin = (ZenithProxyPlugin) pluginClass.getDeclaredConstructor().newInstance();
             }
 
@@ -249,9 +251,9 @@ public class PluginManager {
             }
         }
         var configInstance = new ConfigInstance(
-                config,
-                clazz,
-                configFile
+            config,
+            clazz,
+            configFile
         );
         pluginConfigurations.put(fileName, configInstance);
         return config;
@@ -260,38 +262,28 @@ public class PluginManager {
     @SneakyThrows
     private <T> T loadPluginConfig(String fileName, Class<T> clazz) {
         try {
-            PLUGIN_LOG.info("Loading plugin config...");
+            PLUGIN_LOG.debug("Loading plugin config: {}", fileName);
             File configFile = resolveConfigFile(fileName);
             T config;
-            try {
-                var instance = clazz.getDeclaredField("INSTANCE").get(null);
-                if (clazz.isInstance(instance)) config = (T) instance;
-                else throw new ClassCastException("Not an instance of " + clazz);
-
-                if (configFile.exists()) {
-                    try (Reader reader = new FileReader(configFile)) {
-                        // Create Gson builder with type adapter for singleton instance
-                        T finalConfig = config;
-                        var gson = new GsonBuilder()
-                                .registerTypeAdapter(clazz, (InstanceCreator<T>) type -> finalConfig)
-                                .create();
-                        config = gson.fromJson(reader, clazz);
-                    }
-                    PLUGIN_LOG.info("Plugin config: {} loaded over singleton instance.", fileName);
-                } else {
-                    PLUGIN_LOG.info("Plugin config: {} not found, using default singleton instance", fileName);
+            if (configFile.exists()) {
+                var gson = Globals.GSON;
+                if (isKotlinObject(clazz)) {
+                    final T instance = getKotlinObject(clazz);
+                    gson = gson.newBuilder()
+                        .registerTypeAdapter(clazz, (InstanceCreator<T>) type -> instance)
+                        .create();
                 }
-            } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
-                // Not a singleton instance, handle as regular class
-                if (configFile.exists()) {
-                    try (Reader reader = new FileReader(configFile)) {
-                        config = GSON.fromJson(reader, clazz);
-                    }
-                    PLUGIN_LOG.info("Plugin config: {} loaded.", fileName);
-                } else {
-                    config = clazz.getDeclaredConstructor().newInstance();
-                    PLUGIN_LOG.info("Plugin config: {} not found, loaded default config", fileName);
+                try (Reader reader = new FileReader(configFile)) {
+                    config = gson.fromJson(reader, clazz);
+                } catch (IOException e) {
+                    throw new RuntimeException("Unable to load plugin config: " + fileName, e);
                 }
+                PLUGIN_LOG.info("Plugin config: {} loaded.", fileName);
+            } else {
+                config = isKotlinObject(clazz)
+                    ? getKotlinObject(clazz)
+                    : clazz.getDeclaredConstructor().newInstance();
+                PLUGIN_LOG.info("Plugin config: {} not found, loaded default config", fileName);
             }
             return config;
         } catch (final Throwable e) {
