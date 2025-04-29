@@ -81,7 +81,7 @@ dependencies {
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.0")
     api("org.jspecify:jspecify:1.0.0")
     api("net.kyori:adventure-text-logger-slf4j:4.20.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
