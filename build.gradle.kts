@@ -72,7 +72,7 @@ dependencies {
     api("org.jline:jline-terminal-jni:3.30.4")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:6.3.0")
-    api("org.postgresql:postgresql:42.7.6")
+    api("org.postgresql:postgresql:42.7.7")
     api("org.jdbi:jdbi3-postgres:3.49.4")
     api("com.google.guava:guava:33.4.6-jre")
     api("ch.qos.logback:logback-classic:1.5.18")
