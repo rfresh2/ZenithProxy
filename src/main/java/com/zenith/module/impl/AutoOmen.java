@@ -43,6 +43,8 @@ public class AutoOmen extends AbstractInventoryModule {
     public void handleClientTick(final ClientBotTick e) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
             && !CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().containsKey(Effect.BAD_OMEN)
+            && (CONFIG.client.extra.autoOmen.whileRaidOmen
+                || !CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().containsKey(Effect.RAID_OMEN))
             && CACHE.getPlayerCache().getGameMode() != GameMode.CREATIVE
             && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR
             && Proxy.getInstance().getOnlineTimeSeconds() > 1) {

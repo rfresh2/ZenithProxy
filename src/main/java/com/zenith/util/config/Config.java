@@ -340,6 +340,7 @@ public final class Config {
 
             public static final class AutoOmen {
                 public boolean enabled = false;
+                public boolean whileRaidOmen = false;
             }
 
             public static final class Stalk {
