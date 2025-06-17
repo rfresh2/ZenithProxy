@@ -9,6 +9,7 @@ import com.zenith.feature.player.Input;
 import com.zenith.feature.player.InputRequest;
 import com.zenith.mc.item.ItemData;
 import com.zenith.mc.item.ItemRegistry;
+import net.kyori.adventure.text.TranslatableComponent;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
@@ -22,6 +23,11 @@ public class AutoOmen extends AbstractInventoryModule {
     private int delay = 0;
     private boolean isEating = false;
     public static final int MOVEMENT_PRIORITY = 600;
+    private static final List<Effect> OMEN_EFFECTS = List.of(
+        Effect.BAD_OMEN,
+        Effect.RAID_OMEN,
+        Effect.TRIAL_OMEN
+    );
 
     public AutoOmen() {
         super(HandRestriction.EITHER, 0, MOVEMENT_PRIORITY);
@@ -42,9 +48,8 @@ public class AutoOmen extends AbstractInventoryModule {
 
     public void handleClientTick(final ClientBotTick e) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
-            && !CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().containsKey(Effect.BAD_OMEN)
-            && (CONFIG.client.extra.autoOmen.whileRaidOmen
-                || !CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().containsKey(Effect.RAID_OMEN))
+            && !isRaidActive()
+            && !hasOmenEffect()
             && CACHE.getPlayerCache().getGameMode() != GameMode.CREATIVE
             && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR
             && Proxy.getInstance().getOnlineTimeSeconds() > 1) {
@@ -97,5 +102,28 @@ public class AutoOmen extends AbstractInventoryModule {
     public boolean itemPredicate(final ItemStack itemStack) {
         ItemData itemData = ItemRegistry.REGISTRY.get(itemStack.getId());
         return itemData != null && itemData == ItemRegistry.OMINOUS_BOTTLE;
+    }
+
+    private boolean hasOmenEffect() {
+        for (int i = 0; i < OMEN_EFFECTS.size(); i++) {
+            if (CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().containsKey(OMEN_EFFECTS.get(i))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isRaidActive() {
+        for (var bossBar : CACHE.getBossBarCache().getBossBars().values()) {
+            var titleComponents = bossBar.getTitle().children();
+            for (int i = 0; i < titleComponents.size(); i++) {
+                if (titleComponents.get(i) instanceof TranslatableComponent translatableComponent) {
+                    if (translatableComponent.key().startsWith("event.minecraft.raid")) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
