@@ -51,7 +51,7 @@ dependencies {
     api("io.netty:netty-resolver-dns-native-macos:$nettyVersion:osx-aarch_64")
     api("org.cloudburstmc.math:api:2.0")
     api("org.cloudburstmc.math:immutable:2.0")
-    api("org.redisson:redisson:3.49.0") {
+    api("org.redisson:redisson:3.50.0") {
         exclude(group = "io.netty")
     }
     api("com.github.rfresh2:SimpleEventBus:1.6")
@@ -79,9 +79,9 @@ dependencies {
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.0")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.1")
     api("org.jspecify:jspecify:1.0.0")
-    api("net.kyori:adventure-text-logger-slf4j:4.21.0")
+    api("net.kyori:adventure-text-logger-slf4j:4.23.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.13.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     val lombokVersion = "1.18.38"
