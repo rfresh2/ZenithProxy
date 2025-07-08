@@ -83,7 +83,7 @@ dependencies {
     api("org.jspecify:jspecify:1.0.0")
     api("net.kyori:adventure-text-logger-slf4j:4.23.0")
     api("dev.omega24:upnp4j:1.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.13.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.13.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     val lombokVersion = "1.18.38"
     compileOnly("org.projectlombok:lombok:$lombokVersion")
