@@ -1,6 +1,7 @@
 package com.zenith.feature.player;
 
 import com.zenith.cache.data.chunk.Chunk;
+import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityLiving;
 import com.zenith.mc.block.*;
 import com.zenith.mc.block.properties.api.BlockStateProperties;
@@ -22,6 +23,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import static com.zenith.Globals.*;
 
@@ -183,7 +185,12 @@ public class World {
     }
 
     public void getEntityCollisionBoxes(final LocalizedCollisionBox cb, final List<LocalizedCollisionBox> results) {
+        getEntityCollisionBoxes(cb, results, entity -> true);
+    }
+
+    public void getEntityCollisionBoxes(final LocalizedCollisionBox cb, final List<LocalizedCollisionBox> results, Predicate<Entity> entityPredicate) {
         for (var entity : CACHE.getEntityCache().getEntities().values()) {
+            if (!entityPredicate.test(entity)) continue;
             var x = entity.getX();
             var y = entity.getY();
             var z = entity.getZ();

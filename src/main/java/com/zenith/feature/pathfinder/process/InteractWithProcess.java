@@ -1,5 +1,6 @@
 package com.zenith.feature.pathfinder.process;
 
+import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityLiving;
 import com.zenith.feature.inventory.InventoryActionRequest;
 import com.zenith.feature.inventory.actions.MoveToHotbarSlot;
@@ -21,6 +22,7 @@ import com.zenith.util.math.MathHelper;
 import lombok.Data;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.MoveToHotbarAction;
 import org.jspecify.annotations.Nullable;
 
@@ -294,7 +296,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         public boolean entityInPlaceTarget() {
             var entityCbs = new ArrayList<LocalizedCollisionBox>();
             var blockCb = new LocalizedCollisionBox(new CollisionBox(0, 1, 0, 1, 0, 1), x, y, z);
-            World.getEntityCollisionBoxes(blockCb, entityCbs);
+            World.getEntityCollisionBoxes(blockCb, entityCbs, entity -> !entity.getEntityType().equals(EntityType.ITEM));
             if (!entityCbs.isEmpty()) {
                 return true;
             }
