@@ -47,12 +47,17 @@ public class AutoOmen extends AbstractInventoryModule {
     }
 
     public void handleClientTick(final ClientBotTick e) {
-        if (CACHE.getPlayerCache().getThePlayer().isAlive()
-            && !isRaidActive()
-            && !hasOmenEffect()
+        boolean shouldUseOmen = CACHE.getPlayerCache().getThePlayer().isAlive()
             && CACHE.getPlayerCache().getGameMode() != GameMode.CREATIVE
             && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR
-            && Proxy.getInstance().getOnlineTimeSeconds() > 1) {
+            && Proxy.getInstance().getOnlineTimeSeconds() > 1;
+
+        // Check raid status and omen effect only if ignoreRaidStatus is false
+        if (shouldUseOmen && !CONFIG.client.extra.autoOmen.ignoreRaidStatus) {
+            shouldUseOmen = !isRaidActive() && !hasOmenEffect();
+        }
+
+        if (shouldUseOmen) {
             if (delay > 0) {
                 delay--;
                 if (isEating) {
