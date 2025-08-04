@@ -21,11 +21,12 @@ public class AutoOmenCommand extends Command {
             .category(CommandCategory.MODULE)
             .description("""
                 Automatically drinks Bad Omen potions in the inventory.
-                
+
                 Useful for raid farms on MC 1.21+ servers.
                 """)
             .usageLines(
-                "on/off"
+                "on/off",
+                "ignoreRaidStatus on/off"
             )
             .build();
     }
@@ -39,7 +40,15 @@ public class AutoOmenCommand extends Command {
                     .title("AutoOmen " + toggleStrCaps(CONFIG.client.extra.autoOmen.enabled));
                 MODULE.get(AutoOmen.class).syncEnabledFromConfig();
                 return OK;
-            }));
+            }))
+            .then(literal("ignoreRaidStatus")
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.autoOmen.ignoreRaidStatus = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("AutoOmen Ignore Raid Status " + toggleStrCaps(CONFIG.client.extra.autoOmen.ignoreRaidStatus))
+                        .description("When enabled, AutoOmen will use ominous bottles regardless of raid status or existing omen effects.");
+                    return OK;
+                })));
     }
 
     @Override
