@@ -356,7 +356,8 @@ public final class Config {
 
             public static final class AutoOmen {
                 public boolean enabled = false;
-                public boolean ignoreRaidStatus = false;
+                public boolean whileRaidActive = false;
+                public boolean whileOmenActive = false;
             }
 
             public static final class Stalk {
