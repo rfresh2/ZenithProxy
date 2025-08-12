@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           persist-credentials: false
 
@@ -44,7 +44,7 @@ jobs:
       - generate
     steps:
       - name: Check out wiki repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ${{ github.repository }}.wiki
           fetch-depth: 0
@@ -55,7 +55,7 @@ jobs:
           ls -lah
 
       - name: Download job artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           merge-multiple: true
           path: artifacts/

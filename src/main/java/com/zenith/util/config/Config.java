@@ -391,6 +391,7 @@ public final class Config {
                     public boolean jumpOnlyInWater = true;
                     public long jumpDelayTicks = 1L;
                     public boolean sneak = false;
+                    public long sneakDelayTicks = 200L;
                 }
             }
 

@@ -259,7 +259,11 @@ public final class Bot extends ModuleUtils {
         } else {
             isFallFlying = false;
         }
-        isSneaking = movementInput.sneaking;
+
+        isSneaking = !isFlying
+            && !CACHE.getPlayerCache().getThePlayer().isInVehicle()
+            && canPlayerFitWithinBlocksAndEntitiesWhen(SNEAKING_COLLISION_BOX)
+            && (movementInput.sneaking || !CACHE.getPlayerCache().getThePlayer().isSleeping() && !canPlayerFitWithinBlocksAndEntitiesWhen(STANDING_COLLISION_BOX));
         isSprinting = movementInput.sprinting
             && isOnGround()
             && !isTouchingWater
@@ -1340,6 +1344,18 @@ public final class Bot extends ModuleUtils {
         var attribute = CACHE.getPlayerCache().getThePlayer().getAttributes().get(attributeType);
         if (attribute == null) return defaultAttribute;
         return new Attribute(attribute.getType(), attribute.getValue(), Lists.newArrayList(attribute.getModifiers()));
+    }
+
+    private boolean canPlayerFitWithinBlocksAndEntitiesWhen(CollisionBox poseCb) {
+        var sneakingCb = new LocalizedCollisionBox(poseCb, x, y, z).inflate(-1.0E-7, -1.0E-7, -1.0E-7);
+        var levelCbs = World.getIntersectingCollisionBoxes(sneakingCb);
+        for (int i = 0; i < levelCbs.size(); i++) {
+            final var cb = levelCbs.get(i);
+            if (sneakingCb.intersects(cb)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public double getEyeY() {
