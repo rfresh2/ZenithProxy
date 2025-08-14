@@ -353,4 +353,13 @@ public class PlayerInteractionManager {
         BOT.debug("[{}] [{}, {}, {}] Attack Entity", System.currentTimeMillis(), entity.entity().getX(), entity.entity().getY(), entity.entity().getZ());
         Proxy.getInstance().getClient().sendAsync(new ServerboundInteractPacket(entity.entity().getEntityId(), InteractAction.ATTACK, false));
     }
+
+    protected void releaseUsingItem() {
+        Proxy.getInstance().getClient().sendAsync(new ServerboundPlayerActionPacket(
+            PlayerAction.RELEASE_USE_ITEM,
+            0, 0, 0,
+            Direction.DOWN.mcpl(),
+            CACHE.getPlayerCache().getSeqId().incrementAndGet()
+        ));
+    }
 }

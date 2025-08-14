@@ -71,7 +71,13 @@ public class RegistriesCache implements CachedData {
         for (int i = 0; i < entries.size(); i++) {
             final var entry = entries.get(i);
             String key = getKey(entry);
-            var enchantData = new EnchantmentData(i, key);
+            if (entry.getData() == null) {
+                CACHE_LOG.error("Null data for enchantment registry key: {}", key);
+                continue;
+            }
+            var nbt = (CompoundTag) MNBTIO.read(entry.getData());
+            int maxLevel = nbt.getInt("max_level");
+            var enchantData = new EnchantmentData(i, key, maxLevel);
             registry.register(enchantData);
         }
         CACHE_LOG.debug("Loaded {} enchantments", registry.size());

@@ -144,7 +144,7 @@ public class StatusCommand extends Command {
                     .thumbnail(getThumbnailImage())
                     .addField("Status", getStatus(), true)
                     .addField("Connected Player", getCurrentClientUserName(), true)
-                    .addField("Online For", getOnlineTime(), true)
+                    .addField("Online Duration", getOnlineTime(), true)
                     // end row 1
                     .addField("Health",  (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                     .addField("Dimension",
@@ -159,8 +159,10 @@ public class StatusCommand extends Command {
                 embed.addField("Spectators", toggleStr(CONFIG.server.spectator.allowSpectator),true);
                 if (!getSpectatorUserNames().isEmpty())
                     embed.addField("Online Spectators", String.join(", ", getSpectatorUserNames()), true);
-                embed
-                    .addField("2b2t Queue", getQueueStatus(), true);
+                if (CONFIG.server.queueStatusRefreshWhileNotOn2b2t || Proxy.getInstance().isOn2b2t()) {
+                    embed
+                        .addField("2b2t Queue", getQueueStatus(), true);
+                }
                 if (CONFIG.discord.reportCoords)
                     embed.addField("Coordinates", getCoordinates(CACHE.getPlayerCache().getThePlayer()), true);
                 embed

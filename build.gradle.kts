@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     id("org.graalvm.buildtools.native") version "0.11.0"
-    id("com.gradleup.shadow") version "9.0.0-rc3"
+    id("com.gradleup.shadow") version "9.0.1"
     id("io.freefair.lombok") version "8.14"
     `maven-publish`
 }
@@ -36,7 +36,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.3.Final"))
+    api(platform("io.netty:netty-bom:4.2.4.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -71,10 +71,10 @@ dependencies {
     api("com.viaversion:vialoader:4.0.4")
     api("com.viaversion:viaversion:5.4.2")
     api("com.viaversion:viabackwards:5.4.2")
-    api("org.jline:jline:3.30.4")
-    api("org.jline:jline-terminal-jni:3.30.4")
+    api("org.jline:jline:3.30.5")
+    api("org.jline:jline-terminal-jni:3.30.5")
     api("ar.com.hjg:pngj:2.1.0")
-    api("com.zaxxer:HikariCP:7.0.0")
+    api("com.zaxxer:HikariCP:7.0.1")
     api("org.postgresql:postgresql:42.7.7")
     api("org.jdbi:jdbi3-postgres:3.49.5")
     api("com.google.guava:guava:33.4.6-jre")

@@ -30,7 +30,7 @@ public class Queue {
         EXECUTOR.scheduleAtFixedRate(
             () -> Thread.ofVirtual().name("Queue Update").start(Queue::updateQueueStatus),
             1,
-            CONFIG.server.queueStatusRefreshMinutes,
+            1,
             TimeUnit.MINUTES);
         EXECUTOR.scheduleAtFixedRate(
             () -> Thread.ofVirtual().name("Queue ETA Update").start(Queue::updateQueueEtaEquation),
@@ -56,6 +56,7 @@ public class Queue {
 
     @Locked
     public static void updateQueueStatusNow() {
+        if (!CONFIG.server.queueStatusRefreshWhileNotOn2b2t && !Proxy.getInstance().isOn2b2t()) return;
         if (lastUpdate.isAfter(Instant.now().minus(Duration.ofSeconds(5)))) return; // avoid getting rate limited by tcpshield
         lastUpdate = Instant.now();
         if (!pingUpdate()) {
@@ -131,6 +132,7 @@ public class Queue {
 
     @Locked
     public static void updateQueueEtaEquation() {
+        if (!CONFIG.server.queueStatusRefreshWhileNotOn2b2t && !Proxy.getInstance().isOn2b2t()) return;
         if (!CONFIG.server.dynamicQueueEtaEquation) return;
         if (lastQueueEtaEquationUpdate.isAfter(Instant.now().minus(Duration.ofHours(1)))) return;
         try {

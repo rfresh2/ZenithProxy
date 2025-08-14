@@ -24,6 +24,8 @@ public class AntiAFK extends Module {
     private final Timer startWalkTickTimer = Timers.tickTimer();
     private final Timer rotateTimer = Timers.tickTimer();
     private final Timer jumpTimer = Timers.tickTimer();
+    private final Timer sneakTimer = Timers.tickTimer();
+    private boolean shouldSneak = false;
     private boolean shouldWalk = false;
     private final List<WalkDirection> walkDirections = asList(
             new WalkDirection(1, 0), new WalkDirection(-1, 0),
@@ -74,13 +76,18 @@ public class AntiAFK extends Module {
     }
 
     private void sneakTick() {
-        INPUTS.submit(InputRequest.builder()
-            .owner(this)
-            .input(Input.builder()
-                .sneaking(true)
-                .build())
-            .priority(MOVEMENT_PRIORITY - 1)
-            .build());
+        if (sneakTimer.tick(100L)) {
+            shouldSneak = !shouldSneak;
+        }
+        if (shouldSneak) {
+            INPUTS.submit(InputRequest.builder()
+                .owner(this)
+                .input(Input.builder()
+                    .sneaking(true)
+                    .build())
+                .priority(MOVEMENT_PRIORITY - 1)
+                .build());
+        }
     }
 
     public void handleDeathEvent(final ClientDeathEvent event) {
@@ -101,6 +108,7 @@ public class AntiAFK extends Module {
         swingTickTimer.reset();
         startWalkTickTimer.reset();
         rotateTimer.reset();
+        shouldSneak = false;
         shouldWalk = false;
         currentPathingGoal = null;
         jumpTimer.reset();

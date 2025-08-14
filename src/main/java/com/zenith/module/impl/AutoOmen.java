@@ -65,6 +65,9 @@ public class AutoOmen extends AbstractInventoryModule {
                 startEating();
             }
         } else {
+            if (isEating && !CONFIG.client.extra.autoOmen.whileOmenActive) {
+                delay = 20;
+            }
             isEating = false;
         }
     }
@@ -115,6 +118,11 @@ public class AutoOmen extends AbstractInventoryModule {
 
     private boolean isRaidActive() {
         for (var bossBar : CACHE.getBossBarCache().getBossBars().values()) {
+            if (bossBar.getTitle() instanceof TranslatableComponent translatableComponent) {
+                if (translatableComponent.key().startsWith("event.minecraft.raid")) {
+                    return true;
+                }
+            }
             var titleComponents = bossBar.getTitle().children();
             for (int i = 0; i < titleComponents.size(); i++) {
                 if (titleComponents.get(i) instanceof TranslatableComponent translatableComponent) {
