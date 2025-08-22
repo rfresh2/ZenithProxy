@@ -11,9 +11,11 @@ import com.zenith.discord.Embed;
 import com.zenith.module.impl.Spammer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
+import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.Globals.MODULE;
@@ -27,8 +29,10 @@ public class SpammerCommand extends Command {
             .name("spammer")
             .category(CommandCategory.MODULE)
             .description("""
-            Spams messages or whispers in-game. Use with caution, this can and will get you muted.
-            """)
+                Spams messages or whispers in-game. Use with caution, this can and will get you muted.
+                
+                To add messages in bulk, use the `addAll` subcommand. Each message is delimited by the `,,` characters.
+                """)
             .usageLines(
                 "on/off",
                 "whisper on/off",
@@ -40,6 +44,7 @@ public class SpammerCommand extends Command {
                 "clear",
                 "add <message>",
                 "addAt <index> <message>",
+                "addAll <message 1>,,<message 2>...",
                 "del <index>"
             )
             .aliases("spam")
@@ -54,93 +59,97 @@ public class SpammerCommand extends Command {
                 MODULE.get(Spammer.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("Spammer " + toggleStrCaps(CONFIG.client.extra.spammer.enabled));
-                return OK;
             }))
             .then(literal("whisper")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.extra.spammer.whisper = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                .title("Whisper " + toggleStrCaps(CONFIG.client.extra.spammer.whisper));
-                            return OK;
-                      })))
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.spammer.whisper = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Whisper " + toggleStrCaps(CONFIG.client.extra.spammer.whisper));
+                })))
             .then(literal("whilePlayerConnected")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.extra.spammer.whilePlayerConnected = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                .title("While Player Connected " + toggleStrCaps(CONFIG.client.extra.spammer.whilePlayerConnected));
-                            return OK;
-                      })))
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.spammer.whilePlayerConnected = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("While Player Connected " + toggleStrCaps(CONFIG.client.extra.spammer.whilePlayerConnected));
+                })))
             .then(literal("delayTicks")
-                      .then(argument("delayTicks", integer(1)).executes(c -> {
-                          CONFIG.client.extra.spammer.delayTicks = IntegerArgumentType.getInteger(c, "delayTicks");
-                          c.getSource().getEmbed()
-                              .title("Delay Updated!");
-                          return OK;
-                      })))
+                .then(argument("delayTicks", integer(1)).executes(c -> {
+                    CONFIG.client.extra.spammer.delayTicks = IntegerArgumentType.getInteger(c, "delayTicks");
+                    c.getSource().getEmbed()
+                        .title("Delay Updated!");
+                })))
             .then(literal("randomOrder")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.extra.spammer.randomOrder = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                .title("Random Order " + toggleStrCaps(CONFIG.client.extra.spammer.randomOrder));
-                            return OK;
-                      })))
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.spammer.randomOrder = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Random Order " + toggleStrCaps(CONFIG.client.extra.spammer.randomOrder));
+                })))
             .then(literal("appendRandom")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.extra.spammer.appendRandom = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                .title("Append Random " + toggleStrCaps(CONFIG.client.extra.spammer.appendRandom));
-                            return OK;
-                      })))
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.spammer.appendRandom = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Append Random " + toggleStrCaps(CONFIG.client.extra.spammer.appendRandom));
+                })))
             .then(literal("list").executes(c -> {
                 c.getSource().getEmbed()
                     .title("Status");
-                return OK;
             }))
             .then(literal("clear").executes(c -> {
                 CONFIG.client.extra.spammer.messages.clear();
                 c.getSource().getEmbed()
                     .title("Messages Cleared!");
-                return OK;
             }))
             .then(literal("add")
-                      .then(argument("message", greedyString()).executes(c -> {
-                          final String message = StringArgumentType.getString(c, "message");
-                          CONFIG.client.extra.spammer.messages.add(message);
-                          c.getSource().getEmbed()
-                                                 .primaryColor()
-                                                 .title("Message Added!");
-                          return OK;
-                      })))
-            .then(literal("addAt")
-                      .then(argument("index", integer(0))
-                                .then(argument("message", greedyString()).executes(c -> {
-                                    final int index = IntegerArgumentType.getInteger(c, "index");
-                                    final String message = StringArgumentType.getString(c, "message");
-                                    try {
-                                        CONFIG.client.extra.spammer.messages.add(index, message);
-                                        c.getSource().getEmbed()
-                                            .title("Message Added!");
-                                        return OK;
-                                    } catch (final Exception e) {
-                                        c.getSource().getEmbed()
-                                            .title("Invalid Index!");
-                                        return ERROR;
-                                    }
-                                }))))
+                .then(argument("message", greedyString()).executes(c -> {
+                    final String message = StringArgumentType.getString(c, "message");
+                    CONFIG.client.extra.spammer.messages.add(message);
+                    c.getSource().getEmbed()
+                        .primaryColor()
+                        .title("Message Added!");
+                })))
+            .then(literal("addAt").then(argument("index", integer(0)).then(argument("message", greedyString()).executes(c -> {
+                final int index = IntegerArgumentType.getInteger(c, "index");
+                final String message = StringArgumentType.getString(c, "message");
+                try {
+                    CONFIG.client.extra.spammer.messages.add(index, message);
+                    c.getSource().getEmbed()
+                        .title("Message Added!");
+                    return OK;
+                } catch (final Exception e) {
+                    c.getSource().getEmbed()
+                        .title("Invalid Index!");
+                    return ERROR;
+                }
+            }))))
+            .then(literal("addAll").then(argument("allMessages", greedyString()).executes(c -> {
+                var input = getString(c, "allMessages");
+                var split = input.split(",,");
+                if (split.length == 0) {
+                    c.getSource().getEmbed()
+                        .title("Invalid Input")
+                        .description("Each input message must be delimited by `,,`");
+                    return ERROR;
+                }
+                CONFIG.client.extra.spammer.messages.addAll(Arrays.asList(split));
+                c.getSource().getEmbed()
+                    .title("All Message added!")
+                    .addField("Added Message Count", split.length);
+                return OK;
+            })))
             .then(literal("del")
-                      .then(argument("index", integer(0)).executes(c -> {
-                          final int index = IntegerArgumentType.getInteger(c, "index");
-                          try {
-                              CONFIG.client.extra.spammer.messages.remove(index);
-                              addListDescription(c.getSource().getEmbed()
-                                                     .title("Message Removed!"));
-                              return OK;
-                          } catch (final Exception e) {
-                                c.getSource().getEmbed()
-                                    .title("Invalid Index!");
-                                return ERROR;
-                          }
-                      })));
+                .then(argument("index", integer(0)).executes(c -> {
+                    final int index = IntegerArgumentType.getInteger(c, "index");
+                    try {
+                        CONFIG.client.extra.spammer.messages.remove(index);
+                        addListDescription(c.getSource().getEmbed()
+                            .title("Message Removed!"));
+                        return OK;
+                    } catch (final Exception e) {
+                        c.getSource().getEmbed()
+                            .title("Invalid Index!");
+                        return ERROR;
+                    }
+                })));
     }
 
     @Override
@@ -148,12 +157,12 @@ public class SpammerCommand extends Command {
         addListDescription(builder.description("""
                  **WARNING:** This module can and will get you muted on 2b2t or other servers. Use at your own risk.
                  """))
-            .addField("Spammer", toggleStr(CONFIG.client.extra.spammer.enabled), false)
-            .addField("Whisper", toggleStr(CONFIG.client.extra.spammer.whisper), false)
-            .addField("While Player Connected", toggleStr(CONFIG.client.extra.spammer.whilePlayerConnected), false)
-            .addField("Delay", CONFIG.client.extra.spammer.delayTicks, false)
-            .addField("Random Order", toggleStr(CONFIG.client.extra.spammer.randomOrder), false)
-            .addField("Append Random", toggleStr(CONFIG.client.extra.spammer.appendRandom), false)
+            .addField("Spammer", toggleStr(CONFIG.client.extra.spammer.enabled))
+            .addField("Whisper", toggleStr(CONFIG.client.extra.spammer.whisper))
+            .addField("While Player Connected", toggleStr(CONFIG.client.extra.spammer.whilePlayerConnected))
+            .addField("Delay", CONFIG.client.extra.spammer.delayTicks)
+            .addField("Random Order", toggleStr(CONFIG.client.extra.spammer.randomOrder))
+            .addField("Append Random", toggleStr(CONFIG.client.extra.spammer.appendRandom))
             .primaryColor();
     }
 

@@ -8,13 +8,14 @@ import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.KillAura;
 import com.zenith.util.config.Config;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 
 import java.util.stream.Collectors;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.Globals.MODULE;
+import static com.zenith.command.brigadier.RegistryDataArgument.entity;
+import static com.zenith.command.brigadier.RegistryDataArgument.getEntity;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 
@@ -56,133 +57,97 @@ public class KillAuraCommand extends Command {
                 CONFIG.client.extra.killAura.enabled = getToggle(c, "toggle");
                 MODULE.get(KillAura.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
-                             .title("Kill Aura " + toggleStrCaps(CONFIG.client.extra.killAura.enabled));
-                return OK;
+                    .title("Kill Aura " + toggleStrCaps(CONFIG.client.extra.killAura.enabled));
             }))
-            .then(literal("attackDelay")
-                      .then(argument("ticks", integer(0, 1000)).executes(c -> {
-                          CONFIG.client.extra.killAura.attackDelayTicks = c.getArgument("ticks", Integer.class);
-                          c.getSource().getEmbed()
-                                       .title("Attack Delay Ticks Set!");
-                          return OK;
-                      })))
-            .then(literal("targetPlayers")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.extra.killAura.targetPlayers = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                         .title("Target Players " + toggleStrCaps(CONFIG.client.extra.killAura.targetPlayers));
-                            return OK;
-                      })))
+            .then(literal("attackDelay").then(argument("ticks", integer(0, 1000)).executes(c -> {
+                CONFIG.client.extra.killAura.attackDelayTicks = c.getArgument("ticks", Integer.class);
+                c.getSource().getEmbed()
+                    .title("Attack Delay Ticks Set!");
+            })))
+            .then(literal("targetPlayers").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.killAura.targetPlayers = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Target Players " + toggleStrCaps(CONFIG.client.extra.killAura.targetPlayers));
+            })))
             .then(literal("targetHostileMobs")
-                      .then(literal("onlyAggressive").then(argument("toggle", toggle()).executes(c -> {
-                          CONFIG.client.extra.killAura.onlyHostileAggressive = getToggle(c, "toggle");
-                          c.getSource().getEmbed()
-                              .title("Target Hostile Mobs Only Aggressive " + toggleStrCaps(CONFIG.client.extra.killAura.onlyHostileAggressive));
-                          return OK;
-                      })))
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.extra.killAura.targetHostileMobs = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                         .title("Target Mobs " + toggleStrCaps(CONFIG.client.extra.killAura.targetHostileMobs));
-                            return OK;
-                      })))
+                .then(literal("onlyAggressive").then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.killAura.onlyHostileAggressive = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Target Hostile Mobs Only Aggressive " + toggleStrCaps(CONFIG.client.extra.killAura.onlyHostileAggressive));
+                })))
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.killAura.targetHostileMobs = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Target Mobs " + toggleStrCaps(CONFIG.client.extra.killAura.targetHostileMobs));
+                })))
             .then(literal("targetNeutralMobs")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.extra.killAura.targetNeutralMobs = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                         .title("Target Neutral Mobs " + toggleStrCaps(CONFIG.client.extra.killAura.targetNeutralMobs));
-                            return OK;
-                      }))
-                      .then(literal("onlyAggressive")
-                                .then(argument("toggle", toggle()).executes(c -> {
-                                    CONFIG.client.extra.killAura.onlyNeutralAggressive = getToggle(c, "toggle");
-                                    c.getSource().getEmbed()
-                                                 .title("Target Neutral Mobs Only Aggressive " + toggleStrCaps(CONFIG.client.extra.killAura.onlyNeutralAggressive));
-                                    return OK;
-                                }))))
-            .then(literal("targetArmorStands")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.extra.killAura.targetArmorStands = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                         .title("Target Armor Stands " + toggleStrCaps(CONFIG.client.extra.killAura.targetArmorStands));
-                            return OK;
-                      })))
-            .then(literal("weaponSwitch")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.extra.killAura.switchWeapon = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                         .title("Weapon Switching " + toggleStrCaps(CONFIG.client.extra.killAura.switchWeapon));
-                            return OK;
-                      })))
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.killAura.targetNeutralMobs = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Target Neutral Mobs " + toggleStrCaps(CONFIG.client.extra.killAura.targetNeutralMobs));
+                }))
+                .then(literal("onlyAggressive")
+                    .then(argument("toggle", toggle()).executes(c -> {
+                        CONFIG.client.extra.killAura.onlyNeutralAggressive = getToggle(c, "toggle");
+                        c.getSource().getEmbed()
+                            .title("Target Neutral Mobs Only Aggressive " + toggleStrCaps(CONFIG.client.extra.killAura.onlyNeutralAggressive));
+                    }))))
+            .then(literal("targetArmorStands").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.killAura.targetArmorStands = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Target Armor Stands " + toggleStrCaps(CONFIG.client.extra.killAura.targetArmorStands));
+            })))
+            .then(literal("weaponSwitch").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.killAura.switchWeapon = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Weapon Switching " + toggleStrCaps(CONFIG.client.extra.killAura.switchWeapon));
+            })))
             .then(literal("targetCustom")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.extra.killAura.targetCustom = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                         .title("Target Custom " + toggleStrCaps(CONFIG.client.extra.killAura.targetCustom));
-                            return OK;
-                      }))
-                      .then(literal("add")
-                                .then(argument("entityType", enumStrings(EntityType.values())).executes(c -> {
-                                    var entityType = c.getArgument("entityType", String.class);
-                                    var foundType = entityType.toUpperCase();
-                                    try {
-                                        var type = Enum.valueOf(EntityType.class, foundType);
-                                        if (!CONFIG.client.extra.killAura.customTargets.contains(type))
-                                            CONFIG.client.extra.killAura.customTargets.add(type);
-                                        c.getSource().getEmbed()
-                                                     .title("Added " + type.name());
-                                    } catch (Exception e) {
-                                        c.getSource().getEmbed()
-                                                     .title("Invalid Entity Type")
-                                                     .errorColor();
-                                    }
-                                    return OK;
-                                })))
-                      .then(literal("del")
-                                .then(argument("entityType", enumStrings(EntityType.values())).executes(c -> {
-                                    var entityType = c.getArgument("entityType", String.class);
-                                    var foundType = entityType.toUpperCase();
-                                    try {
-                                        var type = Enum.valueOf(EntityType.class, foundType);
-                                        CONFIG.client.extra.killAura.customTargets.remove(type);
-                                        c.getSource().getEmbed()
-                                            .title("Removed " + type.name());
-                                    } catch (Exception e) {
-                                        c.getSource().getEmbed()
-                                            .title("Invalid Entity Type")
-                                            .errorColor();
-                                    }
-                                    return OK;
-                                }))))
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.killAura.targetCustom = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Target Custom " + toggleStrCaps(CONFIG.client.extra.killAura.targetCustom));
+                }))
+                .then(literal("add").then(argument("entityType", entity()).executes(c -> {
+                    var entityData = getEntity(c, "entityType");
+                    var type = entityData.mcplType();
+                    if (!CONFIG.client.extra.killAura.customTargets.contains(type))
+                        CONFIG.client.extra.killAura.customTargets.add(type);
+                    c.getSource().getEmbed()
+                        .title("Added " + type);
+                })))
+                .then(literal("del").then(argument("entityType", entity()).executes(c -> {
+                    var entityData = getEntity(c, "entityType");
+                    var type = entityData.mcplType();
+                    CONFIG.client.extra.killAura.customTargets.remove(type);
+                    c.getSource().getEmbed()
+                        .title("Removed " + type);
+                }))))
             .then(literal("priority")
-                      .then(literal("none").executes(c -> {
-                          CONFIG.client.extra.killAura.priority = Config.Client.Extra.KillAura.Priority.NONE;
-                          c.getSource().getEmbed()
-                              .title("Priority Set");
-                          return OK;
-                      }))
-                      .then(literal("nearest").executes(c -> {
-                          CONFIG.client.extra.killAura.priority = Config.Client.Extra.KillAura.Priority.NEAREST;
-                          c.getSource().getEmbed()
-                              .title("Priority Set");
-                          return OK;
-                      })));
+                .then(literal("none").executes(c -> {
+                    CONFIG.client.extra.killAura.priority = Config.Client.Extra.KillAura.Priority.NONE;
+                    c.getSource().getEmbed()
+                        .title("Priority Set");
+                }))
+                .then(literal("nearest").executes(c -> {
+                    CONFIG.client.extra.killAura.priority = Config.Client.Extra.KillAura.Priority.NEAREST;
+                    c.getSource().getEmbed()
+                        .title("Priority Set");
+                })));
     }
 
     @Override
     public void defaultEmbed(Embed builder) {
         builder
-            .addField("KillAura", toggleStr(CONFIG.client.extra.killAura.enabled), false)
-            .addField("Target Players", toggleStr(CONFIG.client.extra.killAura.targetPlayers), false)
-            .addField("Target Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.targetHostileMobs), false)
-            .addField("Target Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs), false)
-            .addField("Target Custom", toggleStr(CONFIG.client.extra.killAura.targetCustom), false)
-            .addField("Only Aggressive Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.onlyNeutralAggressive), false)
-            .addField("Only Aggressive Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.onlyHostileAggressive), false)
-            .addField("Target Armor Stands", toggleStr(CONFIG.client.extra.killAura.targetArmorStands), false)
-            .addField("Weapon Switching", toggleStr(CONFIG.client.extra.killAura.switchWeapon), false)
-            .addField("Attack Delay Ticks", CONFIG.client.extra.killAura.attackDelayTicks, false)
-            .addField("Priority", CONFIG.client.extra.killAura.priority.name().toLowerCase(), false)
+            .addField("KillAura", toggleStr(CONFIG.client.extra.killAura.enabled))
+            .addField("Target Players", toggleStr(CONFIG.client.extra.killAura.targetPlayers))
+            .addField("Target Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.targetHostileMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.targetHostileMobs) + "]")
+            .addField("Target Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs) + "]")
+            .addField("Target Custom", toggleStr(CONFIG.client.extra.killAura.targetCustom))
+            .addField("Target Armor Stands", toggleStr(CONFIG.client.extra.killAura.targetArmorStands))
+            .addField("Weapon Switching", toggleStr(CONFIG.client.extra.killAura.switchWeapon))
+            .addField("Attack Delay Ticks", CONFIG.client.extra.killAura.attackDelayTicks)
+            .addField("Priority", CONFIG.client.extra.killAura.priority.name().toLowerCase())
             .primaryColor();
         if (CONFIG.client.extra.killAura.targetCustom) {
             builder.description("**Custom Targets**\n" + CONFIG.client.extra.killAura.customTargets.stream().map(Enum::name).collect(
