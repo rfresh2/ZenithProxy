@@ -57,6 +57,7 @@ public class ActionLimiterCommand extends Command {
                 "allowRespawn on/off",
                 "itemsBlacklist on/off",
                 "itemsBlacklist add/del <item>",
+                "itemsBlacklist addAll <item 1>,<item 2>...",
                 "itemsBlacklist clear",
                 "itemsBlacklist list"
             )
