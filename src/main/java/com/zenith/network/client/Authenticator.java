@@ -5,6 +5,7 @@ import com.zenith.event.client.MsaDeviceCodeLoginEvent;
 import com.zenith.util.WebBrowserHelper;
 import com.zenith.util.math.MathHelper;
 import lombok.Getter;
+import lombok.Locked;
 import lombok.SneakyThrows;
 import net.lenni0451.commons.httpclient.HttpClient;
 import net.lenni0451.commons.httpclient.proxy.ProxyHandler;
@@ -272,10 +273,10 @@ public class Authenticator {
         saveAuthCacheJson(getAuthStep().toJson(session));
     }
 
+    @Locked
     private void saveAuthCacheJson(JsonObject json) {
         try {
-            final File tempFile = new File(AUTH_CACHE_FILE.getAbsolutePath() + ".tmp");
-            if (tempFile.exists()) tempFile.delete();
+            final File tempFile = File.createTempFile(AUTH_CACHE_FILE.getName(), null);
             try (Writer out = new FileWriter(tempFile)) {
                 GSON.toJson(json, out);
             }
@@ -305,6 +306,7 @@ public class Authenticator {
             .map(json -> getAuthStep().fromJson(json));
     }
 
+    @Locked
     private Optional<JsonObject> readAuthCacheJson() {
         try (Reader reader = new FileReader(AUTH_CACHE_FILE)) {
             final JsonObject json = GSON.fromJson(reader, JsonObject.class);

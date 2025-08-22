@@ -32,6 +32,7 @@ import com.zenith.util.config.Config;
 import com.zenith.util.config.ConfigVerifier;
 import com.zenith.util.config.LaunchConfig;
 import com.zenith.via.ZenithViaInitializer;
+import lombok.Locked;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.jspecify.annotations.Nullable;
 
@@ -85,7 +86,8 @@ public class Globals {
     public static final PluginManager PLUGIN_MANAGER;
     public static final InGameGuiManager GUI;
     public static final String MC_VERSION;
-    public static synchronized Config loadConfig() {
+    @Locked
+    public static Config loadConfig() {
         try {
             DEFAULT_LOG.info("Loading config...");
 
@@ -112,7 +114,8 @@ public class Globals {
         }
     }
 
-    public static synchronized LaunchConfig loadLaunchConfig() {
+    @Locked
+    public static LaunchConfig loadLaunchConfig() {
         try {
             DEFAULT_LOG.info("Loading launch config...");
 
@@ -169,14 +172,17 @@ public class Globals {
         Thread.ofVirtual().name("Async Config Save").start(Globals::saveConfig);
     }
 
-    public static synchronized void saveConfig() {
+    @Locked
+    public static void saveConfig() {
         saveConfig(CONFIG_FILE, CONFIG, GSON);
         PLUGIN_MANAGER.saveConfigs(Globals::saveConfig);
     }
-    public static synchronized void saveLaunchConfig() {
+    @Locked
+    public static void saveLaunchConfig() {
         saveConfig(LAUNCH_CONFIG_FILE, LAUNCH_CONFIG, GSON);
     }
 
+    @Locked
     static void saveConfig(File file, Object config, Gson gson) {
         DEFAULT_LOG.debug("Saving {}...", file.getName());
 
