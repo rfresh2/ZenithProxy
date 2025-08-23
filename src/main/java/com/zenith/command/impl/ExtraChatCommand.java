@@ -29,6 +29,7 @@ public class ExtraChatCommand extends Command {
                 "hideDeathMessages on/off",
                 "showConnectionMessages on/off",
                 "insertClickableLinks on/off",
+                "hide2b2tActionBarText on/off",
                 "logChatMessages on/off",
                 "logOnlyQueuePositionUpdates on/off",
                 "whisperCommand <command>"
@@ -68,6 +69,11 @@ public class ExtraChatCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Insert Clickable Links " + toggleStrCaps(CONFIG.client.extra.chat.insertClickableLinks));
             })))
+            .then(literal("hide2b2tActionBarText").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.chat.hide2b2tActionBarText = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Hide 2b2t Action Bar Text " + toggleStrCaps(CONFIG.client.extra.chat.hide2b2tActionBarText));
+            })))
             .then(literal("logChatMessages").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.logChatMessages = getToggle(c, "toggle");
                 c.getSource().getEmbed()
@@ -102,6 +108,7 @@ public class ExtraChatCommand extends Command {
             .addField("Hide death Messages", toggleStr(CONFIG.client.extra.chat.hideDeathMessages))
             .addField("Show Connection Messages", toggleStr(CONFIG.client.extra.chat.showConnectionMessages))
             .addField("Insert Clickable Links", toggleStr(CONFIG.client.extra.chat.insertClickableLinks))
+            .addField("Hide 2b2t Action Bar Text", toggleStr(CONFIG.client.extra.chat.hide2b2tActionBarText))
             .addField("Log Chat Messages", toggleStr(CONFIG.client.extra.logChatMessages))
             .addField("Log Only Queue Pos Updates", toggleStr(CONFIG.client.extra.logOnlyQueuePositionUpdates))
             .addField("Whisper Command", CONFIG.client.extra.whisperCommand)

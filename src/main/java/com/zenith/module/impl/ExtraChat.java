@@ -5,10 +5,7 @@ import com.zenith.Proxy;
 import com.zenith.event.queue.QueuePositionUpdateEvent;
 import com.zenith.event.server.ServerPlayerConnectedEvent;
 import com.zenith.event.server.ServerPlayerDisconnectedEvent;
-import com.zenith.feature.extrachat.ECChatCommandIncomingHandler;
-import com.zenith.feature.extrachat.ECPlayerChatOutgoingHandler;
-import com.zenith.feature.extrachat.ECSignedChatCommandIncomingHandler;
-import com.zenith.feature.extrachat.ECSystemChatOutgoingHandler;
+import com.zenith.feature.extrachat.*;
 import com.zenith.module.api.Module;
 import com.zenith.network.codec.PacketHandlerCodec;
 import com.zenith.network.codec.PacketHandlerStateCodec;
@@ -20,6 +17,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundPlayerChatPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSystemChatPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandSignedPacket;
 
@@ -56,6 +54,7 @@ public class ExtraChat extends Module {
             .state(ProtocolState.GAME, PacketHandlerStateCodec.serverBuilder()
                 .outbound(ClientboundSystemChatPacket.class, new ECSystemChatOutgoingHandler())
                 .outbound(ClientboundPlayerChatPacket.class, new ECPlayerChatOutgoingHandler())
+                .outbound(ClientboundSetActionBarTextPacket.class, new ECSetActionBarTextHandler())
                 .inbound(ServerboundChatCommandPacket.class, new ECChatCommandIncomingHandler())
                 .inbound(ServerboundChatCommandSignedPacket.class, new ECSignedChatCommandIncomingHandler())
                 .build())
