@@ -28,6 +28,7 @@ public class ExtraChatCommand extends Command {
                 "hideWhispers on/off",
                 "hideDeathMessages on/off",
                 "showConnectionMessages on/off",
+                "insertClickableLinks on/off",
                 "logChatMessages on/off",
                 "logOnlyQueuePositionUpdates on/off",
                 "whisperCommand <command>"
@@ -41,43 +42,41 @@ public class ExtraChatCommand extends Command {
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.chat.enabled = getToggle(c, "toggle");
                 c.getSource().getEmbed().title("ExtraChat " + toggleStrCaps(CONFIG.client.extra.chat.enabled));
-                return OK;
             }))
             .then(literal("hideChat").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.chat.hideChat = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Hide Chat " + toggleStrCaps(CONFIG.client.extra.chat.hideChat));
-                return OK;
             })))
             .then(literal("hideWhispers").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.chat.hideWhispers = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Hide Whispers " + toggleStrCaps(CONFIG.client.extra.chat.hideWhispers));
-                return OK;
             })))
             .then(literal("hideDeathMessages").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.chat.hideDeathMessages = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Hide Death Messages " + toggleStrCaps(CONFIG.client.extra.chat.hideDeathMessages));
-                return OK;
             })))
             .then(literal("showConnectionMessages").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.chat.showConnectionMessages = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Show Connection Messages " + toggleStrCaps(CONFIG.client.extra.chat.showConnectionMessages));
-                return OK;
+            })))
+            .then(literal("insertClickableLinks").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.chat.insertClickableLinks = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Insert Clickable Links " + toggleStrCaps(CONFIG.client.extra.chat.insertClickableLinks));
             })))
             .then(literal("logChatMessages").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.logChatMessages = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Log Chat Messages " + toggleStrCaps(CONFIG.client.extra.logChatMessages));
-                return OK;
             })))
             .then(literal("logOnlyQueuePositionUpdates").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.logOnlyQueuePositionUpdates = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Log Only Queue Pos Updates " + toggleStrCaps(CONFIG.client.extra.logOnlyQueuePositionUpdates));
-                return OK;
             })))
             .then(literal("whisperCommand").then(argument("cmd", wordWithChars()).executes(c -> {
                 String cmd = getString(c, "cmd");
@@ -97,14 +96,15 @@ public class ExtraChatCommand extends Command {
     @Override
     public void defaultEmbed(final Embed builder) {
         builder
-            .addField("ExtraChat", toggleStr(CONFIG.client.extra.chat.enabled), false)
-            .addField("Hide Chat", toggleStr(CONFIG.client.extra.chat.hideChat), false)
-            .addField("Hide Whispers", toggleStr(CONFIG.client.extra.chat.hideWhispers), false)
-            .addField("Hide death Messages", toggleStr(CONFIG.client.extra.chat.hideDeathMessages), false)
-            .addField("Show Connection Messages", toggleStr(CONFIG.client.extra.chat.showConnectionMessages), false)
-            .addField("Log Chat Messages", toggleStr(CONFIG.client.extra.logChatMessages), false)
-            .addField("Log Only Queue Pos Updates", toggleStr(CONFIG.client.extra.logOnlyQueuePositionUpdates), false)
-            .addField("Whisper Command", CONFIG.client.extra.whisperCommand, false)
+            .addField("ExtraChat", toggleStr(CONFIG.client.extra.chat.enabled))
+            .addField("Hide Chat", toggleStr(CONFIG.client.extra.chat.hideChat))
+            .addField("Hide Whispers", toggleStr(CONFIG.client.extra.chat.hideWhispers))
+            .addField("Hide death Messages", toggleStr(CONFIG.client.extra.chat.hideDeathMessages))
+            .addField("Show Connection Messages", toggleStr(CONFIG.client.extra.chat.showConnectionMessages))
+            .addField("Insert Clickable Links", toggleStr(CONFIG.client.extra.chat.insertClickableLinks))
+            .addField("Log Chat Messages", toggleStr(CONFIG.client.extra.logChatMessages))
+            .addField("Log Only Queue Pos Updates", toggleStr(CONFIG.client.extra.logOnlyQueuePositionUpdates))
+            .addField("Whisper Command", CONFIG.client.extra.whisperCommand)
             .primaryColor();
     }
 }

@@ -13,6 +13,9 @@ import com.zenith.module.api.Module;
 import com.zenith.network.codec.PacketHandlerCodec;
 import com.zenith.network.codec.PacketHandlerStateCodec;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundPlayerChatPacket;
@@ -21,6 +24,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.Serverbound
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandSignedPacket;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.CHAT_LOG;
@@ -75,5 +79,24 @@ public class ExtraChat extends Module {
     private void handleQueuePositionUpdate(QueuePositionUpdateEvent event) {
         if (!CONFIG.client.extra.logChatMessages || !CONFIG.client.extra.logOnlyQueuePositionUpdates) return;
         CHAT_LOG.info(Component.text("Position in queue: " + event.position()).color(NamedTextColor.GOLD));
+    }
+
+    private static final Pattern urlPattern = Pattern.compile("(?i)(?<link>[a-z0-9:/]+(www\\.)?[-a-z0-9@:%._+~#=]+\\.[a-z0-9()]{1,6}\\b([-a-z0-9()@:%_+.~#?&/=]*))");
+
+    public Component insertClickableLinks(Component component) {
+        var replacementConfig = TextReplacementConfig.builder()
+            .match(urlPattern)
+            .replacement((matchResult, builder) -> {
+                var link = matchResult.group();
+                var lowerCase = link.toLowerCase();
+                var httpLink = lowerCase.startsWith("http://") || link.startsWith("https://")
+                    ? lowerCase
+                    : "https://" + lowerCase;
+                return Component.text(link)
+                    .clickEvent(ClickEvent.openUrl(httpLink))
+                    .hoverEvent(HoverEvent.showText(Component.text(httpLink).color(NamedTextColor.GRAY)));
+            })
+            .build();
+        return component.replaceText(replacementConfig);
     }
 }

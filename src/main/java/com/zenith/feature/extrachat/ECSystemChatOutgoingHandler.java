@@ -4,6 +4,7 @@ import com.zenith.Proxy;
 import com.zenith.feature.chatschema.ChatSchemaParser;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.DeathMessagesParser;
+import com.zenith.module.impl.ExtraChat;
 import com.zenith.network.codec.PacketHandler;
 import com.zenith.network.server.ServerSession;
 import com.zenith.util.ComponentSerializer;
@@ -56,7 +57,9 @@ public class ECSystemChatOutgoingHandler implements PacketHandler<ClientboundSys
 //                        }
 //                    }
                 }
-
+            }
+            if (CONFIG.client.extra.chat.insertClickableLinks && !packet.isOverlay()) {
+                return new ClientboundSystemChatPacket(MODULE.get(ExtraChat.class).insertClickableLinks(packet.getContent()), packet.isOverlay());
             }
         } catch (final Exception e) {
             SERVER_LOG.error("Failed to parse chat message in ExtraChatSystemChatOutgoingHandler: {}",
