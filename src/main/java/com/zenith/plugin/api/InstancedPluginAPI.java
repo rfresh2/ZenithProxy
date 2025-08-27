@@ -2,9 +2,12 @@ package com.zenith.plugin.api;
 
 import com.zenith.command.api.Command;
 import com.zenith.module.api.Module;
+import com.zenith.plugin.DefaultGsonConfigSerializer;
+import com.zenith.plugin.KotlinObjectGsonConfigSerializer;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
 import static com.zenith.Globals.*;
+import static com.zenith.util.KotlinUtil.isKotlinObject;
 
 public record InstancedPluginAPI(
     ZenithProxyPlugin pluginInstance,
@@ -12,8 +15,16 @@ public record InstancedPluginAPI(
 ) implements PluginAPI {
     @Override
     public <T> T registerConfig(String fileName, Class<T> configClass) {
-        getLogger().debug("Registering config: {}", fileName);
-        return PLUGIN_MANAGER.registerConfig(fileName, configClass);
+        return registerConfig(fileName, configClass, isKotlinObject(configClass)
+            ? new KotlinObjectGsonConfigSerializer(configClass)
+            : DefaultGsonConfigSerializer.INSTANCE
+        );
+    }
+
+    @Override
+    public <T> T registerConfig(String fileName, Class<T> configClass, ConfigSerializer serializer) {
+        getLogger().debug("Registering config: {} [{}] using serializer: {}", fileName, configClass.getSimpleName(), serializer.getClass().getSimpleName());
+        return PLUGIN_MANAGER.registerConfig(fileName, configClass, serializer);
     }
 
     @Override

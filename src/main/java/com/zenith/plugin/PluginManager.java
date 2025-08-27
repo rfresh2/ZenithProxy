@@ -1,22 +1,17 @@
 package com.zenith.plugin;
 
-import com.google.gson.Gson;
-import com.google.gson.InstanceCreator;
-import com.zenith.Globals;
 import com.zenith.event.plugin.PluginLoadFailureEvent;
 import com.zenith.event.plugin.PluginLoadedEvent;
-import com.zenith.plugin.api.InstancedPluginAPI;
-import com.zenith.plugin.api.PluginInfo;
-import com.zenith.plugin.api.PluginInstance;
-import com.zenith.plugin.api.ZenithProxyPlugin;
+import com.zenith.plugin.api.*;
 import com.zenith.util.ImageInfo;
 import lombok.SneakyThrows;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -31,10 +26,11 @@ import static com.zenith.util.KotlinUtil.getKotlinObject;
 import static com.zenith.util.KotlinUtil.isKotlinObject;
 import static java.util.Objects.requireNonNull;
 
+@NullMarked
 public class PluginManager {
     public static final Path PLUGINS_PATH = Path.of("plugins");
-    private final Map<String, ConfigInstance> pluginConfigurations = new ConcurrentHashMap<>();
-    private final Map<String, PluginInstance> pluginInstances = new ConcurrentHashMap<>();
+    protected final Map<String, ConfigInstance> pluginConfigurations = new ConcurrentHashMap<>();
+    protected final Map<String, PluginInstance> pluginInstances = new ConcurrentHashMap<>();
     private final AtomicBoolean initialized = new AtomicBoolean(false);
 
     public List<PluginInfo> getPluginInfos() {
@@ -45,6 +41,16 @@ public class PluginManager {
         return new ArrayList<>(pluginInstances.values());
     }
 
+    public @Nullable PluginInstance getPluginInstance(String id) {
+        return pluginInstances.get(id);
+    }
+
+    public @Nullable ZenithProxyPlugin getPlugin(String id) {
+        var instance = pluginInstances.get(id);
+        if (instance == null) return null;
+        return instance.getPluginInstance();
+    }
+
     public String getId(final ZenithProxyPlugin pluginInstance) {
         return pluginInstances.values().stream()
             .filter(i -> i.getPluginInstance() == pluginInstance)
@@ -53,15 +59,18 @@ public class PluginManager {
             .orElseThrow(() -> new RuntimeException("Plugin instance " + pluginInstance.getClass().getName() + " not found"));
     }
 
-    public PluginInfo getPluginInfo(final ZenithProxyPlugin pluginInstance) {
-        return pluginInstances.get(getId(pluginInstance)).getPluginInfo();
+    public @Nullable PluginInfo getPluginInfo(final ZenithProxyPlugin pluginInstance) {
+        var id = getId(pluginInstance);
+        var instance = getPluginInstance(id);
+        if (instance == null) return null;
+        return instance.getPluginInfo();
     }
 
     public List<ConfigInstance> getAllPluginConfigs() {
         return new ArrayList<>(pluginConfigurations.values());
     }
 
-    public record ConfigInstance(Object instance, Class<?> clazz, File file) { }
+    public record ConfigInstance(Object instance, Class<?> clazz, File file, ConfigSerializer serializer) { }
 
     public void initialize() {
         if (initialized.compareAndSet(false, true)) {
@@ -141,30 +150,7 @@ public class PluginManager {
             classLoader = new URLClassLoader(new URL[]{jarPath.toUri().toURL()}, getClass().getClassLoader());
             PluginInfo pluginInfo = readPluginInfo(classLoader, jarPath);
             id = requireNonNull(pluginInfo.id(), "Plugin id is null");
-            if (pluginInstances.containsKey(id)) {
-                // todo: we could try to sort by version and load the "newest" one
-                throw new RuntimeException("Plugin id already exists: " + id);
-            }
-            if (pluginInfo.mcVersions().isEmpty()) {
-                PLUGIN_LOG.error("Plugin: {} has no MC versions specified", jarPath);
-                throw new RuntimeException("Plugin has no MC versions specified");
-            }
-            if (!pluginInfo.mcVersions().contains("*") && !pluginInfo.mcVersions().contains(MC_VERSION)) {
-                PLUGIN_LOG.warn("Plugin: {} not compatible with current MC version. Actual: {}, Plugin Required: {}", jarPath, MC_VERSION, pluginInfo.mcVersions());
-                return;
-            }
-
-            PLUGIN_LOG.info(
-                "Found Plugin:\n  id: {}\n  version: {}\n  description: {}\n  url: {}\n  authors: {}\n  jar: {}",
-                pluginInfo.id(),
-                pluginInfo.version(),
-                pluginInfo.description(),
-                pluginInfo.url(),
-                pluginInfo.authors(),
-                jarPath.getFileName()
-            );
-
-            pluginInstances.put(id, new PluginInstance(id, jarPath, pluginInfo, classLoader));
+            preLoadPluginInstance(pluginInfo, jarPath, classLoader);
         } catch (Throwable e) {
             if (classLoader != null) {
                 try {
@@ -176,7 +162,34 @@ public class PluginManager {
         }
     }
 
-    private void loadPlugin(final PluginInstance pluginInstance) {
+    protected void preLoadPluginInstance(final PluginInfo pluginInfo, Path jarPath, ClassLoader classLoader) {
+        String id = pluginInfo.id();
+        if (pluginInstances.containsKey(id)) {
+            // todo: we could try to sort by version and load the "newest" one
+            throw new RuntimeException("Plugin id already exists: " + id);
+        }
+        if (pluginInfo.mcVersions().isEmpty()) {
+            PLUGIN_LOG.error("Plugin: {} has no MC versions specified", jarPath);
+            throw new RuntimeException("Plugin has no MC versions specified");
+        }
+        if (!pluginInfo.mcVersions().contains("*") && !pluginInfo.mcVersions().contains(MC_VERSION)) {
+            PLUGIN_LOG.warn("Plugin: {} not compatible with current MC version. Actual: {}, Plugin Required: {}", jarPath, MC_VERSION, pluginInfo.mcVersions());
+            return;
+        }
+
+        PLUGIN_LOG.info(
+            "Found Plugin:\n  id: {}\n  version: {}\n  description: {}\n  url: {}\n  authors: {}\n  jar: {}",
+            pluginInfo.id(),
+            pluginInfo.version(),
+            pluginInfo.description(),
+            pluginInfo.url(),
+            pluginInfo.authors(),
+            jarPath.getFileName()
+        );
+        pluginInstances.put(id, new PluginInstance(id, jarPath, pluginInfo, classLoader));
+    }
+
+    protected void loadPlugin(final PluginInstance pluginInstance) {
         try {
             var pluginInfo = pluginInstance.getPluginInfo();
             var classLoader = pluginInstance.getClassLoader();
@@ -209,7 +222,10 @@ public class PluginManager {
             EVENT_BUS.postAsync(new PluginLoadedEvent(pluginInfo));
         } catch (Throwable e) {
             try {
-                pluginInstance.getClassLoader().close();
+                var classloader = pluginInstance.getClassLoader();
+                if (classloader instanceof URLClassLoader urlClassLoader) {
+                    urlClassLoader.close();
+                }
             } catch (IOException ignored) { }
             PLUGIN_LOG.error("Error loading plugin: {}", pluginInstance, e);
             EVENT_BUS.postAsync(new PluginLoadFailureEvent(pluginInstance.getId(), pluginInstance.getJarPath(), e));
@@ -266,12 +282,12 @@ public class PluginManager {
         }
     }
 
-    public synchronized <T> T registerConfig(String fileName, Class<T> clazz) {
+    public synchronized <T> T registerConfig(String fileName, Class<T> clazz, ConfigSerializer serializer) {
         if (pluginConfigurations.containsKey(fileName)) {
             throw new RuntimeException("Config already registered: " + fileName);
         }
-        var config = loadPluginConfig(fileName, clazz);
-        File configFile = resolveConfigFile(fileName);
+        var config = loadPluginConfig(fileName, clazz, serializer);
+        File configFile = resolveConfigFile(fileName, serializer.fileExtension());
         if (!configFile.exists()) {
             if (!configFile.getParentFile().mkdirs() && !configFile.getParentFile().exists()) {
                 throw new RuntimeException("Unable to create plugin config directory: " + configFile.getParentFile());
@@ -280,49 +296,33 @@ public class PluginManager {
         var configInstance = new ConfigInstance(
             config,
             clazz,
-            configFile
+            configFile,
+            serializer
         );
         pluginConfigurations.put(fileName, configInstance);
         return config;
     }
 
-    private static final Gson KOTLIN_CONFIG_OBJECT_GSON = GSON.newBuilder()
-        .excludeFieldsWithModifiers(Modifier.TRANSIENT)
-        .create();
-
     @FunctionalInterface
     public interface ConfigSaver {
-        void saveConfig(File file, Object config, Gson gson);
+        void saveConfig(File file, Object config, ConfigSerializer configSerializer);
     }
 
     public void saveConfigs(ConfigSaver saver) {
-        pluginConfigurations.values()
-            .forEach(config -> saver.saveConfig(
-                         config.file(),
-                         config.instance(),
-                         isKotlinObject(config.clazz())
-                             ? KOTLIN_CONFIG_OBJECT_GSON
-                             : GSON
-                     )
-            );
+        for (var config : pluginConfigurations.values()) {
+            saver.saveConfig(config.file(), config.instance(), config.serializer());
+        }
     }
 
     @SneakyThrows
-    private <T> T loadPluginConfig(String fileName, Class<T> clazz) {
+    private <T> T loadPluginConfig(String fileName, Class<T> clazz, ConfigSerializer serializer) {
         try {
             PLUGIN_LOG.debug("Loading plugin config: {}", fileName);
-            File configFile = resolveConfigFile(fileName);
+            File configFile = resolveConfigFile(fileName, serializer.fileExtension());
             T config;
             if (configFile.exists()) {
-                var gson = Globals.GSON;
-                if (isKotlinObject(clazz)) {
-                    final T instance = getKotlinObject(clazz);
-                    gson = KOTLIN_CONFIG_OBJECT_GSON.newBuilder()
-                        .registerTypeAdapter(clazz, (InstanceCreator<T>) type -> instance)
-                        .create();
-                }
                 try (Reader reader = new FileReader(configFile)) {
-                    config = gson.fromJson(reader, clazz);
+                    config = serializer.read(clazz, reader);
                 } catch (IOException e) {
                     throw new RuntimeException("Unable to load plugin config: " + fileName, e);
                 }
@@ -341,7 +341,7 @@ public class PluginManager {
         }
     }
 
-    private File resolveConfigFile(String fileName) {
-        return PLUGINS_PATH.resolve("config").resolve(fileName + ".json").toFile();
+    private File resolveConfigFile(String fileName, String fileExtension) {
+        return PLUGINS_PATH.resolve("config").resolve(fileName + "." + fileExtension).toFile();
     }
 }
