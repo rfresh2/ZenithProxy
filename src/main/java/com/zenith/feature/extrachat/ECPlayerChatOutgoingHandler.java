@@ -28,20 +28,7 @@ public class ECPlayerChatOutgoingHandler implements PacketHandler<ClientboundPla
         if (CONFIG.client.extra.chat.insertClickableLinks && packet.getUnsignedContent() == null) {
             var content = Component.text(packet.getContent());
             var linkify = MODULE.get(ExtraChat.class).insertClickableLinks(content);
-            return new ClientboundPlayerChatPacket(
-                packet.getSender(),
-                packet.getIndex(),
-                packet.getMessageSignature(),
-                packet.getContent(),
-                packet.getTimeStamp(),
-                packet.getSalt(),
-                packet.getLastSeenMessages(),
-                linkify,
-                packet.getFilterMask(),
-                packet.getChatType(),
-                packet.getName(),
-                packet.getTargetName()
-            );
+            return packet.withUnsignedContent(linkify);
         }
         return packet;
     }
