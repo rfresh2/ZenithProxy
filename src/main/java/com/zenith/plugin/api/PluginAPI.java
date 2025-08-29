@@ -15,6 +15,15 @@ public interface PluginAPI {
     <T> T registerConfig(String fileName, Class<T> configClass);
 
     /**
+     * Initializes and loads a configuration file for your plugin, using a custom serializer.
+     *
+     * May be useful for serializing types that do not have a default GSON serializer.
+     *
+     * Or if you want to use a different file format (NBT, YAML, TOML, etc).
+     */
+    <T> T registerConfig(String fileName, Class<T> configClass, ConfigSerializer serializer);
+
+    /**
      * Registers a {@link Module}.
      * Modules can listen to events, be toggled on and off, and register packet handlers
      */

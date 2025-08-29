@@ -25,7 +25,9 @@ import com.zenith.mc.language.TranslationRegistryInitializer;
 import com.zenith.mc.map.MapBlockColorManager;
 import com.zenith.module.ModuleManager;
 import com.zenith.network.server.handler.player.InGameCommandManager;
+import com.zenith.plugin.DefaultGsonConfigSerializer;
 import com.zenith.plugin.PluginManager;
+import com.zenith.plugin.api.ConfigSerializer;
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.Wait;
 import com.zenith.util.config.Config;
@@ -174,16 +176,16 @@ public class Globals {
 
     @Locked
     public static void saveConfig() {
-        saveConfig(CONFIG_FILE, CONFIG, GSON);
+        saveConfig(CONFIG_FILE, CONFIG, DefaultGsonConfigSerializer.INSTANCE);
         PLUGIN_MANAGER.saveConfigs(Globals::saveConfig);
     }
     @Locked
     public static void saveLaunchConfig() {
-        saveConfig(LAUNCH_CONFIG_FILE, LAUNCH_CONFIG, GSON);
+        saveConfig(LAUNCH_CONFIG_FILE, LAUNCH_CONFIG, DefaultGsonConfigSerializer.INSTANCE);
     }
 
     @Locked
-    static void saveConfig(File file, Object config, Gson gson) {
+    static void saveConfig(File file, Object config, ConfigSerializer serializer) {
         DEFAULT_LOG.debug("Saving {}...", file.getName());
 
         if (config == null) {
@@ -194,7 +196,7 @@ public class Globals {
         try {
             final File tempFile = File.createTempFile(file.getName(), null);
             try (Writer out = new FileWriter(tempFile)) {
-                gson.toJson(config, out);
+                serializer.write(config, out);
             }
             Files.move(tempFile, file);
         } catch (IOException e) {

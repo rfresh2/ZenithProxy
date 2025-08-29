@@ -306,6 +306,8 @@ public final class Config {
                 public boolean hideWhispers = false;
                 public boolean hideDeathMessages = false;
                 public boolean showConnectionMessages = false;
+                public boolean insertClickableLinks = false;
+                public boolean hide2b2tActionBarText = false;
             }
 
             public static final class AutoTotem {
