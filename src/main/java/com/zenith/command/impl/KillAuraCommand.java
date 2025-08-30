@@ -141,8 +141,8 @@ public class KillAuraCommand extends Command {
         builder
             .addField("KillAura", toggleStr(CONFIG.client.extra.killAura.enabled))
             .addField("Target Players", toggleStr(CONFIG.client.extra.killAura.targetPlayers))
-            .addField("Target Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.targetHostileMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.targetHostileMobs) + "]")
-            .addField("Target Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs) + "]")
+            .addField("Target Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.targetHostileMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.onlyHostileAggressive) + "]")
+            .addField("Target Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.onlyNeutralAggressive) + "]")
             .addField("Target Custom", toggleStr(CONFIG.client.extra.killAura.targetCustom))
             .addField("Target Armor Stands", toggleStr(CONFIG.client.extra.killAura.targetArmorStands))
             .addField("Weapon Switching", toggleStr(CONFIG.client.extra.killAura.switchWeapon))
