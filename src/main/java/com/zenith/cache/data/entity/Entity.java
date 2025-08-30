@@ -1,6 +1,7 @@
 package com.zenith.cache.data.entity;
 
 import com.zenith.mc.block.BlockPos;
+import com.zenith.mc.block.LocalizedCollisionBox;
 import com.zenith.mc.entity.EntityData;
 import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -123,6 +124,22 @@ public abstract class Entity {
             return Vector2d.from(entityData.width(), entityData.height());
         }
         return Vector2d.ZERO;
+    }
+
+    public LocalizedCollisionBox collisionBox() {
+        var dimensions = dimensions();
+        double width = dimensions.getX();
+        double height = dimensions.getY();
+        double x = getX();
+        double y = getY();
+        double z = getZ();
+        double minX = x - width / 2;
+        double maxX = x + width / 2;
+        double minY = y;
+        double maxY = y + height;
+        double minZ = z - width / 2;
+        double maxZ = z + width / 2;
+        return new LocalizedCollisionBox(minX, maxX, minY, maxY, minZ, maxZ, x, y, z);
     }
 
 }

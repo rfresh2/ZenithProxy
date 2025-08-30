@@ -339,6 +339,7 @@ public final class Config {
                 public boolean switchWeapon = true;
                 public boolean targetArmorStands = false;
                 public int attackDelayTicks = 10;
+                public boolean raycast = false;
                 public final ArrayList<EntityType> customTargets = new ArrayList<>();
                 public Priority priority = Priority.NONE;
 
