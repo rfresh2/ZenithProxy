@@ -44,13 +44,13 @@ public class AutoEatCommand extends Command {
                     .title("AutoEat " + toggleStrCaps(CONFIG.client.extra.autoEat.enabled));
                 return OK;
             }))
-            .then(literal("health").then(argument("health", integer(0)).executes(c -> {
+            .then(literal("health").then(argument("health", integer(-1)).executes(c -> {
                 CONFIG.client.extra.autoEat.healthThreshold = IntegerArgumentType.getInteger(c, "health");
                 c.getSource().getEmbed()
                     .title("AutoEat Health Threshold Set");
                 return OK;
             })))
-            .then(literal("hunger").then(argument("hunger", integer(0)).executes(c -> {
+            .then(literal("hunger").then(argument("hunger", integer(-1)).executes(c -> {
                 CONFIG.client.extra.autoEat.hungerThreshold = IntegerArgumentType.getInteger(c, "hunger");
                 c.getSource().getEmbed()
                     .title("AutoEat Hunger Threshold Set");
