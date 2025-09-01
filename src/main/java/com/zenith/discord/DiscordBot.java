@@ -332,6 +332,25 @@ public class DiscordBot {
             .orElse(false);
     }
 
+    public void updateBotInfo() {
+        if (CONFIG.discord.manageNickname)
+            DISCORD.setBotNickname(CONFIG.authentication.username + " | ZenithProxy");
+        if (CONFIG.discord.manageDescription)
+            DISCORD.setBotDescription(
+                """
+                ZenithProxy %s
+                **Official Discord**:
+                  https://discord.gg/nJZrSaRKtb
+                **Github**:
+                  https://github.com/rfresh2/ZenithProxy
+                """.formatted(LAUNCH_CONFIG.version));
+    }
+
+    public void updateBotAvatar() {
+        if (CONFIG.discord.manageProfileImage)
+            DISCORD.setProfileImage(Proxy.getInstance().getServerIcon());
+    }
+
     public void setProfileImage(final byte[] imageBytes) {
         if (!isRunning()) return;
         try {

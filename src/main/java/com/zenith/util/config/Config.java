@@ -705,7 +705,6 @@ public final class Config {
             public boolean enabled = true;
             public boolean onlinePlayers = false;
             public boolean onlinePlayerCount = true;
-            public boolean favicon = true;
             public int maxPlayers = Integer.MAX_VALUE;
             public boolean lanBroadcast = true;
             public boolean responseCaching = true;
