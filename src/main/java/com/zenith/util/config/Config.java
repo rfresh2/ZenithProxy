@@ -12,10 +12,7 @@ import org.geysermc.mcprotocollib.network.ProxyInfo;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 @NullMarked
 public final class Config {
@@ -156,6 +153,7 @@ public final class Config {
             public final SpawnPatrol spawnPatrol = new SpawnPatrol();
             public final PearlLoader pearlLoader = new PearlLoader();
             public final Waypoints waypoints = new Waypoints();
+            public final AutoDrop autoDrop = new AutoDrop();
             public String whisperCommand = "msg";
 
             public static final class Waypoints {
@@ -570,6 +568,12 @@ public final class Config {
             public int port = 7890;
             public String user = "";
             public String password = "";
+        }
+        public static final class AutoDrop {
+            public boolean enabled = false;
+            public boolean whitelistMode = true;
+            public List<String> items = Lists.newArrayList("rotten_flesh");
+            public int delayBetweenDrops = 20;
         }
     }
 
