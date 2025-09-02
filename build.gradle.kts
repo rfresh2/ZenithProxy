@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     id("org.graalvm.buildtools.native") version "0.11.0"
-    id("com.gradleup.shadow") version "9.0.2"
+    id("com.gradleup.shadow") version "9.1.0"
     id("io.freefair.lombok") version "8.14.2"
     `maven-publish`
 }
@@ -82,7 +82,7 @@ dependencies {
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.2")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.0")
     api("org.jspecify:jspecify:1.0.0")
     api("net.kyori:adventure-text-logger-slf4j:4.24.0")
     api("dev.omega24:upnp4j:1.0")
