@@ -1014,6 +1014,9 @@
       "type": "com.sun.management.ThreadMXBean"
     },
     {
+      "type": "com.sun.management.UnixOperatingSystemMXBean"
+    },
+    {
       "type": "com.sun.management.VMOption"
     },
     {

@@ -51,7 +51,10 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -445,10 +448,10 @@ public class Proxy {
     }
 
     private void loadServerIcon() {
-        this.serverIcon = loadFileServerIcon().orElse(loadDefaultServerIcon());
+        this.serverIcon = loadServerIconFile().orElse(loadServerIconDefault());
     }
 
-    private void writeServerIcon() {
+    private void writeServerIconFile() {
         try (var out = Files.newOutputStream(serverIconFilePath)) {
             out.write(serverIcon);
         } catch (Exception e) {
@@ -456,15 +459,15 @@ public class Proxy {
         }
     }
 
-    private Optional<byte[]> loadFileServerIcon() {
+    private Optional<byte[]> loadServerIconFile() {
         if (!serverIconFilePath.toFile().exists()) {
             return Optional.empty();
         }
-        try (var in = new FileInputStream(serverIconFilePath.toFile())) {
-            var iconBytes = in.readAllBytes();
+        try {
+            var iconBytes = Files.readAllBytes(serverIconFilePath);
             var pngReader = new PngReader(new ByteArrayInputStream(iconBytes));
             if (pngReader.imgInfo.rows != 64 || pngReader.imgInfo.cols != 64) {
-                DEFAULT_LOG.error("Server icon height must be a 64x64 png, currently {}x{}", pngReader.imgInfo.cols, pngReader.imgInfo.rows);
+                DEFAULT_LOG.error("Server icon must be 64x64, currently {}x{}", pngReader.imgInfo.cols, pngReader.imgInfo.rows);
                 return Optional.empty();
             }
             return Optional.of(iconBytes);
@@ -474,7 +477,7 @@ public class Proxy {
         }
     }
 
-    private byte[] loadDefaultServerIcon() {
+    private byte[] loadServerIconDefault() {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream("server-icon.png")) {
             return in.readAllBytes();
         } catch (final Exception e) {
@@ -716,7 +719,7 @@ public class Proxy {
             var event = new ServerIconBuildEvent(icon);
             EVENT_BUS.post(event.getIcon());
             this.serverIcon = icon;
-            writeServerIcon();
+            writeServerIconFile();
         } catch (final Throwable e) {
             SERVER_LOG.error("Failed updating server icon");
             SERVER_LOG.debug("Failed updating server icon", e);
