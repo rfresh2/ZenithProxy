@@ -1,5 +1,6 @@
 package com.zenith;
 
+import ar.com.hjg.pngj.PngReader;
 import ch.qos.logback.classic.LoggerContext;
 import com.zenith.cache.CacheResetType;
 import com.zenith.discord.ChatRelayEventListener;
@@ -50,9 +51,7 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -82,6 +81,7 @@ public class Proxy {
     @Getter protected static final Proxy instance = new Proxy();
     protected ClientSession client;
     protected TcpServer server;
+    protected final Path serverIconFilePath = Path.of("server-icon.png");
     protected byte[] serverIcon;
     protected final AtomicReference<ServerSession> currentPlayer = new AtomicReference<>();
     protected final FastArrayList<ServerSession> activeConnections = new FastArrayList<>(ServerSession.class);
@@ -176,12 +176,10 @@ public class Proxy {
             if (CONFIG.client.viaversion.enabled || CONFIG.server.viaversion.enabled) {
                 VIA_INITIALIZER.init();
             }
+            loadServerIcon();
             startServer();
             EXECUTOR.execute(DISCORD::updateBotInfo);
-            if (CONFIG.authentication.username.equals("Unknown")) {
-                // default server icon is set in startServer()
-                EXECUTOR.execute(DISCORD::updateBotAvatar);
-            }
+            EXECUTOR.execute(DISCORD::updateBotAvatar);
             CACHE.reset(CacheResetType.FULL);
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
@@ -446,16 +444,49 @@ public class Proxy {
         return this.client != null && this.client.isConnected();
     }
 
+    private void loadServerIcon() {
+        this.serverIcon = loadFileServerIcon().orElse(loadDefaultServerIcon());
+    }
+
+    private void writeServerIcon() {
+        try (var out = Files.newOutputStream(serverIconFilePath)) {
+            out.write(serverIcon);
+        } catch (Exception e) {
+            DEFAULT_LOG.error("Error writing server icon", e);
+        }
+    }
+
+    private Optional<byte[]> loadFileServerIcon() {
+        if (!serverIconFilePath.toFile().exists()) {
+            return Optional.empty();
+        }
+        try (var in = new FileInputStream(serverIconFilePath.toFile())) {
+            var iconBytes = in.readAllBytes();
+            var pngReader = new PngReader(new ByteArrayInputStream(iconBytes));
+            if (pngReader.imgInfo.rows != 64 || pngReader.imgInfo.cols != 64) {
+                DEFAULT_LOG.error("Server icon height must be a 64x64 png, currently {}x{}", pngReader.imgInfo.cols, pngReader.imgInfo.rows);
+                return Optional.empty();
+            }
+            return Optional.of(iconBytes);
+        } catch (Exception e) {
+            DEFAULT_LOG.error("Error loading server icon file", e);
+            return Optional.empty();
+        }
+    }
+
+    private byte[] loadDefaultServerIcon() {
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("server-icon.png")) {
+            return in.readAllBytes();
+        } catch (final Exception e) {
+            SERVER_LOG.error("Failed loading server icon", e);
+            return new byte[0];
+        }
+    }
+
     @SneakyThrows
     public synchronized void startServer() {
         if (this.server != null && this.server.isListening())
             throw new IllegalStateException("Server already started!");
-        try (InputStream in = getClass().getClassLoader().getResourceAsStream("servericon.png")) {
-            byte[] iconBytes = in.readAllBytes();
-            var event = new ServerIconBuildEvent(iconBytes);
-            EVENT_BUS.post(event);
-            this.serverIcon = event.getIcon();
-        }
         if (!CONFIG.server.enabled) return;
         var address = CONFIG.server.bind.address;
         var port = CONFIG.server.bind.port;
@@ -536,11 +567,13 @@ public class Proxy {
         if (CONFIG.server.extra.whitelist.autoAddClient && CONFIG.authentication.accountType != OFFLINE)
             if (PLAYER_LISTS.getWhitelist().add(username, uuid))
                 SERVER_LOG.info("Auto added {} [{}] to whitelist", username, uuid);
-        final GameProfile profile = minecraftProtocol.getProfile();
-        EXECUTOR.execute(() -> {
-            updateServerIcon(profile);
-            DISCORD.updateBotAvatar();
-        });
+        if (CONFIG.server.updateServerIcon) {
+            final GameProfile profile = minecraftProtocol.getProfile();
+            EXECUTOR.execute(() -> {
+                updateServerIcon(profile);
+                DISCORD.updateBotAvatar();
+            });
+        }
         return minecraftProtocol;
     }
 
@@ -683,6 +716,7 @@ public class Proxy {
             var event = new ServerIconBuildEvent(icon);
             EVENT_BUS.post(event.getIcon());
             this.serverIcon = icon;
+            writeServerIcon();
         } catch (final Throwable e) {
             SERVER_LOG.error("Failed updating server icon");
             SERVER_LOG.debug("Failed updating server icon", e);

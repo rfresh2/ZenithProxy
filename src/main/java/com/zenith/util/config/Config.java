@@ -636,6 +636,7 @@ public final class Config {
         public boolean upnp = false;
         public boolean injectTablistFooter = true;
         public boolean welcomeMessages = true;
+        public boolean updateServerIcon = true;
 
         public static final class PacketRateLimiter {
             public boolean enabled = true;
