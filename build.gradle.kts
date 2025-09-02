@@ -262,6 +262,10 @@ graalvmNative {
     metadataRepository { enabled = true }
 }
 
+shadow {
+    addShadowVariantIntoJavaComponent = false
+}
+
 publishing {
     repositories {
         maven {
@@ -292,17 +296,13 @@ publishing {
             groupId = "com.zenith"
             artifactId = "ZenithProxy"
             version = "${project.version}-SNAPSHOT"
-            val javaComponent = components["java"] as AdhocComponentWithVariants
-            javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) { skip() }
-            from(javaComponent)
+            from(components["java"])
         }
         create<MavenPublication>("release") {
             groupId = "com.zenith"
             artifactId = "ZenithProxy"
             version =  providers.environmentVariable("ZENITH_RELEASE_TAG").orElse("0.0.0+${project.version}").get()
-            val javaComponent = components["java"] as AdhocComponentWithVariants
-            javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) { skip() }
-            from(javaComponent)
+            from(components["java"])
         }
     }
 }
