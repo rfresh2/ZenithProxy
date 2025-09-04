@@ -64,6 +64,7 @@ public class CoordinateObfuscationCommand extends Command {
                 "obfuscateBiomesKey <biomeId>",
                 "obfuscateLighting on/off",
                 "eyeOfEnderDisconnect on/off",
+                "blockOffsetsDisconnect on/off",
                 "validateSetup on/off"
             )
             .build();
