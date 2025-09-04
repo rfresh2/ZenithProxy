@@ -21,6 +21,7 @@ public class ModuleManager {
             new AntiLeak(),
             new AutoArmor(),
             new AutoDisconnect(),
+            new AutoDrop(),
             new AutoEat(),
             new AutoFish(),
             new AutoMend(),
@@ -41,8 +42,7 @@ public class ModuleManager {
             new Spammer(),
             new Spook(),
             new SpawnPatrol(),
-            new VisualRange(),
-            new AutoDropModule()
+            new VisualRange()
         ).forEach(m -> {
             addModule(m);
             m.syncEnabledFromConfig();

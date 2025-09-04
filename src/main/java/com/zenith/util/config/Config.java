@@ -12,7 +12,10 @@ import org.geysermc.mcprotocollib.network.ProxyInfo;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 
 @NullMarked
 public final class Config {
@@ -571,9 +574,14 @@ public final class Config {
         }
         public static final class AutoDrop {
             public boolean enabled = false;
-            public boolean whitelistMode = true;
-            public List<String> items = Lists.newArrayList("rotten_flesh");
-            public int delayBetweenDrops = 20;
+            public Mode mode = Mode.WHITELIST;
+            public enum Mode {
+                ALL,
+                BLACKLIST,
+                WHITELIST
+            }
+            public ArrayList<String> items = new ArrayList<>();
+            public int delayTicks = 10;
         }
     }
 

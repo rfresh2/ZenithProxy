@@ -1,193 +1,137 @@
 package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.zenith.Proxy;
 import com.zenith.command.api.Command;
 import com.zenith.command.api.CommandCategory;
 import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
 import com.zenith.mc.item.ItemRegistry;
+import com.zenith.module.impl.AutoDrop;
 import com.zenith.util.config.Config;
 
+import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
+import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
-import static com.mojang.brigadier.arguments.StringArgumentType.string;
 import static com.zenith.Globals.CONFIG;
-import static com.zenith.Globals.saveConfigAsync;
+import static com.zenith.Globals.MODULE;
+import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
+import static com.zenith.command.brigadier.ItemArgument.getItem;
+import static com.zenith.command.brigadier.ItemArgument.item;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 
 public class AutoDropCommand extends Command {
 
-    public static final Config.Client.AutoDrop AUTO_DROP_CONFIG = CONFIG.client.extra.autoDrop;
-
     @Override
     public CommandUsage commandUsage() {
         return CommandUsage.builder()
-                .name("autodrop")
+                .name("autoDrop")
                 .category(CommandCategory.MODULE)
                 .description("""
-                        Automatically drop specified items from player inventory.
-                        """)
+                    Automatically drop items in player inventory.
+                    
+                    Dropping can be configured based on modes:
+                    
+                        * `all`: any item
+                        * `whitelist`: only added items
+                        * `blacklist`: any item not added
+                    """)
                 .usageLines(
-                        "",
-                        "toggle <on/off>",
-                        "mode <whitelist/blacklist>",
-                        "add <item>",
-                        "remove <item>",
-                        "list",
-                        "clear",
-                        "delay <ticks>"
+                    "on/off",
+                    "mode <all/whitelist/blacklist>",
+                    "add/del <item>",
+                    "addAll <item1>,<item2>,...",
+                    "list",
+                    "clear",
+                    "delay <ticks>"
                 )
                 .build();
     }
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("autodrop")
-                .executes(c -> {
-                    if (!verifyLoggedIn(c.getSource().getEmbed())) return ERROR;
-                    printStatus(c.getSource().getEmbed());
-                    return OK;
-                })
-                .then(literal("toggle").then(argument("toggle", toggle()).executes(c -> {
-                    if (!verifyLoggedIn(c.getSource().getEmbed())) return ERROR;
-                    AUTO_DROP_CONFIG.enabled = getToggle(c, "toggle");
-                    saveConfigAsync();
-                    settingsEmbed(c.getSource().getEmbed(), "AutoDrop " + (AUTO_DROP_CONFIG.enabled ? "Enabled" : "Disabled"));
-                    return OK;
-                })))
-                .then(literal("mode").then(argument("mode", string()).executes(c -> {
-                    if (!verifyLoggedIn(c.getSource().getEmbed())) return ERROR;
-                    String mode = getString(c, "mode").toLowerCase();
-                    if (mode.equals("whitelist")) {
-                        AUTO_DROP_CONFIG.whitelistMode = true;
-                    } else if (mode.equals("blacklist")) {
-                        AUTO_DROP_CONFIG.whitelistMode = false;
-                    } else {
-                        c.getSource().getEmbed()
-                                .title("Error")
-                                .description("Invalid mode. Use 'whitelist' or 'blacklist'")
-                                .errorColor();
-                        return ERROR;
-                    }
-                    saveConfigAsync();
-                    settingsEmbed(c.getSource().getEmbed(), "Mode set to: " + mode);
-                    return OK;
-                })))
-                .then(literal("add").then(argument("item", string()).executes(c -> {
-                    if (!verifyLoggedIn(c.getSource().getEmbed())) return ERROR;
-                    String item = getString(c, "item");
-                    if (!isValidItem(item)) {
-                        c.getSource().getEmbed()
-                                .title("Error")
-                                .description("Invalid item: " + item)
-                                .errorColor();
-                        return ERROR;
-                    }
-                    if (AUTO_DROP_CONFIG.items.contains(item)) {
-                        c.getSource().getEmbed()
-                                .title("Error")
-                                .description("Item already in list: " + item)
-                                .errorColor();
-                        return ERROR;
-                    }
-                    AUTO_DROP_CONFIG.items.add(item);
-                    saveConfigAsync();
-                    settingsEmbed(c.getSource().getEmbed(), "Added item: " + item);
-                    return OK;
-                })))
-                .then(literal("remove").then(argument("item", string()).executes(c -> {
-                    if (!verifyLoggedIn(c.getSource().getEmbed())) return ERROR;
-                    String item = getString(c, "item");
-                    if (!AUTO_DROP_CONFIG.items.contains(item)) {
-                        c.getSource().getEmbed()
-                                .title("Error")
-                                .description("Item not in list: " + item)
-                                .errorColor();
-                        return ERROR;
-                    }
-                    AUTO_DROP_CONFIG.items.remove(item);
-                    saveConfigAsync();
-                    settingsEmbed(c.getSource().getEmbed(), "Removed item: " + item);
-                    return OK;
-                })))
-                .then(literal("list").executes(c -> {
-                    if (!verifyLoggedIn(c.getSource().getEmbed())) return ERROR;
-                    printItemList(c.getSource().getEmbed());
-                    return OK;
-                }))
-                .then(literal("clear").executes(c -> {
-                    if (!verifyLoggedIn(c.getSource().getEmbed())) return ERROR;
-                    AUTO_DROP_CONFIG.items.clear();
-                    saveConfigAsync();
-                    settingsEmbed(c.getSource().getEmbed(), "Item list cleared");
-                    return OK;
-                }))
-                .then(literal("delay").then(argument("ticks", string()).executes(c -> {
-                    if (!verifyLoggedIn(c.getSource().getEmbed())) return ERROR;
-                    try {
-                        int delay = Integer.parseInt(getString(c, "ticks"));
-                        if (delay < 1 || delay > 1200) {
-                            c.getSource().getEmbed()
-                                    .title("Error")
-                                    .description("Delay must be between 1 and 1200 ticks")
-                                    .errorColor();
-                            return ERROR;
-                        }
-                        AUTO_DROP_CONFIG.delayBetweenDrops = delay;
-                        saveConfigAsync();
-                        settingsEmbed(c.getSource().getEmbed(), "Delay set to: " + delay + " ticks");
-                        return OK;
-                    } catch (NumberFormatException e) {
-                        c.getSource().getEmbed()
-                                .title("Error")
-                                .description("Invalid number format")
-                                .errorColor();
-                        return ERROR;
-                    }
-                })));
+        return command("autoDrop")
+            .then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.autoDrop.enabled = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("AutoDrop " + toggleStrCaps(CONFIG.client.extra.autoDrop.enabled));
+                MODULE.get(AutoDrop.class).syncEnabledFromConfig();
+            }))
+            .then(literal("mode").then(argument("mode", enumStrings(Config.Client.AutoDrop.Mode.values())).executes(c -> {
+                var modeString = getString(c, "mode").toUpperCase();
+                CONFIG.client.extra.autoDrop.mode = Config.Client.AutoDrop.Mode.valueOf(modeString);
+                c.getSource().getEmbed()
+                    .title("Mode Set");
+            })))
+            .then(literal("add").then(argument("item", item()).executes(c -> {
+                var item = getItem(c, "item");
+                var itemName = item.name();
+                if (!CONFIG.client.extra.autoDrop.items.contains(itemName)) {
+                    CONFIG.client.extra.autoDrop.items.add(itemName);
+                }
+                c.getSource().getEmbed()
+                    .title("Item Added")
+                    .description(itemsListToString());
+            })))
+            .then(literal("del").then(argument("item", item()).executes(c -> {
+                var item = getItem(c, "item");
+                var itemName = item.name();
+                CONFIG.client.extra.autoDrop.items.removeIf(i -> i.equals(itemName));
+                c.getSource().getEmbed()
+                    .title("Item Removed")
+                    .description(itemsListToString());
+            })))
+            .then(literal("addAll").then(argument("items", wordWithChars()).executes(c -> {
+                var itemsList = getString(c, "items").split(",");
+                for (var item : itemsList) {
+                    var itemData = ItemRegistry.REGISTRY.get(item);
+                    if (itemData == null) continue;
+                    if (CONFIG.client.extra.autoDrop.items.contains(itemData.name())) continue;
+                    CONFIG.client.extra.autoDrop.items.add(itemData.name());
+                }
+                c.getSource().getEmbed()
+                    .title(itemsList.length + " Items Added")
+                    .description(itemsListToString());
+            })))
+            .then(literal("list").executes(c -> {
+                c.getSource().getEmbed()
+                    .title("Items List")
+                    .description(itemsListToString());
+            }))
+            .then(literal("clear").executes(c -> {
+                CONFIG.client.extra.autoDrop.items.clear();
+                c.getSource().getEmbed()
+                    .title("Items List Cleared")
+                    .description(itemsListToString());
+            }))
+            .then(literal("delay").then(argument("ticks", integer(0)).executes(c -> {
+                CONFIG.client.extra.autoDrop.delayTicks = getInteger(c, "ticks");
+                c.getSource().getEmbed()
+                    .title("Delay Set");
+            })));
     }
 
-    private void printStatus(Embed embed) {
-        embed.title("AutoDrop Status")
-                .addField("Enabled", AUTO_DROP_CONFIG.enabled)
-                .addField("Mode", AUTO_DROP_CONFIG.whitelistMode ? "Whitelist" : "Blacklist")
-                .addField("Delay", AUTO_DROP_CONFIG.delayBetweenDrops + " ticks")
-                .addField("Items Count", AUTO_DROP_CONFIG.items.size())
-                .primaryColor();
+    @Override
+    public void defaultEmbed(Embed embed) {
+        embed
+            .addField("AutoDrop", toggleStr(CONFIG.client.extra.autoDrop.enabled))
+            .addField("Mode", CONFIG.client.extra.autoDrop.mode.name().toLowerCase())
+            .addField("Delay Ticks", CONFIG.client.extra.autoDrop.delayTicks)
+            .primaryColor();
     }
 
-    private void printItemList(Embed embed) {
-        embed.title("AutoDrop Item List (" + (AUTO_DROP_CONFIG.whitelistMode ? "Whitelist" : "Blacklist") + ")");
-        for (String item : AUTO_DROP_CONFIG.items) {
-            embed.addField(item, isValidItem(item) ? "✓ Valid" : "✗ Invalid", false);
+    private String itemsListToString() {
+        var items = CONFIG.client.extra.autoDrop.items;
+        var sb = new StringBuilder();
+        sb.append("**Items List**\n\n");
+        if (items.isEmpty()) return "None!";
+        for (int i = 0; i < items.size(); i++) {
+            var itemName = items.get(i);
+            sb.append("  ");
+            sb.append(itemName);
+            sb.append("\n");
         }
-        embed.primaryColor();
-    }
-
-    private boolean isValidItem(String itemName) {
-        return ItemRegistry.REGISTRY.get(itemName) != null;
-    }
-
-    private void settingsEmbed(Embed embed, String message) {
-        embed.title("AutoDrop Settings")
-                .description(message)
-                .addField("Enabled", AUTO_DROP_CONFIG.enabled)
-                .addField("Mode", AUTO_DROP_CONFIG.whitelistMode ? "Whitelist" : "Blacklist")
-                .addField("Delay", AUTO_DROP_CONFIG.delayBetweenDrops + " ticks")
-                .addField("Items Count", AUTO_DROP_CONFIG.items.size())
-                .primaryColor();
-    }
-
-    private boolean verifyLoggedIn(Embed embed) {
-        var client = Proxy.getInstance().getClient();
-        if (client == null || !Proxy.getInstance().isConnected()) {
-            embed.title("Error")
-                    .description("Not logged in!")
-                    .errorColor();
-            return false;
-        }
-        return true;
+        return sb.toString();
     }
 }

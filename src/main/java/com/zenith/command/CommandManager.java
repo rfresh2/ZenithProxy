@@ -36,6 +36,7 @@ public class CommandManager {
         new AuthCommand(),
         new AutoArmorCommand(),
         new AutoDisconnectCommand(),
+        new AutoDropCommand(),
         new AutoEatCommand(),
         new AutoFishCommand(),
         new AutoMendCommand(),
@@ -111,7 +112,6 @@ public class CommandManager {
         new ViaVersionCommand(),
         new VisualRangeCommand(),
         new WaypointsCommand(),
-        new AutoDropCommand(),
         new WhitelistCommand()
     );
     private final CommandDispatcher<CommandContext> dispatcher;
