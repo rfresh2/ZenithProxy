@@ -52,13 +52,20 @@ public class ReplayRecording implements Closeable {
             .setDaemon(true)
             .setUncaughtExceptionHandler((t, e) -> MODULE.get(ReplayMod.class).error("Uncaught exception in thread {}", t.getName(), e))
             .build());
+    private volatile boolean started = false;
+    private volatile boolean closed = false;
 
     public ReplayRecording(final Path replayDirectory) {
         this.metadata = new ReplayMetadata();
         this.replayDirectory = replayDirectory;
     }
 
-    public synchronized void startRecording() throws Exception {
+    public boolean ready() {
+        return started && !closed;
+    }
+
+    public void startRecording() throws Exception {
+        if (started) throw new IllegalStateException("Already started");
         // initialize output streams and metadata
         var serverName = CONFIG.client.server.address;
         if (CONFIG.client.server.port != 25565)
@@ -82,6 +89,7 @@ public class ReplayRecording implements Closeable {
         } else {
             preConnectRecording();
         }
+        started = true;
     }
 
     // Start recording while we already have a logged in session
@@ -177,6 +185,8 @@ public class ReplayRecording implements Closeable {
 
     @Override
     public synchronized void close() throws IOException {
+        if (closed) return;
+        closed = true;
         if (!executor.isShutdown()) {
             try {
                 executor.shutdown();

@@ -123,6 +123,7 @@ public class ChatRelayEventListener {
             if (CONFIG.discord.chatRelay.mentionWhileConnected || isNull(Proxy.getInstance().getCurrentPlayer().get())) {
                 if (CONFIG.discord.chatRelay.mentionRoleOnWhisper && !event.outgoing()) {
                     if (!message.toLowerCase(Locale.ROOT).contains("discord.gg/")
+                        && !message.toLowerCase(Locale.ROOT).contains("discord.com/invite/")
                         && !PLAYER_LISTS.getIgnoreList().contains(event.sender().getName())) {
                         ping = notificationMention();
                     }

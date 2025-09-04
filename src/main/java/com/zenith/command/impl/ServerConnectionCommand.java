@@ -54,7 +54,8 @@ public class ServerConnectionCommand extends Command {
                 "enforceMatchingConnectingAddress on/off",
                 "timeout on/off",
                 "timeout <seconds>",
-                "autoConnectOnLogin on/off"
+                "autoConnectOnLogin on/off",
+                "updateServerIcon on/off"
             )
             .build();
     }
@@ -154,6 +155,11 @@ public class ServerConnectionCommand extends Command {
                 CONFIG.server.welcomeMessages = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Welcome Messages " + toggleStrCaps(CONFIG.server.welcomeMessages));
+            })))
+            .then(literal("updateServerIcon").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.server.updateServerIcon = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Update Server Icon " + toggleStrCaps(CONFIG.server.updateServerIcon));
             })));
     }
 

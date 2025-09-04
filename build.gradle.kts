@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     id("org.graalvm.buildtools.native") version "0.11.0"
-    id("com.gradleup.shadow") version "9.0.2"
+    id("com.gradleup.shadow") version "9.1.0"
     id("io.freefair.lombok") version "8.14.2"
     `maven-publish`
 }
@@ -36,7 +36,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.4.Final"))
+    api(platform("io.netty:netty-bom:4.2.5.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -82,7 +82,7 @@ dependencies {
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.19.2")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.0")
     api("org.jspecify:jspecify:1.0.0")
     api("net.kyori:adventure-text-logger-slf4j:4.24.0")
     api("dev.omega24:upnp4j:1.0")
@@ -263,6 +263,10 @@ graalvmNative {
     metadataRepository { enabled = true }
 }
 
+shadow {
+    addShadowVariantIntoJavaComponent = false
+}
+
 publishing {
     repositories {
         maven {
@@ -293,17 +297,13 @@ publishing {
             groupId = "com.zenith"
             artifactId = "ZenithProxy"
             version = "${project.version}-SNAPSHOT"
-            val javaComponent = components["java"] as AdhocComponentWithVariants
-            javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) { skip() }
-            from(javaComponent)
+            from(components["java"])
         }
         create<MavenPublication>("release") {
             groupId = "com.zenith"
             artifactId = "ZenithProxy"
             version =  providers.environmentVariable("ZENITH_RELEASE_TAG").orElse("0.0.0+${project.version}").get()
-            val javaComponent = components["java"] as AdhocComponentWithVariants
-            javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) { skip() }
-            from(javaComponent)
+            from(components["java"])
         }
     }
 }

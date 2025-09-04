@@ -14,6 +14,7 @@ import com.zenith.feature.replay.ReplayRecording;
 import com.zenith.module.api.Module;
 import com.zenith.network.codec.PacketHandlerCodec;
 import com.zenith.util.config.Config.Client.Extra.ReplayMod.AutoRecordMode;
+import lombok.Locked;
 import org.geysermc.mcprotocollib.network.Session;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftPacket;
@@ -69,12 +70,14 @@ public class ReplayMod extends Module {
         stopRecording();
     }
 
-    public synchronized void startDelayedRecordingStop(int delaySeconds, BooleanSupplier condition) {
+    @Locked
+    public void startDelayedRecordingStop(int delaySeconds, BooleanSupplier condition) {
         cancelDelayedRecordingStop();
         scheduleRecordingStop(delaySeconds, condition);
     }
 
-    private synchronized void cancelDelayedRecordingStop() {
+    @Locked
+    private void cancelDelayedRecordingStop() {
         if (delayedRecordingStopFuture != null && !delayedRecordingStopFuture.isDone()) {
             debug("Cancelling delayed recording stop");
             delayedRecordingStopFuture.cancel(false);
@@ -82,7 +85,8 @@ public class ReplayMod extends Module {
         }
     }
 
-    private synchronized void scheduleRecordingStop(int delaySeconds, BooleanSupplier condition) {
+    @Locked
+    private void scheduleRecordingStop(int delaySeconds, BooleanSupplier condition) {
         delayedRecordingStopFuture = EXECUTOR.schedule(() -> disableReplayRecordingConditional(condition), delaySeconds, TimeUnit.SECONDS);
     }
 
@@ -97,6 +101,7 @@ public class ReplayMod extends Module {
     }
 
     public void onClientTick(final ClientTickEvent event) {
+        if (!replayRecording.ready()) return;
         var startT = replayRecording.getStartT();
         if (startT == 0L) return;
         if (CONFIG.client.extra.replayMod.maxRecordingTimeMins <= 0) return;
@@ -107,6 +112,7 @@ public class ReplayMod extends Module {
     }
 
     public void onInboundPacket(final Packet packet, final Session session) {
+        if (!replayRecording.ready()) return;
         try {
             replayRecording.handleInboundPacket(System.currentTimeMillis(), (MinecraftPacket) packet, session);
         } catch (final Throwable e) {
@@ -115,6 +121,7 @@ public class ReplayMod extends Module {
     }
 
     public void onPostOutgoing(final Packet packet, final Session session) {
+        if (!replayRecording.ready()) return;
         try {
             replayRecording.handleOutgoingPacket(System.currentTimeMillis(), (MinecraftPacket) packet, session);
         } catch (final Throwable e) {
@@ -129,6 +136,7 @@ public class ReplayMod extends Module {
     /**
      * Consumers should call enable/disable instead of start/stop recording
      */
+    @Locked
     private void startRecording() {
         cancelDelayedRecordingStop();
         info("Starting recording");
@@ -143,6 +151,7 @@ public class ReplayMod extends Module {
         }
     }
 
+    @Locked
     private void stopRecording() {
         info("Stopping recording");
         try {

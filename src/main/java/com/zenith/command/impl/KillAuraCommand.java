@@ -44,6 +44,7 @@ public class KillAuraCommand extends Command {
                 "targetCustom on/off",
                 "targetCustom add/del <entityType>",
                 "weaponSwitch on/off",
+                "raycast on/off",
                 "priority <none/nearest>"
             )
             .aliases("ka")
@@ -123,6 +124,11 @@ public class KillAuraCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Removed " + type);
                 }))))
+            .then(literal("raycast").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.killAura.raycast = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Raycast " + toggleStrCaps(CONFIG.client.extra.killAura.raycast));
+            })))
             .then(literal("priority")
                 .then(literal("none").executes(c -> {
                     CONFIG.client.extra.killAura.priority = Config.Client.Extra.KillAura.Priority.NONE;
@@ -141,12 +147,13 @@ public class KillAuraCommand extends Command {
         builder
             .addField("KillAura", toggleStr(CONFIG.client.extra.killAura.enabled))
             .addField("Target Players", toggleStr(CONFIG.client.extra.killAura.targetPlayers))
-            .addField("Target Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.targetHostileMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.targetHostileMobs) + "]")
-            .addField("Target Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs) + "]")
+            .addField("Target Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.targetHostileMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.onlyHostileAggressive) + "]")
+            .addField("Target Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.onlyNeutralAggressive) + "]")
             .addField("Target Custom", toggleStr(CONFIG.client.extra.killAura.targetCustom))
             .addField("Target Armor Stands", toggleStr(CONFIG.client.extra.killAura.targetArmorStands))
             .addField("Weapon Switching", toggleStr(CONFIG.client.extra.killAura.switchWeapon))
             .addField("Attack Delay Ticks", CONFIG.client.extra.killAura.attackDelayTicks)
+            .addField("Raycast", toggleStr(CONFIG.client.extra.killAura.raycast))
             .addField("Priority", CONFIG.client.extra.killAura.priority.name().toLowerCase())
             .primaryColor();
         if (CONFIG.client.extra.killAura.targetCustom) {

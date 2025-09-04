@@ -1,5 +1,6 @@
 package com.zenith;
 
+import ar.com.hjg.pngj.PngReader;
 import ch.qos.logback.classic.LoggerContext;
 import com.zenith.cache.CacheResetType;
 import com.zenith.discord.ChatRelayEventListener;
@@ -12,14 +13,13 @@ import com.zenith.event.queue.QueuePositionUpdateEvent;
 import com.zenith.event.queue.QueueSkipEvent;
 import com.zenith.event.queue.QueueStartEvent;
 import com.zenith.event.server.ServerIconBuildEvent;
-import com.zenith.feature.api.crafthead.CraftheadApi;
 import com.zenith.feature.api.mcsrvstatus.MCSrvStatusApi;
-import com.zenith.feature.api.minotar.MinotarApi;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.NoOpAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
 import com.zenith.feature.chatschema.ChatSchemaParser;
 import com.zenith.feature.queue.Queue;
+import com.zenith.feature.skin.SkinRetriever;
 import com.zenith.module.impl.AutoReconnect;
 import com.zenith.network.client.Authenticator;
 import com.zenith.network.client.ClientSession;
@@ -51,6 +51,7 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -83,6 +84,7 @@ public class Proxy {
     @Getter protected static final Proxy instance = new Proxy();
     protected ClientSession client;
     protected TcpServer server;
+    protected final Path serverIconFilePath = Path.of("server-icon.png");
     protected byte[] serverIcon;
     protected final AtomicReference<ServerSession> currentPlayer = new AtomicReference<>();
     protected final FastArrayList<ServerSession> activeConnections = new FastArrayList<>(ServerSession.class);
@@ -177,14 +179,15 @@ public class Proxy {
             if (CONFIG.client.viaversion.enabled || CONFIG.server.viaversion.enabled) {
                 VIA_INITIALIZER.init();
             }
+            loadServerIcon();
             startServer();
+            EXECUTOR.execute(DISCORD::updateBotInfo);
+            EXECUTOR.execute(DISCORD::updateBotAvatar);
             CACHE.reset(CacheResetType.FULL);
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             EXECUTOR.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
             EXECUTOR.schedule(this::serverConnectionTest, 10L, TimeUnit.SECONDS);
-            if (CONFIG.server.enabled && CONFIG.server.ping.favicon)
-                EXECUTOR.submit(this::updateFavicon);
             boolean connected = false;
             if (CONFIG.client.autoConnect && !isConnected()) {
                 connectAndCatchExceptions();
@@ -444,17 +447,50 @@ public class Proxy {
         return this.client != null && this.client.isConnected();
     }
 
+    private void loadServerIcon() {
+        this.serverIcon = loadServerIconFile().orElse(loadServerIconDefault());
+    }
+
+    private void writeServerIconFile() {
+        try (var out = Files.newOutputStream(serverIconFilePath)) {
+            out.write(serverIcon);
+        } catch (Exception e) {
+            DEFAULT_LOG.error("Error writing server icon", e);
+        }
+    }
+
+    private Optional<byte[]> loadServerIconFile() {
+        if (!serverIconFilePath.toFile().exists()) {
+            return Optional.empty();
+        }
+        try {
+            var iconBytes = Files.readAllBytes(serverIconFilePath);
+            var pngReader = new PngReader(new ByteArrayInputStream(iconBytes));
+            if (pngReader.imgInfo.rows != 64 || pngReader.imgInfo.cols != 64) {
+                DEFAULT_LOG.error("Server icon must be 64x64, currently {}x{}", pngReader.imgInfo.cols, pngReader.imgInfo.rows);
+                return Optional.empty();
+            }
+            return Optional.of(iconBytes);
+        } catch (Exception e) {
+            DEFAULT_LOG.error("Error loading server icon file", e);
+            return Optional.empty();
+        }
+    }
+
+    private byte[] loadServerIconDefault() {
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream("server-icon.png")) {
+            return in.readAllBytes();
+        } catch (final Exception e) {
+            SERVER_LOG.error("Failed loading server icon", e);
+            return new byte[0];
+        }
+    }
+
     @SneakyThrows
     public synchronized void startServer() {
         if (this.server != null && this.server.isListening())
             throw new IllegalStateException("Server already started!");
         if (!CONFIG.server.enabled) return;
-        try (InputStream in = getClass().getClassLoader().getResourceAsStream("servericon.png")) {
-            byte[] iconBytes = in.readAllBytes();
-            var event = new ServerIconBuildEvent(iconBytes);
-            EVENT_BUS.post(event);
-            this.serverIcon = event.getIcon();
-        }
         var address = CONFIG.server.bind.address;
         var port = CONFIG.server.bind.port;
         SERVER_LOG.info("Starting server on {}:{}...", address, port);
@@ -534,7 +570,13 @@ public class Proxy {
         if (CONFIG.server.extra.whitelist.autoAddClient && CONFIG.authentication.accountType != OFFLINE)
             if (PLAYER_LISTS.getWhitelist().add(username, uuid))
                 SERVER_LOG.info("Auto added {} [{}] to whitelist", username, uuid);
-        EXECUTOR.execute(this::updateFavicon);
+        if (CONFIG.server.updateServerIcon) {
+            final GameProfile profile = minecraftProtocol.getProfile();
+            EXECUTOR.execute(() -> {
+                updateServerIcon(profile);
+                DISCORD.updateBotAvatar();
+            });
+        }
         return minecraftProtocol;
     }
 
@@ -670,44 +712,18 @@ public class Proxy {
             && getOnlineTimeSecondsWithQueueSkip() >= duration.getSeconds();
     }
 
-    public void updateFavicon() {
-        if (!CONFIG.authentication.username.equals("Unknown")) { // else use default icon
-            try {
-                final GameProfile profile = CACHE.getProfileCache().getProfile();
-                byte[] icon;
-                if (profile != null && profile.getId() != null) {
-                    // do uuid lookup
-                    final UUID uuid = profile.getId();
-                    icon = MinotarApi.INSTANCE.getAvatar(uuid).or(() -> CraftheadApi.INSTANCE.getAvatar(uuid))
-                        .orElseThrow(() -> new IOException("Unable to download server icon for \"" + uuid + "\""));
-                } else {
-                    // do username lookup
-                    final String username = CONFIG.authentication.username;
-                    icon = MinotarApi.INSTANCE.getAvatar(username).or(() -> CraftheadApi.INSTANCE.getAvatar(username))
-                        .orElseThrow(() -> new IOException("Unable to download server icon for \"" + username + "\""));
-                }
-                var event = new ServerIconBuildEvent(icon);
-                EVENT_BUS.post(event.getIcon());
-                this.serverIcon = icon;
-                if (DISCORD.isRunning()) {
-                    if (CONFIG.discord.manageNickname)
-                        DISCORD.setBotNickname(CONFIG.authentication.username + " | ZenithProxy");
-                    if (CONFIG.discord.manageDescription) DISCORD.setBotDescription(
-                        """
-                        ZenithProxy %s
-                        **Official Discord**:
-                          https://discord.gg/nJZrSaRKtb
-                        **Github**:
-                          https://github.com/rfresh2/ZenithProxy
-                        """.formatted(LAUNCH_CONFIG.version));
-                }
-            } catch (final Throwable e) {
-                SERVER_LOG.error("Failed updating favicon");
-                SERVER_LOG.debug("Failed updating favicon", e);
-            }
+    void updateServerIcon(@NonNull GameProfile profile) {
+        try {
+            byte[] icon = SkinRetriever.getRenderedAvatar(profile)
+                .orElse(serverIcon);
+            var event = new ServerIconBuildEvent(icon);
+            EVENT_BUS.post(event.getIcon());
+            this.serverIcon = icon;
+            writeServerIconFile();
+        } catch (final Throwable e) {
+            SERVER_LOG.error("Failed updating server icon");
+            SERVER_LOG.debug("Failed updating server icon", e);
         }
-        if (DISCORD.isRunning() && this.serverIcon != null)
-            if (CONFIG.discord.manageProfileImage) DISCORD.setProfileImage(this.serverIcon);
     }
 
     public boolean isOn2b2t() {

@@ -9,8 +9,10 @@ import com.zenith.feature.inventory.InventoryActionRequest;
 import com.zenith.feature.player.*;
 import com.zenith.feature.player.raycast.RaycastHelper;
 import com.zenith.mc.item.ItemRegistry;
+import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import org.cloudburstmc.math.vector.Vector2f;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
@@ -190,7 +192,8 @@ public class KillAura extends AbstractInventoryModule {
     }
 
     private InputRequestFuture attack(final EntityLiving entity) {
-        var rotation = RotationHelper.shortestRotationTo(entity);
+        var rotation = getRotationTo(entity);
+        if (rotation == null) return InputRequestFuture.rejected;
         return INPUTS.submit(InputRequest.builder()
             .owner(this)
             .input(Input.builder()
@@ -204,7 +207,8 @@ public class KillAura extends AbstractInventoryModule {
     }
 
     private void rotateTo(EntityLiving entity) {
-        var rotation = RotationHelper.shortestRotationTo(entity);
+        var rotation = getRotationTo(entity);
+        if (rotation == null) return;
         INPUTS.submit(InputRequest.builder()
             .owner(this)
             .yaw(rotation.getX())
@@ -218,10 +222,90 @@ public class KillAura extends AbstractInventoryModule {
         return entityRaycastResult.hit();
     }
 
+    private @Nullable Vector2f getRotationTo(final EntityLiving entity) {
+        if (CONFIG.client.extra.killAura.raycast) {
+            return raycastRotationTo(entity);
+        } else {
+            return RotationHelper.shortestRotationTo(entity);
+        }
+    }
+
+    private @Nullable Vector2f raycastRotationTo(final EntityLiving entity) {
+        var currentRaycast = RaycastHelper.blockOrEntityRaycastFromPos(
+            BOT.getX(),
+            BOT.getEyeY(),
+            BOT.getZ(),
+            BOT.getYaw(),
+            BOT.getPitch(),
+            BOT.getBlockReachDistance(),
+            BOT.getEntityInteractDistance()
+        );
+        if (currentRaycast.hit() && currentRaycast.isEntity() && currentRaycast.entity().entity() == entity) {
+            return Vector2f.from(BOT.getYaw(), BOT.getPitch());
+        }
+
+        var dimensions = entity.dimensions();
+        double halfW = dimensions.getX() / 2.0;
+        double halfH = dimensions.getY() / 2.0;
+        double entityCenterX = entity.getX();
+        double entityMinX = entityCenterX - halfW;
+        double entityMaxX = entityCenterX + halfW;
+        double entityCenterY = entity.getY() + halfH;
+        double entityMinY = entity.getY();
+        double entityMaxY = entity.getY() + dimensions.getY();
+        double entityCenterZ = entity.getZ();
+        double entityMinZ = entityCenterZ - halfW;
+        double entityMaxZ = entityCenterZ + halfW;
+
+        var entityCenterRotation = RotationHelper.rotationTo(entityCenterX, entityCenterY, entityCenterZ);
+        var centerRaycast = RaycastHelper.blockOrEntityRaycastFromPos(
+            BOT.getX(),
+            BOT.getEyeY(),
+            BOT.getZ(),
+            entityCenterRotation.getX(),
+            entityCenterRotation.getY(),
+            BOT.getBlockReachDistance(),
+            BOT.getEntityInteractDistance()
+        );
+        if (centerRaycast.hit() && centerRaycast.isEntity() && centerRaycast.entity().entity() == entity) {
+            return entityCenterRotation;
+        }
+
+        double step = 0.1;
+        double maxStep = Math.max(halfW, halfH);
+        for (double d = step; d <= maxStep; d += step) {
+            for (double dx = -1; dx <= 1; dx++) {
+                for (double dy = -1; dy <= 1; dy++) {
+                    for (double dz = -1; dz <= 1; dz++) {
+                        if (dx == 0 && dy == 0 && dz == 0) continue;
+                        double x = MathHelper.clamp(entityCenterX + (dx * d), entityMinX, entityMaxX);
+                        double y = MathHelper.clamp(entityCenterY + (dy * d), entityMinY, entityMaxY);
+                        double z = MathHelper.clamp(entityCenterZ + (dz * d), entityMinZ, entityMaxZ);
+                        var rotation = RotationHelper.rotationTo(x, y, z);
+                        var raycast = RaycastHelper.blockOrEntityRaycastFromPos(
+                            BOT.getX(),
+                            BOT.getEyeY(),
+                            BOT.getZ(),
+                            rotation.getX(),
+                            rotation.getY(),
+                            BOT.getBlockReachDistance(),
+                            BOT.getEntityInteractDistance()
+                        );
+                        if (raycast.hit() && raycast.isEntity() && raycast.entity().entity() == entity) {
+                            return rotation;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     private boolean canPossiblyReach(final EntityLiving entity) {
         var rangeSq = Math.pow(BOT.getEntityInteractDistance(), 2) + 5;
         if (CACHE.getPlayerCache().distanceSqToSelf(entity) > rangeSq) return false;
-        var rotation = RotationHelper.shortestRotationTo(entity);
+        var rotation = getRotationTo(entity);
+        if (rotation == null) return false;
         var entityRaycastResult = RaycastHelper.playerEyeRaycastThroughToTarget(entity, rotation.getX(), rotation.getY());
         return entityRaycastResult.hit();
     }

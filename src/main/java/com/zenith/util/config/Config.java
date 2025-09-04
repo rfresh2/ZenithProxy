@@ -339,6 +339,7 @@ public final class Config {
                 public boolean switchWeapon = true;
                 public boolean targetArmorStands = false;
                 public int attackDelayTicks = 10;
+                public boolean raycast = false;
                 public final ArrayList<EntityType> customTargets = new ArrayList<>();
                 public Priority priority = Priority.NONE;
 
@@ -635,6 +636,7 @@ public final class Config {
         public boolean upnp = false;
         public boolean injectTablistFooter = true;
         public boolean welcomeMessages = true;
+        public boolean updateServerIcon = true;
 
         public static final class PacketRateLimiter {
             public boolean enabled = true;
@@ -704,7 +706,6 @@ public final class Config {
             public boolean enabled = true;
             public boolean onlinePlayers = false;
             public boolean onlinePlayerCount = true;
-            public boolean favicon = true;
             public int maxPlayers = Integer.MAX_VALUE;
             public boolean lanBroadcast = true;
             public boolean responseCaching = true;

@@ -99,6 +99,10 @@ public class ActiveHours extends Module {
                         if (proxy.isOn2b2t()) {
                             info("Waiting 1 minute to avoid reconnect queue skip");
                             MODULE.get(AutoReconnect.class).scheduleAutoReconnect(60);
+                            EXECUTOR.schedule(() -> {
+                                activeSession = Proxy.getInstance().isConnected();
+                                debug("Setting active session after reconnect: {}", activeSession);
+                            }, 70, TimeUnit.SECONDS);
                             return;
                         }
                     }
