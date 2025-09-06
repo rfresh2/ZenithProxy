@@ -8,6 +8,7 @@ import org.jspecify.annotations.Nullable;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.math.BigInteger;
+import java.net.URLEncoder;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
@@ -62,7 +63,9 @@ public class SessionServerApi extends Api {
     }
 
     public Optional<GameProfile> hasJoined(final String name, final String serverId) {
-        final HttpRequest httpRequest = buildBaseRequest("/session/minecraft/hasJoined?username=" + name + "&serverId=" + serverId)
+        var usernameEncoded = URLEncoder.encode(name, StandardCharsets.UTF_8);
+        var serverIdEncoded = URLEncoder.encode(serverId, StandardCharsets.UTF_8);
+        final HttpRequest httpRequest = buildBaseRequest("/session/minecraft/hasJoined?username=" + usernameEncoded + "&serverId=" + serverIdEncoded)
             .GET()
             .build();
         try (var client = buildHttpClient()) {
