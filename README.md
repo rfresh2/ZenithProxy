@@ -81,21 +81,34 @@ This project is also used for the [2b2t.vc API](https://api.2b2t.vc) and [Discor
 
 ### System Requirements
 
-1. Linux, Windows, or Mac computer. I recommend using a VPS (droplet) from DigitalOcean:
-    * [$200 Free Digital](https://m.do.co/c/f3afffef9a46)[Ocean Credits](https://m.do.co/c/3a3a226e4936).
-    * [Guide and automatic setup script](https://github.com/rfresh2/ZenithProxy/wiki/DigitalOcean-Setup-Guide).
-2. Java 21+ (Not required for `linux` release channel on supported CPU)
-    * The ZenithProxy launcher will install Java 21 automatically if not already installed
+1. Linux, Windows, or Mac computer. 
+    * I recommend using a VPS (Virtual Private Server) from DigitalOcean (droplet)
+2. Java 21+ (auto-installed by ZenithProxy launcher)
+3. Minimum System specs:
+   * `linux` release channel (Linux on x64 CPU):
+     * ~250MB RAM
+   * `java` release channel (Any OS and CPU):
+     * ~600MB RAM
 
-### Launcher
+<details>
+<summary>Don't have enough RAM on your Linux VPS?</summary>
 
-1. Download [the launcher zip](https://github.com/rfresh2/ZenithProxy/releases/launcher-v3) for your system
-    * Windows Setup Guide: https://github.com/rfresh2/ZenithProxy/wiki/Windows-Python-Launcher-Guide
-    * For other systems, download the Python version (Universal). Requires [Python 3.10+](https://www.python.org/downloads/)
+* [Set up system swap memory](https://linuxize.com/post/create-a-linux-swap-file/)
+
+</details>
+
+### Guides
+
+* [DigitalOcean VPS + $200 free credits + auto setup script](https://github.com/rfresh2/ZenithProxy/wiki/DigitalOcean-Setup-Guide)
+* [Windows](https://github.com/rfresh2/ZenithProxy/wiki/Windows-Python-Launcher-Guide)
+
+### Launcher Downloads
+
+1. Download [the launcher zip](https://github.com/rfresh2/ZenithProxy/releases/launcher-v3) for your OS and CPU
 2. Unzip the file.
-3. Run the launcher executable in a terminal:
+3. Run the launcher in a terminal:
    * Linux/Mac: `./launch`
-   * Python: `./launch.sh` (Linux/Mac) or `.\launch.bat` (Windows)
+   * Python: `.\launch.bat` (Windows) or `./launch.sh` (Linux/Mac) 
 
 <details>
     <summary>How do I download a file from a Linux terminal?</summary>
@@ -122,7 +135,7 @@ This project is also used for the [2b2t.vc API](https://api.2b2t.vc) and [Discor
 ### Run
 
 * The launcher will ask for all configuration on first launch
-    * Or run the launcher with the `--setup` flag. e.g. `.\launch.exe --setup`
+    * Or run the launcher with the `--setup` flag. e.g. `./launch --setup`
 * Use the `connect` command to link an MC account and log in once ZenithProxy is launched
 * Command Prefixes:
     * Discord: `.` (e.g. `.help`)
@@ -144,7 +157,11 @@ If you do not use one, **ZenithProxy will be killed after you exit your SSH sess
 
 ### Docker
 
-Instructions and info: https://github.com/rfresh2/ZenithProxyDocker
+https://github.com/rfresh2/ZenithProxyDocker
+
+## Plugins
+
+https://github.com/rfresh2/ZenithProxy/wiki/Plugins
 
 ## Configuration
 
@@ -184,7 +201,7 @@ Instances must be independently run and configured. i.e. separate terminal sessi
 
 See the [Linux Guide](https://github.com/rfresh2/ZenithProxy/wiki/Linux-Guide) for help copying files, creating folders, etc.
 
-### 2b2t Limits
+## 2b2t Limits
 
 2b2t limits accounts without priority queue based on:
 1. Accounts currently connected per IP address
