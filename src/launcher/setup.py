@@ -224,7 +224,10 @@ def setup_execute(config):
     #     config["authentication"] = {"accountType": "msa", "email": username, "password": password}
 
     ip_pattern = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
-    proxy_address = ip + ":" + str(port) if ip_pattern.match(ip) else ip
+    if ip == "localhost" or ip_pattern.match(ip):
+        proxy_address = ip + ":" + str(port)
+    else:
+        proxy_address = ip
 
     config["server"] = {
         "bind": {
