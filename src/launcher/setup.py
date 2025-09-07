@@ -366,11 +366,17 @@ def setup_unattended(config):
                 if discord_chat_relay_channel < 1000000000 or discord_chat_relay_channel > 9999999999999999999:
                     critical_error("Invalid Discord chat relay channel ID")
 
+        ip_pattern = re.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
+        if ip == "localhost" or ip_pattern.match(ip):
+            proxy_address = ip + ":" + str(port)
+        else:
+            proxy_address = ip
+
         config["server"] = {
             "bind": {
                 "port": port,
             },
-            "proxyIP": ip,
+            "proxyIP": proxy_address,
         }
         if discord_bot:
             config["discord"] = {
