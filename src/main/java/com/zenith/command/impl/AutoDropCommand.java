@@ -48,7 +48,8 @@ public class AutoDropCommand extends Command {
                     "addAll <item1>,<item2>,...",
                     "list",
                     "clear",
-                    "delay <ticks>"
+                    "delay <ticks>",
+                    "dropStack on/off"
                 )
                 .build();
     }
@@ -125,6 +126,11 @@ public class AutoDropCommand extends Command {
                 CONFIG.client.extra.autoDrop.delayTicks = getInteger(c, "ticks");
                 c.getSource().getEmbed()
                     .title("Delay Set");
+            })))
+            .then(literal("dropStack").then(argument("toggle", toggle()).executes(c -> {;
+                CONFIG.client.extra.autoDrop.dropStack = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Drop Stack " + toggleStrCaps(CONFIG.client.extra.autoDrop.dropStack));
             })));
     }
 
@@ -134,6 +140,7 @@ public class AutoDropCommand extends Command {
             .addField("AutoDrop", toggleStr(CONFIG.client.extra.autoDrop.enabled))
             .addField("Mode", CONFIG.client.extra.autoDrop.mode.name().toLowerCase())
             .addField("Delay Ticks", CONFIG.client.extra.autoDrop.delayTicks)
+            .addField("Drop Stack", toggleStr(CONFIG.client.extra.autoDrop.dropStack))
             .primaryColor();
     }
 

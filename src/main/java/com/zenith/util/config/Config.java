@@ -582,6 +582,7 @@ public final class Config {
             }
             public ArrayList<String> items = new ArrayList<>();
             public int delayTicks = 10;
+            public boolean dropStack = true;
         }
     }
 

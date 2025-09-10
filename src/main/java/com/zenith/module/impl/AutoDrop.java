@@ -39,7 +39,9 @@ public class AutoDrop extends Module {
         if (slotId == -1) return;
         var request = InventoryActionRequest.builder()
             .owner(this)
-            .actions(new DropItem(slotId, DropItemAction.DROP_SELECTED_STACK))
+            .actions(new DropItem(slotId, CONFIG.client.extra.autoDrop.dropStack
+                ? DropItemAction.DROP_SELECTED_STACK
+                : DropItemAction.DROP_FROM_SELECTED))
             .priority(MOVEMENT_PRIORITY)
             .build();
         INVENTORY.submit(request);
