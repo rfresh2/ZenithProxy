@@ -10,6 +10,9 @@ import com.zenith.mc.item.ItemRegistry;
 import com.zenith.module.impl.AutoDrop;
 import com.zenith.util.config.Config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
@@ -78,21 +81,31 @@ public class AutoDropCommand extends Command {
                 var item = getItem(c, "item");
                 var itemName = item.name();
                 CONFIG.client.extra.autoDrop.items.removeIf(i -> i.equals(itemName));
+                CONFIG.client.extra.autoDrop.items.removeIf(i -> ItemRegistry.REGISTRY.get(i) == null);
                 c.getSource().getEmbed()
                     .title("Item Removed")
                     .description(itemsListToString());
             })))
             .then(literal("addAll").then(argument("items", wordWithChars()).executes(c -> {
                 var itemsList = getString(c, "items").split(",");
+                List<String> invalidItems = new ArrayList<>();
                 for (var item : itemsList) {
                     var itemData = ItemRegistry.REGISTRY.get(item);
-                    if (itemData == null) continue;
+                    if (itemData == null) {
+                        invalidItems.add(item);
+                        continue;
+                    }
                     if (CONFIG.client.extra.autoDrop.items.contains(itemData.name())) continue;
                     CONFIG.client.extra.autoDrop.items.add(itemData.name());
                 }
                 c.getSource().getEmbed()
-                    .title(itemsList.length + " Items Added")
+                    .title("Items Added")
+                    .addField("Added Items Count", itemsList.length - invalidItems.size())
                     .description(itemsListToString());
+                if (!invalidItems.isEmpty()) {
+                    c.getSource().getEmbed()
+                        .addField("Invalid Items", String.join(", ", invalidItems));
+                }
             })))
             .then(literal("list").executes(c -> {
                 c.getSource().getEmbed()
@@ -128,9 +141,9 @@ public class AutoDropCommand extends Command {
         if (items.isEmpty()) return "None!";
         for (int i = 0; i < items.size(); i++) {
             var itemName = items.get(i);
-            sb.append("  ");
+            sb.append("`");
             sb.append(itemName);
-            sb.append("\n");
+            sb.append("`\n");
         }
         return sb.toString();
     }
