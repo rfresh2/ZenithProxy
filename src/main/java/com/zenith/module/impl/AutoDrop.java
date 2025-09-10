@@ -16,8 +16,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 import static com.github.rfresh2.EventConsumer.of;
-import static com.zenith.Globals.CONFIG;
-import static com.zenith.Globals.INVENTORY;
+import static com.zenith.Globals.*;
 
 public class AutoDrop extends Module {
     public static final int MOVEMENT_PRIORITY = 20;
@@ -44,6 +43,8 @@ public class AutoDrop extends Module {
             .priority(MOVEMENT_PRIORITY)
             .build();
         INVENTORY.submit(request);
+        var itemData = ItemRegistry.REGISTRY.get(CACHE.getPlayerCache().getPlayerInventory().get(slotId).getId());
+        debug("Requesting drop for item: {} in slot: {}", itemData == null ? "?" : itemData.name(), slotId);
     }
 
     private boolean dropItemPredicate(@Nullable ItemStack item) {
