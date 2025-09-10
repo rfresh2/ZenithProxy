@@ -9,6 +9,7 @@ import com.zenith.discord.Embed;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.module.impl.AutoDrop;
 import com.zenith.util.config.Config;
+import com.zenith.util.math.MathHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,11 +18,12 @@ import java.util.List;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
-import static com.zenith.Globals.CONFIG;
-import static com.zenith.Globals.MODULE;
+import static com.zenith.Globals.*;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.command.brigadier.ItemArgument.getItem;
 import static com.zenith.command.brigadier.ItemArgument.item;
+import static com.zenith.command.brigadier.RotationArgument.getRotation;
+import static com.zenith.command.brigadier.RotationArgument.rotation;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 
@@ -49,7 +51,10 @@ public class AutoDropCommand extends Command {
                     "list",
                     "clear",
                     "delay <ticks>",
-                    "dropStack on/off"
+                    "dropStack on/off",
+                    "rotation on/off",
+                    "rotation sync",
+                    "rotation <yaw> <pitch>"
                 )
                 .build();
     }
@@ -131,7 +136,27 @@ public class AutoDropCommand extends Command {
                 CONFIG.client.extra.autoDrop.dropStack = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Drop Stack " + toggleStrCaps(CONFIG.client.extra.autoDrop.dropStack));
-            })));
+            })))
+            .then(literal("rotation")
+                      .then(argument("toggle", toggle()).executes(c -> {;
+                              CONFIG.client.extra.autoDrop.requiresRotation = getToggle(c, "toggle");
+                              c.getSource().getEmbed()
+                                  .title("Rotation " + toggleStrCaps(CONFIG.client.extra.autoDrop.requiresRotation));
+                      }))
+                      .then(literal("sync").executes(c -> {
+                            // normalize yaw and pitch to -180 to 180 and -90 to 90
+                            CONFIG.client.extra.autoDrop.yaw = MathHelper.wrapYaw(CACHE.getPlayerCache().getYaw());
+                            CONFIG.client.extra.autoDrop.pitch = MathHelper.wrapPitch(CACHE.getPlayerCache().getPitch());
+                            c.getSource().getEmbed()
+                                .title("Rotation Set");
+                      }))
+                      .then(argument("rotation", rotation()).executes(c -> {
+                            var rotation = getRotation(c, "rotation");
+                            CONFIG.client.extra.autoDrop.yaw = (float) rotation.getX();
+                            CONFIG.client.extra.autoDrop.pitch = (float) rotation.getY();
+                            c.getSource().getEmbed()
+                                .title("Rotation Set");
+                        })));
     }
 
     @Override
@@ -141,6 +166,9 @@ public class AutoDropCommand extends Command {
             .addField("Mode", CONFIG.client.extra.autoDrop.mode.name().toLowerCase())
             .addField("Delay Ticks", CONFIG.client.extra.autoDrop.delayTicks)
             .addField("Drop Stack", toggleStr(CONFIG.client.extra.autoDrop.dropStack))
+            .addField("Rotation", toggleStr(CONFIG.client.extra.autoDrop.requiresRotation))
+            .addField("Yaw", CONFIG.client.extra.autoDrop.yaw)
+            .addField("Pitch", CONFIG.client.extra.autoDrop.pitch)
             .primaryColor();
     }
 

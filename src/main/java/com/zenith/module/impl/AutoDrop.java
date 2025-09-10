@@ -5,8 +5,10 @@ import com.zenith.event.client.ClientBotTick;
 import com.zenith.feature.inventory.InventoryActionRequest;
 import com.zenith.feature.inventory.actions.DropItem;
 import com.zenith.feature.inventory.util.InventoryUtil;
+import com.zenith.feature.player.InputRequest;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.module.api.Module;
+import com.zenith.util.math.MathHelper;
 import com.zenith.util.timer.Timer;
 import com.zenith.util.timer.Timers;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.DropItemAction;
@@ -37,6 +39,21 @@ public class AutoDrop extends Module {
         if (!dropTimer.tick(CONFIG.client.extra.autoDrop.delayTicks)) return;
         int slotId = InventoryUtil.searchPlayerInventory(this::dropItemPredicate);
         if (slotId == -1) return;
+        if (CONFIG.client.extra.autoDrop.requiresRotation) {
+            var inputRequest = InputRequest.builder()
+                .owner(this)
+                .yaw(CONFIG.client.extra.autoDrop.yaw)
+                .pitch(CONFIG.client.extra.autoDrop.pitch)
+                .priority(MOVEMENT_PRIORITY)
+                .build();
+            INPUTS.submit(inputRequest);
+            if (!MathHelper.isYawInRange(CONFIG.client.extra.autoDrop.yaw, CACHE.getPlayerCache().getYaw(), 0.1f)
+                || !MathHelper.isPitchInRange(CONFIG.client.extra.autoDrop.pitch, CACHE.getPlayerCache().getPitch(), 0.1f)) {
+                dropTimer.skip();
+                // await rotation next tick
+                return;
+            }
+        }
         var request = InventoryActionRequest.builder()
             .owner(this)
             .actions(new DropItem(slotId, CONFIG.client.extra.autoDrop.dropStack

@@ -583,6 +583,9 @@ public final class Config {
             public ArrayList<String> items = new ArrayList<>();
             public int delayTicks = 10;
             public boolean dropStack = true;
+            public boolean requiresRotation = false;
+            public float yaw = 0.0f;
+            public float pitch = 0.0f;
         }
     }
 
