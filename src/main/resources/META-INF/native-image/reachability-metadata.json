@@ -2276,6 +2276,20 @@
       ]
     },
     {
+      "type": "com.zenith.util.config.Config$Client$AutoDrop",
+      "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.util.config.Config$Client$AutoDrop$Mode",
+      "allDeclaredFields": true
+    },
+    {
       "type": "com.zenith.util.config.Config$Client$ChatSchemas",
       "allDeclaredFields": true,
       "methods": [

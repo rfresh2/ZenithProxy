@@ -21,6 +21,7 @@ public class ModuleManager {
             new AntiLeak(),
             new AutoArmor(),
             new AutoDisconnect(),
+            new AutoDrop(),
             new AutoEat(),
             new AutoFish(),
             new AutoMend(),

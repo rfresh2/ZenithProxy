@@ -156,6 +156,7 @@ public final class Config {
             public final SpawnPatrol spawnPatrol = new SpawnPatrol();
             public final PearlLoader pearlLoader = new PearlLoader();
             public final Waypoints waypoints = new Waypoints();
+            public final AutoDrop autoDrop = new AutoDrop();
             public String whisperCommand = "msg";
 
             public static final class Waypoints {
@@ -570,6 +571,21 @@ public final class Config {
             public int port = 7890;
             public String user = "";
             public String password = "";
+        }
+        public static final class AutoDrop {
+            public boolean enabled = false;
+            public Mode mode = Mode.WHITELIST;
+            public enum Mode {
+                ALL,
+                BLACKLIST,
+                WHITELIST
+            }
+            public ArrayList<String> items = new ArrayList<>();
+            public int delayTicks = 10;
+            public boolean dropStack = true;
+            public boolean requiresRotation = false;
+            public float yaw = 0.0f;
+            public float pitch = 0.0f;
         }
     }
 
