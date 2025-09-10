@@ -11,6 +11,7 @@ import com.zenith.module.impl.AutoDrop;
 import com.zenith.util.config.Config;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
@@ -73,6 +74,7 @@ public class AutoDropCommand extends Command {
                 if (!CONFIG.client.extra.autoDrop.items.contains(itemName)) {
                     CONFIG.client.extra.autoDrop.items.add(itemName);
                 }
+                Collections.sort(CONFIG.client.extra.autoDrop.items);
                 c.getSource().getEmbed()
                     .title("Item Added")
                     .description(itemsListToString());
@@ -98,6 +100,7 @@ public class AutoDropCommand extends Command {
                     if (CONFIG.client.extra.autoDrop.items.contains(itemData.name())) continue;
                     CONFIG.client.extra.autoDrop.items.add(itemData.name());
                 }
+                Collections.sort(CONFIG.client.extra.autoDrop.items);
                 c.getSource().getEmbed()
                     .title("Items Added")
                     .addField("Added Items Count", itemsList.length - invalidItems.size())
