@@ -45,7 +45,8 @@ public class ReplayCommand extends Command {
                 "fileIoUpload on/off",
                 "maxRecordingTime <minutes>",
                 "autoRecord mode <off/proxyConnected/playerConnected/health>",
-                "autoRecord health <integer>"
+                "autoRecord health <integer>",
+                "featureFlags on/off"
             )
             .build();
     }
@@ -121,17 +122,23 @@ public class ReplayCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Auto Record Health Set");
                           return OK;
-                      }))));
+                      }))))
+            .then(literal("featureFlags").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.replayMod.featureFlags = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Feature Flags Set");
+            })));
     }
 
     @Override
     public void defaultEmbed(final Embed embed) {
         embed
             .primaryColor()
-            .addField("Discord Upload", toggleStr(CONFIG.client.extra.replayMod.sendRecordingsToDiscord), false)
-            .addField("file.io Upload", toggleStr(CONFIG.client.extra.replayMod.fileIOUploadIfTooLarge), false)
-            .addField("Max Recording Time", getMaxRecordingTimeStr(), false)
-            .addField("Auto Record Mode", CONFIG.client.extra.replayMod.autoRecordMode.getName(), false);
+            .addField("Discord Upload", toggleStr(CONFIG.client.extra.replayMod.sendRecordingsToDiscord))
+            .addField("file.io Upload", toggleStr(CONFIG.client.extra.replayMod.fileIOUploadIfTooLarge))
+            .addField("Max Recording Time", getMaxRecordingTimeStr())
+            .addField("Auto Record Mode", CONFIG.client.extra.replayMod.autoRecordMode.getName())
+            .addField("Feature Flags", toggleStr(CONFIG.client.extra.replayMod.featureFlags));
     }
 
     private String getMaxRecordingTimeStr() {
