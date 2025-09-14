@@ -252,6 +252,7 @@ public final class PacketCodecRegistries {
                 .inbound(ServerboundTeleportToEntityPacket.class, new TeleportToEntitySpectatorHandler())
                 .inbound(ServerboundInteractPacket.class, new InteractEntitySpectatorHandler())
                 .inbound(ServerboundChatCommandPacket.class, new ChatCommandSpectatorHandler())
+                .inbound(ServerboundCommandSuggestionPacket.class, new CommandSuggestionSpectatorHandler())
                 .inbound(ServerboundChatCommandSignedPacket.class, new SignedChatCommandSpectatorHandler())
                 .outbound(ClientboundCommandsPacket.class, new ClientCommandsSpectatorOutgoingHandler())
                 .outbound(ClientboundContainerClosePacket.class, new ContainerCloseSpectatorOutgoingHandler())
