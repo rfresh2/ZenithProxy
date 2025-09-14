@@ -7,6 +7,7 @@ import com.zenith.command.api.CommandCategory;
 import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
+import com.zenith.feature.player.ClickTarget;
 import com.zenith.feature.player.Input;
 import com.zenith.feature.player.InputRequest;
 import com.zenith.util.config.Config.Client.Extra.Click.HoldClickTarget;
@@ -33,9 +34,11 @@ public class ClickCommand extends Command {
              """)
             .usageLines(
                 "left",
+                "left target <any/none/entity/block>",
                 "left hold",
                 "left hold interval <ticks>",
                 "right",
+                "right target <any/none/entity/block>",
                 "right hold",
                 "right hold <mainHand/offHand/alternate>",
                 "right hold interval <ticks>",
@@ -80,6 +83,33 @@ public class ClickCommand extends Command {
                         .primaryColor();
                     return OK;
                 })
+                .then(literal("target").then(argument("targetType", enumStrings(HoldClickTarget.values())).executes(c -> {
+                    if (!Proxy.getInstance().isConnected()) {
+                        c.getSource().getEmbed()
+                            .title("Not Connected")
+                            .description("Must be connected to click");
+                        return ERROR;
+                    }
+                    var target = HoldClickTarget.valueOf(getString(c, "targetType").toUpperCase());
+                    var clickTarget = switch (target) {
+                        case ANY -> ClickTarget.Any.INSTANCE;
+                        case NONE -> ClickTarget.None.INSTANCE;
+                        case BLOCK -> ClickTarget.AnyBlock.INSTANCE;
+                        case ENTITY -> ClickTarget.AnyEntity.INSTANCE;
+                    };
+                    INPUTS.submit(InputRequest.builder()
+                        .owner(this)
+                        .input(Input.builder()
+                            .leftClick(true)
+                            .clickTarget(clickTarget)
+                            .build())
+                        .priority(100000)
+                        .build());
+                    c.getSource().getEmbed()
+                        .title("Left Clicked")
+                        .primaryColor();
+                    return OK;
+                })))
                 .then(literal("hold").executes(c -> {
                         CONFIG.client.extra.click.holdLeftClick = true;
                         CONFIG.client.extra.click.holdRightClick = false;
@@ -114,6 +144,33 @@ public class ClickCommand extends Command {
                         .primaryColor();
                     return OK;
                 })
+                .then(literal("target").then(argument("targetType", enumStrings(HoldClickTarget.values())).executes(c -> {
+                    if (!Proxy.getInstance().isConnected()) {
+                        c.getSource().getEmbed()
+                            .title("Not Connected")
+                            .description("Must be connected to click");
+                        return ERROR;
+                    }
+                    var target = HoldClickTarget.valueOf(getString(c, "targetType").toUpperCase());
+                    var clickTarget = switch (target) {
+                        case ANY -> ClickTarget.Any.INSTANCE;
+                        case NONE -> ClickTarget.None.INSTANCE;
+                        case BLOCK -> ClickTarget.AnyBlock.INSTANCE;
+                        case ENTITY -> ClickTarget.AnyEntity.INSTANCE;
+                    };
+                    INPUTS.submit(InputRequest.builder()
+                        .owner(this)
+                        .input(Input.builder()
+                            .rightClick(true)
+                            .clickTarget(clickTarget)
+                            .build())
+                        .priority(100000)
+                        .build());
+                    c.getSource().getEmbed()
+                        .title("Right Clicked")
+                        .primaryColor();
+                    return OK;
+                })))
                 .then(literal("hold")
                     .executes(c -> {
                         CONFIG.client.extra.click.holdLeftClick = false;
