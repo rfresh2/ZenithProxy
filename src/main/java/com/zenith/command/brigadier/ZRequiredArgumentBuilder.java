@@ -45,7 +45,7 @@ public class ZRequiredArgumentBuilder<S, T> extends ArgumentBuilder<S, ZRequired
     }
 
     public ArgumentCommandNode<S, T> build() {
-        final ArgumentCommandNode<S, T> result = new ArgumentCommandNode<>(getName(), getType(), getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), getSuggestionsProvider());
+        final ArgumentCommandNode<S, T> result = new CaseInsensitiveArgumentNode<>(getName(), getType(), getCommand(), getRequirement(), getRedirect(), getRedirectModifier(), isFork(), getSuggestionsProvider());
 
         for (final CommandNode<S> argument : getArguments()) {
             result.addChild(argument);

@@ -36,6 +36,7 @@ public class CommandManager {
         new AuthCommand(),
         new AutoArmorCommand(),
         new AutoDisconnectCommand(),
+        new AutoDropCommand(),
         new AutoEatCommand(),
         new AutoFishCommand(),
         new AutoMendCommand(),

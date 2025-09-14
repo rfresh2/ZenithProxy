@@ -156,6 +156,7 @@ public final class Config {
             public final SpawnPatrol spawnPatrol = new SpawnPatrol();
             public final PearlLoader pearlLoader = new PearlLoader();
             public final Waypoints waypoints = new Waypoints();
+            public final AutoDrop autoDrop = new AutoDrop();
             public String whisperCommand = "msg";
 
             public static final class Waypoints {
@@ -417,6 +418,7 @@ public final class Config {
                 public AutoRecordMode autoRecordMode = AutoRecordMode.NONE;
                 public int replayRecordingHealthThreshold = 5;
                 public boolean fileIOUploadIfTooLarge = true;
+                public boolean featureFlags = true;
 
                 @Getter
                 public enum AutoRecordMode {
@@ -571,6 +573,21 @@ public final class Config {
             public String user = "";
             public String password = "";
         }
+        public static final class AutoDrop {
+            public boolean enabled = false;
+            public Mode mode = Mode.WHITELIST;
+            public enum Mode {
+                ALL,
+                BLACKLIST,
+                WHITELIST
+            }
+            public ArrayList<String> items = new ArrayList<>();
+            public int delayTicks = 10;
+            public boolean dropStack = true;
+            public boolean requiresRotation = false;
+            public float yaw = 0.0f;
+            public float pitch = 0.0f;
+        }
     }
 
     public static final class Debug {
@@ -722,7 +739,7 @@ public final class Config {
         public String getProxyAddress() {
             // if the proxy IP is not a DNS name, also return the port appended
             if (!this.proxyIP.contains(":") // port already appended
-                && this.proxyIP.contains("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+")) // IP address
+                && (this.proxyIP.contains("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+") || this.proxyIP.startsWith("localhost"))) // IP address
                 return this.proxyIP + ":" + this.bind.port;
              else
                 return this.proxyIP;

@@ -16,6 +16,7 @@ import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerSpawnInfo;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundCustomPayloadPacket;
 import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundFinishConfigurationPacket;
+import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundUpdateEnabledFeaturesPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
@@ -250,7 +251,14 @@ public class ReplayRecording implements Closeable {
                     packet2 -> writeToFile(System.currentTimeMillis(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION),
                     Proxy.getInstance().getClient());
                 CACHE.getConfigurationCache().getConfigurationPackets(
-                    packet2 -> writeToFile(System.currentTimeMillis(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION),
+                    packet2 -> {
+                        if (!CONFIG.client.extra.replayMod.featureFlags) {
+                            if (packet2 instanceof ClientboundUpdateEnabledFeaturesPacket) {
+                                packet2 = new ClientboundUpdateEnabledFeaturesPacket(new String[]{"minecraft:vanilla"});
+                            }
+                        }
+                        writeToFile(System.currentTimeMillis(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
+                    },
                     Proxy.getInstance().getClient());
                 writeToFile(System.currentTimeMillis(), new ClientboundCustomPayloadPacket(Key.key("minecraft:brand"), CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
                 writeToFile(System.currentTimeMillis(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);

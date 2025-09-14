@@ -28,7 +28,7 @@ repositories {
 
 val mcplVersion = "1.21.8.3"
 dependencies {
-    api("com.github.rfresh2:JDA:6.0.17") {
+    api("com.github.rfresh2:JDA:6.0.18") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -36,7 +36,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.5.Final"))
+    api(platform("io.netty:netty-bom:4.2.6.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
