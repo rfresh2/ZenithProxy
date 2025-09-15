@@ -28,7 +28,7 @@ repositories {
 
 val mcplVersion = "1.21.4.28"
 dependencies {
-    api("com.github.rfresh2:JDA:6.0.18") {
+    api("com.github.rfresh2:JDA:6.0.19") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -71,8 +71,8 @@ dependencies {
     api("com.viaversion:vialoader:4.0.4")
     api("com.viaversion:viaversion:5.4.2")
     api("com.viaversion:viabackwards:5.4.2")
-    api("org.jline:jline:3.30.5")
-    api("org.jline:jline-terminal-jni:3.30.5")
+    api("org.jline:jline:3.30.6")
+    api("org.jline:jline-terminal-jni:3.30.6")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
     api("org.postgresql:postgresql:42.7.7")
