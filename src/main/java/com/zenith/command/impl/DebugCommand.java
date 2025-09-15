@@ -51,7 +51,8 @@ public class DebugCommand extends Command {
                 "dc",
                 "debugLogs on/off",
                 "chunkCacheFullbright on/off",
-                "defaultClientRenderDistance <int>"
+                "defaultClientRenderDistance <int>",
+                "lockFile on/off"
             )
             .build();
     }
@@ -245,21 +246,27 @@ public class DebugCommand extends Command {
                                 .build())
                             .build())
                         .build());
-            }));
+            }))
+            .then(literal("lockFile").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.lockFile = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Lock File " + toggleStrCaps(CONFIG.debug.lockFile));
+            })));
     }
 
     @Override
     public void defaultEmbed(final Embed builder) {
         builder
-            .addField("Packet Log", toggleStr(CONFIG.debug.packetLog.enabled), false)
-            .addField("Client Packet Log", toggleStr(CONFIG.debug.packetLog.clientPacketLog.received), false)
-            .addField("Server Packet Log", toggleStr(CONFIG.debug.packetLog.serverPacketLog.received), false)
-            .addField("Packet Log Filter", CONFIG.debug.packetLog.packetFilter, false)
-            .addField("Kick Disconnect", toggleStr(CONFIG.debug.kickDisconnect), false)
-            .addField("Debug Logs", toggleStr(CONFIG.debug.debugLogs), false)
-            .addField("Terminal Debug Logs", toggleStr(CONFIG.debug.terminalDebugLogs), false)
-            .addField("Chunk Cache Fullbright", toggleStr(CONFIG.debug.server.cache.fullbrightChunkBlocklight), false)
-            .addField("Default Client Render Distance", CONFIG.client.defaultClientRenderDistance, false)
+            .addField("Packet Log", toggleStr(CONFIG.debug.packetLog.enabled))
+            .addField("Client Packet Log", toggleStr(CONFIG.debug.packetLog.clientPacketLog.received))
+            .addField("Server Packet Log", toggleStr(CONFIG.debug.packetLog.serverPacketLog.received))
+            .addField("Packet Log Filter", CONFIG.debug.packetLog.packetFilter)
+            .addField("Kick Disconnect", toggleStr(CONFIG.debug.kickDisconnect))
+            .addField("Debug Logs", toggleStr(CONFIG.debug.debugLogs))
+            .addField("Terminal Debug Logs", toggleStr(CONFIG.debug.terminalDebugLogs))
+            .addField("Chunk Cache Fullbright", toggleStr(CONFIG.debug.server.cache.fullbrightChunkBlocklight))
+            .addField("Default Client Render Distance", CONFIG.client.defaultClientRenderDistance)
+            .addField("Lock File", toggleStr(CONFIG.debug.lockFile))
             .primaryColor();
     }
 }

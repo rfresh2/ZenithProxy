@@ -598,6 +598,7 @@ public final class Config {
         public boolean debugLogs = false;
         public boolean terminalDebugLogs = false;
         public boolean inventorySyncOnLogin = false;
+        public boolean lockFile = true;
 
         public static final class PacketLog {
             public boolean enabled = false;
