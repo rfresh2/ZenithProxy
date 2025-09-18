@@ -10,7 +10,7 @@ group = "com.zenith"
 version = "1.21.4"
 
 val javaReleaseVersion = 21
-val javaVersion = JavaLanguageVersion.of(24)
+val javaVersion = JavaLanguageVersion.of(25)
 val javaLauncherProvider = javaToolchains.launcherFor { languageVersion = javaVersion }
 java {
     toolchain { languageVersion = javaVersion }
@@ -125,12 +125,10 @@ tasks {
         workingDir = layout.projectDirectory.dir("run").asFile
         classpath = sourceSets.main.get().runtimeClasspath
         mainClass.set("com.zenith.Proxy")
-        val args = mutableListOf("-Xmx300m", "-XX:+UseG1GC")
-        if (javaLauncher.get().metadata.languageVersion.asInt() == 24)
-            args.addAll(listOf(
-                "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCompactObjectHeaders",
-                "--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow"
-            ))
+        val args = listOf(
+			"-Xmx300m", "-XX:+UseG1GC", "-XX:+UseCompactObjectHeaders",
+			"--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow"
+		)
         jvmArgs = args
         standardInput = System.`in`
         environment("ZENITH_DEV", "true")
@@ -221,12 +219,12 @@ graalvmNative {
                 "-H:+CompactingOldGen",
                 "-H:+TrackPrimitiveValues",
                 "-H:+UsePredicates",
-//                "--emit build-report",
+                "--future-defaults=all",
                 "-R:MaxHeapSize=200m",
                 "-march=x86-64-v3",
                 "--gc=serial",
                 "-J-XX:MaxRAMPercentage=90",
-                "--install-exit-handlers",
+				"--enable-sbom=false",
 //                "--enable-monitoring=nmt,jfr",
                 "-J--enable-native-access=ALL-UNNAMED",
                 "-J--sun-misc-unsafe-memory-access=allow",
@@ -244,17 +242,21 @@ graalvmNative {
                 "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl", // fix for windows builds, exception when doing srv lookups with netty
             )
             val pgoPath = providers.environmentVariable("GRAALVM_PGO_PATH").orNull
+			val pgoInstrument = providers.environmentVariable("GRAALVM_PGO_INSTRUMENT").orNull
+			val trace = providers.environmentVariable("GRAALVM_NATIVE_IMAGE_TRACE").orNull
             if (pgoPath != null) {
                 println("Using PGO profile: $pgoPath")
                 buildArgs.add("--pgo=$pgoPath")
                 buildArgs.add("-H:+PGOPrintProfileQuality")
             } else {
-                val pgoInstrument = providers.environmentVariable("GRAALVM_PGO_INSTRUMENT").orNull
                 if (pgoInstrument != null) {
                     println("Instrumenting PGO")
                     buildArgs.add("--pgo-instrument")
                     buildArgs.add("-R:ProfilesDumpFile=profile.iprof")
-                }
+                } else if (trace != null) {
+					println("Enabling tracing agent")
+					buildArgs.add("-H:Preserve=all")
+				}
             }
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }

@@ -35,3 +35,5 @@ dataGenerator/run
 buildSrc/.gradle
 buildSrc/.kotlin
 buildSrc/build
+.python-version
+uv.lock
