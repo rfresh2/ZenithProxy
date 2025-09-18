@@ -27,6 +27,7 @@ import com.zenith.network.server.handler.spectator.incoming.movement.PlayerPosit
 import com.zenith.network.server.handler.spectator.incoming.movement.PlayerRotationSpectatorHandler;
 import com.zenith.network.server.handler.spectator.outgoing.*;
 import com.zenith.network.server.handler.spectator.postoutgoing.LoginSpectatorPostHandler;
+import org.geysermc.mcprotocollib.protocol.codec.MinecraftPacket;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.*;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundClientInformationPacket;
@@ -66,12 +67,34 @@ import org.geysermc.mcprotocollib.protocol.packet.status.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.status.serverbound.ServerboundPingRequestPacket;
 import org.geysermc.mcprotocollib.protocol.packet.status.serverbound.ServerboundStatusRequestPacket;
 
+import java.util.Set;
+
 import static com.zenith.Globals.*;
 
 public final class PacketCodecRegistries {
     private PacketCodecRegistries() {}
     public static final CodecRegistry CLIENT_REGISTRY = new CodecRegistry("Client Handlers");
     public static final CodecRegistry SERVER_REGISTRY = new CodecRegistry("Server Handlers");
+    /**
+     * Packets that are not forwarded from zenith client
+     */
+    public static final Set<Class<? extends MinecraftPacket>> SPECTATOR_PACKET_FILTER = Set.of(
+        ClientboundContainerClosePacket.class,
+        ClientboundContainerSetContentPacket.class,
+        ClientboundContainerSetDataPacket.class,
+        ClientboundContainerSetSlotPacket.class,
+        ClientboundHorseScreenOpenPacket.class,
+        ClientboundMoveVehiclePacket.class,
+        ClientboundOpenBookPacket.class,
+        ClientboundOpenScreenPacket.class,
+        ClientboundOpenSignEditorPacket.class,
+        ClientboundPlaceGhostRecipePacket.class,
+        ClientboundPlayerAbilitiesPacket.class,
+        ClientboundPlayerPositionPacket.class,
+        ClientboundSetHeldSlotPacket.class,
+        ClientboundSetExperiencePacket.class,
+        ClientboundSetHealthPacket.class
+    );
 
     static {
         final PacketHandlerCodec CLIENT_CODEC = PacketHandlerCodec.clientBuilder()
@@ -255,21 +278,7 @@ public final class PacketCodecRegistries {
                 .inbound(ServerboundCommandSuggestionPacket.class, new CommandSuggestionSpectatorHandler())
                 .inbound(ServerboundChatCommandSignedPacket.class, new SignedChatCommandSpectatorHandler())
                 .outbound(ClientboundCommandsPacket.class, new ClientCommandsSpectatorOutgoingHandler())
-                .outbound(ClientboundContainerClosePacket.class, new ContainerCloseSpectatorOutgoingHandler())
-                .outbound(ClientboundContainerSetContentPacket.class, new ContainerSetContentSpectatorOutgoingHandler())
-                .outbound(ClientboundPlaceGhostRecipePacket.class, new PlaceGhostRecipeSpectatorOutgoingHandler())
-                .outbound(ClientboundOpenScreenPacket.class, new OpenScreenSpectatorOutgoingHandler())
-                .outbound(ClientboundOpenSignEditorPacket.class, new OpenSignEditorSpectatorOutgoingHandler())
-                .outbound(ClientboundSetHeldSlotPacket.class, new SetCarriedItemSpectatorOutgoingHandler())
-                .outbound(ClientboundSetHealthPacket.class, new SetHealthSpectatorOutgoingHandler())
-                .outbound(ClientboundPlayerPositionPacket.class, new PlayerPositionSpectatorOutgoingHandler())
-                .outbound(ClientboundSetExperiencePacket.class, new SetExperienceSpectatorOutgoingHandler())
-                .outbound(ClientboundOpenBookPacket.class, new OpenBookSpectatorOutgoingHandler())
-                .outbound(ClientboundContainerSetSlotPacket.class, new ContainerSetSlotSpectatorOutgoingHandler())
                 .outbound(ClientboundGameEventPacket.class, new GameEventSpectatorOutgoingHandler())
-                .outbound(ClientboundMoveVehiclePacket.class, new MoveVehicleSpectatorOutgoingHandler())
-                .outbound(ClientboundHorseScreenOpenPacket.class, new HorseScreenOpenSpectatorOutgoingHandler())
-                .outbound(ClientboundContainerSetDataPacket.class, new ContainerSetDataSpectatorOutgoingHandler())
                 .outbound(ClientboundPlayerAbilitiesPacket.class, new PlayerAbilitiesSpectatorOutgoingHandler())
                 .outbound(ClientboundRespawnPacket.class, new RespawnSpectatorOutgoingPacket())
                 .outbound(ClientboundStartConfigurationPacket.class, new StartConfigurationSpectatorOutgoingHandler())

@@ -98,6 +98,7 @@ public class ClientSession extends TcpClientSession {
                 for (int i = 0; i < connections.length; i++) {
                     var connection = connections[i];
                     if (state == ProtocolState.CONFIGURATION && !connection.isConfigured()) continue;
+                    if (connection.isSpectator() && PacketCodecRegistries.SPECTATOR_PACKET_FILTER.contains(p.getClass())) continue;
                     connection.sendAsync(p);
                 }
             }
