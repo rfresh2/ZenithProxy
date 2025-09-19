@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           java-version: '25'
-          distribution: 'corretto'
+          distribution: 'temurin'
 
       - name: Elevate wrapper permissions
         run: chmod +x ./gradlew
