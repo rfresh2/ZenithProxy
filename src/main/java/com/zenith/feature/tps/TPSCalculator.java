@@ -1,57 +1,65 @@
 package com.zenith.feature.tps;
 
 import com.google.common.primitives.Doubles;
+import com.zenith.Proxy;
 import com.zenith.event.client.ClientConnectEvent;
+import com.zenith.event.client.ClientTickEvent;
+import com.zenith.util.struct.CircularFifoQueue;
+import lombok.Locked;
 
-import java.util.Arrays;
+import java.time.Duration;
 
+import static com.github.rfresh2.EventConsumer.of;
+import static com.zenith.Globals.CACHE;
 import static com.zenith.Globals.EVENT_BUS;
 
 public class TPSCalculator {
 
-    private static final int TICK_RATES_SIZE = 60; // 1 sample per second - so 1 minute
-    // circularly written array
-    private final double[] tickRates = new double[TICK_RATES_SIZE];
-    private int nextTickIndex = 0;
-    private long timeSinceLastTimeUpdate = -1L;
+    private final CircularFifoQueue<Double> tickRates;
+    private long prevWorldTimeUpdate = -1;
 
-    public TPSCalculator() {
-        reset();
-        // calculators must always be reused
-        // beware: event sub is never unsubbed
-        EVENT_BUS.subscribe(this, ClientConnectEvent.class, (e) -> reset());
+    /**
+     * Instances of this class will never be garbage collected automatically
+     *
+     * If you want to dispose of it, you must unsubscribe it from the event bus manually
+     */
+    public TPSCalculator(int tpsBufferSize) {
+        tickRates = new CircularFifoQueue<>(tpsBufferSize);
+        EVENT_BUS.subscribe(this,
+            of(ClientConnectEvent.class, (e) -> reset()),
+            of(ClientTickEvent.class, this::onTick)
+        );
     }
 
-    // expected to be received once per second by the mc server
-    public void handleTimeUpdate() {
-        if (timeSinceLastTimeUpdate != -1L) {
-            final double timeElapsed = (System.nanoTime() - timeSinceLastTimeUpdate) / 1E9;
-            final double tps = Doubles.constrainToRange(20.0 / timeElapsed, 0.0, 20.0);
-            synchronized (tickRates) {
-                tickRates[nextTickIndex] = tps;
-                if (++nextTickIndex >= tickRates.length) nextTickIndex = 0;
-            }
+    @Locked
+    private void onTick(ClientTickEvent event) {
+        if (!Proxy.getInstance().isOnlineForAtLeastDuration(Duration.ofSeconds(1))) return;
+        var worldTimeData = CACHE.getChunkCache().getWorldTimeData();
+        long lastUpdate = worldTimeData.getLastUpdate();
+        if (prevWorldTimeUpdate == -1) {
+            prevWorldTimeUpdate = lastUpdate;
+            return;
         }
-        timeSinceLastTimeUpdate = System.nanoTime();
+        if (prevWorldTimeUpdate == lastUpdate) return;
+        double timeElapsed = lastUpdate - prevWorldTimeUpdate;
+        double tps = Doubles.constrainToRange(20.0 / (timeElapsed / 1000.0), 0.0, 20.0);
+        tickRates.add(tps);
+        prevWorldTimeUpdate = lastUpdate;
     }
 
+    @Locked
     public void reset() {
-        synchronized (tickRates) {
-            // fill with 20.0 tps by default
-            Arrays.fill(tickRates, 20.0);
-            nextTickIndex = 0;
-            timeSinceLastTimeUpdate = -1L;
-        }
+        tickRates.clear();
+        prevWorldTimeUpdate = -1;
     }
 
+    @Locked
     private double getTickRateAverage() {
-        synchronized (tickRates) {
-            double sum = 0f;
-            for (int i = 0; i < tickRates.length; i++) {
-                sum += tickRates[i];
-            }
-            return sum / tickRates.length;
+        double sum = 0f;
+        for (var d : tickRates) {
+            sum += d;
         }
+        return sum / tickRates.size();
     }
 
     public String getTPS() {
