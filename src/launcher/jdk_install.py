@@ -39,7 +39,7 @@ def get_java_home_version():
 
 def install_java():
     print("Installing Java to:", _JDK_DIR)
-    install_dir = jdk.install("25", path=_JDK_DIR)
+    install_dir = jdk.install("25", path=_JDK_DIR, vendor="Corretto")
     print("Java installed successfully to:", install_dir)
 
 
