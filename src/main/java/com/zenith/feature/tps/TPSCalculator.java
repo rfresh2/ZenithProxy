@@ -55,6 +55,7 @@ public class TPSCalculator {
 
     @Locked
     private double getTickRateAverage() {
+        if (tickRates.isEmpty()) return 20.0;
         double sum = 0f;
         for (var d : tickRates) {
             sum += d;
