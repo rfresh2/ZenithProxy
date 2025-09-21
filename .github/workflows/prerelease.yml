@@ -51,6 +51,7 @@ jobs:
         with:
           name: ZenithProxy-java
           path: build/libs/ZenithProxy.jar
+          if-no-files-found: error
 
       - name: Download GraalVM Profile
         run: |
@@ -75,6 +76,7 @@ jobs:
         with:
           name: ZenithProxy-linux
           path: ZenithProxy.zip
+          if-no-files-found: error
 
       - name: Publish Maven Artifact Snapshot
         env:

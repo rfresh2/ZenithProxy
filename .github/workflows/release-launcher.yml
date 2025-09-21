@@ -42,7 +42,7 @@ jobs:
 
       - name: Build launcher
         run: >
-          pyinstaller --specpath ./build 
+          pyinstaller --specpath ./build
           -p ./src/launcher --onefile --noconfirm
           -i ../src/launcher/icon.ico
           ./src/launcher/__main__.py
@@ -60,6 +60,7 @@ jobs:
         with:
           name: ${{ matrix.artifact-name }}
           path: dist/ZenithProxy-${{ matrix.artifact-name }}.zip
+          if-no-files-found: error
 
       - name: Get Binary Hash
         run: ${{ matrix.sha1-command }} > ZenithProxy-${{ matrix.artifact-name }}.sha1
@@ -69,6 +70,7 @@ jobs:
         with:
           name: ${{ matrix.artifact-name }}.sha1
           path: ZenithProxy-${{ matrix.artifact-name }}.sha1
+          if-no-files-found: error
 
   # todo: probably possible to unify this with the mac matrix somehow
   build-ubuntu20-x64:
@@ -102,7 +104,7 @@ jobs:
 
       - name: Build launcher
         run: >
-          pyinstaller --specpath ./build 
+          pyinstaller --specpath ./build
           -p ./src/launcher --onefile --noconfirm
           -i ../src/launcher/icon.ico
           ./src/launcher/__main__.py
@@ -120,6 +122,7 @@ jobs:
         with:
           name: ${{ matrix.artifact-name }}
           path: dist/ZenithProxy-${{ matrix.artifact-name }}.zip
+          if-no-files-found: error
 
       - name: Get Binary Hash
         run: ${{ matrix.sha1-command }} > ZenithProxy-${{ matrix.artifact-name }}.sha1
@@ -129,6 +132,7 @@ jobs:
         with:
           name: ${{ matrix.artifact-name }}.sha1
           path: ZenithProxy-${{ matrix.artifact-name }}.sha1
+          if-no-files-found: error
 
   build-linux-aarch64:
     runs-on: 'ubuntu-latest'
@@ -168,6 +172,7 @@ jobs:
         with:
           name: launcher-linux-aarch64
           path: dist/ZenithProxy-launcher-linux-aarch64.zip
+          if-no-files-found: error
 
       - name: Get Binary Hash
         run: sha1sum -b dist/launch | cut -d" " -f 1 > ZenithProxy-launcher-linux-aarch64.sha1
@@ -177,6 +182,7 @@ jobs:
         with:
           name: launcher-linux-aarch64.sha1
           path: ZenithProxy-launcher-linux-aarch64.sha1
+          if-no-files-found: error
 
   package-python:
     runs-on: ubuntu-latest
@@ -201,6 +207,7 @@ jobs:
         with:
           name: launcher-python
           path: ZenithProxy-launcher-python.zip
+          if-no-files-found: error
 
       - name: Get Binary Hash
         run: sha1sum -b launcher-py.zip | cut -d" " -f 1 > ZenithProxy-launcher-python.sha1
@@ -210,6 +217,7 @@ jobs:
         with:
           name: launcher-python.sha1
           path: ZenithProxy-launcher-python.sha1
+          if-no-files-found: error
 
   # same as python package but with a custom bat script that bootstraps the python interpreter
   package-windows-python:
@@ -234,6 +242,7 @@ jobs:
         with:
           name: launcher-windows-python-amd64
           path: ZenithProxy-launcher-windows-python-amd64.zip
+          if-no-files-found: error
 
       - name: Get Binary Hash
         run: sha1sum -b launcher-py.zip | cut -d" " -f 1 > ZenithProxy-launcher-windows-python-amd64.sha1
@@ -243,6 +252,7 @@ jobs:
         with:
           name: launcher-windows-python-amd64.sha1
           path: ZenithProxy-launcher-windows-python-amd64.sha1
+          if-no-files-found: error
 
   release-artifacts:
     needs:
@@ -268,6 +278,7 @@ jobs:
         with:
           name: hashes
           path: hashes.txt
+          if-no-files-found: error
 
       - name: Publish Release Artifacts
         uses: ncipollo/release-action@v1

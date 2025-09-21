@@ -30,13 +30,14 @@ jobs:
           dependency-graph: generate-and-submit
 
       - name: Build ZenithProxy Java
-        run: ./gradlew build
+        run: ./gradlew build --no-build-cache
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: commands
           path: build/Commands.md
+          if-no-files-found: error
 
   edit:
     runs-on: ubuntu-latest
