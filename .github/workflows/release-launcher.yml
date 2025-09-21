@@ -8,6 +8,26 @@ env:
   pyinstaller_version: "6.11.1"
 
 jobs:
+  backup-existing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download current launcher files
+        uses: robinraju/release-downloader@v1
+        with:
+          repository: ${{ github.repository }}
+          tag: launcher-v3
+          fileName: "*"
+          out-file-path: launcher-assets
+
+      - name: Zip launcher assets
+        run: zip -j -r launcher-assets.zip launcher-assets/
+
+      - name: Upload assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: existing-launcher-assets
+          path: launcher-assets.zip
+          if-no-files-found: error
   build-mac:
     runs-on: ${{ matrix.os }}
     strategy:
