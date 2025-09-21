@@ -38,3 +38,4 @@ jobs:
         with:
           name: ZenithProxy-java
           path: build/libs/ZenithProxy.jar
+          if-no-files-found: error

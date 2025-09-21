@@ -37,6 +37,7 @@ jobs:
         with:
           name: commands
           path: build/Commands.md
+          if-no-files-found: error
 
   edit:
     runs-on: ubuntu-latest

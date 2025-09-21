@@ -67,3 +67,4 @@ jobs:
         with:
           name: linux-native
           path: ZenithProxy.zip
+          if-no-files-found: error
