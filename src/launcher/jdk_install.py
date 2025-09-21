@@ -39,7 +39,7 @@ def get_java_home_version():
 
 def install_java():
     print("Installing Java to:", _JDK_DIR)
-    install_dir = jdk.install("21", path=_JDK_DIR)
+    install_dir = jdk.install("25", path=_JDK_DIR, vendor="Corretto")
     print("Java installed successfully to:", install_dir)
 
 
@@ -48,13 +48,11 @@ def search_for_java_in_dir(search_path, min_version=21):
     java_file_extension = ".exe" if launch_platform.get_platform_os() == launch_platform.OperatingSystem.WINDOWS else ""
     if not os.path.exists(search_path) or not os.path.isdir(search_path):
         return output
+    # check if this has bin/java(.exe)
     for folder in os.listdir(search_path):
-        if folder.__contains__(str(min_version)):
-            # check if this has bin/java(.exe)
-            # its optional on windows to include the .exe in the subprocess call, but we need to check it if its present
-            java_path = os.path.join(search_path, folder, "bin", "java" + java_file_extension)
-            if os.path.exists(java_path):
-                output.append(java_path)
+        java_path = os.path.join(search_path, folder, "bin", "java" + java_file_extension)
+        if os.path.exists(java_path):
+            output.append(java_path)
     return output
 
 

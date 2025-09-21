@@ -426,7 +426,7 @@ public class CoordObfuscation extends Module {
         // todo: find any cases where zenith is sending the teleport after the session is spawned
         if (teleportId == session.getSpawnTeleportId() && !session.isSpawned()) return;
         // spectator position resync see SpectatorSync$syncSpectatorPositionToEntity
-        if (teleportId == session.getSpawnTeleportId() && session.isSpectator() && session.isAllowSpectatorServerPlayerPosRotate()) return;
+        if (teleportId == session.getSpawnTeleportId() && session.isSpectator()) return;
         var tp = preTeleportPositionCache.getIfPresent(teleportId);
         if (tp == null) {
             warn("Unexpected teleport id {} for {}, known teleports: {}",

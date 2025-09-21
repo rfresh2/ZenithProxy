@@ -158,6 +158,7 @@ public final class Config {
             public final Waypoints waypoints = new Waypoints();
             public final AutoDrop autoDrop = new AutoDrop();
             public String whisperCommand = "msg";
+            public int tpsBufferSize = 20;
 
             public static final class Waypoints {
                 public ArrayList<Waypoint> waypoints = new ArrayList<>();
@@ -598,6 +599,7 @@ public final class Config {
         public boolean debugLogs = false;
         public boolean terminalDebugLogs = false;
         public boolean inventorySyncOnLogin = false;
+        public boolean lockFile = true;
 
         public static final class PacketLog {
             public boolean enabled = false;

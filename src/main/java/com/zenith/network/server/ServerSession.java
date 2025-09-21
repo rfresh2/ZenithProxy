@@ -100,8 +100,6 @@ public class ServerSession extends TcpServerSession {
     protected boolean spawned = false;
     // default spawn teleport id
     protected final int spawnTeleportId = 1234567890;
-    // cancel outbound packets until we have received the protocol switch ack
-    protected boolean allowSpectatorServerPlayerPosRotate = true;
     // allow spectator to set their camera to client
     // need to persist state to allow them in and out of this
     protected Entity cameraTarget = null;

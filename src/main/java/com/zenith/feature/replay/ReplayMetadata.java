@@ -1,5 +1,6 @@
 package com.zenith.feature.replay;
 
+import com.zenith.Globals;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -42,4 +43,10 @@ public class ReplayMetadata {
      * Array of UUIDs of all players which can be seen in this replay.
      */
     private List<String> players = new ArrayList<>();
+
+    private String zenithProxyVersion = Globals.getExecutableReleaseVersion();
+
+    private String zenithProxyCommit = Globals.getExecutableCommit();
+
+    private String zenithProxyMCVersion = Globals.getMCVersionFile();
 }

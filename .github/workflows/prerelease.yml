@@ -18,7 +18,7 @@ jobs:
       - name: Setup GraalVM
         uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '24'
+          java-version: '25'
           distribution: 'graalvm'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -97,7 +97,7 @@ jobs:
         env:
           TAG_NAME: ${{ github.ref_name }}
         run: |
-          j_tag="$(sed 's/\+/\+java./' <<< $TAG_NAME)" 
+          j_tag="$(sed 's/\+/\+java./' <<< $TAG_NAME)"
           echo "JAVA_TAG=$j_tag" >> "$GITHUB_ENV"
           l_tag="$(sed 's/\+/\+linux./' <<< $TAG_NAME)"
           echo "LINUX_TAG=$l_tag" >> "$GITHUB_ENV"

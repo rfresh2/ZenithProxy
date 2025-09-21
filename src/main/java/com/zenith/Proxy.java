@@ -51,14 +51,12 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -91,14 +89,15 @@ public class Proxy {
     private boolean inQueue = false;
     private boolean didQueueSkip = false;
     private int queuePosition = 0;
-    @Setter @Nullable private Instant connectTime;
+    @Nullable private Instant connectTime;
     private Instant disconnectTime = Instant.now();
     private OptionalLong prevOnlineSeconds = OptionalLong.empty();
     private Optional<Boolean> isPrio = Optional.empty();
-    @Getter private final AtomicBoolean loggingIn = new AtomicBoolean(false);
+    private final AtomicBoolean loggingIn = new AtomicBoolean(false);
     @Setter @NonNull private AutoUpdater autoUpdater = NoOpAutoUpdater.INSTANCE;
     private LanBroadcaster lanBroadcaster;
     private TcpConnectionManager tcpManager;
+    private FileLock fileLock;
 
     public static void main(String... args) {
         Locale.setDefault(Locale.ENGLISH);
@@ -155,6 +154,7 @@ public class Proxy {
             if (inDevEnv()) CONFIG.debug.debugLogs = true;
             if (CONFIG.debug.clearOldLogs) EXECUTOR.schedule(Proxy::clearOldLogs, 10L, TimeUnit.SECONDS);
             if (CONFIG.interactiveTerminal.enable) TERMINAL.start();
+            if (CONFIG.debug.lockFile) tryOpenLockFile();
             MODULE.init();
             this.tcpManager = new TcpConnectionManager();
             if (CONFIG.database.enabled) {
@@ -216,9 +216,9 @@ public class Proxy {
                         .description(
                             """
                             You are currently using a ZenithProxy prerelease
-                            
+
                             Prereleases include experiments that may contain bugs and are not always updated with fixes
-                            
+
                             Switch to a stable release with the `channel` command
                             """));
             }
@@ -251,6 +251,48 @@ public class Proxy {
         }
     }
 
+    private void tryOpenLockFile() {
+        var lockFile = new File(".lock");
+        if (!lockFile.exists()) {
+            try {
+                lockFile.createNewFile();
+            } catch (final Exception e) {
+                DEFAULT_LOG.debug("Error creating lock file", e);
+                return;
+            }
+        }
+        try {
+            var fos = new FileOutputStream(lockFile);
+            fileLock = fos.getChannel().tryLock();
+            if (fileLock == null) {
+                var isTmux = System.getenv("TMUX") != null;
+                var isScreen = Optional.ofNullable(System.getenv("TERM")).filter("screen"::equals).isPresent();
+                var helpText = """
+                   Close other ZenithProxy instances open in the current directory: `%s`
+                   """.formatted(lockFile.getAbsoluteFile().getParent());
+                if (isTmux || isScreen) {
+                    var multiplexerName = isTmux ? "tmux" : "screen";
+                    var cheatSheet = isTmux ? "https://tmuxcheatsheet.com" : "https://devhints.io/screen";
+                    helpText += """
+                        Most likely you have more than one %s session open.
+
+                        For %s help: %s
+
+                        Close other %s sessions open in the current directory
+                        """.formatted(multiplexerName, multiplexerName, cheatSheet, multiplexerName);
+                }
+                DISCORD.sendEmbedMessage(Embed.builder()
+                    .title("Error: Multiple ZenithProxy Instances Open")
+                    .description(helpText)
+                    .errorColor());
+                Wait.wait(5);
+                System.exit(1);
+            }
+        } catch (Exception e) {
+            // fall through
+        }
+    }
+
     private void serverHealthCheck() {
         if (!CONFIG.server.enabled || !CONFIG.server.healthCheck) return;
         if (server != null && server.isListening()) return;
@@ -260,9 +302,9 @@ public class Proxy {
             if (server == null || !server.isListening()) {
                 var errorMessage = """
                     The ZenithProxy MC server was unable to start correctly.
-                    
+
                     Most likely you have two or more ZenithProxy instance running on the same configured port: %s.
-                    
+
                     Shut down duplicate instances, or change the configured port: `serverConnection port <port>`
                     """.formatted(CONFIG.server.bind.port);
                 DISCORD.sendEmbedMessage(
@@ -292,13 +334,13 @@ public class Proxy {
                     SERVER_LOG.error(
                         """
                         Unable to ping the configured `proxyIP`: {}
-                        
+
                         If you are actually able to connect to ZenithProxy you can disable this test: `connectionTest testOnStart off`
-                        
+
                         This test is most likely failing due to a firewall needing to be disabled.
-                        
+
                         If the `proxyIP` is incorrect, set `serverConnection proxyIP <ip>` with the correct IP.
-                        
+
                         For instructions on how to disable the firewall consult with your VPS provider. Each provider varies in steps and what word they refer to firewalls with.
                         """, address);
                 }
@@ -595,7 +637,7 @@ public class Proxy {
                         AUTH_LOG.error("""
                           [Help]
                           Log into the account with the vanilla MC launcher and join a server. Then try again with ZenithProxy.
-                          
+
                           Another possible cause is your microsoft account needs to have a password set. Meaning are using email codes to log in instead of passwords.
                           """);
                     }

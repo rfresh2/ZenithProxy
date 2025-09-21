@@ -161,7 +161,12 @@ public class ReplayRecording implements Closeable {
         }
     }
 
-    private synchronized void writeToFile(final long time, final MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
+    private synchronized void writeToFile(final long time, MinecraftPacket packet, final Session session, final ProtocolState protocolState) {
+        if (!CONFIG.client.extra.replayMod.featureFlags) {
+            if (packet instanceof ClientboundUpdateEnabledFeaturesPacket) {
+                packet = new ClientboundUpdateEnabledFeaturesPacket(new String[]{"minecraft:vanilla"});
+            }
+        }
         int t = time == 0 ? 0 : (int) (time - startT);
         if (t == 0) startT = System.currentTimeMillis();
         final ByteBuf packetBuf = ALLOC.heapBuffer();
@@ -251,14 +256,7 @@ public class ReplayRecording implements Closeable {
                     packet2 -> writeToFile(System.currentTimeMillis(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION),
                     Proxy.getInstance().getClient());
                 CACHE.getConfigurationCache().getConfigurationPackets(
-                    packet2 -> {
-                        if (!CONFIG.client.extra.replayMod.featureFlags) {
-                            if (packet2 instanceof ClientboundUpdateEnabledFeaturesPacket) {
-                                packet2 = new ClientboundUpdateEnabledFeaturesPacket(new String[]{"minecraft:vanilla"});
-                            }
-                        }
-                        writeToFile(System.currentTimeMillis(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
-                    },
+                    packet2 -> writeToFile(System.currentTimeMillis(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION),
                     Proxy.getInstance().getClient());
                 writeToFile(System.currentTimeMillis(), new ClientboundCustomPayloadPacket(Key.key("minecraft:brand"), CACHE.getChunkCache().getServerBrand()), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
                 writeToFile(System.currentTimeMillis(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);

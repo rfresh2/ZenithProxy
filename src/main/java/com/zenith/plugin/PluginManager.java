@@ -8,10 +8,7 @@ import lombok.SneakyThrows;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -75,12 +72,8 @@ public class PluginManager {
     public void initialize() {
         if (initialized.compareAndSet(false, true)) {
             ensurePluginsFolderExists();
-            if (!ImageInfo.inImageCode()) {
-                preLoadPlugins();
-                loadPlugins();
-            } else if (ImageInfo.inImageRuntimeCode() && LAUNCH_CONFIG.release_channel.contains("linux")) {
-                linuxChannelIncompatibilityWarning();
-            }
+            preLoadPlugins();
+            loadPlugins();
         }
     }
 
@@ -91,7 +84,7 @@ public class PluginManager {
             PLUGIN_LOG.warn("""
                 Plugins are not supported on the `linux` release channel.
                 Detected {} potential plugin jars in the plugins directory.
-                
+
                 To use plugins, switch to the `java` channel: `channel set java <mcVersion>`
                 """, potentialPluginCount);
         }
@@ -108,6 +101,12 @@ public class PluginManager {
     }
 
     private void preLoadPlugins() {
+        preLoadPluginsFromSystemClasspath();
+        if (ImageInfo.inImageRuntimeCode()) {
+            linuxChannelIncompatibilityWarning();
+            return;
+        }
+        if (ImageInfo.inAgentRuntime()) return;
         var potentialPlugins = findPotentialPluginJars();
         for (var jar : potentialPlugins) {
             try {
@@ -125,6 +124,24 @@ public class PluginManager {
             } catch (Throwable e) {
                 PLUGIN_LOG.error("Error loading plugin: {} : {}", instance.getKey(), instance.getValue().getJarPath(), e);
             }
+        }
+    }
+
+    private void preLoadPluginsFromSystemClasspath() {
+        try {
+            // must be called before plugin jar discovery where classloaders are opened
+            var resources = ClassLoader.getSystemClassLoader().getResources("zenithproxy.plugin.json");
+            while (resources.hasMoreElements()) {
+                var resourceUrl = resources.nextElement();
+                try (var in = resourceUrl.openStream()) {
+                    var pluginInfo = readPluginInfo(in);
+                    preLoadPluginInstance(pluginInfo, Path.of(""), ClassLoader.getSystemClassLoader());
+                } catch (Exception e) {
+                    PLUGIN_LOG.error("Error loading classpath plugin: {}", resourceUrl.toString(), e);
+                }
+            }
+        } catch (Throwable e) {
+            PLUGIN_LOG.error("Error loading classpath plugins", e);
         }
     }
 
@@ -260,26 +277,31 @@ public class PluginManager {
     }
 
     @SneakyThrows
-    private PluginInfo readPluginInfo(URLClassLoader classLoader, String pluginJsonFileName) {
+    private PluginInfo readPluginInfo(ClassLoader classLoader, String pluginJsonFileName) {
         try (var stream = classLoader.getResourceAsStream(pluginJsonFileName)) {
             if (stream == null) {
                 throw new RuntimeException(pluginJsonFileName + " not found in jar");
             }
-            var info = OBJECT_MAPPER.readValue(stream, PluginInfo.class);
-            requireNonNull(info.entrypoint(), "Entrypoint is null");
-            if (info.entrypoint().isBlank()) throw new RuntimeException("Invalid entrypoint");
-            requireNonNull(info.id(), "Plugin id is null");
-            if (info.id().isBlank()) throw new RuntimeException("Invalid plugin id");
-            if (!PluginInfo.ID_PATTERN.matcher(info.id()).matches()) {
-                throw new RuntimeException("Invalid plugin id: " + info.id());
-            }
-            requireNonNull(info.version(), "Plugin version is null");
-            requireNonNull(info.description(), "Plugin description is null");
-            requireNonNull(info.url(), "Plugin url is null");
-            requireNonNull(info.authors(), "Plugin authors is null");
-            requireNonNull(info.mcVersions(), "Plugin mcVersions is null");
-            return info;
+            return readPluginInfo(stream);
         }
+    }
+
+    @SneakyThrows
+    private PluginInfo readPluginInfo(InputStream stream) {
+        var info = OBJECT_MAPPER.readValue(stream, PluginInfo.class);
+        requireNonNull(info.entrypoint(), "Entrypoint is null");
+        if (info.entrypoint().isBlank()) throw new RuntimeException("Invalid entrypoint");
+        requireNonNull(info.id(), "Plugin id is null");
+        if (info.id().isBlank()) throw new RuntimeException("Invalid plugin id");
+        if (!PluginInfo.ID_PATTERN.matcher(info.id()).matches()) {
+            throw new RuntimeException("Invalid plugin id: " + info.id());
+        }
+        requireNonNull(info.version(), "Plugin version is null");
+        requireNonNull(info.description(), "Plugin description is null");
+        requireNonNull(info.url(), "Plugin url is null");
+        requireNonNull(info.authors(), "Plugin authors is null");
+        requireNonNull(info.mcVersions(), "Plugin mcVersions is null");
+        return info;
     }
 
     public synchronized <T> T registerConfig(String fileName, Class<T> clazz, ConfigSerializer serializer) {

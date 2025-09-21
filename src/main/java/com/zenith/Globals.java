@@ -228,7 +228,6 @@ public class Globals {
             ENTITY_DATA = new EntityDataManager();
             MAP_BLOCK_COLOR = new MapBlockColorManager();
             DATABASE = new DatabaseManager();
-            TPS = new TPSCalculator();
             MODULE = new ModuleManager();
             INPUTS = new InputManager();
             TERMINAL = new TerminalManager();
@@ -242,6 +241,7 @@ public class Globals {
             PLUGIN_MANAGER = new PluginManager();
             ConfigVerifier.verifyConfigs();
             PLAYER_LISTS.init(); // must be init after config
+            TPS = new TPSCalculator(CONFIG.client.extra.tpsBufferSize);
             BOT = new Bot();
             BARITONE = new Baritone();
             GUI = new InGameGuiManager();

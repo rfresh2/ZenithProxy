@@ -214,12 +214,11 @@ public class PathExecutor {
             ticksOnCurrent++;
             double predictedMovementFinishTicks = currentMovementOriginalCostEstimate + 100;
             if (ticksOnCurrent > predictedMovementFinishTicks) {
-                if (path.getGoal().isInGoal(movement.getDest()) && ctx.player().getInteractions().isDestroying(movement.getDest().x(), movement.getDest().y(), movement.getDest().z())) {
+                if (isMovementToBreakGoal(movement)) {
                     if (ticksOnCurrent > predictedMovementFinishTicks + (20 * 300)) {
-                        PATH_LOG.info("This movement: {} to goal has taken too long ({} ticks, expected {}" + 500 + "). Cancelling.",
+                        PATH_LOG.info("This movement: {} to break goal has taken too long ({} ticks). Cancelling.",
                             movement.getClass().getSimpleName(),
-                            ticksOnCurrent,
-                            predictedMovementFinishTicks);
+                            ticksOnCurrent);
                         PATH_LOG.debug("{}", movement);
                         cancel();
                         return true;
@@ -240,6 +239,16 @@ public class PathExecutor {
             }
         }
         return canCancel; // movement is in progress, but if it reports cancellable, PathingBehavior is good to cut onto the next path
+    }
+
+    private boolean isMovementToBreakGoal(Movement movement) {
+        if (!path.getGoal().isInGoal(movement.getDest())) return false;
+        for (var breakPos : movement.toBreak()) {
+            if (ctx.player().getInteractions().isDestroying(breakPos.x(), breakPos.y(), breakPos.z())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Pair<Double, BlockPos> closestPathPos(IPath path) {

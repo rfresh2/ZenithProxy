@@ -19,7 +19,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Set;
 
 @AutoService(Processor.class)
@@ -58,8 +57,8 @@ public class PluginAnnotationProcessor extends AbstractProcessor {
             TypeElement typeElement = (TypeElement) element;
             Name qualifiedName = typeElement.getQualifiedName();
 
-            if (Objects.equals(pluginClassFound, qualifiedName.toString())) {
-                if (!warnedAboutMultiplePlugins) {
+            if (pluginClassFound != null) {
+                if (!pluginClassFound.equals(qualifiedName.toString()) && !warnedAboutMultiplePlugins) {
                     environment.getMessager()
                         .printMessage(Diagnostic.Kind.WARNING, "UNSUPPORTED: Multiple Plugin classes found");
                     warnedAboutMultiplePlugins = true;

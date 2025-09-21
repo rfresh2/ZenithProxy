@@ -46,7 +46,6 @@ public final class SpectatorSync {
             .setZ(target.getZ())
             .setYaw(target.getYaw())
             .setPitch(target.getPitch());
-        spectConnection.setAllowSpectatorServerPlayerPosRotate(true);
         spectConnection.send(new ClientboundPlayerPositionPacket(
             spectConnection.getSpawnTeleportId(),
             spectConnection.getSpectatorPlayerCache().getX(),
@@ -58,7 +57,6 @@ public final class SpectatorSync {
             spectConnection.getSpectatorPlayerCache().getYaw(),
             spectConnection.getSpectatorPlayerCache().getPitch()
         ));
-        spectConnection.setAllowSpectatorServerPlayerPosRotate(false);
         updateSpectatorPosition(spectConnection);
         var connections = Proxy.getInstance().getActiveConnections().getArray();
         for (int i = 0; i < connections.length; i++) {
@@ -123,9 +121,7 @@ public final class SpectatorSync {
             .setWalkSpeed(0.1f)
             .setOpLevel(CACHE.getPlayerCache().getOpLevel())
             .setMaxPlayers(CACHE.getPlayerCache().getMaxPlayers());
-        session.setAllowSpectatorServerPlayerPosRotate(true);
         DataCache.sendCacheData(cacheSupplier.get(), session);
-        session.setAllowSpectatorServerPlayerPosRotate(false);
         session.sendAsync(session.getEntitySpawnPacket());
         session.sendAsync(session.getSelfEntityMetadataPacket());
         SpectatorPacketProvider.playerSpawn().forEach(session::sendAsync);

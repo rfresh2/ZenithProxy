@@ -12,7 +12,7 @@
 </p>
 
 
-Minecraft proxy and bot designed for 2b2t.org but also works on any server. 
+Minecraft proxy and bot designed for 2b2t.org but also works on any server.
 
 ZenithProxy is a MC bot with an integrated MC server that players can log into and control.
 
@@ -29,12 +29,12 @@ This project is also used for the [2b2t.vc API](https://api.2b2t.vc) and [Discor
 
     Players use a Minecraft client to connect to the Proxy Server as you would a normal MC server.
     The Proxy Client connects to a destination MC server (i.e. 2b2t.org).
-    The Player's packets to the Proxy Server get forwarded to the Proxy Client which 
+    The Player's packets to the Proxy Server get forwarded to the Proxy Client which
     forwards them to the destination MC server.
-    
+
     Player MC Client -> Proxy Server -> Proxy Client -> MC Server
-    
-    When no Player Client is connected the Proxy Client will act 
+
+    When no Player Client is connected the Proxy Client will act
     as a bot: moving around, chatting, etc.
 </details>
 
@@ -43,17 +43,17 @@ This project is also used for the [2b2t.vc API](https://api.2b2t.vc) and [Discor
 
     ZenithProxy does not use, depend on, or interact with the Minecraft client or server code.
     This means much greater opportunities for optimizing memory usage and performance.
-    
+
     But this also means existing MC mods or plugins cannot be used and must be
     reimplemented specifically for ZenithProxy.
 
     ZenithProxy acts primarily at the network packet layer. It can read/modify/cancel/send
     arbitrary packets in either direction at any time.
 
-    Using packet interception, the client's session and world state is cached and 
+    Using packet interception, the client's session and world state is cached and
     sent to players when they connect.
 
-    The cached world state is also used to simulate player movements, 
+    The cached world state is also used to simulate player movements,
     inventory actions, discord chat relay, and all features.
 </details>
 
@@ -81,7 +81,7 @@ This project is also used for the [2b2t.vc API](https://api.2b2t.vc) and [Discor
 
 ### System Requirements
 
-1. Linux, Windows, or Mac computer. 
+1. Linux, Windows, or Mac computer.
     * I recommend using a VPS (Virtual Private Server) from DigitalOcean (droplet)
 2. Java 21+ (auto-installed by ZenithProxy launcher)
 3. Minimum System specs:
@@ -108,7 +108,7 @@ This project is also used for the [2b2t.vc API](https://api.2b2t.vc) and [Discor
 2. Unzip the file.
 3. Run the launcher in a terminal:
    * Linux/Mac: `./launch`
-   * Python: `.\launch.bat` (Windows) or `./launch.sh` (Linux/Mac) 
+   * Python: `.\launch.bat` (Windows) or `./launch.sh` (Linux/Mac)
 
 <details>
     <summary>How do I download a file from a Linux terminal?</summary>
@@ -117,7 +117,7 @@ This project is also used for the [2b2t.vc API](https://api.2b2t.vc) and [Discor
 * Example: `wget https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-linux-amd64.zip`
 </details>
 
-<details> 
+<details>
 <summary>Recommended unzip tools</summary>
 
 * Windows: [7zip](https://www.7-zip.org/download.html)
@@ -147,7 +147,7 @@ This project is also used for the [2b2t.vc API](https://api.2b2t.vc) and [Discor
 
 See the [Linux Guide](https://github.com/rfresh2/ZenithProxy/wiki/Linux-Guide)
 
-I highly recommend using a terminal multiplexer - a program that manages terminal sessions. 
+I highly recommend using a terminal multiplexer - a program that manages terminal sessions.
 
 If you do not use one, **ZenithProxy will be killed after you exit your SSH session.**
 
@@ -213,7 +213,7 @@ Current limits are documented in [a discord channel](https://discord.com/channel
 
 I highly recommend using [Intellij](https://www.jetbrains.com/idea/) for building and running local development instances.
 
-Gradle will automatically install the required Java version for compiling (currently Java 24)
+Gradle will automatically install the required Java version for compiling (currently Java 25)
 
 Most useful gradle tasks:
 * `run` - Builds and runs a local dev instance
