@@ -1,4 +1,3 @@
-import errno
 import os
 import platform
 import socket
@@ -168,8 +167,5 @@ def check_port_in_use(port):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind(("localhost", port))
             return False
-    except socket.error as e:
-        if e.errno == errno.EADDRINUSE:
-            return True
-        else:
-            return False
+    except socket.error:
+        return False
