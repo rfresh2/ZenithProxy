@@ -4,6 +4,8 @@ import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.zenith.Proxy;
 import com.zenith.event.client.ClientConnectEvent;
 import com.zenith.event.client.ClientDisconnectEvent;
+import com.zenith.mc.biome.BiomeRegistry;
+import com.zenith.mc.block.BlockRegistry;
 import com.zenith.network.ClientPacketPingTask;
 import com.zenith.network.codec.PacketCodecRegistries;
 import com.zenith.util.ComponentSerializer;
@@ -22,6 +24,7 @@ import org.geysermc.mcprotocollib.network.tcp.TcpConnectionManager;
 import org.geysermc.mcprotocollib.protocol.MinecraftProtocol;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
+import org.geysermc.mcprotocollib.protocol.data.game.chunk.PalettedWorldState;
 import org.geysermc.mcprotocollib.protocol.data.handshake.HandshakeIntent;
 import org.geysermc.mcprotocollib.protocol.packet.handshake.serverbound.ClientIntentionPacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundHelloPacket;
@@ -53,6 +56,7 @@ public class ClientSession extends TcpClientSession {
     private final String accessToken;
     private int protocolVersionId;
     private static final ClientTickManager clientTickManager = new ClientTickManager();
+    private PalettedWorldState palettedWorldState = createPalettedWorldState(1);
 
     public ClientSession(String host, int port, String bindAddress, MinecraftProtocol protocol, ProxyInfo proxyInfo, TcpConnectionManager tcpManager) {
         super(host, port, bindAddress, 0, protocol, proxyInfo, tcpManager);
@@ -73,6 +77,24 @@ public class ClientSession extends TcpClientSession {
     public void setDisconnected(final boolean disconnected) {
         this.disconnected = disconnected;
         setOnline(false);
+    }
+
+    @Override
+    public PalettedWorldState getPalettedWorldState() {
+        return palettedWorldState;
+    }
+
+    public PalettedWorldState createPalettedWorldState(int sectionsCount) {
+        int defaultBiomeId = 0;
+        var plains = BiomeRegistry.PLAINS.get();
+        if (plains != null) defaultBiomeId = plains.id();
+        return new PalettedWorldState(
+            sectionsCount,
+            BLOCK_DATA.blockStateRegistrySize(),
+            BlockRegistry.AIR.minStateId(),
+            BiomeRegistry.REGISTRY.size(),
+            defaultBiomeId
+        );
     }
 
     @Override

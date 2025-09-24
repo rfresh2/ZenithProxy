@@ -133,8 +133,13 @@ public class ChunkCache implements CachedData {
             final var chunk = get(record.getX() >> 4, record.getZ() >> 4);
             if (chunk != null) {
                 var chunkSection = chunk.getChunkSection(record.getY());
-                if (chunkSection == null)
-                    chunkSection = new ChunkSection(0, DataPalette.createForChunk(), DataPalette.createForBiome());
+                if (chunkSection == null) {
+                    var palettedWorldState = Proxy.getInstance().getClient().getPalettedWorldState();
+                    chunkSection = new ChunkSection(0,
+                        DataPalette.createForChunk(palettedWorldState),
+                        DataPalette.createForBiome(palettedWorldState)
+                    );
+                }
                 // relative positions in the chunk
                 int relativeX = record.getX() & 15;
                 int relativeY = record.getY() & 15;
@@ -411,16 +416,18 @@ public class ChunkCache implements CachedData {
     }
 
     public int getSectionsCount() {
-        return this.getMaxSection() - this.getMinSection();
+        var dim = currentDimension;
+        return dim != null ? dim.sectionCount() : 1;
     }
 
     public int getMaxSection() {
-        return ((this.getMaxBuildHeight() - 1) >> 4) + 1;
+        var dim = currentDimension;
+        return dim != null ? dim.maxSection() : 1;
     }
 
     public int getMinSection() {
         var dim = currentDimension;
-        return dim != null ? dim.minY() >> 4 : 0;
+        return dim != null ? dim.minSection() : 0;
     }
 
     public int getMaxBuildHeight() {

@@ -26,7 +26,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.8.3"
+val mcplVersion = "1.21.8.4"
 dependencies {
     api("com.github.rfresh2:JDA:6.0.19") {
         exclude(group = "club.minnced")
@@ -75,9 +75,9 @@ dependencies {
     api("org.jline:jline-terminal-jni:3.30.6")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
-    api("org.postgresql:postgresql:42.7.7")
+    api("org.postgresql:postgresql:42.7.8")
     api("org.jdbi:jdbi3-postgres:3.49.5")
-    api("com.google.guava:guava:33.4.6-jre")
+    api("com.google.guava:guava:33.5.0-jre")
     api("ch.qos.logback:logback-classic:1.5.18")
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")

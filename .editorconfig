@@ -17,6 +17,10 @@ ij_smart_tabs = false
 ij_visual_guides =
 ij_wrap_on_typing = false
 
+[*.yml]
+indent_size = 2
+indent_style = space
+
 [*.java]
 indent_style = space
 ij_continuation_indent_size = 4

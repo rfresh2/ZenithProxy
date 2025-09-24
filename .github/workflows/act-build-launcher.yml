@@ -35,7 +35,7 @@ jobs:
 
       - name: Build launcher
         run: |
-          pyinstaller --specpath ./build -p ./src/launcher --onefile --noconfirm ./src/launcher/__main__.py
+          pyinstaller --specpath ./build -p ./src/launcher --onefile --runtime-tmpdir .launcher.tmp --noconfirm ./src/launcher/__main__.py
 
       - name: Rename executable
         run: |

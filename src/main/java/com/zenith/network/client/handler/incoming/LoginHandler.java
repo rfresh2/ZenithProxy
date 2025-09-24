@@ -16,7 +16,6 @@ public class LoginHandler implements PacketHandler<ClientboundLoginPacket, Clien
     @Override
     public ClientboundLoginPacket apply(@NonNull ClientboundLoginPacket packet, @NonNull ClientSession session) {
         CACHE.reset(CacheResetType.LOGIN);
-        CACHE.getSectionCountProvider().updateDimension(packet.getCommonPlayerSpawnInfo());
         var serverProfile = CACHE.getProfileCache().getProfile();
         if (serverProfile == null) {
             CLIENT_LOG.warn("No server profile found, something has gone wrong. Using expected player UUID");
@@ -42,6 +41,7 @@ public class LoginHandler implements PacketHandler<ClientboundLoginPacket, Clien
         );
         CACHE.getChunkCache().setServerViewDistance(packet.getViewDistance());
         CACHE.getChunkCache().setServerSimulationDistance(packet.getSimulationDistance());
+        session.setPalettedWorldState(session.createPalettedWorldState(CACHE.getChunkCache().getSectionsCount()));
         if (CONFIG.client.chatSigning.enabled) {
             if (!packet.isEnforcesSecureChat() && CONFIG.client.chatSigning.force) {
                 CLIENT_LOG.info("Force enabling chat signing even though server does not enforce it");

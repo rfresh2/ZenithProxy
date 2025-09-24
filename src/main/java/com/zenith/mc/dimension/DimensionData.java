@@ -8,4 +8,16 @@ public record DimensionData(
     int minY,
     int buildHeight,
     int height
-) implements RegistryData { }
+) implements RegistryData {
+    public int sectionCount() {
+        return maxSection() - minSection();
+    }
+
+    public int minSection() {
+        return minY >> 4;
+    }
+
+    public int maxSection() {
+        return ((buildHeight - 1) >> 4) + 1;
+    }
+}

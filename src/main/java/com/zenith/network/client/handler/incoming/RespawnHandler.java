@@ -3,6 +3,7 @@ package com.zenith.network.client.handler.incoming;
 import com.zenith.cache.CacheResetType;
 import com.zenith.feature.player.World;
 import com.zenith.feature.spectator.SpectatorSync;
+import com.zenith.mc.dimension.DimensionRegistry;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.codec.ClientEventLoopPacketHandler;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
@@ -21,7 +22,12 @@ public class RespawnHandler implements ClientEventLoopPacketHandler<ClientboundR
 
     @Override
     public ClientboundRespawnPacket apply(@NonNull ClientboundRespawnPacket packet, @NonNull ClientSession session) {
-        CACHE.getSectionCountProvider().updateDimension(packet.getCommonPlayerSpawnInfo());
+        var dim = DimensionRegistry.REGISTRY.get(packet.getCommonPlayerSpawnInfo().getDimension());
+        if (dim == null) {
+            CLIENT_LOG.warn("Unknown dimension {}, using overworld as fallback", packet.getCommonPlayerSpawnInfo().getDimension());
+            dim = DimensionRegistry.OVERWORLD.get();
+        }
+        session.setPalettedWorldState(session.createPalettedWorldState(dim.sectionCount()));
         ClientEventLoopPacketHandler.super.apply(packet, session);
         return packet;
     }
