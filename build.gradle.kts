@@ -224,7 +224,7 @@ graalvmNative {
                 "-march=x86-64-v3",
                 "--gc=serial",
                 "-J-XX:MaxRAMPercentage=90",
-				"--enable-sbom=false",
+//				"--enable-sbom=false", todo: detect and disable on graalvm ce
 //                "--enable-monitoring=nmt,jfr",
                 "-J--enable-native-access=ALL-UNNAMED",
                 "-J--sun-misc-unsafe-memory-access=allow",
