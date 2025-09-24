@@ -7,14 +7,12 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.DoubleNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.zenith.util.math.MathHelper;
 import com.zenith.util.struct.Maps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import lombok.SneakyThrows;
-import org.geysermc.mcprotocollib.protocol.data.game.chunk.DataPalette;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
@@ -78,7 +76,6 @@ public class BlockDataManager {
                 replaceableStateIds.add(stateId.asInt());
             });
         }
-        DataPalette.GLOBAL_PALETTE_BITS_PER_ENTRY = MathHelper.log2Ceil(blockStateIdToBlock.size());
     }
 
     @SneakyThrows
@@ -222,5 +219,9 @@ public class BlockDataManager {
         }
         var cb = collisionBoxes.getFirst();
         return cb.isFullBlock();
+    }
+
+    public int blockStateRegistrySize() {
+        return blockStateIdToBlock.size();
     }
 }

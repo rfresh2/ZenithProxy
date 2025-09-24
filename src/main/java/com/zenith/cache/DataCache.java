@@ -9,7 +9,6 @@ import com.zenith.cache.data.config.ConfigurationCache;
 import com.zenith.cache.data.entity.EntityCache;
 import com.zenith.cache.data.info.ClientInfoCache;
 import com.zenith.cache.data.map.MapDataCache;
-import com.zenith.cache.data.mcpl.CachedChunkSectionCountProvider;
 import com.zenith.cache.data.recipe.RecipeCache;
 import com.zenith.cache.data.registry.RegistriesCache;
 import com.zenith.cache.data.scoreboard.ScoreboardCache;
@@ -41,7 +40,6 @@ public class DataCache {
     protected final TeamCache teamCache = new TeamCache();
     protected final ScoreboardCache scoreboardCache = new ScoreboardCache();
     protected final ConfigurationCache configurationCache = new ConfigurationCache();
-    protected final CachedChunkSectionCountProvider sectionCountProvider = new CachedChunkSectionCountProvider();
     protected final ClientInfoCache clientInfoCache = new ClientInfoCache();
     protected final RegistriesCache registriesCache = new RegistriesCache();
 

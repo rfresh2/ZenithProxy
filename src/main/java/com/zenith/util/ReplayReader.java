@@ -1,15 +1,18 @@
 package com.zenith.util;
 
-import com.zenith.cache.data.mcpl.CachedChunkSectionCountProvider;
 import com.zenith.feature.replay.ReplayMetadata;
+import com.zenith.mc.biome.BiomeRegistry;
+import com.zenith.mc.block.BlockRegistry;
+import com.zenith.mc.dimension.DimensionRegistry;
+import com.zenith.network.client.ClientSession;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import lombok.SneakyThrows;
 import org.geysermc.mcprotocollib.network.packet.Packet;
-import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.MinecraftProtocol;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
+import org.geysermc.mcprotocollib.protocol.data.game.chunk.PalettedWorldState;
 import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundFinishConfigurationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundRespawnPacket;
@@ -21,6 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import static com.zenith.Globals.BLOCK_DATA;
 import static com.zenith.Globals.GSON;
 
 public class ReplayReader {
@@ -71,24 +75,23 @@ public class ReplayReader {
         packetProtocol.setTargetState(ProtocolState.GAME);
         packetProtocol.setUseDefaultListeners(false);
         packetProtocol.setInboundState(ProtocolState.LOGIN);
-        CachedChunkSectionCountProvider chunkSectionCountProvider = new CachedChunkSectionCountProvider();
-        MinecraftConstants.CHUNK_SECTION_COUNT_PROVIDER = chunkSectionCountProvider;
+        var session = new ClientSession("", 0, "", packetProtocol, null);
         try (var outputWriter = new BufferedOutputStream(new FileOutputStream(packetLogOutputFile))) {
             while (recordingStream.available() > 0) {
-                readRecordingEntry(recordingStream, packetProtocol, chunkSectionCountProvider, outputWriter);
+                readRecordingEntry(recordingStream, packetProtocol, session, outputWriter);
             }
         }
     }
 
     @SneakyThrows
-    private void readRecordingEntry(final DataInputStream recordingStream, final MinecraftProtocol packetProtocol, final CachedChunkSectionCountProvider chunkSectionCountProvider, final BufferedOutputStream outputWriter) {
+    private void readRecordingEntry(final DataInputStream recordingStream, final MinecraftProtocol packetProtocol, final ClientSession session, final BufferedOutputStream outputWriter) {
         int t = recordingStream.readInt();
         int len = recordingStream.readInt();
         ByteBuf byteBuf = ALLOC.buffer();
         try {
             byteBuf.writeBytes(recordingStream, len);
             int packetId = packetProtocol.getPacketHeader().readPacketId(byteBuf);
-            Packet packet = packetProtocol.getInboundPacketRegistry().createClientboundPacket(packetId, byteBuf);
+            Packet packet = packetProtocol.getInboundPacketRegistry().createClientboundPacket(packetId, byteBuf, session);
             String out = "\n[" + t + "] " + packet.toString();
             outputWriter.write(out.getBytes(StandardCharsets.UTF_8));
             switch (packetProtocol.getInboundState()) {
@@ -109,9 +112,21 @@ public class ReplayReader {
                 }
             }
             if (packet instanceof ClientboundLoginPacket loginPacket) {
-                chunkSectionCountProvider.updateDimension(loginPacket.getCommonPlayerSpawnInfo());
+                session.setPalettedWorldState(new PalettedWorldState(
+                    DimensionRegistry.REGISTRY.get(loginPacket.getCommonPlayerSpawnInfo().getDimension()).sectionCount(),
+                    BLOCK_DATA.blockStateRegistrySize(),
+                    BlockRegistry.AIR.minStateId(),
+                    BiomeRegistry.REGISTRY.size(),
+                    BiomeRegistry.PLAINS.get().id()
+                ));
             } else if (packet instanceof ClientboundRespawnPacket respawnPacket) {
-                chunkSectionCountProvider.updateDimension(respawnPacket.getCommonPlayerSpawnInfo());
+                session.setPalettedWorldState(new PalettedWorldState(
+                    DimensionRegistry.REGISTRY.get(respawnPacket.getCommonPlayerSpawnInfo().getDimension()).sectionCount(),
+                    BLOCK_DATA.blockStateRegistrySize(),
+                    BlockRegistry.AIR.minStateId(),
+                    BiomeRegistry.REGISTRY.size(),
+                    BiomeRegistry.PLAINS.get().id()
+                ));
             }
         } catch (final Throwable e) {
             outputWriter.write("\nError reading recording entry".getBytes(StandardCharsets.UTF_8));

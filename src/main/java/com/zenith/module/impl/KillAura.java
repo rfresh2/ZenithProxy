@@ -198,6 +198,7 @@ public class KillAura extends AbstractInventoryModule {
             .owner(this)
             .input(Input.builder()
                 .leftClick(true)
+                .clickRequiresRotation(false) // any rotation is fine, as long as click target is met
                 .clickTarget(new ClickTarget.EntityInstance(entity))
                 .build())
             .yaw(rotation.getX())

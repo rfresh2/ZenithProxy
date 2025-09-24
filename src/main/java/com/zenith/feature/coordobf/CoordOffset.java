@@ -17,6 +17,7 @@ import it.unimi.dsi.fastutil.objects.ReferenceSet;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.geysermc.mcprotocollib.protocol.data.game.chunk.ChunkSection;
 import org.geysermc.mcprotocollib.protocol.data.game.chunk.DataPalette;
+import org.geysermc.mcprotocollib.protocol.data.game.chunk.PalettedWorldState;
 import org.geysermc.mcprotocollib.protocol.data.game.chunk.palette.PaletteType;
 import org.geysermc.mcprotocollib.protocol.data.game.chunk.palette.SingletonPalette;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
@@ -217,8 +218,8 @@ public record CoordOffset(
             && (currentDimension == DimensionRegistry.OVERWORLD.get() || currentDimension == DimensionRegistry.THE_NETHER.get());
         var shouldReplaceBiomes = CONFIG.client.extra.coordObfuscation.obfuscateBiomes;
         DataPalette obfuscatedBiomes = null;
-        if (shouldReplaceBiomes) {
-            obfuscatedBiomes = obfuscatedBiomePalette();
+        if (shouldReplaceBiomes && originalSections.length > 0) {
+            obfuscatedBiomes = obfuscatedBiomePalette(originalSections[0].getBiomeData().getPalettedWorldState());
         }
 
         if (!shouldAddBedrockLayer && !shouldReplaceBiomes) return originalSections;
@@ -260,19 +261,20 @@ public record CoordOffset(
 
     public DataPalette[] obfuscateBiomePalettes(final DataPalette[] originalPalettes) {
         if (!CONFIG.client.extra.coordObfuscation.obfuscateBiomes) return originalPalettes;
+        if (originalPalettes.length == 0) return originalPalettes;
         var palettes = new DataPalette[originalPalettes.length];
-        Arrays.fill(palettes, obfuscatedBiomePalette());
+        Arrays.fill(palettes, obfuscatedBiomePalette(originalPalettes[0].getPalettedWorldState()));
         return palettes;
     }
 
-    public DataPalette obfuscatedBiomePalette() {
+    public DataPalette obfuscatedBiomePalette(PalettedWorldState palettedWorldState) {
         String biomeKey = CONFIG.client.extra.coordObfuscation.obfuscateBiomesKey;
         Biome biome = BiomeRegistry.REGISTRY.get(biomeKey);
         int id = 40;
         if (biome != null) {
             id = biome.id();
         }
-        return new DataPalette(new SingletonPalette(id), null, PaletteType.BIOME);
+        return new DataPalette(new SingletonPalette(id), null, PaletteType.BIOME, palettedWorldState);
     }
 
     public Particle offsetParticle(Particle particle) {
