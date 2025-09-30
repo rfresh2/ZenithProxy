@@ -130,7 +130,6 @@ public class DiscordBot {
         return jda.getStatus();
     }
 
-
     private void initializeJda() {
         if (CONFIG.discord.channelId.isEmpty()) throw new RuntimeException("Discord bot is enabled but channel id is not set");
         if (CONFIG.discord.chatRelay.enable) {
@@ -375,13 +374,17 @@ public class DiscordBot {
     public void sendEmbedMessageTo(TextChannel channel, @Nullable String message, Embed embed) {
         defaultEmbedDecoration(embed);
         if (isRunning()) {
-            var msgBuilder = new MessageCreateBuilder()
-                .setContent(message)
-                .addEmbeds(embed.toJDAEmbed());
-            if (embed.fileAttachment() != null) {
-                msgBuilder.addFiles(FileUpload.fromData(new ByteArrayInputStream(embed.fileAttachment.data()), embed.fileAttachment.name()));
+            try {
+                var msgBuilder = new MessageCreateBuilder()
+                    .setContent(message)
+                    .addEmbeds(embed.toJDAEmbed());
+                if (embed.fileAttachment() != null) {
+                    msgBuilder.addFiles(FileUpload.fromData(new ByteArrayInputStream(embed.fileAttachment.data()), embed.fileAttachment.name()));
+                }
+                channel.sendMessage(msgBuilder.build()).queue();
+            } catch (final Exception e) {
+                DISCORD_LOG.error("Failed sending embed message", e);
             }
-            channel.sendMessage(msgBuilder.build()).queue();
         }
         if (message != null) TERMINAL_LOG.info(message);
     }
@@ -406,11 +409,15 @@ public class DiscordBot {
 
     public void sendMessageTo(TextChannel channel, String message) {
         if (isRunning()) {
-            channel.sendMessage(
-                new MessageCreateBuilder()
-                    .setContent(message)
-                    .build())
-                .queue();
+            try {
+                channel.sendMessage(
+                    new MessageCreateBuilder()
+                        .setContent(message)
+                        .build())
+                    .queue();
+            } catch (Exception e) {
+                DISCORD_LOG.error("Failed sending message: {}", e.getMessage());
+            }
         }
     }
 
@@ -427,18 +434,22 @@ public class DiscordBot {
     public void sendEmbedMessageWithButtonsTo(TextChannel channel, @Nullable String message, Embed embed, List<Button> buttons, Consumer<ButtonInteractionEvent> eventConsumer, Duration timeout) {
         defaultEmbedDecoration(embed);
         if (isRunning()) {
-            channel.sendMessage(
-                    new MessageCreateBuilder()
-                        .setEmbeds(embed.toJDAEmbed())
-                        .setContent(message)
-                        .addComponents(ActionRow.of(buttons))
-                        .build())
-                .queue();
-            var buttonIds = buttons.stream().map(ActionComponent::getCustomId).collect(Collectors.toSet());
-            jda.listenOnce(ButtonInteractionEvent.class)
-                .filter(e -> buttonIds.contains(e.getComponentId()))
-                .timeout(timeout)
-                .subscribe(eventConsumer);
+            try {
+                channel.sendMessage(
+                        new MessageCreateBuilder()
+                            .setEmbeds(embed.toJDAEmbed())
+                            .setContent(message)
+                            .addComponents(ActionRow.of(buttons))
+                            .build())
+                    .queue();
+                var buttonIds = buttons.stream().map(ActionComponent::getCustomId).collect(Collectors.toSet());
+                jda.listenOnce(ButtonInteractionEvent.class)
+                    .filter(e -> buttonIds.contains(e.getComponentId()))
+                    .timeout(timeout)
+                    .subscribe(eventConsumer);
+            } catch (final Exception e) {
+                DISCORD_LOG.error("Failed sending embed message with buttons to discord", e);
+            }
         }
     }
 
