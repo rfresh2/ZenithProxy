@@ -206,6 +206,7 @@ public final class Config {
                 public boolean getToBlockExploreForBlocks = true;
                 public boolean getToBlockBlacklistClosestOnFailure = false;
                 public boolean simplifyUnloadedYGoal = false;
+                public boolean placeBlockVerifyAbleToPlace = true;
             }
 
             public static class SessionTimeLimit {

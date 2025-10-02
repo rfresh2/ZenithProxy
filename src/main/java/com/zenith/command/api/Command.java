@@ -145,10 +145,10 @@ public abstract class Command {
     }
 
     public void defaultErrorHandler(Map<CommandNode<CommandContext>, CommandSyntaxException> exceptions, CommandContext context) {
-        exceptions.values().stream()
-            .findFirst()
-            .ifPresent(exception -> context.getEmbed()
-                .addField("Error", exception.getMessage(), false));
+        for (var e : exceptions.values()) {
+            context.getEmbed()
+                .addField("Error", e.getMessage());
+        }
         defaultHandler(context);
         if (!context.getEmbed().isTitlePresent()) {
             context.getEmbed()
@@ -166,6 +166,8 @@ public abstract class Command {
     }
 
     public void defaultExecutionExceptionHandler(CommandContext commandContext, Throwable e) {
+        if (e instanceof CommandSyntaxException)
+            return; // handled in error handler, safe to swallow, will happen on command without args like doing `clientConnection`
         TERMINAL_LOG.error("Exception while executing command: {}", commandContext.getInput(), e);
         commandContext.getEmbed()
             .title("Command Execution Error")

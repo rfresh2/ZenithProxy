@@ -782,6 +782,14 @@ public class PathfinderCommand extends Command {
                     .addField("Get To Block Blacklist Closest On Failure", CONFIG.client.extra.pathfinder.getToBlockBlacklistClosestOnFailure, false)
                     .primaryColor();
                 return OK;
+            })))
+            .then(literal("placeBlockVerifyAbleToPlace").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Place Block Verify Able To Place", CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace, false)
+                    .primaryColor();
+                return OK;
             })));
 //            .then(literal("diagonalCentering").then(argument("toggle", toggle()).executes(c -> {
 //                CONFIG.client.extra.pathfinder.diagonalCentering = getToggle(c, "toggle");

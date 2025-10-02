@@ -67,9 +67,7 @@ def setup_execute(config):
             print("config.json already exists, overwrite and continue anyway? (y/n)")
             i1 = input("> ").lower()
             if i1 == "n":
-                print("Setup complete!")
-                print("Run './launch.sh' (Unix) or '.\\launch.bat` (Windows) to start ZenithProxy!")
-                exit(0)
+                return
             elif i1 == "y":
                 break
             else:
@@ -106,6 +104,8 @@ def setup_execute(config):
             while check_port_in_use(port) and attempts < 10:
                 port = int(random.uniform(35000, 65000))
                 attempts += 1
+            if attempts == 10:
+                port = 25565 # just fall back to 25565 if we can't find a random port
             break
         try:
             port = int(port)
