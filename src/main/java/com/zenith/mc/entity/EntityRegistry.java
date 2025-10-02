@@ -5,7 +5,7 @@ import com.zenith.mc.Registry;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 
 public final class EntityRegistry {
-    public static final Registry<EntityData> REGISTRY = new Registry<EntityData>(151);
+    public static final Registry<EntityData> REGISTRY = new Registry<EntityData>(153);
 
     public static final EntityData ACACIA_BOAT = REGISTRY.register(new EntityData(0, "acacia_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.ACACIA_BOAT));
 
@@ -61,251 +61,255 @@ public final class EntityRegistry {
 
     public static final EntityData COD = REGISTRY.register(new EntityData(26, "cod", 0.5f, 0.3f, true, true, true, false, true, EntityType.COD));
 
-    public static final EntityData COMMAND_BLOCK_MINECART = REGISTRY.register(new EntityData(27, "command_block_minecart", 0.98f, 0.7f, true, true, false, false, true, EntityType.COMMAND_BLOCK_MINECART));
+    public static final EntityData COPPER_GOLEM = REGISTRY.register(new EntityData(27, "copper_golem", 0.49f, 0.98f, true, true, true, false, true, EntityType.COPPER_GOLEM));
 
-    public static final EntityData COW = REGISTRY.register(new EntityData(28, "cow", 0.9f, 1.4f, true, true, true, true, true, EntityType.COW));
+    public static final EntityData COMMAND_BLOCK_MINECART = REGISTRY.register(new EntityData(28, "command_block_minecart", 0.98f, 0.7f, true, true, false, false, true, EntityType.COMMAND_BLOCK_MINECART));
 
-    public static final EntityData CREAKING = REGISTRY.register(new EntityData(29, "creaking", 0.9f, 2.7f, true, true, true, false, true, EntityType.CREAKING));
+    public static final EntityData COW = REGISTRY.register(new EntityData(29, "cow", 0.9f, 1.4f, true, true, true, true, true, EntityType.COW));
 
-    public static final EntityData CREEPER = REGISTRY.register(new EntityData(30, "creeper", 0.6f, 1.7f, true, true, true, false, true, EntityType.CREEPER));
+    public static final EntityData CREAKING = REGISTRY.register(new EntityData(30, "creaking", 0.9f, 2.7f, true, true, true, false, true, EntityType.CREAKING));
 
-    public static final EntityData DARK_OAK_BOAT = REGISTRY.register(new EntityData(31, "dark_oak_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.DARK_OAK_BOAT));
+    public static final EntityData CREEPER = REGISTRY.register(new EntityData(31, "creeper", 0.6f, 1.7f, true, true, true, false, true, EntityType.CREEPER));
 
-    public static final EntityData DARK_OAK_CHEST_BOAT = REGISTRY.register(new EntityData(32, "dark_oak_chest_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.DARK_OAK_CHEST_BOAT));
+    public static final EntityData DARK_OAK_BOAT = REGISTRY.register(new EntityData(32, "dark_oak_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.DARK_OAK_BOAT));
 
-    public static final EntityData DOLPHIN = REGISTRY.register(new EntityData(33, "dolphin", 0.9f, 0.6f, true, true, true, true, true, EntityType.DOLPHIN));
+    public static final EntityData DARK_OAK_CHEST_BOAT = REGISTRY.register(new EntityData(33, "dark_oak_chest_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.DARK_OAK_CHEST_BOAT));
 
-    public static final EntityData DONKEY = REGISTRY.register(new EntityData(34, "donkey", 1.3964844f, 1.5f, true, true, true, true, true, EntityType.DONKEY));
+    public static final EntityData DOLPHIN = REGISTRY.register(new EntityData(34, "dolphin", 0.9f, 0.6f, true, true, true, true, true, EntityType.DOLPHIN));
 
-    public static final EntityData DRAGON_FIREBALL = REGISTRY.register(new EntityData(35, "dragon_fireball", 1.0f, 1.0f, true, false, false, false, false, EntityType.DRAGON_FIREBALL));
+    public static final EntityData DONKEY = REGISTRY.register(new EntityData(35, "donkey", 1.3964844f, 1.5f, true, true, true, true, true, EntityType.DONKEY));
 
-    public static final EntityData DROWNED = REGISTRY.register(new EntityData(36, "drowned", 0.6f, 1.95f, true, true, true, false, true, EntityType.DROWNED));
+    public static final EntityData DRAGON_FIREBALL = REGISTRY.register(new EntityData(36, "dragon_fireball", 1.0f, 1.0f, true, false, false, false, false, EntityType.DRAGON_FIREBALL));
 
-    public static final EntityData EGG = REGISTRY.register(new EntityData(37, "egg", 0.25f, 0.25f, true, false, false, false, false, EntityType.EGG));
+    public static final EntityData DROWNED = REGISTRY.register(new EntityData(37, "drowned", 0.6f, 1.95f, true, true, true, false, true, EntityType.DROWNED));
 
-    public static final EntityData ELDER_GUARDIAN = REGISTRY.register(new EntityData(38, "elder_guardian", 1.9975f, 1.9975f, true, true, true, false, true, EntityType.ELDER_GUARDIAN));
+    public static final EntityData EGG = REGISTRY.register(new EntityData(38, "egg", 0.25f, 0.25f, true, false, false, false, false, EntityType.EGG));
 
-    public static final EntityData ENDERMAN = REGISTRY.register(new EntityData(39, "enderman", 0.6f, 2.9f, true, true, true, false, true, EntityType.ENDERMAN));
+    public static final EntityData ELDER_GUARDIAN = REGISTRY.register(new EntityData(39, "elder_guardian", 1.9975f, 1.9975f, true, true, true, false, true, EntityType.ELDER_GUARDIAN));
 
-    public static final EntityData ENDERMITE = REGISTRY.register(new EntityData(40, "endermite", 0.4f, 0.3f, true, true, true, false, true, EntityType.ENDERMITE));
+    public static final EntityData ENDERMAN = REGISTRY.register(new EntityData(40, "enderman", 0.6f, 2.9f, true, true, true, false, true, EntityType.ENDERMAN));
 
-    public static final EntityData ENDER_DRAGON = REGISTRY.register(new EntityData(41, "ender_dragon", 16.0f, 8.0f, true, false, true, false, true, EntityType.ENDER_DRAGON));
+    public static final EntityData ENDERMITE = REGISTRY.register(new EntityData(41, "endermite", 0.4f, 0.3f, true, true, true, false, true, EntityType.ENDERMITE));
 
-    public static final EntityData ENDER_PEARL = REGISTRY.register(new EntityData(42, "ender_pearl", 0.25f, 0.25f, true, false, false, false, false, EntityType.ENDER_PEARL));
+    public static final EntityData ENDER_DRAGON = REGISTRY.register(new EntityData(42, "ender_dragon", 16.0f, 8.0f, true, false, true, false, true, EntityType.ENDER_DRAGON));
 
-    public static final EntityData END_CRYSTAL = REGISTRY.register(new EntityData(43, "end_crystal", 2.0f, 2.0f, true, true, false, false, true, EntityType.END_CRYSTAL));
+    public static final EntityData ENDER_PEARL = REGISTRY.register(new EntityData(43, "ender_pearl", 0.25f, 0.25f, true, false, false, false, false, EntityType.ENDER_PEARL));
 
-    public static final EntityData EVOKER = REGISTRY.register(new EntityData(44, "evoker", 0.6f, 1.95f, true, true, true, false, true, EntityType.EVOKER));
+    public static final EntityData END_CRYSTAL = REGISTRY.register(new EntityData(44, "end_crystal", 2.0f, 2.0f, true, true, false, false, true, EntityType.END_CRYSTAL));
 
-    public static final EntityData EVOKER_FANGS = REGISTRY.register(new EntityData(45, "evoker_fangs", 0.5f, 0.8f, true, false, false, false, false, EntityType.EVOKER_FANGS));
+    public static final EntityData EVOKER = REGISTRY.register(new EntityData(45, "evoker", 0.6f, 1.95f, true, true, true, false, true, EntityType.EVOKER));
 
-    public static final EntityData EXPERIENCE_BOTTLE = REGISTRY.register(new EntityData(46, "experience_bottle", 0.25f, 0.25f, true, false, false, false, false, EntityType.EXPERIENCE_BOTTLE));
+    public static final EntityData EVOKER_FANGS = REGISTRY.register(new EntityData(46, "evoker_fangs", 0.5f, 0.8f, true, false, false, false, false, EntityType.EVOKER_FANGS));
 
-    public static final EntityData EXPERIENCE_ORB = REGISTRY.register(new EntityData(47, "experience_orb", 0.5f, 0.5f, false, false, false, false, false, EntityType.EXPERIENCE_ORB));
+    public static final EntityData EXPERIENCE_BOTTLE = REGISTRY.register(new EntityData(47, "experience_bottle", 0.25f, 0.25f, true, false, false, false, false, EntityType.EXPERIENCE_BOTTLE));
 
-    public static final EntityData EYE_OF_ENDER = REGISTRY.register(new EntityData(48, "eye_of_ender", 0.25f, 0.25f, false, false, false, false, false, EntityType.EYE_OF_ENDER));
+    public static final EntityData EXPERIENCE_ORB = REGISTRY.register(new EntityData(48, "experience_orb", 0.5f, 0.5f, false, false, false, false, false, EntityType.EXPERIENCE_ORB));
 
-    public static final EntityData FALLING_BLOCK = REGISTRY.register(new EntityData(49, "falling_block", 0.98f, 0.98f, false, true, false, false, false, EntityType.FALLING_BLOCK));
+    public static final EntityData EYE_OF_ENDER = REGISTRY.register(new EntityData(49, "eye_of_ender", 0.25f, 0.25f, false, false, false, false, false, EntityType.EYE_OF_ENDER));
 
-    public static final EntityData FIREBALL = REGISTRY.register(new EntityData(50, "fireball", 1.0f, 1.0f, true, true, false, false, false, EntityType.FIREBALL));
+    public static final EntityData FALLING_BLOCK = REGISTRY.register(new EntityData(50, "falling_block", 0.98f, 0.98f, false, true, false, false, false, EntityType.FALLING_BLOCK));
 
-    public static final EntityData FIREWORK_ROCKET = REGISTRY.register(new EntityData(51, "firework_rocket", 0.25f, 0.25f, false, false, false, false, false, EntityType.FIREWORK_ROCKET));
+    public static final EntityData FIREBALL = REGISTRY.register(new EntityData(51, "fireball", 1.0f, 1.0f, true, true, false, false, false, EntityType.FIREBALL));
 
-    public static final EntityData FOX = REGISTRY.register(new EntityData(52, "fox", 0.6f, 0.7f, true, true, true, true, true, EntityType.FOX));
+    public static final EntityData FIREWORK_ROCKET = REGISTRY.register(new EntityData(52, "firework_rocket", 0.25f, 0.25f, false, false, false, false, false, EntityType.FIREWORK_ROCKET));
 
-    public static final EntityData FROG = REGISTRY.register(new EntityData(53, "frog", 0.5f, 0.5f, true, true, true, true, true, EntityType.FROG));
+    public static final EntityData FOX = REGISTRY.register(new EntityData(53, "fox", 0.6f, 0.7f, true, true, true, true, true, EntityType.FOX));
 
-    public static final EntityData FURNACE_MINECART = REGISTRY.register(new EntityData(54, "furnace_minecart", 0.98f, 0.7f, true, true, false, false, true, EntityType.FURNACE_MINECART));
+    public static final EntityData FROG = REGISTRY.register(new EntityData(54, "frog", 0.5f, 0.5f, true, true, true, true, true, EntityType.FROG));
 
-    public static final EntityData GHAST = REGISTRY.register(new EntityData(55, "ghast", 4.0f, 4.0f, true, true, true, false, true, EntityType.GHAST));
+    public static final EntityData FURNACE_MINECART = REGISTRY.register(new EntityData(55, "furnace_minecart", 0.98f, 0.7f, true, true, false, false, true, EntityType.FURNACE_MINECART));
 
-    public static final EntityData HAPPY_GHAST = REGISTRY.register(new EntityData(56, "happy_ghast", 4.0f, 4.0f, true, true, true, true, true, EntityType.HAPPY_GHAST));
+    public static final EntityData GHAST = REGISTRY.register(new EntityData(56, "ghast", 4.0f, 4.0f, true, true, true, false, true, EntityType.GHAST));
 
-    public static final EntityData GIANT = REGISTRY.register(new EntityData(57, "giant", 3.6f, 12.0f, true, true, true, false, true, EntityType.GIANT));
+    public static final EntityData HAPPY_GHAST = REGISTRY.register(new EntityData(57, "happy_ghast", 4.0f, 4.0f, true, true, true, true, true, EntityType.HAPPY_GHAST));
 
-    public static final EntityData GLOW_ITEM_FRAME = REGISTRY.register(new EntityData(58, "glow_item_frame", 0.5f, 0.5f, true, true, false, false, false, EntityType.GLOW_ITEM_FRAME));
+    public static final EntityData GIANT = REGISTRY.register(new EntityData(58, "giant", 3.6f, 12.0f, true, true, true, false, true, EntityType.GIANT));
 
-    public static final EntityData GLOW_SQUID = REGISTRY.register(new EntityData(59, "glow_squid", 0.8f, 0.8f, true, true, true, true, true, EntityType.GLOW_SQUID));
+    public static final EntityData GLOW_ITEM_FRAME = REGISTRY.register(new EntityData(59, "glow_item_frame", 0.5f, 0.5f, true, true, false, false, false, EntityType.GLOW_ITEM_FRAME));
 
-    public static final EntityData GOAT = REGISTRY.register(new EntityData(60, "goat", 0.9f, 1.3f, true, true, true, true, true, EntityType.GOAT));
+    public static final EntityData GLOW_SQUID = REGISTRY.register(new EntityData(60, "glow_squid", 0.8f, 0.8f, true, true, true, true, true, EntityType.GLOW_SQUID));
 
-    public static final EntityData GUARDIAN = REGISTRY.register(new EntityData(61, "guardian", 0.85f, 0.85f, true, true, true, false, true, EntityType.GUARDIAN));
+    public static final EntityData GOAT = REGISTRY.register(new EntityData(61, "goat", 0.9f, 1.3f, true, true, true, true, true, EntityType.GOAT));
 
-    public static final EntityData HOGLIN = REGISTRY.register(new EntityData(62, "hoglin", 1.3964844f, 1.4f, true, true, true, true, true, EntityType.HOGLIN));
+    public static final EntityData GUARDIAN = REGISTRY.register(new EntityData(62, "guardian", 0.85f, 0.85f, true, true, true, false, true, EntityType.GUARDIAN));
 
-    public static final EntityData HOPPER_MINECART = REGISTRY.register(new EntityData(63, "hopper_minecart", 0.98f, 0.7f, true, true, false, false, true, EntityType.HOPPER_MINECART));
+    public static final EntityData HOGLIN = REGISTRY.register(new EntityData(63, "hoglin", 1.3964844f, 1.4f, true, true, true, true, true, EntityType.HOGLIN));
 
-    public static final EntityData HORSE = REGISTRY.register(new EntityData(64, "horse", 1.3964844f, 1.6f, true, true, true, true, true, EntityType.HORSE));
+    public static final EntityData HOPPER_MINECART = REGISTRY.register(new EntityData(64, "hopper_minecart", 0.98f, 0.7f, true, true, false, false, true, EntityType.HOPPER_MINECART));
 
-    public static final EntityData HUSK = REGISTRY.register(new EntityData(65, "husk", 0.6f, 1.95f, true, true, true, false, true, EntityType.HUSK));
+    public static final EntityData HORSE = REGISTRY.register(new EntityData(65, "horse", 1.3964844f, 1.6f, true, true, true, true, true, EntityType.HORSE));
 
-    public static final EntityData ILLUSIONER = REGISTRY.register(new EntityData(66, "illusioner", 0.6f, 1.95f, true, true, true, false, true, EntityType.ILLUSIONER));
+    public static final EntityData HUSK = REGISTRY.register(new EntityData(66, "husk", 0.6f, 1.95f, true, true, true, false, true, EntityType.HUSK));
 
-    public static final EntityData INTERACTION = REGISTRY.register(new EntityData(67, "interaction", 0.0f, 0.0f, true, true, false, false, false, EntityType.INTERACTION));
+    public static final EntityData ILLUSIONER = REGISTRY.register(new EntityData(67, "illusioner", 0.6f, 1.95f, true, true, true, false, true, EntityType.ILLUSIONER));
 
-    public static final EntityData IRON_GOLEM = REGISTRY.register(new EntityData(68, "iron_golem", 1.4f, 2.7f, true, true, true, false, true, EntityType.IRON_GOLEM));
+    public static final EntityData INTERACTION = REGISTRY.register(new EntityData(68, "interaction", 0.0f, 0.0f, true, true, false, false, false, EntityType.INTERACTION));
 
-    public static final EntityData ITEM = REGISTRY.register(new EntityData(69, "item", 0.25f, 0.25f, false, false, false, false, false, EntityType.ITEM));
+    public static final EntityData IRON_GOLEM = REGISTRY.register(new EntityData(69, "iron_golem", 1.4f, 2.7f, true, true, true, false, true, EntityType.IRON_GOLEM));
 
-    public static final EntityData ITEM_DISPLAY = REGISTRY.register(new EntityData(70, "item_display", 0.0f, 0.0f, true, false, false, false, false, EntityType.ITEM_DISPLAY));
+    public static final EntityData ITEM = REGISTRY.register(new EntityData(70, "item", 0.25f, 0.25f, false, false, false, false, false, EntityType.ITEM));
 
-    public static final EntityData ITEM_FRAME = REGISTRY.register(new EntityData(71, "item_frame", 0.5f, 0.5f, true, true, false, false, false, EntityType.ITEM_FRAME));
+    public static final EntityData ITEM_DISPLAY = REGISTRY.register(new EntityData(71, "item_display", 0.0f, 0.0f, true, false, false, false, false, EntityType.ITEM_DISPLAY));
 
-    public static final EntityData JUNGLE_BOAT = REGISTRY.register(new EntityData(72, "jungle_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.JUNGLE_BOAT));
+    public static final EntityData ITEM_FRAME = REGISTRY.register(new EntityData(72, "item_frame", 0.5f, 0.5f, true, true, false, false, false, EntityType.ITEM_FRAME));
 
-    public static final EntityData JUNGLE_CHEST_BOAT = REGISTRY.register(new EntityData(73, "jungle_chest_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.JUNGLE_CHEST_BOAT));
+    public static final EntityData JUNGLE_BOAT = REGISTRY.register(new EntityData(73, "jungle_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.JUNGLE_BOAT));
 
-    public static final EntityData LEASH_KNOT = REGISTRY.register(new EntityData(74, "leash_knot", 0.375f, 0.5f, true, true, false, false, false, EntityType.LEASH_KNOT));
+    public static final EntityData JUNGLE_CHEST_BOAT = REGISTRY.register(new EntityData(74, "jungle_chest_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.JUNGLE_CHEST_BOAT));
 
-    public static final EntityData LIGHTNING_BOLT = REGISTRY.register(new EntityData(75, "lightning_bolt", 0.0f, 0.0f, true, false, false, false, false, EntityType.LIGHTNING_BOLT));
+    public static final EntityData LEASH_KNOT = REGISTRY.register(new EntityData(75, "leash_knot", 0.375f, 0.5f, true, true, false, false, false, EntityType.LEASH_KNOT));
 
-    public static final EntityData LLAMA = REGISTRY.register(new EntityData(76, "llama", 0.9f, 1.87f, true, true, true, true, true, EntityType.LLAMA));
+    public static final EntityData LIGHTNING_BOLT = REGISTRY.register(new EntityData(76, "lightning_bolt", 0.0f, 0.0f, true, false, false, false, false, EntityType.LIGHTNING_BOLT));
 
-    public static final EntityData LLAMA_SPIT = REGISTRY.register(new EntityData(77, "llama_spit", 0.25f, 0.25f, true, false, false, false, false, EntityType.LLAMA_SPIT));
+    public static final EntityData LLAMA = REGISTRY.register(new EntityData(77, "llama", 0.9f, 1.87f, true, true, true, true, true, EntityType.LLAMA));
 
-    public static final EntityData MAGMA_CUBE = REGISTRY.register(new EntityData(78, "magma_cube", 0.52f, 0.52f, true, true, true, false, true, EntityType.MAGMA_CUBE));
+    public static final EntityData LLAMA_SPIT = REGISTRY.register(new EntityData(78, "llama_spit", 0.25f, 0.25f, true, false, false, false, false, EntityType.LLAMA_SPIT));
 
-    public static final EntityData MANGROVE_BOAT = REGISTRY.register(new EntityData(79, "mangrove_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.MANGROVE_BOAT));
+    public static final EntityData MAGMA_CUBE = REGISTRY.register(new EntityData(79, "magma_cube", 0.52f, 0.52f, true, true, true, false, true, EntityType.MAGMA_CUBE));
 
-    public static final EntityData MANGROVE_CHEST_BOAT = REGISTRY.register(new EntityData(80, "mangrove_chest_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.MANGROVE_CHEST_BOAT));
+    public static final EntityData MANGROVE_BOAT = REGISTRY.register(new EntityData(80, "mangrove_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.MANGROVE_BOAT));
 
-    public static final EntityData MARKER = REGISTRY.register(new EntityData(81, "marker", 0.0f, 0.0f, true, false, false, false, false, EntityType.MARKER));
+    public static final EntityData MANGROVE_CHEST_BOAT = REGISTRY.register(new EntityData(81, "mangrove_chest_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.MANGROVE_CHEST_BOAT));
 
-    public static final EntityData MINECART = REGISTRY.register(new EntityData(82, "minecart", 0.98f, 0.7f, true, true, false, false, true, EntityType.MINECART));
+    public static final EntityData MANNEQUIN = REGISTRY.register(new EntityData(82, "mannequin", 0.6f, 1.8f, true, true, true, false, true, EntityType.MANNEQUIN));
 
-    public static final EntityData MOOSHROOM = REGISTRY.register(new EntityData(83, "mooshroom", 0.9f, 1.4f, true, true, true, true, true, EntityType.MOOSHROOM));
+    public static final EntityData MARKER = REGISTRY.register(new EntityData(83, "marker", 0.0f, 0.0f, true, false, false, false, false, EntityType.MARKER));
 
-    public static final EntityData MULE = REGISTRY.register(new EntityData(84, "mule", 1.3964844f, 1.6f, true, true, true, true, true, EntityType.MULE));
+    public static final EntityData MINECART = REGISTRY.register(new EntityData(84, "minecart", 0.98f, 0.7f, true, true, false, false, true, EntityType.MINECART));
 
-    public static final EntityData OAK_BOAT = REGISTRY.register(new EntityData(85, "oak_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.OAK_BOAT));
+    public static final EntityData MOOSHROOM = REGISTRY.register(new EntityData(85, "mooshroom", 0.9f, 1.4f, true, true, true, true, true, EntityType.MOOSHROOM));
 
-    public static final EntityData OAK_CHEST_BOAT = REGISTRY.register(new EntityData(86, "oak_chest_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.OAK_CHEST_BOAT));
+    public static final EntityData MULE = REGISTRY.register(new EntityData(86, "mule", 1.3964844f, 1.6f, true, true, true, true, true, EntityType.MULE));
 
-    public static final EntityData OCELOT = REGISTRY.register(new EntityData(87, "ocelot", 0.6f, 0.7f, true, true, true, true, true, EntityType.OCELOT));
+    public static final EntityData OAK_BOAT = REGISTRY.register(new EntityData(87, "oak_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.OAK_BOAT));
 
-    public static final EntityData OMINOUS_ITEM_SPAWNER = REGISTRY.register(new EntityData(88, "ominous_item_spawner", 0.25f, 0.25f, true, false, false, false, false, EntityType.OMINOUS_ITEM_SPAWNER));
+    public static final EntityData OAK_CHEST_BOAT = REGISTRY.register(new EntityData(88, "oak_chest_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.OAK_CHEST_BOAT));
 
-    public static final EntityData PAINTING = REGISTRY.register(new EntityData(89, "painting", 0.5f, 0.5f, true, true, false, false, false, EntityType.PAINTING));
+    public static final EntityData OCELOT = REGISTRY.register(new EntityData(89, "ocelot", 0.6f, 0.7f, true, true, true, true, true, EntityType.OCELOT));
 
-    public static final EntityData PALE_OAK_BOAT = REGISTRY.register(new EntityData(90, "pale_oak_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.PALE_OAK_BOAT));
+    public static final EntityData OMINOUS_ITEM_SPAWNER = REGISTRY.register(new EntityData(90, "ominous_item_spawner", 0.25f, 0.25f, true, false, false, false, false, EntityType.OMINOUS_ITEM_SPAWNER));
 
-    public static final EntityData PALE_OAK_CHEST_BOAT = REGISTRY.register(new EntityData(91, "pale_oak_chest_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.PALE_OAK_CHEST_BOAT));
+    public static final EntityData PAINTING = REGISTRY.register(new EntityData(91, "painting", 0.5f, 0.5f, true, true, false, false, false, EntityType.PAINTING));
 
-    public static final EntityData PANDA = REGISTRY.register(new EntityData(92, "panda", 1.3f, 1.25f, true, true, true, true, true, EntityType.PANDA));
+    public static final EntityData PALE_OAK_BOAT = REGISTRY.register(new EntityData(92, "pale_oak_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.PALE_OAK_BOAT));
 
-    public static final EntityData PARROT = REGISTRY.register(new EntityData(93, "parrot", 0.5f, 0.9f, true, true, true, true, true, EntityType.PARROT));
+    public static final EntityData PALE_OAK_CHEST_BOAT = REGISTRY.register(new EntityData(93, "pale_oak_chest_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.PALE_OAK_CHEST_BOAT));
 
-    public static final EntityData PHANTOM = REGISTRY.register(new EntityData(94, "phantom", 0.9f, 0.5f, true, true, true, false, true, EntityType.PHANTOM));
+    public static final EntityData PANDA = REGISTRY.register(new EntityData(94, "panda", 1.3f, 1.25f, true, true, true, true, true, EntityType.PANDA));
 
-    public static final EntityData PIG = REGISTRY.register(new EntityData(95, "pig", 0.9f, 0.9f, true, true, true, true, true, EntityType.PIG));
+    public static final EntityData PARROT = REGISTRY.register(new EntityData(95, "parrot", 0.5f, 0.9f, true, true, true, true, true, EntityType.PARROT));
 
-    public static final EntityData PIGLIN = REGISTRY.register(new EntityData(96, "piglin", 0.6f, 1.95f, true, true, true, false, true, EntityType.PIGLIN));
+    public static final EntityData PHANTOM = REGISTRY.register(new EntityData(96, "phantom", 0.9f, 0.5f, true, true, true, false, true, EntityType.PHANTOM));
 
-    public static final EntityData PIGLIN_BRUTE = REGISTRY.register(new EntityData(97, "piglin_brute", 0.6f, 1.95f, true, true, true, false, true, EntityType.PIGLIN_BRUTE));
+    public static final EntityData PIG = REGISTRY.register(new EntityData(97, "pig", 0.9f, 0.9f, true, true, true, true, true, EntityType.PIG));
 
-    public static final EntityData PILLAGER = REGISTRY.register(new EntityData(98, "pillager", 0.6f, 1.95f, true, true, true, false, true, EntityType.PILLAGER));
+    public static final EntityData PIGLIN = REGISTRY.register(new EntityData(98, "piglin", 0.6f, 1.95f, true, true, true, false, true, EntityType.PIGLIN));
 
-    public static final EntityData POLAR_BEAR = REGISTRY.register(new EntityData(99, "polar_bear", 1.4f, 1.4f, true, true, true, true, true, EntityType.POLAR_BEAR));
+    public static final EntityData PIGLIN_BRUTE = REGISTRY.register(new EntityData(99, "piglin_brute", 0.6f, 1.95f, true, true, true, false, true, EntityType.PIGLIN_BRUTE));
 
-    public static final EntityData SPLASH_POTION = REGISTRY.register(new EntityData(100, "splash_potion", 0.25f, 0.25f, true, false, false, false, false, EntityType.SPLASH_POTION));
+    public static final EntityData PILLAGER = REGISTRY.register(new EntityData(100, "pillager", 0.6f, 1.95f, true, true, true, false, true, EntityType.PILLAGER));
 
-    public static final EntityData LINGERING_POTION = REGISTRY.register(new EntityData(101, "lingering_potion", 0.25f, 0.25f, true, false, false, false, false, EntityType.LINGERING_POTION));
+    public static final EntityData POLAR_BEAR = REGISTRY.register(new EntityData(101, "polar_bear", 1.4f, 1.4f, true, true, true, true, true, EntityType.POLAR_BEAR));
 
-    public static final EntityData PUFFERFISH = REGISTRY.register(new EntityData(102, "pufferfish", 0.7f, 0.7f, true, true, true, false, true, EntityType.PUFFERFISH));
+    public static final EntityData SPLASH_POTION = REGISTRY.register(new EntityData(102, "splash_potion", 0.25f, 0.25f, true, false, false, false, false, EntityType.SPLASH_POTION));
 
-    public static final EntityData RABBIT = REGISTRY.register(new EntityData(103, "rabbit", 0.4f, 0.5f, true, true, true, true, true, EntityType.RABBIT));
+    public static final EntityData LINGERING_POTION = REGISTRY.register(new EntityData(103, "lingering_potion", 0.25f, 0.25f, true, false, false, false, false, EntityType.LINGERING_POTION));
 
-    public static final EntityData RAVAGER = REGISTRY.register(new EntityData(104, "ravager", 1.95f, 2.2f, true, true, true, false, true, EntityType.RAVAGER));
+    public static final EntityData PUFFERFISH = REGISTRY.register(new EntityData(104, "pufferfish", 0.7f, 0.7f, true, true, true, false, true, EntityType.PUFFERFISH));
 
-    public static final EntityData SALMON = REGISTRY.register(new EntityData(105, "salmon", 0.7f, 0.4f, true, true, true, false, true, EntityType.SALMON));
+    public static final EntityData RABBIT = REGISTRY.register(new EntityData(105, "rabbit", 0.4f, 0.5f, true, true, true, true, true, EntityType.RABBIT));
 
-    public static final EntityData SHEEP = REGISTRY.register(new EntityData(106, "sheep", 0.9f, 1.3f, true, true, true, true, true, EntityType.SHEEP));
+    public static final EntityData RAVAGER = REGISTRY.register(new EntityData(106, "ravager", 1.95f, 2.2f, true, true, true, false, true, EntityType.RAVAGER));
 
-    public static final EntityData SHULKER = REGISTRY.register(new EntityData(107, "shulker", 1.0f, 1.0f, true, true, true, false, true, EntityType.SHULKER));
+    public static final EntityData SALMON = REGISTRY.register(new EntityData(107, "salmon", 0.7f, 0.4f, true, true, true, false, true, EntityType.SALMON));
 
-    public static final EntityData SHULKER_BULLET = REGISTRY.register(new EntityData(108, "shulker_bullet", 0.3125f, 0.3125f, true, true, false, false, false, EntityType.SHULKER_BULLET));
+    public static final EntityData SHEEP = REGISTRY.register(new EntityData(108, "sheep", 0.9f, 1.3f, true, true, true, true, true, EntityType.SHEEP));
 
-    public static final EntityData SILVERFISH = REGISTRY.register(new EntityData(109, "silverfish", 0.4f, 0.3f, true, true, true, false, true, EntityType.SILVERFISH));
+    public static final EntityData SHULKER = REGISTRY.register(new EntityData(109, "shulker", 1.0f, 1.0f, true, true, true, false, true, EntityType.SHULKER));
 
-    public static final EntityData SKELETON = REGISTRY.register(new EntityData(110, "skeleton", 0.6f, 1.99f, true, true, true, false, true, EntityType.SKELETON));
+    public static final EntityData SHULKER_BULLET = REGISTRY.register(new EntityData(110, "shulker_bullet", 0.3125f, 0.3125f, true, true, false, false, false, EntityType.SHULKER_BULLET));
 
-    public static final EntityData SKELETON_HORSE = REGISTRY.register(new EntityData(111, "skeleton_horse", 1.3964844f, 1.6f, true, true, true, true, true, EntityType.SKELETON_HORSE));
+    public static final EntityData SILVERFISH = REGISTRY.register(new EntityData(111, "silverfish", 0.4f, 0.3f, true, true, true, false, true, EntityType.SILVERFISH));
 
-    public static final EntityData SLIME = REGISTRY.register(new EntityData(112, "slime", 0.52f, 0.52f, true, true, true, false, true, EntityType.SLIME));
+    public static final EntityData SKELETON = REGISTRY.register(new EntityData(112, "skeleton", 0.6f, 1.99f, true, true, true, false, true, EntityType.SKELETON));
 
-    public static final EntityData SMALL_FIREBALL = REGISTRY.register(new EntityData(113, "small_fireball", 0.3125f, 0.3125f, true, false, false, false, false, EntityType.SMALL_FIREBALL));
+    public static final EntityData SKELETON_HORSE = REGISTRY.register(new EntityData(113, "skeleton_horse", 1.3964844f, 1.6f, true, true, true, true, true, EntityType.SKELETON_HORSE));
 
-    public static final EntityData SNIFFER = REGISTRY.register(new EntityData(114, "sniffer", 1.9f, 1.75f, true, true, true, true, true, EntityType.SNIFFER));
+    public static final EntityData SLIME = REGISTRY.register(new EntityData(114, "slime", 0.52f, 0.52f, true, true, true, false, true, EntityType.SLIME));
 
-    public static final EntityData SNOWBALL = REGISTRY.register(new EntityData(115, "snowball", 0.25f, 0.25f, true, false, false, false, false, EntityType.SNOWBALL));
+    public static final EntityData SMALL_FIREBALL = REGISTRY.register(new EntityData(115, "small_fireball", 0.3125f, 0.3125f, true, false, false, false, false, EntityType.SMALL_FIREBALL));
 
-    public static final EntityData SNOW_GOLEM = REGISTRY.register(new EntityData(116, "snow_golem", 0.7f, 1.9f, true, true, true, false, true, EntityType.SNOW_GOLEM));
+    public static final EntityData SNIFFER = REGISTRY.register(new EntityData(116, "sniffer", 1.9f, 1.75f, true, true, true, true, true, EntityType.SNIFFER));
 
-    public static final EntityData SPAWNER_MINECART = REGISTRY.register(new EntityData(117, "spawner_minecart", 0.98f, 0.7f, true, true, false, false, true, EntityType.SPAWNER_MINECART));
+    public static final EntityData SNOWBALL = REGISTRY.register(new EntityData(117, "snowball", 0.25f, 0.25f, true, false, false, false, false, EntityType.SNOWBALL));
 
-    public static final EntityData SPECTRAL_ARROW = REGISTRY.register(new EntityData(118, "spectral_arrow", 0.5f, 0.5f, false, false, false, false, false, EntityType.SPECTRAL_ARROW));
+    public static final EntityData SNOW_GOLEM = REGISTRY.register(new EntityData(118, "snow_golem", 0.7f, 1.9f, true, true, true, false, true, EntityType.SNOW_GOLEM));
 
-    public static final EntityData SPIDER = REGISTRY.register(new EntityData(119, "spider", 1.4f, 0.9f, true, true, true, false, true, EntityType.SPIDER));
+    public static final EntityData SPAWNER_MINECART = REGISTRY.register(new EntityData(119, "spawner_minecart", 0.98f, 0.7f, true, true, false, false, true, EntityType.SPAWNER_MINECART));
 
-    public static final EntityData SPRUCE_BOAT = REGISTRY.register(new EntityData(120, "spruce_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.SPRUCE_BOAT));
+    public static final EntityData SPECTRAL_ARROW = REGISTRY.register(new EntityData(120, "spectral_arrow", 0.5f, 0.5f, false, false, false, false, false, EntityType.SPECTRAL_ARROW));
 
-    public static final EntityData SPRUCE_CHEST_BOAT = REGISTRY.register(new EntityData(121, "spruce_chest_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.SPRUCE_CHEST_BOAT));
+    public static final EntityData SPIDER = REGISTRY.register(new EntityData(121, "spider", 1.4f, 0.9f, true, true, true, false, true, EntityType.SPIDER));
 
-    public static final EntityData SQUID = REGISTRY.register(new EntityData(122, "squid", 0.8f, 0.8f, true, true, true, true, true, EntityType.SQUID));
+    public static final EntityData SPRUCE_BOAT = REGISTRY.register(new EntityData(122, "spruce_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.SPRUCE_BOAT));
 
-    public static final EntityData STRAY = REGISTRY.register(new EntityData(123, "stray", 0.6f, 1.99f, true, true, true, false, true, EntityType.STRAY));
+    public static final EntityData SPRUCE_CHEST_BOAT = REGISTRY.register(new EntityData(123, "spruce_chest_boat", 1.375f, 0.5625f, true, true, false, false, true, EntityType.SPRUCE_CHEST_BOAT));
 
-    public static final EntityData STRIDER = REGISTRY.register(new EntityData(124, "strider", 0.9f, 1.7f, true, true, true, true, true, EntityType.STRIDER));
+    public static final EntityData SQUID = REGISTRY.register(new EntityData(124, "squid", 0.8f, 0.8f, true, true, true, true, true, EntityType.SQUID));
 
-    public static final EntityData TADPOLE = REGISTRY.register(new EntityData(125, "tadpole", 0.4f, 0.3f, true, true, true, false, true, EntityType.TADPOLE));
+    public static final EntityData STRAY = REGISTRY.register(new EntityData(125, "stray", 0.6f, 1.99f, true, true, true, false, true, EntityType.STRAY));
 
-    public static final EntityData TEXT_DISPLAY = REGISTRY.register(new EntityData(126, "text_display", 0.0f, 0.0f, true, false, false, false, false, EntityType.TEXT_DISPLAY));
+    public static final EntityData STRIDER = REGISTRY.register(new EntityData(126, "strider", 0.9f, 1.7f, true, true, true, true, true, EntityType.STRIDER));
 
-    public static final EntityData TNT = REGISTRY.register(new EntityData(127, "tnt", 0.98f, 0.98f, true, true, false, false, true, EntityType.TNT));
+    public static final EntityData TADPOLE = REGISTRY.register(new EntityData(127, "tadpole", 0.4f, 0.3f, true, true, true, false, true, EntityType.TADPOLE));
 
-    public static final EntityData TNT_MINECART = REGISTRY.register(new EntityData(128, "tnt_minecart", 0.98f, 0.7f, true, true, false, false, true, EntityType.TNT_MINECART));
+    public static final EntityData TEXT_DISPLAY = REGISTRY.register(new EntityData(128, "text_display", 0.0f, 0.0f, true, false, false, false, false, EntityType.TEXT_DISPLAY));
 
-    public static final EntityData TRADER_LLAMA = REGISTRY.register(new EntityData(129, "trader_llama", 0.9f, 1.87f, true, true, true, true, true, EntityType.TRADER_LLAMA));
+    public static final EntityData TNT = REGISTRY.register(new EntityData(129, "tnt", 0.98f, 0.98f, true, true, false, false, true, EntityType.TNT));
 
-    public static final EntityData TRIDENT = REGISTRY.register(new EntityData(130, "trident", 0.5f, 0.5f, false, false, false, false, false, EntityType.TRIDENT));
+    public static final EntityData TNT_MINECART = REGISTRY.register(new EntityData(130, "tnt_minecart", 0.98f, 0.7f, true, true, false, false, true, EntityType.TNT_MINECART));
 
-    public static final EntityData TROPICAL_FISH = REGISTRY.register(new EntityData(131, "tropical_fish", 0.5f, 0.4f, true, true, true, false, true, EntityType.TROPICAL_FISH));
+    public static final EntityData TRADER_LLAMA = REGISTRY.register(new EntityData(131, "trader_llama", 0.9f, 1.87f, true, true, true, true, true, EntityType.TRADER_LLAMA));
 
-    public static final EntityData TURTLE = REGISTRY.register(new EntityData(132, "turtle", 1.2f, 0.4f, true, true, true, true, true, EntityType.TURTLE));
+    public static final EntityData TRIDENT = REGISTRY.register(new EntityData(132, "trident", 0.5f, 0.5f, false, false, false, false, false, EntityType.TRIDENT));
 
-    public static final EntityData VEX = REGISTRY.register(new EntityData(133, "vex", 0.4f, 0.8f, true, true, true, false, true, EntityType.VEX));
+    public static final EntityData TROPICAL_FISH = REGISTRY.register(new EntityData(133, "tropical_fish", 0.5f, 0.4f, true, true, true, false, true, EntityType.TROPICAL_FISH));
 
-    public static final EntityData VILLAGER = REGISTRY.register(new EntityData(134, "villager", 0.6f, 1.95f, true, true, true, true, true, EntityType.VILLAGER));
+    public static final EntityData TURTLE = REGISTRY.register(new EntityData(134, "turtle", 1.2f, 0.4f, true, true, true, true, true, EntityType.TURTLE));
 
-    public static final EntityData VINDICATOR = REGISTRY.register(new EntityData(135, "vindicator", 0.6f, 1.95f, true, true, true, false, true, EntityType.VINDICATOR));
+    public static final EntityData VEX = REGISTRY.register(new EntityData(135, "vex", 0.4f, 0.8f, true, true, true, false, true, EntityType.VEX));
 
-    public static final EntityData WANDERING_TRADER = REGISTRY.register(new EntityData(136, "wandering_trader", 0.6f, 1.95f, true, true, true, true, true, EntityType.WANDERING_TRADER));
+    public static final EntityData VILLAGER = REGISTRY.register(new EntityData(136, "villager", 0.6f, 1.95f, true, true, true, true, true, EntityType.VILLAGER));
 
-    public static final EntityData WARDEN = REGISTRY.register(new EntityData(137, "warden", 0.9f, 2.9f, true, true, true, false, true, EntityType.WARDEN));
+    public static final EntityData VINDICATOR = REGISTRY.register(new EntityData(137, "vindicator", 0.6f, 1.95f, true, true, true, false, true, EntityType.VINDICATOR));
 
-    public static final EntityData WIND_CHARGE = REGISTRY.register(new EntityData(138, "wind_charge", 0.3125f, 0.3125f, true, true, false, false, false, EntityType.WIND_CHARGE));
+    public static final EntityData WANDERING_TRADER = REGISTRY.register(new EntityData(138, "wandering_trader", 0.6f, 1.95f, true, true, true, true, true, EntityType.WANDERING_TRADER));
 
-    public static final EntityData WITCH = REGISTRY.register(new EntityData(139, "witch", 0.6f, 1.95f, true, true, true, false, true, EntityType.WITCH));
+    public static final EntityData WARDEN = REGISTRY.register(new EntityData(139, "warden", 0.9f, 2.9f, true, true, true, false, true, EntityType.WARDEN));
 
-    public static final EntityData WITHER = REGISTRY.register(new EntityData(140, "wither", 0.9f, 3.5f, true, true, true, false, true, EntityType.WITHER));
+    public static final EntityData WIND_CHARGE = REGISTRY.register(new EntityData(140, "wind_charge", 0.3125f, 0.3125f, true, true, false, false, false, EntityType.WIND_CHARGE));
 
-    public static final EntityData WITHER_SKELETON = REGISTRY.register(new EntityData(141, "wither_skeleton", 0.7f, 2.4f, true, true, true, false, true, EntityType.WITHER_SKELETON));
+    public static final EntityData WITCH = REGISTRY.register(new EntityData(141, "witch", 0.6f, 1.95f, true, true, true, false, true, EntityType.WITCH));
 
-    public static final EntityData WITHER_SKULL = REGISTRY.register(new EntityData(142, "wither_skull", 0.3125f, 0.3125f, true, false, false, false, false, EntityType.WITHER_SKULL));
+    public static final EntityData WITHER = REGISTRY.register(new EntityData(142, "wither", 0.9f, 3.5f, true, true, true, false, true, EntityType.WITHER));
 
-    public static final EntityData WOLF = REGISTRY.register(new EntityData(143, "wolf", 0.6f, 0.85f, true, true, true, true, true, EntityType.WOLF));
+    public static final EntityData WITHER_SKELETON = REGISTRY.register(new EntityData(143, "wither_skeleton", 0.7f, 2.4f, true, true, true, false, true, EntityType.WITHER_SKELETON));
 
-    public static final EntityData ZOGLIN = REGISTRY.register(new EntityData(144, "zoglin", 1.3964844f, 1.4f, true, true, true, false, true, EntityType.ZOGLIN));
+    public static final EntityData WITHER_SKULL = REGISTRY.register(new EntityData(144, "wither_skull", 0.3125f, 0.3125f, true, false, false, false, false, EntityType.WITHER_SKULL));
 
-    public static final EntityData ZOMBIE = REGISTRY.register(new EntityData(145, "zombie", 0.6f, 1.95f, true, true, true, false, true, EntityType.ZOMBIE));
+    public static final EntityData WOLF = REGISTRY.register(new EntityData(145, "wolf", 0.6f, 0.85f, true, true, true, true, true, EntityType.WOLF));
 
-    public static final EntityData ZOMBIE_HORSE = REGISTRY.register(new EntityData(146, "zombie_horse", 1.3964844f, 1.6f, true, true, true, true, true, EntityType.ZOMBIE_HORSE));
+    public static final EntityData ZOGLIN = REGISTRY.register(new EntityData(146, "zoglin", 1.3964844f, 1.4f, true, true, true, false, true, EntityType.ZOGLIN));
 
-    public static final EntityData ZOMBIE_VILLAGER = REGISTRY.register(new EntityData(147, "zombie_villager", 0.6f, 1.95f, true, true, true, false, true, EntityType.ZOMBIE_VILLAGER));
+    public static final EntityData ZOMBIE = REGISTRY.register(new EntityData(147, "zombie", 0.6f, 1.95f, true, true, true, false, true, EntityType.ZOMBIE));
 
-    public static final EntityData ZOMBIFIED_PIGLIN = REGISTRY.register(new EntityData(148, "zombified_piglin", 0.6f, 1.95f, true, true, true, false, true, EntityType.ZOMBIFIED_PIGLIN));
+    public static final EntityData ZOMBIE_HORSE = REGISTRY.register(new EntityData(148, "zombie_horse", 1.3964844f, 1.6f, true, true, true, true, true, EntityType.ZOMBIE_HORSE));
 
-    public static final EntityData PLAYER = REGISTRY.register(new EntityData(149, "player", 0.6f, 1.8f, true, true, true, true, true, EntityType.PLAYER));
+    public static final EntityData ZOMBIE_VILLAGER = REGISTRY.register(new EntityData(149, "zombie_villager", 0.6f, 1.95f, true, true, true, false, true, EntityType.ZOMBIE_VILLAGER));
 
-    public static final EntityData FISHING_BOBBER = REGISTRY.register(new EntityData(150, "fishing_bobber", 0.25f, 0.25f, true, false, false, false, false, EntityType.FISHING_BOBBER));
+    public static final EntityData ZOMBIFIED_PIGLIN = REGISTRY.register(new EntityData(150, "zombified_piglin", 0.6f, 1.95f, true, true, true, false, true, EntityType.ZOMBIFIED_PIGLIN));
+
+    public static final EntityData PLAYER = REGISTRY.register(new EntityData(151, "player", 0.6f, 1.8f, true, true, true, true, true, EntityType.PLAYER));
+
+    public static final EntityData FISHING_BOBBER = REGISTRY.register(new EntityData(152, "fishing_bobber", 0.25f, 0.25f, true, false, false, false, false, EntityType.FISHING_BOBBER));
 }

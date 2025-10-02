@@ -37,9 +37,9 @@ public class AddEntityHandler implements ClientEventLoopPacketHandler<Clientboun
                 .setYaw(packet.getYaw())
                 .setPitch(packet.getPitch())
                 .setHeadYaw(packet.getHeadYaw())
-                .setVelX(packet.getMotionX())
-                .setVelY(packet.getMotionY())
-                .setVelZ(packet.getMotionZ());
+                .setVelX(packet.getMovement().getX())
+                .setVelY(packet.getMovement().getY())
+                .setVelZ(packet.getMovement().getZ());
             CACHE.getEntityCache().add(entity);
         }
         return true;

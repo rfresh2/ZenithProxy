@@ -45,6 +45,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
+import static com.zenith.Globals.CACHE;
 import static org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot.*;
 
 
@@ -112,7 +113,10 @@ public class PlayerCache implements CachedData {
         } else {
             consumer.accept(new ClientboundPlayerPositionPacket(ThreadLocalRandom.current().nextInt(16, 1024), this.getX(), this.getY(), this.getZ(), this.getVelX(), this.getVelY(), this.getVelZ(), this.getYaw(), this.getPitch()));
         }
-        consumer.accept(new ClientboundSetDefaultSpawnPositionPacket(spawnPosition.getX(), spawnPosition.getY(), spawnPosition.getZ(), 0.0f));
+        consumer.accept(new ClientboundSetDefaultSpawnPositionPacket(
+            // todo: cache spawn world key
+            new GlobalPos(CACHE.getChunkCache().getWorldName(), spawnPosition.getX(), spawnPosition.getY(), spawnPosition.getZ()),
+            0.0f, 0.0f));
         consumer.accept(new ClientboundSetHeldSlotPacket(heldItemSlot));
     }
 

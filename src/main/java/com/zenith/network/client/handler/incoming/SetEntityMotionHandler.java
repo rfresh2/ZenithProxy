@@ -12,7 +12,7 @@ public class SetEntityMotionHandler implements ClientEventLoopPacketHandler<Clie
     @Override
     public boolean applyAsync(final ClientboundSetEntityMotionPacket packet, final ClientSession session) {
         if (!Proxy.getInstance().hasActivePlayer() && packet.getEntityId() == CACHE.getPlayerCache().getEntityId()) {
-            BOT.handleSetMotion(packet.getMotionX(), packet.getMotionY(), packet.getMotionZ());
+            BOT.handleSetMotion(packet.getMovement().getX(), packet.getMovement().getY(), packet.getMovement().getZ());
         }
         return true;
     }

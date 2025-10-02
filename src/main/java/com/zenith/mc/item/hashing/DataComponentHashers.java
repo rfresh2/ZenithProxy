@@ -164,9 +164,9 @@ public class DataComponentHashers {
 
         register(DataComponentTypes.TRIM, RegistryHasher.ARMOR_TRIM);
         register(DataComponentTypes.DEBUG_STICK_STATE, MinecraftHasher.MNBT);
-        register(DataComponentTypes.ENTITY_DATA, MinecraftHasher.MNBT);
+//        register(DataComponentTypes.ENTITY_DATA, MinecraftHasher.MNBT);
         register(DataComponentTypes.BUCKET_ENTITY_DATA, MinecraftHasher.MNBT);
-        register(DataComponentTypes.BLOCK_ENTITY_DATA, MinecraftHasher.MNBT);
+//        register(DataComponentTypes.BLOCK_ENTITY_DATA, MinecraftHasher.MNBT);
 
         register(DataComponentTypes.INSTRUMENT, RegistryHasher.INSTRUMENT_COMPONENT);
         register(DataComponentTypes.PROVIDES_TRIM_MATERIAL, RegistryHasher.PROVIDES_TRIM_MATERIAL);
@@ -186,7 +186,7 @@ public class DataComponentHashers {
             .optional("flight_duration", MinecraftHasher.BYTE, fireworks -> (byte) fireworks.getFlightDuration(), (byte) 0)
             .optionalList("explosions", RegistryHasher.FIREWORK_EXPLOSION, Fireworks::getExplosions));
 
-        register(DataComponentTypes.PROFILE, MinecraftHasher.GAME_PROFILE);
+//        register(DataComponentTypes.PROFILE, MinecraftHasher.GAME_PROFILE);
         register(DataComponentTypes.NOTE_BLOCK_SOUND, MinecraftHasher.KEY);
         register(DataComponentTypes.BANNER_PATTERNS, RegistryHasher.BANNER_PATTERN_LAYER.list());
         register(DataComponentTypes.BASE_COLOR, MinecraftHasher.DYE_COLOR);

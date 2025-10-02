@@ -7,7 +7,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType
 import java.util.EnumSet;
 
 public final class BlockRegistry {
-    public static final Registry<Block> REGISTRY = new Registry<Block>(1105);
+    public static final Registry<Block> REGISTRY = new Registry<Block>(1166);
 
     public static final Block AIR = REGISTRY.register(new Block(0, "air", false, 0, 0, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
@@ -367,1855 +367,1977 @@ public final class BlockRegistry {
 
     public static final Block CHISELED_BOOKSHELF = REGISTRY.register(new Block(178, "chiseled_bookshelf", true, 2143, 2398, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.CHISELED_BOOKSHELF));
 
-    public static final Block MOSSY_COBBLESTONE = REGISTRY.register(new Block(179, "mossy_cobblestone", true, 2399, 2399, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ACACIA_SHELF = REGISTRY.register(new Block(179, "acacia_shelf", true, 2399, 2462, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SHELF));
 
-    public static final Block OBSIDIAN = REGISTRY.register(new Block(180, "obsidian", true, 2400, 2400, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 50.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL)));
+    public static final Block BAMBOO_SHELF = REGISTRY.register(new Block(180, "bamboo_shelf", true, 2463, 2526, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SHELF));
 
-    public static final Block TORCH = REGISTRY.register(new Block(181, "torch", false, 2401, 2401, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block BIRCH_SHELF = REGISTRY.register(new Block(181, "birch_shelf", true, 2527, 2590, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SHELF));
 
-    public static final Block WALL_TORCH = REGISTRY.register(new Block(182, "wall_torch", false, 2402, 2405, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block CHERRY_SHELF = REGISTRY.register(new Block(182, "cherry_shelf", true, 2591, 2654, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SHELF));
 
-    public static final Block FIRE = REGISTRY.register(new Block(183, "fire", false, 2406, 2917, 4, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block CRIMSON_SHELF = REGISTRY.register(new Block(183, "crimson_shelf", true, 2655, 2718, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SHELF));
 
-    public static final Block SOUL_FIRE = REGISTRY.register(new Block(184, "soul_fire", false, 2918, 2918, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block DARK_OAK_SHELF = REGISTRY.register(new Block(184, "dark_oak_shelf", true, 2719, 2782, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SHELF));
 
-    public static final Block SPAWNER = REGISTRY.register(new Block(185, "spawner", true, 2919, 2919, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.MOB_SPAWNER));
+    public static final Block JUNGLE_SHELF = REGISTRY.register(new Block(185, "jungle_shelf", true, 2783, 2846, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SHELF));
 
-    public static final Block CREAKING_HEART = REGISTRY.register(new Block(186, "creaking_heart", true, 2920, 2937, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 10.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.CREAKING_HEART));
+    public static final Block MANGROVE_SHELF = REGISTRY.register(new Block(186, "mangrove_shelf", true, 2847, 2910, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SHELF));
 
-    public static final Block OAK_STAIRS = REGISTRY.register(new Block(187, "oak_stairs", true, 2938, 3017, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block OAK_SHELF = REGISTRY.register(new Block(187, "oak_shelf", true, 2911, 2974, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SHELF));
 
-    public static final Block CHEST = REGISTRY.register(new Block(188, "chest", true, 3018, 3041, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.CHEST));
+    public static final Block PALE_OAK_SHELF = REGISTRY.register(new Block(188, "pale_oak_shelf", true, 2975, 3038, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SHELF));
 
-    public static final Block REDSTONE_WIRE = REGISTRY.register(new Block(189, "redstone_wire", false, 3042, 4337, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block SPRUCE_SHELF = REGISTRY.register(new Block(189, "spruce_shelf", true, 3039, 3102, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SHELF));
 
-    public static final Block DIAMOND_ORE = REGISTRY.register(new Block(190, "diamond_ore", true, 4338, 4338, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
+    public static final Block WARPED_SHELF = REGISTRY.register(new Block(190, "warped_shelf", true, 3103, 3166, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SHELF));
 
-    public static final Block DEEPSLATE_DIAMOND_ORE = REGISTRY.register(new Block(191, "deepslate_diamond_ore", true, 4339, 4339, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 4.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
+    public static final Block MOSSY_COBBLESTONE = REGISTRY.register(new Block(191, "mossy_cobblestone", true, 3167, 3167, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DIAMOND_BLOCK = REGISTRY.register(new Block(192, "diamond_block", true, 4340, 4340, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
+    public static final Block OBSIDIAN = REGISTRY.register(new Block(192, "obsidian", true, 3168, 3168, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 50.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL)));
 
-    public static final Block CRAFTING_TABLE = REGISTRY.register(new Block(193, "crafting_table", true, 4341, 4341, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block TORCH = REGISTRY.register(new Block(193, "torch", false, 3169, 3169, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block WHEAT = REGISTRY.register(new Block(194, "wheat", false, 4342, 4349, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WALL_TORCH = REGISTRY.register(new Block(194, "wall_torch", false, 3170, 3173, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block FARMLAND = REGISTRY.register(new Block(195, "farmland", true, 4350, 4357, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 0.6f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block FIRE = REGISTRY.register(new Block(195, "fire", false, 3174, 3685, 4, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block FURNACE = REGISTRY.register(new Block(196, "furnace", true, 4358, 4365, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.FURNACE));
+    public static final Block SOUL_FIRE = REGISTRY.register(new Block(196, "soul_fire", false, 3686, 3686, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block OAK_SIGN = REGISTRY.register(new Block(197, "oak_sign", true, 4366, 4397, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block SPAWNER = REGISTRY.register(new Block(197, "spawner", true, 3687, 3687, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.MOB_SPAWNER));
 
-    public static final Block SPRUCE_SIGN = REGISTRY.register(new Block(198, "spruce_sign", true, 4398, 4429, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block CREAKING_HEART = REGISTRY.register(new Block(198, "creaking_heart", true, 3688, 3705, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 10.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.CREAKING_HEART));
 
-    public static final Block BIRCH_SIGN = REGISTRY.register(new Block(199, "birch_sign", true, 4430, 4461, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block OAK_STAIRS = REGISTRY.register(new Block(199, "oak_stairs", true, 3706, 3785, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block ACACIA_SIGN = REGISTRY.register(new Block(200, "acacia_sign", true, 4462, 4493, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block CHEST = REGISTRY.register(new Block(200, "chest", true, 3786, 3809, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.CHEST));
 
-    public static final Block CHERRY_SIGN = REGISTRY.register(new Block(201, "cherry_sign", true, 4494, 4525, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block REDSTONE_WIRE = REGISTRY.register(new Block(201, "redstone_wire", false, 3810, 5105, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block JUNGLE_SIGN = REGISTRY.register(new Block(202, "jungle_sign", true, 4526, 4557, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block DIAMOND_ORE = REGISTRY.register(new Block(202, "diamond_ore", true, 5106, 5106, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
 
-    public static final Block DARK_OAK_SIGN = REGISTRY.register(new Block(203, "dark_oak_sign", true, 4558, 4589, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block DEEPSLATE_DIAMOND_ORE = REGISTRY.register(new Block(203, "deepslate_diamond_ore", true, 5107, 5107, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 4.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
 
-    public static final Block PALE_OAK_SIGN = REGISTRY.register(new Block(204, "pale_oak_sign", true, 4590, 4621, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block DIAMOND_BLOCK = REGISTRY.register(new Block(204, "diamond_block", true, 5108, 5108, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
 
-    public static final Block MANGROVE_SIGN = REGISTRY.register(new Block(205, "mangrove_sign", true, 4622, 4653, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block CRAFTING_TABLE = REGISTRY.register(new Block(205, "crafting_table", true, 5109, 5109, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BAMBOO_SIGN = REGISTRY.register(new Block(206, "bamboo_sign", true, 4654, 4685, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block WHEAT = REGISTRY.register(new Block(206, "wheat", false, 5110, 5117, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block OAK_DOOR = REGISTRY.register(new Block(207, "oak_door", true, 4686, 4749, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block FARMLAND = REGISTRY.register(new Block(207, "farmland", true, 5118, 5125, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 0.6f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block LADDER = REGISTRY.register(new Block(208, "ladder", false, 4750, 4757, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.CLIMBABLE)));
+    public static final Block FURNACE = REGISTRY.register(new Block(208, "furnace", true, 5126, 5133, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.FURNACE));
 
-    public static final Block RAIL = REGISTRY.register(new Block(209, "rail", false, 4758, 4777, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.7f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block OAK_SIGN = REGISTRY.register(new Block(209, "oak_sign", true, 5134, 5165, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block COBBLESTONE_STAIRS = REGISTRY.register(new Block(210, "cobblestone_stairs", true, 4778, 4857, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SPRUCE_SIGN = REGISTRY.register(new Block(210, "spruce_sign", true, 5166, 5197, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block OAK_WALL_SIGN = REGISTRY.register(new Block(211, "oak_wall_sign", true, 4858, 4865, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block BIRCH_SIGN = REGISTRY.register(new Block(211, "birch_sign", true, 5198, 5229, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block SPRUCE_WALL_SIGN = REGISTRY.register(new Block(212, "spruce_wall_sign", true, 4866, 4873, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block ACACIA_SIGN = REGISTRY.register(new Block(212, "acacia_sign", true, 5230, 5261, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block BIRCH_WALL_SIGN = REGISTRY.register(new Block(213, "birch_wall_sign", true, 4874, 4881, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block CHERRY_SIGN = REGISTRY.register(new Block(213, "cherry_sign", true, 5262, 5293, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block ACACIA_WALL_SIGN = REGISTRY.register(new Block(214, "acacia_wall_sign", true, 4882, 4889, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block JUNGLE_SIGN = REGISTRY.register(new Block(214, "jungle_sign", true, 5294, 5325, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block CHERRY_WALL_SIGN = REGISTRY.register(new Block(215, "cherry_wall_sign", true, 4890, 4897, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block DARK_OAK_SIGN = REGISTRY.register(new Block(215, "dark_oak_sign", true, 5326, 5357, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block JUNGLE_WALL_SIGN = REGISTRY.register(new Block(216, "jungle_wall_sign", true, 4898, 4905, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block PALE_OAK_SIGN = REGISTRY.register(new Block(216, "pale_oak_sign", true, 5358, 5389, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block DARK_OAK_WALL_SIGN = REGISTRY.register(new Block(217, "dark_oak_wall_sign", true, 4906, 4913, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block MANGROVE_SIGN = REGISTRY.register(new Block(217, "mangrove_sign", true, 5390, 5421, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block PALE_OAK_WALL_SIGN = REGISTRY.register(new Block(218, "pale_oak_wall_sign", true, 4914, 4921, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block BAMBOO_SIGN = REGISTRY.register(new Block(218, "bamboo_sign", true, 5422, 5453, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block MANGROVE_WALL_SIGN = REGISTRY.register(new Block(219, "mangrove_wall_sign", true, 4922, 4929, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block OAK_DOOR = REGISTRY.register(new Block(219, "oak_door", true, 5454, 5517, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BAMBOO_WALL_SIGN = REGISTRY.register(new Block(220, "bamboo_wall_sign", true, 4930, 4937, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block LADDER = REGISTRY.register(new Block(220, "ladder", false, 5518, 5525, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.CLIMBABLE)));
 
-    public static final Block OAK_HANGING_SIGN = REGISTRY.register(new Block(221, "oak_hanging_sign", true, 4938, 5001, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block RAIL = REGISTRY.register(new Block(221, "rail", false, 5526, 5545, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.7f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SPRUCE_HANGING_SIGN = REGISTRY.register(new Block(222, "spruce_hanging_sign", true, 5002, 5065, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block COBBLESTONE_STAIRS = REGISTRY.register(new Block(222, "cobblestone_stairs", true, 5546, 5625, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BIRCH_HANGING_SIGN = REGISTRY.register(new Block(223, "birch_hanging_sign", true, 5066, 5129, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block OAK_WALL_SIGN = REGISTRY.register(new Block(223, "oak_wall_sign", true, 5626, 5633, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block ACACIA_HANGING_SIGN = REGISTRY.register(new Block(224, "acacia_hanging_sign", true, 5130, 5193, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block SPRUCE_WALL_SIGN = REGISTRY.register(new Block(224, "spruce_wall_sign", true, 5634, 5641, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block CHERRY_HANGING_SIGN = REGISTRY.register(new Block(225, "cherry_hanging_sign", true, 5194, 5257, 42, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block BIRCH_WALL_SIGN = REGISTRY.register(new Block(225, "birch_wall_sign", true, 5642, 5649, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block JUNGLE_HANGING_SIGN = REGISTRY.register(new Block(226, "jungle_hanging_sign", true, 5258, 5321, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block ACACIA_WALL_SIGN = REGISTRY.register(new Block(226, "acacia_wall_sign", true, 5650, 5657, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block DARK_OAK_HANGING_SIGN = REGISTRY.register(new Block(227, "dark_oak_hanging_sign", true, 5322, 5385, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block CHERRY_WALL_SIGN = REGISTRY.register(new Block(227, "cherry_wall_sign", true, 5658, 5665, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block PALE_OAK_HANGING_SIGN = REGISTRY.register(new Block(228, "pale_oak_hanging_sign", true, 5386, 5449, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block JUNGLE_WALL_SIGN = REGISTRY.register(new Block(228, "jungle_wall_sign", true, 5666, 5673, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block CRIMSON_HANGING_SIGN = REGISTRY.register(new Block(229, "crimson_hanging_sign", true, 5450, 5513, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block DARK_OAK_WALL_SIGN = REGISTRY.register(new Block(229, "dark_oak_wall_sign", true, 5674, 5681, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block WARPED_HANGING_SIGN = REGISTRY.register(new Block(230, "warped_hanging_sign", true, 5514, 5577, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block PALE_OAK_WALL_SIGN = REGISTRY.register(new Block(230, "pale_oak_wall_sign", true, 5682, 5689, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block MANGROVE_HANGING_SIGN = REGISTRY.register(new Block(231, "mangrove_hanging_sign", true, 5578, 5641, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block MANGROVE_WALL_SIGN = REGISTRY.register(new Block(231, "mangrove_wall_sign", true, 5690, 5697, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block BAMBOO_HANGING_SIGN = REGISTRY.register(new Block(232, "bamboo_hanging_sign", true, 5642, 5705, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block BAMBOO_WALL_SIGN = REGISTRY.register(new Block(232, "bamboo_wall_sign", true, 5698, 5705, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block OAK_WALL_HANGING_SIGN = REGISTRY.register(new Block(233, "oak_wall_hanging_sign", true, 5706, 5713, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block OAK_HANGING_SIGN = REGISTRY.register(new Block(233, "oak_hanging_sign", true, 5706, 5769, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block SPRUCE_WALL_HANGING_SIGN = REGISTRY.register(new Block(234, "spruce_wall_hanging_sign", true, 5714, 5721, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block SPRUCE_HANGING_SIGN = REGISTRY.register(new Block(234, "spruce_hanging_sign", true, 5770, 5833, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block BIRCH_WALL_HANGING_SIGN = REGISTRY.register(new Block(235, "birch_wall_hanging_sign", true, 5722, 5729, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block BIRCH_HANGING_SIGN = REGISTRY.register(new Block(235, "birch_hanging_sign", true, 5834, 5897, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block ACACIA_WALL_HANGING_SIGN = REGISTRY.register(new Block(236, "acacia_wall_hanging_sign", true, 5730, 5737, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block ACACIA_HANGING_SIGN = REGISTRY.register(new Block(236, "acacia_hanging_sign", true, 5898, 5961, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block CHERRY_WALL_HANGING_SIGN = REGISTRY.register(new Block(237, "cherry_wall_hanging_sign", true, 5738, 5745, 42, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block CHERRY_HANGING_SIGN = REGISTRY.register(new Block(237, "cherry_hanging_sign", true, 5962, 6025, 42, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block JUNGLE_WALL_HANGING_SIGN = REGISTRY.register(new Block(238, "jungle_wall_hanging_sign", true, 5746, 5753, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block JUNGLE_HANGING_SIGN = REGISTRY.register(new Block(238, "jungle_hanging_sign", true, 6026, 6089, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block DARK_OAK_WALL_HANGING_SIGN = REGISTRY.register(new Block(239, "dark_oak_wall_hanging_sign", true, 5754, 5761, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block DARK_OAK_HANGING_SIGN = REGISTRY.register(new Block(239, "dark_oak_hanging_sign", true, 6090, 6153, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block PALE_OAK_WALL_HANGING_SIGN = REGISTRY.register(new Block(240, "pale_oak_wall_hanging_sign", true, 5762, 5769, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block PALE_OAK_HANGING_SIGN = REGISTRY.register(new Block(240, "pale_oak_hanging_sign", true, 6154, 6217, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block MANGROVE_WALL_HANGING_SIGN = REGISTRY.register(new Block(241, "mangrove_wall_hanging_sign", true, 5770, 5777, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block CRIMSON_HANGING_SIGN = REGISTRY.register(new Block(241, "crimson_hanging_sign", true, 6218, 6281, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block CRIMSON_WALL_HANGING_SIGN = REGISTRY.register(new Block(242, "crimson_wall_hanging_sign", true, 5778, 5785, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block WARPED_HANGING_SIGN = REGISTRY.register(new Block(242, "warped_hanging_sign", true, 6282, 6345, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block WARPED_WALL_HANGING_SIGN = REGISTRY.register(new Block(243, "warped_wall_hanging_sign", true, 5786, 5793, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block MANGROVE_HANGING_SIGN = REGISTRY.register(new Block(243, "mangrove_hanging_sign", true, 6346, 6409, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block BAMBOO_WALL_HANGING_SIGN = REGISTRY.register(new Block(244, "bamboo_wall_hanging_sign", true, 5794, 5801, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
+    public static final Block BAMBOO_HANGING_SIGN = REGISTRY.register(new Block(244, "bamboo_hanging_sign", true, 6410, 6473, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block LEVER = REGISTRY.register(new Block(245, "lever", false, 5802, 5825, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block OAK_WALL_HANGING_SIGN = REGISTRY.register(new Block(245, "oak_wall_hanging_sign", true, 6474, 6481, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block STONE_PRESSURE_PLATE = REGISTRY.register(new Block(246, "stone_pressure_plate", true, 5826, 5827, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SPRUCE_WALL_HANGING_SIGN = REGISTRY.register(new Block(246, "spruce_wall_hanging_sign", true, 6482, 6489, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block IRON_DOOR = REGISTRY.register(new Block(247, "iron_door", true, 5828, 5891, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BIRCH_WALL_HANGING_SIGN = REGISTRY.register(new Block(247, "birch_wall_hanging_sign", true, 6490, 6497, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block OAK_PRESSURE_PLATE = REGISTRY.register(new Block(248, "oak_pressure_plate", true, 5892, 5893, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block ACACIA_WALL_HANGING_SIGN = REGISTRY.register(new Block(248, "acacia_wall_hanging_sign", true, 6498, 6505, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block SPRUCE_PRESSURE_PLATE = REGISTRY.register(new Block(249, "spruce_pressure_plate", true, 5894, 5895, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block CHERRY_WALL_HANGING_SIGN = REGISTRY.register(new Block(249, "cherry_wall_hanging_sign", true, 6506, 6513, 42, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block BIRCH_PRESSURE_PLATE = REGISTRY.register(new Block(250, "birch_pressure_plate", true, 5896, 5897, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block JUNGLE_WALL_HANGING_SIGN = REGISTRY.register(new Block(250, "jungle_wall_hanging_sign", true, 6514, 6521, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block JUNGLE_PRESSURE_PLATE = REGISTRY.register(new Block(251, "jungle_pressure_plate", true, 5898, 5899, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block DARK_OAK_WALL_HANGING_SIGN = REGISTRY.register(new Block(251, "dark_oak_wall_hanging_sign", true, 6522, 6529, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block ACACIA_PRESSURE_PLATE = REGISTRY.register(new Block(252, "acacia_pressure_plate", true, 5900, 5901, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block PALE_OAK_WALL_HANGING_SIGN = REGISTRY.register(new Block(252, "pale_oak_wall_hanging_sign", true, 6530, 6537, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block CHERRY_PRESSURE_PLATE = REGISTRY.register(new Block(253, "cherry_pressure_plate", true, 5902, 5903, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block MANGROVE_WALL_HANGING_SIGN = REGISTRY.register(new Block(253, "mangrove_wall_hanging_sign", true, 6538, 6545, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block DARK_OAK_PRESSURE_PLATE = REGISTRY.register(new Block(254, "dark_oak_pressure_plate", true, 5904, 5905, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block CRIMSON_WALL_HANGING_SIGN = REGISTRY.register(new Block(254, "crimson_wall_hanging_sign", true, 6546, 6553, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block PALE_OAK_PRESSURE_PLATE = REGISTRY.register(new Block(255, "pale_oak_pressure_plate", true, 5906, 5907, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block WARPED_WALL_HANGING_SIGN = REGISTRY.register(new Block(255, "warped_wall_hanging_sign", true, 6554, 6561, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block MANGROVE_PRESSURE_PLATE = REGISTRY.register(new Block(256, "mangrove_pressure_plate", true, 5908, 5909, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block BAMBOO_WALL_HANGING_SIGN = REGISTRY.register(new Block(256, "bamboo_wall_hanging_sign", true, 6562, 6569, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.HANGING_SIGN));
 
-    public static final Block BAMBOO_PRESSURE_PLATE = REGISTRY.register(new Block(257, "bamboo_pressure_plate", true, 5910, 5911, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block LEVER = REGISTRY.register(new Block(257, "lever", false, 6570, 6593, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block REDSTONE_ORE = REGISTRY.register(new Block(258, "redstone_ore", true, 5912, 5913, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
+    public static final Block STONE_PRESSURE_PLATE = REGISTRY.register(new Block(258, "stone_pressure_plate", true, 6594, 6595, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DEEPSLATE_REDSTONE_ORE = REGISTRY.register(new Block(259, "deepslate_redstone_ore", true, 5914, 5915, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 4.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
+    public static final Block IRON_DOOR = REGISTRY.register(new Block(259, "iron_door", true, 6596, 6659, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block REDSTONE_TORCH = REGISTRY.register(new Block(260, "redstone_torch", false, 5916, 5917, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block OAK_PRESSURE_PLATE = REGISTRY.register(new Block(260, "oak_pressure_plate", true, 6660, 6661, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block REDSTONE_WALL_TORCH = REGISTRY.register(new Block(261, "redstone_wall_torch", false, 5918, 5925, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block SPRUCE_PRESSURE_PLATE = REGISTRY.register(new Block(261, "spruce_pressure_plate", true, 6662, 6663, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block STONE_BUTTON = REGISTRY.register(new Block(262, "stone_button", false, 5926, 5949, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BIRCH_PRESSURE_PLATE = REGISTRY.register(new Block(262, "birch_pressure_plate", true, 6664, 6665, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block SNOW = REGISTRY.register(new Block(263, "snow", false, 5950, 5957, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, true, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block JUNGLE_PRESSURE_PLATE = REGISTRY.register(new Block(263, "jungle_pressure_plate", true, 6666, 6667, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block ICE = REGISTRY.register(new Block(264, "ice", true, 5958, 5958, 5, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ACACIA_PRESSURE_PLATE = REGISTRY.register(new Block(264, "acacia_pressure_plate", true, 6668, 6669, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block SNOW_BLOCK = REGISTRY.register(new Block(265, "snow_block", true, 5959, 5959, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, true, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block CHERRY_PRESSURE_PLATE = REGISTRY.register(new Block(265, "cherry_pressure_plate", true, 6670, 6671, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CACTUS = REGISTRY.register(new Block(266, "cactus", true, 5960, 5975, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, false));
+    public static final Block DARK_OAK_PRESSURE_PLATE = REGISTRY.register(new Block(266, "dark_oak_pressure_plate", true, 6672, 6673, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CACTUS_FLOWER = REGISTRY.register(new Block(267, "cactus_flower", false, 5976, 5976, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block PALE_OAK_PRESSURE_PLATE = REGISTRY.register(new Block(267, "pale_oak_pressure_plate", true, 6674, 6675, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CLAY = REGISTRY.register(new Block(268, "clay", true, 5977, 5977, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 0.6f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block MANGROVE_PRESSURE_PLATE = REGISTRY.register(new Block(268, "mangrove_pressure_plate", true, 6676, 6677, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block SUGAR_CANE = REGISTRY.register(new Block(269, "sugar_cane", false, 5978, 5993, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block BAMBOO_PRESSURE_PLATE = REGISTRY.register(new Block(269, "bamboo_pressure_plate", true, 6678, 6679, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block JUKEBOX = REGISTRY.register(new Block(270, "jukebox", true, 5994, 5995, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.JUKEBOX));
+    public static final Block REDSTONE_ORE = REGISTRY.register(new Block(270, "redstone_ore", true, 6680, 6681, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
 
-    public static final Block OAK_FENCE = REGISTRY.register(new Block(271, "oak_fence", true, 5996, 6027, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block DEEPSLATE_REDSTONE_ORE = REGISTRY.register(new Block(271, "deepslate_redstone_ore", true, 6682, 6683, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 4.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
 
-    public static final Block NETHERRACK = REGISTRY.register(new Block(272, "netherrack", true, 6028, 6028, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block REDSTONE_TORCH = REGISTRY.register(new Block(272, "redstone_torch", false, 6684, 6685, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block SOUL_SAND = REGISTRY.register(new Block(273, "soul_sand", true, 6029, 6029, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block REDSTONE_WALL_TORCH = REGISTRY.register(new Block(273, "redstone_wall_torch", false, 6686, 6693, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block SOUL_SOIL = REGISTRY.register(new Block(274, "soul_soil", true, 6030, 6030, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block STONE_BUTTON = REGISTRY.register(new Block(274, "stone_button", false, 6694, 6717, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BASALT = REGISTRY.register(new Block(275, "basalt", true, 6031, 6033, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SNOW = REGISTRY.register(new Block(275, "snow", false, 6718, 6725, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, true, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block POLISHED_BASALT = REGISTRY.register(new Block(276, "polished_basalt", true, 6034, 6036, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ICE = REGISTRY.register(new Block(276, "ice", true, 6726, 6726, 5, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SOUL_TORCH = REGISTRY.register(new Block(277, "soul_torch", false, 6037, 6037, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block SNOW_BLOCK = REGISTRY.register(new Block(277, "snow_block", true, 6727, 6727, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, true, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block SOUL_WALL_TORCH = REGISTRY.register(new Block(278, "soul_wall_torch", false, 6038, 6041, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block CACTUS = REGISTRY.register(new Block(278, "cactus", true, 6728, 6743, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, false));
 
-    public static final Block GLOWSTONE = REGISTRY.register(new Block(279, "glowstone", true, 6042, 6042, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block CACTUS_FLOWER = REGISTRY.register(new Block(279, "cactus_flower", false, 6744, 6744, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block NETHER_PORTAL = REGISTRY.register(new Block(280, "nether_portal", false, 6043, 6044, 0, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false));
+    public static final Block CLAY = REGISTRY.register(new Block(280, "clay", true, 6745, 6745, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 0.6f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block CARVED_PUMPKIN = REGISTRY.register(new Block(281, "carved_pumpkin", true, 6045, 6048, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
+    public static final Block SUGAR_CANE = REGISTRY.register(new Block(281, "sugar_cane", false, 6746, 6761, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block JACK_O_LANTERN = REGISTRY.register(new Block(282, "jack_o_lantern", true, 6049, 6052, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
+    public static final Block JUKEBOX = REGISTRY.register(new Block(282, "jukebox", true, 6762, 6763, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.JUKEBOX));
 
-    public static final Block CAKE = REGISTRY.register(new Block(283, "cake", true, 6053, 6059, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block OAK_FENCE = REGISTRY.register(new Block(283, "oak_fence", true, 6764, 6795, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block REPEATER = REGISTRY.register(new Block(284, "repeater", false, 6060, 6123, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block NETHERRACK = REGISTRY.register(new Block(284, "netherrack", true, 6796, 6796, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WHITE_STAINED_GLASS = REGISTRY.register(new Block(285, "white_stained_glass", true, 6124, 6124, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block SOUL_SAND = REGISTRY.register(new Block(285, "soul_sand", true, 6797, 6797, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block ORANGE_STAINED_GLASS = REGISTRY.register(new Block(286, "orange_stained_glass", true, 6125, 6125, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block SOUL_SOIL = REGISTRY.register(new Block(286, "soul_soil", true, 6798, 6798, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block MAGENTA_STAINED_GLASS = REGISTRY.register(new Block(287, "magenta_stained_glass", true, 6126, 6126, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block BASALT = REGISTRY.register(new Block(287, "basalt", true, 6799, 6801, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LIGHT_BLUE_STAINED_GLASS = REGISTRY.register(new Block(288, "light_blue_stained_glass", true, 6127, 6127, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block POLISHED_BASALT = REGISTRY.register(new Block(288, "polished_basalt", true, 6802, 6804, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block YELLOW_STAINED_GLASS = REGISTRY.register(new Block(289, "yellow_stained_glass", true, 6128, 6128, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block SOUL_TORCH = REGISTRY.register(new Block(289, "soul_torch", false, 6805, 6805, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block LIME_STAINED_GLASS = REGISTRY.register(new Block(290, "lime_stained_glass", true, 6129, 6129, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block SOUL_WALL_TORCH = REGISTRY.register(new Block(290, "soul_wall_torch", false, 6806, 6809, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block PINK_STAINED_GLASS = REGISTRY.register(new Block(291, "pink_stained_glass", true, 6130, 6130, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block COPPER_TORCH = REGISTRY.register(new Block(291, "copper_torch", false, 6810, 6810, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block GRAY_STAINED_GLASS = REGISTRY.register(new Block(292, "gray_stained_glass", true, 6131, 6131, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block COPPER_WALL_TORCH = REGISTRY.register(new Block(292, "copper_wall_torch", false, 6811, 6814, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block LIGHT_GRAY_STAINED_GLASS = REGISTRY.register(new Block(293, "light_gray_stained_glass", true, 6132, 6132, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block GLOWSTONE = REGISTRY.register(new Block(293, "glowstone", true, 6815, 6815, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block CYAN_STAINED_GLASS = REGISTRY.register(new Block(294, "cyan_stained_glass", true, 6133, 6133, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block NETHER_PORTAL = REGISTRY.register(new Block(294, "nether_portal", false, 6816, 6817, 0, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false));
 
-    public static final Block PURPLE_STAINED_GLASS = REGISTRY.register(new Block(295, "purple_stained_glass", true, 6134, 6134, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block CARVED_PUMPKIN = REGISTRY.register(new Block(295, "carved_pumpkin", true, 6818, 6821, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
 
-    public static final Block BLUE_STAINED_GLASS = REGISTRY.register(new Block(296, "blue_stained_glass", true, 6135, 6135, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block JACK_O_LANTERN = REGISTRY.register(new Block(296, "jack_o_lantern", true, 6822, 6825, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
 
-    public static final Block BROWN_STAINED_GLASS = REGISTRY.register(new Block(297, "brown_stained_glass", true, 6136, 6136, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block CAKE = REGISTRY.register(new Block(297, "cake", true, 6826, 6832, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block GREEN_STAINED_GLASS = REGISTRY.register(new Block(298, "green_stained_glass", true, 6137, 6137, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block REPEATER = REGISTRY.register(new Block(298, "repeater", false, 6833, 6896, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block RED_STAINED_GLASS = REGISTRY.register(new Block(299, "red_stained_glass", true, 6138, 6138, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block WHITE_STAINED_GLASS = REGISTRY.register(new Block(299, "white_stained_glass", true, 6897, 6897, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block BLACK_STAINED_GLASS = REGISTRY.register(new Block(300, "black_stained_glass", true, 6139, 6139, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block ORANGE_STAINED_GLASS = REGISTRY.register(new Block(300, "orange_stained_glass", true, 6898, 6898, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block OAK_TRAPDOOR = REGISTRY.register(new Block(301, "oak_trapdoor", true, 6140, 6203, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block MAGENTA_STAINED_GLASS = REGISTRY.register(new Block(301, "magenta_stained_glass", true, 6899, 6899, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block SPRUCE_TRAPDOOR = REGISTRY.register(new Block(302, "spruce_trapdoor", true, 6204, 6267, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block LIGHT_BLUE_STAINED_GLASS = REGISTRY.register(new Block(302, "light_blue_stained_glass", true, 6900, 6900, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block BIRCH_TRAPDOOR = REGISTRY.register(new Block(303, "birch_trapdoor", true, 6268, 6331, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block YELLOW_STAINED_GLASS = REGISTRY.register(new Block(303, "yellow_stained_glass", true, 6901, 6901, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block JUNGLE_TRAPDOOR = REGISTRY.register(new Block(304, "jungle_trapdoor", true, 6332, 6395, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block LIME_STAINED_GLASS = REGISTRY.register(new Block(304, "lime_stained_glass", true, 6902, 6902, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block ACACIA_TRAPDOOR = REGISTRY.register(new Block(305, "acacia_trapdoor", true, 6396, 6459, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block PINK_STAINED_GLASS = REGISTRY.register(new Block(305, "pink_stained_glass", true, 6903, 6903, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block CHERRY_TRAPDOOR = REGISTRY.register(new Block(306, "cherry_trapdoor", true, 6460, 6523, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block GRAY_STAINED_GLASS = REGISTRY.register(new Block(306, "gray_stained_glass", true, 6904, 6904, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block DARK_OAK_TRAPDOOR = REGISTRY.register(new Block(307, "dark_oak_trapdoor", true, 6524, 6587, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block LIGHT_GRAY_STAINED_GLASS = REGISTRY.register(new Block(307, "light_gray_stained_glass", true, 6905, 6905, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block PALE_OAK_TRAPDOOR = REGISTRY.register(new Block(308, "pale_oak_trapdoor", true, 6588, 6651, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block CYAN_STAINED_GLASS = REGISTRY.register(new Block(308, "cyan_stained_glass", true, 6906, 6906, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block MANGROVE_TRAPDOOR = REGISTRY.register(new Block(309, "mangrove_trapdoor", true, 6652, 6715, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block PURPLE_STAINED_GLASS = REGISTRY.register(new Block(309, "purple_stained_glass", true, 6907, 6907, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block BAMBOO_TRAPDOOR = REGISTRY.register(new Block(310, "bamboo_trapdoor", true, 6716, 6779, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block BLUE_STAINED_GLASS = REGISTRY.register(new Block(310, "blue_stained_glass", true, 6908, 6908, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block STONE_BRICKS = REGISTRY.register(new Block(311, "stone_bricks", true, 6780, 6780, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BROWN_STAINED_GLASS = REGISTRY.register(new Block(311, "brown_stained_glass", true, 6909, 6909, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block MOSSY_STONE_BRICKS = REGISTRY.register(new Block(312, "mossy_stone_bricks", true, 6781, 6781, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GREEN_STAINED_GLASS = REGISTRY.register(new Block(312, "green_stained_glass", true, 6910, 6910, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block CRACKED_STONE_BRICKS = REGISTRY.register(new Block(313, "cracked_stone_bricks", true, 6782, 6782, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block RED_STAINED_GLASS = REGISTRY.register(new Block(313, "red_stained_glass", true, 6911, 6911, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block CHISELED_STONE_BRICKS = REGISTRY.register(new Block(314, "chiseled_stone_bricks", true, 6783, 6783, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BLACK_STAINED_GLASS = REGISTRY.register(new Block(314, "black_stained_glass", true, 6912, 6912, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block PACKED_MUD = REGISTRY.register(new Block(315, "packed_mud", true, 6784, 6784, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block OAK_TRAPDOOR = REGISTRY.register(new Block(315, "oak_trapdoor", true, 6913, 6976, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block MUD_BRICKS = REGISTRY.register(new Block(316, "mud_bricks", true, 6785, 6785, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SPRUCE_TRAPDOOR = REGISTRY.register(new Block(316, "spruce_trapdoor", true, 6977, 7040, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block INFESTED_STONE = REGISTRY.register(new Block(317, "infested_stone", true, 6786, 6786, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 0.75f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BIRCH_TRAPDOOR = REGISTRY.register(new Block(317, "birch_trapdoor", true, 7041, 7104, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block INFESTED_COBBLESTONE = REGISTRY.register(new Block(318, "infested_cobblestone", true, 6787, 6787, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block JUNGLE_TRAPDOOR = REGISTRY.register(new Block(318, "jungle_trapdoor", true, 7105, 7168, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block INFESTED_STONE_BRICKS = REGISTRY.register(new Block(319, "infested_stone_bricks", true, 6788, 6788, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 0.75f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ACACIA_TRAPDOOR = REGISTRY.register(new Block(319, "acacia_trapdoor", true, 7169, 7232, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block INFESTED_MOSSY_STONE_BRICKS = REGISTRY.register(new Block(320, "infested_mossy_stone_bricks", true, 6789, 6789, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 0.75f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CHERRY_TRAPDOOR = REGISTRY.register(new Block(320, "cherry_trapdoor", true, 7233, 7296, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block INFESTED_CRACKED_STONE_BRICKS = REGISTRY.register(new Block(321, "infested_cracked_stone_bricks", true, 6790, 6790, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 0.75f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DARK_OAK_TRAPDOOR = REGISTRY.register(new Block(321, "dark_oak_trapdoor", true, 7297, 7360, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block INFESTED_CHISELED_STONE_BRICKS = REGISTRY.register(new Block(322, "infested_chiseled_stone_bricks", true, 6791, 6791, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 0.75f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PALE_OAK_TRAPDOOR = REGISTRY.register(new Block(322, "pale_oak_trapdoor", true, 7361, 7424, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BROWN_MUSHROOM_BLOCK = REGISTRY.register(new Block(323, "brown_mushroom_block", true, 6792, 6855, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block MANGROVE_TRAPDOOR = REGISTRY.register(new Block(323, "mangrove_trapdoor", true, 7425, 7488, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block RED_MUSHROOM_BLOCK = REGISTRY.register(new Block(324, "red_mushroom_block", true, 6856, 6919, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block BAMBOO_TRAPDOOR = REGISTRY.register(new Block(324, "bamboo_trapdoor", true, 7489, 7552, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block MUSHROOM_STEM = REGISTRY.register(new Block(325, "mushroom_stem", true, 6920, 6983, 3, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block STONE_BRICKS = REGISTRY.register(new Block(325, "stone_bricks", true, 7553, 7553, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block IRON_BARS = REGISTRY.register(new Block(326, "iron_bars", true, 6984, 7015, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MOSSY_STONE_BRICKS = REGISTRY.register(new Block(326, "mossy_stone_bricks", true, 7554, 7554, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CHAIN = REGISTRY.register(new Block(327, "chain", true, 7016, 7021, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CRACKED_STONE_BRICKS = REGISTRY.register(new Block(327, "cracked_stone_bricks", true, 7555, 7555, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GLASS_PANE = REGISTRY.register(new Block(328, "glass_pane", true, 7022, 7053, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block CHISELED_STONE_BRICKS = REGISTRY.register(new Block(328, "chiseled_stone_bricks", true, 7556, 7556, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PUMPKIN = REGISTRY.register(new Block(329, "pumpkin", true, 7054, 7054, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
+    public static final Block PACKED_MUD = REGISTRY.register(new Block(329, "packed_mud", true, 7557, 7557, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MELON = REGISTRY.register(new Block(330, "melon", true, 7055, 7055, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
+    public static final Block MUD_BRICKS = REGISTRY.register(new Block(330, "mud_bricks", true, 7558, 7558, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block ATTACHED_PUMPKIN_STEM = REGISTRY.register(new Block(331, "attached_pumpkin_stem", false, 7056, 7059, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block INFESTED_STONE = REGISTRY.register(new Block(331, "infested_stone", true, 7559, 7559, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 0.75f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block ATTACHED_MELON_STEM = REGISTRY.register(new Block(332, "attached_melon_stem", false, 7060, 7063, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block INFESTED_COBBLESTONE = REGISTRY.register(new Block(332, "infested_cobblestone", true, 7560, 7560, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PUMPKIN_STEM = REGISTRY.register(new Block(333, "pumpkin_stem", false, 7064, 7071, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block INFESTED_STONE_BRICKS = REGISTRY.register(new Block(333, "infested_stone_bricks", true, 7561, 7561, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 0.75f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MELON_STEM = REGISTRY.register(new Block(334, "melon_stem", false, 7072, 7079, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block INFESTED_MOSSY_STONE_BRICKS = REGISTRY.register(new Block(334, "infested_mossy_stone_bricks", true, 7562, 7562, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 0.75f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block VINE = REGISTRY.register(new Block(335, "vine", false, 7080, 7111, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT, BlockTags.CLIMBABLE)));
+    public static final Block INFESTED_CRACKED_STONE_BRICKS = REGISTRY.register(new Block(335, "infested_cracked_stone_bricks", true, 7563, 7563, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 0.75f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GLOW_LICHEN = REGISTRY.register(new Block(336, "glow_lichen", false, 7112, 7239, 61, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
+    public static final Block INFESTED_CHISELED_STONE_BRICKS = REGISTRY.register(new Block(336, "infested_chiseled_stone_bricks", true, 7564, 7564, 9, BlockOffsetType.NONE, 0.25f, 0.2f, 0.75f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block RESIN_CLUMP = REGISTRY.register(new Block(337, "resin_clump", false, 7240, 7367, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block BROWN_MUSHROOM_BLOCK = REGISTRY.register(new Block(337, "brown_mushroom_block", true, 7565, 7628, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block OAK_FENCE_GATE = REGISTRY.register(new Block(338, "oak_fence_gate", true, 7368, 7399, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block RED_MUSHROOM_BLOCK = REGISTRY.register(new Block(338, "red_mushroom_block", true, 7629, 7692, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BRICK_STAIRS = REGISTRY.register(new Block(339, "brick_stairs", true, 7400, 7479, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MUSHROOM_STEM = REGISTRY.register(new Block(339, "mushroom_stem", true, 7693, 7756, 3, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block STONE_BRICK_STAIRS = REGISTRY.register(new Block(340, "stone_brick_stairs", true, 7480, 7559, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block IRON_BARS = REGISTRY.register(new Block(340, "iron_bars", true, 7757, 7788, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MUD_BRICK_STAIRS = REGISTRY.register(new Block(341, "mud_brick_stairs", true, 7560, 7639, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block COPPER_BARS = REGISTRY.register(new Block(341, "copper_bars", true, 7789, 7820, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MYCELIUM = REGISTRY.register(new Block(342, "mycelium", true, 7640, 7641, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.6f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block EXPOSED_COPPER_BARS = REGISTRY.register(new Block(342, "exposed_copper_bars", true, 7821, 7852, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LILY_PAD = REGISTRY.register(new Block(343, "lily_pad", false, 7642, 7642, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WEATHERED_COPPER_BARS = REGISTRY.register(new Block(343, "weathered_copper_bars", true, 7853, 7884, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block RESIN_BLOCK = REGISTRY.register(new Block(344, "resin_block", true, 7643, 7643, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block OXIDIZED_COPPER_BARS = REGISTRY.register(new Block(344, "oxidized_copper_bars", true, 7885, 7916, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block RESIN_BRICKS = REGISTRY.register(new Block(345, "resin_bricks", true, 7644, 7644, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_COPPER_BARS = REGISTRY.register(new Block(345, "waxed_copper_bars", true, 7917, 7948, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block RESIN_BRICK_STAIRS = REGISTRY.register(new Block(346, "resin_brick_stairs", true, 7645, 7724, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_EXPOSED_COPPER_BARS = REGISTRY.register(new Block(346, "waxed_exposed_copper_bars", true, 7949, 7980, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block RESIN_BRICK_SLAB = REGISTRY.register(new Block(347, "resin_brick_slab", true, 7725, 7730, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_WEATHERED_COPPER_BARS = REGISTRY.register(new Block(347, "waxed_weathered_copper_bars", true, 7981, 8012, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block RESIN_BRICK_WALL = REGISTRY.register(new Block(348, "resin_brick_wall", true, 7731, 8054, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_OXIDIZED_COPPER_BARS = REGISTRY.register(new Block(348, "waxed_oxidized_copper_bars", true, 8013, 8044, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CHISELED_RESIN_BRICKS = REGISTRY.register(new Block(349, "chiseled_resin_bricks", true, 8055, 8055, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block IRON_CHAIN = REGISTRY.register(new Block(349, "iron_chain", true, 8045, 8050, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block NETHER_BRICKS = REGISTRY.register(new Block(350, "nether_bricks", true, 8056, 8056, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block COPPER_CHAIN = REGISTRY.register(new Block(350, "copper_chain", true, 8051, 8056, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block NETHER_BRICK_FENCE = REGISTRY.register(new Block(351, "nether_brick_fence", true, 8057, 8088, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block EXPOSED_COPPER_CHAIN = REGISTRY.register(new Block(351, "exposed_copper_chain", true, 8057, 8062, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block NETHER_BRICK_STAIRS = REGISTRY.register(new Block(352, "nether_brick_stairs", true, 8089, 8168, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WEATHERED_COPPER_CHAIN = REGISTRY.register(new Block(352, "weathered_copper_chain", true, 8063, 8068, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block NETHER_WART = REGISTRY.register(new Block(353, "nether_wart", false, 8169, 8172, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block OXIDIZED_COPPER_CHAIN = REGISTRY.register(new Block(353, "oxidized_copper_chain", true, 8069, 8074, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block ENCHANTING_TABLE = REGISTRY.register(new Block(354, "enchanting_table", true, 8173, 8173, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.ENCHANTING_TABLE));
+    public static final Block WAXED_COPPER_CHAIN = REGISTRY.register(new Block(354, "waxed_copper_chain", true, 8075, 8080, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BREWING_STAND = REGISTRY.register(new Block(355, "brewing_stand", true, 8174, 8181, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.BREWING_STAND));
+    public static final Block WAXED_EXPOSED_COPPER_CHAIN = REGISTRY.register(new Block(355, "waxed_exposed_copper_chain", true, 8081, 8086, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CAULDRON = REGISTRY.register(new Block(356, "cauldron", true, 8182, 8182, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_WEATHERED_COPPER_CHAIN = REGISTRY.register(new Block(356, "waxed_weathered_copper_chain", true, 8087, 8092, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WATER_CAULDRON = REGISTRY.register(new Block(357, "water_cauldron", true, 8183, 8185, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_OXIDIZED_COPPER_CHAIN = REGISTRY.register(new Block(357, "waxed_oxidized_copper_chain", true, 8093, 8098, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LAVA_CAULDRON = REGISTRY.register(new Block(358, "lava_cauldron", true, 8186, 8186, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GLASS_PANE = REGISTRY.register(new Block(358, "glass_pane", true, 8099, 8130, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block POWDER_SNOW_CAULDRON = REGISTRY.register(new Block(359, "powder_snow_cauldron", true, 8187, 8189, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PUMPKIN = REGISTRY.register(new Block(359, "pumpkin", true, 8131, 8131, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
 
-    public static final Block END_PORTAL = REGISTRY.register(new Block(360, "end_portal", false, 8190, 8190, 29, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false, BlockEntityType.END_PORTAL));
+    public static final Block MELON = REGISTRY.register(new Block(360, "melon", true, 8132, 8132, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
 
-    public static final Block END_PORTAL_FRAME = REGISTRY.register(new Block(361, "end_portal_frame", true, 8191, 8198, 27, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false));
+    public static final Block ATTACHED_PUMPKIN_STEM = REGISTRY.register(new Block(361, "attached_pumpkin_stem", false, 8133, 8136, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block END_STONE = REGISTRY.register(new Block(362, "end_stone", true, 8199, 8199, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ATTACHED_MELON_STEM = REGISTRY.register(new Block(362, "attached_melon_stem", false, 8137, 8140, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block DRAGON_EGG = REGISTRY.register(new Block(363, "dragon_egg", true, 8200, 8200, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false));
+    public static final Block PUMPKIN_STEM = REGISTRY.register(new Block(363, "pumpkin_stem", false, 8141, 8148, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block REDSTONE_LAMP = REGISTRY.register(new Block(364, "redstone_lamp", true, 8201, 8202, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block MELON_STEM = REGISTRY.register(new Block(364, "melon_stem", false, 8149, 8156, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block COCOA = REGISTRY.register(new Block(365, "cocoa", false, 8203, 8214, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
+    public static final Block VINE = REGISTRY.register(new Block(365, "vine", false, 8157, 8188, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT, BlockTags.CLIMBABLE)));
 
-    public static final Block SANDSTONE_STAIRS = REGISTRY.register(new Block(366, "sandstone_stairs", true, 8215, 8294, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GLOW_LICHEN = REGISTRY.register(new Block(366, "glow_lichen", false, 8189, 8316, 61, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
 
-    public static final Block EMERALD_ORE = REGISTRY.register(new Block(367, "emerald_ore", true, 8295, 8295, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
+    public static final Block RESIN_CLUMP = REGISTRY.register(new Block(367, "resin_clump", false, 8317, 8444, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block DEEPSLATE_EMERALD_ORE = REGISTRY.register(new Block(368, "deepslate_emerald_ore", true, 8296, 8296, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 4.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
+    public static final Block OAK_FENCE_GATE = REGISTRY.register(new Block(368, "oak_fence_gate", true, 8445, 8476, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block ENDER_CHEST = REGISTRY.register(new Block(369, "ender_chest", true, 8297, 8304, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 22.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.ENDER_CHEST));
+    public static final Block BRICK_STAIRS = REGISTRY.register(new Block(369, "brick_stairs", true, 8477, 8556, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block TRIPWIRE_HOOK = REGISTRY.register(new Block(370, "tripwire_hook", false, 8305, 8320, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block STONE_BRICK_STAIRS = REGISTRY.register(new Block(370, "stone_brick_stairs", true, 8557, 8636, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block TRIPWIRE = REGISTRY.register(new Block(371, "tripwire", false, 8321, 8448, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block MUD_BRICK_STAIRS = REGISTRY.register(new Block(371, "mud_brick_stairs", true, 8637, 8716, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block EMERALD_BLOCK = REGISTRY.register(new Block(372, "emerald_block", true, 8449, 8449, 33, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
+    public static final Block MYCELIUM = REGISTRY.register(new Block(372, "mycelium", true, 8717, 8718, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.6f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block SPRUCE_STAIRS = REGISTRY.register(new Block(373, "spruce_stairs", true, 8450, 8529, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block LILY_PAD = REGISTRY.register(new Block(373, "lily_pad", false, 8719, 8719, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block BIRCH_STAIRS = REGISTRY.register(new Block(374, "birch_stairs", true, 8530, 8609, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block RESIN_BLOCK = REGISTRY.register(new Block(374, "resin_block", true, 8720, 8720, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block JUNGLE_STAIRS = REGISTRY.register(new Block(375, "jungle_stairs", true, 8610, 8689, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block RESIN_BRICKS = REGISTRY.register(new Block(375, "resin_bricks", true, 8721, 8721, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block COMMAND_BLOCK = REGISTRY.register(new Block(376, "command_block", true, 8690, 8701, 26, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, true, BlockEntityType.COMMAND_BLOCK));
+    public static final Block RESIN_BRICK_STAIRS = REGISTRY.register(new Block(376, "resin_brick_stairs", true, 8722, 8801, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BEACON = REGISTRY.register(new Block(377, "beacon", true, 8702, 8702, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, BlockEntityType.BEACON));
+    public static final Block RESIN_BRICK_SLAB = REGISTRY.register(new Block(377, "resin_brick_slab", true, 8802, 8807, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block COBBLESTONE_WALL = REGISTRY.register(new Block(378, "cobblestone_wall", true, 8703, 9026, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block RESIN_BRICK_WALL = REGISTRY.register(new Block(378, "resin_brick_wall", true, 8808, 9131, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MOSSY_COBBLESTONE_WALL = REGISTRY.register(new Block(379, "mossy_cobblestone_wall", true, 9027, 9350, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CHISELED_RESIN_BRICKS = REGISTRY.register(new Block(379, "chiseled_resin_bricks", true, 9132, 9132, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block FLOWER_POT = REGISTRY.register(new Block(380, "flower_pot", false, 9351, 9351, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block NETHER_BRICKS = REGISTRY.register(new Block(380, "nether_bricks", true, 9133, 9133, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POTTED_TORCHFLOWER = REGISTRY.register(new Block(381, "potted_torchflower", false, 9352, 9352, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block NETHER_BRICK_FENCE = REGISTRY.register(new Block(381, "nether_brick_fence", true, 9134, 9165, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POTTED_OAK_SAPLING = REGISTRY.register(new Block(382, "potted_oak_sapling", false, 9353, 9353, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block NETHER_BRICK_STAIRS = REGISTRY.register(new Block(382, "nether_brick_stairs", true, 9166, 9245, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POTTED_SPRUCE_SAPLING = REGISTRY.register(new Block(383, "potted_spruce_sapling", false, 9354, 9354, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block NETHER_WART = REGISTRY.register(new Block(383, "nether_wart", false, 9246, 9249, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block POTTED_BIRCH_SAPLING = REGISTRY.register(new Block(384, "potted_birch_sapling", false, 9355, 9355, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block ENCHANTING_TABLE = REGISTRY.register(new Block(384, "enchanting_table", true, 9250, 9250, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.ENCHANTING_TABLE));
 
-    public static final Block POTTED_JUNGLE_SAPLING = REGISTRY.register(new Block(385, "potted_jungle_sapling", false, 9356, 9356, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block BREWING_STAND = REGISTRY.register(new Block(385, "brewing_stand", true, 9251, 9258, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.BREWING_STAND));
 
-    public static final Block POTTED_ACACIA_SAPLING = REGISTRY.register(new Block(386, "potted_acacia_sapling", false, 9357, 9357, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block CAULDRON = REGISTRY.register(new Block(386, "cauldron", true, 9259, 9259, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POTTED_CHERRY_SAPLING = REGISTRY.register(new Block(387, "potted_cherry_sapling", false, 9358, 9358, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WATER_CAULDRON = REGISTRY.register(new Block(387, "water_cauldron", true, 9260, 9262, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POTTED_DARK_OAK_SAPLING = REGISTRY.register(new Block(388, "potted_dark_oak_sapling", false, 9359, 9359, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block LAVA_CAULDRON = REGISTRY.register(new Block(388, "lava_cauldron", true, 9263, 9263, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POTTED_PALE_OAK_SAPLING = REGISTRY.register(new Block(389, "potted_pale_oak_sapling", false, 9360, 9360, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block POWDER_SNOW_CAULDRON = REGISTRY.register(new Block(389, "powder_snow_cauldron", true, 9264, 9266, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POTTED_MANGROVE_PROPAGULE = REGISTRY.register(new Block(390, "potted_mangrove_propagule", false, 9361, 9361, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block END_PORTAL = REGISTRY.register(new Block(390, "end_portal", false, 9267, 9267, 29, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false, BlockEntityType.END_PORTAL));
 
-    public static final Block POTTED_FERN = REGISTRY.register(new Block(391, "potted_fern", false, 9362, 9362, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block END_PORTAL_FRAME = REGISTRY.register(new Block(391, "end_portal_frame", true, 9268, 9275, 27, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false));
 
-    public static final Block POTTED_DANDELION = REGISTRY.register(new Block(392, "potted_dandelion", false, 9363, 9363, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block END_STONE = REGISTRY.register(new Block(392, "end_stone", true, 9276, 9276, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POTTED_POPPY = REGISTRY.register(new Block(393, "potted_poppy", false, 9364, 9364, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block DRAGON_EGG = REGISTRY.register(new Block(393, "dragon_egg", true, 9277, 9277, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false));
 
-    public static final Block POTTED_BLUE_ORCHID = REGISTRY.register(new Block(394, "potted_blue_orchid", false, 9365, 9365, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block REDSTONE_LAMP = REGISTRY.register(new Block(394, "redstone_lamp", true, 9278, 9279, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block POTTED_ALLIUM = REGISTRY.register(new Block(395, "potted_allium", false, 9366, 9366, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block COCOA = REGISTRY.register(new Block(395, "cocoa", false, 9280, 9291, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
 
-    public static final Block POTTED_AZURE_BLUET = REGISTRY.register(new Block(396, "potted_azure_bluet", false, 9367, 9367, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block SANDSTONE_STAIRS = REGISTRY.register(new Block(396, "sandstone_stairs", true, 9292, 9371, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POTTED_RED_TULIP = REGISTRY.register(new Block(397, "potted_red_tulip", false, 9368, 9368, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block EMERALD_ORE = REGISTRY.register(new Block(397, "emerald_ore", true, 9372, 9372, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
 
-    public static final Block POTTED_ORANGE_TULIP = REGISTRY.register(new Block(398, "potted_orange_tulip", false, 9369, 9369, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block DEEPSLATE_EMERALD_ORE = REGISTRY.register(new Block(398, "deepslate_emerald_ore", true, 9373, 9373, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 4.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
 
-    public static final Block POTTED_WHITE_TULIP = REGISTRY.register(new Block(399, "potted_white_tulip", false, 9370, 9370, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block ENDER_CHEST = REGISTRY.register(new Block(399, "ender_chest", true, 9374, 9381, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 22.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.ENDER_CHEST));
 
-    public static final Block POTTED_PINK_TULIP = REGISTRY.register(new Block(400, "potted_pink_tulip", false, 9371, 9371, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block TRIPWIRE_HOOK = REGISTRY.register(new Block(400, "tripwire_hook", false, 9382, 9397, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block POTTED_OXEYE_DAISY = REGISTRY.register(new Block(401, "potted_oxeye_daisy", false, 9372, 9372, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block TRIPWIRE = REGISTRY.register(new Block(401, "tripwire", false, 9398, 9525, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block POTTED_CORNFLOWER = REGISTRY.register(new Block(402, "potted_cornflower", false, 9373, 9373, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block EMERALD_BLOCK = REGISTRY.register(new Block(402, "emerald_block", true, 9526, 9526, 33, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
 
-    public static final Block POTTED_LILY_OF_THE_VALLEY = REGISTRY.register(new Block(403, "potted_lily_of_the_valley", false, 9374, 9374, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block SPRUCE_STAIRS = REGISTRY.register(new Block(403, "spruce_stairs", true, 9527, 9606, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POTTED_WITHER_ROSE = REGISTRY.register(new Block(404, "potted_wither_rose", false, 9375, 9375, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block BIRCH_STAIRS = REGISTRY.register(new Block(404, "birch_stairs", true, 9607, 9686, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POTTED_RED_MUSHROOM = REGISTRY.register(new Block(405, "potted_red_mushroom", false, 9376, 9376, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block JUNGLE_STAIRS = REGISTRY.register(new Block(405, "jungle_stairs", true, 9687, 9766, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POTTED_BROWN_MUSHROOM = REGISTRY.register(new Block(406, "potted_brown_mushroom", false, 9377, 9377, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block COMMAND_BLOCK = REGISTRY.register(new Block(406, "command_block", true, 9767, 9778, 26, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, true, BlockEntityType.COMMAND_BLOCK));
 
-    public static final Block POTTED_DEAD_BUSH = REGISTRY.register(new Block(407, "potted_dead_bush", false, 9378, 9378, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block BEACON = REGISTRY.register(new Block(407, "beacon", true, 9779, 9779, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, BlockEntityType.BEACON));
 
-    public static final Block POTTED_CACTUS = REGISTRY.register(new Block(408, "potted_cactus", false, 9379, 9379, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block COBBLESTONE_WALL = REGISTRY.register(new Block(408, "cobblestone_wall", true, 9780, 10103, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CARROTS = REGISTRY.register(new Block(409, "carrots", false, 9380, 9387, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block MOSSY_COBBLESTONE_WALL = REGISTRY.register(new Block(409, "mossy_cobblestone_wall", true, 10104, 10427, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POTATOES = REGISTRY.register(new Block(410, "potatoes", false, 9388, 9395, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block FLOWER_POT = REGISTRY.register(new Block(410, "flower_pot", false, 10428, 10428, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block OAK_BUTTON = REGISTRY.register(new Block(411, "oak_button", false, 9396, 9419, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block POTTED_TORCHFLOWER = REGISTRY.register(new Block(411, "potted_torchflower", false, 10429, 10429, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block SPRUCE_BUTTON = REGISTRY.register(new Block(412, "spruce_button", false, 9420, 9443, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block POTTED_OAK_SAPLING = REGISTRY.register(new Block(412, "potted_oak_sapling", false, 10430, 10430, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block BIRCH_BUTTON = REGISTRY.register(new Block(413, "birch_button", false, 9444, 9467, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block POTTED_SPRUCE_SAPLING = REGISTRY.register(new Block(413, "potted_spruce_sapling", false, 10431, 10431, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block JUNGLE_BUTTON = REGISTRY.register(new Block(414, "jungle_button", false, 9468, 9491, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block POTTED_BIRCH_SAPLING = REGISTRY.register(new Block(414, "potted_birch_sapling", false, 10432, 10432, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block ACACIA_BUTTON = REGISTRY.register(new Block(415, "acacia_button", false, 9492, 9515, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block POTTED_JUNGLE_SAPLING = REGISTRY.register(new Block(415, "potted_jungle_sapling", false, 10433, 10433, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block CHERRY_BUTTON = REGISTRY.register(new Block(416, "cherry_button", false, 9516, 9539, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block POTTED_ACACIA_SAPLING = REGISTRY.register(new Block(416, "potted_acacia_sapling", false, 10434, 10434, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block DARK_OAK_BUTTON = REGISTRY.register(new Block(417, "dark_oak_button", false, 9540, 9563, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block POTTED_CHERRY_SAPLING = REGISTRY.register(new Block(417, "potted_cherry_sapling", false, 10435, 10435, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block PALE_OAK_BUTTON = REGISTRY.register(new Block(418, "pale_oak_button", false, 9564, 9587, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block POTTED_DARK_OAK_SAPLING = REGISTRY.register(new Block(418, "potted_dark_oak_sapling", false, 10436, 10436, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block MANGROVE_BUTTON = REGISTRY.register(new Block(419, "mangrove_button", false, 9588, 9611, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block POTTED_PALE_OAK_SAPLING = REGISTRY.register(new Block(419, "potted_pale_oak_sapling", false, 10437, 10437, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block BAMBOO_BUTTON = REGISTRY.register(new Block(420, "bamboo_button", false, 9612, 9635, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block POTTED_MANGROVE_PROPAGULE = REGISTRY.register(new Block(420, "potted_mangrove_propagule", false, 10438, 10438, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block SKELETON_SKULL = REGISTRY.register(new Block(421, "skeleton_skull", false, 9636, 9667, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_FERN = REGISTRY.register(new Block(421, "potted_fern", false, 10439, 10439, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block SKELETON_WALL_SKULL = REGISTRY.register(new Block(422, "skeleton_wall_skull", false, 9668, 9675, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_DANDELION = REGISTRY.register(new Block(422, "potted_dandelion", false, 10440, 10440, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block WITHER_SKELETON_SKULL = REGISTRY.register(new Block(423, "wither_skeleton_skull", false, 9676, 9707, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_POPPY = REGISTRY.register(new Block(423, "potted_poppy", false, 10441, 10441, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block WITHER_SKELETON_WALL_SKULL = REGISTRY.register(new Block(424, "wither_skeleton_wall_skull", false, 9708, 9715, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_BLUE_ORCHID = REGISTRY.register(new Block(424, "potted_blue_orchid", false, 10442, 10442, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block ZOMBIE_HEAD = REGISTRY.register(new Block(425, "zombie_head", false, 9716, 9747, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_ALLIUM = REGISTRY.register(new Block(425, "potted_allium", false, 10443, 10443, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block ZOMBIE_WALL_HEAD = REGISTRY.register(new Block(426, "zombie_wall_head", false, 9748, 9755, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_AZURE_BLUET = REGISTRY.register(new Block(426, "potted_azure_bluet", false, 10444, 10444, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block PLAYER_HEAD = REGISTRY.register(new Block(427, "player_head", false, 9756, 9787, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_RED_TULIP = REGISTRY.register(new Block(427, "potted_red_tulip", false, 10445, 10445, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block PLAYER_WALL_HEAD = REGISTRY.register(new Block(428, "player_wall_head", false, 9788, 9795, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_ORANGE_TULIP = REGISTRY.register(new Block(428, "potted_orange_tulip", false, 10446, 10446, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block CREEPER_HEAD = REGISTRY.register(new Block(429, "creeper_head", false, 9796, 9827, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_WHITE_TULIP = REGISTRY.register(new Block(429, "potted_white_tulip", false, 10447, 10447, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block CREEPER_WALL_HEAD = REGISTRY.register(new Block(430, "creeper_wall_head", false, 9828, 9835, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_PINK_TULIP = REGISTRY.register(new Block(430, "potted_pink_tulip", false, 10448, 10448, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block DRAGON_HEAD = REGISTRY.register(new Block(431, "dragon_head", false, 9836, 9867, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_OXEYE_DAISY = REGISTRY.register(new Block(431, "potted_oxeye_daisy", false, 10449, 10449, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block DRAGON_WALL_HEAD = REGISTRY.register(new Block(432, "dragon_wall_head", false, 9868, 9875, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_CORNFLOWER = REGISTRY.register(new Block(432, "potted_cornflower", false, 10450, 10450, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block PIGLIN_HEAD = REGISTRY.register(new Block(433, "piglin_head", false, 9876, 9907, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_LILY_OF_THE_VALLEY = REGISTRY.register(new Block(433, "potted_lily_of_the_valley", false, 10451, 10451, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block PIGLIN_WALL_HEAD = REGISTRY.register(new Block(434, "piglin_wall_head", false, 9908, 9915, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
+    public static final Block POTTED_WITHER_ROSE = REGISTRY.register(new Block(434, "potted_wither_rose", false, 10452, 10452, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block ANVIL = REGISTRY.register(new Block(435, "anvil", true, 9916, 9919, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block POTTED_RED_MUSHROOM = REGISTRY.register(new Block(435, "potted_red_mushroom", false, 10453, 10453, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block CHIPPED_ANVIL = REGISTRY.register(new Block(436, "chipped_anvil", true, 9920, 9923, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block POTTED_BROWN_MUSHROOM = REGISTRY.register(new Block(436, "potted_brown_mushroom", false, 10454, 10454, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block DAMAGED_ANVIL = REGISTRY.register(new Block(437, "damaged_anvil", true, 9924, 9927, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block POTTED_DEAD_BUSH = REGISTRY.register(new Block(437, "potted_dead_bush", false, 10455, 10455, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block TRAPPED_CHEST = REGISTRY.register(new Block(438, "trapped_chest", true, 9928, 9951, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.TRAPPED_CHEST));
+    public static final Block POTTED_CACTUS = REGISTRY.register(new Block(438, "potted_cactus", false, 10456, 10456, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block LIGHT_WEIGHTED_PRESSURE_PLATE = REGISTRY.register(new Block(439, "light_weighted_pressure_plate", true, 9952, 9967, 30, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CARROTS = REGISTRY.register(new Block(439, "carrots", false, 10457, 10464, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block HEAVY_WEIGHTED_PRESSURE_PLATE = REGISTRY.register(new Block(440, "heavy_weighted_pressure_plate", true, 9968, 9983, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block POTATOES = REGISTRY.register(new Block(440, "potatoes", false, 10465, 10472, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block COMPARATOR = REGISTRY.register(new Block(441, "comparator", false, 9984, 9999, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, BlockEntityType.COMPARATOR));
+    public static final Block OAK_BUTTON = REGISTRY.register(new Block(441, "oak_button", false, 10473, 10496, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block DAYLIGHT_DETECTOR = REGISTRY.register(new Block(442, "daylight_detector", true, 10000, 10031, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.DAYLIGHT_DETECTOR));
+    public static final Block SPRUCE_BUTTON = REGISTRY.register(new Block(442, "spruce_button", false, 10497, 10520, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block REDSTONE_BLOCK = REGISTRY.register(new Block(443, "redstone_block", true, 10032, 10032, 4, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BIRCH_BUTTON = REGISTRY.register(new Block(443, "birch_button", false, 10521, 10544, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block NETHER_QUARTZ_ORE = REGISTRY.register(new Block(444, "nether_quartz_ore", true, 10033, 10033, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block JUNGLE_BUTTON = REGISTRY.register(new Block(444, "jungle_button", false, 10545, 10568, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block HOPPER = REGISTRY.register(new Block(445, "hopper", true, 10034, 10043, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.HOPPER));
+    public static final Block ACACIA_BUTTON = REGISTRY.register(new Block(445, "acacia_button", false, 10569, 10592, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block QUARTZ_BLOCK = REGISTRY.register(new Block(446, "quartz_block", true, 10044, 10044, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CHERRY_BUTTON = REGISTRY.register(new Block(446, "cherry_button", false, 10593, 10616, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CHISELED_QUARTZ_BLOCK = REGISTRY.register(new Block(447, "chiseled_quartz_block", true, 10045, 10045, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DARK_OAK_BUTTON = REGISTRY.register(new Block(447, "dark_oak_button", false, 10617, 10640, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block QUARTZ_PILLAR = REGISTRY.register(new Block(448, "quartz_pillar", true, 10046, 10048, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PALE_OAK_BUTTON = REGISTRY.register(new Block(448, "pale_oak_button", false, 10641, 10664, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block QUARTZ_STAIRS = REGISTRY.register(new Block(449, "quartz_stairs", true, 10049, 10128, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MANGROVE_BUTTON = REGISTRY.register(new Block(449, "mangrove_button", false, 10665, 10688, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block ACTIVATOR_RAIL = REGISTRY.register(new Block(450, "activator_rail", false, 10129, 10152, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.7f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BAMBOO_BUTTON = REGISTRY.register(new Block(450, "bamboo_button", false, 10689, 10712, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block DROPPER = REGISTRY.register(new Block(451, "dropper", true, 10153, 10164, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.DROPPER));
+    public static final Block SKELETON_SKULL = REGISTRY.register(new Block(451, "skeleton_skull", false, 10713, 10744, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block WHITE_TERRACOTTA = REGISTRY.register(new Block(452, "white_terracotta", true, 10165, 10165, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SKELETON_WALL_SKULL = REGISTRY.register(new Block(452, "skeleton_wall_skull", false, 10745, 10752, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block ORANGE_TERRACOTTA = REGISTRY.register(new Block(453, "orange_terracotta", true, 10166, 10166, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WITHER_SKELETON_SKULL = REGISTRY.register(new Block(453, "wither_skeleton_skull", false, 10753, 10784, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block MAGENTA_TERRACOTTA = REGISTRY.register(new Block(454, "magenta_terracotta", true, 10167, 10167, 38, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WITHER_SKELETON_WALL_SKULL = REGISTRY.register(new Block(454, "wither_skeleton_wall_skull", false, 10785, 10792, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block LIGHT_BLUE_TERRACOTTA = REGISTRY.register(new Block(455, "light_blue_terracotta", true, 10168, 10168, 39, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ZOMBIE_HEAD = REGISTRY.register(new Block(455, "zombie_head", false, 10793, 10824, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block YELLOW_TERRACOTTA = REGISTRY.register(new Block(456, "yellow_terracotta", true, 10169, 10169, 40, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ZOMBIE_WALL_HEAD = REGISTRY.register(new Block(456, "zombie_wall_head", false, 10825, 10832, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block LIME_TERRACOTTA = REGISTRY.register(new Block(457, "lime_terracotta", true, 10170, 10170, 41, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PLAYER_HEAD = REGISTRY.register(new Block(457, "player_head", false, 10833, 10864, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block PINK_TERRACOTTA = REGISTRY.register(new Block(458, "pink_terracotta", true, 10171, 10171, 42, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PLAYER_WALL_HEAD = REGISTRY.register(new Block(458, "player_wall_head", false, 10865, 10872, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block GRAY_TERRACOTTA = REGISTRY.register(new Block(459, "gray_terracotta", true, 10172, 10172, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CREEPER_HEAD = REGISTRY.register(new Block(459, "creeper_head", false, 10873, 10904, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block LIGHT_GRAY_TERRACOTTA = REGISTRY.register(new Block(460, "light_gray_terracotta", true, 10173, 10173, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CREEPER_WALL_HEAD = REGISTRY.register(new Block(460, "creeper_wall_head", false, 10905, 10912, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block CYAN_TERRACOTTA = REGISTRY.register(new Block(461, "cyan_terracotta", true, 10174, 10174, 45, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DRAGON_HEAD = REGISTRY.register(new Block(461, "dragon_head", false, 10913, 10944, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block PURPLE_TERRACOTTA = REGISTRY.register(new Block(462, "purple_terracotta", true, 10175, 10175, 46, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DRAGON_WALL_HEAD = REGISTRY.register(new Block(462, "dragon_wall_head", false, 10945, 10952, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block BLUE_TERRACOTTA = REGISTRY.register(new Block(463, "blue_terracotta", true, 10176, 10176, 47, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PIGLIN_HEAD = REGISTRY.register(new Block(463, "piglin_head", false, 10953, 10984, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block BROWN_TERRACOTTA = REGISTRY.register(new Block(464, "brown_terracotta", true, 10177, 10177, 48, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PIGLIN_WALL_HEAD = REGISTRY.register(new Block(464, "piglin_wall_head", false, 10985, 10992, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, BlockEntityType.SKULL));
 
-    public static final Block GREEN_TERRACOTTA = REGISTRY.register(new Block(465, "green_terracotta", true, 10178, 10178, 49, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ANVIL = REGISTRY.register(new Block(465, "anvil", true, 10993, 10996, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block RED_TERRACOTTA = REGISTRY.register(new Block(466, "red_terracotta", true, 10179, 10179, 50, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CHIPPED_ANVIL = REGISTRY.register(new Block(466, "chipped_anvil", true, 10997, 11000, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BLACK_TERRACOTTA = REGISTRY.register(new Block(467, "black_terracotta", true, 10180, 10180, 51, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DAMAGED_ANVIL = REGISTRY.register(new Block(467, "damaged_anvil", true, 11001, 11004, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WHITE_STAINED_GLASS_PANE = REGISTRY.register(new Block(468, "white_stained_glass_pane", true, 10181, 10212, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block TRAPPED_CHEST = REGISTRY.register(new Block(468, "trapped_chest", true, 11005, 11028, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.TRAPPED_CHEST));
 
-    public static final Block ORANGE_STAINED_GLASS_PANE = REGISTRY.register(new Block(469, "orange_stained_glass_pane", true, 10213, 10244, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block LIGHT_WEIGHTED_PRESSURE_PLATE = REGISTRY.register(new Block(469, "light_weighted_pressure_plate", true, 11029, 11044, 30, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MAGENTA_STAINED_GLASS_PANE = REGISTRY.register(new Block(470, "magenta_stained_glass_pane", true, 10245, 10276, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block HEAVY_WEIGHTED_PRESSURE_PLATE = REGISTRY.register(new Block(470, "heavy_weighted_pressure_plate", true, 11045, 11060, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LIGHT_BLUE_STAINED_GLASS_PANE = REGISTRY.register(new Block(471, "light_blue_stained_glass_pane", true, 10277, 10308, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block COMPARATOR = REGISTRY.register(new Block(471, "comparator", false, 11061, 11076, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, BlockEntityType.COMPARATOR));
 
-    public static final Block YELLOW_STAINED_GLASS_PANE = REGISTRY.register(new Block(472, "yellow_stained_glass_pane", true, 10309, 10340, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block DAYLIGHT_DETECTOR = REGISTRY.register(new Block(472, "daylight_detector", true, 11077, 11108, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.DAYLIGHT_DETECTOR));
 
-    public static final Block LIME_STAINED_GLASS_PANE = REGISTRY.register(new Block(473, "lime_stained_glass_pane", true, 10341, 10372, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block REDSTONE_BLOCK = REGISTRY.register(new Block(473, "redstone_block", true, 11109, 11109, 4, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PINK_STAINED_GLASS_PANE = REGISTRY.register(new Block(474, "pink_stained_glass_pane", true, 10373, 10404, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block NETHER_QUARTZ_ORE = REGISTRY.register(new Block(474, "nether_quartz_ore", true, 11110, 11110, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GRAY_STAINED_GLASS_PANE = REGISTRY.register(new Block(475, "gray_stained_glass_pane", true, 10405, 10436, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block HOPPER = REGISTRY.register(new Block(475, "hopper", true, 11111, 11120, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.HOPPER));
 
-    public static final Block LIGHT_GRAY_STAINED_GLASS_PANE = REGISTRY.register(new Block(476, "light_gray_stained_glass_pane", true, 10437, 10468, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block QUARTZ_BLOCK = REGISTRY.register(new Block(476, "quartz_block", true, 11121, 11121, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CYAN_STAINED_GLASS_PANE = REGISTRY.register(new Block(477, "cyan_stained_glass_pane", true, 10469, 10500, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block CHISELED_QUARTZ_BLOCK = REGISTRY.register(new Block(477, "chiseled_quartz_block", true, 11122, 11122, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PURPLE_STAINED_GLASS_PANE = REGISTRY.register(new Block(478, "purple_stained_glass_pane", true, 10501, 10532, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block QUARTZ_PILLAR = REGISTRY.register(new Block(478, "quartz_pillar", true, 11123, 11125, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BLUE_STAINED_GLASS_PANE = REGISTRY.register(new Block(479, "blue_stained_glass_pane", true, 10533, 10564, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block QUARTZ_STAIRS = REGISTRY.register(new Block(479, "quartz_stairs", true, 11126, 11205, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BROWN_STAINED_GLASS_PANE = REGISTRY.register(new Block(480, "brown_stained_glass_pane", true, 10565, 10596, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block ACTIVATOR_RAIL = REGISTRY.register(new Block(480, "activator_rail", false, 11206, 11229, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.7f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GREEN_STAINED_GLASS_PANE = REGISTRY.register(new Block(481, "green_stained_glass_pane", true, 10597, 10628, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block DROPPER = REGISTRY.register(new Block(481, "dropper", true, 11230, 11241, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.DROPPER));
 
-    public static final Block RED_STAINED_GLASS_PANE = REGISTRY.register(new Block(482, "red_stained_glass_pane", true, 10629, 10660, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block WHITE_TERRACOTTA = REGISTRY.register(new Block(482, "white_terracotta", true, 11242, 11242, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BLACK_STAINED_GLASS_PANE = REGISTRY.register(new Block(483, "black_stained_glass_pane", true, 10661, 10692, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block ORANGE_TERRACOTTA = REGISTRY.register(new Block(483, "orange_terracotta", true, 11243, 11243, 37, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block ACACIA_STAIRS = REGISTRY.register(new Block(484, "acacia_stairs", true, 10693, 10772, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block MAGENTA_TERRACOTTA = REGISTRY.register(new Block(484, "magenta_terracotta", true, 11244, 11244, 38, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CHERRY_STAIRS = REGISTRY.register(new Block(485, "cherry_stairs", true, 10773, 10852, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block LIGHT_BLUE_TERRACOTTA = REGISTRY.register(new Block(485, "light_blue_terracotta", true, 11245, 11245, 39, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DARK_OAK_STAIRS = REGISTRY.register(new Block(486, "dark_oak_stairs", true, 10853, 10932, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block YELLOW_TERRACOTTA = REGISTRY.register(new Block(486, "yellow_terracotta", true, 11246, 11246, 40, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PALE_OAK_STAIRS = REGISTRY.register(new Block(487, "pale_oak_stairs", true, 10933, 11012, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block LIME_TERRACOTTA = REGISTRY.register(new Block(487, "lime_terracotta", true, 11247, 11247, 41, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MANGROVE_STAIRS = REGISTRY.register(new Block(488, "mangrove_stairs", true, 11013, 11092, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block PINK_TERRACOTTA = REGISTRY.register(new Block(488, "pink_terracotta", true, 11248, 11248, 42, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BAMBOO_STAIRS = REGISTRY.register(new Block(489, "bamboo_stairs", true, 11093, 11172, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block GRAY_TERRACOTTA = REGISTRY.register(new Block(489, "gray_terracotta", true, 11249, 11249, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BAMBOO_MOSAIC_STAIRS = REGISTRY.register(new Block(490, "bamboo_mosaic_stairs", true, 11173, 11252, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block LIGHT_GRAY_TERRACOTTA = REGISTRY.register(new Block(490, "light_gray_terracotta", true, 11250, 11250, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SLIME_BLOCK = REGISTRY.register(new Block(491, "slime_block", true, 11253, 11253, 1, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block CYAN_TERRACOTTA = REGISTRY.register(new Block(491, "cyan_terracotta", true, 11251, 11251, 45, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BARRIER = REGISTRY.register(new Block(492, "barrier", true, 11254, 11255, 0, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false));
+    public static final Block PURPLE_TERRACOTTA = REGISTRY.register(new Block(492, "purple_terracotta", true, 11252, 11252, 46, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LIGHT = REGISTRY.register(new Block(493, "light", false, 11256, 11287, 0, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false));
+    public static final Block BLUE_TERRACOTTA = REGISTRY.register(new Block(493, "blue_terracotta", true, 11253, 11253, 47, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block IRON_TRAPDOOR = REGISTRY.register(new Block(494, "iron_trapdoor", true, 11288, 11351, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BROWN_TERRACOTTA = REGISTRY.register(new Block(494, "brown_terracotta", true, 11254, 11254, 48, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PRISMARINE = REGISTRY.register(new Block(495, "prismarine", true, 11352, 11352, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GREEN_TERRACOTTA = REGISTRY.register(new Block(495, "green_terracotta", true, 11255, 11255, 49, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PRISMARINE_BRICKS = REGISTRY.register(new Block(496, "prismarine_bricks", true, 11353, 11353, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block RED_TERRACOTTA = REGISTRY.register(new Block(496, "red_terracotta", true, 11256, 11256, 50, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DARK_PRISMARINE = REGISTRY.register(new Block(497, "dark_prismarine", true, 11354, 11354, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BLACK_TERRACOTTA = REGISTRY.register(new Block(497, "black_terracotta", true, 11257, 11257, 51, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PRISMARINE_STAIRS = REGISTRY.register(new Block(498, "prismarine_stairs", true, 11355, 11434, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WHITE_STAINED_GLASS_PANE = REGISTRY.register(new Block(498, "white_stained_glass_pane", true, 11258, 11289, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block PRISMARINE_BRICK_STAIRS = REGISTRY.register(new Block(499, "prismarine_brick_stairs", true, 11435, 11514, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ORANGE_STAINED_GLASS_PANE = REGISTRY.register(new Block(499, "orange_stained_glass_pane", true, 11290, 11321, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block DARK_PRISMARINE_STAIRS = REGISTRY.register(new Block(500, "dark_prismarine_stairs", true, 11515, 11594, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MAGENTA_STAINED_GLASS_PANE = REGISTRY.register(new Block(500, "magenta_stained_glass_pane", true, 11322, 11353, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block PRISMARINE_SLAB = REGISTRY.register(new Block(501, "prismarine_slab", true, 11595, 11600, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIGHT_BLUE_STAINED_GLASS_PANE = REGISTRY.register(new Block(501, "light_blue_stained_glass_pane", true, 11354, 11385, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block PRISMARINE_BRICK_SLAB = REGISTRY.register(new Block(502, "prismarine_brick_slab", true, 11601, 11606, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block YELLOW_STAINED_GLASS_PANE = REGISTRY.register(new Block(502, "yellow_stained_glass_pane", true, 11386, 11417, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block DARK_PRISMARINE_SLAB = REGISTRY.register(new Block(503, "dark_prismarine_slab", true, 11607, 11612, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIME_STAINED_GLASS_PANE = REGISTRY.register(new Block(503, "lime_stained_glass_pane", true, 11418, 11449, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block SEA_LANTERN = REGISTRY.register(new Block(504, "sea_lantern", true, 11613, 11613, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block PINK_STAINED_GLASS_PANE = REGISTRY.register(new Block(504, "pink_stained_glass_pane", true, 11450, 11481, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block HAY_BLOCK = REGISTRY.register(new Block(505, "hay_block", true, 11614, 11616, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+    public static final Block GRAY_STAINED_GLASS_PANE = REGISTRY.register(new Block(505, "gray_stained_glass_pane", true, 11482, 11513, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block WHITE_CARPET = REGISTRY.register(new Block(506, "white_carpet", false, 11617, 11617, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block LIGHT_GRAY_STAINED_GLASS_PANE = REGISTRY.register(new Block(506, "light_gray_stained_glass_pane", true, 11514, 11545, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block ORANGE_CARPET = REGISTRY.register(new Block(507, "orange_carpet", false, 11618, 11618, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block CYAN_STAINED_GLASS_PANE = REGISTRY.register(new Block(507, "cyan_stained_glass_pane", true, 11546, 11577, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block MAGENTA_CARPET = REGISTRY.register(new Block(508, "magenta_carpet", false, 11619, 11619, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block PURPLE_STAINED_GLASS_PANE = REGISTRY.register(new Block(508, "purple_stained_glass_pane", true, 11578, 11609, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block LIGHT_BLUE_CARPET = REGISTRY.register(new Block(509, "light_blue_carpet", false, 11620, 11620, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block BLUE_STAINED_GLASS_PANE = REGISTRY.register(new Block(509, "blue_stained_glass_pane", true, 11610, 11641, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block YELLOW_CARPET = REGISTRY.register(new Block(510, "yellow_carpet", false, 11621, 11621, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block BROWN_STAINED_GLASS_PANE = REGISTRY.register(new Block(510, "brown_stained_glass_pane", true, 11642, 11673, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block LIME_CARPET = REGISTRY.register(new Block(511, "lime_carpet", false, 11622, 11622, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block GREEN_STAINED_GLASS_PANE = REGISTRY.register(new Block(511, "green_stained_glass_pane", true, 11674, 11705, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block PINK_CARPET = REGISTRY.register(new Block(512, "pink_carpet", false, 11623, 11623, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block RED_STAINED_GLASS_PANE = REGISTRY.register(new Block(512, "red_stained_glass_pane", true, 11706, 11737, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block GRAY_CARPET = REGISTRY.register(new Block(513, "gray_carpet", false, 11624, 11624, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block BLACK_STAINED_GLASS_PANE = REGISTRY.register(new Block(513, "black_stained_glass_pane", true, 11738, 11769, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block LIGHT_GRAY_CARPET = REGISTRY.register(new Block(514, "light_gray_carpet", false, 11625, 11625, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block ACACIA_STAIRS = REGISTRY.register(new Block(514, "acacia_stairs", true, 11770, 11849, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CYAN_CARPET = REGISTRY.register(new Block(515, "cyan_carpet", false, 11626, 11626, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block CHERRY_STAIRS = REGISTRY.register(new Block(515, "cherry_stairs", true, 11850, 11929, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block PURPLE_CARPET = REGISTRY.register(new Block(516, "purple_carpet", false, 11627, 11627, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block DARK_OAK_STAIRS = REGISTRY.register(new Block(516, "dark_oak_stairs", true, 11930, 12009, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BLUE_CARPET = REGISTRY.register(new Block(517, "blue_carpet", false, 11628, 11628, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block PALE_OAK_STAIRS = REGISTRY.register(new Block(517, "pale_oak_stairs", true, 12010, 12089, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BROWN_CARPET = REGISTRY.register(new Block(518, "brown_carpet", false, 11629, 11629, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block MANGROVE_STAIRS = REGISTRY.register(new Block(518, "mangrove_stairs", true, 12090, 12169, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block GREEN_CARPET = REGISTRY.register(new Block(519, "green_carpet", false, 11630, 11630, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block BAMBOO_STAIRS = REGISTRY.register(new Block(519, "bamboo_stairs", true, 12170, 12249, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block RED_CARPET = REGISTRY.register(new Block(520, "red_carpet", false, 11631, 11631, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block BAMBOO_MOSAIC_STAIRS = REGISTRY.register(new Block(520, "bamboo_mosaic_stairs", true, 12250, 12329, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BLACK_CARPET = REGISTRY.register(new Block(521, "black_carpet", false, 11632, 11632, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block SLIME_BLOCK = REGISTRY.register(new Block(521, "slime_block", true, 12330, 12330, 1, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block TERRACOTTA = REGISTRY.register(new Block(522, "terracotta", true, 11633, 11633, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BARRIER = REGISTRY.register(new Block(522, "barrier", true, 12331, 12332, 0, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false));
 
-    public static final Block COAL_BLOCK = REGISTRY.register(new Block(523, "coal_block", true, 11634, 11634, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIGHT = REGISTRY.register(new Block(523, "light", false, 12333, 12364, 0, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false));
 
-    public static final Block PACKED_ICE = REGISTRY.register(new Block(524, "packed_ice", true, 11635, 11635, 5, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block IRON_TRAPDOOR = REGISTRY.register(new Block(524, "iron_trapdoor", true, 12365, 12428, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SUNFLOWER = REGISTRY.register(new Block(525, "sunflower", false, 11636, 11637, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block PRISMARINE = REGISTRY.register(new Block(525, "prismarine", true, 12429, 12429, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LILAC = REGISTRY.register(new Block(526, "lilac", false, 11638, 11639, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block PRISMARINE_BRICKS = REGISTRY.register(new Block(526, "prismarine_bricks", true, 12430, 12430, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block ROSE_BUSH = REGISTRY.register(new Block(527, "rose_bush", false, 11640, 11641, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block DARK_PRISMARINE = REGISTRY.register(new Block(527, "dark_prismarine", true, 12431, 12431, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PEONY = REGISTRY.register(new Block(528, "peony", false, 11642, 11643, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block PRISMARINE_STAIRS = REGISTRY.register(new Block(528, "prismarine_stairs", true, 12432, 12511, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block TALL_GRASS = REGISTRY.register(new Block(529, "tall_grass", false, 11644, 11645, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block PRISMARINE_BRICK_STAIRS = REGISTRY.register(new Block(529, "prismarine_brick_stairs", true, 12512, 12591, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LARGE_FERN = REGISTRY.register(new Block(530, "large_fern", false, 11646, 11647, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block DARK_PRISMARINE_STAIRS = REGISTRY.register(new Block(530, "dark_prismarine_stairs", true, 12592, 12671, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WHITE_BANNER = REGISTRY.register(new Block(531, "white_banner", true, 11648, 11663, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block PRISMARINE_SLAB = REGISTRY.register(new Block(531, "prismarine_slab", true, 12672, 12677, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block ORANGE_BANNER = REGISTRY.register(new Block(532, "orange_banner", true, 11664, 11679, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block PRISMARINE_BRICK_SLAB = REGISTRY.register(new Block(532, "prismarine_brick_slab", true, 12678, 12683, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MAGENTA_BANNER = REGISTRY.register(new Block(533, "magenta_banner", true, 11680, 11695, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block DARK_PRISMARINE_SLAB = REGISTRY.register(new Block(533, "dark_prismarine_slab", true, 12684, 12689, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LIGHT_BLUE_BANNER = REGISTRY.register(new Block(534, "light_blue_banner", true, 11696, 11711, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block SEA_LANTERN = REGISTRY.register(new Block(534, "sea_lantern", true, 12690, 12690, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block YELLOW_BANNER = REGISTRY.register(new Block(535, "yellow_banner", true, 11712, 11727, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block HAY_BLOCK = REGISTRY.register(new Block(535, "hay_block", true, 12691, 12693, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
 
-    public static final Block LIME_BANNER = REGISTRY.register(new Block(536, "lime_banner", true, 11728, 11743, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block WHITE_CARPET = REGISTRY.register(new Block(536, "white_carpet", false, 12694, 12694, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block PINK_BANNER = REGISTRY.register(new Block(537, "pink_banner", true, 11744, 11759, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block ORANGE_CARPET = REGISTRY.register(new Block(537, "orange_carpet", false, 12695, 12695, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block GRAY_BANNER = REGISTRY.register(new Block(538, "gray_banner", true, 11760, 11775, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block MAGENTA_CARPET = REGISTRY.register(new Block(538, "magenta_carpet", false, 12696, 12696, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block LIGHT_GRAY_BANNER = REGISTRY.register(new Block(539, "light_gray_banner", true, 11776, 11791, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block LIGHT_BLUE_CARPET = REGISTRY.register(new Block(539, "light_blue_carpet", false, 12697, 12697, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block CYAN_BANNER = REGISTRY.register(new Block(540, "cyan_banner", true, 11792, 11807, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block YELLOW_CARPET = REGISTRY.register(new Block(540, "yellow_carpet", false, 12698, 12698, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block PURPLE_BANNER = REGISTRY.register(new Block(541, "purple_banner", true, 11808, 11823, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block LIME_CARPET = REGISTRY.register(new Block(541, "lime_carpet", false, 12699, 12699, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block BLUE_BANNER = REGISTRY.register(new Block(542, "blue_banner", true, 11824, 11839, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block PINK_CARPET = REGISTRY.register(new Block(542, "pink_carpet", false, 12700, 12700, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block BROWN_BANNER = REGISTRY.register(new Block(543, "brown_banner", true, 11840, 11855, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block GRAY_CARPET = REGISTRY.register(new Block(543, "gray_carpet", false, 12701, 12701, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block GREEN_BANNER = REGISTRY.register(new Block(544, "green_banner", true, 11856, 11871, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block LIGHT_GRAY_CARPET = REGISTRY.register(new Block(544, "light_gray_carpet", false, 12702, 12702, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block RED_BANNER = REGISTRY.register(new Block(545, "red_banner", true, 11872, 11887, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block CYAN_CARPET = REGISTRY.register(new Block(545, "cyan_carpet", false, 12703, 12703, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block BLACK_BANNER = REGISTRY.register(new Block(546, "black_banner", true, 11888, 11903, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block PURPLE_CARPET = REGISTRY.register(new Block(546, "purple_carpet", false, 12704, 12704, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block WHITE_WALL_BANNER = REGISTRY.register(new Block(547, "white_wall_banner", true, 11904, 11907, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block BLUE_CARPET = REGISTRY.register(new Block(547, "blue_carpet", false, 12705, 12705, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block ORANGE_WALL_BANNER = REGISTRY.register(new Block(548, "orange_wall_banner", true, 11908, 11911, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block BROWN_CARPET = REGISTRY.register(new Block(548, "brown_carpet", false, 12706, 12706, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block MAGENTA_WALL_BANNER = REGISTRY.register(new Block(549, "magenta_wall_banner", true, 11912, 11915, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block GREEN_CARPET = REGISTRY.register(new Block(549, "green_carpet", false, 12707, 12707, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block LIGHT_BLUE_WALL_BANNER = REGISTRY.register(new Block(550, "light_blue_wall_banner", true, 11916, 11919, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block RED_CARPET = REGISTRY.register(new Block(550, "red_carpet", false, 12708, 12708, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block YELLOW_WALL_BANNER = REGISTRY.register(new Block(551, "yellow_wall_banner", true, 11920, 11923, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block BLACK_CARPET = REGISTRY.register(new Block(551, "black_carpet", false, 12709, 12709, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block LIME_WALL_BANNER = REGISTRY.register(new Block(552, "lime_wall_banner", true, 11924, 11927, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block TERRACOTTA = REGISTRY.register(new Block(552, "terracotta", true, 12710, 12710, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PINK_WALL_BANNER = REGISTRY.register(new Block(553, "pink_wall_banner", true, 11928, 11931, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block COAL_BLOCK = REGISTRY.register(new Block(553, "coal_block", true, 12711, 12711, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GRAY_WALL_BANNER = REGISTRY.register(new Block(554, "gray_wall_banner", true, 11932, 11935, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block PACKED_ICE = REGISTRY.register(new Block(554, "packed_ice", true, 12712, 12712, 5, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LIGHT_GRAY_WALL_BANNER = REGISTRY.register(new Block(555, "light_gray_wall_banner", true, 11936, 11939, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block SUNFLOWER = REGISTRY.register(new Block(555, "sunflower", false, 12713, 12714, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block CYAN_WALL_BANNER = REGISTRY.register(new Block(556, "cyan_wall_banner", true, 11940, 11943, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block LILAC = REGISTRY.register(new Block(556, "lilac", false, 12715, 12716, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block PURPLE_WALL_BANNER = REGISTRY.register(new Block(557, "purple_wall_banner", true, 11944, 11947, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block ROSE_BUSH = REGISTRY.register(new Block(557, "rose_bush", false, 12717, 12718, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block BLUE_WALL_BANNER = REGISTRY.register(new Block(558, "blue_wall_banner", true, 11948, 11951, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block PEONY = REGISTRY.register(new Block(558, "peony", false, 12719, 12720, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block BROWN_WALL_BANNER = REGISTRY.register(new Block(559, "brown_wall_banner", true, 11952, 11955, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block TALL_GRASS = REGISTRY.register(new Block(559, "tall_grass", false, 12721, 12722, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block GREEN_WALL_BANNER = REGISTRY.register(new Block(560, "green_wall_banner", true, 11956, 11959, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block LARGE_FERN = REGISTRY.register(new Block(560, "large_fern", false, 12723, 12724, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block RED_WALL_BANNER = REGISTRY.register(new Block(561, "red_wall_banner", true, 11960, 11963, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block WHITE_BANNER = REGISTRY.register(new Block(561, "white_banner", true, 12725, 12740, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block BLACK_WALL_BANNER = REGISTRY.register(new Block(562, "black_wall_banner", true, 11964, 11967, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
+    public static final Block ORANGE_BANNER = REGISTRY.register(new Block(562, "orange_banner", true, 12741, 12756, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block RED_SANDSTONE = REGISTRY.register(new Block(563, "red_sandstone", true, 11968, 11968, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MAGENTA_BANNER = REGISTRY.register(new Block(563, "magenta_banner", true, 12757, 12772, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block CHISELED_RED_SANDSTONE = REGISTRY.register(new Block(564, "chiseled_red_sandstone", true, 11969, 11969, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIGHT_BLUE_BANNER = REGISTRY.register(new Block(564, "light_blue_banner", true, 12773, 12788, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block CUT_RED_SANDSTONE = REGISTRY.register(new Block(565, "cut_red_sandstone", true, 11970, 11970, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block YELLOW_BANNER = REGISTRY.register(new Block(565, "yellow_banner", true, 12789, 12804, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block RED_SANDSTONE_STAIRS = REGISTRY.register(new Block(566, "red_sandstone_stairs", true, 11971, 12050, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIME_BANNER = REGISTRY.register(new Block(566, "lime_banner", true, 12805, 12820, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block OAK_SLAB = REGISTRY.register(new Block(567, "oak_slab", true, 12051, 12056, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block PINK_BANNER = REGISTRY.register(new Block(567, "pink_banner", true, 12821, 12836, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block SPRUCE_SLAB = REGISTRY.register(new Block(568, "spruce_slab", true, 12057, 12062, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block GRAY_BANNER = REGISTRY.register(new Block(568, "gray_banner", true, 12837, 12852, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block BIRCH_SLAB = REGISTRY.register(new Block(569, "birch_slab", true, 12063, 12068, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block LIGHT_GRAY_BANNER = REGISTRY.register(new Block(569, "light_gray_banner", true, 12853, 12868, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block JUNGLE_SLAB = REGISTRY.register(new Block(570, "jungle_slab", true, 12069, 12074, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block CYAN_BANNER = REGISTRY.register(new Block(570, "cyan_banner", true, 12869, 12884, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block ACACIA_SLAB = REGISTRY.register(new Block(571, "acacia_slab", true, 12075, 12080, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block PURPLE_BANNER = REGISTRY.register(new Block(571, "purple_banner", true, 12885, 12900, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block CHERRY_SLAB = REGISTRY.register(new Block(572, "cherry_slab", true, 12081, 12086, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block BLUE_BANNER = REGISTRY.register(new Block(572, "blue_banner", true, 12901, 12916, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block DARK_OAK_SLAB = REGISTRY.register(new Block(573, "dark_oak_slab", true, 12087, 12092, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block BROWN_BANNER = REGISTRY.register(new Block(573, "brown_banner", true, 12917, 12932, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block PALE_OAK_SLAB = REGISTRY.register(new Block(574, "pale_oak_slab", true, 12093, 12098, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block GREEN_BANNER = REGISTRY.register(new Block(574, "green_banner", true, 12933, 12948, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block MANGROVE_SLAB = REGISTRY.register(new Block(575, "mangrove_slab", true, 12099, 12104, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block RED_BANNER = REGISTRY.register(new Block(575, "red_banner", true, 12949, 12964, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block BAMBOO_SLAB = REGISTRY.register(new Block(576, "bamboo_slab", true, 12105, 12110, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block BLACK_BANNER = REGISTRY.register(new Block(576, "black_banner", true, 12965, 12980, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block BAMBOO_MOSAIC_SLAB = REGISTRY.register(new Block(577, "bamboo_mosaic_slab", true, 12111, 12116, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block WHITE_WALL_BANNER = REGISTRY.register(new Block(577, "white_wall_banner", true, 12981, 12984, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block STONE_SLAB = REGISTRY.register(new Block(578, "stone_slab", true, 12117, 12122, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ORANGE_WALL_BANNER = REGISTRY.register(new Block(578, "orange_wall_banner", true, 12985, 12988, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block SMOOTH_STONE_SLAB = REGISTRY.register(new Block(579, "smooth_stone_slab", true, 12123, 12128, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MAGENTA_WALL_BANNER = REGISTRY.register(new Block(579, "magenta_wall_banner", true, 12989, 12992, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block SANDSTONE_SLAB = REGISTRY.register(new Block(580, "sandstone_slab", true, 12129, 12134, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIGHT_BLUE_WALL_BANNER = REGISTRY.register(new Block(580, "light_blue_wall_banner", true, 12993, 12996, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block CUT_SANDSTONE_SLAB = REGISTRY.register(new Block(581, "cut_sandstone_slab", true, 12135, 12140, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block YELLOW_WALL_BANNER = REGISTRY.register(new Block(581, "yellow_wall_banner", true, 12997, 13000, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block PETRIFIED_OAK_SLAB = REGISTRY.register(new Block(582, "petrified_oak_slab", true, 12141, 12146, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIME_WALL_BANNER = REGISTRY.register(new Block(582, "lime_wall_banner", true, 13001, 13004, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block COBBLESTONE_SLAB = REGISTRY.register(new Block(583, "cobblestone_slab", true, 12147, 12152, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PINK_WALL_BANNER = REGISTRY.register(new Block(583, "pink_wall_banner", true, 13005, 13008, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block BRICK_SLAB = REGISTRY.register(new Block(584, "brick_slab", true, 12153, 12158, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GRAY_WALL_BANNER = REGISTRY.register(new Block(584, "gray_wall_banner", true, 13009, 13012, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block STONE_BRICK_SLAB = REGISTRY.register(new Block(585, "stone_brick_slab", true, 12159, 12164, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIGHT_GRAY_WALL_BANNER = REGISTRY.register(new Block(585, "light_gray_wall_banner", true, 13013, 13016, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block MUD_BRICK_SLAB = REGISTRY.register(new Block(586, "mud_brick_slab", true, 12165, 12170, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CYAN_WALL_BANNER = REGISTRY.register(new Block(586, "cyan_wall_banner", true, 13017, 13020, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block NETHER_BRICK_SLAB = REGISTRY.register(new Block(587, "nether_brick_slab", true, 12171, 12176, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PURPLE_WALL_BANNER = REGISTRY.register(new Block(587, "purple_wall_banner", true, 13021, 13024, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block QUARTZ_SLAB = REGISTRY.register(new Block(588, "quartz_slab", true, 12177, 12182, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BLUE_WALL_BANNER = REGISTRY.register(new Block(588, "blue_wall_banner", true, 13025, 13028, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block RED_SANDSTONE_SLAB = REGISTRY.register(new Block(589, "red_sandstone_slab", true, 12183, 12188, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BROWN_WALL_BANNER = REGISTRY.register(new Block(589, "brown_wall_banner", true, 13029, 13032, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block CUT_RED_SANDSTONE_SLAB = REGISTRY.register(new Block(590, "cut_red_sandstone_slab", true, 12189, 12194, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GREEN_WALL_BANNER = REGISTRY.register(new Block(590, "green_wall_banner", true, 13033, 13036, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block PURPUR_SLAB = REGISTRY.register(new Block(591, "purpur_slab", true, 12195, 12200, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block RED_WALL_BANNER = REGISTRY.register(new Block(591, "red_wall_banner", true, 13037, 13040, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block SMOOTH_STONE = REGISTRY.register(new Block(592, "smooth_stone", true, 12201, 12201, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BLACK_WALL_BANNER = REGISTRY.register(new Block(592, "black_wall_banner", true, 13041, 13044, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BANNER));
 
-    public static final Block SMOOTH_SANDSTONE = REGISTRY.register(new Block(593, "smooth_sandstone", true, 12202, 12202, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block RED_SANDSTONE = REGISTRY.register(new Block(593, "red_sandstone", true, 13045, 13045, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SMOOTH_QUARTZ = REGISTRY.register(new Block(594, "smooth_quartz", true, 12203, 12203, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CHISELED_RED_SANDSTONE = REGISTRY.register(new Block(594, "chiseled_red_sandstone", true, 13046, 13046, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SMOOTH_RED_SANDSTONE = REGISTRY.register(new Block(595, "smooth_red_sandstone", true, 12204, 12204, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CUT_RED_SANDSTONE = REGISTRY.register(new Block(595, "cut_red_sandstone", true, 13047, 13047, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SPRUCE_FENCE_GATE = REGISTRY.register(new Block(596, "spruce_fence_gate", true, 12205, 12236, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block RED_SANDSTONE_STAIRS = REGISTRY.register(new Block(596, "red_sandstone_stairs", true, 13048, 13127, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BIRCH_FENCE_GATE = REGISTRY.register(new Block(597, "birch_fence_gate", true, 12237, 12268, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block OAK_SLAB = REGISTRY.register(new Block(597, "oak_slab", true, 13128, 13133, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block JUNGLE_FENCE_GATE = REGISTRY.register(new Block(598, "jungle_fence_gate", true, 12269, 12300, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block SPRUCE_SLAB = REGISTRY.register(new Block(598, "spruce_slab", true, 13134, 13139, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block ACACIA_FENCE_GATE = REGISTRY.register(new Block(599, "acacia_fence_gate", true, 12301, 12332, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block BIRCH_SLAB = REGISTRY.register(new Block(599, "birch_slab", true, 13140, 13145, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CHERRY_FENCE_GATE = REGISTRY.register(new Block(600, "cherry_fence_gate", true, 12333, 12364, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block JUNGLE_SLAB = REGISTRY.register(new Block(600, "jungle_slab", true, 13146, 13151, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block DARK_OAK_FENCE_GATE = REGISTRY.register(new Block(601, "dark_oak_fence_gate", true, 12365, 12396, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block ACACIA_SLAB = REGISTRY.register(new Block(601, "acacia_slab", true, 13152, 13157, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block PALE_OAK_FENCE_GATE = REGISTRY.register(new Block(602, "pale_oak_fence_gate", true, 12397, 12428, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block CHERRY_SLAB = REGISTRY.register(new Block(602, "cherry_slab", true, 13158, 13163, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block MANGROVE_FENCE_GATE = REGISTRY.register(new Block(603, "mangrove_fence_gate", true, 12429, 12460, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block DARK_OAK_SLAB = REGISTRY.register(new Block(603, "dark_oak_slab", true, 13164, 13169, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BAMBOO_FENCE_GATE = REGISTRY.register(new Block(604, "bamboo_fence_gate", true, 12461, 12492, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block PALE_OAK_SLAB = REGISTRY.register(new Block(604, "pale_oak_slab", true, 13170, 13175, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block SPRUCE_FENCE = REGISTRY.register(new Block(605, "spruce_fence", true, 12493, 12524, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block MANGROVE_SLAB = REGISTRY.register(new Block(605, "mangrove_slab", true, 13176, 13181, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BIRCH_FENCE = REGISTRY.register(new Block(606, "birch_fence", true, 12525, 12556, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block BAMBOO_SLAB = REGISTRY.register(new Block(606, "bamboo_slab", true, 13182, 13187, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block JUNGLE_FENCE = REGISTRY.register(new Block(607, "jungle_fence", true, 12557, 12588, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block BAMBOO_MOSAIC_SLAB = REGISTRY.register(new Block(607, "bamboo_mosaic_slab", true, 13188, 13193, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block ACACIA_FENCE = REGISTRY.register(new Block(608, "acacia_fence", true, 12589, 12620, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block STONE_SLAB = REGISTRY.register(new Block(608, "stone_slab", true, 13194, 13199, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CHERRY_FENCE = REGISTRY.register(new Block(609, "cherry_fence", true, 12621, 12652, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block SMOOTH_STONE_SLAB = REGISTRY.register(new Block(609, "smooth_stone_slab", true, 13200, 13205, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DARK_OAK_FENCE = REGISTRY.register(new Block(610, "dark_oak_fence", true, 12653, 12684, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block SANDSTONE_SLAB = REGISTRY.register(new Block(610, "sandstone_slab", true, 13206, 13211, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PALE_OAK_FENCE = REGISTRY.register(new Block(611, "pale_oak_fence", true, 12685, 12716, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block CUT_SANDSTONE_SLAB = REGISTRY.register(new Block(611, "cut_sandstone_slab", true, 13212, 13217, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MANGROVE_FENCE = REGISTRY.register(new Block(612, "mangrove_fence", true, 12717, 12748, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block PETRIFIED_OAK_SLAB = REGISTRY.register(new Block(612, "petrified_oak_slab", true, 13218, 13223, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BAMBOO_FENCE = REGISTRY.register(new Block(613, "bamboo_fence", true, 12749, 12780, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block COBBLESTONE_SLAB = REGISTRY.register(new Block(613, "cobblestone_slab", true, 13224, 13229, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SPRUCE_DOOR = REGISTRY.register(new Block(614, "spruce_door", true, 12781, 12844, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block BRICK_SLAB = REGISTRY.register(new Block(614, "brick_slab", true, 13230, 13235, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BIRCH_DOOR = REGISTRY.register(new Block(615, "birch_door", true, 12845, 12908, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block STONE_BRICK_SLAB = REGISTRY.register(new Block(615, "stone_brick_slab", true, 13236, 13241, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block JUNGLE_DOOR = REGISTRY.register(new Block(616, "jungle_door", true, 12909, 12972, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block MUD_BRICK_SLAB = REGISTRY.register(new Block(616, "mud_brick_slab", true, 13242, 13247, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block ACACIA_DOOR = REGISTRY.register(new Block(617, "acacia_door", true, 12973, 13036, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block NETHER_BRICK_SLAB = REGISTRY.register(new Block(617, "nether_brick_slab", true, 13248, 13253, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CHERRY_DOOR = REGISTRY.register(new Block(618, "cherry_door", true, 13037, 13100, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block QUARTZ_SLAB = REGISTRY.register(new Block(618, "quartz_slab", true, 13254, 13259, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DARK_OAK_DOOR = REGISTRY.register(new Block(619, "dark_oak_door", true, 13101, 13164, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block RED_SANDSTONE_SLAB = REGISTRY.register(new Block(619, "red_sandstone_slab", true, 13260, 13265, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PALE_OAK_DOOR = REGISTRY.register(new Block(620, "pale_oak_door", true, 13165, 13228, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block CUT_RED_SANDSTONE_SLAB = REGISTRY.register(new Block(620, "cut_red_sandstone_slab", true, 13266, 13271, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MANGROVE_DOOR = REGISTRY.register(new Block(621, "mangrove_door", true, 13229, 13292, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block PURPUR_SLAB = REGISTRY.register(new Block(621, "purpur_slab", true, 13272, 13277, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BAMBOO_DOOR = REGISTRY.register(new Block(622, "bamboo_door", true, 13293, 13356, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block SMOOTH_STONE = REGISTRY.register(new Block(622, "smooth_stone", true, 13278, 13278, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block END_ROD = REGISTRY.register(new Block(623, "end_rod", false, 13357, 13362, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block SMOOTH_SANDSTONE = REGISTRY.register(new Block(623, "smooth_sandstone", true, 13279, 13279, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CHORUS_PLANT = REGISTRY.register(new Block(624, "chorus_plant", false, 13363, 13426, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
+    public static final Block SMOOTH_QUARTZ = REGISTRY.register(new Block(624, "smooth_quartz", true, 13280, 13280, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CHORUS_FLOWER = REGISTRY.register(new Block(625, "chorus_flower", false, 13427, 13432, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
+    public static final Block SMOOTH_RED_SANDSTONE = REGISTRY.register(new Block(625, "smooth_red_sandstone", true, 13281, 13281, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PURPUR_BLOCK = REGISTRY.register(new Block(626, "purpur_block", true, 13433, 13433, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SPRUCE_FENCE_GATE = REGISTRY.register(new Block(626, "spruce_fence_gate", true, 13282, 13313, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block PURPUR_PILLAR = REGISTRY.register(new Block(627, "purpur_pillar", true, 13434, 13436, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BIRCH_FENCE_GATE = REGISTRY.register(new Block(627, "birch_fence_gate", true, 13314, 13345, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block PURPUR_STAIRS = REGISTRY.register(new Block(628, "purpur_stairs", true, 13437, 13516, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block JUNGLE_FENCE_GATE = REGISTRY.register(new Block(628, "jungle_fence_gate", true, 13346, 13377, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block END_STONE_BRICKS = REGISTRY.register(new Block(629, "end_stone_bricks", true, 13517, 13517, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ACACIA_FENCE_GATE = REGISTRY.register(new Block(629, "acacia_fence_gate", true, 13378, 13409, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block TORCHFLOWER_CROP = REGISTRY.register(new Block(630, "torchflower_crop", false, 13518, 13519, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block CHERRY_FENCE_GATE = REGISTRY.register(new Block(630, "cherry_fence_gate", true, 13410, 13441, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block PITCHER_CROP = REGISTRY.register(new Block(631, "pitcher_crop", false, 13520, 13529, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block DARK_OAK_FENCE_GATE = REGISTRY.register(new Block(631, "dark_oak_fence_gate", true, 13442, 13473, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block PITCHER_PLANT = REGISTRY.register(new Block(632, "pitcher_plant", false, 13530, 13531, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block PALE_OAK_FENCE_GATE = REGISTRY.register(new Block(632, "pale_oak_fence_gate", true, 13474, 13505, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BEETROOTS = REGISTRY.register(new Block(633, "beetroots", false, 13532, 13535, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block MANGROVE_FENCE_GATE = REGISTRY.register(new Block(633, "mangrove_fence_gate", true, 13506, 13537, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block DIRT_PATH = REGISTRY.register(new Block(634, "dirt_path", true, 13536, 13536, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 0.65f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block BAMBOO_FENCE_GATE = REGISTRY.register(new Block(634, "bamboo_fence_gate", true, 13538, 13569, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block END_GATEWAY = REGISTRY.register(new Block(635, "end_gateway", false, 13537, 13537, 29, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false, BlockEntityType.END_GATEWAY));
+    public static final Block SPRUCE_FENCE = REGISTRY.register(new Block(635, "spruce_fence", true, 13570, 13601, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block REPEATING_COMMAND_BLOCK = REGISTRY.register(new Block(636, "repeating_command_block", true, 13538, 13549, 24, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, true, BlockEntityType.COMMAND_BLOCK));
+    public static final Block BIRCH_FENCE = REGISTRY.register(new Block(636, "birch_fence", true, 13602, 13633, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CHAIN_COMMAND_BLOCK = REGISTRY.register(new Block(637, "chain_command_block", true, 13550, 13561, 27, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, true, BlockEntityType.COMMAND_BLOCK));
+    public static final Block JUNGLE_FENCE = REGISTRY.register(new Block(637, "jungle_fence", true, 13634, 13665, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block FROSTED_ICE = REGISTRY.register(new Block(638, "frosted_ice", true, 13562, 13565, 5, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block ACACIA_FENCE = REGISTRY.register(new Block(638, "acacia_fence", true, 13666, 13697, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block MAGMA_BLOCK = REGISTRY.register(new Block(639, "magma_block", true, 13566, 13566, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CHERRY_FENCE = REGISTRY.register(new Block(639, "cherry_fence", true, 13698, 13729, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block NETHER_WART_BLOCK = REGISTRY.register(new Block(640, "nether_wart_block", true, 13567, 13567, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+    public static final Block DARK_OAK_FENCE = REGISTRY.register(new Block(640, "dark_oak_fence", true, 13730, 13761, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block RED_NETHER_BRICKS = REGISTRY.register(new Block(641, "red_nether_bricks", true, 13568, 13568, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PALE_OAK_FENCE = REGISTRY.register(new Block(641, "pale_oak_fence", true, 13762, 13793, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BONE_BLOCK = REGISTRY.register(new Block(642, "bone_block", true, 13569, 13571, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MANGROVE_FENCE = REGISTRY.register(new Block(642, "mangrove_fence", true, 13794, 13825, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block STRUCTURE_VOID = REGISTRY.register(new Block(643, "structure_void", false, 13572, 13572, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block BAMBOO_FENCE = REGISTRY.register(new Block(643, "bamboo_fence", true, 13826, 13857, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block OBSERVER = REGISTRY.register(new Block(644, "observer", true, 13573, 13584, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SPRUCE_DOOR = REGISTRY.register(new Block(644, "spruce_door", true, 13858, 13921, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block SHULKER_BOX = REGISTRY.register(new Block(645, "shulker_box", true, 13585, 13590, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block BIRCH_DOOR = REGISTRY.register(new Block(645, "birch_door", true, 13922, 13985, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block WHITE_SHULKER_BOX = REGISTRY.register(new Block(646, "white_shulker_box", true, 13591, 13596, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block JUNGLE_DOOR = REGISTRY.register(new Block(646, "jungle_door", true, 13986, 14049, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block ORANGE_SHULKER_BOX = REGISTRY.register(new Block(647, "orange_shulker_box", true, 13597, 13602, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block ACACIA_DOOR = REGISTRY.register(new Block(647, "acacia_door", true, 14050, 14113, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block MAGENTA_SHULKER_BOX = REGISTRY.register(new Block(648, "magenta_shulker_box", true, 13603, 13608, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block CHERRY_DOOR = REGISTRY.register(new Block(648, "cherry_door", true, 14114, 14177, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block LIGHT_BLUE_SHULKER_BOX = REGISTRY.register(new Block(649, "light_blue_shulker_box", true, 13609, 13614, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block DARK_OAK_DOOR = REGISTRY.register(new Block(649, "dark_oak_door", true, 14178, 14241, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block YELLOW_SHULKER_BOX = REGISTRY.register(new Block(650, "yellow_shulker_box", true, 13615, 13620, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block PALE_OAK_DOOR = REGISTRY.register(new Block(650, "pale_oak_door", true, 14242, 14305, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block LIME_SHULKER_BOX = REGISTRY.register(new Block(651, "lime_shulker_box", true, 13621, 13626, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block MANGROVE_DOOR = REGISTRY.register(new Block(651, "mangrove_door", true, 14306, 14369, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block PINK_SHULKER_BOX = REGISTRY.register(new Block(652, "pink_shulker_box", true, 13627, 13632, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block BAMBOO_DOOR = REGISTRY.register(new Block(652, "bamboo_door", true, 14370, 14433, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block GRAY_SHULKER_BOX = REGISTRY.register(new Block(653, "gray_shulker_box", true, 13633, 13638, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block END_ROD = REGISTRY.register(new Block(653, "end_rod", false, 14434, 14439, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block LIGHT_GRAY_SHULKER_BOX = REGISTRY.register(new Block(654, "light_gray_shulker_box", true, 13639, 13644, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block CHORUS_PLANT = REGISTRY.register(new Block(654, "chorus_plant", false, 14440, 14503, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
 
-    public static final Block CYAN_SHULKER_BOX = REGISTRY.register(new Block(655, "cyan_shulker_box", true, 13645, 13650, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block CHORUS_FLOWER = REGISTRY.register(new Block(655, "chorus_flower", false, 14504, 14509, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
 
-    public static final Block PURPLE_SHULKER_BOX = REGISTRY.register(new Block(656, "purple_shulker_box", true, 13651, 13656, 46, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block PURPUR_BLOCK = REGISTRY.register(new Block(656, "purpur_block", true, 14510, 14510, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BLUE_SHULKER_BOX = REGISTRY.register(new Block(657, "blue_shulker_box", true, 13657, 13662, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block PURPUR_PILLAR = REGISTRY.register(new Block(657, "purpur_pillar", true, 14511, 14513, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BROWN_SHULKER_BOX = REGISTRY.register(new Block(658, "brown_shulker_box", true, 13663, 13668, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block PURPUR_STAIRS = REGISTRY.register(new Block(658, "purpur_stairs", true, 14514, 14593, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GREEN_SHULKER_BOX = REGISTRY.register(new Block(659, "green_shulker_box", true, 13669, 13674, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block END_STONE_BRICKS = REGISTRY.register(new Block(659, "end_stone_bricks", true, 14594, 14594, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block RED_SHULKER_BOX = REGISTRY.register(new Block(660, "red_shulker_box", true, 13675, 13680, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block TORCHFLOWER_CROP = REGISTRY.register(new Block(660, "torchflower_crop", false, 14595, 14596, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block BLACK_SHULKER_BOX = REGISTRY.register(new Block(661, "black_shulker_box", true, 13681, 13686, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
+    public static final Block PITCHER_CROP = REGISTRY.register(new Block(661, "pitcher_crop", false, 14597, 14606, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block WHITE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(662, "white_glazed_terracotta", true, 13687, 13690, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PITCHER_PLANT = REGISTRY.register(new Block(662, "pitcher_plant", false, 14607, 14608, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block ORANGE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(663, "orange_glazed_terracotta", true, 13691, 13694, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BEETROOTS = REGISTRY.register(new Block(663, "beetroots", false, 14609, 14612, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block MAGENTA_GLAZED_TERRACOTTA = REGISTRY.register(new Block(664, "magenta_glazed_terracotta", true, 13695, 13698, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DIRT_PATH = REGISTRY.register(new Block(664, "dirt_path", true, 14613, 14613, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 0.65f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block LIGHT_BLUE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(665, "light_blue_glazed_terracotta", true, 13699, 13702, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block END_GATEWAY = REGISTRY.register(new Block(665, "end_gateway", false, 14614, 14614, 29, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false, BlockEntityType.END_GATEWAY));
 
-    public static final Block YELLOW_GLAZED_TERRACOTTA = REGISTRY.register(new Block(666, "yellow_glazed_terracotta", true, 13703, 13706, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block REPEATING_COMMAND_BLOCK = REGISTRY.register(new Block(666, "repeating_command_block", true, 14615, 14626, 24, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, true, BlockEntityType.COMMAND_BLOCK));
 
-    public static final Block LIME_GLAZED_TERRACOTTA = REGISTRY.register(new Block(667, "lime_glazed_terracotta", true, 13707, 13710, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CHAIN_COMMAND_BLOCK = REGISTRY.register(new Block(667, "chain_command_block", true, 14627, 14638, 27, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, true, BlockEntityType.COMMAND_BLOCK));
 
-    public static final Block PINK_GLAZED_TERRACOTTA = REGISTRY.register(new Block(668, "pink_glazed_terracotta", true, 13711, 13714, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block FROSTED_ICE = REGISTRY.register(new Block(668, "frosted_ice", true, 14639, 14642, 5, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block GRAY_GLAZED_TERRACOTTA = REGISTRY.register(new Block(669, "gray_glazed_terracotta", true, 13715, 13718, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MAGMA_BLOCK = REGISTRY.register(new Block(669, "magma_block", true, 14643, 14643, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LIGHT_GRAY_GLAZED_TERRACOTTA = REGISTRY.register(new Block(670, "light_gray_glazed_terracotta", true, 13719, 13722, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block NETHER_WART_BLOCK = REGISTRY.register(new Block(670, "nether_wart_block", true, 14644, 14644, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
 
-    public static final Block CYAN_GLAZED_TERRACOTTA = REGISTRY.register(new Block(671, "cyan_glazed_terracotta", true, 13723, 13726, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block RED_NETHER_BRICKS = REGISTRY.register(new Block(671, "red_nether_bricks", true, 14645, 14645, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PURPLE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(672, "purple_glazed_terracotta", true, 13727, 13730, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BONE_BLOCK = REGISTRY.register(new Block(672, "bone_block", true, 14646, 14648, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BLUE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(673, "blue_glazed_terracotta", true, 13731, 13734, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block STRUCTURE_VOID = REGISTRY.register(new Block(673, "structure_void", false, 14649, 14649, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block BROWN_GLAZED_TERRACOTTA = REGISTRY.register(new Block(674, "brown_glazed_terracotta", true, 13735, 13738, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block OBSERVER = REGISTRY.register(new Block(674, "observer", true, 14650, 14661, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GREEN_GLAZED_TERRACOTTA = REGISTRY.register(new Block(675, "green_glazed_terracotta", true, 13739, 13742, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SHULKER_BOX = REGISTRY.register(new Block(675, "shulker_box", true, 14662, 14667, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block RED_GLAZED_TERRACOTTA = REGISTRY.register(new Block(676, "red_glazed_terracotta", true, 13743, 13746, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WHITE_SHULKER_BOX = REGISTRY.register(new Block(676, "white_shulker_box", true, 14668, 14673, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block BLACK_GLAZED_TERRACOTTA = REGISTRY.register(new Block(677, "black_glazed_terracotta", true, 13747, 13750, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ORANGE_SHULKER_BOX = REGISTRY.register(new Block(677, "orange_shulker_box", true, 14674, 14679, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block WHITE_CONCRETE = REGISTRY.register(new Block(678, "white_concrete", true, 13751, 13751, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MAGENTA_SHULKER_BOX = REGISTRY.register(new Block(678, "magenta_shulker_box", true, 14680, 14685, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block ORANGE_CONCRETE = REGISTRY.register(new Block(679, "orange_concrete", true, 13752, 13752, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIGHT_BLUE_SHULKER_BOX = REGISTRY.register(new Block(679, "light_blue_shulker_box", true, 14686, 14691, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block MAGENTA_CONCRETE = REGISTRY.register(new Block(680, "magenta_concrete", true, 13753, 13753, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block YELLOW_SHULKER_BOX = REGISTRY.register(new Block(680, "yellow_shulker_box", true, 14692, 14697, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block LIGHT_BLUE_CONCRETE = REGISTRY.register(new Block(681, "light_blue_concrete", true, 13754, 13754, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIME_SHULKER_BOX = REGISTRY.register(new Block(681, "lime_shulker_box", true, 14698, 14703, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block YELLOW_CONCRETE = REGISTRY.register(new Block(682, "yellow_concrete", true, 13755, 13755, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PINK_SHULKER_BOX = REGISTRY.register(new Block(682, "pink_shulker_box", true, 14704, 14709, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block LIME_CONCRETE = REGISTRY.register(new Block(683, "lime_concrete", true, 13756, 13756, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GRAY_SHULKER_BOX = REGISTRY.register(new Block(683, "gray_shulker_box", true, 14710, 14715, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block PINK_CONCRETE = REGISTRY.register(new Block(684, "pink_concrete", true, 13757, 13757, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIGHT_GRAY_SHULKER_BOX = REGISTRY.register(new Block(684, "light_gray_shulker_box", true, 14716, 14721, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block GRAY_CONCRETE = REGISTRY.register(new Block(685, "gray_concrete", true, 13758, 13758, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CYAN_SHULKER_BOX = REGISTRY.register(new Block(685, "cyan_shulker_box", true, 14722, 14727, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block LIGHT_GRAY_CONCRETE = REGISTRY.register(new Block(686, "light_gray_concrete", true, 13759, 13759, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PURPLE_SHULKER_BOX = REGISTRY.register(new Block(686, "purple_shulker_box", true, 14728, 14733, 46, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block CYAN_CONCRETE = REGISTRY.register(new Block(687, "cyan_concrete", true, 13760, 13760, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BLUE_SHULKER_BOX = REGISTRY.register(new Block(687, "blue_shulker_box", true, 14734, 14739, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block PURPLE_CONCRETE = REGISTRY.register(new Block(688, "purple_concrete", true, 13761, 13761, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BROWN_SHULKER_BOX = REGISTRY.register(new Block(688, "brown_shulker_box", true, 14740, 14745, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block BLUE_CONCRETE = REGISTRY.register(new Block(689, "blue_concrete", true, 13762, 13762, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GREEN_SHULKER_BOX = REGISTRY.register(new Block(689, "green_shulker_box", true, 14746, 14751, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block BROWN_CONCRETE = REGISTRY.register(new Block(690, "brown_concrete", true, 13763, 13763, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block RED_SHULKER_BOX = REGISTRY.register(new Block(690, "red_shulker_box", true, 14752, 14757, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block GREEN_CONCRETE = REGISTRY.register(new Block(691, "green_concrete", true, 13764, 13764, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BLACK_SHULKER_BOX = REGISTRY.register(new Block(691, "black_shulker_box", true, 14758, 14763, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SHULKER_BOX));
 
-    public static final Block RED_CONCRETE = REGISTRY.register(new Block(692, "red_concrete", true, 13765, 13765, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WHITE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(692, "white_glazed_terracotta", true, 14764, 14767, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BLACK_CONCRETE = REGISTRY.register(new Block(693, "black_concrete", true, 13766, 13766, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ORANGE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(693, "orange_glazed_terracotta", true, 14768, 14771, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WHITE_CONCRETE_POWDER = REGISTRY.register(new Block(694, "white_concrete_powder", true, 13767, 13767, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block MAGENTA_GLAZED_TERRACOTTA = REGISTRY.register(new Block(694, "magenta_glazed_terracotta", true, 14772, 14775, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block ORANGE_CONCRETE_POWDER = REGISTRY.register(new Block(695, "orange_concrete_powder", true, 13768, 13768, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block LIGHT_BLUE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(695, "light_blue_glazed_terracotta", true, 14776, 14779, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MAGENTA_CONCRETE_POWDER = REGISTRY.register(new Block(696, "magenta_concrete_powder", true, 13769, 13769, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block YELLOW_GLAZED_TERRACOTTA = REGISTRY.register(new Block(696, "yellow_glazed_terracotta", true, 14780, 14783, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LIGHT_BLUE_CONCRETE_POWDER = REGISTRY.register(new Block(697, "light_blue_concrete_powder", true, 13770, 13770, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block LIME_GLAZED_TERRACOTTA = REGISTRY.register(new Block(697, "lime_glazed_terracotta", true, 14784, 14787, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block YELLOW_CONCRETE_POWDER = REGISTRY.register(new Block(698, "yellow_concrete_powder", true, 13771, 13771, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block PINK_GLAZED_TERRACOTTA = REGISTRY.register(new Block(698, "pink_glazed_terracotta", true, 14788, 14791, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LIME_CONCRETE_POWDER = REGISTRY.register(new Block(699, "lime_concrete_powder", true, 13772, 13772, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block GRAY_GLAZED_TERRACOTTA = REGISTRY.register(new Block(699, "gray_glazed_terracotta", true, 14792, 14795, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PINK_CONCRETE_POWDER = REGISTRY.register(new Block(700, "pink_concrete_powder", true, 13773, 13773, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block LIGHT_GRAY_GLAZED_TERRACOTTA = REGISTRY.register(new Block(700, "light_gray_glazed_terracotta", true, 14796, 14799, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GRAY_CONCRETE_POWDER = REGISTRY.register(new Block(701, "gray_concrete_powder", true, 13774, 13774, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block CYAN_GLAZED_TERRACOTTA = REGISTRY.register(new Block(701, "cyan_glazed_terracotta", true, 14800, 14803, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LIGHT_GRAY_CONCRETE_POWDER = REGISTRY.register(new Block(702, "light_gray_concrete_powder", true, 13775, 13775, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block PURPLE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(702, "purple_glazed_terracotta", true, 14804, 14807, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CYAN_CONCRETE_POWDER = REGISTRY.register(new Block(703, "cyan_concrete_powder", true, 13776, 13776, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block BLUE_GLAZED_TERRACOTTA = REGISTRY.register(new Block(703, "blue_glazed_terracotta", true, 14808, 14811, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PURPLE_CONCRETE_POWDER = REGISTRY.register(new Block(704, "purple_concrete_powder", true, 13777, 13777, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block BROWN_GLAZED_TERRACOTTA = REGISTRY.register(new Block(704, "brown_glazed_terracotta", true, 14812, 14815, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BLUE_CONCRETE_POWDER = REGISTRY.register(new Block(705, "blue_concrete_powder", true, 13778, 13778, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block GREEN_GLAZED_TERRACOTTA = REGISTRY.register(new Block(705, "green_glazed_terracotta", true, 14816, 14819, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BROWN_CONCRETE_POWDER = REGISTRY.register(new Block(706, "brown_concrete_powder", true, 13779, 13779, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block RED_GLAZED_TERRACOTTA = REGISTRY.register(new Block(706, "red_glazed_terracotta", true, 14820, 14823, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GREEN_CONCRETE_POWDER = REGISTRY.register(new Block(707, "green_concrete_powder", true, 13780, 13780, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block BLACK_GLAZED_TERRACOTTA = REGISTRY.register(new Block(707, "black_glazed_terracotta", true, 14824, 14827, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block RED_CONCRETE_POWDER = REGISTRY.register(new Block(708, "red_concrete_powder", true, 13781, 13781, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block WHITE_CONCRETE = REGISTRY.register(new Block(708, "white_concrete", true, 14828, 14828, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BLACK_CONCRETE_POWDER = REGISTRY.register(new Block(709, "black_concrete_powder", true, 13782, 13782, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block ORANGE_CONCRETE = REGISTRY.register(new Block(709, "orange_concrete", true, 14829, 14829, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block KELP = REGISTRY.register(new Block(710, "kelp", false, 13783, 13808, 12, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block MAGENTA_CONCRETE = REGISTRY.register(new Block(710, "magenta_concrete", true, 14830, 14830, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block KELP_PLANT = REGISTRY.register(new Block(711, "kelp_plant", false, 13809, 13809, 12, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block LIGHT_BLUE_CONCRETE = REGISTRY.register(new Block(711, "light_blue_concrete", true, 14831, 14831, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DRIED_KELP_BLOCK = REGISTRY.register(new Block(712, "dried_kelp_block", true, 13810, 13810, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+    public static final Block YELLOW_CONCRETE = REGISTRY.register(new Block(712, "yellow_concrete", true, 14832, 14832, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block TURTLE_EGG = REGISTRY.register(new Block(713, "turtle_egg", true, 13811, 13822, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block LIME_CONCRETE = REGISTRY.register(new Block(713, "lime_concrete", true, 14833, 14833, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SNIFFER_EGG = REGISTRY.register(new Block(714, "sniffer_egg", true, 13823, 13825, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block PINK_CONCRETE = REGISTRY.register(new Block(714, "pink_concrete", true, 14834, 14834, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DRIED_GHAST = REGISTRY.register(new Block(715, "dried_ghast", true, 13826, 13857, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block GRAY_CONCRETE = REGISTRY.register(new Block(715, "gray_concrete", true, 14835, 14835, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DEAD_TUBE_CORAL_BLOCK = REGISTRY.register(new Block(716, "dead_tube_coral_block", true, 13858, 13858, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIGHT_GRAY_CONCRETE = REGISTRY.register(new Block(716, "light_gray_concrete", true, 14836, 14836, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DEAD_BRAIN_CORAL_BLOCK = REGISTRY.register(new Block(717, "dead_brain_coral_block", true, 13859, 13859, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CYAN_CONCRETE = REGISTRY.register(new Block(717, "cyan_concrete", true, 14837, 14837, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DEAD_BUBBLE_CORAL_BLOCK = REGISTRY.register(new Block(718, "dead_bubble_coral_block", true, 13860, 13860, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PURPLE_CONCRETE = REGISTRY.register(new Block(718, "purple_concrete", true, 14838, 14838, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DEAD_FIRE_CORAL_BLOCK = REGISTRY.register(new Block(719, "dead_fire_coral_block", true, 13861, 13861, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BLUE_CONCRETE = REGISTRY.register(new Block(719, "blue_concrete", true, 14839, 14839, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DEAD_HORN_CORAL_BLOCK = REGISTRY.register(new Block(720, "dead_horn_coral_block", true, 13862, 13862, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BROWN_CONCRETE = REGISTRY.register(new Block(720, "brown_concrete", true, 14840, 14840, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block TUBE_CORAL_BLOCK = REGISTRY.register(new Block(721, "tube_coral_block", true, 13863, 13863, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GREEN_CONCRETE = REGISTRY.register(new Block(721, "green_concrete", true, 14841, 14841, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BRAIN_CORAL_BLOCK = REGISTRY.register(new Block(722, "brain_coral_block", true, 13864, 13864, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block RED_CONCRETE = REGISTRY.register(new Block(722, "red_concrete", true, 14842, 14842, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BUBBLE_CORAL_BLOCK = REGISTRY.register(new Block(723, "bubble_coral_block", true, 13865, 13865, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BLACK_CONCRETE = REGISTRY.register(new Block(723, "black_concrete", true, 14843, 14843, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block FIRE_CORAL_BLOCK = REGISTRY.register(new Block(724, "fire_coral_block", true, 13866, 13866, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WHITE_CONCRETE_POWDER = REGISTRY.register(new Block(724, "white_concrete_powder", true, 14844, 14844, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block HORN_CORAL_BLOCK = REGISTRY.register(new Block(725, "horn_coral_block", true, 13867, 13867, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ORANGE_CONCRETE_POWDER = REGISTRY.register(new Block(725, "orange_concrete_powder", true, 14845, 14845, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block DEAD_TUBE_CORAL = REGISTRY.register(new Block(726, "dead_tube_coral", true, 13868, 13869, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MAGENTA_CONCRETE_POWDER = REGISTRY.register(new Block(726, "magenta_concrete_powder", true, 14846, 14846, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block DEAD_BRAIN_CORAL = REGISTRY.register(new Block(727, "dead_brain_coral", true, 13870, 13871, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIGHT_BLUE_CONCRETE_POWDER = REGISTRY.register(new Block(727, "light_blue_concrete_powder", true, 14847, 14847, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block DEAD_BUBBLE_CORAL = REGISTRY.register(new Block(728, "dead_bubble_coral", true, 13872, 13873, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block YELLOW_CONCRETE_POWDER = REGISTRY.register(new Block(728, "yellow_concrete_powder", true, 14848, 14848, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block DEAD_FIRE_CORAL = REGISTRY.register(new Block(729, "dead_fire_coral", true, 13874, 13875, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIME_CONCRETE_POWDER = REGISTRY.register(new Block(729, "lime_concrete_powder", true, 14849, 14849, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block DEAD_HORN_CORAL = REGISTRY.register(new Block(730, "dead_horn_coral", true, 13876, 13877, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PINK_CONCRETE_POWDER = REGISTRY.register(new Block(730, "pink_concrete_powder", true, 14850, 14850, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block TUBE_CORAL = REGISTRY.register(new Block(731, "tube_coral", false, 13878, 13879, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block GRAY_CONCRETE_POWDER = REGISTRY.register(new Block(731, "gray_concrete_powder", true, 14851, 14851, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block BRAIN_CORAL = REGISTRY.register(new Block(732, "brain_coral", false, 13880, 13881, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block LIGHT_GRAY_CONCRETE_POWDER = REGISTRY.register(new Block(732, "light_gray_concrete_powder", true, 14852, 14852, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block BUBBLE_CORAL = REGISTRY.register(new Block(733, "bubble_coral", false, 13882, 13883, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block CYAN_CONCRETE_POWDER = REGISTRY.register(new Block(733, "cyan_concrete_powder", true, 14853, 14853, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block FIRE_CORAL = REGISTRY.register(new Block(734, "fire_coral", false, 13884, 13885, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block PURPLE_CONCRETE_POWDER = REGISTRY.register(new Block(734, "purple_concrete_powder", true, 14854, 14854, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block HORN_CORAL = REGISTRY.register(new Block(735, "horn_coral", false, 13886, 13887, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block BLUE_CONCRETE_POWDER = REGISTRY.register(new Block(735, "blue_concrete_powder", true, 14855, 14855, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block DEAD_TUBE_CORAL_FAN = REGISTRY.register(new Block(736, "dead_tube_coral_fan", true, 13888, 13889, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BROWN_CONCRETE_POWDER = REGISTRY.register(new Block(736, "brown_concrete_powder", true, 14856, 14856, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block DEAD_BRAIN_CORAL_FAN = REGISTRY.register(new Block(737, "dead_brain_coral_fan", true, 13890, 13891, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GREEN_CONCRETE_POWDER = REGISTRY.register(new Block(737, "green_concrete_powder", true, 14857, 14857, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block DEAD_BUBBLE_CORAL_FAN = REGISTRY.register(new Block(738, "dead_bubble_coral_fan", true, 13892, 13893, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block RED_CONCRETE_POWDER = REGISTRY.register(new Block(738, "red_concrete_powder", true, 14858, 14858, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block DEAD_FIRE_CORAL_FAN = REGISTRY.register(new Block(739, "dead_fire_coral_fan", true, 13894, 13895, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BLACK_CONCRETE_POWDER = REGISTRY.register(new Block(739, "black_concrete_powder", true, 14859, 14859, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
 
-    public static final Block DEAD_HORN_CORAL_FAN = REGISTRY.register(new Block(740, "dead_horn_coral_fan", true, 13896, 13897, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block KELP = REGISTRY.register(new Block(740, "kelp", false, 14860, 14885, 12, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block TUBE_CORAL_FAN = REGISTRY.register(new Block(741, "tube_coral_fan", false, 13898, 13899, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block KELP_PLANT = REGISTRY.register(new Block(741, "kelp_plant", false, 14886, 14886, 12, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block BRAIN_CORAL_FAN = REGISTRY.register(new Block(742, "brain_coral_fan", false, 13900, 13901, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block DRIED_KELP_BLOCK = REGISTRY.register(new Block(742, "dried_kelp_block", true, 14887, 14887, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
 
-    public static final Block BUBBLE_CORAL_FAN = REGISTRY.register(new Block(743, "bubble_coral_fan", false, 13902, 13903, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block TURTLE_EGG = REGISTRY.register(new Block(743, "turtle_egg", true, 14888, 14899, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block FIRE_CORAL_FAN = REGISTRY.register(new Block(744, "fire_coral_fan", false, 13904, 13905, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block SNIFFER_EGG = REGISTRY.register(new Block(744, "sniffer_egg", true, 14900, 14902, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block HORN_CORAL_FAN = REGISTRY.register(new Block(745, "horn_coral_fan", false, 13906, 13907, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block DRIED_GHAST = REGISTRY.register(new Block(745, "dried_ghast", true, 14903, 14934, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block DEAD_TUBE_CORAL_WALL_FAN = REGISTRY.register(new Block(746, "dead_tube_coral_wall_fan", true, 13908, 13915, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_TUBE_CORAL_BLOCK = REGISTRY.register(new Block(746, "dead_tube_coral_block", true, 14935, 14935, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DEAD_BRAIN_CORAL_WALL_FAN = REGISTRY.register(new Block(747, "dead_brain_coral_wall_fan", true, 13916, 13923, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_BRAIN_CORAL_BLOCK = REGISTRY.register(new Block(747, "dead_brain_coral_block", true, 14936, 14936, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DEAD_BUBBLE_CORAL_WALL_FAN = REGISTRY.register(new Block(748, "dead_bubble_coral_wall_fan", true, 13924, 13931, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_BUBBLE_CORAL_BLOCK = REGISTRY.register(new Block(748, "dead_bubble_coral_block", true, 14937, 14937, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DEAD_FIRE_CORAL_WALL_FAN = REGISTRY.register(new Block(749, "dead_fire_coral_wall_fan", true, 13932, 13939, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_FIRE_CORAL_BLOCK = REGISTRY.register(new Block(749, "dead_fire_coral_block", true, 14938, 14938, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DEAD_HORN_CORAL_WALL_FAN = REGISTRY.register(new Block(750, "dead_horn_coral_wall_fan", true, 13940, 13947, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_HORN_CORAL_BLOCK = REGISTRY.register(new Block(750, "dead_horn_coral_block", true, 14939, 14939, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block TUBE_CORAL_WALL_FAN = REGISTRY.register(new Block(751, "tube_coral_wall_fan", false, 13948, 13955, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block TUBE_CORAL_BLOCK = REGISTRY.register(new Block(751, "tube_coral_block", true, 14940, 14940, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BRAIN_CORAL_WALL_FAN = REGISTRY.register(new Block(752, "brain_coral_wall_fan", false, 13956, 13963, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block BRAIN_CORAL_BLOCK = REGISTRY.register(new Block(752, "brain_coral_block", true, 14941, 14941, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BUBBLE_CORAL_WALL_FAN = REGISTRY.register(new Block(753, "bubble_coral_wall_fan", false, 13964, 13971, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block BUBBLE_CORAL_BLOCK = REGISTRY.register(new Block(753, "bubble_coral_block", true, 14942, 14942, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block FIRE_CORAL_WALL_FAN = REGISTRY.register(new Block(754, "fire_coral_wall_fan", false, 13972, 13979, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block FIRE_CORAL_BLOCK = REGISTRY.register(new Block(754, "fire_coral_block", true, 14943, 14943, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block HORN_CORAL_WALL_FAN = REGISTRY.register(new Block(755, "horn_coral_wall_fan", false, 13980, 13987, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block HORN_CORAL_BLOCK = REGISTRY.register(new Block(755, "horn_coral_block", true, 14944, 14944, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SEA_PICKLE = REGISTRY.register(new Block(756, "sea_pickle", false, 13988, 13995, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block DEAD_TUBE_CORAL = REGISTRY.register(new Block(756, "dead_tube_coral", true, 14945, 14946, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BLUE_ICE = REGISTRY.register(new Block(757, "blue_ice", true, 13996, 13996, 5, BlockOffsetType.NONE, 0.25f, 0.2f, 2.8f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_BRAIN_CORAL = REGISTRY.register(new Block(757, "dead_brain_coral", true, 14947, 14948, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CONDUIT = REGISTRY.register(new Block(758, "conduit", true, 13997, 13998, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.CONDUIT));
+    public static final Block DEAD_BUBBLE_CORAL = REGISTRY.register(new Block(758, "dead_bubble_coral", true, 14949, 14950, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BAMBOO_SAPLING = REGISTRY.register(new Block(759, "bamboo_sapling", true, 13999, 13999, 13, BlockOffsetType.XZ, 0.25f, 0.2f, 1.0f, false));
+    public static final Block DEAD_FIRE_CORAL = REGISTRY.register(new Block(759, "dead_fire_coral", true, 14951, 14952, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BAMBOO = REGISTRY.register(new Block(760, "bamboo", true, 14000, 14011, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block DEAD_HORN_CORAL = REGISTRY.register(new Block(760, "dead_horn_coral", true, 14953, 14954, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POTTED_BAMBOO = REGISTRY.register(new Block(761, "potted_bamboo", false, 14012, 14012, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block TUBE_CORAL = REGISTRY.register(new Block(761, "tube_coral", false, 14955, 14956, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block VOID_AIR = REGISTRY.register(new Block(762, "void_air", false, 14013, 14013, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block BRAIN_CORAL = REGISTRY.register(new Block(762, "brain_coral", false, 14957, 14958, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block CAVE_AIR = REGISTRY.register(new Block(763, "cave_air", false, 14014, 14014, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block BUBBLE_CORAL = REGISTRY.register(new Block(763, "bubble_coral", false, 14959, 14960, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block BUBBLE_COLUMN = REGISTRY.register(new Block(764, "bubble_column", false, 14015, 14016, 12, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block FIRE_CORAL = REGISTRY.register(new Block(764, "fire_coral", false, 14961, 14962, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block POLISHED_GRANITE_STAIRS = REGISTRY.register(new Block(765, "polished_granite_stairs", true, 14017, 14096, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block HORN_CORAL = REGISTRY.register(new Block(765, "horn_coral", false, 14963, 14964, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block SMOOTH_RED_SANDSTONE_STAIRS = REGISTRY.register(new Block(766, "smooth_red_sandstone_stairs", true, 14097, 14176, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_TUBE_CORAL_FAN = REGISTRY.register(new Block(766, "dead_tube_coral_fan", true, 14965, 14966, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MOSSY_STONE_BRICK_STAIRS = REGISTRY.register(new Block(767, "mossy_stone_brick_stairs", true, 14177, 14256, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_BRAIN_CORAL_FAN = REGISTRY.register(new Block(767, "dead_brain_coral_fan", true, 14967, 14968, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POLISHED_DIORITE_STAIRS = REGISTRY.register(new Block(768, "polished_diorite_stairs", true, 14257, 14336, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_BUBBLE_CORAL_FAN = REGISTRY.register(new Block(768, "dead_bubble_coral_fan", true, 14969, 14970, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MOSSY_COBBLESTONE_STAIRS = REGISTRY.register(new Block(769, "mossy_cobblestone_stairs", true, 14337, 14416, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_FIRE_CORAL_FAN = REGISTRY.register(new Block(769, "dead_fire_coral_fan", true, 14971, 14972, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block END_STONE_BRICK_STAIRS = REGISTRY.register(new Block(770, "end_stone_brick_stairs", true, 14417, 14496, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_HORN_CORAL_FAN = REGISTRY.register(new Block(770, "dead_horn_coral_fan", true, 14973, 14974, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block STONE_STAIRS = REGISTRY.register(new Block(771, "stone_stairs", true, 14497, 14576, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block TUBE_CORAL_FAN = REGISTRY.register(new Block(771, "tube_coral_fan", false, 14975, 14976, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block SMOOTH_SANDSTONE_STAIRS = REGISTRY.register(new Block(772, "smooth_sandstone_stairs", true, 14577, 14656, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BRAIN_CORAL_FAN = REGISTRY.register(new Block(772, "brain_coral_fan", false, 14977, 14978, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block SMOOTH_QUARTZ_STAIRS = REGISTRY.register(new Block(773, "smooth_quartz_stairs", true, 14657, 14736, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BUBBLE_CORAL_FAN = REGISTRY.register(new Block(773, "bubble_coral_fan", false, 14979, 14980, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block GRANITE_STAIRS = REGISTRY.register(new Block(774, "granite_stairs", true, 14737, 14816, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block FIRE_CORAL_FAN = REGISTRY.register(new Block(774, "fire_coral_fan", false, 14981, 14982, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block ANDESITE_STAIRS = REGISTRY.register(new Block(775, "andesite_stairs", true, 14817, 14896, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block HORN_CORAL_FAN = REGISTRY.register(new Block(775, "horn_coral_fan", false, 14983, 14984, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block RED_NETHER_BRICK_STAIRS = REGISTRY.register(new Block(776, "red_nether_brick_stairs", true, 14897, 14976, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_TUBE_CORAL_WALL_FAN = REGISTRY.register(new Block(776, "dead_tube_coral_wall_fan", true, 14985, 14992, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POLISHED_ANDESITE_STAIRS = REGISTRY.register(new Block(777, "polished_andesite_stairs", true, 14977, 15056, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_BRAIN_CORAL_WALL_FAN = REGISTRY.register(new Block(777, "dead_brain_coral_wall_fan", true, 14993, 15000, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DIORITE_STAIRS = REGISTRY.register(new Block(778, "diorite_stairs", true, 15057, 15136, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_BUBBLE_CORAL_WALL_FAN = REGISTRY.register(new Block(778, "dead_bubble_coral_wall_fan", true, 15001, 15008, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block POLISHED_GRANITE_SLAB = REGISTRY.register(new Block(779, "polished_granite_slab", true, 15137, 15142, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_FIRE_CORAL_WALL_FAN = REGISTRY.register(new Block(779, "dead_fire_coral_wall_fan", true, 15009, 15016, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SMOOTH_RED_SANDSTONE_SLAB = REGISTRY.register(new Block(780, "smooth_red_sandstone_slab", true, 15143, 15148, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEAD_HORN_CORAL_WALL_FAN = REGISTRY.register(new Block(780, "dead_horn_coral_wall_fan", true, 15017, 15024, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MOSSY_STONE_BRICK_SLAB = REGISTRY.register(new Block(781, "mossy_stone_brick_slab", true, 15149, 15154, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block TUBE_CORAL_WALL_FAN = REGISTRY.register(new Block(781, "tube_coral_wall_fan", false, 15025, 15032, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block POLISHED_DIORITE_SLAB = REGISTRY.register(new Block(782, "polished_diorite_slab", true, 15155, 15160, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BRAIN_CORAL_WALL_FAN = REGISTRY.register(new Block(782, "brain_coral_wall_fan", false, 15033, 15040, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block MOSSY_COBBLESTONE_SLAB = REGISTRY.register(new Block(783, "mossy_cobblestone_slab", true, 15161, 15166, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BUBBLE_CORAL_WALL_FAN = REGISTRY.register(new Block(783, "bubble_coral_wall_fan", false, 15041, 15048, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block END_STONE_BRICK_SLAB = REGISTRY.register(new Block(784, "end_stone_brick_slab", true, 15167, 15172, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block FIRE_CORAL_WALL_FAN = REGISTRY.register(new Block(784, "fire_coral_wall_fan", false, 15049, 15056, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block SMOOTH_SANDSTONE_SLAB = REGISTRY.register(new Block(785, "smooth_sandstone_slab", true, 15173, 15178, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block HORN_CORAL_WALL_FAN = REGISTRY.register(new Block(785, "horn_coral_wall_fan", false, 15057, 15064, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block SMOOTH_QUARTZ_SLAB = REGISTRY.register(new Block(786, "smooth_quartz_slab", true, 15179, 15184, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SEA_PICKLE = REGISTRY.register(new Block(786, "sea_pickle", false, 15065, 15072, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block GRANITE_SLAB = REGISTRY.register(new Block(787, "granite_slab", true, 15185, 15190, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BLUE_ICE = REGISTRY.register(new Block(787, "blue_ice", true, 15073, 15073, 5, BlockOffsetType.NONE, 0.25f, 0.2f, 2.8f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block ANDESITE_SLAB = REGISTRY.register(new Block(788, "andesite_slab", true, 15191, 15196, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CONDUIT = REGISTRY.register(new Block(788, "conduit", true, 15074, 15075, 31, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.CONDUIT));
 
-    public static final Block RED_NETHER_BRICK_SLAB = REGISTRY.register(new Block(789, "red_nether_brick_slab", true, 15197, 15202, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BAMBOO_SAPLING = REGISTRY.register(new Block(789, "bamboo_sapling", true, 15076, 15076, 13, BlockOffsetType.XZ, 0.25f, 0.2f, 1.0f, false));
 
-    public static final Block POLISHED_ANDESITE_SLAB = REGISTRY.register(new Block(790, "polished_andesite_slab", true, 15203, 15208, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BAMBOO = REGISTRY.register(new Block(790, "bamboo", true, 15077, 15088, 7, BlockOffsetType.XZ, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block DIORITE_SLAB = REGISTRY.register(new Block(791, "diorite_slab", true, 15209, 15214, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block POTTED_BAMBOO = REGISTRY.register(new Block(791, "potted_bamboo", false, 15089, 15089, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block BRICK_WALL = REGISTRY.register(new Block(792, "brick_wall", true, 15215, 15538, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block VOID_AIR = REGISTRY.register(new Block(792, "void_air", false, 15090, 15090, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block PRISMARINE_WALL = REGISTRY.register(new Block(793, "prismarine_wall", true, 15539, 15862, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CAVE_AIR = REGISTRY.register(new Block(793, "cave_air", false, 15091, 15091, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block RED_SANDSTONE_WALL = REGISTRY.register(new Block(794, "red_sandstone_wall", true, 15863, 16186, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BUBBLE_COLUMN = REGISTRY.register(new Block(794, "bubble_column", false, 15092, 15093, 12, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block MOSSY_STONE_BRICK_WALL = REGISTRY.register(new Block(795, "mossy_stone_brick_wall", true, 16187, 16510, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block POLISHED_GRANITE_STAIRS = REGISTRY.register(new Block(795, "polished_granite_stairs", true, 15094, 15173, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GRANITE_WALL = REGISTRY.register(new Block(796, "granite_wall", true, 16511, 16834, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SMOOTH_RED_SANDSTONE_STAIRS = REGISTRY.register(new Block(796, "smooth_red_sandstone_stairs", true, 15174, 15253, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block STONE_BRICK_WALL = REGISTRY.register(new Block(797, "stone_brick_wall", true, 16835, 17158, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MOSSY_STONE_BRICK_STAIRS = REGISTRY.register(new Block(797, "mossy_stone_brick_stairs", true, 15254, 15333, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MUD_BRICK_WALL = REGISTRY.register(new Block(798, "mud_brick_wall", true, 17159, 17482, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block POLISHED_DIORITE_STAIRS = REGISTRY.register(new Block(798, "polished_diorite_stairs", true, 15334, 15413, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block NETHER_BRICK_WALL = REGISTRY.register(new Block(799, "nether_brick_wall", true, 17483, 17806, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MOSSY_COBBLESTONE_STAIRS = REGISTRY.register(new Block(799, "mossy_cobblestone_stairs", true, 15414, 15493, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block ANDESITE_WALL = REGISTRY.register(new Block(800, "andesite_wall", true, 17807, 18130, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block END_STONE_BRICK_STAIRS = REGISTRY.register(new Block(800, "end_stone_brick_stairs", true, 15494, 15573, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block RED_NETHER_BRICK_WALL = REGISTRY.register(new Block(801, "red_nether_brick_wall", true, 18131, 18454, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block STONE_STAIRS = REGISTRY.register(new Block(801, "stone_stairs", true, 15574, 15653, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SANDSTONE_WALL = REGISTRY.register(new Block(802, "sandstone_wall", true, 18455, 18778, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SMOOTH_SANDSTONE_STAIRS = REGISTRY.register(new Block(802, "smooth_sandstone_stairs", true, 15654, 15733, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block END_STONE_BRICK_WALL = REGISTRY.register(new Block(803, "end_stone_brick_wall", true, 18779, 19102, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SMOOTH_QUARTZ_STAIRS = REGISTRY.register(new Block(803, "smooth_quartz_stairs", true, 15734, 15813, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block DIORITE_WALL = REGISTRY.register(new Block(804, "diorite_wall", true, 19103, 19426, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GRANITE_STAIRS = REGISTRY.register(new Block(804, "granite_stairs", true, 15814, 15893, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SCAFFOLDING = REGISTRY.register(new Block(805, "scaffolding", false, 19427, 19458, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
+    public static final Block ANDESITE_STAIRS = REGISTRY.register(new Block(805, "andesite_stairs", true, 15894, 15973, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LOOM = REGISTRY.register(new Block(806, "loom", true, 19459, 19462, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block RED_NETHER_BRICK_STAIRS = REGISTRY.register(new Block(806, "red_nether_brick_stairs", true, 15974, 16053, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BARREL = REGISTRY.register(new Block(807, "barrel", true, 19463, 19474, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BARREL));
+    public static final Block POLISHED_ANDESITE_STAIRS = REGISTRY.register(new Block(807, "polished_andesite_stairs", true, 16054, 16133, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SMOKER = REGISTRY.register(new Block(808, "smoker", true, 19475, 19482, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SMOKER));
+    public static final Block DIORITE_STAIRS = REGISTRY.register(new Block(808, "diorite_stairs", true, 16134, 16213, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BLAST_FURNACE = REGISTRY.register(new Block(809, "blast_furnace", true, 19483, 19490, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.BLAST_FURNACE));
+    public static final Block POLISHED_GRANITE_SLAB = REGISTRY.register(new Block(809, "polished_granite_slab", true, 16214, 16219, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CARTOGRAPHY_TABLE = REGISTRY.register(new Block(810, "cartography_table", true, 19491, 19491, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block SMOOTH_RED_SANDSTONE_SLAB = REGISTRY.register(new Block(810, "smooth_red_sandstone_slab", true, 16220, 16225, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block FLETCHING_TABLE = REGISTRY.register(new Block(811, "fletching_table", true, 19492, 19492, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block MOSSY_STONE_BRICK_SLAB = REGISTRY.register(new Block(811, "mossy_stone_brick_slab", true, 16226, 16231, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GRINDSTONE = REGISTRY.register(new Block(812, "grindstone", true, 19493, 19504, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block POLISHED_DIORITE_SLAB = REGISTRY.register(new Block(812, "polished_diorite_slab", true, 16232, 16237, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LECTERN = REGISTRY.register(new Block(813, "lectern", true, 19505, 19520, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.LECTERN));
+    public static final Block MOSSY_COBBLESTONE_SLAB = REGISTRY.register(new Block(813, "mossy_cobblestone_slab", true, 16238, 16243, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SMITHING_TABLE = REGISTRY.register(new Block(814, "smithing_table", true, 19521, 19521, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block END_STONE_BRICK_SLAB = REGISTRY.register(new Block(814, "end_stone_brick_slab", true, 16244, 16249, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block STONECUTTER = REGISTRY.register(new Block(815, "stonecutter", true, 19522, 19525, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SMOOTH_SANDSTONE_SLAB = REGISTRY.register(new Block(815, "smooth_sandstone_slab", true, 16250, 16255, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BELL = REGISTRY.register(new Block(816, "bell", true, 19526, 19557, 30, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.BELL));
+    public static final Block SMOOTH_QUARTZ_SLAB = REGISTRY.register(new Block(816, "smooth_quartz_slab", true, 16256, 16261, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LANTERN = REGISTRY.register(new Block(817, "lantern", true, 19558, 19561, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GRANITE_SLAB = REGISTRY.register(new Block(817, "granite_slab", true, 16262, 16267, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SOUL_LANTERN = REGISTRY.register(new Block(818, "soul_lantern", true, 19562, 19565, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ANDESITE_SLAB = REGISTRY.register(new Block(818, "andesite_slab", true, 16268, 16273, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CAMPFIRE = REGISTRY.register(new Block(819, "campfire", true, 19566, 19597, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.CAMPFIRE));
+    public static final Block RED_NETHER_BRICK_SLAB = REGISTRY.register(new Block(819, "red_nether_brick_slab", true, 16274, 16279, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SOUL_CAMPFIRE = REGISTRY.register(new Block(820, "soul_campfire", true, 19598, 19629, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.CAMPFIRE));
+    public static final Block POLISHED_ANDESITE_SLAB = REGISTRY.register(new Block(820, "polished_andesite_slab", true, 16280, 16285, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block SWEET_BERRY_BUSH = REGISTRY.register(new Block(821, "sweet_berry_bush", false, 19630, 19633, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block DIORITE_SLAB = REGISTRY.register(new Block(821, "diorite_slab", true, 16286, 16291, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WARPED_STEM = REGISTRY.register(new Block(822, "warped_stem", true, 19634, 19636, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block BRICK_WALL = REGISTRY.register(new Block(822, "brick_wall", true, 16292, 16615, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block STRIPPED_WARPED_STEM = REGISTRY.register(new Block(823, "stripped_warped_stem", true, 19637, 19639, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block PRISMARINE_WALL = REGISTRY.register(new Block(823, "prismarine_wall", true, 16616, 16939, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WARPED_HYPHAE = REGISTRY.register(new Block(824, "warped_hyphae", true, 19640, 19642, 57, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block RED_SANDSTONE_WALL = REGISTRY.register(new Block(824, "red_sandstone_wall", true, 16940, 17263, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block STRIPPED_WARPED_HYPHAE = REGISTRY.register(new Block(825, "stripped_warped_hyphae", true, 19643, 19645, 57, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block MOSSY_STONE_BRICK_WALL = REGISTRY.register(new Block(825, "mossy_stone_brick_wall", true, 17264, 17587, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WARPED_NYLIUM = REGISTRY.register(new Block(826, "warped_nylium", true, 19646, 19646, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GRANITE_WALL = REGISTRY.register(new Block(826, "granite_wall", true, 17588, 17911, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WARPED_FUNGUS = REGISTRY.register(new Block(827, "warped_fungus", false, 19647, 19647, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block STONE_BRICK_WALL = REGISTRY.register(new Block(827, "stone_brick_wall", true, 17912, 18235, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WARPED_WART_BLOCK = REGISTRY.register(new Block(828, "warped_wart_block", true, 19648, 19648, 58, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+    public static final Block MUD_BRICK_WALL = REGISTRY.register(new Block(828, "mud_brick_wall", true, 18236, 18559, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WARPED_ROOTS = REGISTRY.register(new Block(829, "warped_roots", false, 19649, 19649, 23, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block NETHER_BRICK_WALL = REGISTRY.register(new Block(829, "nether_brick_wall", true, 18560, 18883, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block NETHER_SPROUTS = REGISTRY.register(new Block(830, "nether_sprouts", false, 19650, 19650, 23, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block ANDESITE_WALL = REGISTRY.register(new Block(830, "andesite_wall", true, 18884, 19207, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CRIMSON_STEM = REGISTRY.register(new Block(831, "crimson_stem", true, 19651, 19653, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block RED_NETHER_BRICK_WALL = REGISTRY.register(new Block(831, "red_nether_brick_wall", true, 19208, 19531, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block STRIPPED_CRIMSON_STEM = REGISTRY.register(new Block(832, "stripped_crimson_stem", true, 19654, 19656, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block SANDSTONE_WALL = REGISTRY.register(new Block(832, "sandstone_wall", true, 19532, 19855, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CRIMSON_HYPHAE = REGISTRY.register(new Block(833, "crimson_hyphae", true, 19657, 19659, 54, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block END_STONE_BRICK_WALL = REGISTRY.register(new Block(833, "end_stone_brick_wall", true, 19856, 20179, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block STRIPPED_CRIMSON_HYPHAE = REGISTRY.register(new Block(834, "stripped_crimson_hyphae", true, 19660, 19662, 54, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block DIORITE_WALL = REGISTRY.register(new Block(834, "diorite_wall", true, 20180, 20503, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CRIMSON_NYLIUM = REGISTRY.register(new Block(835, "crimson_nylium", true, 19663, 19663, 52, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block SCAFFOLDING = REGISTRY.register(new Block(835, "scaffolding", false, 20504, 20535, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
 
-    public static final Block CRIMSON_FUNGUS = REGISTRY.register(new Block(836, "crimson_fungus", false, 19664, 19664, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block LOOM = REGISTRY.register(new Block(836, "loom", true, 20536, 20539, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block SHROOMLIGHT = REGISTRY.register(new Block(837, "shroomlight", true, 19665, 19665, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+    public static final Block BARREL = REGISTRY.register(new Block(837, "barrel", true, 20540, 20551, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BARREL));
 
-    public static final Block WEEPING_VINES = REGISTRY.register(new Block(838, "weeping_vines", false, 19666, 19691, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
+    public static final Block SMOKER = REGISTRY.register(new Block(838, "smoker", true, 20552, 20559, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.SMOKER));
 
-    public static final Block WEEPING_VINES_PLANT = REGISTRY.register(new Block(839, "weeping_vines_plant", false, 19692, 19692, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
+    public static final Block BLAST_FURNACE = REGISTRY.register(new Block(839, "blast_furnace", true, 20560, 20567, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.BLAST_FURNACE));
 
-    public static final Block TWISTING_VINES = REGISTRY.register(new Block(840, "twisting_vines", false, 19693, 19718, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
+    public static final Block CARTOGRAPHY_TABLE = REGISTRY.register(new Block(840, "cartography_table", true, 20568, 20568, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block TWISTING_VINES_PLANT = REGISTRY.register(new Block(841, "twisting_vines_plant", false, 19719, 19719, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
+    public static final Block FLETCHING_TABLE = REGISTRY.register(new Block(841, "fletching_table", true, 20569, 20569, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CRIMSON_ROOTS = REGISTRY.register(new Block(842, "crimson_roots", false, 19720, 19720, 35, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block GRINDSTONE = REGISTRY.register(new Block(842, "grindstone", true, 20570, 20581, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CRIMSON_PLANKS = REGISTRY.register(new Block(843, "crimson_planks", true, 19721, 19721, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block LECTERN = REGISTRY.register(new Block(843, "lectern", true, 20582, 20597, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.LECTERN));
 
-    public static final Block WARPED_PLANKS = REGISTRY.register(new Block(844, "warped_planks", true, 19722, 19722, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block SMITHING_TABLE = REGISTRY.register(new Block(844, "smithing_table", true, 20598, 20598, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 2.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CRIMSON_SLAB = REGISTRY.register(new Block(845, "crimson_slab", true, 19723, 19728, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block STONECUTTER = REGISTRY.register(new Block(845, "stonecutter", true, 20599, 20602, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WARPED_SLAB = REGISTRY.register(new Block(846, "warped_slab", true, 19729, 19734, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block BELL = REGISTRY.register(new Block(846, "bell", true, 20603, 20634, 30, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.BELL));
 
-    public static final Block CRIMSON_PRESSURE_PLATE = REGISTRY.register(new Block(847, "crimson_pressure_plate", true, 19735, 19736, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block LANTERN = REGISTRY.register(new Block(847, "lantern", true, 20635, 20638, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WARPED_PRESSURE_PLATE = REGISTRY.register(new Block(848, "warped_pressure_plate", true, 19737, 19738, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block SOUL_LANTERN = REGISTRY.register(new Block(848, "soul_lantern", true, 20639, 20642, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CRIMSON_FENCE = REGISTRY.register(new Block(849, "crimson_fence", true, 19739, 19770, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block COPPER_LANTERN = REGISTRY.register(new Block(849, "copper_lantern", true, 20643, 20646, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WARPED_FENCE = REGISTRY.register(new Block(850, "warped_fence", true, 19771, 19802, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block EXPOSED_COPPER_LANTERN = REGISTRY.register(new Block(850, "exposed_copper_lantern", true, 20647, 20650, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CRIMSON_TRAPDOOR = REGISTRY.register(new Block(851, "crimson_trapdoor", true, 19803, 19866, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block WEATHERED_COPPER_LANTERN = REGISTRY.register(new Block(851, "weathered_copper_lantern", true, 20651, 20654, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WARPED_TRAPDOOR = REGISTRY.register(new Block(852, "warped_trapdoor", true, 19867, 19930, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block OXIDIZED_COPPER_LANTERN = REGISTRY.register(new Block(852, "oxidized_copper_lantern", true, 20655, 20658, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CRIMSON_FENCE_GATE = REGISTRY.register(new Block(853, "crimson_fence_gate", true, 19931, 19962, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block WAXED_COPPER_LANTERN = REGISTRY.register(new Block(853, "waxed_copper_lantern", true, 20659, 20662, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WARPED_FENCE_GATE = REGISTRY.register(new Block(854, "warped_fence_gate", true, 19963, 19994, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block WAXED_EXPOSED_COPPER_LANTERN = REGISTRY.register(new Block(854, "waxed_exposed_copper_lantern", true, 20663, 20666, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CRIMSON_STAIRS = REGISTRY.register(new Block(855, "crimson_stairs", true, 19995, 20074, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block WAXED_WEATHERED_COPPER_LANTERN = REGISTRY.register(new Block(855, "waxed_weathered_copper_lantern", true, 20667, 20670, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WARPED_STAIRS = REGISTRY.register(new Block(856, "warped_stairs", true, 20075, 20154, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block WAXED_OXIDIZED_COPPER_LANTERN = REGISTRY.register(new Block(856, "waxed_oxidized_copper_lantern", true, 20671, 20674, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CRIMSON_BUTTON = REGISTRY.register(new Block(857, "crimson_button", false, 20155, 20178, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block CAMPFIRE = REGISTRY.register(new Block(857, "campfire", true, 20675, 20706, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.CAMPFIRE));
 
-    public static final Block WARPED_BUTTON = REGISTRY.register(new Block(858, "warped_button", false, 20179, 20202, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block SOUL_CAMPFIRE = REGISTRY.register(new Block(858, "soul_campfire", true, 20707, 20738, 34, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.CAMPFIRE));
 
-    public static final Block CRIMSON_DOOR = REGISTRY.register(new Block(859, "crimson_door", true, 20203, 20266, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block SWEET_BERRY_BUSH = REGISTRY.register(new Block(859, "sweet_berry_bush", false, 20739, 20742, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block WARPED_DOOR = REGISTRY.register(new Block(860, "warped_door", true, 20267, 20330, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block WARPED_STEM = REGISTRY.register(new Block(860, "warped_stem", true, 20743, 20745, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CRIMSON_SIGN = REGISTRY.register(new Block(861, "crimson_sign", true, 20331, 20362, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block STRIPPED_WARPED_STEM = REGISTRY.register(new Block(861, "stripped_warped_stem", true, 20746, 20748, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block WARPED_SIGN = REGISTRY.register(new Block(862, "warped_sign", true, 20363, 20394, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block WARPED_HYPHAE = REGISTRY.register(new Block(862, "warped_hyphae", true, 20749, 20751, 57, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CRIMSON_WALL_SIGN = REGISTRY.register(new Block(863, "crimson_wall_sign", true, 20395, 20402, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block STRIPPED_WARPED_HYPHAE = REGISTRY.register(new Block(863, "stripped_warped_hyphae", true, 20752, 20754, 57, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block WARPED_WALL_SIGN = REGISTRY.register(new Block(864, "warped_wall_sign", true, 20403, 20410, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
+    public static final Block WARPED_NYLIUM = REGISTRY.register(new Block(864, "warped_nylium", true, 20755, 20755, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block STRUCTURE_BLOCK = REGISTRY.register(new Block(865, "structure_block", true, 20411, 20414, 22, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, true, BlockEntityType.STRUCTURE_BLOCK));
+    public static final Block WARPED_FUNGUS = REGISTRY.register(new Block(865, "warped_fungus", false, 20756, 20756, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block JIGSAW = REGISTRY.register(new Block(866, "jigsaw", true, 20415, 20426, 22, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, true, BlockEntityType.JIGSAW));
+    public static final Block WARPED_WART_BLOCK = REGISTRY.register(new Block(866, "warped_wart_block", true, 20757, 20757, 58, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
 
-    public static final Block TEST_BLOCK = REGISTRY.register(new Block(867, "test_block", true, 20427, 20430, 22, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false, BlockEntityType.TEST_BLOCK));
+    public static final Block WARPED_ROOTS = REGISTRY.register(new Block(867, "warped_roots", false, 20758, 20758, 23, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block TEST_INSTANCE_BLOCK = REGISTRY.register(new Block(868, "test_instance_block", true, 20431, 20431, 0, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false, BlockEntityType.TEST_INSTANCE_BLOCK));
+    public static final Block NETHER_SPROUTS = REGISTRY.register(new Block(868, "nether_sprouts", false, 20759, 20759, 23, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block COMPOSTER = REGISTRY.register(new Block(869, "composter", true, 20432, 20440, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 0.6f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
+    public static final Block CRIMSON_STEM = REGISTRY.register(new Block(869, "crimson_stem", true, 20760, 20762, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block TARGET = REGISTRY.register(new Block(870, "target", true, 20441, 20456, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+    public static final Block STRIPPED_CRIMSON_STEM = REGISTRY.register(new Block(870, "stripped_crimson_stem", true, 20763, 20765, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BEE_NEST = REGISTRY.register(new Block(871, "bee_nest", true, 20457, 20480, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BEEHIVE));
+    public static final Block CRIMSON_HYPHAE = REGISTRY.register(new Block(871, "crimson_hyphae", true, 20766, 20768, 54, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BEEHIVE = REGISTRY.register(new Block(872, "beehive", true, 20481, 20504, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 0.6f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BEEHIVE));
+    public static final Block STRIPPED_CRIMSON_HYPHAE = REGISTRY.register(new Block(872, "stripped_crimson_hyphae", true, 20769, 20771, 54, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block HONEY_BLOCK = REGISTRY.register(new Block(873, "honey_block", true, 20505, 20505, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block CRIMSON_NYLIUM = REGISTRY.register(new Block(873, "crimson_nylium", true, 20772, 20772, 52, BlockOffsetType.NONE, 0.25f, 0.2f, 0.4f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block HONEYCOMB_BLOCK = REGISTRY.register(new Block(874, "honeycomb_block", true, 20506, 20506, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.6f, false));
+    public static final Block CRIMSON_FUNGUS = REGISTRY.register(new Block(874, "crimson_fungus", false, 20773, 20773, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block NETHERITE_BLOCK = REGISTRY.register(new Block(875, "netherite_block", true, 20507, 20507, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 50.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL)));
+    public static final Block SHROOMLIGHT = REGISTRY.register(new Block(875, "shroomlight", true, 20774, 20774, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
 
-    public static final Block ANCIENT_DEBRIS = REGISTRY.register(new Block(876, "ancient_debris", true, 20508, 20508, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 30.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL)));
+    public static final Block WEEPING_VINES = REGISTRY.register(new Block(876, "weeping_vines", false, 20775, 20800, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
 
-    public static final Block CRYING_OBSIDIAN = REGISTRY.register(new Block(877, "crying_obsidian", true, 20509, 20509, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 50.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL)));
+    public static final Block WEEPING_VINES_PLANT = REGISTRY.register(new Block(877, "weeping_vines_plant", false, 20801, 20801, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
 
-    public static final Block RESPAWN_ANCHOR = REGISTRY.register(new Block(878, "respawn_anchor", true, 20510, 20514, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 50.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL)));
+    public static final Block TWISTING_VINES = REGISTRY.register(new Block(878, "twisting_vines", false, 20802, 20827, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
 
-    public static final Block POTTED_CRIMSON_FUNGUS = REGISTRY.register(new Block(879, "potted_crimson_fungus", false, 20515, 20515, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block TWISTING_VINES_PLANT = REGISTRY.register(new Block(879, "twisting_vines_plant", false, 20828, 20828, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
 
-    public static final Block POTTED_WARPED_FUNGUS = REGISTRY.register(new Block(880, "potted_warped_fungus", false, 20516, 20516, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block CRIMSON_ROOTS = REGISTRY.register(new Block(880, "crimson_roots", false, 20829, 20829, 35, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block POTTED_CRIMSON_ROOTS = REGISTRY.register(new Block(881, "potted_crimson_roots", false, 20517, 20517, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block CRIMSON_PLANKS = REGISTRY.register(new Block(881, "crimson_planks", true, 20830, 20830, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POTTED_WARPED_ROOTS = REGISTRY.register(new Block(882, "potted_warped_roots", false, 20518, 20518, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WARPED_PLANKS = REGISTRY.register(new Block(882, "warped_planks", true, 20831, 20831, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block LODESTONE = REGISTRY.register(new Block(883, "lodestone", true, 20519, 20519, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CRIMSON_SLAB = REGISTRY.register(new Block(883, "crimson_slab", true, 20832, 20837, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BLACKSTONE = REGISTRY.register(new Block(884, "blackstone", true, 20520, 20520, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WARPED_SLAB = REGISTRY.register(new Block(884, "warped_slab", true, 20838, 20843, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BLACKSTONE_STAIRS = REGISTRY.register(new Block(885, "blackstone_stairs", true, 20521, 20600, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CRIMSON_PRESSURE_PLATE = REGISTRY.register(new Block(885, "crimson_pressure_plate", true, 20844, 20845, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BLACKSTONE_WALL = REGISTRY.register(new Block(886, "blackstone_wall", true, 20601, 20924, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WARPED_PRESSURE_PLATE = REGISTRY.register(new Block(886, "warped_pressure_plate", true, 20846, 20847, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block BLACKSTONE_SLAB = REGISTRY.register(new Block(887, "blackstone_slab", true, 20925, 20930, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CRIMSON_FENCE = REGISTRY.register(new Block(887, "crimson_fence", true, 20848, 20879, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POLISHED_BLACKSTONE = REGISTRY.register(new Block(888, "polished_blackstone", true, 20931, 20931, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WARPED_FENCE = REGISTRY.register(new Block(888, "warped_fence", true, 20880, 20911, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POLISHED_BLACKSTONE_BRICKS = REGISTRY.register(new Block(889, "polished_blackstone_bricks", true, 20932, 20932, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CRIMSON_TRAPDOOR = REGISTRY.register(new Block(889, "crimson_trapdoor", true, 20912, 20975, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CRACKED_POLISHED_BLACKSTONE_BRICKS = REGISTRY.register(new Block(890, "cracked_polished_blackstone_bricks", true, 20933, 20933, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WARPED_TRAPDOOR = REGISTRY.register(new Block(890, "warped_trapdoor", true, 20976, 21039, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block CHISELED_POLISHED_BLACKSTONE = REGISTRY.register(new Block(891, "chiseled_polished_blackstone", true, 20934, 20934, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CRIMSON_FENCE_GATE = REGISTRY.register(new Block(891, "crimson_fence_gate", true, 21040, 21071, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POLISHED_BLACKSTONE_BRICK_SLAB = REGISTRY.register(new Block(892, "polished_blackstone_brick_slab", true, 20935, 20940, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WARPED_FENCE_GATE = REGISTRY.register(new Block(892, "warped_fence_gate", true, 21072, 21103, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POLISHED_BLACKSTONE_BRICK_STAIRS = REGISTRY.register(new Block(893, "polished_blackstone_brick_stairs", true, 20941, 21020, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CRIMSON_STAIRS = REGISTRY.register(new Block(893, "crimson_stairs", true, 21104, 21183, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POLISHED_BLACKSTONE_BRICK_WALL = REGISTRY.register(new Block(894, "polished_blackstone_brick_wall", true, 21021, 21344, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WARPED_STAIRS = REGISTRY.register(new Block(894, "warped_stairs", true, 21184, 21263, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block GILDED_BLACKSTONE = REGISTRY.register(new Block(895, "gilded_blackstone", true, 21345, 21345, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CRIMSON_BUTTON = REGISTRY.register(new Block(895, "crimson_button", false, 21264, 21287, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POLISHED_BLACKSTONE_STAIRS = REGISTRY.register(new Block(896, "polished_blackstone_stairs", true, 21346, 21425, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WARPED_BUTTON = REGISTRY.register(new Block(896, "warped_button", false, 21288, 21311, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POLISHED_BLACKSTONE_SLAB = REGISTRY.register(new Block(897, "polished_blackstone_slab", true, 21426, 21431, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CRIMSON_DOOR = REGISTRY.register(new Block(897, "crimson_door", true, 21312, 21375, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POLISHED_BLACKSTONE_PRESSURE_PLATE = REGISTRY.register(new Block(898, "polished_blackstone_pressure_plate", true, 21432, 21433, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WARPED_DOOR = REGISTRY.register(new Block(898, "warped_door", true, 21376, 21439, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block POLISHED_BLACKSTONE_BUTTON = REGISTRY.register(new Block(899, "polished_blackstone_button", false, 21434, 21457, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CRIMSON_SIGN = REGISTRY.register(new Block(899, "crimson_sign", true, 21440, 21471, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block POLISHED_BLACKSTONE_WALL = REGISTRY.register(new Block(900, "polished_blackstone_wall", true, 21458, 21781, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WARPED_SIGN = REGISTRY.register(new Block(900, "warped_sign", true, 21472, 21503, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block CHISELED_NETHER_BRICKS = REGISTRY.register(new Block(901, "chiseled_nether_bricks", true, 21782, 21782, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CRIMSON_WALL_SIGN = REGISTRY.register(new Block(901, "crimson_wall_sign", true, 21504, 21511, 53, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block CRACKED_NETHER_BRICKS = REGISTRY.register(new Block(902, "cracked_nether_bricks", true, 21783, 21783, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WARPED_WALL_SIGN = REGISTRY.register(new Block(902, "warped_wall_sign", true, 21512, 21519, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 1.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.SIGN));
 
-    public static final Block QUARTZ_BRICKS = REGISTRY.register(new Block(903, "quartz_bricks", true, 21784, 21784, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block STRUCTURE_BLOCK = REGISTRY.register(new Block(903, "structure_block", true, 21520, 21523, 22, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, true, BlockEntityType.STRUCTURE_BLOCK));
 
-    public static final Block CANDLE = REGISTRY.register(new Block(904, "candle", false, 21785, 21800, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block JIGSAW = REGISTRY.register(new Block(904, "jigsaw", true, 21524, 21535, 22, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, true, BlockEntityType.JIGSAW));
 
-    public static final Block WHITE_CANDLE = REGISTRY.register(new Block(905, "white_candle", false, 21801, 21816, 3, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block TEST_BLOCK = REGISTRY.register(new Block(905, "test_block", true, 21536, 21539, 22, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false, BlockEntityType.TEST_BLOCK));
 
-    public static final Block ORANGE_CANDLE = REGISTRY.register(new Block(906, "orange_candle", false, 21817, 21832, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block TEST_INSTANCE_BLOCK = REGISTRY.register(new Block(906, "test_instance_block", true, 21540, 21540, 0, BlockOffsetType.NONE, 0.25f, 0.2f, -1.0f, false, BlockEntityType.TEST_INSTANCE_BLOCK));
 
-    public static final Block MAGENTA_CANDLE = REGISTRY.register(new Block(907, "magenta_candle", false, 21833, 21848, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block COMPOSTER = REGISTRY.register(new Block(907, "composter", true, 21541, 21549, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 0.6f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE)));
 
-    public static final Block LIGHT_BLUE_CANDLE = REGISTRY.register(new Block(908, "light_blue_candle", false, 21849, 21864, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block TARGET = REGISTRY.register(new Block(908, "target", true, 21550, 21565, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
 
-    public static final Block YELLOW_CANDLE = REGISTRY.register(new Block(909, "yellow_candle", false, 21865, 21880, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block BEE_NEST = REGISTRY.register(new Block(909, "bee_nest", true, 21566, 21589, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BEEHIVE));
 
-    public static final Block LIME_CANDLE = REGISTRY.register(new Block(910, "lime_candle", false, 21881, 21896, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block BEEHIVE = REGISTRY.register(new Block(910, "beehive", true, 21590, 21613, 13, BlockOffsetType.NONE, 0.25f, 0.2f, 0.6f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE), BlockEntityType.BEEHIVE));
 
-    public static final Block PINK_CANDLE = REGISTRY.register(new Block(911, "pink_candle", false, 21897, 21912, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block HONEY_BLOCK = REGISTRY.register(new Block(911, "honey_block", true, 21614, 21614, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block GRAY_CANDLE = REGISTRY.register(new Block(912, "gray_candle", false, 21913, 21928, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block HONEYCOMB_BLOCK = REGISTRY.register(new Block(912, "honeycomb_block", true, 21615, 21615, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.6f, false));
 
-    public static final Block LIGHT_GRAY_CANDLE = REGISTRY.register(new Block(913, "light_gray_candle", false, 21929, 21944, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block NETHERITE_BLOCK = REGISTRY.register(new Block(913, "netherite_block", true, 21616, 21616, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 50.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL)));
 
-    public static final Block CYAN_CANDLE = REGISTRY.register(new Block(914, "cyan_candle", false, 21945, 21960, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block ANCIENT_DEBRIS = REGISTRY.register(new Block(914, "ancient_debris", true, 21617, 21617, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 30.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL)));
 
-    public static final Block PURPLE_CANDLE = REGISTRY.register(new Block(915, "purple_candle", false, 21961, 21976, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block CRYING_OBSIDIAN = REGISTRY.register(new Block(915, "crying_obsidian", true, 21618, 21618, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 50.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL)));
 
-    public static final Block BLUE_CANDLE = REGISTRY.register(new Block(916, "blue_candle", false, 21977, 21992, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block RESPAWN_ANCHOR = REGISTRY.register(new Block(916, "respawn_anchor", true, 21619, 21623, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 50.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_DIAMOND_TOOL)));
 
-    public static final Block BROWN_CANDLE = REGISTRY.register(new Block(917, "brown_candle", false, 21993, 22008, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block POTTED_CRIMSON_FUNGUS = REGISTRY.register(new Block(917, "potted_crimson_fungus", false, 21624, 21624, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block GREEN_CANDLE = REGISTRY.register(new Block(918, "green_candle", false, 22009, 22024, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block POTTED_WARPED_FUNGUS = REGISTRY.register(new Block(918, "potted_warped_fungus", false, 21625, 21625, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block RED_CANDLE = REGISTRY.register(new Block(919, "red_candle", false, 22025, 22040, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block POTTED_CRIMSON_ROOTS = REGISTRY.register(new Block(919, "potted_crimson_roots", false, 21626, 21626, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block BLACK_CANDLE = REGISTRY.register(new Block(920, "black_candle", false, 22041, 22056, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
+    public static final Block POTTED_WARPED_ROOTS = REGISTRY.register(new Block(920, "potted_warped_roots", false, 21627, 21627, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 
-    public static final Block CANDLE_CAKE = REGISTRY.register(new Block(921, "candle_cake", true, 22057, 22058, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block LODESTONE = REGISTRY.register(new Block(921, "lodestone", true, 21628, 21628, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WHITE_CANDLE_CAKE = REGISTRY.register(new Block(922, "white_candle_cake", true, 22059, 22060, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block BLACKSTONE = REGISTRY.register(new Block(922, "blackstone", true, 21629, 21629, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block ORANGE_CANDLE_CAKE = REGISTRY.register(new Block(923, "orange_candle_cake", true, 22061, 22062, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block BLACKSTONE_STAIRS = REGISTRY.register(new Block(923, "blackstone_stairs", true, 21630, 21709, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MAGENTA_CANDLE_CAKE = REGISTRY.register(new Block(924, "magenta_candle_cake", true, 22063, 22064, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block BLACKSTONE_WALL = REGISTRY.register(new Block(924, "blackstone_wall", true, 21710, 22033, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LIGHT_BLUE_CANDLE_CAKE = REGISTRY.register(new Block(925, "light_blue_candle_cake", true, 22065, 22066, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block BLACKSTONE_SLAB = REGISTRY.register(new Block(925, "blackstone_slab", true, 22034, 22039, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block YELLOW_CANDLE_CAKE = REGISTRY.register(new Block(926, "yellow_candle_cake", true, 22067, 22068, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block POLISHED_BLACKSTONE = REGISTRY.register(new Block(926, "polished_blackstone", true, 22040, 22040, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LIME_CANDLE_CAKE = REGISTRY.register(new Block(927, "lime_candle_cake", true, 22069, 22070, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block POLISHED_BLACKSTONE_BRICKS = REGISTRY.register(new Block(927, "polished_blackstone_bricks", true, 22041, 22041, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PINK_CANDLE_CAKE = REGISTRY.register(new Block(928, "pink_candle_cake", true, 22071, 22072, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block CRACKED_POLISHED_BLACKSTONE_BRICKS = REGISTRY.register(new Block(928, "cracked_polished_blackstone_bricks", true, 22042, 22042, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GRAY_CANDLE_CAKE = REGISTRY.register(new Block(929, "gray_candle_cake", true, 22073, 22074, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block CHISELED_POLISHED_BLACKSTONE = REGISTRY.register(new Block(929, "chiseled_polished_blackstone", true, 22043, 22043, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LIGHT_GRAY_CANDLE_CAKE = REGISTRY.register(new Block(930, "light_gray_candle_cake", true, 22075, 22076, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block POLISHED_BLACKSTONE_BRICK_SLAB = REGISTRY.register(new Block(930, "polished_blackstone_brick_slab", true, 22044, 22049, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CYAN_CANDLE_CAKE = REGISTRY.register(new Block(931, "cyan_candle_cake", true, 22077, 22078, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block POLISHED_BLACKSTONE_BRICK_STAIRS = REGISTRY.register(new Block(931, "polished_blackstone_brick_stairs", true, 22050, 22129, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PURPLE_CANDLE_CAKE = REGISTRY.register(new Block(932, "purple_candle_cake", true, 22079, 22080, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block POLISHED_BLACKSTONE_BRICK_WALL = REGISTRY.register(new Block(932, "polished_blackstone_brick_wall", true, 22130, 22453, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BLUE_CANDLE_CAKE = REGISTRY.register(new Block(933, "blue_candle_cake", true, 22081, 22082, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block GILDED_BLACKSTONE = REGISTRY.register(new Block(933, "gilded_blackstone", true, 22454, 22454, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BROWN_CANDLE_CAKE = REGISTRY.register(new Block(934, "brown_candle_cake", true, 22083, 22084, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block POLISHED_BLACKSTONE_STAIRS = REGISTRY.register(new Block(934, "polished_blackstone_stairs", true, 22455, 22534, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block GREEN_CANDLE_CAKE = REGISTRY.register(new Block(935, "green_candle_cake", true, 22085, 22086, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block POLISHED_BLACKSTONE_SLAB = REGISTRY.register(new Block(935, "polished_blackstone_slab", true, 22535, 22540, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block RED_CANDLE_CAKE = REGISTRY.register(new Block(936, "red_candle_cake", true, 22087, 22088, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block POLISHED_BLACKSTONE_PRESSURE_PLATE = REGISTRY.register(new Block(936, "polished_blackstone_pressure_plate", true, 22541, 22542, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BLACK_CANDLE_CAKE = REGISTRY.register(new Block(937, "black_candle_cake", true, 22089, 22090, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
+    public static final Block POLISHED_BLACKSTONE_BUTTON = REGISTRY.register(new Block(937, "polished_blackstone_button", false, 22543, 22566, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block AMETHYST_BLOCK = REGISTRY.register(new Block(938, "amethyst_block", true, 22091, 22091, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block POLISHED_BLACKSTONE_WALL = REGISTRY.register(new Block(938, "polished_blackstone_wall", true, 22567, 22890, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BUDDING_AMETHYST = REGISTRY.register(new Block(939, "budding_amethyst", true, 22092, 22092, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CHISELED_NETHER_BRICKS = REGISTRY.register(new Block(939, "chiseled_nether_bricks", true, 22891, 22891, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block AMETHYST_CLUSTER = REGISTRY.register(new Block(940, "amethyst_cluster", true, 22093, 22104, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CRACKED_NETHER_BRICKS = REGISTRY.register(new Block(940, "cracked_nether_bricks", true, 22892, 22892, 35, BlockOffsetType.NONE, 0.25f, 0.2f, 2.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LARGE_AMETHYST_BUD = REGISTRY.register(new Block(941, "large_amethyst_bud", true, 22105, 22116, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block QUARTZ_BRICKS = REGISTRY.register(new Block(941, "quartz_bricks", true, 22893, 22893, 14, BlockOffsetType.NONE, 0.25f, 0.2f, 0.8f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MEDIUM_AMETHYST_BUD = REGISTRY.register(new Block(942, "medium_amethyst_bud", true, 22117, 22128, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CANDLE = REGISTRY.register(new Block(942, "candle", false, 22894, 22909, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block SMALL_AMETHYST_BUD = REGISTRY.register(new Block(943, "small_amethyst_bud", true, 22129, 22140, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WHITE_CANDLE = REGISTRY.register(new Block(943, "white_candle", false, 22910, 22925, 3, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block TUFF = REGISTRY.register(new Block(944, "tuff", true, 22141, 22141, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block ORANGE_CANDLE = REGISTRY.register(new Block(944, "orange_candle", false, 22926, 22941, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block TUFF_SLAB = REGISTRY.register(new Block(945, "tuff_slab", true, 22142, 22147, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block MAGENTA_CANDLE = REGISTRY.register(new Block(945, "magenta_candle", false, 22942, 22957, 16, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block TUFF_STAIRS = REGISTRY.register(new Block(946, "tuff_stairs", true, 22148, 22227, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIGHT_BLUE_CANDLE = REGISTRY.register(new Block(946, "light_blue_candle", false, 22958, 22973, 17, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block TUFF_WALL = REGISTRY.register(new Block(947, "tuff_wall", true, 22228, 22551, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block YELLOW_CANDLE = REGISTRY.register(new Block(947, "yellow_candle", false, 22974, 22989, 18, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block POLISHED_TUFF = REGISTRY.register(new Block(948, "polished_tuff", true, 22552, 22552, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIME_CANDLE = REGISTRY.register(new Block(948, "lime_candle", false, 22990, 23005, 19, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block POLISHED_TUFF_SLAB = REGISTRY.register(new Block(949, "polished_tuff_slab", true, 22553, 22558, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PINK_CANDLE = REGISTRY.register(new Block(949, "pink_candle", false, 23006, 23021, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block POLISHED_TUFF_STAIRS = REGISTRY.register(new Block(950, "polished_tuff_stairs", true, 22559, 22638, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GRAY_CANDLE = REGISTRY.register(new Block(950, "gray_candle", false, 23022, 23037, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block POLISHED_TUFF_WALL = REGISTRY.register(new Block(951, "polished_tuff_wall", true, 22639, 22962, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block LIGHT_GRAY_CANDLE = REGISTRY.register(new Block(951, "light_gray_candle", false, 23038, 23053, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block CHISELED_TUFF = REGISTRY.register(new Block(952, "chiseled_tuff", true, 22963, 22963, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CYAN_CANDLE = REGISTRY.register(new Block(952, "cyan_candle", false, 23054, 23069, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block TUFF_BRICKS = REGISTRY.register(new Block(953, "tuff_bricks", true, 22964, 22964, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block PURPLE_CANDLE = REGISTRY.register(new Block(953, "purple_candle", false, 23070, 23085, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block TUFF_BRICK_SLAB = REGISTRY.register(new Block(954, "tuff_brick_slab", true, 22965, 22970, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BLUE_CANDLE = REGISTRY.register(new Block(954, "blue_candle", false, 23086, 23101, 25, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block TUFF_BRICK_STAIRS = REGISTRY.register(new Block(955, "tuff_brick_stairs", true, 22971, 23050, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BROWN_CANDLE = REGISTRY.register(new Block(955, "brown_candle", false, 23102, 23117, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block TUFF_BRICK_WALL = REGISTRY.register(new Block(956, "tuff_brick_wall", true, 23051, 23374, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block GREEN_CANDLE = REGISTRY.register(new Block(956, "green_candle", false, 23118, 23133, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block CHISELED_TUFF_BRICKS = REGISTRY.register(new Block(957, "chiseled_tuff_bricks", true, 23375, 23375, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block RED_CANDLE = REGISTRY.register(new Block(957, "red_candle", false, 23134, 23149, 28, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block CALCITE = REGISTRY.register(new Block(958, "calcite", true, 23376, 23376, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 0.75f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block BLACK_CANDLE = REGISTRY.register(new Block(958, "black_candle", false, 23150, 23165, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false));
 
-    public static final Block TINTED_GLASS = REGISTRY.register(new Block(959, "tinted_glass", true, 23377, 23377, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block CANDLE_CAKE = REGISTRY.register(new Block(959, "candle_cake", true, 23166, 23167, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block POWDER_SNOW = REGISTRY.register(new Block(960, "powder_snow", false, 23378, 23378, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 0.25f, false));
+    public static final Block WHITE_CANDLE_CAKE = REGISTRY.register(new Block(960, "white_candle_cake", true, 23168, 23169, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block SCULK_SENSOR = REGISTRY.register(new Block(961, "sculk_sensor", true, 23379, 23474, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE), BlockEntityType.SCULK_SENSOR));
+    public static final Block ORANGE_CANDLE_CAKE = REGISTRY.register(new Block(961, "orange_candle_cake", true, 23170, 23171, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block CALIBRATED_SCULK_SENSOR = REGISTRY.register(new Block(962, "calibrated_sculk_sensor", true, 23475, 23858, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE), BlockEntityType.CALIBRATED_SCULK_SENSOR));
+    public static final Block MAGENTA_CANDLE_CAKE = REGISTRY.register(new Block(962, "magenta_candle_cake", true, 23172, 23173, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block SCULK = REGISTRY.register(new Block(963, "sculk", true, 23859, 23859, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+    public static final Block LIGHT_BLUE_CANDLE_CAKE = REGISTRY.register(new Block(963, "light_blue_candle_cake", true, 23174, 23175, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block SCULK_VEIN = REGISTRY.register(new Block(964, "sculk_vein", true, 23860, 23987, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+    public static final Block YELLOW_CANDLE_CAKE = REGISTRY.register(new Block(964, "yellow_candle_cake", true, 23176, 23177, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block SCULK_CATALYST = REGISTRY.register(new Block(965, "sculk_catalyst", true, 23988, 23989, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE), BlockEntityType.SCULK_CATALYST));
+    public static final Block LIME_CANDLE_CAKE = REGISTRY.register(new Block(965, "lime_candle_cake", true, 23178, 23179, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block SCULK_SHRIEKER = REGISTRY.register(new Block(966, "sculk_shrieker", true, 23990, 23997, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE), BlockEntityType.SCULK_SHRIEKER));
+    public static final Block PINK_CANDLE_CAKE = REGISTRY.register(new Block(966, "pink_candle_cake", true, 23180, 23181, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block COPPER_BLOCK = REGISTRY.register(new Block(967, "copper_block", true, 23998, 23998, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block GRAY_CANDLE_CAKE = REGISTRY.register(new Block(967, "gray_candle_cake", true, 23182, 23183, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block EXPOSED_COPPER = REGISTRY.register(new Block(968, "exposed_copper", true, 23999, 23999, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block LIGHT_GRAY_CANDLE_CAKE = REGISTRY.register(new Block(968, "light_gray_candle_cake", true, 23184, 23185, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block WEATHERED_COPPER = REGISTRY.register(new Block(969, "weathered_copper", true, 24000, 24000, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block CYAN_CANDLE_CAKE = REGISTRY.register(new Block(969, "cyan_candle_cake", true, 23186, 23187, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block OXIDIZED_COPPER = REGISTRY.register(new Block(970, "oxidized_copper", true, 24001, 24001, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block PURPLE_CANDLE_CAKE = REGISTRY.register(new Block(970, "purple_candle_cake", true, 23188, 23189, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block COPPER_ORE = REGISTRY.register(new Block(971, "copper_ore", true, 24002, 24002, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block BLUE_CANDLE_CAKE = REGISTRY.register(new Block(971, "blue_candle_cake", true, 23190, 23191, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block DEEPSLATE_COPPER_ORE = REGISTRY.register(new Block(972, "deepslate_copper_ore", true, 24003, 24003, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 4.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block BROWN_CANDLE_CAKE = REGISTRY.register(new Block(972, "brown_candle_cake", true, 23192, 23193, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block OXIDIZED_CUT_COPPER = REGISTRY.register(new Block(973, "oxidized_cut_copper", true, 24004, 24004, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block GREEN_CANDLE_CAKE = REGISTRY.register(new Block(973, "green_candle_cake", true, 23194, 23195, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block WEATHERED_CUT_COPPER = REGISTRY.register(new Block(974, "weathered_cut_copper", true, 24005, 24005, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block RED_CANDLE_CAKE = REGISTRY.register(new Block(974, "red_candle_cake", true, 23196, 23197, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block EXPOSED_CUT_COPPER = REGISTRY.register(new Block(975, "exposed_cut_copper", true, 24006, 24006, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block BLACK_CANDLE_CAKE = REGISTRY.register(new Block(975, "black_candle_cake", true, 23198, 23199, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false));
 
-    public static final Block CUT_COPPER = REGISTRY.register(new Block(976, "cut_copper", true, 24007, 24007, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block AMETHYST_BLOCK = REGISTRY.register(new Block(976, "amethyst_block", true, 23200, 23200, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block OXIDIZED_CHISELED_COPPER = REGISTRY.register(new Block(977, "oxidized_chiseled_copper", true, 24008, 24008, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block BUDDING_AMETHYST = REGISTRY.register(new Block(977, "budding_amethyst", true, 23201, 23201, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WEATHERED_CHISELED_COPPER = REGISTRY.register(new Block(978, "weathered_chiseled_copper", true, 24009, 24009, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block AMETHYST_CLUSTER = REGISTRY.register(new Block(978, "amethyst_cluster", true, 23202, 23213, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block EXPOSED_CHISELED_COPPER = REGISTRY.register(new Block(979, "exposed_chiseled_copper", true, 24010, 24010, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block LARGE_AMETHYST_BUD = REGISTRY.register(new Block(979, "large_amethyst_bud", true, 23214, 23225, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CHISELED_COPPER = REGISTRY.register(new Block(980, "chiseled_copper", true, 24011, 24011, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block MEDIUM_AMETHYST_BUD = REGISTRY.register(new Block(980, "medium_amethyst_bud", true, 23226, 23237, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WAXED_OXIDIZED_CHISELED_COPPER = REGISTRY.register(new Block(981, "waxed_oxidized_chiseled_copper", true, 24012, 24012, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block SMALL_AMETHYST_BUD = REGISTRY.register(new Block(981, "small_amethyst_bud", true, 23238, 23249, 24, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WAXED_WEATHERED_CHISELED_COPPER = REGISTRY.register(new Block(982, "waxed_weathered_chiseled_copper", true, 24013, 24013, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block TUFF = REGISTRY.register(new Block(982, "tuff", true, 23250, 23250, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WAXED_EXPOSED_CHISELED_COPPER = REGISTRY.register(new Block(983, "waxed_exposed_chiseled_copper", true, 24014, 24014, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block TUFF_SLAB = REGISTRY.register(new Block(983, "tuff_slab", true, 23251, 23256, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WAXED_CHISELED_COPPER = REGISTRY.register(new Block(984, "waxed_chiseled_copper", true, 24015, 24015, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block TUFF_STAIRS = REGISTRY.register(new Block(984, "tuff_stairs", true, 23257, 23336, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(985, "oxidized_cut_copper_stairs", true, 24016, 24095, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block TUFF_WALL = REGISTRY.register(new Block(985, "tuff_wall", true, 23337, 23660, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(986, "weathered_cut_copper_stairs", true, 24096, 24175, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block POLISHED_TUFF = REGISTRY.register(new Block(986, "polished_tuff", true, 23661, 23661, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(987, "exposed_cut_copper_stairs", true, 24176, 24255, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block POLISHED_TUFF_SLAB = REGISTRY.register(new Block(987, "polished_tuff_slab", true, 23662, 23667, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CUT_COPPER_STAIRS = REGISTRY.register(new Block(988, "cut_copper_stairs", true, 24256, 24335, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block POLISHED_TUFF_STAIRS = REGISTRY.register(new Block(988, "polished_tuff_stairs", true, 23668, 23747, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(new Block(989, "oxidized_cut_copper_slab", true, 24336, 24341, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block POLISHED_TUFF_WALL = REGISTRY.register(new Block(989, "polished_tuff_wall", true, 23748, 24071, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(new Block(990, "weathered_cut_copper_slab", true, 24342, 24347, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block CHISELED_TUFF = REGISTRY.register(new Block(990, "chiseled_tuff", true, 24072, 24072, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(new Block(991, "exposed_cut_copper_slab", true, 24348, 24353, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block TUFF_BRICKS = REGISTRY.register(new Block(991, "tuff_bricks", true, 24073, 24073, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block CUT_COPPER_SLAB = REGISTRY.register(new Block(992, "cut_copper_slab", true, 24354, 24359, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block TUFF_BRICK_SLAB = REGISTRY.register(new Block(992, "tuff_brick_slab", true, 24074, 24079, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WAXED_COPPER_BLOCK = REGISTRY.register(new Block(993, "waxed_copper_block", true, 24360, 24360, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block TUFF_BRICK_STAIRS = REGISTRY.register(new Block(993, "tuff_brick_stairs", true, 24080, 24159, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WAXED_WEATHERED_COPPER = REGISTRY.register(new Block(994, "waxed_weathered_copper", true, 24361, 24361, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block TUFF_BRICK_WALL = REGISTRY.register(new Block(994, "tuff_brick_wall", true, 24160, 24483, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WAXED_EXPOSED_COPPER = REGISTRY.register(new Block(995, "waxed_exposed_copper", true, 24362, 24362, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block CHISELED_TUFF_BRICKS = REGISTRY.register(new Block(995, "chiseled_tuff_bricks", true, 24484, 24484, 43, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WAXED_OXIDIZED_COPPER = REGISTRY.register(new Block(996, "waxed_oxidized_copper", true, 24363, 24363, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block CALCITE = REGISTRY.register(new Block(996, "calcite", true, 24485, 24485, 36, BlockOffsetType.NONE, 0.25f, 0.2f, 0.75f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WAXED_OXIDIZED_CUT_COPPER = REGISTRY.register(new Block(997, "waxed_oxidized_cut_copper", true, 24364, 24364, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block TINTED_GLASS = REGISTRY.register(new Block(997, "tinted_glass", true, 24486, 24486, 21, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
 
-    public static final Block WAXED_WEATHERED_CUT_COPPER = REGISTRY.register(new Block(998, "waxed_weathered_cut_copper", true, 24365, 24365, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block POWDER_SNOW = REGISTRY.register(new Block(998, "powder_snow", false, 24487, 24487, 8, BlockOffsetType.NONE, 0.25f, 0.2f, 0.25f, false));
 
-    public static final Block WAXED_EXPOSED_CUT_COPPER = REGISTRY.register(new Block(999, "waxed_exposed_cut_copper", true, 24366, 24366, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block SCULK_SENSOR = REGISTRY.register(new Block(999, "sculk_sensor", true, 24488, 24583, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE), BlockEntityType.SCULK_SENSOR));
 
-    public static final Block WAXED_CUT_COPPER = REGISTRY.register(new Block(1000, "waxed_cut_copper", true, 24367, 24367, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block CALIBRATED_SCULK_SENSOR = REGISTRY.register(new Block(1000, "calibrated_sculk_sensor", true, 24584, 24967, 23, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE), BlockEntityType.CALIBRATED_SCULK_SENSOR));
 
-    public static final Block WAXED_OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(1001, "waxed_oxidized_cut_copper_stairs", true, 24368, 24447, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block SCULK = REGISTRY.register(new Block(1001, "sculk", true, 24968, 24968, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
 
-    public static final Block WAXED_WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(1002, "waxed_weathered_cut_copper_stairs", true, 24448, 24527, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block SCULK_VEIN = REGISTRY.register(new Block(1002, "sculk_vein", true, 24969, 25096, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 0.2f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
 
-    public static final Block WAXED_EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(1003, "waxed_exposed_cut_copper_stairs", true, 24528, 24607, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block SCULK_CATALYST = REGISTRY.register(new Block(1003, "sculk_catalyst", true, 25097, 25098, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE), BlockEntityType.SCULK_CATALYST));
 
-    public static final Block WAXED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(1004, "waxed_cut_copper_stairs", true, 24608, 24687, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block SCULK_SHRIEKER = REGISTRY.register(new Block(1004, "sculk_shrieker", true, 25099, 25106, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE), BlockEntityType.SCULK_SHRIEKER));
 
-    public static final Block WAXED_OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(new Block(1005, "waxed_oxidized_cut_copper_slab", true, 24688, 24693, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block COPPER_BLOCK = REGISTRY.register(new Block(1005, "copper_block", true, 25107, 25107, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(new Block(1006, "waxed_weathered_cut_copper_slab", true, 24694, 24699, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block EXPOSED_COPPER = REGISTRY.register(new Block(1006, "exposed_copper", true, 25108, 25108, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(new Block(1007, "waxed_exposed_cut_copper_slab", true, 24700, 24705, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WEATHERED_COPPER = REGISTRY.register(new Block(1007, "weathered_copper", true, 25109, 25109, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_CUT_COPPER_SLAB = REGISTRY.register(new Block(1008, "waxed_cut_copper_slab", true, 24706, 24711, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block OXIDIZED_COPPER = REGISTRY.register(new Block(1008, "oxidized_copper", true, 25110, 25110, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block COPPER_DOOR = REGISTRY.register(new Block(1009, "copper_door", true, 24712, 24775, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block COPPER_ORE = REGISTRY.register(new Block(1009, "copper_ore", true, 25111, 25111, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block EXPOSED_COPPER_DOOR = REGISTRY.register(new Block(1010, "exposed_copper_door", true, 24776, 24839, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block DEEPSLATE_COPPER_ORE = REGISTRY.register(new Block(1010, "deepslate_copper_ore", true, 25112, 25112, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 4.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block OXIDIZED_COPPER_DOOR = REGISTRY.register(new Block(1011, "oxidized_copper_door", true, 24840, 24903, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block OXIDIZED_CUT_COPPER = REGISTRY.register(new Block(1011, "oxidized_cut_copper", true, 25113, 25113, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WEATHERED_COPPER_DOOR = REGISTRY.register(new Block(1012, "weathered_copper_door", true, 24904, 24967, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WEATHERED_CUT_COPPER = REGISTRY.register(new Block(1012, "weathered_cut_copper", true, 25114, 25114, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_COPPER_DOOR = REGISTRY.register(new Block(1013, "waxed_copper_door", true, 24968, 25031, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block EXPOSED_CUT_COPPER = REGISTRY.register(new Block(1013, "exposed_cut_copper", true, 25115, 25115, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_EXPOSED_COPPER_DOOR = REGISTRY.register(new Block(1014, "waxed_exposed_copper_door", true, 25032, 25095, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block CUT_COPPER = REGISTRY.register(new Block(1014, "cut_copper", true, 25116, 25116, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_OXIDIZED_COPPER_DOOR = REGISTRY.register(new Block(1015, "waxed_oxidized_copper_door", true, 25096, 25159, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block OXIDIZED_CHISELED_COPPER = REGISTRY.register(new Block(1015, "oxidized_chiseled_copper", true, 25117, 25117, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_WEATHERED_COPPER_DOOR = REGISTRY.register(new Block(1016, "waxed_weathered_copper_door", true, 25160, 25223, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WEATHERED_CHISELED_COPPER = REGISTRY.register(new Block(1016, "weathered_chiseled_copper", true, 25118, 25118, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block COPPER_TRAPDOOR = REGISTRY.register(new Block(1017, "copper_trapdoor", true, 25224, 25287, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block EXPOSED_CHISELED_COPPER = REGISTRY.register(new Block(1017, "exposed_chiseled_copper", true, 25119, 25119, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1018, "exposed_copper_trapdoor", true, 25288, 25351, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block CHISELED_COPPER = REGISTRY.register(new Block(1018, "chiseled_copper", true, 25120, 25120, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1019, "oxidized_copper_trapdoor", true, 25352, 25415, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_OXIDIZED_CHISELED_COPPER = REGISTRY.register(new Block(1019, "waxed_oxidized_chiseled_copper", true, 25121, 25121, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1020, "weathered_copper_trapdoor", true, 25416, 25479, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_WEATHERED_CHISELED_COPPER = REGISTRY.register(new Block(1020, "waxed_weathered_chiseled_copper", true, 25122, 25122, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1021, "waxed_copper_trapdoor", true, 25480, 25543, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_EXPOSED_CHISELED_COPPER = REGISTRY.register(new Block(1021, "waxed_exposed_chiseled_copper", true, 25123, 25123, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1022, "waxed_exposed_copper_trapdoor", true, 25544, 25607, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_CHISELED_COPPER = REGISTRY.register(new Block(1022, "waxed_chiseled_copper", true, 25124, 25124, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1023, "waxed_oxidized_copper_trapdoor", true, 25608, 25671, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(1023, "oxidized_cut_copper_stairs", true, 25125, 25204, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1024, "waxed_weathered_copper_trapdoor", true, 25672, 25735, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(1024, "weathered_cut_copper_stairs", true, 25205, 25284, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block COPPER_GRATE = REGISTRY.register(new Block(1025, "copper_grate", true, 25736, 25737, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(1025, "exposed_cut_copper_stairs", true, 25285, 25364, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block EXPOSED_COPPER_GRATE = REGISTRY.register(new Block(1026, "exposed_copper_grate", true, 25738, 25739, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block CUT_COPPER_STAIRS = REGISTRY.register(new Block(1026, "cut_copper_stairs", true, 25365, 25444, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WEATHERED_COPPER_GRATE = REGISTRY.register(new Block(1027, "weathered_copper_grate", true, 25740, 25741, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(new Block(1027, "oxidized_cut_copper_slab", true, 25445, 25450, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block OXIDIZED_COPPER_GRATE = REGISTRY.register(new Block(1028, "oxidized_copper_grate", true, 25742, 25743, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(new Block(1028, "weathered_cut_copper_slab", true, 25451, 25456, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_COPPER_GRATE = REGISTRY.register(new Block(1029, "waxed_copper_grate", true, 25744, 25745, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(new Block(1029, "exposed_cut_copper_slab", true, 25457, 25462, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_EXPOSED_COPPER_GRATE = REGISTRY.register(new Block(1030, "waxed_exposed_copper_grate", true, 25746, 25747, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block CUT_COPPER_SLAB = REGISTRY.register(new Block(1030, "cut_copper_slab", true, 25463, 25468, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_WEATHERED_COPPER_GRATE = REGISTRY.register(new Block(1031, "waxed_weathered_copper_grate", true, 25748, 25749, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_COPPER_BLOCK = REGISTRY.register(new Block(1031, "waxed_copper_block", true, 25469, 25469, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_OXIDIZED_COPPER_GRATE = REGISTRY.register(new Block(1032, "waxed_oxidized_copper_grate", true, 25750, 25751, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_WEATHERED_COPPER = REGISTRY.register(new Block(1032, "waxed_weathered_copper", true, 25470, 25470, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block COPPER_BULB = REGISTRY.register(new Block(1033, "copper_bulb", true, 25752, 25755, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_EXPOSED_COPPER = REGISTRY.register(new Block(1033, "waxed_exposed_copper", true, 25471, 25471, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block EXPOSED_COPPER_BULB = REGISTRY.register(new Block(1034, "exposed_copper_bulb", true, 25756, 25759, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_OXIDIZED_COPPER = REGISTRY.register(new Block(1034, "waxed_oxidized_copper", true, 25472, 25472, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WEATHERED_COPPER_BULB = REGISTRY.register(new Block(1035, "weathered_copper_bulb", true, 25760, 25763, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_OXIDIZED_CUT_COPPER = REGISTRY.register(new Block(1035, "waxed_oxidized_cut_copper", true, 25473, 25473, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block OXIDIZED_COPPER_BULB = REGISTRY.register(new Block(1036, "oxidized_copper_bulb", true, 25764, 25767, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_WEATHERED_CUT_COPPER = REGISTRY.register(new Block(1036, "waxed_weathered_cut_copper", true, 25474, 25474, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_COPPER_BULB = REGISTRY.register(new Block(1037, "waxed_copper_bulb", true, 25768, 25771, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_EXPOSED_CUT_COPPER = REGISTRY.register(new Block(1037, "waxed_exposed_cut_copper", true, 25475, 25475, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_EXPOSED_COPPER_BULB = REGISTRY.register(new Block(1038, "waxed_exposed_copper_bulb", true, 25772, 25775, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_CUT_COPPER = REGISTRY.register(new Block(1038, "waxed_cut_copper", true, 25476, 25476, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_WEATHERED_COPPER_BULB = REGISTRY.register(new Block(1039, "waxed_weathered_copper_bulb", true, 25776, 25779, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(1039, "waxed_oxidized_cut_copper_stairs", true, 25477, 25556, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block WAXED_OXIDIZED_COPPER_BULB = REGISTRY.register(new Block(1040, "waxed_oxidized_copper_bulb", true, 25780, 25783, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(1040, "waxed_weathered_cut_copper_stairs", true, 25557, 25636, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block LIGHTNING_ROD = REGISTRY.register(new Block(1041, "lightning_rod", true, 25784, 25807, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(1041, "waxed_exposed_cut_copper_stairs", true, 25637, 25716, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block POINTED_DRIPSTONE = REGISTRY.register(new Block(1042, "pointed_dripstone", true, 25808, 25827, 48, BlockOffsetType.XZ, 0.125f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_CUT_COPPER_STAIRS = REGISTRY.register(new Block(1042, "waxed_cut_copper_stairs", true, 25717, 25796, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block DRIPSTONE_BLOCK = REGISTRY.register(new Block(1043, "dripstone_block", true, 25828, 25828, 48, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(new Block(1043, "waxed_oxidized_cut_copper_slab", true, 25797, 25802, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block CAVE_VINES = REGISTRY.register(new Block(1044, "cave_vines", false, 25829, 25880, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
+    public static final Block WAXED_WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(new Block(1044, "waxed_weathered_cut_copper_slab", true, 25803, 25808, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block CAVE_VINES_PLANT = REGISTRY.register(new Block(1045, "cave_vines_plant", false, 25881, 25882, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
+    public static final Block WAXED_EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(new Block(1045, "waxed_exposed_cut_copper_slab", true, 25809, 25814, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block SPORE_BLOSSOM = REGISTRY.register(new Block(1046, "spore_blossom", false, 25883, 25883, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WAXED_CUT_COPPER_SLAB = REGISTRY.register(new Block(1046, "waxed_cut_copper_slab", true, 25815, 25820, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block AZALEA = REGISTRY.register(new Block(1047, "azalea", false, 25884, 25884, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block COPPER_DOOR = REGISTRY.register(new Block(1047, "copper_door", true, 25821, 25884, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block FLOWERING_AZALEA = REGISTRY.register(new Block(1048, "flowering_azalea", false, 25885, 25885, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block EXPOSED_COPPER_DOOR = REGISTRY.register(new Block(1048, "exposed_copper_door", true, 25885, 25948, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MOSS_CARPET = REGISTRY.register(new Block(1049, "moss_carpet", false, 25886, 25886, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+    public static final Block OXIDIZED_COPPER_DOOR = REGISTRY.register(new Block(1049, "oxidized_copper_door", true, 25949, 26012, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block PINK_PETALS = REGISTRY.register(new Block(1050, "pink_petals", false, 25887, 25902, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WEATHERED_COPPER_DOOR = REGISTRY.register(new Block(1050, "weathered_copper_door", true, 26013, 26076, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block WILDFLOWERS = REGISTRY.register(new Block(1051, "wildflowers", false, 25903, 25918, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WAXED_COPPER_DOOR = REGISTRY.register(new Block(1051, "waxed_copper_door", true, 26077, 26140, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block LEAF_LITTER = REGISTRY.register(new Block(1052, "leaf_litter", false, 25919, 25934, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WAXED_EXPOSED_COPPER_DOOR = REGISTRY.register(new Block(1052, "waxed_exposed_copper_door", true, 26141, 26204, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block MOSS_BLOCK = REGISTRY.register(new Block(1053, "moss_block", true, 25935, 25935, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+    public static final Block WAXED_OXIDIZED_COPPER_DOOR = REGISTRY.register(new Block(1053, "waxed_oxidized_copper_door", true, 26205, 26268, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BIG_DRIPLEAF = REGISTRY.register(new Block(1054, "big_dripleaf", false, 25936, 25967, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
+    public static final Block WAXED_WEATHERED_COPPER_DOOR = REGISTRY.register(new Block(1054, "waxed_weathered_copper_door", true, 26269, 26332, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block BIG_DRIPLEAF_STEM = REGISTRY.register(new Block(1055, "big_dripleaf_stem", false, 25968, 25975, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
+    public static final Block COPPER_TRAPDOOR = REGISTRY.register(new Block(1055, "copper_trapdoor", true, 26333, 26396, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block SMALL_DRIPLEAF = REGISTRY.register(new Block(1056, "small_dripleaf", false, 25976, 25991, 7, BlockOffsetType.XYZ, 0.25f, 0.1f, 0.0f, false));
+    public static final Block EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1056, "exposed_copper_trapdoor", true, 26397, 26460, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block HANGING_ROOTS = REGISTRY.register(new Block(1057, "hanging_roots", false, 25992, 25993, 10, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1057, "oxidized_copper_trapdoor", true, 26461, 26524, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block ROOTED_DIRT = REGISTRY.register(new Block(1058, "rooted_dirt", true, 25994, 25994, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1058, "weathered_copper_trapdoor", true, 26525, 26588, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block MUD = REGISTRY.register(new Block(1059, "mud", true, 25995, 25995, 45, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+    public static final Block WAXED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1059, "waxed_copper_trapdoor", true, 26589, 26652, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block DEEPSLATE = REGISTRY.register(new Block(1060, "deepslate", true, 25996, 25998, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1060, "waxed_exposed_copper_trapdoor", true, 26653, 26716, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block COBBLED_DEEPSLATE = REGISTRY.register(new Block(1061, "cobbled_deepslate", true, 25999, 25999, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1061, "waxed_oxidized_copper_trapdoor", true, 26717, 26780, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block COBBLED_DEEPSLATE_STAIRS = REGISTRY.register(new Block(1062, "cobbled_deepslate_stairs", true, 26000, 26079, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(new Block(1062, "waxed_weathered_copper_trapdoor", true, 26781, 26844, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block COBBLED_DEEPSLATE_SLAB = REGISTRY.register(new Block(1063, "cobbled_deepslate_slab", true, 26080, 26085, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block COPPER_GRATE = REGISTRY.register(new Block(1063, "copper_grate", true, 26845, 26846, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block COBBLED_DEEPSLATE_WALL = REGISTRY.register(new Block(1064, "cobbled_deepslate_wall", true, 26086, 26409, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block EXPOSED_COPPER_GRATE = REGISTRY.register(new Block(1064, "exposed_copper_grate", true, 26847, 26848, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block POLISHED_DEEPSLATE = REGISTRY.register(new Block(1065, "polished_deepslate", true, 26410, 26410, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WEATHERED_COPPER_GRATE = REGISTRY.register(new Block(1065, "weathered_copper_grate", true, 26849, 26850, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block POLISHED_DEEPSLATE_STAIRS = REGISTRY.register(new Block(1066, "polished_deepslate_stairs", true, 26411, 26490, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block OXIDIZED_COPPER_GRATE = REGISTRY.register(new Block(1066, "oxidized_copper_grate", true, 26851, 26852, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block POLISHED_DEEPSLATE_SLAB = REGISTRY.register(new Block(1067, "polished_deepslate_slab", true, 26491, 26496, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_COPPER_GRATE = REGISTRY.register(new Block(1067, "waxed_copper_grate", true, 26853, 26854, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block POLISHED_DEEPSLATE_WALL = REGISTRY.register(new Block(1068, "polished_deepslate_wall", true, 26497, 26820, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_EXPOSED_COPPER_GRATE = REGISTRY.register(new Block(1068, "waxed_exposed_copper_grate", true, 26855, 26856, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block DEEPSLATE_TILES = REGISTRY.register(new Block(1069, "deepslate_tiles", true, 26821, 26821, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_WEATHERED_COPPER_GRATE = REGISTRY.register(new Block(1069, "waxed_weathered_copper_grate", true, 26857, 26858, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block DEEPSLATE_TILE_STAIRS = REGISTRY.register(new Block(1070, "deepslate_tile_stairs", true, 26822, 26901, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_OXIDIZED_COPPER_GRATE = REGISTRY.register(new Block(1070, "waxed_oxidized_copper_grate", true, 26859, 26860, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block DEEPSLATE_TILE_SLAB = REGISTRY.register(new Block(1071, "deepslate_tile_slab", true, 26902, 26907, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block COPPER_BULB = REGISTRY.register(new Block(1071, "copper_bulb", true, 26861, 26864, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block DEEPSLATE_TILE_WALL = REGISTRY.register(new Block(1072, "deepslate_tile_wall", true, 26908, 27231, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block EXPOSED_COPPER_BULB = REGISTRY.register(new Block(1072, "exposed_copper_bulb", true, 26865, 26868, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block DEEPSLATE_BRICKS = REGISTRY.register(new Block(1073, "deepslate_bricks", true, 27232, 27232, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WEATHERED_COPPER_BULB = REGISTRY.register(new Block(1073, "weathered_copper_bulb", true, 26869, 26872, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block DEEPSLATE_BRICK_STAIRS = REGISTRY.register(new Block(1074, "deepslate_brick_stairs", true, 27233, 27312, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block OXIDIZED_COPPER_BULB = REGISTRY.register(new Block(1074, "oxidized_copper_bulb", true, 26873, 26876, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block DEEPSLATE_BRICK_SLAB = REGISTRY.register(new Block(1075, "deepslate_brick_slab", true, 27313, 27318, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_COPPER_BULB = REGISTRY.register(new Block(1075, "waxed_copper_bulb", true, 26877, 26880, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block DEEPSLATE_BRICK_WALL = REGISTRY.register(new Block(1076, "deepslate_brick_wall", true, 27319, 27642, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_EXPOSED_COPPER_BULB = REGISTRY.register(new Block(1076, "waxed_exposed_copper_bulb", true, 26881, 26884, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block CHISELED_DEEPSLATE = REGISTRY.register(new Block(1077, "chiseled_deepslate", true, 27643, 27643, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_WEATHERED_COPPER_BULB = REGISTRY.register(new Block(1077, "waxed_weathered_copper_bulb", true, 26885, 26888, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block CRACKED_DEEPSLATE_BRICKS = REGISTRY.register(new Block(1078, "cracked_deepslate_bricks", true, 27644, 27644, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WAXED_OXIDIZED_COPPER_BULB = REGISTRY.register(new Block(1078, "waxed_oxidized_copper_bulb", true, 26889, 26892, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block CRACKED_DEEPSLATE_TILES = REGISTRY.register(new Block(1079, "cracked_deepslate_tiles", true, 27645, 27645, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block COPPER_CHEST = REGISTRY.register(new Block(1079, "copper_chest", true, 26893, 26916, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL), BlockEntityType.CHEST));
 
-    public static final Block INFESTED_DEEPSLATE = REGISTRY.register(new Block(1080, "infested_deepslate", true, 27646, 27648, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block EXPOSED_COPPER_CHEST = REGISTRY.register(new Block(1080, "exposed_copper_chest", true, 26917, 26940, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL), BlockEntityType.CHEST));
 
-    public static final Block SMOOTH_BASALT = REGISTRY.register(new Block(1081, "smooth_basalt", true, 27649, 27649, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block WEATHERED_COPPER_CHEST = REGISTRY.register(new Block(1081, "weathered_copper_chest", true, 26941, 26964, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL), BlockEntityType.CHEST));
 
-    public static final Block RAW_IRON_BLOCK = REGISTRY.register(new Block(1082, "raw_iron_block", true, 27650, 27650, 60, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block OXIDIZED_COPPER_CHEST = REGISTRY.register(new Block(1082, "oxidized_copper_chest", true, 26965, 26988, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL), BlockEntityType.CHEST));
 
-    public static final Block RAW_COPPER_BLOCK = REGISTRY.register(new Block(1083, "raw_copper_block", true, 27651, 27651, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+    public static final Block WAXED_COPPER_CHEST = REGISTRY.register(new Block(1083, "waxed_copper_chest", true, 26989, 27012, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL), BlockEntityType.CHEST));
 
-    public static final Block RAW_GOLD_BLOCK = REGISTRY.register(new Block(1084, "raw_gold_block", true, 27652, 27652, 30, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
+    public static final Block WAXED_EXPOSED_COPPER_CHEST = REGISTRY.register(new Block(1084, "waxed_exposed_copper_chest", true, 27013, 27036, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL), BlockEntityType.CHEST));
 
-    public static final Block POTTED_AZALEA_BUSH = REGISTRY.register(new Block(1085, "potted_azalea_bush", false, 27653, 27653, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WAXED_WEATHERED_COPPER_CHEST = REGISTRY.register(new Block(1085, "waxed_weathered_copper_chest", true, 27037, 27060, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL), BlockEntityType.CHEST));
 
-    public static final Block POTTED_FLOWERING_AZALEA_BUSH = REGISTRY.register(new Block(1086, "potted_flowering_azalea_bush", false, 27654, 27654, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WAXED_OXIDIZED_COPPER_CHEST = REGISTRY.register(new Block(1086, "waxed_oxidized_copper_chest", true, 27061, 27084, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL), BlockEntityType.CHEST));
 
-    public static final Block OCHRE_FROGLIGHT = REGISTRY.register(new Block(1087, "ochre_froglight", true, 27655, 27657, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block COPPER_GOLEM_STATUE = REGISTRY.register(new Block(1087, "copper_golem_statue", false, 27085, 27116, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.COPPER_GOLEM_STATUE));
 
-    public static final Block VERDANT_FROGLIGHT = REGISTRY.register(new Block(1088, "verdant_froglight", true, 27658, 27660, 61, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block EXPOSED_COPPER_GOLEM_STATUE = REGISTRY.register(new Block(1088, "exposed_copper_golem_statue", false, 27117, 27148, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.COPPER_GOLEM_STATUE));
 
-    public static final Block PEARLESCENT_FROGLIGHT = REGISTRY.register(new Block(1089, "pearlescent_froglight", true, 27661, 27663, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+    public static final Block WEATHERED_COPPER_GOLEM_STATUE = REGISTRY.register(new Block(1089, "weathered_copper_golem_statue", false, 27149, 27180, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.COPPER_GOLEM_STATUE));
 
-    public static final Block FROGSPAWN = REGISTRY.register(new Block(1090, "frogspawn", false, 27664, 27664, 12, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block OXIDIZED_COPPER_GOLEM_STATUE = REGISTRY.register(new Block(1090, "oxidized_copper_golem_statue", false, 27181, 27212, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.COPPER_GOLEM_STATUE));
 
-    public static final Block REINFORCED_DEEPSLATE = REGISTRY.register(new Block(1091, "reinforced_deepslate", true, 27665, 27665, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 55.0f, false));
+    public static final Block WAXED_COPPER_GOLEM_STATUE = REGISTRY.register(new Block(1091, "waxed_copper_golem_statue", false, 27213, 27244, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.COPPER_GOLEM_STATUE));
 
-    public static final Block DECORATED_POT = REGISTRY.register(new Block(1092, "decorated_pot", true, 27666, 27681, 50, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, BlockEntityType.DECORATED_POT));
+    public static final Block WAXED_EXPOSED_COPPER_GOLEM_STATUE = REGISTRY.register(new Block(1092, "waxed_exposed_copper_golem_statue", false, 27245, 27276, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.COPPER_GOLEM_STATUE));
 
-    public static final Block CRAFTER = REGISTRY.register(new Block(1093, "crafter", true, 27682, 27729, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL), BlockEntityType.CRAFTER));
+    public static final Block WAXED_WEATHERED_COPPER_GOLEM_STATUE = REGISTRY.register(new Block(1093, "waxed_weathered_copper_golem_statue", false, 27277, 27308, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.COPPER_GOLEM_STATUE));
 
-    public static final Block TRIAL_SPAWNER = REGISTRY.register(new Block(1094, "trial_spawner", true, 27730, 27741, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 50.0f, false, BlockEntityType.TRIAL_SPAWNER));
+    public static final Block WAXED_OXIDIZED_COPPER_GOLEM_STATUE = REGISTRY.register(new Block(1094, "waxed_oxidized_copper_golem_statue", false, 27309, 27340, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE), BlockEntityType.COPPER_GOLEM_STATUE));
 
-    public static final Block VAULT = REGISTRY.register(new Block(1095, "vault", true, 27742, 27773, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 50.0f, false, BlockEntityType.VAULT));
+    public static final Block LIGHTNING_ROD = REGISTRY.register(new Block(1095, "lightning_rod", true, 27341, 27364, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block HEAVY_CORE = REGISTRY.register(new Block(1096, "heavy_core", false, 27774, 27775, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 10.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+    public static final Block EXPOSED_LIGHTNING_ROD = REGISTRY.register(new Block(1096, "exposed_lightning_rod", true, 27365, 27388, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block PALE_MOSS_BLOCK = REGISTRY.register(new Block(1097, "pale_moss_block", true, 27776, 27776, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+    public static final Block WEATHERED_LIGHTNING_ROD = REGISTRY.register(new Block(1097, "weathered_lightning_rod", true, 27389, 27412, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block PALE_MOSS_CARPET = REGISTRY.register(new Block(1098, "pale_moss_carpet", false, 27777, 27938, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+    public static final Block OXIDIZED_LIGHTNING_ROD = REGISTRY.register(new Block(1098, "oxidized_lightning_rod", true, 27413, 27436, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block PALE_HANGING_MOSS = REGISTRY.register(new Block(1099, "pale_hanging_moss", false, 27939, 27940, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WAXED_LIGHTNING_ROD = REGISTRY.register(new Block(1099, "waxed_lightning_rod", true, 27437, 27460, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block OPEN_EYEBLOSSOM = REGISTRY.register(new Block(1100, "open_eyeblossom", false, 27941, 27941, 15, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WAXED_EXPOSED_LIGHTNING_ROD = REGISTRY.register(new Block(1100, "waxed_exposed_lightning_rod", true, 27461, 27484, 44, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block CLOSED_EYEBLOSSOM = REGISTRY.register(new Block(1101, "closed_eyeblossom", false, 27942, 27942, 6, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WAXED_WEATHERED_LIGHTNING_ROD = REGISTRY.register(new Block(1101, "waxed_weathered_lightning_rod", true, 27485, 27508, 56, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block POTTED_OPEN_EYEBLOSSOM = REGISTRY.register(new Block(1102, "potted_open_eyeblossom", false, 27943, 27943, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block WAXED_OXIDIZED_LIGHTNING_ROD = REGISTRY.register(new Block(1102, "waxed_oxidized_lightning_rod", true, 27509, 27532, 55, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
 
-    public static final Block POTTED_CLOSED_EYEBLOSSOM = REGISTRY.register(new Block(1103, "potted_closed_eyeblossom", false, 27944, 27944, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block POINTED_DRIPSTONE = REGISTRY.register(new Block(1103, "pointed_dripstone", true, 27533, 27552, 48, BlockOffsetType.XZ, 0.125f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
 
-    public static final Block FIREFLY_BUSH = REGISTRY.register(new Block(1104, "firefly_bush", false, 27945, 27945, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+    public static final Block DRIPSTONE_BLOCK = REGISTRY.register(new Block(1104, "dripstone_block", true, 27553, 27553, 48, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block CAVE_VINES = REGISTRY.register(new Block(1105, "cave_vines", false, 27554, 27605, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
+
+    public static final Block CAVE_VINES_PLANT = REGISTRY.register(new Block(1106, "cave_vines_plant", false, 27606, 27607, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, EnumSet.of(BlockTags.CLIMBABLE)));
+
+    public static final Block SPORE_BLOSSOM = REGISTRY.register(new Block(1107, "spore_blossom", false, 27608, 27608, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block AZALEA = REGISTRY.register(new Block(1108, "azalea", false, 27609, 27609, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block FLOWERING_AZALEA = REGISTRY.register(new Block(1109, "flowering_azalea", false, 27610, 27610, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block MOSS_CARPET = REGISTRY.register(new Block(1110, "moss_carpet", false, 27611, 27611, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+
+    public static final Block PINK_PETALS = REGISTRY.register(new Block(1111, "pink_petals", false, 27612, 27627, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block WILDFLOWERS = REGISTRY.register(new Block(1112, "wildflowers", false, 27628, 27643, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block LEAF_LITTER = REGISTRY.register(new Block(1113, "leaf_litter", false, 27644, 27659, 26, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block MOSS_BLOCK = REGISTRY.register(new Block(1114, "moss_block", true, 27660, 27660, 27, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+
+    public static final Block BIG_DRIPLEAF = REGISTRY.register(new Block(1115, "big_dripleaf", false, 27661, 27692, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
+
+    public static final Block BIG_DRIPLEAF_STEM = REGISTRY.register(new Block(1116, "big_dripleaf_stem", false, 27693, 27700, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false, EnumSet.of(BlockTags.MINEABLE_WITH_AXE, BlockTags.SWORD_EFFICIENT)));
+
+    public static final Block SMALL_DRIPLEAF = REGISTRY.register(new Block(1117, "small_dripleaf", false, 27701, 27716, 7, BlockOffsetType.XYZ, 0.25f, 0.1f, 0.0f, false));
+
+    public static final Block HANGING_ROOTS = REGISTRY.register(new Block(1118, "hanging_roots", false, 27717, 27718, 10, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block ROOTED_DIRT = REGISTRY.register(new Block(1119, "rooted_dirt", true, 27719, 27719, 10, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+
+    public static final Block MUD = REGISTRY.register(new Block(1120, "mud", true, 27720, 27720, 45, BlockOffsetType.NONE, 0.25f, 0.2f, 0.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_SHOVEL)));
+
+    public static final Block DEEPSLATE = REGISTRY.register(new Block(1121, "deepslate", true, 27721, 27723, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block COBBLED_DEEPSLATE = REGISTRY.register(new Block(1122, "cobbled_deepslate", true, 27724, 27724, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block COBBLED_DEEPSLATE_STAIRS = REGISTRY.register(new Block(1123, "cobbled_deepslate_stairs", true, 27725, 27804, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block COBBLED_DEEPSLATE_SLAB = REGISTRY.register(new Block(1124, "cobbled_deepslate_slab", true, 27805, 27810, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block COBBLED_DEEPSLATE_WALL = REGISTRY.register(new Block(1125, "cobbled_deepslate_wall", true, 27811, 28134, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block POLISHED_DEEPSLATE = REGISTRY.register(new Block(1126, "polished_deepslate", true, 28135, 28135, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block POLISHED_DEEPSLATE_STAIRS = REGISTRY.register(new Block(1127, "polished_deepslate_stairs", true, 28136, 28215, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block POLISHED_DEEPSLATE_SLAB = REGISTRY.register(new Block(1128, "polished_deepslate_slab", true, 28216, 28221, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block POLISHED_DEEPSLATE_WALL = REGISTRY.register(new Block(1129, "polished_deepslate_wall", true, 28222, 28545, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block DEEPSLATE_TILES = REGISTRY.register(new Block(1130, "deepslate_tiles", true, 28546, 28546, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block DEEPSLATE_TILE_STAIRS = REGISTRY.register(new Block(1131, "deepslate_tile_stairs", true, 28547, 28626, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block DEEPSLATE_TILE_SLAB = REGISTRY.register(new Block(1132, "deepslate_tile_slab", true, 28627, 28632, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block DEEPSLATE_TILE_WALL = REGISTRY.register(new Block(1133, "deepslate_tile_wall", true, 28633, 28956, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block DEEPSLATE_BRICKS = REGISTRY.register(new Block(1134, "deepslate_bricks", true, 28957, 28957, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block DEEPSLATE_BRICK_STAIRS = REGISTRY.register(new Block(1135, "deepslate_brick_stairs", true, 28958, 29037, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block DEEPSLATE_BRICK_SLAB = REGISTRY.register(new Block(1136, "deepslate_brick_slab", true, 29038, 29043, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block DEEPSLATE_BRICK_WALL = REGISTRY.register(new Block(1137, "deepslate_brick_wall", true, 29044, 29367, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block CHISELED_DEEPSLATE = REGISTRY.register(new Block(1138, "chiseled_deepslate", true, 29368, 29368, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block CRACKED_DEEPSLATE_BRICKS = REGISTRY.register(new Block(1139, "cracked_deepslate_bricks", true, 29369, 29369, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block CRACKED_DEEPSLATE_TILES = REGISTRY.register(new Block(1140, "cracked_deepslate_tiles", true, 29370, 29370, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 3.5f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block INFESTED_DEEPSLATE = REGISTRY.register(new Block(1141, "infested_deepslate", true, 29371, 29373, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block SMOOTH_BASALT = REGISTRY.register(new Block(1142, "smooth_basalt", true, 29374, 29374, 29, BlockOffsetType.NONE, 0.25f, 0.2f, 1.25f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block RAW_IRON_BLOCK = REGISTRY.register(new Block(1143, "raw_iron_block", true, 29375, 29375, 60, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+
+    public static final Block RAW_COPPER_BLOCK = REGISTRY.register(new Block(1144, "raw_copper_block", true, 29376, 29376, 15, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL)));
+
+    public static final Block RAW_GOLD_BLOCK = REGISTRY.register(new Block(1145, "raw_gold_block", true, 29377, 29377, 30, BlockOffsetType.NONE, 0.25f, 0.2f, 5.0f, true, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_IRON_TOOL)));
+
+    public static final Block POTTED_AZALEA_BUSH = REGISTRY.register(new Block(1146, "potted_azalea_bush", false, 29378, 29378, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block POTTED_FLOWERING_AZALEA_BUSH = REGISTRY.register(new Block(1147, "potted_flowering_azalea_bush", false, 29379, 29379, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block OCHRE_FROGLIGHT = REGISTRY.register(new Block(1148, "ochre_froglight", true, 29380, 29382, 2, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+
+    public static final Block VERDANT_FROGLIGHT = REGISTRY.register(new Block(1149, "verdant_froglight", true, 29383, 29385, 61, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+
+    public static final Block PEARLESCENT_FROGLIGHT = REGISTRY.register(new Block(1150, "pearlescent_froglight", true, 29386, 29388, 20, BlockOffsetType.NONE, 0.25f, 0.2f, 0.3f, false));
+
+    public static final Block FROGSPAWN = REGISTRY.register(new Block(1151, "frogspawn", false, 29389, 29389, 12, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block REINFORCED_DEEPSLATE = REGISTRY.register(new Block(1152, "reinforced_deepslate", true, 29390, 29390, 59, BlockOffsetType.NONE, 0.25f, 0.2f, 55.0f, false));
+
+    public static final Block DECORATED_POT = REGISTRY.register(new Block(1153, "decorated_pot", true, 29391, 29406, 50, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false, BlockEntityType.DECORATED_POT));
+
+    public static final Block CRAFTER = REGISTRY.register(new Block(1154, "crafter", true, 29407, 29454, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 1.5f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE, BlockTags.NEEDS_STONE_TOOL), BlockEntityType.CRAFTER));
+
+    public static final Block TRIAL_SPAWNER = REGISTRY.register(new Block(1155, "trial_spawner", true, 29455, 29466, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 50.0f, false, BlockEntityType.TRIAL_SPAWNER));
+
+    public static final Block VAULT = REGISTRY.register(new Block(1156, "vault", true, 29467, 29498, 11, BlockOffsetType.NONE, 0.25f, 0.2f, 50.0f, false, BlockEntityType.VAULT));
+
+    public static final Block HEAVY_CORE = REGISTRY.register(new Block(1157, "heavy_core", false, 29499, 29500, 6, BlockOffsetType.NONE, 0.25f, 0.2f, 10.0f, false, EnumSet.of(BlockTags.MINEABLE_WITH_PICKAXE)));
+
+    public static final Block PALE_MOSS_BLOCK = REGISTRY.register(new Block(1158, "pale_moss_block", true, 29501, 29501, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+
+    public static final Block PALE_MOSS_CARPET = REGISTRY.register(new Block(1159, "pale_moss_carpet", false, 29502, 29663, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.1f, false, EnumSet.of(BlockTags.MINEABLE_WITH_HOE)));
+
+    public static final Block PALE_HANGING_MOSS = REGISTRY.register(new Block(1160, "pale_hanging_moss", false, 29664, 29665, 22, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block OPEN_EYEBLOSSOM = REGISTRY.register(new Block(1161, "open_eyeblossom", false, 29666, 29666, 15, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block CLOSED_EYEBLOSSOM = REGISTRY.register(new Block(1162, "closed_eyeblossom", false, 29667, 29667, 6, BlockOffsetType.XZ, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block POTTED_OPEN_EYEBLOSSOM = REGISTRY.register(new Block(1163, "potted_open_eyeblossom", false, 29668, 29668, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block POTTED_CLOSED_EYEBLOSSOM = REGISTRY.register(new Block(1164, "potted_closed_eyeblossom", false, 29669, 29669, 0, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
+
+    public static final Block FIREFLY_BUSH = REGISTRY.register(new Block(1165, "firefly_bush", false, 29670, 29670, 7, BlockOffsetType.NONE, 0.25f, 0.2f, 0.0f, false));
 }

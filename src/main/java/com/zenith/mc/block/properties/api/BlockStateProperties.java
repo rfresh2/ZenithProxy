@@ -67,6 +67,7 @@ public class BlockStateProperties {
     public static final EnumProperty<RedstoneSide> WEST_REDSTONE = EnumProperty.create("west", RedstoneSide.class);
     public static final EnumProperty<DoubleBlockHalf> DOUBLE_BLOCK_HALF = EnumProperty.create("half", DoubleBlockHalf.class);
     public static final EnumProperty<Half> HALF = EnumProperty.create("half", Half.class);
+    public static final EnumProperty<SideChainPart> SIDE_CHAIN_PART = EnumProperty.create("side_chain", SideChainPart.class);
     public static final EnumProperty<RailShape> RAIL_SHAPE = EnumProperty.create("shape", RailShape.class);
     public static final EnumProperty<RailShape> RAIL_SHAPE_STRAIGHT = EnumProperty.create(
         "shape",
@@ -119,12 +120,12 @@ public class BlockStateProperties {
     public static final EnumProperty<Direction> VERTICAL_DIRECTION = EnumProperty.create("vertical_direction", Direction.class, Direction.UP, Direction.DOWN);
     public static final EnumProperty<DripstoneThickness> DRIPSTONE_THICKNESS = EnumProperty.create("thickness", DripstoneThickness.class);
     public static final EnumProperty<SculkSensorPhase> SCULK_SENSOR_PHASE = EnumProperty.create("sculk_sensor_phase", SculkSensorPhase.class);
-    public static final BooleanProperty CHISELED_BOOKSHELF_SLOT_0_OCCUPIED = BooleanProperty.create("slot_0_occupied");
-    public static final BooleanProperty CHISELED_BOOKSHELF_SLOT_1_OCCUPIED = BooleanProperty.create("slot_1_occupied");
-    public static final BooleanProperty CHISELED_BOOKSHELF_SLOT_2_OCCUPIED = BooleanProperty.create("slot_2_occupied");
-    public static final BooleanProperty CHISELED_BOOKSHELF_SLOT_3_OCCUPIED = BooleanProperty.create("slot_3_occupied");
-    public static final BooleanProperty CHISELED_BOOKSHELF_SLOT_4_OCCUPIED = BooleanProperty.create("slot_4_occupied");
-    public static final BooleanProperty CHISELED_BOOKSHELF_SLOT_5_OCCUPIED = BooleanProperty.create("slot_5_occupied");
+    public static final BooleanProperty SLOT_0_OCCUPIED = BooleanProperty.create("slot_0_occupied");
+    public static final BooleanProperty SLOT_1_OCCUPIED = BooleanProperty.create("slot_1_occupied");
+    public static final BooleanProperty SLOT_2_OCCUPIED = BooleanProperty.create("slot_2_occupied");
+    public static final BooleanProperty SLOT_3_OCCUPIED = BooleanProperty.create("slot_3_occupied");
+    public static final BooleanProperty SLOT_4_OCCUPIED = BooleanProperty.create("slot_4_occupied");
+    public static final BooleanProperty SLOT_5_OCCUPIED = BooleanProperty.create("slot_5_occupied");
     public static final IntegerProperty DUSTED = IntegerProperty.create("dusted", 0, 3);
     public static final BooleanProperty CRACKED = BooleanProperty.create("cracked");
     public static final BooleanProperty CRAFTING = BooleanProperty.create("crafting");
@@ -134,4 +135,5 @@ public class BlockStateProperties {
     public static final BooleanProperty OMINOUS = BooleanProperty.create("ominous");
     public static final EnumProperty<TestBlockMode> TEST_BLOCK_MODE = EnumProperty.create("mode", TestBlockMode.class);
     public static final BooleanProperty MAP = BooleanProperty.create("map");
+    public static final EnumProperty<CopperGolemStatueBlockPose> COPPER_GOLEM_POSE = EnumProperty.create("copper_golem_pose", CopperGolemStatueBlockPose.class);
 }

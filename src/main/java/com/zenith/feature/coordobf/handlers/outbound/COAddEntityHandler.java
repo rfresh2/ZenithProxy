@@ -34,11 +34,10 @@ public class COAddEntityHandler implements PacketHandler<ClientboundAddEntityPac
             coordObf.getCoordOffset(session).offsetX(packet.getX()),
             packet.getY(),
             coordObf.getCoordOffset(session).offsetZ(packet.getZ()),
+            packet.getMovement(),
             packet.getYaw(),
             packet.getHeadYaw(),
-            packet.getPitch(),
-            packet.getMotionX(),
-            packet.getMotionY(),
-            packet.getMotionZ());
+            packet.getPitch()
+        );
     }
 }

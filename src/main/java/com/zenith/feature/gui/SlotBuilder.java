@@ -6,6 +6,7 @@ import com.zenith.mc.item.ItemData;
 import com.zenith.mc.item.ItemRegistry;
 import net.kyori.adventure.text.Component;
 import org.geysermc.mcprotocollib.auth.GameProfile;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.ResolvableProfile;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentType;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentTypes;
@@ -66,7 +67,7 @@ public class SlotBuilder {
         profile.setProperties(List.of(
             new GameProfile.Property("textures", customTextureData)
         ));
-        dataComponent(DataComponentTypes.PROFILE, profile);
+        dataComponent(DataComponentTypes.PROFILE, new ResolvableProfile(profile));
         return this;
     }
 
@@ -79,10 +80,10 @@ public class SlotBuilder {
         var profileAndSkin = SessionServerApi.INSTANCE.getProfileAndSkin(uuid);
         if (profileAndSkin.isPresent()) {
             var profile = profileAndSkin.get();
-            dataComponent(DataComponentTypes.PROFILE, profile);
+            dataComponent(DataComponentTypes.PROFILE, new ResolvableProfile(profile));
         } else {
             SERVER_LOG.error("Failed getting player head skin for uuid: {}", uuid);
-            dataComponent(DataComponentTypes.PROFILE, new GameProfile(uuid, uuid.toString()));
+            dataComponent(DataComponentTypes.PROFILE, new ResolvableProfile(new GameProfile(uuid, uuid.toString())));
         }
         return this;
     }
