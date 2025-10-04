@@ -7,7 +7,8 @@
       "type": "boolean[]"
     },
     {
-      "type": "byte[]"
+      "type": "byte[]",
+      "serializable": true
     },
     {
       "type": "ch.qos.logback.classic.AsyncAppender",
@@ -658,6 +659,9 @@
           "parameterTypes": []
         }
       ]
+    },
+    {
+      "type": "com.pgvector.PGvector"
     },
     {
       "type": "com.sun.crypto.provider.AESCipher$General",
@@ -3954,6 +3958,9 @@
       ]
     },
     {
+      "type": "java.beans.Introspector"
+    },
+    {
       "type": "java.io.FileDescriptor",
       "jniAccessible": true,
       "fields": [
@@ -4043,6 +4050,7 @@
     },
     {
       "type": "java.lang.Double",
+      "serializable": true,
       "fields": [
         {
           "name": "TYPE"
@@ -4079,6 +4087,7 @@
     },
     {
       "type": "java.lang.Long",
+      "serializable": true,
       "fields": [
         {
           "name": "TYPE"
@@ -4087,6 +4096,10 @@
     },
     {
       "type": "java.lang.Long[]"
+    },
+    {
+      "type": "java.lang.Number",
+      "serializable": true
     },
     {
       "type": "java.lang.Object",
@@ -4180,6 +4193,7 @@
     },
     {
       "type": "java.lang.String",
+      "serializable": true,
       "fields": [
         {
           "name": "TYPE"
@@ -4535,19 +4549,32 @@
       ]
     },
     {
-      "type": "java.rmi.dgc.Lease"
+      "type": "java.rmi.dgc.Lease",
+      "serializable": true
     },
     {
-      "type": "java.rmi.dgc.VMID"
+      "type": "java.rmi.dgc.VMID",
+      "serializable": true
     },
     {
-      "type": "java.rmi.server.ObjID"
+      "type": "java.rmi.server.ObjID",
+      "serializable": true
     },
     {
-      "type": "java.rmi.server.ObjID[]"
+      "type": "java.rmi.server.ObjID[]",
+      "serializable": true
     },
     {
-      "type": "java.rmi.server.UID"
+      "type": "java.rmi.server.RemoteObject",
+      "serializable": true
+    },
+    {
+      "type": "java.rmi.server.RemoteStub",
+      "serializable": true
+    },
+    {
+      "type": "java.rmi.server.UID",
+      "serializable": true
     },
     {
       "type": "java.security.AccessController",
@@ -4785,6 +4812,10 @@
       "type": "java.util.RandomAccess"
     },
     {
+      "type": "java.util.TreeMap",
+      "serializable": true
+    },
+    {
       "type": "java.util.UUID",
       "allDeclaredFields": true
     },
@@ -4921,7 +4952,8 @@
       "type": "javax.management.NotificationEmitter"
     },
     {
-      "type": "javax.management.ObjectName"
+      "type": "javax.management.ObjectName",
+      "serializable": true
     },
     {
       "type": "javax.management.StandardEmitterMBean"
@@ -4930,10 +4962,26 @@
       "type": "javax.management.openmbean.CompositeData"
     },
     {
+      "type": "javax.management.openmbean.CompositeDataSupport",
+      "serializable": true
+    },
+    {
       "type": "javax.management.openmbean.CompositeData[]"
     },
     {
+      "type": "javax.management.openmbean.CompositeType",
+      "serializable": true
+    },
+    {
       "type": "javax.management.openmbean.OpenMBeanOperationInfoSupport"
+    },
+    {
+      "type": "javax.management.openmbean.OpenType",
+      "serializable": true
+    },
+    {
+      "type": "javax.management.openmbean.SimpleType",
+      "serializable": true
     },
     {
       "type": "javax.management.openmbean.TabularData"
@@ -4974,6 +5022,7 @@
     },
     {
       "type": "javax.management.remote.rmi.RMIConnectionImpl_Stub",
+      "serializable": true,
       "methods": [
         {
           "name": "<init>",
@@ -4999,6 +5048,7 @@
     },
     {
       "type": "javax.management.remote.rmi.RMIServerImpl_Stub",
+      "serializable": true,
       "methods": [
         {
           "name": "<init>",
@@ -7121,6 +7171,9 @@
       ]
     },
     {
+      "type": "reactor.netty.http.client.HttpClient"
+    },
+    {
       "type": "reactor.netty.http.client.WebsocketClientOperations",
       "fields": [
         {
@@ -8097,6 +8150,15 @@
     },
     {
       "type": "sun.util.resources.cldr.CalendarData"
+    },
+    {
+      "type": "sun.util.resources.cldr.TimeZoneNames"
+    },
+    {
+      "type": "sun.util.resources.cldr.TimeZoneNames_en"
+    },
+    {
+      "type": "sun.util.resources.cldr.TimeZoneNames_en_US"
     },
     {
       "type": {
