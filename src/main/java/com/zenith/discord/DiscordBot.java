@@ -243,6 +243,7 @@ public class DiscordBot {
     public void setBotNickname(final String nick) {
         if (!isRunning()) return;
         try {
+            if (nick.equals(mainChannel.getGuild().getSelfMember().getNickname())) return;
             mainChannel.getGuild().getSelfMember().modifyNickname(nick).complete();
         } catch (PermissionException e) {
             DISCORD_LOG.warn("Failed updating bot's nickname. Check that the bot has correct permissions: {}", e.getMessage());
