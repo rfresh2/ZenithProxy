@@ -331,9 +331,13 @@ public class DiscordBot {
             .orElse(false);
     }
 
-    public void updateBotInfo() {
+    public void updateBotNickname() {
         if (CONFIG.discord.manageNickname)
             DISCORD.setBotNickname(CONFIG.authentication.username + " | ZenithProxy");
+    }
+
+    public void updateBotInfo() {
+        updateBotNickname();
         if (CONFIG.discord.manageDescription)
             DISCORD.setBotDescription(
                 """

@@ -35,6 +35,7 @@ public class TPSCalculator {
     private void onTick(ClientTickEvent event) {
         if (!Proxy.getInstance().isOnlineForAtLeastDuration(Duration.ofSeconds(1))) return;
         var worldTimeData = CACHE.getChunkCache().getWorldTimeData();
+        if (worldTimeData == null) return;
         long lastUpdate = worldTimeData.getLastUpdate();
         if (prevWorldTimeUpdate == -1) {
             prevWorldTimeUpdate = lastUpdate;
