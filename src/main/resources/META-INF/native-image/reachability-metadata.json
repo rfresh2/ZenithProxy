@@ -1189,6 +1189,9 @@
       "type": "com.viaversion.viaversion.api.minecraft.item.data.SuspiciousStewEffect[]"
     },
     {
+      "type": "com.viaversion.viaversion.libs.fastutil.longs.Long2ObjectOpenHashMap"
+    },
+    {
       "type": "com.viaversion.viaversion.libs.flare.fastutil.Int2ObjectSyncMapImpl$ExpungingEntryImpl",
       "fields": [
         {
