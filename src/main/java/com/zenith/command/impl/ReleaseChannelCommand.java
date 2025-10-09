@@ -35,7 +35,8 @@ public class ReleaseChannelCommand extends Command {
         "1.21.4",
         "1.21.5",
         "1.21.7",
-        "1.21.8"
+        "1.21.8",
+        "1.21.10"
     );
 
     @Override
@@ -45,7 +46,7 @@ public class ReleaseChannelCommand extends Command {
             .category(CommandCategory.MANAGE)
             .description("""
             Configures the current AutoUpdater release channel.
-            
+
             The release channel is a combination of a platform (java or linux) and a Minecraft protocol version.
             """)
             .usageLines(
