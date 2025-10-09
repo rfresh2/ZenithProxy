@@ -71,6 +71,7 @@ dependencies {
     api("com.viaversion:vialoader:4.0.5")
     api("com.viaversion:viaversion:5.5.0")
     api("com.viaversion:viabackwards:5.5.0")
+    api("com.viaversion:viarewind:4.0.10")
     api("org.jline:jline:3.30.6")
     api("org.jline:jline-terminal-jni:3.30.6")
     api("ar.com.hjg:pngj:2.1.0")
