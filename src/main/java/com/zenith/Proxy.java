@@ -618,6 +618,9 @@ public class Proxy {
                 DISCORD.updateBotAvatar();
             });
         }
+        if (CONFIG.discord.manageNickname) {
+            EXECUTOR.execute(DISCORD::updateBotNickname);
+        }
         return minecraftProtocol;
     }
 

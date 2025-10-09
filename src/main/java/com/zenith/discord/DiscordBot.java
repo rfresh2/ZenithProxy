@@ -243,6 +243,7 @@ public class DiscordBot {
     public void setBotNickname(final String nick) {
         if (!isRunning()) return;
         try {
+            if (nick.equals(mainChannel.getGuild().getSelfMember().getNickname())) return;
             mainChannel.getGuild().getSelfMember().modifyNickname(nick).complete();
         } catch (PermissionException e) {
             DISCORD_LOG.warn("Failed updating bot's nickname. Check that the bot has correct permissions: {}", e.getMessage());
@@ -331,9 +332,13 @@ public class DiscordBot {
             .orElse(false);
     }
 
-    public void updateBotInfo() {
+    public void updateBotNickname() {
         if (CONFIG.discord.manageNickname)
             DISCORD.setBotNickname(CONFIG.authentication.username + " | ZenithProxy");
+    }
+
+    public void updateBotInfo() {
+        updateBotNickname();
         if (CONFIG.discord.manageDescription)
             DISCORD.setBotDescription(
                 """

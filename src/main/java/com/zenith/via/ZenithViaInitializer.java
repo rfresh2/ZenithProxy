@@ -2,6 +2,7 @@ package com.zenith.via;
 
 import com.viaversion.vialoader.ViaLoader;
 import com.viaversion.vialoader.impl.platform.ViaBackwardsPlatformImpl;
+import com.viaversion.vialoader.impl.platform.ViaRewindPlatformImpl;
 import com.viaversion.vialoader.netty.VLPipeline;
 import com.viaversion.vialoader.netty.ViaCodec;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
@@ -27,7 +28,8 @@ public class ZenithViaInitializer {
                 new ZenithViaLoader(),
                 null,
                 null,
-                ViaBackwardsPlatformImpl::new
+                ViaBackwardsPlatformImpl::new,
+                ViaRewindPlatformImpl::new
             );
         }
     }
