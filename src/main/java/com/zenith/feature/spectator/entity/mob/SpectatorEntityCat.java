@@ -5,7 +5,7 @@ import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTypes;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ObjectEntityMetadata;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.IntEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.data.game.level.sound.BuiltinSound;
 
@@ -16,7 +16,7 @@ public class SpectatorEntityCat extends SpectatorMob {
     @Override
     public ArrayList<EntityMetadata<?, ?>> getBaseEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
         return metadataListOf(
-            new ObjectEntityMetadata<>(19, MetadataTypes.CAT_VARIANT, (spectatorEntityId % 10))
+            new IntEntityMetadata(19, MetadataTypes.CAT_VARIANT, (spectatorEntityId % 10))
         );
     }
 

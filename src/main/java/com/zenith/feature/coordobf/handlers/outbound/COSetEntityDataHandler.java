@@ -1,6 +1,5 @@
 package com.zenith.feature.coordobf.handlers.outbound;
 
-import com.viaversion.nbt.mini.MNBT;
 import com.zenith.module.impl.CoordObfuscation;
 import com.zenith.network.codec.PacketHandler;
 import com.zenith.network.server.ServerSession;
@@ -26,32 +25,27 @@ public class COSetEntityDataHandler implements PacketHandler<ClientboundSetEntit
             .map(m -> {
                 if (m.getType() == MetadataTypes.BLOCK_POS) {
                     return new ObjectEntityMetadata<>(m.getId(),
-                                                      MetadataTypes.BLOCK_POS,
-                                                      coordObf.getCoordOffset(session).offsetVector((Vector3i) m.getValue()));
+                        MetadataTypes.BLOCK_POS,
+                        coordObf.getCoordOffset(session).offsetVector((Vector3i) m.getValue()));
                 } else if (m.getType() == MetadataTypes.OPTIONAL_BLOCK_POS) {
                     return new ObjectEntityMetadata<>(m.getId(),
-                                                      MetadataTypes.OPTIONAL_BLOCK_POS,
-                                                      ((Optional<Vector3i>) m.getValue()).map(p -> coordObf.getCoordOffset(session)
-                                                          .offsetVector(p)));
-                } else if (m.getType() == MetadataTypes.COMPOUND_TAG) {
-                    return new ObjectEntityMetadata<>(m.getId(),
-                                                      MetadataTypes.COMPOUND_TAG,
-                                                      coordObf.getCoordOffset(session)
-                                                          .offsetNbt((MNBT) m.getValue()));
+                        MetadataTypes.OPTIONAL_BLOCK_POS,
+                        ((Optional<Vector3i>) m.getValue()).map(p -> coordObf.getCoordOffset(session)
+                            .offsetVector(p)));
                 } else if (m.getType() == MetadataTypes.OPTIONAL_GLOBAL_POS) {
                     return new ObjectEntityMetadata<>(m.getId(),
-                                                      MetadataTypes.OPTIONAL_GLOBAL_POS,
-                                                      ((Optional<GlobalPos>) m.getValue())
-                                                          .map(globalPos ->
-                                                                   new GlobalPos(
-                                                                       globalPos.getDimension(),
-                                                                       coordObf.getCoordOffset(session)
-                                                                           .offsetX(globalPos.getX()),
-                                                                       globalPos.getY(),
-                                                                       coordObf.getCoordOffset(session)
-                                                                           .offsetZ(globalPos.getZ())
-                                                                   )
-                                                          )
+                        MetadataTypes.OPTIONAL_GLOBAL_POS,
+                        ((Optional<GlobalPos>) m.getValue())
+                            .map(globalPos ->
+                                new GlobalPos(
+                                    globalPos.getDimension(),
+                                    coordObf.getCoordOffset(session)
+                                        .offsetX(globalPos.getX()),
+                                    globalPos.getY(),
+                                    coordObf.getCoordOffset(session)
+                                        .offsetZ(globalPos.getZ())
+                                )
+                            )
                     );
                 }
                 return m;

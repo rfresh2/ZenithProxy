@@ -26,8 +26,6 @@
 package com.zenith.mc.item.hashing;
 
 import com.google.common.hash.HashCode;
-import com.viaversion.nbt.io.MNBTIO;
-import com.viaversion.nbt.tag.CompoundTag;
 import com.zenith.mc.DynamicRegistry;
 import com.zenith.mc.Registry;
 import com.zenith.mc.block.BlockRegistry;
@@ -324,10 +322,10 @@ public interface RegistryHasher<DirectType> extends MinecraftHasher<Integer> {
         .optional("has_trail", BOOL, Fireworks.FireworkExplosion::isHasTrail, false)
         .optional("has_twinkle", BOOL, Fireworks.FireworkExplosion::isHasTwinkle, false));
 
-    MinecraftHasher<BeehiveOccupant> BEEHIVE_OCCUPANT = MinecraftHasher.mapBuilder(builder -> builder
-        .optional("entity_data", MNBT, BeehiveOccupant::getEntityData, MNBTIO.write(new CompoundTag(), false))
-        .accept("ticks_in_hive", INT, BeehiveOccupant::getTicksInHive)
-        .accept("min_ticks_in_hive", INT, BeehiveOccupant::getMinTicksInHive));
+//    MinecraftHasher<BeehiveOccupant> BEEHIVE_OCCUPANT = MinecraftHasher.mapBuilder(builder -> builder
+//        .optional("entity_data", MNBT, BeehiveOccupant::getEntityData, MNBTIO.write(new CompoundTag(), false))
+//        .accept("ticks_in_hive", INT, BeehiveOccupant::getTicksInHive)
+//        .accept("min_ticks_in_hive", INT, BeehiveOccupant::getMinTicksInHive));
 
 
     /**

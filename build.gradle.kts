@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.zenith"
-version = "1.21.9"
+version = "1.21.10"
 
 val javaReleaseVersion = 21
 val javaVersion = JavaLanguageVersion.of(25)
@@ -26,7 +26,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.9.1"
+val mcplVersion = "1.21.10.4"
 dependencies {
     api("com.github.rfresh2:JDA:6.0.19") {
         exclude(group = "club.minnced")

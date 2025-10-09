@@ -33,10 +33,7 @@ import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.*;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundClientInformationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundKeepAlivePacket;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundPongPacket;
-import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundFinishConfigurationPacket;
-import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundRegistryDataPacket;
-import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundSelectKnownPacks;
-import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundUpdateEnabledFeaturesPacket;
+import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.*;
 import org.geysermc.mcprotocollib.protocol.packet.configuration.serverbound.ServerboundFinishConfigurationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.handshake.serverbound.ClientIntentionPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.*;
@@ -133,6 +130,7 @@ public final class PacketCodecRegistries {
                 .inbound(ClientboundStoreCookiePacket.class, new CStoreCookieHandler())
                 .inbound(ClientboundCookieRequestPacket.class, new CCookieRequestHandler())
                 .inbound(ClientboundTransferPacket.class, new CTransferHandler())
+                .inbound(ClientboundCodeOfConductPacket.class, new CodeOfConductHandler())
                 .postOutbound(ServerboundFinishConfigurationPacket.class, new PostOutgoingFinishConfigurationHandler())
                 .build())
             .state(ProtocolState.GAME, PacketHandlerStateCodec.clientBuilder()
