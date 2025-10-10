@@ -3015,6 +3015,34 @@
       ]
     },
     {
+      "type": "com.zenith.util.config.Config$Server$ChatSigning",
+      "fields": [
+        {
+          "name": "mode"
+        }
+      ],
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.util.config.Config$Server$ChatSigning$ChatSigningMode",
+      "fields": [
+        {
+          "name": "DISGUISED"
+        },
+        {
+          "name": "PASSTHROUGH"
+        },
+        {
+          "name": "SYSTEM"
+        }
+      ]
+    },
+    {
       "type": "com.zenith.util.config.Config$Server$Extra",
       "allDeclaredFields": true,
       "methods": [

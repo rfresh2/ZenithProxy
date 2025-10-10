@@ -17,9 +17,7 @@ import com.zenith.network.server.handler.player.incoming.*;
 import com.zenith.network.server.handler.player.outgoing.ClientCommandsOutgoingHandler;
 import com.zenith.network.server.handler.player.postoutgoing.LoginPostHandler;
 import com.zenith.network.server.handler.shared.incoming.*;
-import com.zenith.network.server.handler.shared.outgoing.KeepAliveOutgoingHandler;
-import com.zenith.network.server.handler.shared.outgoing.SLoginFinishedOutgoingHandler;
-import com.zenith.network.server.handler.shared.outgoing.ServerTablistDataOutgoingHandler;
+import com.zenith.network.server.handler.shared.outgoing.*;
 import com.zenith.network.server.handler.shared.postoutgoing.*;
 import com.zenith.network.server.handler.spectator.incoming.*;
 import com.zenith.network.server.handler.spectator.incoming.movement.PlayerPositionRotationSpectatorHandler;
@@ -318,9 +316,12 @@ public final class PacketCodecRegistries {
                 .inbound(ServerboundPingRequestPacket.class, PingRequestHandler.INSTANCE)
                 .inbound(ServerboundPongPacket.class, new PongHandler())
                 .inbound(ServerboundClientInformationPacket.class, SClientInformationHandler.INSTANCE)
+                .inbound(ServerboundChatSessionUpdatePacket.class, new SChatSessionUpdateHandler())
                 .postOutbound(ClientboundPingPacket.class, new PingPostOutgoingHandler())
                 .outbound(ClientboundTabListPacket.class, new ServerTablistDataOutgoingHandler())
                 .outbound(ClientboundKeepAlivePacket.class, KeepAliveOutgoingHandler.INSTANCE)
+                .outbound(ClientboundPlayerChatPacket.class, new SPlayerChatOutgoingHandler())
+                .outbound(ClientboundDeleteChatPacket.class, new SDeleteChatOutgoingHandler())
                 .postOutbound(ClientboundStartConfigurationPacket.class, new ClientStartConfigurationPostOutgoingHandler())
                 .postOutbound(ClientboundTransferPacket.class, new TransferPostOutgoingHandler())
                 .build())

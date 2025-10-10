@@ -657,6 +657,17 @@ public final class Config {
         public boolean injectTablistFooter = true;
         public boolean welcomeMessages = true;
         public boolean updateServerIcon = true;
+        public final ChatSigning chatSigning = new ChatSigning();
+
+        public static final class ChatSigning {
+            public ChatSigningMode mode = ChatSigningMode.DISGUISED;
+
+            public enum ChatSigningMode {
+                PASSTHROUGH,
+                DISGUISED,
+                SYSTEM
+            }
+        }
 
         public static final class PacketRateLimiter {
             public boolean enabled = true;
