@@ -4,8 +4,6 @@ import com.github.rfresh2.EventConsumer;
 import lombok.Data;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zenith.Globals.EVENT_BUS;
@@ -15,7 +13,7 @@ import static com.zenith.Globals.EVENT_BUS;
  */
 @Data
 @ApiStatus.Experimental
-public class EventCondition implements Condition, Closeable {
+public class EventCondition implements Condition {
     private AtomicBoolean triggered = new AtomicBoolean(false);
     private final Class<?> event;
 
@@ -34,7 +32,7 @@ public class EventCondition implements Condition, Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         EVENT_BUS.unsubscribe(this);
     }
 }

@@ -3,6 +3,8 @@ package com.zenith.feature.tasks;
 import lombok.Data;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.io.Closeable;
+
 /**
  * A task that consists of an {@link Action}, a {@link Condition}, and a {@link Continuation}.
  * The task executes the {@link Action} when the {@link Condition} is met.
@@ -10,7 +12,7 @@ import org.jetbrains.annotations.ApiStatus;
  */
 @Data
 @ApiStatus.Experimental
-public class Task {
+public class Task implements Closeable {
     private final String id;
     private final Action action;
     private final Condition condition;
@@ -26,5 +28,12 @@ public class Task {
             executed = true;
         }
         return continuation.shouldContinue(executed);
+    }
+
+    @Override
+    public void close() {
+        action.close();
+        condition.close();
+        continuation.close();
     }
 }

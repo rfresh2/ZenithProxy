@@ -61,8 +61,14 @@ public class Tasks extends Module {
                 error("Error while executing scheduled task {}", task.getId(), e);
                 remove = true;
             }
-            if (remove)
+            if (remove) {
                 it.remove();
+                try {
+                    task.close();
+                } catch (Exception e) {
+                    error("Error while closing scheduled task {}", task.getId(), e);
+                }
+            }
         }
     }
 }
