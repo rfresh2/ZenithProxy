@@ -10,6 +10,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.zenith.Globals.EVENT_BUS;
 
+/**
+ * A condition that is met when a specific event is fired.
+ */
 @Data
 @ApiStatus.Experimental
 public class EventCondition implements Condition, Closeable {

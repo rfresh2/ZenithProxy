@@ -5,7 +5,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 @Data
 @ApiStatus.Experimental
-public class ContinuationDuration implements Continuation {
+public class DurationContinuation implements Continuation {
     private final long endTimeEpochMs;
 
     @Override

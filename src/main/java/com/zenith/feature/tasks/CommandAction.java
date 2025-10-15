@@ -10,6 +10,9 @@ import org.jetbrains.annotations.ApiStatus;
 
 import static com.zenith.Globals.*;
 
+/**
+ * An {@link Action} that executes a command.
+ */
 @Data
 @ApiStatus.Experimental
 public class CommandAction implements Action {

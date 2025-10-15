@@ -5,6 +5,9 @@ import com.zenith.util.timer.Timers;
 import lombok.Data;
 import org.jetbrains.annotations.ApiStatus;
 
+/**
+ * A {@link Condition} that is met after a specified delay.
+ */
 @Data
 @ApiStatus.Experimental
 public class TimedCondition implements Condition {
