@@ -1,7 +1,9 @@
 package com.zenith.module.api;
 
 import com.zenith.Proxy;
+import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandOutputHelper;
+import com.zenith.command.api.CommandSource;
 import com.zenith.discord.Embed;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.server.ServerSession;
@@ -126,5 +128,33 @@ public abstract class ModuleUtils {
 
     public void disconnect(ServerSession session, String minimessage) {
         session.disconnect(ComponentSerializer.minimessage("<red>" + moduleLogPrefix + "</red><gray>" + minimessage));
+    }
+
+    public void executeCommand(String command, boolean accountOwnerPerms) {
+        class ModuleCommandSource implements CommandSource {
+            @Override
+            public String name() {
+                return this.getClass().getSimpleName();
+            }
+            @Override
+            public boolean validateAccountOwner(final CommandContext ctx) {
+                return accountOwnerPerms;
+            }
+            @Override
+            public void logEmbed(final CommandContext ctx, final Embed embed) {
+                discordNotification(embed);
+            }
+        }
+        var ctx = CommandContext.create(command, new ModuleCommandSource());
+        COMMAND.execute(ctx);
+        if (!ctx.isNoOutput() && !ctx.getEmbed().isTitlePresent() && ctx.getMultiLineOutput().isEmpty()) {
+            CommandOutputHelper.logEmbedOutputToDiscord(Embed.builder()
+                .title("[" + this.getClass().getSimpleName() + " Command Error")
+                .addField("Error", "Unknown Command")
+                .addField("Command", "`" + command + "`"));
+            return;
+        }
+        CommandOutputHelper.logEmbedOutputToDiscord(ctx.getEmbed());
+        CommandOutputHelper.logMultiLineOutputToDiscord(ctx.getMultiLineOutput());
     }
 }
