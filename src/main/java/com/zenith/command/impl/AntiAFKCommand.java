@@ -1,6 +1,5 @@
 package com.zenith.command.impl;
 
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.api.Command;
 import com.zenith.command.api.CommandCategory;
@@ -9,9 +8,11 @@ import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.AntiAFK;
 
+import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.Globals.MODULE;
+import static com.zenith.command.brigadier.TimeArgument.time;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 
@@ -23,11 +24,11 @@ public class AntiAFKCommand extends Command {
             .category(CommandCategory.MODULE)
             .description("""
             Configures the AntiAFK module.
-            
+
             To avoid being kicked on 2b2t the only required action is swing OR walk.
-            
+
             The walk action will move the player roughly in a square shape. To avoid falling down any ledges, enable safeWalk
-            
+
             For delay settings, 1 tick = 50ms
             """)
             .usageLines(
@@ -69,8 +70,8 @@ public class AntiAFKCommand extends Command {
                         .title("Rotate " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.rotate));
                     return OK;
                 }))
-                .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
-                    CONFIG.client.extra.antiafk.actions.rotateDelayTicks = IntegerArgumentType.getInteger(c, "delay");
+                .then(literal("delay").then(argument("delay", time(1, 50000)).executes(c -> {
+                    CONFIG.client.extra.antiafk.actions.rotateDelayTicks = getInteger(c, "delay");
                     c.getSource().getEmbed()
                         .title("Rotate Delay Set!");
                     return OK;
@@ -82,8 +83,8 @@ public class AntiAFKCommand extends Command {
                         .title("Swing " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.swingHand));
                     return OK;
                 }))
-                .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
-                    CONFIG.client.extra.antiafk.actions.swingDelayTicks = IntegerArgumentType.getInteger(c, "delay");
+                .then(literal("delay").then(argument("delay", time(1, 50000)).executes(c -> {
+                    CONFIG.client.extra.antiafk.actions.swingDelayTicks = getInteger(c, "delay");
                     c.getSource().getEmbed()
                         .title("Swing Delay Set!");
                     return OK;
@@ -95,8 +96,8 @@ public class AntiAFKCommand extends Command {
                         .title("Walk " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.walk));
                     return OK;
                 }))
-                .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
-                    CONFIG.client.extra.antiafk.actions.walkDelayTicks = IntegerArgumentType.getInteger(c, "delay");
+                .then(literal("delay").then(argument("delay", time(1, 50000)).executes(c -> {
+                    CONFIG.client.extra.antiafk.actions.walkDelayTicks = getInteger(c, "delay");
                     c.getSource().getEmbed()
                         .title("Walk Delay Set!");
                     return OK;
@@ -110,7 +111,7 @@ public class AntiAFKCommand extends Command {
                 })))
             .then(literal("walkDistance")
                 .then(argument("walkdist", integer(1)).executes(c -> {
-                    CONFIG.client.extra.antiafk.actions.walkDistance = IntegerArgumentType.getInteger(c, "walkdist");
+                    CONFIG.client.extra.antiafk.actions.walkDistance = getInteger(c, "walkdist");
                     c.getSource().getEmbed()
                         .title("Walk Distance Set!");
                     return OK;
@@ -128,8 +129,8 @@ public class AntiAFKCommand extends Command {
                         .title("Jump Only In Water " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.jumpOnlyInWater));
                     return OK;
                 })))
-                .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
-                    CONFIG.client.extra.antiafk.actions.jumpDelayTicks = IntegerArgumentType.getInteger(c, "delay");
+                .then(literal("delay").then(argument("delay", time(1, 50000)).executes(c -> {
+                    CONFIG.client.extra.antiafk.actions.jumpDelayTicks = getInteger(c, "delay");
                     c.getSource().getEmbed()
                         .title("Jump Delay Set!");
                     return OK;
@@ -141,8 +142,8 @@ public class AntiAFKCommand extends Command {
                         .title("Sneak " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.sneak));
                     return OK;
                 }))
-                .then(literal("delay").then(argument("delay", integer(1, 50000)).executes(c -> {
-                    CONFIG.client.extra.antiafk.actions.sneakDelayTicks = IntegerArgumentType.getInteger(c, "delay");
+                .then(literal("delay").then(argument("delay", time(1, 50000)).executes(c -> {
+                    CONFIG.client.extra.antiafk.actions.sneakDelayTicks = getInteger(c, "delay");
                     c.getSource().getEmbed()
                         .title("Sneak Delay Set!");
                 }))));

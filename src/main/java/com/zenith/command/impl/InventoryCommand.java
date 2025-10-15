@@ -23,6 +23,7 @@ import java.util.List;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Globals.*;
+import static com.zenith.command.brigadier.TimeArgument.time;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 
@@ -351,7 +352,7 @@ public class InventoryCommand extends Command {
                 }
                 return OK;
             })))
-            .then(literal("actionDelayTicks").then(argument("ticks", integer(0, 100)).executes(c -> {
+            .then(literal("actionDelayTicks").then(argument("ticks", time(0, 100)).executes(c -> {
                 CONFIG.client.inventory.actionDelayTicks = getInteger(c, "ticks");
                 settingsEmbed(c.getSource().getEmbed()
                     .title("Action Delay Ticks Set"));

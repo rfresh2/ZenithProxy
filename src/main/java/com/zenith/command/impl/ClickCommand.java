@@ -20,6 +20,7 @@ import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.Globals.INPUTS;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
+import static com.zenith.command.brigadier.TimeArgument.time;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 
@@ -208,7 +209,7 @@ public class ClickCommand extends Command {
                             .primaryColor();
                         return OK;
                     }))
-                    .then(literal("interval").then(argument("ticks", integer(0, 100)).executes(c -> {
+                    .then(literal("interval").then(argument("ticks", time(0, 100)).executes(c -> {
                         CONFIG.client.extra.click.holdRightClickInterval = getInteger(c, "ticks");
                         c.getSource().getEmbed()
                             .title("Right Click Hold Interval Set")
