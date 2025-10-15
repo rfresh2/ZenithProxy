@@ -33,12 +33,12 @@ public class ActiveHoursCommand extends Command {
             .category(CommandCategory.MODULE)
             .description("""
             Set times for ZenithProxy to automatically connect at.
-            
+
             By default, 2b2t's queue wait ETA is used to determine when to log in.
             The connect will occur when the current time plus the ETA is equal to a time set.
-            
+
             If Queue ETA calc is disabled, connects will occur exactly at the set times instead.
-            
+
              Time zone Ids ("TZ Identifier" column): https://w.wiki/A2fd
              Time format: hh:mm, Examples: 1:42, 14:42, 14:01
             """)
@@ -50,9 +50,6 @@ public class ActiveHoursCommand extends Command {
                 "whilePlayerConnected on/off",
                 "queueEtaCalc on/off",
                 "fullSessionUntilNextDisconnect on/off"
-            )
-            .aliases(
-                "schedule"
             )
             .build();
     }

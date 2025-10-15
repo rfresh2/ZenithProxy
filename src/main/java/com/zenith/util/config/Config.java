@@ -159,6 +159,11 @@ public final class Config {
             public final AutoDrop autoDrop = new AutoDrop();
             public String whisperCommand = "msg";
             public int tpsBufferSize = 20;
+            public final Tasks tasks = new Tasks();
+
+            public static final class Tasks {
+                public boolean enabled = true;
+            }
 
             public static final class Waypoints {
                 public ArrayList<Waypoint> waypoints = new ArrayList<>();

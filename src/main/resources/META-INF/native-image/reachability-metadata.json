@@ -2713,6 +2713,20 @@
       ]
     },
     {
+      "type": "com.zenith.util.config.Config$Client$Extra$Tasks",
+      "fields": [
+        {
+          "name": "enabled"
+        }
+      ],
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "com.zenith.util.config.Config$Client$Extra$Utility",
       "allDeclaredFields": true,
       "methods": [
