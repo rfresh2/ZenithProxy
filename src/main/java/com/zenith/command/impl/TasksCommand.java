@@ -1,22 +1,20 @@
 package com.zenith.command.impl;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.ImmutableBiMap;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.zenith.command.api.Command;
 import com.zenith.command.api.CommandCategory;
 import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandUsage;
 import com.zenith.event.client.ClientConnectEvent;
+import com.zenith.event.client.ClientDeathEvent;
 import com.zenith.event.client.ClientDisconnectEvent;
+import com.zenith.event.client.ClientOnlineEvent;
 import com.zenith.event.player.PlayerConnectedEvent;
 import com.zenith.event.player.PlayerDisconnectedEvent;
-import com.zenith.event.player.SpectatorConnectedEvent;
-import com.zenith.event.player.SpectatorDisconnectedEvent;
-import com.zenith.event.queue.QueueCompleteEvent;
-import com.zenith.event.queue.QueueStartEvent;
 import com.zenith.feature.tasks.*;
 import com.zenith.module.impl.Tasks;
-
-import java.util.Map;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
@@ -27,15 +25,13 @@ import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChar
 import static com.zenith.command.brigadier.TimeArgument.time;
 
 public class TasksCommand extends Command {
-    private static final Map<String, Class<?>> EVENT_MAP = Map.of(
+    private static final BiMap<String, Class<?>> EVENT_MAP = ImmutableBiMap.of(
         "connect", ClientConnectEvent.class,
+        "death", ClientDeathEvent.class,
         "disconnect", ClientDisconnectEvent.class,
+        "online", ClientOnlineEvent.class,
         "playerConnect", PlayerConnectedEvent.class,
-        "playerDisconnect", PlayerDisconnectedEvent.class,
-        "spectatorConnect", SpectatorConnectedEvent.class,
-        "spectatorDisconnect", SpectatorDisconnectedEvent.class,
-        "queueStart", QueueStartEvent.class,
-        "queueComplete", QueueCompleteEvent.class
+        "playerDisconnect", PlayerDisconnectedEvent.class
     );
 
     @Override
@@ -52,7 +48,7 @@ public class TasksCommand extends Command {
                 """)
             .usageLines(
                 "add timed <repeat/once> <id> <delay> <command>",
-                "add event <repeat/once> <id> <event> <command>",
+                "add event <repeat/once> <id> <" + String.join("/", EVENT_MAP.keySet().stream().sorted().toList()) + "> <command>",
                 "del <id>",
                 "list",
                 "clear"
@@ -135,7 +131,7 @@ public class TasksCommand extends Command {
                         .addField("Task ID", task.getId())
                         .addField("Type", "Event")
                         .addField("Repeat", repeat)
-                        .addField("Event", eventId)
+                        .addField("Event", EVENT_MAP.inverse().get(eventClass))
                         .addField("Command", command);
                     return OK;
                 })))))))
