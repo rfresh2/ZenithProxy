@@ -70,7 +70,7 @@ public class AntiAFKCommand extends Command {
                         .title("Rotate " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.rotate));
                     return OK;
                 }))
-                .then(literal("delay").then(argument("delay", time(1, 50000)).executes(c -> {
+                .then(literal("delay").then(argument("delay", time(0, 50000)).executes(c -> {
                     CONFIG.client.extra.antiafk.actions.rotateDelayTicks = getInteger(c, "delay");
                     c.getSource().getEmbed()
                         .title("Rotate Delay Set!");
@@ -83,7 +83,7 @@ public class AntiAFKCommand extends Command {
                         .title("Swing " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.swingHand));
                     return OK;
                 }))
-                .then(literal("delay").then(argument("delay", time(1, 50000)).executes(c -> {
+                .then(literal("delay").then(argument("delay", time(0, 50000)).executes(c -> {
                     CONFIG.client.extra.antiafk.actions.swingDelayTicks = getInteger(c, "delay");
                     c.getSource().getEmbed()
                         .title("Swing Delay Set!");
@@ -96,7 +96,7 @@ public class AntiAFKCommand extends Command {
                         .title("Walk " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.walk));
                     return OK;
                 }))
-                .then(literal("delay").then(argument("delay", time(1, 50000)).executes(c -> {
+                .then(literal("delay").then(argument("delay", time(0, 50000)).executes(c -> {
                     CONFIG.client.extra.antiafk.actions.walkDelayTicks = getInteger(c, "delay");
                     c.getSource().getEmbed()
                         .title("Walk Delay Set!");
@@ -129,7 +129,7 @@ public class AntiAFKCommand extends Command {
                         .title("Jump Only In Water " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.jumpOnlyInWater));
                     return OK;
                 })))
-                .then(literal("delay").then(argument("delay", time(1, 50000)).executes(c -> {
+                .then(literal("delay").then(argument("delay", time(0, 50000)).executes(c -> {
                     CONFIG.client.extra.antiafk.actions.jumpDelayTicks = getInteger(c, "delay");
                     c.getSource().getEmbed()
                         .title("Jump Delay Set!");
@@ -142,7 +142,7 @@ public class AntiAFKCommand extends Command {
                         .title("Sneak " + toggleStrCaps(CONFIG.client.extra.antiafk.actions.sneak));
                     return OK;
                 }))
-                .then(literal("delay").then(argument("delay", time(1, 50000)).executes(c -> {
+                .then(literal("delay").then(argument("delay", time(0, 50000)).executes(c -> {
                     CONFIG.client.extra.antiafk.actions.sneakDelayTicks = getInteger(c, "delay");
                     c.getSource().getEmbed()
                         .title("Sneak Delay Set!");

@@ -76,7 +76,9 @@ public class AntiAFK extends Module {
     }
 
     private void sneakTick() {
-        if (sneakTimer.tick(100L)) {
+        if (CONFIG.client.extra.antiafk.actions.sneakDelayTicks <= 0) {
+            shouldSneak = true;
+        } else if (sneakTimer.tick(CONFIG.client.extra.antiafk.actions.sneakDelayTicks)) {
             shouldSneak = !shouldSneak;
         }
         if (shouldSneak) {
