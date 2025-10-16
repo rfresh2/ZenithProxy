@@ -86,13 +86,11 @@ public class TimeArgument implements SerializableArgumentType<Integer> {
     @Override
     public CompletableFuture<Suggestions> listSuggestions(com.mojang.brigadier.context.CommandContext context, SuggestionsBuilder builder) {
         StringReader stringReader = new StringReader(builder.getRemaining());
-
         try {
             stringReader.readFloat();
         } catch (CommandSyntaxException var5) {
             return builder.buildFuture();
         }
-
         return suggest(UNITS.keySet(), builder.createOffset(builder.getStart() + stringReader.getCursor()));
     }
 
