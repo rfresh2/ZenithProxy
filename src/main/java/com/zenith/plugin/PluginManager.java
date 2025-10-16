@@ -1,5 +1,6 @@
 package com.zenith.plugin;
 
+import com.zenith.Globals;
 import com.zenith.event.plugin.PluginLoadFailureEvent;
 import com.zenith.event.plugin.PluginLoadedEvent;
 import com.zenith.plugin.api.*;
@@ -8,7 +9,9 @@ import lombok.SneakyThrows;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -338,29 +341,9 @@ public class PluginManager {
 
     @SneakyThrows
     private <T> T loadPluginConfig(String fileName, Class<T> clazz, ConfigSerializer serializer) {
-        try {
-            PLUGIN_LOG.debug("Loading plugin config: {}", fileName);
-            File configFile = resolveConfigFile(fileName, serializer.fileExtension());
-            T config;
-            if (configFile.exists()) {
-                try (Reader reader = new FileReader(configFile)) {
-                    config = serializer.read(clazz, reader);
-                } catch (IOException e) {
-                    throw new RuntimeException("Unable to load plugin config: " + fileName, e);
-                }
-                PLUGIN_LOG.info("Plugin config: {} loaded.", fileName);
-            } else {
-                config = isKotlinObject(clazz)
-                    ? getKotlinObject(clazz)
-                    : clazz.getDeclaredConstructor().newInstance();
-                PLUGIN_LOG.info("Plugin config: {} not found, loaded default config", fileName);
-            }
-            return config;
-        } catch (final Throwable e) {
-            PLUGIN_LOG.error("Unable to load plugin config: {}", fileName, e);
-            PLUGIN_LOG.error("Config must be manually fixed or deleted");
-            throw e;
-        }
+        PLUGIN_LOG.debug("Loading plugin config: {}", fileName);
+        File configFile = resolveConfigFile(fileName, serializer.fileExtension());
+        return Globals.loadConfig(configFile, clazz, serializer);
     }
 
     private File resolveConfigFile(String fileName, String fileExtension) {

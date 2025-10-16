@@ -4,12 +4,10 @@ import com.github.rfresh2.EventConsumer;
 import com.zenith.event.module.TasksTickEvent;
 import com.zenith.feature.tasks.Task;
 import com.zenith.module.api.Module;
-import lombok.Getter;
+import lombok.Locked;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -17,7 +15,6 @@ import static com.zenith.Globals.*;
 
 @ApiStatus.Experimental
 public class Tasks extends Module {
-    @Getter private final Map<String, Task> tasks = new ConcurrentHashMap<>();
 
     public Tasks() {
         EXECUTOR.scheduleWithFixedDelay(Tasks::postTick, 50, 50, TimeUnit.MILLISECONDS);
@@ -38,20 +35,35 @@ public class Tasks extends Module {
         );
     }
 
+    @Locked
     public void addTask(Task task) {
-        tasks.put(task.getId(), task);
+        var existing = CONFIG.client.extra.tasks.tasks.get(task.getId());
+        if (existing == task) return;
+        if (existing != null) {
+            removeTask(task.getId());
+        }
+        CONFIG.client.extra.tasks.tasks.put(task.getId(), task);
     }
 
+    @Locked
     public void removeTask(String id) {
-        tasks.remove(id);
+        var task = CONFIG.client.extra.tasks.tasks.remove(id);
+        if (task != null) {
+            try {
+                task.close();
+            } catch (Exception e) {
+                error("Error while closing scheduled task {}", task.getId(), e);
+            }
+        }
     }
 
     private void onTasksTick(TasksTickEvent event) {
         processTasks();
     }
 
+    @Locked
     private void processTasks() {
-        for (var it = tasks.entrySet().iterator(); it.hasNext(); ) {
+        for (var it = CONFIG.client.extra.tasks.tasks.entrySet().iterator(); it.hasNext(); ) {
             final var entry = it.next();
             var task = entry.getValue();
             boolean remove;

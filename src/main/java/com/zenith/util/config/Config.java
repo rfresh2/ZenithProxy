@@ -3,6 +3,7 @@ package com.zenith.util.config;
 import com.google.common.collect.Lists;
 import com.google.gson.annotations.SerializedName;
 import com.zenith.feature.chatschema.ChatSchema;
+import com.zenith.feature.tasks.Task;
 import com.zenith.feature.waypoints.Waypoint;
 import com.zenith.feature.whitelist.PlayerEntry;
 import com.zenith.module.impl.ActiveHours.ActiveTime;
@@ -163,6 +164,7 @@ public final class Config {
 
             public static final class Tasks {
                 public boolean enabled = true;
+                public final LinkedHashMap<String, Task> tasks = new LinkedHashMap<>();
             }
 
             public static final class Waypoints {

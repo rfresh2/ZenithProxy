@@ -17,6 +17,7 @@ import com.zenith.feature.inventory.InventoryManager;
 import com.zenith.feature.pathfinder.Baritone;
 import com.zenith.feature.player.Bot;
 import com.zenith.feature.player.InputManager;
+import com.zenith.feature.tasks.*;
 import com.zenith.feature.tps.TPSCalculator;
 import com.zenith.feature.whitelist.PlayerListsManager;
 import com.zenith.mc.block.BlockDataManager;
@@ -29,6 +30,7 @@ import com.zenith.plugin.DefaultGsonConfigSerializer;
 import com.zenith.plugin.PluginManager;
 import com.zenith.plugin.api.ConfigSerializer;
 import com.zenith.terminal.TerminalManager;
+import com.zenith.util.KotlinUtil;
 import com.zenith.util.Wait;
 import com.zenith.util.config.Config;
 import com.zenith.util.config.ConfigVerifier;
@@ -46,6 +48,9 @@ public class Globals {
     public static final Gson GSON = new GsonBuilder()
         .disableHtmlEscaping()
         .setPrettyPrinting()
+        .registerTypeHierarchyAdapter(Action.class, new ActionTypeAdapter())
+        .registerTypeHierarchyAdapter(Condition.class, new ConditionTypeAdapter())
+        .registerTypeHierarchyAdapter(Continuation.class, new ContinuationTypeAdapter())
         .create();
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -88,61 +93,6 @@ public class Globals {
     public static final PluginManager PLUGIN_MANAGER;
     public static final InGameGuiManager GUI;
     public static final String MC_VERSION;
-    @Locked
-    public static Config loadConfig() {
-        try {
-            DEFAULT_LOG.info("Loading config...");
-
-            Config config;
-            if (CONFIG_FILE.exists()) {
-                try (Reader reader = new FileReader(CONFIG_FILE)) {
-                    config = GSON.fromJson(reader, Config.class);
-                } catch (IOException e) {
-                    throw new RuntimeException("Unable to load config!", e);
-                }
-            } else {
-                config = new Config();
-            }
-
-            DEFAULT_LOG.info("Config loaded.");
-            return config;
-        } catch (final Throwable e) {
-            DEFAULT_LOG.error("Unable to load config!", e);
-            DEFAULT_LOG.error("config.json must be manually fixed or deleted");
-            DEFAULT_LOG.error("Shutting down in 10s");
-            Wait.wait(10);
-            System.exit(1);
-            return null;
-        }
-    }
-
-    @Locked
-    public static LaunchConfig loadLaunchConfig() {
-        try {
-            DEFAULT_LOG.info("Loading launch config...");
-
-            LaunchConfig config = null;
-            if (LAUNCH_CONFIG_FILE.exists()) {
-                try (Reader reader = new FileReader(LAUNCH_CONFIG_FILE)) {
-                    config = GSON.fromJson(reader, LaunchConfig.class);
-                } catch (IOException e) {
-                    DEFAULT_LOG.error("Unable to load launch config. Writing default config", e);
-                    config = new LaunchConfig();
-                }
-            } else {
-                config = new LaunchConfig();
-            }
-            DEFAULT_LOG.info("Launch config loaded.");
-            return config;
-        } catch (final Throwable e) {
-            DEFAULT_LOG.error("Unable to load launch config!", e);
-            DEFAULT_LOG.error("launch_config.json must be manually fixed or deleted");
-            DEFAULT_LOG.error("Shutting down in 10s");
-            Wait.wait(10);
-            System.exit(1);
-            return null;
-        }
-    }
 
     public static boolean inDevEnv() {
         return System.getenv("ZENITH_DEV") != null;
@@ -170,6 +120,44 @@ public class Globals {
             return null;
         }
     }
+
+    @Locked
+    public static Config loadConfig() {
+        return loadConfig(CONFIG_FILE, Config.class, DefaultGsonConfigSerializer.INSTANCE);
+    }
+
+    @Locked
+    public static LaunchConfig loadLaunchConfig() {
+        return loadConfig(LAUNCH_CONFIG_FILE, LaunchConfig.class, DefaultGsonConfigSerializer.INSTANCE);
+    }
+
+    @Locked
+    public static <T> T loadConfig(File file, Class<T> configClass, ConfigSerializer serializer) {
+        try {
+            T config;
+            if (file.exists()) {
+                try (Reader reader = new FileReader(file)) {
+                    config = serializer.read(configClass, reader);
+                } catch (IOException e) {
+                    throw new RuntimeException("Unable to load config: " + file.getName(), e);
+                }
+            } else {
+                config = KotlinUtil.isKotlinObject(configClass)
+                    ? KotlinUtil.getKotlinObject(configClass)
+                    : configClass.getDeclaredConstructor().newInstance();
+            }
+            DEFAULT_LOG.info("{} loaded.", file.getName());
+            return config;
+        } catch (final Throwable e) {
+            DEFAULT_LOG.error("Unable to load config: {}", file.getName(), e);
+            DEFAULT_LOG.error("{} must be manually fixed or deleted", file.getName());
+            DEFAULT_LOG.error("Shutting down in 10s");
+            Wait.wait(10);
+            System.exit(1);
+            return null;
+        }
+    }
+
     public static void saveConfigAsync() {
         Thread.ofVirtual().name("Async Config Save").start(Globals::saveConfig);
     }

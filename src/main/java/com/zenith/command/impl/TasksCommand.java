@@ -24,8 +24,7 @@ import java.util.regex.Pattern;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
-import static com.zenith.Globals.COMMAND;
-import static com.zenith.Globals.MODULE;
+import static com.zenith.Globals.*;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.command.brigadier.TimeArgument.time;
@@ -50,8 +49,6 @@ public class TasksCommand extends Command {
                 [BETA]
 
                 Schedules commands to be executed after a delay or after specified events.
-
-                Tasks do NOT save and persist through ZenithProxy restarts (yet).
                 """)
             .usageLines(
                 "add timed <repeat/once> <id> <delay> <command>",
@@ -227,7 +224,7 @@ public class TasksCommand extends Command {
                     .addField("Task ID", id);
             })))
             .then(literal("list").executes(c -> {
-                var tasksStr = MODULE.get(Tasks.class).getTasks().entrySet().stream()
+                var tasksStr = CONFIG.client.extra.tasks.tasks.entrySet().stream()
                     .map(e -> "`" + e.getKey()
                         + ": " + (e.getValue().getCondition() instanceof TimedCondition ? "Timed" : "Event")
                         + (e.getValue().getAction() instanceof CommandAction cmd
