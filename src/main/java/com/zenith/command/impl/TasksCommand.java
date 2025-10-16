@@ -30,6 +30,8 @@ import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChar
 import static com.zenith.command.brigadier.TimeArgument.time;
 
 public class TasksCommand extends Command {
+    // make sure to update graalvm reachability
+    // otherwise they will fail to be deserialized to config
     private static final BiMap<String, Class<?>> EVENT_MAP = ImmutableBiMap.of(
         "connect", ClientConnectEvent.class,
         "death", ClientDeathEvent.class,

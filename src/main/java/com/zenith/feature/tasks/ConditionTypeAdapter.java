@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 
+import static com.zenith.Globals.DEFAULT_LOG;
+
 public class ConditionTypeAdapter extends TypeAdapter<Condition> {
     @Override
     public void write(final JsonWriter writer, final Condition condition) throws IOException {
@@ -76,8 +78,9 @@ public class ConditionTypeAdapter extends TypeAdapter<Condition> {
                     Class<?> eventClass = Class.forName(eventClassName);
                     reader.endObject();
                     condition = new EventCondition(eventClass);
-                } catch (ClassNotFoundException e) {
+                } catch (Throwable e) {
                     reader.endObject();
+                    DEFAULT_LOG.error("Unable to find event class: {} in EventCondition deserializer", eventClassName);
                 }
             }
             case "InstantCondition" -> {

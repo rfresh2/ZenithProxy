@@ -1576,6 +1576,24 @@
       ]
     },
     {
+      "type": "com.zenith.event.client.ClientConnectEvent"
+    },
+    {
+      "type": "com.zenith.event.client.ClientDeathEvent"
+    },
+    {
+      "type": "com.zenith.event.client.ClientDisconnectEvent"
+    },
+    {
+      "type": "com.zenith.event.client.ClientOnlineEvent"
+    },
+    {
+      "type": "com.zenith.event.player.PlayerConnectedEvent"
+    },
+    {
+      "type": "com.zenith.event.player.PlayerDisconnectedEvent"
+    },
+    {
       "type": "com.zenith.feature.api.ProfileData"
     },
     {
@@ -2075,6 +2093,23 @@
         {
           "name": "<init>",
           "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.feature.tasks.Task",
+      "fields": [
+        {
+          "name": "action"
+        },
+        {
+          "name": "condition"
+        },
+        {
+          "name": "continuation"
+        },
+        {
+          "name": "id"
         }
       ]
     },
@@ -2717,6 +2752,9 @@
       "fields": [
         {
           "name": "enabled"
+        },
+        {
+          "name": "tasks"
         }
       ],
       "methods": [
