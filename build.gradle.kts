@@ -91,6 +91,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
     annotationProcessor("com.google.auto.service:auto-service:1.1.1")
+    compileOnly("org.graalvm.sdk:nativeimage:25.0.0")
 }
 
 lombok {
@@ -242,6 +243,7 @@ graalvmNative {
                 "--initialize-at-build-time=com.zenith.event",
                 "--initialize-at-run-time=com.zenith.mc.chat_type",
                 "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl", // fix for windows builds, exception when doing srv lookups with netty
+                "--features=com.zenith.util.graalvm.ReflectionFeature"
             )
             val pgoPath = providers.environmentVariable("GRAALVM_PGO_PATH").orNull
 			val pgoInstrument = providers.environmentVariable("GRAALVM_PGO_INSTRUMENT").orNull

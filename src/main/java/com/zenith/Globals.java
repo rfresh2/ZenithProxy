@@ -149,6 +149,7 @@ public class Globals {
             DEFAULT_LOG.info("{} loaded.", file.getName());
             return config;
         } catch (final Throwable e) {
+            e.printStackTrace();
             DEFAULT_LOG.error("Unable to load config: {}", file.getName(), e);
             DEFAULT_LOG.error("{} must be manually fixed or deleted", file.getName());
             DEFAULT_LOG.error("Shutting down in 10s");
