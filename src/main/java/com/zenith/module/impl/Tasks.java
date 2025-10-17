@@ -57,6 +57,25 @@ public class Tasks extends Module {
         }
     }
 
+
+    @Locked
+    public void clearTasks() {
+        for (var it = CONFIG.client.extra.tasks.tasks.entrySet().iterator(); it.hasNext(); ) {
+            var task = it.next();
+            it.remove();
+            try {
+                task.getValue().close();
+            } catch (Exception e) {
+                error("Error while closing scheduled task {}", task.getKey(), e);
+            }
+        }
+    }
+
+    @Locked
+    public List<Task> getTasks() {
+        return List.copyOf(CONFIG.client.extra.tasks.tasks.values());
+    }
+
     private void onTasksTick(TasksTickEvent event) {
         processTasks();
     }

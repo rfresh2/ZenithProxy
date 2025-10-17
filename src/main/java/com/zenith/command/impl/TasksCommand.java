@@ -15,23 +15,21 @@ import com.zenith.event.player.PlayerConnectedEvent;
 import com.zenith.event.player.PlayerDisconnectedEvent;
 import com.zenith.feature.tasks.*;
 import com.zenith.module.impl.Tasks;
+import com.zenith.util.math.MathHelper;
+import net.dv8tion.jda.api.utils.TimeFormat;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.regex.Pattern;
+import java.time.Duration;
+import java.time.Instant;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
-import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
-import static com.zenith.Globals.*;
+import static com.zenith.Globals.COMMAND;
+import static com.zenith.Globals.MODULE;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.command.brigadier.TimeArgument.time;
 
 public class TasksCommand extends Command {
-    // make sure to update graalvm reachability
-    // otherwise they will fail to be deserialized to config
     private static final BiMap<String, Class<?>> EVENT_MAP = ImmutableBiMap.of(
         "connect", ClientConnectEvent.class,
         "death", ClientDeathEvent.class,
@@ -40,7 +38,6 @@ public class TasksCommand extends Command {
         "playerConnect", PlayerConnectedEvent.class,
         "playerDisconnect", PlayerDisconnectedEvent.class
     );
-    private static final Pattern TIME_PATTERN = Pattern.compile("[0-9]{1,2}:[0-9]{2}");
 
     @Override
     public CommandUsage commandUsage() {
@@ -53,9 +50,9 @@ public class TasksCommand extends Command {
                 Schedules commands to be executed after a delay or after specified events.
                 """)
             .usageLines(
-                "add timed <repeat/once> <id> <delay> <command>",
-                "add event <repeat/once> <id> <" + String.join("/", EVENT_MAP.keySet().stream().sorted().toList()) + "> <command>",
-                "add interval <repeat/once> <id> <interval> <daily/hourly/minutely/secondly/tickly> <startTime> <timezoneId> <command>",
+                "add timed <id> <delay> <command>",
+                "add interval <id> <startDelay> <repeatDelay> <command>",
+                "add event <id> <" + String.join("/", EVENT_MAP.keySet().stream().sorted().toList()) + "> <repeat/once> <command>",
                 "del <id>",
                 "list",
                 "clear"
@@ -68,9 +65,8 @@ public class TasksCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("tasks")
             .then(literal("add")
-                .then(literal("timed").then(argument("repeat", enumStrings("repeat", "once")).then(argument("id", wordWithChars()).then(argument("delay", time()).then(argument("command", greedyString()).executes(c -> {
+                .then(literal("timed").then(argument("id", wordWithChars()).then(argument("delay", time()).then(argument("command", greedyString()).executes(c -> {
                     var taskId = getString(c, "id");
-                    var repeat = getString(c, "repeat").equalsIgnoreCase("repeat");
                     var command = getString(c, "command");
                     var parse = COMMAND.parse(CommandContext.create(command, new CommandAction.CommandActionSource()));
                     if (!parse.getExceptions().isEmpty() || parse.getReader().canRead()) {
@@ -81,25 +77,55 @@ public class TasksCommand extends Command {
                             );
                         return ERROR;
                     }
+                    long delayMs = getInteger(c, "delay") * 50L;
                     var task = new Task(
                         taskId,
                         new CommandAction(command),
-                        new TimedCondition(getInteger(c, "delay") * 50L),
-                        repeat
-                            ? new ForeverContinuation()
-                            : new OnceContinuation()
+                        new TimedCondition(delayMs),
+                        new OnceContinuation()
                     );
                     MODULE.get(Tasks.class).addTask(task);
                     c.getSource().getEmbed()
                         .title("Task Added")
                         .addField("Task ID", task.getId())
                         .addField("Type", "Timed")
-                        .addField("Repeat", repeat)
-                        .addField("Delay", getInteger(c, "delay") + " ticks")
+                        .addField("Delay", formatTaskDuration(Duration.ofMillis(delayMs)))
+                        .addField("Command", command);
+                    return OK;
+                })))))
+                .then(literal("interval").then(argument("id", wordWithChars()).then(argument("startDelay", time()).then(argument("repeatDelay", time()).then(argument("command", greedyString()).executes(c -> {
+                    var taskId = getString(c, "id");
+                    var command = getString(c, "command");
+                    var parse = COMMAND.parse(CommandContext.create(command, new CommandAction.CommandActionSource()));
+                    if (!parse.getExceptions().isEmpty() || parse.getReader().canRead()) {
+                        c.getSource().getEmbed()
+                            .title("Invalid Command")
+                            .description("Invalid command: `" + command + "`"
+                                + (parse.getExceptions().isEmpty() ? "" : "\nExceptions: " + parse.getExceptions().values())
+                            );
+                        return ERROR;
+                    }
+                    var startDelayTicks = getInteger(c, "startDelay");
+                    var startTimeInstant = Instant.now().plusMillis(startDelayTicks * 50L);
+                    var repeatDelayTicks = getInteger(c, "repeatDelay");
+                    var repeatDuration = Duration.ofMillis(repeatDelayTicks * 50L);
+                    var task = new Task(
+                        taskId,
+                        new CommandAction(command),
+                        new IntervalCondition(startTimeInstant, repeatDuration),
+                        new ForeverContinuation()
+                    );
+                    MODULE.get(Tasks.class).addTask(task);
+                    c.getSource().getEmbed()
+                        .title("Task Added")
+                        .addField("Task ID", task.getId())
+                        .addField("Type", "Interval")
+                        .addField("Start Time", TimeFormat.DATE_TIME_LONG.format(startTimeInstant))
+                        .addField("Repeat Delay", formatTaskDuration(repeatDuration))
                         .addField("Command", command);
                     return OK;
                 }))))))
-                .then(literal("event").then(argument("repeat", enumStrings("repeat", "once")).then(argument("id", wordWithChars()).then(argument("event", enumStrings(EVENT_MAP.keySet())).then(argument("command", greedyString()).executes(c -> {
+                .then(literal("event").then(argument("id", wordWithChars()).then(argument("event", enumStrings(EVENT_MAP.keySet())).then(argument("repeat", enumStrings("repeat", "once")).then(argument("command", greedyString()).executes(c -> {
                     var taskId = getString(c, "id");
                     var eventId = getString(c, "event");
                     var repeat = getString(c, "repeat").equalsIgnoreCase("repeat");
@@ -143,81 +169,7 @@ public class TasksCommand extends Command {
                         .addField("Event", EVENT_MAP.inverse().get(eventClass))
                         .addField("Command", command);
                     return OK;
-                }))))))
-                .then(literal("interval").then(argument("repeat", enumStrings("repeat", "once")).then(argument("id", wordWithChars()).then(argument("interval", integer(1)).then(argument("period", enumStrings("daily", "hourly", "minutely", "secondly")).then(argument("startTime", wordWithChars()).then(argument("timezoneId", wordWithChars()).then(argument("command", greedyString()).executes(c -> {
-                    var taskId = getString(c, "id");
-                    var repeat = getString(c, "repeat").equalsIgnoreCase("repeat");
-                    var command = getString(c, "command");
-                    var parse = COMMAND.parse(CommandContext.create(command, new CommandAction.CommandActionSource()));
-                    if (!parse.getExceptions().isEmpty() || parse.getReader().canRead()) {
-                        c.getSource().getEmbed()
-                            .title("Invalid Command")
-                            .description("Invalid command: `" + command + "`"
-                                + (parse.getExceptions().isEmpty() ? "" : "\nExceptions: " + parse.getExceptions().values())
-                            );
-                        return ERROR;
-                    }
-                    var startTimeStr = getString(c, "startTime");
-                    if (!TIME_PATTERN.matcher(startTimeStr).matches()) {
-                        c.getSource().getEmbed()
-                            .title("Invalid Time Format")
-                            .addField("Help", "Time format: XX:XX, e.g.: 1:42, 14:42, 14:01", false);
-                        return ERROR;
-                    }
-                    var timezoneId = getString(c, "timezoneId");
-                    if (ZoneId.getAvailableZoneIds().stream().noneMatch(id -> id.equals(timezoneId))) {
-                        c.getSource().getEmbed()
-                            .title("Invalid Timezone")
-                            .addField("Help", "Time zone Ids: https://w.wiki/8Yif", false);
-                        return ERROR;
-                    }
-                    var startHour = Integer.parseInt(startTimeStr.split(":")[0]);
-                    var startMinute = Integer.parseInt(startTimeStr.split(":")[1]);
-                    if (startHour < 0 || startHour > 23 || startMinute < 0 || startMinute > 59) {
-                        c.getSource().getEmbed()
-                            .title("Invalid Time")
-                            .addField("Help", "Time format: XX:XX, e.g.: 1:42, 14:42, 14:01", false);
-                        return ERROR;
-                    }
-                    var localT = LocalDateTime.now(ZoneId.of(timezoneId));
-                    var startTime = ZonedDateTime.of(
-                        localT.getYear(),
-                        localT.getMonthValue(),
-                        localT.getDayOfMonth(),
-                        startHour,
-                        startMinute,
-                        0,
-                        0,
-                        ZoneId.of(timezoneId)
-                    ).toInstant();
-                    var period = getString(c, "period").toLowerCase();
-                    var interval = getInteger(c, "interval");
-                    var condition = switch (period) {
-                        case "daily" -> IntervalCondition.daily(startTime, interval);
-                        case "hourly" -> IntervalCondition.hourly(startTime, interval);
-                        case "minutely" -> IntervalCondition.minutely(startTime, interval);
-                        case "secondly" -> IntervalCondition.secondly(startTime, interval);
-                        default -> throw new IllegalStateException("Unexpected value: " + period);
-                    };
-                    var task = new Task(
-                        taskId,
-                        new CommandAction(command),
-                        condition,
-                        repeat
-                            ? new ForeverContinuation()
-                            : new OnceContinuation()
-                    );
-                    MODULE.get(Tasks.class).addTask(task);
-                    c.getSource().getEmbed()
-                        .title("Task Added")
-                        .addField("Task ID", task.getId())
-                        .addField("Type", "Interval")
-                        .addField("Repeat", repeat)
-                        .addField("Interval", interval + " " + period)
-                        .addField("Start Time", startTimeStr + " (" + timezoneId + ")")
-                        .addField("Command", command);
-                    return OK;
-                }))))))))))
+                })))))))
             .then(literal("del").then(argument("id", wordWithChars()).executes(c -> {
                 var id = getString(c, "id");
                 MODULE.get(Tasks.class).removeTask(id);
@@ -226,10 +178,10 @@ public class TasksCommand extends Command {
                     .addField("Task ID", id);
             })))
             .then(literal("list").executes(c -> {
-                var tasksStr = CONFIG.client.extra.tasks.tasks.entrySet().stream()
-                    .map(e -> "`" + e.getKey()
-                        + ": " + (e.getValue().getCondition() instanceof TimedCondition ? "Timed" : "Event")
-                        + (e.getValue().getAction() instanceof CommandAction cmd
+                var tasksStr = MODULE.get(Tasks.class).getTasks().stream()
+                    .map(task -> "`" + task.getId() + "`"
+                        + ": " + getType(task)
+                        + (task.getAction() instanceof CommandAction cmd
                             ? " -> " + cmd.getCommand()
                             : "")
                         + "`" )
@@ -238,6 +190,11 @@ public class TasksCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Task List")
                     .description(tasksStr);
+            }))
+            .then(literal("clear").executes(c -> {
+                MODULE.get(Tasks.class).clearTasks();
+                c.getSource().getEmbed()
+                    .title("All Tasks Cleared");
             }));
     }
 
@@ -245,5 +202,27 @@ public class TasksCommand extends Command {
     public void defaultHandler(CommandContext ctx) {
         ctx.getEmbed()
             .primaryColor();
+    }
+
+    private String getType(Task task) {
+        if (task.getCondition() instanceof TimedCondition) {
+            return "Timed";
+        } else if (task.getCondition() instanceof IntervalCondition) {
+            return "Interval";
+        } else if (task.getCondition() instanceof EventCondition) {
+            return "Event";
+        } else if (task.getCondition() instanceof InstantCondition) {
+            return "Instant";
+        } else {
+            return "Unknown";
+        }
+    }
+
+    private String formatTaskDuration(Duration duration) {
+        if (duration.toMillis() >= 1000L) {
+            return MathHelper.formatDuration(duration);
+        } else {
+            return duration.toMillis() / 50L + " ticks";
+        }
     }
 }
