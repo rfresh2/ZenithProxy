@@ -22,6 +22,52 @@ public abstract class Module extends ModuleUtils {
 
     public Module() {}
 
+    /**
+     * Whether this module should be enabled automatically on startup
+     *
+     * Typically, this should be read from a config boolean value
+     */
+    public abstract boolean enabledSetting();
+
+    /**
+     * Override this to register module events
+     */
+    public List<EventConsumer<?>> registerEvents() {
+        return Collections.emptyList();
+    }
+
+    /**
+     * Override this to register client packet handlers
+     *
+     * Meaning packets between zenith and the destination server
+     */
+    public @Nullable PacketHandlerCodec registerClientPacketHandlerCodec() {
+        return null;
+    }
+
+    /**
+     * Override this to register server packet handlers
+     *
+     * Meaning packets between zenith and players - both spectators and controlling player
+     */
+    public @Nullable PacketHandlerCodec registerServerPacketHandlerCodec() {
+        return null;
+    }
+
+    /**
+     * Override to run a custom hook when the module is enabled
+     */
+    public void onEnable() { }
+
+    /**
+     * Override to run a custom hook when the module is disabled
+     */
+    public void onDisable() { }
+
+
+    /**
+     * Enables the module, does not check enabledSetting() or set any config values
+     */
     public synchronized void enable() {
         try {
             if (!enabled) {
@@ -44,6 +90,9 @@ public abstract class Module extends ModuleUtils {
         }
     }
 
+    /**
+     * Disables the module, does not check enabledSetting() or set any config values
+     */
     public synchronized void disable() {
         try {
             if (enabled) {
@@ -63,6 +112,9 @@ public abstract class Module extends ModuleUtils {
         }
     }
 
+    /**
+     * Sets the module enabled state, does not set any config values
+     */
     public synchronized void setEnabled(boolean enabled) {
         if (enabled) {
             enable();
@@ -71,33 +123,28 @@ public abstract class Module extends ModuleUtils {
         }
     }
 
-    public abstract boolean enabledSetting();
-
+    /**
+     * Sets the module enabled state from the result of enabledSetting()
+     */
     public synchronized void syncEnabledFromConfig() {
         setEnabled(enabledSetting());
     }
 
-    public void onEnable() { }
-
-    public void onDisable() { }
-
+    /**
+     * Executed when the module is enabled
+     *
+     * Should not usually be overridden or run directly
+     */
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this, registerEvents().toArray(new EventConsumer[0]));
     }
 
-    public List<EventConsumer<?>> registerEvents() {
-        return Collections.emptyList();
-    }
-
+    /**
+     * Executed when the module is disabled
+     *
+     * Should not usually be overridden or run directly
+     */
     public void unsubscribeEvents() {
         EVENT_BUS.unsubscribe(this);
-    }
-
-    public @Nullable PacketHandlerCodec registerClientPacketHandlerCodec() {
-        return null;
-    }
-
-    public @Nullable PacketHandlerCodec registerServerPacketHandlerCodec() {
-        return null;
     }
 }

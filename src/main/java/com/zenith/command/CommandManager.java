@@ -104,6 +104,7 @@ public class CommandManager {
         new StatsCommand(),
         new StatusCommand(),
         new TablistCommand(),
+        new TasksCommand(),
         new SpawnPatrolCommand(),
         new ThemeCommand(),
         new TransferCommand(),

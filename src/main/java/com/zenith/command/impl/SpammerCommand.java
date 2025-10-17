@@ -19,6 +19,7 @@ import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.Globals.MODULE;
+import static com.zenith.command.brigadier.TimeArgument.time;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 
@@ -30,7 +31,7 @@ public class SpammerCommand extends Command {
             .category(CommandCategory.MODULE)
             .description("""
                 Spams messages or whispers in-game. Use with caution, this can and will get you muted.
-                
+
                 To add messages in bulk, use the `addAll` subcommand. Each message is delimited by the `,,` characters.
                 """)
             .usageLines(
@@ -73,7 +74,7 @@ public class SpammerCommand extends Command {
                         .title("While Player Connected " + toggleStrCaps(CONFIG.client.extra.spammer.whilePlayerConnected));
                 })))
             .then(literal("delayTicks")
-                .then(argument("delayTicks", integer(1)).executes(c -> {
+                .then(argument("delayTicks", time(1)).executes(c -> {
                     CONFIG.client.extra.spammer.delayTicks = IntegerArgumentType.getInteger(c, "delayTicks");
                     c.getSource().getEmbed()
                         .title("Delay Updated!");

@@ -7,6 +7,7 @@ import com.zenith.command.api.CommandCategory;
 import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
+import com.zenith.util.config.Config;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -25,20 +26,20 @@ public class ServerConnectionCommand extends Command {
             .category(CommandCategory.MANAGE)
             .description("""
             Configures the MC server hosted by Zenith and players' connections to it
-            
+
             The `proxyIP` is the IP players should connect to. This is purely informational.
-            
+
             The `port` argument changes the port the ZenithProxy MC server listens on
-            
+
             `upnp` will try to open the port to the public internet, useful for self-hosting on a home network
-            
+
             The `ping` arguments configure the server list ping response ZenithProxy sends to players.
             `onlinePlayers` = MC profiles of players
             `onlinePlayerCount` = number of players connected
             `maxPlayers` = number of players that can connect
             `lanBroadcast` = LAN server broadcast
             `log` = logs pings
-            
+
             The `timeout` arguments configures how long until players are kicked due no packets being received.
             """)
             .usageLines(
@@ -55,7 +56,8 @@ public class ServerConnectionCommand extends Command {
                 "timeout on/off",
                 "timeout <seconds>",
                 "autoConnectOnLogin on/off",
-                "updateServerIcon on/off"
+                "updateServerIcon on/off",
+                "chatSigning mode <disguised/passthrough/system>"
             )
             .build();
     }
@@ -160,7 +162,12 @@ public class ServerConnectionCommand extends Command {
                 CONFIG.server.updateServerIcon = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Update Server Icon " + toggleStrCaps(CONFIG.server.updateServerIcon));
-            })));
+            })))
+            .then(literal("chatSigning").then(literal("mode").then(argument("mode", enumStrings(Config.Server.ChatSigning.ChatSigningMode.values())).executes(c -> {
+                CONFIG.server.chatSigning.mode = Config.Server.ChatSigning.ChatSigningMode.valueOf(getString(c, "mode").toUpperCase());
+                c.getSource().getEmbed()
+                    .title("Chat Signing Mode Set");
+            }))));
     }
 
     private void syncTimeout() {

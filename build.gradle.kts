@@ -69,9 +69,9 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:long-double-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
     api("com.viaversion:vialoader:4.0.5")
-    api("com.viaversion:viaversion:5.5.0")
-    api("com.viaversion:viabackwards:5.5.0")
-    api("com.viaversion:viarewind:4.0.10")
+    api("com.viaversion:viaversion:5.5.1")
+    api("com.viaversion:viabackwards:5.5.1")
+    api("com.viaversion:viarewind:4.0.11")
     api("org.jline:jline:3.30.6")
     api("org.jline:jline-terminal-jni:3.30.6")
     api("ar.com.hjg:pngj:2.1.0")
@@ -91,6 +91,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
     annotationProcessor("com.google.auto.service:auto-service:1.1.1")
+    compileOnly("org.graalvm.sdk:nativeimage:25.0.0")
 }
 
 lombok {
@@ -240,8 +241,10 @@ graalvmNative {
                 "--initialize-at-build-time=com.google.common.collect",
                 "--initialize-at-build-time=com.zenith.mc",
                 "--initialize-at-run-time=com.zenith.mc.item.hashing",
+                "--initialize-at-build-time=com.zenith.event",
                 "--initialize-at-run-time=com.zenith.mc.chat_type",
                 "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl", // fix for windows builds, exception when doing srv lookups with netty
+                "--features=com.zenith.util.graalvm.ReflectionFeature"
             )
             val pgoPath = providers.environmentVariable("GRAALVM_PGO_PATH").orNull
 			val pgoInstrument = providers.environmentVariable("GRAALVM_PGO_INSTRUMENT").orNull

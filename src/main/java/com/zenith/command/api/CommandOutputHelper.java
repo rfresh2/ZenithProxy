@@ -16,26 +16,22 @@ import static com.zenith.Globals.TERMINAL_LOG;
 @UtilityClass
 public class CommandOutputHelper {
     public void logMultiLineOutputToDiscord(List<String> multiLine) {
-        if (DISCORD.isRunning()) {
-            multiLine.forEach(DISCORD::sendMessage);
-        }
+        multiLine.forEach(DISCORD::sendMessage);
     }
 
     public void logEmbedOutputToDiscord(final Embed embed) {
-        if (DISCORD.isRunning() && embed.isTitlePresent())
+        if (embed.isTitlePresent())
             DISCORD.sendEmbedMessage(embed);
     }
 
     public void logInputToDiscord(String command, CommandSource source, CommandContext ctx) {
-        if (DISCORD.isRunning()) {
-            Embed embed = Embed.builder().title(source.name() + " Command Executed")
-                    .description(command);
-            if (source instanceof PlayerCommandSource playerCommandSource) {
-                ServerSession executor = ctx.getInGamePlayerInfo().session();
-                embed.footer("Executed by: " + executor.getName(), Proxy.getInstance().getPlayerHeadURL(executor.getUUID()).toString());
-            }
-            DISCORD.sendEmbedMessage(embed);
+        Embed embed = Embed.builder().title(source.name() + " Command Executed")
+            .description(command);
+        if (source instanceof PlayerCommandSource playerCommandSource) {
+            ServerSession executor = ctx.getInGamePlayerInfo().session();
+            embed.footer("Executed by: " + executor.getName(), Proxy.getInstance().getPlayerHeadURL(executor.getUUID()).toString());
         }
+        DISCORD.sendEmbedMessage(embed);
     }
 
     public void logEmbedOutputToInGame(final Embed embed, final ServerSession session) {
@@ -79,10 +75,7 @@ public class CommandOutputHelper {
     }
 
     public void logMultiLineOutput(final List<String> multiLineOutput) {
-        if (DISCORD.isRunning())
-            multiLineOutput.forEach(DISCORD::sendMessage);
-        else
-            multiLineOutput.forEach(TERMINAL_LOG::info);
+        multiLineOutput.forEach(DISCORD::sendMessage);
     }
 
     // intended for use in embed descriptions

@@ -21,6 +21,10 @@ ij_wrap_on_typing = false
 indent_size = 2
 indent_style = space
 
+[*.json]
+indent_size = 2
+indent_style = space
+
 [*.java]
 indent_style = space
 ij_continuation_indent_size = 4

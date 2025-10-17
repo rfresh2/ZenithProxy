@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
-import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.mojang.brigadier.arguments.StringArgumentType.getString;
 import static com.zenith.Globals.*;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
@@ -24,6 +23,7 @@ import static com.zenith.command.brigadier.ItemArgument.getItem;
 import static com.zenith.command.brigadier.ItemArgument.item;
 import static com.zenith.command.brigadier.RotationArgument.getRotation;
 import static com.zenith.command.brigadier.RotationArgument.rotation;
+import static com.zenith.command.brigadier.TimeArgument.time;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 
@@ -36,9 +36,9 @@ public class AutoDropCommand extends Command {
                 .category(CommandCategory.MODULE)
                 .description("""
                     Automatically drop items in player inventory.
-                    
+
                     Dropping can be configured based on modes:
-                    
+
                         * `all`: any item
                         * `whitelist`: only added items
                         * `blacklist`: any item not added
@@ -127,7 +127,7 @@ public class AutoDropCommand extends Command {
                     .title("Items List Cleared")
                     .description(itemsListToString());
             }))
-            .then(literal("delay").then(argument("ticks", integer(0)).executes(c -> {
+            .then(literal("delay").then(argument("ticks", time(0)).executes(c -> {
                 CONFIG.client.extra.autoDrop.delayTicks = getInteger(c, "ticks");
                 c.getSource().getEmbed()
                     .title("Delay Set");
