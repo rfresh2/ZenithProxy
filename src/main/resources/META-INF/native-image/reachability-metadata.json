@@ -1576,6 +1576,24 @@
       ]
     },
     {
+      "type": "com.zenith.event.client.ClientConnectEvent"
+    },
+    {
+      "type": "com.zenith.event.client.ClientDeathEvent"
+    },
+    {
+      "type": "com.zenith.event.client.ClientDisconnectEvent"
+    },
+    {
+      "type": "com.zenith.event.client.ClientOnlineEvent"
+    },
+    {
+      "type": "com.zenith.event.player.PlayerConnectedEvent"
+    },
+    {
+      "type": "com.zenith.event.player.PlayerDisconnectedEvent"
+    },
+    {
       "type": "com.zenith.feature.api.ProfileData"
     },
     {
@@ -2075,6 +2093,23 @@
         {
           "name": "<init>",
           "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.feature.tasks.Task",
+      "fields": [
+        {
+          "name": "action"
+        },
+        {
+          "name": "condition"
+        },
+        {
+          "name": "continuation"
+        },
+        {
+          "name": "id"
         }
       ]
     },
@@ -2713,6 +2748,23 @@
       ]
     },
     {
+      "type": "com.zenith.util.config.Config$Client$Extra$Tasks",
+      "fields": [
+        {
+          "name": "enabled"
+        },
+        {
+          "name": "tasks"
+        }
+      ],
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "com.zenith.util.config.Config$Client$Extra$Utility",
       "allDeclaredFields": true,
       "methods": [
@@ -3011,6 +3063,34 @@
         {
           "name": "<init>",
           "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.util.config.Config$Server$ChatSigning",
+      "fields": [
+        {
+          "name": "mode"
+        }
+      ],
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.util.config.Config$Server$ChatSigning$ChatSigningMode",
+      "fields": [
+        {
+          "name": "DISGUISED"
+        },
+        {
+          "name": "PASSTHROUGH"
+        },
+        {
+          "name": "SYSTEM"
         }
       ]
     },

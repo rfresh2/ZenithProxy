@@ -7,7 +7,7 @@ from enum import Enum
 
 import requests
 
-from jdk_install import get_java_executable
+from jdk_install import get_java_executable, JavaInstallType
 
 
 def validate_linux_cpu_flags():
@@ -73,9 +73,9 @@ def validate_linux_system(config):
         return False
 
 
-def validate_java_system(config):
+def validate_java_system(config, install_type):
     min_java_version = 17 if config.version.startswith("1") else 21
-    java_executable = get_java_executable()
+    java_executable = get_java_executable(install_type=install_type)
     if java_executable is None:
         print(f"Java >={min_java_version} not found.")
         return False
@@ -90,7 +90,7 @@ def validate_system_with_config(config):
     if config.release_channel == "git":
         return validate_git_system()
     elif config.release_channel.startswith("java"):
-        return validate_java_system(config)
+        return validate_java_system(config, JavaInstallType.AUTO_INSTALL)
     elif config.release_channel.startswith("linux"):
         return validate_linux_system(config)
     else:

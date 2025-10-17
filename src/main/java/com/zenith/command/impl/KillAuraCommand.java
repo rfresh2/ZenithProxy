@@ -11,11 +11,11 @@ import com.zenith.util.config.Config;
 
 import java.util.stream.Collectors;
 
-import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.Globals.MODULE;
 import static com.zenith.command.brigadier.RegistryDataArgument.entity;
 import static com.zenith.command.brigadier.RegistryDataArgument.getEntity;
+import static com.zenith.command.brigadier.TimeArgument.time;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 
@@ -27,9 +27,9 @@ public class KillAuraCommand extends Command {
             .category(CommandCategory.MODULE)
             .description("""
              Attacks entities near the player.
-             
+
              Custom targets list: https://link.2b2t.vc/1
-             
+
              Aggressive mobs are mobs that are actively targeting and attacking the player.
              """)
             .usageLines(
@@ -60,7 +60,7 @@ public class KillAuraCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Kill Aura " + toggleStrCaps(CONFIG.client.extra.killAura.enabled));
             }))
-            .then(literal("attackDelay").then(argument("ticks", integer(0, 1000)).executes(c -> {
+            .then(literal("attackDelay").then(argument("ticks", time(0, 1000)).executes(c -> {
                 CONFIG.client.extra.killAura.attackDelayTicks = c.getArgument("ticks", Integer.class);
                 c.getSource().getEmbed()
                     .title("Attack Delay Ticks Set!");

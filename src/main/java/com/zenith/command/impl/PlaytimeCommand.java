@@ -35,15 +35,15 @@ public class PlaytimeCommand extends Command {
                 final String playerName = getString(c, "playerName");
                 VcApi.INSTANCE.getPlaytime(playerName)
                     .ifPresentOrElse((response) ->
-                                         c.getSource().getEmbed()
-                                             .title("Playtime")
-                                             .addField("Player", playerName, true)
-                                             .description(MathHelper.formatDurationLong(Duration.ofSeconds(response.playtimeSeconds())))
-                                             .thumbnail(Proxy.getInstance().getPlayerHeadURL(playerName).toString())
-                                             .primaryColor(),
-                                     () -> c.getSource().getEmbed()
-                                         .title(playerName + " not found")
-                                         .errorColor());
+                            c.getSource().getEmbed()
+                                .title("Playtime")
+                                .addField("Player", playerName, true)
+                                .description(MathHelper.formatDurationLong(Duration.ofSeconds(response.playtimeSeconds())))
+                                .thumbnail(Proxy.getInstance().getPlayerHeadURL(playerName).toString())
+                                .primaryColor(),
+                        () -> c.getSource().getEmbed()
+                            .title(playerName + " not found")
+                            .errorColor());
                 return OK;
             }));
     }

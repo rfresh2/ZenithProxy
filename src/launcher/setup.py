@@ -5,6 +5,7 @@ import re
 
 import requests
 
+import launch_platform
 from jdk_install import get_java_executable, JavaInstallType
 from launch_config import read_launch_config_file
 from launch_platform import get_public_ip, check_port_in_use
@@ -30,6 +31,10 @@ def setup_execute(config):
     else:
         release_channel = "java"
     print("")
+
+    if release_channel == "java":
+        if not launch_platform.validate_java_system(config, JavaInstallType.USER_PROMPT):
+            critical_error("Setup cancelled")
 
     # while True:
     #     print("Select a Minecraft version: (1/2)")

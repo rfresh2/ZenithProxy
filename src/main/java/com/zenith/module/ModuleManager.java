@@ -42,6 +42,7 @@ public class ModuleManager {
             new Spammer(),
             new Spook(),
             new SpawnPatrol(),
+            new Tasks(),
             new VisualRange()
         ).forEach(m -> {
             addModule(m);
