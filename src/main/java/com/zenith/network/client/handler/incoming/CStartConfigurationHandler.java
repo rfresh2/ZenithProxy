@@ -10,6 +10,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.Serverbound
 public class CStartConfigurationHandler implements PacketHandler<ClientboundStartConfigurationPacket, ClientSession> {
     @Override
     public ClientboundStartConfigurationPacket apply(final ClientboundStartConfigurationPacket packet, final ClientSession session) {
+        session.setOnline(false);
         session.switchInboundState(ProtocolState.CONFIGURATION);
         if (!Proxy.getInstance().hasActivePlayer()) {
             session.send(new ServerboundConfigurationAcknowledgedPacket());
