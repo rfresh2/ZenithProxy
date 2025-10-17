@@ -234,8 +234,7 @@ jobs:
   release-artifacts:
     needs:
       - build-mac
-      - build-ubuntu20-x64
-      - build-linux-aarch64
+      - build-linux
       - package-python
       - package-windows-python
     runs-on: ubuntu-latest
