@@ -119,6 +119,11 @@ tasks {
         metadataValue = version.toString()
         outputFile = project.layout.buildDirectory.file("resources/main/zenith_mc_version.txt")
     }
+    val updateWikiTask = register<UpdateWikiTask>("updateWiki") {
+        wikiDirectory = layout.projectDirectory.dir("docs/wiki").asFile
+        wikiFiles = files(project.layout.buildDirectory.file("Commands.md"))
+        dependsOn(test)
+    }
     val runGroup = "run"
     register("run", JavaExec::class.java) {
         group = runGroup
@@ -189,7 +194,7 @@ tasks {
         }
     }
     build {
-        dependsOn(shadowJar)
+        dependsOn(shadowJar, updateWikiTask)
     }
     nativeCompile {
         notCompatibleWithConfigurationCache("not compatible with configuration cache")

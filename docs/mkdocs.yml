@@ -1,0 +1,58 @@
+site_name: ZenithProxy
+docs_dir: wiki
+site_url: https://rfresh2.github.io/ZenithProxy
+repo_url: https://github.com/rfresh2/ZenithProxy
+edit_uri: edit/main/docs/wiki
+#use_directory_urls: false
+
+theme:
+  name: material
+  logo: _assets/icons/icon.png
+  favicon: _assets/icons/icon.png
+  features:
+    - navigation.instant
+    - search.suggest
+    - content.code.copy
+    - content.action.edit
+    - toc.follow
+#    - toc.integrate
+    - navigation.top
+  palette:
+    - media: "(prefers-color-scheme)"
+      primary: custom
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      primary: custom
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      primary: custom
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
+markdown_extensions:
+  - github-callouts
+  - attr_list
+  - md_in_html
+  - pymdownx.blocks.caption
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.keys
+  - toc:
+      permalink: true
+plugins:
+  - search
+strict: true
+extra_css:
+  - _assets/styles/extra.css
