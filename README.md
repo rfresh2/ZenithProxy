@@ -99,8 +99,8 @@ This project is also used for the [2b2t.vc API](https://api.2b2t.vc) and [Discor
 
 ### Guides
 
-* [DigitalOcean VPS + $200 free credits + auto setup script](https://github.com/rfresh2/ZenithProxy/wiki/DigitalOcean-Setup-Guide)
-* [Windows](https://github.com/rfresh2/ZenithProxy/wiki/Windows-Python-Launcher-Guide)
+* [DigitalOcean VPS + $200 free credits + auto setup script](https://wiki.2b2t.vc/DigitalOcean-Setup-Guide/)
+* [Windows](https://wiki.2b2t.vc/Windows-Python-Launcher-Guide/)
 
 ### Launcher Downloads
 
@@ -141,11 +141,15 @@ This project is also used for the [2b2t.vc API](https://api.2b2t.vc) and [Discor
     * Discord: `.` (e.g. `.help`)
     * In-game: `/` OR `!` -> (e.g. `/help`)
     * Terminal: N/A -> (e.g. `help`)
-* [Full Commands Documentation](https://github.com/rfresh2/ZenithProxy/wiki/Commands)
+* [Full Commands Documentation](https://wiki.2b2t.vc/Commands/)
+
+### Frequently Asked Questions (FAQ)
+
+https://wiki.2b2t.vc/FAQ/
 
 ### Running on Linux Servers
 
-See the [Linux Guide](https://github.com/rfresh2/ZenithProxy/wiki/Linux-Guide)
+See the [Linux Guide](https://wiki.2b2t.vc/Linux-Guide/)
 
 I highly recommend using a terminal multiplexer - a program that manages terminal sessions.
 
@@ -161,7 +165,7 @@ https://github.com/rfresh2/ZenithProxyDocker
 
 ## Plugins
 
-https://github.com/rfresh2/ZenithProxy/wiki/Plugins
+https://wiki.2b2t.vc/Plugins/
 
 ## Configuration
 

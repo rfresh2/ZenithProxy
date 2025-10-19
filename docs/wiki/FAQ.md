@@ -46,6 +46,28 @@ First step, run the ZenithProxy command: `connectionTest`
 
 If it shows an error related to firewall:
 
+## I'm self-hosting ZenithProxy on my home PC. How can my friends connect?
+
+### Option 1: Tunneling
+
+Use a service like [playit.gg](https://playit.gg/) to create a network tunnel for your friends to connect to.
+
+You can set it up same as a normal Minecraft server, using the port ZenithProxy is listening on (`serverConnection` command to check port)
+
+### Option 2: Port Forwarding
+
+Automatic port forwarding: `serverConnection upnp on`
+
+The automatic method may not work depending on your router.
+
+Otherwise you will need to manually set up port forwarding on your router, google your router model + "port forwarding" for instructions.
+
+### Option 3: VPS
+
+Host ZenithProxy on a VPS instead of your home PC.
+
+A VPS will have a public IP address anyone can connect to.
+
 ### Oracle Cloud
 
 ```bash
