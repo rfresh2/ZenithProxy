@@ -26,7 +26,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.4.30"
+val mcplVersion = "1.21.4.31"
 dependencies {
     api("com.github.rfresh2:JDA:6.0.19") {
         exclude(group = "club.minnced")
@@ -36,7 +36,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.6.Final"))
+    api(platform("io.netty:netty-bom:4.2.7.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
