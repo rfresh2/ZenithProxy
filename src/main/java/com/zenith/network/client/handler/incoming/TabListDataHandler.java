@@ -56,7 +56,7 @@ public class TabListDataHandler implements ClientEventLoopPacketHandler<Clientbo
             if (!session.isInQueue()) {
                 boolean wasOnline = false;
                 Duration wasOnlineDuration = Duration.ZERO;
-                if (session.isOnline()) {
+                if (session.isWasOnline()) {
                     // can occur if we get kicked to queue in certain cases like if the main server restarts
                     // resetting connect time to calculate queue duration correctly
                     wasOnline = true;
