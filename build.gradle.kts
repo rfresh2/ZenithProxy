@@ -69,11 +69,10 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:long-double-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
     api("com.viaversion:vialoader:4.0.5")
-    api("com.viaversion:viaversion:5.5.1")
-    api("com.viaversion:viabackwards:5.5.1")
-    api("com.viaversion:viarewind:4.0.11")
+    api("com.viaversion:viaversion-common:5.5.1")
+    api("com.viaversion:viabackwards-common:5.5.1")
+    api("com.viaversion:viarewind-common:4.0.11")
     api("org.jline:jline:3.30.6")
-    api("org.jline:jline-terminal-jni:3.30.6")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
     api("org.postgresql:postgresql:42.7.8")
@@ -95,7 +94,7 @@ dependencies {
 }
 
 lombok {
-    version = "1.18.40"
+    version = "1.18.42"
 }
 
 tasks {
