@@ -203,7 +203,7 @@ Create a new folder for each instance with its own copy of the launcher files. [
 
 Instances must be independently run and configured. i.e. separate terminal sessions, discord bots, ports, config files, etc.
 
-See the [Linux Guide](https://github.com/rfresh2/ZenithProxy/wiki/Linux-Guide) for help copying files, creating folders, etc.
+See the [Linux Guide](https://wiki.2b2t.vc/Linux-Guide) for help copying files, creating folders, etc.
 
 ## 2b2t Limits
 

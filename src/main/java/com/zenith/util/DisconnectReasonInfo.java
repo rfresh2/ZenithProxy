@@ -34,7 +34,7 @@ public class DisconnectReasonInfo {
         }
 
         public String getWikiURL() {
-            return "https://github.com/rfresh2/ZenithProxy/wiki/Disconnects#" + wikiHeader;
+            return "https://wiki.2b2t.vc/Disconnects#" + wikiHeader;
         }
     }
 

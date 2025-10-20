@@ -78,6 +78,6 @@ During setup, select the `linux` platform:
 
 Complete the rest of the setup and you're done.
 
-See the main [README](https://github.com/rfresh2/ZenithProxy) and [commands documentation](https://github.com/rfresh2/ZenithProxy/wiki/Commands) for more info.
+See the main [README](https://github.com/rfresh2/ZenithProxy) and [commands documentation](https://wiki.2b2t.vc/Commands) for more info.
 
 for tmux help click [here](https://tmuxcheatsheet.com/)
