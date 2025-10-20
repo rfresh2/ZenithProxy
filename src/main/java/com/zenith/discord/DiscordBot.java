@@ -200,7 +200,6 @@ public class DiscordBot {
             COMMAND.execute(context);
             final MessageCreateData request = commandEmbedOutputToMessage(context);
             if (request != null) {
-                DISCORD_LOG.debug("Discord bot response: {}", request.toData().toJson());
                 mainChannel.sendMessage(request).queue();
                 CommandOutputHelper.logEmbedOutputToTerminal(context.getEmbed());
             }
