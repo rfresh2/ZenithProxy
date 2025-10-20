@@ -341,7 +341,7 @@ def setup_unattended(config):
         discord_disabled_env = os.getenv("ZENITH_DISCORD_DISABLED")
 
         # idk how exactly you plan to do anything after this but ok
-        discord_bot = not (discord_disabled_env and discord_disabled_env.lower() in ['true', 'yes', '1'])
+        discord_bot = discord_disabled_env is None or discord_disabled_env.lower() in ['false', '0', 'no']
         if discord_bot:
             discord_bot_token = os.getenv("ZENITH_DISCORD_TOKEN")
             if discord_bot_token is None:
