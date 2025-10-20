@@ -49,6 +49,7 @@ public class ClientSession extends TcpClientSession {
     private int lastQueuePosition = Integer.MAX_VALUE;
     // in game
     private boolean online = false;
+    private boolean wasOnline = false;
     private boolean disconnected = true;
     // profile we logged in with
     // MC servers can send a different profile back, which will be stored in `CACHE.getProfileCache()`
@@ -70,7 +71,10 @@ public class ClientSession extends TcpClientSession {
 
     public void setOnline(final boolean online) {
         this.online = online;
-        if (online) clientTickManager.startClientTicks();
+        if (online) {
+            clientTickManager.startClientTicks();
+            wasOnline = true;
+        }
         else clientTickManager.stopClientTicks();
     }
 
