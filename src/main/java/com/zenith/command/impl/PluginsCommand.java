@@ -34,11 +34,11 @@ public class PluginsCommand extends Command {
             .category(CommandCategory.MANAGE)
             .description("""
              [BETA]
-             
+
              Configures the ZenithProxy plugin manager.
-             
+
              Plugins are user-created add-ons that add modules and commands.
-             
+
              Plugins are only supported on the `java` release channel.
              """)
             .usageLines(
@@ -47,6 +47,7 @@ public class PluginsCommand extends Command {
                 "download <url>",
                 "remove <pluginId>"
             )
+            .aliases("plugin")
             .build();
     }
 

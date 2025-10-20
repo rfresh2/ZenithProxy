@@ -26,9 +26,9 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.8.5"
+val mcplVersion = "1.21.8.6"
 dependencies {
-    api("com.github.rfresh2:JDA:6.0.19") {
+    api("com.github.rfresh2:JDA:6.1.20") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -36,7 +36,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.6.Final"))
+    api(platform("io.netty:netty-bom:4.2.7.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -69,11 +69,10 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:long-double-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
     api("com.viaversion:vialoader:4.0.5")
-    api("com.viaversion:viaversion:5.5.1")
-    api("com.viaversion:viabackwards:5.5.1")
-    api("com.viaversion:viarewind:4.0.11")
+    api("com.viaversion:viaversion-common:5.5.1")
+    api("com.viaversion:viabackwards-common:5.5.1")
+    api("com.viaversion:viarewind-common:4.0.11")
     api("org.jline:jline:3.30.6")
-    api("org.jline:jline-terminal-jni:3.30.6")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
     api("org.postgresql:postgresql:42.7.8")
@@ -95,7 +94,7 @@ dependencies {
 }
 
 lombok {
-    version = "1.18.40"
+    version = "1.18.42"
 }
 
 tasks {
@@ -118,6 +117,11 @@ tasks {
     val mcVersionTask = register<WriteMetadataTxtTask>("mcVersion") {
         metadataValue = version.toString()
         outputFile = project.layout.buildDirectory.file("resources/main/zenith_mc_version.txt")
+    }
+    val updateWikiTask = register<UpdateWikiTask>("updateWiki") {
+        wikiDirectory = layout.projectDirectory.dir("docs/wiki").asFile
+        wikiFiles = files(project.layout.buildDirectory.file("Commands.md"))
+        dependsOn(test)
     }
     val runGroup = "run"
     register("run", JavaExec::class.java) {
@@ -189,7 +193,7 @@ tasks {
         }
     }
     build {
-        dependsOn(shadowJar)
+        dependsOn(shadowJar, updateWikiTask)
     }
     nativeCompile {
         notCompatibleWithConfigurationCache("not compatible with configuration cache")
