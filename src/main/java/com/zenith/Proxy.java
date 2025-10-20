@@ -222,7 +222,7 @@ public class Proxy {
                             """));
             }
             if (!connected) {
-                DEFAULT_LOG.info("Commands Help: https://github.com/rfresh2/ZenithProxy/wiki/Commands");
+                DEFAULT_LOG.info("Commands Help: https://wiki.2b2t.vc/Commands");
                 DEFAULT_LOG.info("Proxy IP: {}", CONFIG.server.getProxyAddress());
                 DEFAULT_LOG.info("Use the `connect` command to log in!");
             }

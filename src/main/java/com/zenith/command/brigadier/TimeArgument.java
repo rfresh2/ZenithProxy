@@ -22,6 +22,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @Data
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -35,8 +36,10 @@ public class TimeArgument implements SerializableArgumentType<Integer> {
     );
     private static final Object2IntMap<String> UNITS = new Object2IntOpenHashMap<>();
     static {
-        UNITS.put("d", 24000);
-        UNITS.put("s", 20);
+        UNITS.put("d", (int) (TimeUnit.DAYS.toMillis(1) / 50));
+        UNITS.put("h", (int) (TimeUnit.HOURS.toMillis(1) / 50));
+        UNITS.put("m", (int) (TimeUnit.MINUTES.toMillis(1) / 50));
+        UNITS.put("s", (int) (TimeUnit.SECONDS.toMillis(1) / 50));
         UNITS.put("t", 1);
         UNITS.put("", 1);
     }

@@ -1,0 +1,10 @@
+[project]
+name = "ZenithProxy-Wiki"
+version = "0.1.0"
+description = "ZenithProxy Wiki Documentation"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "markdown-callouts>=0.4.0",
+    "mkdocs-material>=9.6.21",
+]

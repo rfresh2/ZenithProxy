@@ -3,6 +3,7 @@ package com.zenith.via;
 import com.viaversion.vialoader.impl.platform.ViaVersionPlatformImpl;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.configuration.AbstractViaConfig;
+import com.zenith.Globals;
 import com.zenith.Proxy;
 import com.zenith.network.server.ServerSession;
 import net.kyori.adventure.key.Key;
@@ -18,6 +19,16 @@ public class ZenithViaPlatform extends ViaVersionPlatformImpl {
     private static final Logger LOGGER = LoggerFactory.getLogger("ViaVersion");
     public ZenithViaPlatform() {
         super(null);
+    }
+
+    @Override
+    public String getPlatformName() {
+        return "ZenithProxy";
+    }
+
+    @Override
+    public String getPlatformVersion() {
+        return Globals.LAUNCH_CONFIG.version;
     }
 
     @Override
