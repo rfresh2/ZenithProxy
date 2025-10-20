@@ -4,6 +4,7 @@ import com.zenith.event.client.ClientConnectEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.Instant;
 
 import static com.zenith.Globals.EVENT_BUS;
@@ -50,14 +51,6 @@ public class TaskSerializerTest {
     }
 
     @Test
-    public void testInstantCondition() {
-        Condition condition = new InstantCondition(Instant.now());
-        var str = GSON.toJson(condition, Condition.class);
-        var result = GSON.fromJson(str, Condition.class);
-        assertEquals(condition, result);
-    }
-
-    @Test
     public void testIntervalCondition() {
         Condition condition = new IntervalCondition(Instant.now(), java.time.Duration.ofSeconds(10));
         var str = GSON.toJson(condition, Condition.class);
@@ -82,19 +75,11 @@ public class TaskSerializerTest {
     }
 
     @Test
-    public void testTimedCondition() {
-        Condition condition = new TimedCondition(5000);
-        var str = GSON.toJson(condition, Condition.class);
-        var result = GSON.fromJson(str, Condition.class);
-        assertEquals(condition, result);
-    }
-
-    @Test
     public void testTask() {
         Task task = new Task(
             "task1",
             new CommandAction("say hello"),
-            new InstantCondition(Instant.now()),
+            new IntervalCondition(Instant.now(), Duration.ofMillis(500L)),
             new NContinuation(5)
         );
         var str = GSON.toJson(task, Task.class);

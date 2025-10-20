@@ -81,7 +81,7 @@ public class TasksCommand extends Command {
                     var task = new Task(
                         taskId,
                         new CommandAction(command),
-                        new TimedCondition(delayMs),
+                        new IntervalCondition(Instant.now(), Duration.ofMillis(delayMs)),
                         new OnceContinuation()
                     );
                     MODULE.get(Tasks.class).addTask(task);
@@ -205,17 +205,16 @@ public class TasksCommand extends Command {
     }
 
     private String getType(Task task) {
-        if (task.getCondition() instanceof TimedCondition) {
-            return "Timed";
-        } else if (task.getCondition() instanceof IntervalCondition) {
-            return "Interval";
-        } else if (task.getCondition() instanceof EventCondition) {
-            return "Event";
-        } else if (task.getCondition() instanceof InstantCondition) {
-            return "Instant";
-        } else {
-            return "Unknown";
-        }
+        return switch (task.getCondition()) {
+            case IntervalCondition c -> {
+                if (task.getContinuation() instanceof OnceContinuation) {
+                    yield "Timed";
+                }
+                yield "Interval";
+            }
+            case EventCondition c -> "Event";
+            case null, default -> "Unknown";
+        };
     }
 
     private String formatTaskDuration(Duration duration) {

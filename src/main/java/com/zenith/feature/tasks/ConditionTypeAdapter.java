@@ -25,25 +25,12 @@ public class ConditionTypeAdapter extends TypeAdapter<Condition> {
                 writer.value(eventClass.getName());
                 writer.endObject();
             }
-            case InstantCondition instant -> {
-                writer.beginObject();
-                Instant time = instant.getTime();
-                writer.name("time");
-                writer.value(time.toString());
-                writer.endObject();
-            }
             case IntervalCondition interval -> {
                 writer.beginObject();
                 writer.name("startTime");
                 writer.value(interval.getStartTime().toString());
                 writer.name("interval");
                 writer.value(interval.getInterval().toString());
-                writer.endObject();
-            }
-            case TimedCondition timed -> {
-                writer.beginObject();
-                writer.name("delayMs");
-                writer.value(timed.getDelayMs());
                 writer.endObject();
             }
             default -> {
@@ -83,17 +70,6 @@ public class ConditionTypeAdapter extends TypeAdapter<Condition> {
                     DEFAULT_LOG.error("Unable to find event class: {} in EventCondition deserializer", eventClassName);
                 }
             }
-            case "InstantCondition" -> {
-                reader.beginObject();
-                var timeField = reader.nextName();
-                if (!timeField.equals("time")) {
-                    return null;
-                }
-                String timeString = reader.nextString();
-                Instant time = Instant.parse(timeString);
-                reader.endObject();
-                condition = new InstantCondition(time);
-            }
             case "IntervalCondition" -> {
                 reader.beginObject();
                 var startTimeField = reader.nextName();
@@ -110,16 +86,6 @@ public class ConditionTypeAdapter extends TypeAdapter<Condition> {
                 var interval = Duration.parse(intervalString);
                 reader.endObject();
                 condition = new IntervalCondition(startTime, interval);
-            }
-            case "TimedCondition" -> {
-                reader.beginObject();
-                var delayField = reader.nextName();
-                if (!delayField.equals("delayMs")) {
-                    return null;
-                }
-                long delayMs = reader.nextLong();
-                reader.endObject();
-                condition = new TimedCondition(delayMs);
             }
             default -> {
                 reader.skipValue();
