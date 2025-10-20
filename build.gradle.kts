@@ -28,7 +28,7 @@ repositories {
 
 val mcplVersion = "1.21.4.31"
 dependencies {
-    api("com.github.rfresh2:JDA:6.0.19") {
+    api("com.github.rfresh2:JDA:6.1.20") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
