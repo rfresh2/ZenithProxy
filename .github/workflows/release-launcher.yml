@@ -291,6 +291,9 @@ jobs:
           merge-multiple: true
           path: artifacts/
 
+      - name: Remove old launcher assets
+        run: rm artifacts/launcher-assets.zip
+
       - name: Compile Hashes
         run: |
           cat artifacts/*.sha1 > hashes.txt
