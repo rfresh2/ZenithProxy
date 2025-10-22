@@ -186,7 +186,6 @@ public class Proxy {
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             EXECUTOR.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
-            EXECUTOR.scheduleAtFixedRate(this::deprecationWarningTick, 0L, 72L, TimeUnit.HOURS);
             EXECUTOR.schedule(this::serverConnectionTest, 10L, TimeUnit.SECONDS);
             boolean connected = false;
             if (CONFIG.client.autoConnect && !isConnected()) {
@@ -357,26 +356,6 @@ public class Proxy {
             MODULE.get(AutoReconnect.class).cancelAutoReconnect();
             connect();
         }
-    }
-
-    private void deprecationWarningTick() {
-        if (!CONFIG.deprecationWarning_1_21_8) return;
-        String platform = ImageInfo.inImageCode() ? "linux" : "java";
-        DISCORD.sendEmbedMessage(NotificationEventListener.notificationMention(), Embed.builder()
-            .title("1.21.8 Deprecation")
-                .description("""
-                  Update to ZenithProxy for 1.21.10 (or 1.21.4) with this command:
-
-                  `channel set %s 1.21.10`
-
-                  ZenithProxy for 1.21.8 has been deprecated and will no longer receive updates and support.
-
-                  You can continue using 1.21.8 clients on the `1.21.10` channel, ZenithProxy has built-in ViaVersion.
-
-                  To disable this notification: `deprecationWarning off`
-                  """.formatted(platform))
-            .errorColor()
-        );
     }
 
     private void tablistUpdate() {
