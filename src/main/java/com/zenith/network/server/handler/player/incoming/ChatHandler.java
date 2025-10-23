@@ -17,6 +17,8 @@ public class ChatHandler implements PacketHandler<ServerboundChatPacket, ServerS
                 return null;
             }
         }
+        // todo: help players by trying to converting `/` prefixed chats to commands?
+        //  might be some situations where merged command trees could make this needed
         return packet;
     }
 }

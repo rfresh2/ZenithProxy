@@ -338,11 +338,11 @@ def setup_unattended(config):
         # some env vars have default values
         port = os.getenv("ZENITH_PORT", 25565)
         ip = os.getenv("ZENITH_IP", "localhost")
-        if os.getenv("ZENITH_DISCORD_DISABLED") is not None:
-            # idk how exactly you plan to do anything after this but ok
-            discord_bot = False
-        else:
-            discord_bot = True
+        discord_disabled_env = os.getenv("ZENITH_DISCORD_DISABLED")
+
+        # idk how exactly you plan to do anything after this but ok
+        discord_bot = discord_disabled_env is None or discord_disabled_env.lower() in ['false', '0', 'no']
+        if discord_bot:
             discord_bot_token = os.getenv("ZENITH_DISCORD_TOKEN")
             if discord_bot_token is None:
                 critical_error("ZENITH_DISCORD_TOKEN env variable must be set in unattended mode")

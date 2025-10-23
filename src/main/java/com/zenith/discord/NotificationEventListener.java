@@ -354,7 +354,24 @@ public class NotificationEventListener {
                 .title("MC Version Mismatch")
                 .description(desc)
                 .errorColor();
-            sendEmbedMessage(embed);
+            var buttonId = "via-" + ThreadLocalRandom.current().nextInt(1000000);
+            var button = Button.secondary(buttonId, "Auto-Configure ViaVersion");
+            Consumer<ButtonInteractionEvent> mapper = e -> {
+                if (e.getComponentId().equals(buttonId)) {
+                    CONFIG.client.viaversion.protocolVersion = playerProtocolVersion.getVersion();
+                    CONFIG.client.viaversion.disableOn2b2t = false;
+                    CONFIG.client.viaversion.enabled = true;
+                    saveConfigAsync();
+                    e.replyEmbeds(Embed.builder()
+                            .title("ViaVersion Configured")
+                            .description("Changes will take effect on next connect")
+                            .addField("MC Version", playerProtocolVersion.getName())
+                            .primaryColor()
+                            .toJDAEmbed())
+                        .complete();
+                }
+            };
+            sendEmbedMessageWithButtons(embed, List.of(button), mapper, Duration.ofHours(1L));
         }
     }
 

@@ -216,8 +216,13 @@ public class ClientSession extends TcpClientSession {
         CLIENT_LOG.info("Disconnected: {}", reason != null ? reason : reasonStr);
         var onlineDuration = Duration.ofSeconds(Proxy.getInstance().getOnlineTimeSeconds());
         var onlineDurationWithQueueSkip = Duration.ofSeconds(Proxy.getInstance().getOnlineTimeSecondsWithQueueSkip());
-        // stop processing packets before we reset the client cache to avoid race conditions
-        getClientEventLoop().shutdownGracefully(0L, 15L, TimeUnit.SECONDS).awaitUninterruptibly();
+        try {
+            CLIENT_LOG.trace("Shutting down client event loop...");
+            // stop processing packets before we reset the client cache to avoid race conditions
+            getClientEventLoop().shutdownGracefully(0L, 15L, TimeUnit.SECONDS).awaitUninterruptibly(20L, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            CLIENT_LOG.error("Error awaiting client event loop shutdown", e);
+        }
         EVENT_BUS.post(new ClientDisconnectEvent(reasonStr, onlineDuration, onlineDurationWithQueueSkip, Proxy.getInstance().isInQueue(), Proxy.getInstance().getQueuePosition()));
     }
 

@@ -1,8 +1,12 @@
 package com.zenith.cache.data.chat;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
+import com.zenith.command.api.CommandContext;
+import com.zenith.command.brigadier.McplBrigadierConverter;
 import lombok.Data;
+import lombok.Locked;
 import lombok.experimental.Accessors;
 import net.raphimc.minecraftauth.step.java.StepPlayerCertificates;
 import org.geysermc.mcprotocollib.network.packet.Packet;
@@ -22,10 +26,12 @@ import static com.zenith.Globals.CONFIG;
 @Accessors(chain = true)
 public class ChatCache implements CachedData {
     protected CommandNode[] commandNodes = new CommandNode[0];
+    protected CommandDispatcher<CommandContext> commandDispatcher = new CommandDispatcher<>();
+    private boolean commandTreeParsed = false;
     protected int firstCommandNodeIndex;
     protected volatile long lastChatTimestamp = System.currentTimeMillis();
     protected boolean enforcesSecureChat = false;
-    protected @Nullable ChatSession chatSession = new ChatSession(UUID.randomUUID());
+    protected ChatSession chatSession = new ChatSession(UUID.randomUUID());
     protected StepPlayerCertificates.@Nullable PlayerCertificates playerCertificates;
 
     @Override
@@ -37,6 +43,8 @@ public class ChatCache implements CachedData {
     public void reset(CacheResetType type) {
         if (type == CacheResetType.PROTOCOL_SWITCH || type == CacheResetType.FULL) {
             this.commandNodes = new CommandNode[0];
+            this.commandDispatcher = new CommandDispatcher<>();
+            this.commandTreeParsed = false;
             this.firstCommandNodeIndex = 0;
         }
         if (type == CacheResetType.FULL) {
@@ -61,5 +69,29 @@ public class ChatCache implements CachedData {
         }
         this.chatSession.setPlayerCertificates(this.playerCertificates);
         return this.chatSession;
+    }
+
+    @Locked
+    public CommandDispatcher<CommandContext> getCommandDispatcher() {
+        if (!this.commandTreeParsed) {
+            this.parseCommandTree();
+        }
+        return this.commandDispatcher;
+    }
+
+    private void parseCommandTree() {
+        try {
+            this.commandDispatcher = McplBrigadierConverter.toBrigadier(this.commandNodes);
+        } catch (Exception e) {
+            CACHE_LOG.error("Failed to parse command tree", e);
+        }
+        this.commandTreeParsed = true;
+    }
+
+    /**
+     * Pass full raw command string
+     */
+    public boolean isSignableCommand(final String command) {
+        return chatSession.isSignableCommand(command);
     }
 }

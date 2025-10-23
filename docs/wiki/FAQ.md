@@ -3,7 +3,9 @@
 ## Switch Accounts
 
 `disconnect`
+
 `auth clear`
+
 `connect`
 
 ## Switch the MC server ZenithProxy connects to
@@ -75,7 +77,6 @@ sudo iptables -I INPUT -j ACCEPT
 sudo su
 iptables-save > /etc/iptables/rules.v4
 exit
-
 ```
 
 source: https://www.reddit.com/r/oraclecloud/comments/r8lkf7/a_quick_tips_to_people_who_are_having_issue/

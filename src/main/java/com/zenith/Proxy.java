@@ -782,9 +782,11 @@ public class Proxy {
     }
 
     public long getOnlineTimeSecondsWithQueueSkip() {
-        return !inQueue && didQueueSkip && prevOnlineSeconds.isPresent()
-            ? getOnlineTimeSeconds() + prevOnlineSeconds.getAsLong()
-            : getOnlineTimeSeconds();
+        long beforeQueueSkipOnlineTime = 0L;
+        if (!inQueue && didQueueSkip) {
+            beforeQueueSkipOnlineTime = prevOnlineSeconds.orElse(0L);
+        }
+        return getOnlineTimeSeconds() + beforeQueueSkipOnlineTime;
     }
 
     public String getOnlineTimeString() {

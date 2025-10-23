@@ -33,6 +33,7 @@ public class ChatUtil {
     private static final Set<String> knownWhisperCommands = Set.of(
         "w", "whisper", "msg", "minecraft:msg", "tell", "r"
     );
+    @Deprecated
     public static boolean isWhisperCommand(String command) {
         if (CONFIG.client.extra.whisperCommand.equals(command)) return true;
         return knownWhisperCommands.contains(command);

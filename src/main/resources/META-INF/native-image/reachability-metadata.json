@@ -1637,6 +1637,20 @@
       ]
     },
     {
+      "type": "com.zenith.feature.api.mclogs.model.MclogsResponse",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "boolean",
+            "java.lang.String",
+            "java.lang.String",
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
       "type": "com.zenith.feature.api.mcsrvstatus.model.MCSrvStatusResponse",
       "allDeclaredFields": true,
       "methods": [
@@ -4558,6 +4572,13 @@
         {
           "name": "alignedSlice",
           "parameterTypes": [
+            "int"
+          ]
+        },
+        {
+          "name": "slice",
+          "parameterTypes": [
+            "int",
             "int"
           ]
         }

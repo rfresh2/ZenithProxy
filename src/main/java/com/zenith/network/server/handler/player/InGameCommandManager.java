@@ -15,6 +15,10 @@ public class InGameCommandManager {
     // true = command was handled
     // false = command was not handled
     public boolean handleInGameCommand(final String message, final @NonNull ServerSession session, final boolean printUnhandled) {
+        if (matchesServerCommand(message, session)) {
+            // pass through to server
+            return false;
+        }
         TERMINAL_LOG.info("{} executed in-game command: {}", session.getName(), message);
         final String command = message.split(" ")[0]; // first word is the command
         if (command.equals("help") && CONFIG.inGameCommands.enable && !CONFIG.inGameCommands.slashCommands) {
@@ -22,6 +26,15 @@ public class InGameCommandManager {
             session.sendAsyncMessage(minimessage("<green>Prefix : \"" + CONFIG.inGameCommands.prefix + "\""));
         }
         return executeInGameCommand(message, session, printUnhandled);
+    }
+
+    public boolean matchesServerCommand(final String message, final ServerSession session) {
+        var dispatcher = CACHE.getChatCache().getCommandDispatcher();
+        var parse = dispatcher.parse(message, CommandContext.createInGamePlayerContext(message, session));
+        if (!parse.getExceptions().isEmpty()) {
+            return false;
+        }
+        return !parse.getReader().canRead();
     }
 
     public boolean isCommandPrefixed(final String message) {
