@@ -229,6 +229,7 @@ public final class PacketCodecRegistries {
                 .postOutbound(ServerboundAcceptTeleportationPacket.class, new PostOutgoingAcceptTeleportHandler())
                 .postOutbound(ServerboundConfigurationAcknowledgedPacket.class, new PostOutgoingConfigurationAckHandler())
                 .postOutbound(ServerboundMoveVehiclePacket.class, new PostOutgoingMoveVehicleHandler())
+                .postOutbound(ServerboundPlayerAbilitiesPacket.class, new PostOutgoingPlayerAbilitiesHandler())
                 .postOutbound(ServerboundPlayerCommandPacket.class, new PostOutgoingPlayerCommandHandler())
                 .postOutbound(ServerboundSetCarriedItemPacket.class, new PostOutgoingSetCarriedItemHandler())
                 .postOutbound(ServerboundMovePlayerPosPacket.class, new PostOutgoingPlayerPositionHandler())

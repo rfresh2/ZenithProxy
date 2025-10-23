@@ -89,6 +89,7 @@ public final class Bot extends ModuleUtils {
     private float speed = 0.10000000149011612f;
     private float sneakSpeed = 0.3f;
     private float jumpStrength = 0.42f;
+    private float flyingSpeed = 0.05f;
     private boolean onGroundNoBlocks = false;
     private Optional<BlockPos> supportingBlockPos = Optional.empty();
     private int jumpingCooldown;
@@ -281,6 +282,36 @@ public final class Bot extends ModuleUtils {
 
         updateInWaterStateAndDoFluidPushing();
 
+        if (CACHE.getPlayerCache().isCanFly()) {
+            if (CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
+                if (!CACHE.getPlayerCache().isFlying()) {
+                    CACHE.getPlayerCache().setFlying(true);
+                    onUpdateAbilities();
+                }
+            } else if (movementInput.isJumping()) {
+                // todo:
+                // need to check prev jump state, but lets just not do that for now
+            }
+        }
+        if (isFlying) {
+            int verticalDirection = 0;
+            if (this.movementInput.isSneaking()) {
+                verticalDirection--;
+            }
+
+            if (this.movementInput.isJumping()) {
+                verticalDirection++;
+            }
+
+            if (verticalDirection != 0) {
+                velocity.add(
+                    0.0,
+                    verticalDirection * flyingSpeed * 3.0f,
+                    0
+                );
+            }
+        }
+
         if (movementInput.isJumping()) {
             if (this.onGround && jumpingCooldown == 0 && !isTouchingWater) {
                 jump();
@@ -301,8 +332,13 @@ public final class Bot extends ModuleUtils {
             //  but we don't cache or intercept where this would be set server side yet
             velocity.set(0, 0, 0);
         } else {
-            travel(movementInputVec);
+            playerTravel(movementInputVec);
             tryCheckInsideBlocks();
+        }
+
+        if (onGround && isFlying && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR) {
+            isFlying = false;
+            this.onUpdateAbilities();
         }
 
         if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
@@ -458,6 +494,12 @@ public final class Bot extends ModuleUtils {
         float strafe = 0.0F;
         if (movementInput.pressingLeft) --strafe;
         if (movementInput.pressingRight) ++strafe;
+        // todo:
+//        if (isUsingItem && !isPassenger) {
+//            this.input.leftImpulse *= 0.2F;
+//            this.input.forwardImpulse *= 0.2F;
+//            this.sprintTriggerTime = 0;
+//        }
         if (movementInput.sneaking) strafe *= sneakSpeed;
         strafe = strafe * 0.98f;
         float fwd = 0.0F;
@@ -512,6 +554,22 @@ public final class Bot extends ModuleUtils {
 
     public void handleRespawn() {
         syncFromCache(true);
+    }
+
+    private void playerTravel(MutableVec3d movementInputVec) {
+        if (!CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
+            // todo: swimming movement
+            // if (swimming) { ...  }
+            if (isFlying) {
+                var d = velocity.getY();
+                travel(movementInputVec);
+                velocity.setY(d * 0.6);
+            } else {
+                travel(movementInputVec);
+            }
+        } else {
+            travel(movementInputVec);
+        }
     }
 
     private void travel(MutableVec3d movementInputVec) {
@@ -1137,6 +1195,7 @@ public final class Bot extends ModuleUtils {
         this.yaw = this.lastYaw = this.requestedYaw = CACHE.getPlayerCache().getYaw();
         this.pitch = this.lastPitch = this.requestedPitch = CACHE.getPlayerCache().getPitch();
         this.onGround = this.lastOnGround = true; // todo: cache
+        this.isFlying = CACHE.getPlayerCache().isFlying();
         this.velocity.set(0, 0, 0);
         this.supportingBlockPos = Optional.empty();
         this.onGroundNoBlocks = false;
@@ -1300,6 +1359,7 @@ public final class Bot extends ModuleUtils {
         this.gravity = getAttributeValue(AttributeType.Builtin.GRAVITY, 0.08f);
         this.jumpStrength = getAttributeValue(AttributeType.Builtin.JUMP_STRENGTH, 0.42f);
         this.sneakSpeed = getAttributeValue(AttributeType.Builtin.SNEAKING_SPEED, 0.3f);
+        this.flyingSpeed = getAttributeValue(AttributeType.Builtin.FLYING_SPEED, 0.05f);
     }
 
     public float getAttributeValue(final AttributeType.Builtin attributeType, float defaultValue) {
@@ -1364,6 +1424,10 @@ public final class Bot extends ModuleUtils {
             }
         }
         return true;
+    }
+
+    public void onUpdateAbilities() {
+        sendClientPacketAsync(new ServerboundPlayerAbilitiesPacket(CACHE.getPlayerCache().isFlying()));
     }
 
     public double getEyeY() {
