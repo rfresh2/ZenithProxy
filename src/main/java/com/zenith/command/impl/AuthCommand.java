@@ -23,18 +23,18 @@ public class AuthCommand extends Command {
             .category(CommandCategory.MANAGE)
             .description("""
             Configures the proxy's authentication settings.
-            
+
             To switch accounts, use the `clear` command.
-            
+
             `attempts` configures the number of login attempts before wiping the cache.
-            
+
             `alwaysRefreshOnLogin` will always refresh the token on login instead of trusting the cache. This can cause
             Microsoft to rate limit your account. Auth tokens will always refresh in the background even if this is off.
-            
+
             `deviceCode` is the default and recommended authentication type.
             If authentication fails, try logging into the account on the vanilla MC launcher and joining a server. Then try again in Zenith.
             If this still fails, try one of the alternate auth types.
-            
+
             """)
             .usageLines(
                 "clear",
@@ -49,7 +49,7 @@ public class AuthCommand extends Command {
                 "useClientConnectionProxy on/off",
                 "chatSigning on/off",
                 "chatSigning force on/off",
-                "chatSigning whispers on/off"
+                "chatSigning commands on/off"
             )
             .build();
     }
@@ -84,71 +84,71 @@ public class AuthCommand extends Command {
                 return OK;
             })))
             .then(literal("type").requires(this::validateDiscordOrTerminalSource)
-                      .then(argument("typeArg", enumStrings("deviceCode", "emailAndPassword", "deviceCode2", "prism")).executes(c -> {
-                          String type = getString(c, "typeArg");
-                          Config.Authentication.AccountType accountType = switch (type) {
-                              case "deviceCode" -> Config.Authentication.AccountType.DEVICE_CODE;
-                              case "emailAndPassword" -> Config.Authentication.AccountType.MSA;
-                              case "deviceCode2" -> Config.Authentication.AccountType.DEVICE_CODE_WITHOUT_DEVICE_TOKEN;
-                              case "prism" -> Config.Authentication.AccountType.PRISM;
-                              default -> null;
-                          };
-                          if (accountType == null) {
-                              c.getSource().getEmbed()
-                                  .title("Invalid Type")
-                                  .errorColor();
-                              return ERROR;
-                          }
-                          CONFIG.authentication.accountType = accountType;
-                          c.getSource().getEmbed()
-                              .title("Authentication Type Set")
-                              .primaryColor();
-                          Proxy.getInstance().cancelLogin();
-                          Authenticator.INSTANCE.clearAuthCache();
-                          return OK;
-                      })))
+                .then(argument("typeArg", enumStrings("deviceCode", "emailAndPassword", "deviceCode2", "prism")).executes(c -> {
+                    String type = getString(c, "typeArg");
+                    Config.Authentication.AccountType accountType = switch (type) {
+                        case "deviceCode" -> Config.Authentication.AccountType.DEVICE_CODE;
+                        case "emailAndPassword" -> Config.Authentication.AccountType.MSA;
+                        case "deviceCode2" -> Config.Authentication.AccountType.DEVICE_CODE_WITHOUT_DEVICE_TOKEN;
+                        case "prism" -> Config.Authentication.AccountType.PRISM;
+                        default -> null;
+                    };
+                    if (accountType == null) {
+                        c.getSource().getEmbed()
+                            .title("Invalid Type")
+                            .errorColor();
+                        return ERROR;
+                    }
+                    CONFIG.authentication.accountType = accountType;
+                    c.getSource().getEmbed()
+                        .title("Authentication Type Set")
+                        .primaryColor();
+                    Proxy.getInstance().cancelLogin();
+                    Authenticator.INSTANCE.clearAuthCache();
+                    return OK;
+                })))
             .then(literal("email").requires(this::validateTerminalSource)
-                      .then(argument("email", wordWithChars()).executes(c -> {
-                          c.getSource().setSensitiveInput(true);
-                          var emailStr = getString(c, "email").trim();
-                          // validate email str is an email
-                          if (!emailStr.contains("@") || emailStr.length() < 3) {
-                              c.getSource().getEmbed()
-                                  .title("Invalid Email")
-                                  .errorColor();
-                              return OK;
-                          }
-                          CONFIG.authentication.email = emailStr;
-                          c.getSource().getEmbed()
-                              .title("Authentication Email Set")
-                              .primaryColor();
-                          return OK;
-                      })))
+                .then(argument("email", wordWithChars()).executes(c -> {
+                    c.getSource().setSensitiveInput(true);
+                    var emailStr = getString(c, "email").trim();
+                    // validate email str is an email
+                    if (!emailStr.contains("@") || emailStr.length() < 3) {
+                        c.getSource().getEmbed()
+                            .title("Invalid Email")
+                            .errorColor();
+                        return OK;
+                    }
+                    CONFIG.authentication.email = emailStr;
+                    c.getSource().getEmbed()
+                        .title("Authentication Email Set")
+                        .primaryColor();
+                    return OK;
+                })))
             .then(literal("password").requires(this::validateTerminalSource)
-                      .then(argument("password", wordWithChars()).executes(c -> {
-                          c.getSource().setSensitiveInput(true);
-                          var passwordStr = getString(c, "password").trim();
-                          // validate password str is a password
-                          if (passwordStr.isBlank()) {
-                              c.getSource().getEmbed()
-                                  .title("Invalid Password")
-                                  .errorColor();
-                              return OK;
-                          }
-                          CONFIG.authentication.password = passwordStr;
-                          c.getSource().getEmbed()
-                              .title("Authentication Password Set")
-                              .primaryColor();
-                          return OK;
-                      })))
+                .then(argument("password", wordWithChars()).executes(c -> {
+                    c.getSource().setSensitiveInput(true);
+                    var passwordStr = getString(c, "password").trim();
+                    // validate password str is a password
+                    if (passwordStr.isBlank()) {
+                        c.getSource().getEmbed()
+                            .title("Invalid Password")
+                            .errorColor();
+                        return OK;
+                    }
+                    CONFIG.authentication.password = passwordStr;
+                    c.getSource().getEmbed()
+                        .title("Authentication Password Set")
+                        .primaryColor();
+                    return OK;
+                })))
             .then(literal("mention")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                          CONFIG.discord.mentionRoleOnDeviceCodeAuth = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                .title("Mention Role " + toggleStrCaps(CONFIG.discord.mentionRoleOnDeviceCodeAuth))
-                                .primaryColor();
-                            return OK;
-                      })))
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.discord.mentionRoleOnDeviceCodeAuth = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Mention Role " + toggleStrCaps(CONFIG.discord.mentionRoleOnDeviceCodeAuth))
+                        .primaryColor();
+                    return OK;
+                })))
             .then(literal("openBrowser").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.authentication.openBrowserOnLogin = getToggle(c, "toggle");
                 c.getSource().getEmbed()
@@ -185,10 +185,10 @@ public class AuthCommand extends Command {
                         .primaryColor();
                     return OK;
                 })))
-                .then(literal("whispers").then(argument("whisperToggle", toggle()).executes(c -> {
-                    CONFIG.client.chatSigning.signWhispers = getToggle(c, "whisperToggle");
+                .then(literal("commands").then(argument("commandsToggle", toggle()).executes(c -> {
+                    CONFIG.client.chatSigning.signCommands = getToggle(c, "commandsToggle");
                     c.getSource().getEmbed()
-                        .title("Chat Signing Whispers " + toggleStrCaps(CONFIG.client.chatSigning.signWhispers))
+                        .title("Chat Signing Commands " + toggleStrCaps(CONFIG.client.chatSigning.signCommands))
                         .primaryColor();
                     return OK;
                 }))));
@@ -214,7 +214,7 @@ public class AuthCommand extends Command {
             .addField("Use Client Connection Proxy", toggleStr(CONFIG.authentication.useClientConnectionProxy))
             .addField("Chat Signing", toggleStr(CONFIG.client.chatSigning.enabled))
             .addField("Chat Signing Force", toggleStr(CONFIG.client.chatSigning.force))
-            .addField("Chat Signing Whispers", toggleStr(CONFIG.client.chatSigning.signWhispers));
+            .addField("Chat Signing Commands", toggleStr(CONFIG.client.chatSigning.signCommands));
     }
 
     private String authTypeToString(Config.Authentication.AccountType type) {

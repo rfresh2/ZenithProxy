@@ -12,8 +12,8 @@ import com.zenith.command.api.Command;
 import com.zenith.command.api.CommandCategory;
 import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandSource;
-import com.zenith.command.brigadier.BrigadierToMCProtocolLibConverter;
 import com.zenith.command.brigadier.CaseInsensitiveLiteralCommandNode;
+import com.zenith.command.brigadier.McplBrigadierConverter;
 import com.zenith.command.impl.*;
 import lombok.Getter;
 import org.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;
@@ -116,7 +116,7 @@ public class CommandManager {
         new WhitelistCommand()
     );
     private final CommandDispatcher<CommandContext> dispatcher;
-    @Getter private @NonNull CommandNode[] MCProtocolLibCommandNodes;
+    @Getter private @NonNull CommandNode[] mcplCommandNodes;
 
     public CommandManager() {
         this.dispatcher = new CommandDispatcher<>();
@@ -150,7 +150,7 @@ public class CommandManager {
     }
 
     void syncCommandNodes() {
-        this.MCProtocolLibCommandNodes = BrigadierToMCProtocolLibConverter.convertNodesToMCProtocolLibNodes(this.dispatcher);
+        this.mcplCommandNodes = McplBrigadierConverter.toMcpl(this.dispatcher);
     }
 
     public void execute(final CommandContext context, final ParseResults<CommandContext> parseResults) {

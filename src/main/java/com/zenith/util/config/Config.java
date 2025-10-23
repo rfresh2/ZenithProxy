@@ -97,7 +97,7 @@ public final class Config {
         public static final class ChatSigning {
             public boolean enabled = true;
             public boolean force = false;
-            public boolean signWhispers = true;
+            public boolean signCommands = true;
         }
 
         public static final class ClientViaVersion {

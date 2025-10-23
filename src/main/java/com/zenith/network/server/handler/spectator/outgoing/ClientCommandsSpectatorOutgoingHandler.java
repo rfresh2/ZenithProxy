@@ -14,7 +14,7 @@ public class ClientCommandsSpectatorOutgoingHandler implements PacketHandler<Cli
             if (CONFIG.server.spectator.fullCommandsRequireRegularWhitelist && !PLAYER_LISTS.getWhitelist().contains(session.getProfileCache().getProfile().getId())) {
                 return null;
             }
-            CommandNode[] zenithCommandNodes = COMMAND.getMCProtocolLibCommandNodes();
+            CommandNode[] zenithCommandNodes = COMMAND.getMcplCommandNodes();
             return new ClientboundCommandsPacket(
                 zenithCommandNodes,
                 0
