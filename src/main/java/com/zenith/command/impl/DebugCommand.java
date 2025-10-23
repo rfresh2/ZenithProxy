@@ -8,7 +8,7 @@ import com.zenith.command.api.Command;
 import com.zenith.command.api.CommandCategory;
 import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandUsage;
-import com.zenith.discord.Embed;
+import com.zenith.feature.api.mclogs.MclogsApi;
 import com.zenith.feature.gui.GuiBuilder;
 import com.zenith.feature.gui.SlotBuilder;
 import com.zenith.mc.item.ItemRegistry;
@@ -20,6 +20,8 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerType;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentTypes;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundRemoveMobEffectPacket;
+
+import java.nio.file.Path;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -52,7 +54,9 @@ public class DebugCommand extends Command {
                 "debugLogs on/off",
                 "chunkCacheFullbright on/off",
                 "defaultClientRenderDistance <int>",
-                "lockFile on/off"
+                "lockFile on/off",
+                "uploadLog",
+                "uploadDebugLog"
             )
             .build();
     }
@@ -121,12 +125,14 @@ public class DebugCommand extends Command {
                     PlayerCache.inventorySync();
                     c.getSource().getEmbed()
                         .title("Inventory Synced");
+                    c.getSource().getData().put("noDefaultEmbed", true);
                     return OK;
                 }))
                 .then(literal("chunks").executes(c -> {
                     ChunkCache.sync();
                     c.getSource().getEmbed()
                         .title("Synced Chunks");
+                    c.getSource().getData().put("noDefaultEmbed", true);
                     return OK;
                 })))
             .then(literal("clearEffects").executes(c -> {
@@ -139,6 +145,7 @@ public class DebugCommand extends Command {
                 }
                 c.getSource().getEmbed()
                     .title("Cleared Effects");
+                c.getSource().getData().put("noDefaultEmbed", true);
                 return OK;
             }))
             .then(literal("kickDisconnect").then(argument("toggle", toggle()).executes(c -> {
@@ -246,27 +253,59 @@ public class DebugCommand extends Command {
                                 .build())
                             .build())
                         .build());
+                c.getSource().getData().put("noDefaultEmbed", true);
             }))
             .then(literal("lockFile").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.debug.lockFile = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Lock File " + toggleStrCaps(CONFIG.debug.lockFile));
-            })));
+            })))
+            .then(literal("uploadLog").executes(c -> {
+                uploadLog(c.getSource(), "log/latest.log");
+            }))
+            .then(literal("uploadDebugLog").executes(c -> {
+                uploadLog(c.getSource(), "log/debug.log");
+            }));
+    }
+
+    private static void uploadLog(CommandContext c, String path) {
+        MclogsApi.INSTANCE.uploadLog(Path.of(path))
+            .ifPresentOrElse(response -> {
+                if (response.success()) {
+                    c.getEmbed()
+                        .title("Log Uploaded")
+                        .description("**Link**: " + response.url())
+                        .addField("Warning", "May contain sensitive information like coords, be careful who you share the link with");
+                } else {
+                    c.getEmbed()
+                        .title("Error Uploading Log")
+                        .description(response.error())
+                        .errorColor();
+                }
+            }, () -> {
+                c.getEmbed()
+                    .title("Log Upload Failed")
+                    .errorColor();
+            });
+        c.getData().put("noDefaultEmbed", true);
     }
 
     @Override
-    public void defaultEmbed(final Embed builder) {
-        builder
-            .addField("Packet Log", toggleStr(CONFIG.debug.packetLog.enabled))
-            .addField("Client Packet Log", toggleStr(CONFIG.debug.packetLog.clientPacketLog.received))
-            .addField("Server Packet Log", toggleStr(CONFIG.debug.packetLog.serverPacketLog.received))
-            .addField("Packet Log Filter", CONFIG.debug.packetLog.packetFilter)
-            .addField("Kick Disconnect", toggleStr(CONFIG.debug.kickDisconnect))
-            .addField("Debug Logs", toggleStr(CONFIG.debug.debugLogs))
-            .addField("Terminal Debug Logs", toggleStr(CONFIG.debug.terminalDebugLogs))
-            .addField("Chunk Cache Fullbright", toggleStr(CONFIG.debug.server.cache.fullbrightChunkBlocklight))
-            .addField("Default Client Render Distance", CONFIG.client.defaultClientRenderDistance)
-            .addField("Lock File", toggleStr(CONFIG.debug.lockFile))
+    public void defaultHandler(final CommandContext ctx) {
+        if (!ctx.getData().containsKey("noDefaultEmbed")) {
+            ctx.getEmbed()
+                .addField("Packet Log", toggleStr(CONFIG.debug.packetLog.enabled))
+                .addField("Client Packet Log", toggleStr(CONFIG.debug.packetLog.clientPacketLog.received))
+                .addField("Server Packet Log", toggleStr(CONFIG.debug.packetLog.serverPacketLog.received))
+                .addField("Packet Log Filter", CONFIG.debug.packetLog.packetFilter)
+                .addField("Kick Disconnect", toggleStr(CONFIG.debug.kickDisconnect))
+                .addField("Debug Logs", toggleStr(CONFIG.debug.debugLogs))
+                .addField("Terminal Debug Logs", toggleStr(CONFIG.debug.terminalDebugLogs))
+                .addField("Chunk Cache Fullbright", toggleStr(CONFIG.debug.server.cache.fullbrightChunkBlocklight))
+                .addField("Default Client Render Distance", CONFIG.client.defaultClientRenderDistance)
+                .addField("Lock File", toggleStr(CONFIG.debug.lockFile));
+        }
+        ctx.getEmbed()
             .primaryColor();
     }
 }

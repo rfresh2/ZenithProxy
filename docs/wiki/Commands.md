@@ -214,7 +214,7 @@ If this still fails, try one of the alternate auth types.
 
   ```auth chatSigning force on/off```
 
-  ```auth chatSigning whispers on/off```
+  ```auth chatSigning commands on/off```
 
 
 ### autoUpdate
@@ -460,6 +460,10 @@ Debug settings for features in testing or for use in development.
   ```debug defaultClientRenderDistance <int>```
 
   ```debug lockFile on/off```
+
+  ```debug uploadLog```
+
+  ```debug uploadDebugLog```
 
 
 ### discord
