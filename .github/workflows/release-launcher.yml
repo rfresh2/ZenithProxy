@@ -77,7 +77,7 @@ jobs:
 
       - name: Rename executable
         run: |
-          mv dist/__main__ dist/launch'
+          mv dist/__main__ dist/launch
 
       - name: Create zip
         run: |
