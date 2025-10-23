@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  python_version: '3.12.8'
+  UV_PYTHON: '3.12.8'
   pyinstaller_version: "6.11.1"
 
 jobs:
@@ -28,22 +28,29 @@ jobs:
           name: existing-launcher-assets
           path: launcher-assets.zip
           if-no-files-found: error
-  build-mac:
+
+  build-pyinstaller:
     runs-on: ${{ matrix.os }}
+    container:
+      image: ${{ matrix.image || '' }}
     strategy:
       fail-fast: true
       matrix:
-        os: [ 'macos-15-intel', 'macos-15' ]
+        os: [ 'ubuntu-latest', 'ubuntu-24.04-arm', 'macos-15-intel', 'macos-15' ]
         include:
+          - os: 'ubuntu-latest'
+            image: 'catthehacker/ubuntu:act-20.04'
+            artifact-name: 'launcher-linux-amd64'
+            sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
+          - os: 'ubuntu-24.04-arm'
+            image: 'catthehacker/ubuntu:act-20.04'
+            artifact-name: 'launcher-linux-aarch64'
+            sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
           - os: 'macos-15-intel'
             artifact-name: 'launcher-macos-amd64'
-            move-command: 'mv dist/__main__ dist/launch'
-            zip-command: 'zip -j dist/ZenithProxy-launcher-macos-amd64.zip dist/launch'
             sha1-command: 'shasum dist/launch | cut -d" " -f 1'
           - os: 'macos-15'
             artifact-name: 'launcher-macos-aarch64'
-            move-command: 'mv dist/__main__ dist/launch'
-            zip-command: 'zip -j dist/ZenithProxy-launcher-macos-aarch64.zip dist/launch'
             sha1-command: 'shasum dist/launch | cut -d" " -f 1'
     steps:
       - name: Check out repository
@@ -51,79 +58,16 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/setup-python@v6
-        with:
-          python-version: ${{ env.python_version }}
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
 
       - name: Install PyInstaller
         run: |
-          pip install -U pyinstaller==${{ env.pyinstaller_version }}
-          pip install -r ./src/launcher/requirements.txt
+          uv tool install pyinstaller@${{ env.pyinstaller_version }}
 
       - name: Build launcher
         run: >
-          pyinstaller --specpath ./build
-          -p ./src/launcher --onefile --noconfirm
-          -i ../src/launcher/icon.ico
-          ./src/launcher/__main__.py
-
-      - name: Rename executable
-        run: |
-          ${{ matrix.move-command }}
-
-      - name: Create zip
-        run: |
-          ${{ matrix.zip-command }}
-
-      - name: Upload Binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.artifact-name }}
-          path: dist/ZenithProxy-${{ matrix.artifact-name }}.zip
-          if-no-files-found: error
-
-      - name: Get Binary Hash
-        run: ${{ matrix.sha1-command }} > ZenithProxy-${{ matrix.artifact-name }}.sha1
-
-      - name: Upload Launcher Hash Version
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.artifact-name }}.sha1
-          path: ZenithProxy-${{ matrix.artifact-name }}.sha1
-          if-no-files-found: error
-
-  # todo: probably possible to unify this with the mac matrix somehow
-  build-linux:
-    runs-on: ${{ matrix.os }}
-    container: # todo: this is the only diff with mac matrix
-      image: catthehacker/ubuntu:act-20.04
-    strategy:
-      fail-fast: true
-      matrix:
-        os: [ 'ubuntu-latest']
-        include:
-          - os: 'ubuntu-latest'
-            artifact-name: 'launcher-linux-amd64'
-            move-command: 'mv dist/__main__ dist/launch'
-            zip-command: 'zip -j dist/ZenithProxy-launcher-linux-amd64.zip dist/launch'
-            sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v5
-        with:
-          persist-credentials: false
-
-      - uses: actions/setup-python@v6
-        with:
-          python-version: ${{ env.python_version }}
-
-      - name: Install PyInstaller
-        run: |
-          pip install -U pyinstaller==${{ env.pyinstaller_version }}
-          pip install -r ./src/launcher/requirements.txt
-
-      - name: Build launcher
-        run: >
+          uv tool run --with-requirements src/launcher/requirements.txt
           pyinstaller --specpath ./build
           -p ./src/launcher --onefile
           --runtime-tmpdir .launcher.tmp
@@ -133,11 +77,11 @@ jobs:
 
       - name: Rename executable
         run: |
-          ${{ matrix.move-command }}
+          mv dist/__main__ dist/launch'
 
       - name: Create zip
         run: |
-          ${{ matrix.zip-command }}
+          zip -j dist/ZenithProxy-${{ matrix.artifact-name }}.zip dist/launch
 
       - name: Upload Binary
         uses: actions/upload-artifact@v4
@@ -154,56 +98,6 @@ jobs:
         with:
           name: ${{ matrix.artifact-name }}.sha1
           path: ZenithProxy-${{ matrix.artifact-name }}.sha1
-          if-no-files-found: error
-
-  build-linux-aarch64:
-    runs-on: 'ubuntu-latest'
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v5
-        with:
-          persist-credentials: false
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build binary on emulated aarch64
-        run: |
-          docker run --rm --platform linux/arm64 --volume "${PWD}:/repo" python:${{ env.python_version }}-bullseye /bin/sh -c " \
-            cd /repo && \
-            python3 -m pip install -U pyinstaller==${{ env.pyinstaller_version }} && \
-            python3 -m pip install -r ./src/launcher/requirements.txt && \
-            pyinstaller --specpath ./build -p ./src/launcher --onefile --runtime-tmpdir .launcher.tmp --noconfirm ./src/launcher/__main__.py
-          "
-
-      - name: Rename executable
-        run: |
-          sudo mv dist/__main__ dist/launch
-
-      - name: Elevate binary permissions
-        run: sudo chmod +x dist/launch
-
-      - name: Create zip
-        run: sudo zip -j dist/ZenithProxy-launcher-linux-aarch64.zip dist/launch
-
-      - name: Upload Binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: launcher-linux-aarch64
-          path: dist/ZenithProxy-launcher-linux-aarch64.zip
-          if-no-files-found: error
-
-      - name: Get Binary Hash
-        run: sha1sum -b dist/launch | cut -d" " -f 1 > ZenithProxy-launcher-linux-aarch64.sha1
-
-      - name: Upload Launcher Hash Version
-        uses: actions/upload-artifact@v4
-        with:
-          name: launcher-linux-aarch64.sha1
-          path: ZenithProxy-launcher-linux-aarch64.sha1
           if-no-files-found: error
 
   package-python:
@@ -278,9 +172,7 @@ jobs:
 
   release-artifacts:
     needs:
-      - build-mac
-      - build-linux
-      - build-linux-aarch64
+      - build-pyinstaller
       - package-python
       - package-windows-python
     runs-on: ubuntu-latest
