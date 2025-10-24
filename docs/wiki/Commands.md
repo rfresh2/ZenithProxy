@@ -248,7 +248,11 @@ Mentions can be configured when a whisper is received or your name is seen in ch
 
 Messages typed in the ChatRelay discord channel will be sent as chat messages in-game
 
-Discord message replies will be sent as whispers in-game
+Discord message replies will be sent as whispers in-game.
+
+
+
+Ignore regex will filter out messages, see here for help writing regex: https://regex101.com/ (Java flavor)
 
 **Usage**
 
@@ -275,6 +279,14 @@ Discord message replies will be sent as whispers in-game
   ```chatRelay ignoreQueue on/off```
 
   ```chatRelay sendMessages on/off```
+
+  ```chatRelay ignoreRegex add <regex>```
+
+  ```chatRelay ignoreRegex del <index>```
+
+  ```chatRelay ignoreRegex list```
+
+  ```chatRelay ignoreRegex clear```
 
 
 ### chatSchema

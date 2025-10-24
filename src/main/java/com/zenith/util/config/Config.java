@@ -853,6 +853,7 @@ public final class Config {
             public boolean deathMessages = true;
             public boolean sendMessages = true;
             public String channelId = "";
+            public ArrayList<String> ignoreRegex = new ArrayList<>();
         }
     }
 
