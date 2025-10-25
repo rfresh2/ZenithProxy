@@ -56,3 +56,13 @@ plugins:
 strict: true
 extra_css:
   - _assets/styles/extra.css
+nav:
+  - Home: index.md
+  - DigitalOcean Setup Guide: DigitalOcean-Setup-Guide.md
+  - Windows Launcher Guide: Windows-Python-Launcher-Guide.md
+  - Commands: Commands.md
+  - Frequently Asked Questions (FAQ): FAQ.md
+  - Disconnects: Disconnects.md
+  - Linux Guide: Linux-Guide.md
+  - Plugins: Plugins.md
+  - Docker: Docker.md
