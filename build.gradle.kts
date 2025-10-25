@@ -118,11 +118,6 @@ tasks {
         metadataValue = version.toString()
         outputFile = project.layout.buildDirectory.file("resources/main/zenith_mc_version.txt")
     }
-    val updateWikiTask = register<UpdateWikiTask>("updateWiki") {
-        wikiDirectory = layout.projectDirectory.dir("docs/wiki").asFile
-        wikiFiles = files(project.layout.buildDirectory.file("Commands.md"))
-        dependsOn(test)
-    }
     val runGroup = "run"
     register("run", JavaExec::class.java) {
         group = runGroup
@@ -142,6 +137,23 @@ tasks {
     }
     val javaPathTask = register<JavaPathTask>("javaPath") {
         javaLauncher = javaLauncherProvider
+    }
+    val generateCommandDocsTask = register("generateCommandDocs", JavaExec::class.java) {
+        group = "build"
+        description = "Generate command documentation for the wiki"
+        javaLauncher = javaLauncherProvider
+        workingDir = layout.projectDirectory.dir("run").asFile
+        classpath = sourceSets.main.get().runtimeClasspath
+        mainClass.set("com.zenith.util.CommandDocsGenerator")
+        val outputFile = project.layout.buildDirectory.file("Commands.md")
+        args = listOf(outputFile.get().asFile.absolutePath)
+        environment("ZENITH_DEV", "true")
+        outputs.file(outputFile)
+    }
+    val updateWikiTask = register<UpdateWikiTask>("updateWiki") {
+        inputs.files(generateCommandDocsTask.get().outputs.files)
+        wikiDirectory = layout.projectDirectory.dir("docs/wiki").asFile
+        wikiFiles = files(project.layout.buildDirectory.file("Commands.md"))
     }
     processResources {
         dependsOn(releaseTagTask, mcVersionTask, commitHashTask, javaPathTask)
