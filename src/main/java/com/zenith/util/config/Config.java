@@ -631,9 +631,10 @@ public final class Config {
             public final Cache cache = new Cache();
 
             public static final class Cache {
-                public boolean unlockAllRecipes = true;
                 public boolean fullbrightChunkSkylight = true;
                 public boolean fullbrightChunkBlocklight = false;
+                // each map is 16kb, so 128 maps = ~2MB
+                public int maxCachedMaps = 128;
             }
         }
     }
