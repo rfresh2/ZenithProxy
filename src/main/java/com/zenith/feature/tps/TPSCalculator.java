@@ -67,4 +67,12 @@ public class TPSCalculator {
     public String getTPS() {
         return String.format("%.2f", getTickRateAverage());
     }
+
+    /**
+     * Returns the current average server TPS as a double value in the range [0.0, 20.0].
+     * Falls back to 20.0 when insufficient data has been collected yet.
+     */
+    public double getTPSValue() {
+        return getTickRateAverage();
+    }
 }

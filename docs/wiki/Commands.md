@@ -1737,6 +1737,8 @@ Aggressive mobs are mobs that are actively targeting and attacking the player.
 
   ```killAura attackDelay <ticks>```
 
+  ```killAura tpsSync on/off```
+
   ```killAura targetPlayers on/off```
 
   ```killAura targetHostileMobs on/off```

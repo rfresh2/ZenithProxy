@@ -349,6 +349,9 @@ public final class Config {
                 public boolean switchWeapon = true;
                 public boolean targetArmorStands = false;
                 public int attackDelayTicks = 10;
+                // When enabled, adjusts attackDelayTicks by current server TPS
+                // so attack rate stays consistent.
+                public boolean tpsSync = false;
                 public boolean raycast = false;
                 public final ArrayList<EntityType> customTargets = new ArrayList<>();
                 public Priority priority = Priority.NONE;

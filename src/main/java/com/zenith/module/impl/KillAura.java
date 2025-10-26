@@ -123,8 +123,15 @@ public class KillAura extends AbstractInventoryModule {
     private void onAttackInputExecuted(InputRequestFuture future) {
         if (future.getClickResult() instanceof ClickResult.LeftClickResult leftClickResult
             && leftClickResult.getEntity() != null && leftClickResult.getEntity() == attackTarget.get()) {
-            delay = CONFIG.client.extra.killAura.attackDelayTicks;
+            delay = computeAttackDelayTicks();
         }
+    }
+
+    private int computeAttackDelayTicks() {
+        var delay = CONFIG.client.extra.killAura.attackDelayTicks;
+        if (!CONFIG.client.extra.killAura.tpsSync) return delay;
+        // Scale delay by server slowdown: at 10 TPS, wait twice as long; at 20 TPS, unchanged.
+        return MathHelper.ceilI(delay * (20.0 / MathHelper.clamp(TPS.getTPSValue(), 1.0, 20.0)));
     }
 
     @Nullable
