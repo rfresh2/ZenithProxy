@@ -101,6 +101,7 @@ public class NotificationEventListener {
     }
 
     private void handleScheduledTaskCommandExecutedEvent(TasksCommandExecutedEvent event) {
+        if (!CONFIG.client.extra.tasks.taskCommandExecutedNotification) return;
         sendEmbedMessage(Embed.builder()
             .title("Scheduled Task Executed")
             .addField("Command", "`" + event.command() + "`")

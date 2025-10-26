@@ -165,6 +165,8 @@ public final class Config {
             public static final class Tasks {
                 public boolean enabled = true;
                 public final LinkedHashMap<String, Task> tasks = new LinkedHashMap<>();
+                public boolean logCommandActionOutput = true;
+                public boolean taskCommandExecutedNotification = true;
             }
 
             public static final class Waypoints {

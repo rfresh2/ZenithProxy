@@ -37,14 +37,16 @@ public class CommandAction implements Action {
                 .addField("Command", "`" + command + "`"));
             return;
         }
-        CommandOutputHelper.logEmbedOutputToDiscord(ctx.getEmbed());
-        CommandOutputHelper.logMultiLineOutputToDiscord(ctx.getMultiLineOutput());
+        if (CONFIG.client.extra.tasks.logCommandActionOutput) {
+            CommandOutputHelper.logEmbedOutputToDiscord(ctx.getEmbed());
+            CommandOutputHelper.logMultiLineOutputToDiscord(ctx.getMultiLineOutput());
+        }
     }
 
     public static class CommandActionSource implements CommandSource {
         @Override
         public String name() {
-            return "Scheduler";
+            return "Tasks";
         }
 
         @Override
@@ -54,7 +56,9 @@ public class CommandAction implements Action {
 
         @Override
         public void logEmbed(final CommandContext ctx, final Embed embed) {
-            CommandOutputHelper.logEmbedOutputToDiscord(embed);
+            if (CONFIG.client.extra.tasks.logCommandActionOutput) {
+                CommandOutputHelper.logEmbedOutputToDiscord(embed);
+            }
         }
     }
 }
