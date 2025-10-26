@@ -34,6 +34,7 @@ public class TerminalManager {
             TERMINAL_LOG.info("Starting Interactive Terminal...");
             this.lineReader = LineReaderBuilder.builder()
                 .terminal(terminal)
+                .appName("ZenithProxy")
                 .option(LineReader.Option.DISABLE_EVENT_EXPANSION, true)
                 .option(LineReader.Option.CASE_INSENSITIVE, true)
                 .option(LineReader.Option.INSERT_TAB, false)
