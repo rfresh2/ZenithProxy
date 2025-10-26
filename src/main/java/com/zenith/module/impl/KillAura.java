@@ -128,12 +128,10 @@ public class KillAura extends AbstractInventoryModule {
     }
 
     private int computeAttackDelayTicks() {
-        int base = CONFIG.client.extra.killAura.attackDelayTicks;
-        if (!CONFIG.client.extra.killAura.tpsSync) return base;
-        double tps = TPS.getTPSValue();
+        var delay = CONFIG.client.extra.killAura.attackDelayTicks;
+        if (!CONFIG.client.extra.killAura.tpsSync) return delay;
         // Scale delay by server slowdown: at 10 TPS, wait twice as long; at 20 TPS, unchanged.
-        double scaled = Math.ceil(base * (20.0 / Math.max(1.0, tps)));
-        return (int) scaled;
+        return MathHelper.ceilI(delay * (20.0 / MathHelper.clamp(TPS.getTPSValue(), 1.0, 20.0)));
     }
 
     @Nullable
