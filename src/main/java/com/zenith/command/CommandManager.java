@@ -75,6 +75,7 @@ public class CommandManager {
         new KillAuraCommand(),
         new LicenseCommand(),
         new MapCommand(),
+        new ModulePriorityCommand(),
         new PathfinderCommand(),
         new PearlLoader(),
         new PlaytimeCommand(),

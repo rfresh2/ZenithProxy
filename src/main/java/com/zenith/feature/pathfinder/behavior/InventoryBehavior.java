@@ -98,7 +98,7 @@ public class InventoryBehavior extends Behavior {
         INVENTORY.submit(InventoryActionRequest.builder()
              .owner(this)
              .actions(new MoveToHotbarSlot(inInventory, MoveToHotbarAction.from(inHotbar)))
-             .priority(Baritone.MOVEMENT_PRIORITY)
+             .priority(Baritone.getPriority())
              .build());
         ticksSinceLastInventoryMove = 0;
         lastTickRequestedMove = null;
@@ -179,7 +179,7 @@ public class InventoryBehavior extends Behavior {
                         INVENTORY.submit(InventoryActionRequest.builder()
                             .owner(this)
                             .actions(new SetHeldItem(hotbarIndex))
-                            .priority(Baritone.MOVEMENT_PRIORITY)
+                            .priority(Baritone.getPriority())
                             .build());
                     }
                 }
@@ -201,7 +201,7 @@ public class InventoryBehavior extends Behavior {
                         INVENTORY.submit(InventoryActionRequest.builder()
                             .owner(this)
                             .actions(new SetHeldItem(hotbarIndex))
-                            .priority(Baritone.MOVEMENT_PRIORITY)
+                            .priority(Baritone.getPriority())
                             .build());
                     }
                 } else {
@@ -212,7 +212,7 @@ public class InventoryBehavior extends Behavior {
                             INVENTORY.submit(InventoryActionRequest.builder()
                                 .owner(this)
                                 .actions(new SetHeldItem(hotbarIndex))
-                                .priority(Baritone.MOVEMENT_PRIORITY)
+                                .priority(Baritone.getPriority())
                                 .build());
                         }
                         return true;
@@ -232,7 +232,7 @@ public class InventoryBehavior extends Behavior {
                             INVENTORY.submit(InventoryActionRequest.builder()
                                 .owner(this)
                                 .actions(new SetHeldItem(7))
-                                .priority(Baritone.MOVEMENT_PRIORITY)
+                                .priority(Baritone.getPriority())
                                 .build());
                         }
                     }

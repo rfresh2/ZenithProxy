@@ -16,6 +16,7 @@ import com.zenith.util.timer.Timers;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.*;
@@ -25,7 +26,6 @@ public class Spook extends Module {
     // list (used as a stack) of most recently seen player entity ID's
     private final IntArrayList playerTargetStack = new IntArrayList();
     private int targetEntity = -1;
-    public static final int MOVEMENT_PRIORITY = 10; // relatively low
     private static final int SEARCH_DELAY_TICKS = 50;
 
     @Override
@@ -41,6 +41,10 @@ public class Spook extends Module {
     @Override
     public boolean enabledSetting() {
         return CONFIG.client.extra.spook.enabled;
+    }
+
+    public int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.spook.priority, 1000);
     }
 
     @SuppressWarnings("deprecation")
@@ -126,7 +130,7 @@ public class Spook extends Module {
                 .owner(this)
                 .yaw(rotation.getX())
                 .pitch(rotation.getY())
-                .priority(MOVEMENT_PRIORITY)
+                .priority(getPriority())
                 .build());
         }
     }

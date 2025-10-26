@@ -21,6 +21,7 @@ import org.jspecify.annotations.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -47,7 +48,6 @@ public class KillAura extends AbstractInventoryModule {
     private int delay = 0;
     private final WeakReference<EntityLiving> nullRef = new WeakReference<>(null);
     private WeakReference<EntityLiving> attackTarget = nullRef;
-    public static final int MOVEMENT_PRIORITY = 500;
     private final IntSet swords = IntSet.of(
         ItemRegistry.DIAMOND_SWORD.id(),
         ItemRegistry.NETHERITE_SWORD.id(),
@@ -60,7 +60,7 @@ public class KillAura extends AbstractInventoryModule {
     );
 
     public KillAura() {
-        super(HandRestriction.MAIN_HAND, 1, MOVEMENT_PRIORITY);
+        super(HandRestriction.MAIN_HAND, 1);
     }
 
     public boolean isActive() {
@@ -81,6 +81,11 @@ public class KillAura extends AbstractInventoryModule {
     }
 
     @Override
+    public int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.killAura.actionPriority, 8000);
+    }
+
+    @Override
     public void onDisable() {
         delay = 0;
         attackTarget = nullRef;
@@ -94,7 +99,7 @@ public class KillAura extends AbstractInventoryModule {
                 if (!hasRotation(target)) {
                     rotateTo(target);
                 }
-                INVENTORY.submit(InventoryActionRequest.noAction(this, MOVEMENT_PRIORITY - 1));
+                INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority() - 1));
             }
             return;
         }
@@ -104,13 +109,13 @@ public class KillAura extends AbstractInventoryModule {
                 if (!attackTarget.refersTo(target))
                     attackTarget = new WeakReference<>(target);
                 if (switchToWeapon()) {
-                    INVENTORY.submit(InventoryActionRequest.noAction(this, MOVEMENT_PRIORITY - 1));
+                    INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority() - 1));
                     attack(target).addInputExecutedListener(this::onAttackInputExecuted);
                 } else {
                     // stop while doing inventory actions
                     INPUTS.submit(InputRequest.builder()
                         .owner(this)
-                        .priority(MOVEMENT_PRIORITY - 1)
+                        .priority(getPriority() - 1)
                         .build());
                 }
                 return;
@@ -210,7 +215,7 @@ public class KillAura extends AbstractInventoryModule {
                 .build())
             .yaw(rotation.getX())
             .pitch(rotation.getY())
-            .priority(MOVEMENT_PRIORITY)
+            .priority(getPriority())
             .build());
     }
 
@@ -221,7 +226,7 @@ public class KillAura extends AbstractInventoryModule {
             .owner(this)
             .yaw(rotation.getX())
             .pitch(rotation.getY())
-            .priority(MOVEMENT_PRIORITY)
+            .priority(getPriority())
             .build());
     }
 

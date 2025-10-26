@@ -605,7 +605,7 @@ public final class MovementHelper {
         INVENTORY.submit(InventoryActionRequest.builder()
             .owner(BARITONE)
             .actions(new SetHeldItem(hotbarSlotId))
-            .priority(Baritone.MOVEMENT_PRIORITY)
+            .priority(Baritone.getPriority())
             .build());
     }
 

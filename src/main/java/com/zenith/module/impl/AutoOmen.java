@@ -19,6 +19,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundPlayerActionPacket;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.*;
@@ -26,7 +27,6 @@ import static com.zenith.Globals.*;
 public class AutoOmen extends AbstractInventoryModule {
     private int delay = 0;
     private boolean isEating = false;
-    public static final int MOVEMENT_PRIORITY = 600;
     private static final List<Effect> OMEN_EFFECTS = List.of(
         Effect.BAD_OMEN,
         Effect.RAID_OMEN,
@@ -36,7 +36,7 @@ public class AutoOmen extends AbstractInventoryModule {
     private long lastRaidActive = 0L;
 
     public AutoOmen() {
-        super(HandRestriction.EITHER, 3, MOVEMENT_PRIORITY);
+        super(HandRestriction.EITHER, 3);
     }
 
     @Override
@@ -50,6 +50,11 @@ public class AutoOmen extends AbstractInventoryModule {
             of(ClientBotTick.class, this::handleClientTick),
             of(ClientBotTick.Starting.class, this::handleBotTickStarting)
         );
+    }
+
+    @Override
+    public int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.autoOmen.priority, 10000);
     }
 
     public void handleClientTick(final ClientBotTick e) {
@@ -68,8 +73,8 @@ public class AutoOmen extends AbstractInventoryModule {
             if (delay > 0) {
                 delay--;
                 if (isEating) {
-                    INPUTS.submit(InputRequest.noInput(this, MOVEMENT_PRIORITY));
-                    INVENTORY.submit(InventoryActionRequest.noAction(this, MOVEMENT_PRIORITY));
+                    INPUTS.submit(InputRequest.noInput(this, getPriority()));
+                    INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                 }
                 return;
             }
@@ -115,7 +120,7 @@ public class AutoOmen extends AbstractInventoryModule {
                     .rightClick(true)
                     .clickTarget(ClickTarget.None.INSTANCE)
                     .build())
-                .priority(MOVEMENT_PRIORITY)
+                .priority(getPriority())
                 .build())
             .addInputExecutedListener(future -> {
                 debug("Drinking Omen");
