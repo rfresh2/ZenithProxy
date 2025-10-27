@@ -372,7 +372,7 @@ public class NotificationEventListener {
                 .description(desc)
                 .errorColor();
             var buttonId = "via-" + ThreadLocalRandom.current().nextInt(1000000);
-            var button = Button.secondary(buttonId, "Auto-Configure ViaVersion");
+            var button = Button.primary(buttonId, "Auto-Configure ViaVersion");
             Consumer<ButtonInteractionEvent> mapper = e -> {
                 if (e.getComponentId().equals(buttonId)) {
                     CONFIG.client.viaversion.protocolVersion = playerProtocolVersion.getVersion();
