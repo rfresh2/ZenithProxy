@@ -55,6 +55,7 @@ public class NotificationEventListener {
             this,
             of(ClientConnectEvent.class, this::handleConnectEvent),
             of(ClientOnlineEvent.class, this::handlePlayerOnlineEvent),
+            of(ClientConfigurationEvent.Entering.class, this::handleClientConfigurationEnteringEvent),
             of(ClientDisconnectEvent.class, this::handleDisconnectEvent),
             of(QueuePositionUpdateEvent.class, this::handleQueuePositionUpdateEvent),
             of(QueueWarningEvent.class, this::handleQueueWarning),
@@ -176,6 +177,14 @@ public class NotificationEventListener {
         } else {
             sendEmbedMessage(embedBuilder);
         }
+    }
+
+    private void handleClientConfigurationEnteringEvent(ClientConfigurationEvent.Entering event) {
+        if (!CONFIG.client.extra.reconfiguringNotification) return;
+        var embedBuilder = Embed.builder()
+            .title("Reconfiguring...")
+            .inQueueColor();
+        sendEmbedMessage(embedBuilder);
     }
 
     public void handleDisconnectEvent(ClientDisconnectEvent event) {

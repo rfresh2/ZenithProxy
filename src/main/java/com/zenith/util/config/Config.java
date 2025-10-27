@@ -145,6 +145,7 @@ public final class Config {
             public boolean killMessage = true;
             public boolean logChatMessages = true;
             public boolean logOnlyQueuePositionUpdates = true;
+            public boolean reconfiguringNotification = true;
             public final CoordObfuscation coordObfuscation = new CoordObfuscation();
             public final ActionLimiter actionLimiter = new ActionLimiter();
             public final VisualRange visualRange = new VisualRange();
