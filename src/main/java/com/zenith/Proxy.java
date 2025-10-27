@@ -761,8 +761,8 @@ public class Proxy {
             byte[] icon = SkinRetriever.getRenderedAvatar(profile)
                 .orElse(serverIcon);
             var event = new ServerIconBuildEvent(icon);
-            EVENT_BUS.post(event.getIcon());
-            this.serverIcon = icon;
+            EVENT_BUS.post(event);
+            this.serverIcon = event.getIcon();
             writeServerIconFile();
         } catch (final Throwable e) {
             SERVER_LOG.error("Failed updating server icon");
