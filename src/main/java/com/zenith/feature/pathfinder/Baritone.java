@@ -26,6 +26,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.function.Predicate;
 
@@ -44,7 +45,6 @@ import static com.zenith.Globals.*;
 @Data
 public class Baritone implements Pathfinder {
     public static final int POST_TICK_PRIORITY = -40000;
-    public static final int MOVEMENT_PRIORITY = 200;
     private final PathingBehavior pathingBehavior = new PathingBehavior(this);
     private final InputOverrideHandler inputOverrideHandler = new InputOverrideHandler(this);
     private final LookBehavior lookBehavior = new LookBehavior(this);
@@ -80,6 +80,10 @@ public class Baritone implements Pathfinder {
             of(ClientBotTick.Starting.class, this::onClientBotTickStarting),
             of(ClientBotTick.Stopped.class, this::onClientBotTickStopped)
         );
+    }
+
+    public static int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.pathfinder.priority, 7000);
     }
 
     public boolean isActive() {
@@ -215,7 +219,7 @@ public class Baritone implements Pathfinder {
             var req = InputRequest.builder()
                 .owner(this)
                 .input(inputOverrideHandler.currentInput)
-                .priority(MOVEMENT_PRIORITY);
+                .priority(getPriority());
             if (rotation != null) {
                 req
                     .yaw(rotation.yaw())

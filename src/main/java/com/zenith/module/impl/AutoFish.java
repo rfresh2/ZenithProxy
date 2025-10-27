@@ -26,6 +26,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.Clien
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.*;
@@ -34,12 +35,11 @@ public class AutoFish extends AbstractInventoryModule {
     private int fishHookEntityId = -1;
     private Hand rodHand = Hand.MAIN_HAND;
     private int delay = 0;
-    public static final int MOVEMENT_PRIORITY = 10;
     private Instant castTime = Instant.EPOCH;
     private int fishTimeoutCounter = 0;
 
     public AutoFish() {
-        super(HandRestriction.EITHER, 2, MOVEMENT_PRIORITY);
+        super(HandRestriction.EITHER, 2);
     }
 
     @Override
@@ -56,6 +56,11 @@ public class AutoFish extends AbstractInventoryModule {
     @Override
     public boolean enabledSetting() {
         return CONFIG.client.extra.autoFish.enabled;
+    }
+
+    @Override
+    public int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.autoFish.priority, 2000);
     }
 
     @Override
@@ -165,7 +170,7 @@ public class AutoFish extends AbstractInventoryModule {
                 .build())
             .yaw(CONFIG.client.extra.autoFish.yaw)
             .pitch(CONFIG.client.extra.autoFish.pitch)
-            .priority(MOVEMENT_PRIORITY)
+            .priority(getPriority())
             .build());
     }
 

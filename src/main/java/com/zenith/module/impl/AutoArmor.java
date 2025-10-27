@@ -14,6 +14,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.*;
@@ -21,7 +22,6 @@ import static java.util.Arrays.asList;
 
 public class AutoArmor extends Module {
     private int delay = 0;
-    public static final int MOVEMENT_PRIORITY = 1000;
     private static final List<EquipmentSlot> ARMOR_SLOTS = asList(EquipmentSlot.HELMET, EquipmentSlot.CHESTPLATE, EquipmentSlot.LEGGINGS, EquipmentSlot.BOOTS);
 
     @Override
@@ -35,6 +35,10 @@ public class AutoArmor extends Module {
     @Override
     public boolean enabledSetting() {
         return CONFIG.client.extra.autoArmor.enabled;
+    }
+
+    public int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.autoArmor.priority, 12000);
     }
 
     private void handleClientBotTickStarting(ClientBotTick.Starting starting) {
@@ -57,7 +61,7 @@ public class AutoArmor extends Module {
                 INVENTORY.submit(InventoryActionRequest.builder()
                     .owner(this)
                     .actions(InventoryActionMacros.swapSlots(bestArmorInInventory.index(), invSlotId))
-                    .priority(MOVEMENT_PRIORITY)
+                    .priority(getPriority())
                     .build());
                 delay = 5;
                 return;
@@ -67,7 +71,7 @@ public class AutoArmor extends Module {
                 INVENTORY.submit(InventoryActionRequest.builder()
                     .owner(this)
                     .actions(InventoryActionMacros.swapSlots(bestArmorInInventory.index(), invSlotId))
-                    .priority(MOVEMENT_PRIORITY)
+                    .priority(getPriority())
                     .build());
                 delay = 5;
                 return;

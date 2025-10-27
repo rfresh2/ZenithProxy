@@ -1,5 +1,7 @@
 package com.zenith.discord;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.zenith.Proxy;
 import com.zenith.event.chat.DeathMessageChatEvent;
 import com.zenith.event.chat.PublicChatEvent;
@@ -26,6 +28,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.*;
@@ -119,6 +122,7 @@ public class ChatRelayEventListener {
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
         try {
             String message = ComponentSerializer.serializePlain(event.component());
+            if (ignoreRegexFilter(message)) return;
             String ping = "";
             if (CONFIG.discord.chatRelay.mentionWhileConnected || isNull(Proxy.getInstance().getCurrentPlayer().get())) {
                 if (CONFIG.discord.chatRelay.mentionRoleOnWhisper && !event.outgoing()) {
@@ -155,6 +159,7 @@ public class ChatRelayEventListener {
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
         try {
             String message = event.message();
+            if (ignoreRegexFilter(message)) return;
             final String avatarURL = Proxy.getInstance().isOn2b2t() ? Proxy.getInstance().getPlayerHeadURL("Hausemaster").toString() : null;
             var embed = Embed.builder()
                 .description(escape(message))
@@ -172,6 +177,7 @@ public class ChatRelayEventListener {
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
         try {
             String message = event.message();
+            if (ignoreRegexFilter(message)) return;
             Color color = message.startsWith(">") ? Color.MEDIUM_SEA_GREEN : Color.BLACK;
             String ping = "";
             if (CONFIG.discord.chatRelay.mentionWhileConnected || isNull(Proxy.getInstance().getCurrentPlayer().get())) {
@@ -219,6 +225,7 @@ public class ChatRelayEventListener {
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
         try {
             String message = event.message();
+            if (ignoreRegexFilter(message)) return;
             DeathMessageParseResult death = event.deathMessage();
             message = message.replace(death.victim(), "**" + death.victim() + "**");
             var k = death.killer().filter(killer -> killer.type() == KillerType.PLAYER);
@@ -243,9 +250,9 @@ public class ChatRelayEventListener {
         if (!Proxy.getInstance().isOnlineForAtLeastDuration(Duration.ofSeconds(3))) return;
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
         sendRelayEmbedMessage(Embed.builder()
-                                  .description(escape("**" + event.playerEntry().getName() + "** connected"))
-                                  .successColor()
-                                  .footer("\u200b", Proxy.getInstance().getPlayerHeadURL(event.playerEntry().getProfileId()).toString()));
+            .description(escape("**" + event.playerEntry().getName() + "** connected"))
+            .successColor()
+            .footer("\u200b", Proxy.getInstance().getPlayerHeadURL(event.playerEntry().getProfileId()).toString()));
     }
 
     private void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
@@ -253,9 +260,32 @@ public class ChatRelayEventListener {
         if (!Proxy.getInstance().isOnlineForAtLeastDuration(Duration.ofSeconds(3))) return;
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
         sendRelayEmbedMessage(Embed.builder()
-                                  .description(escape("**" + event.playerEntry().getName() + "** disconnected"))
-                                  .errorColor()
-                                  .footer("\u200b", Proxy.getInstance().getPlayerHeadURL(event.playerEntry().getProfileId()).toString()));
+            .description(escape("**" + event.playerEntry().getName() + "** disconnected"))
+            .errorColor()
+            .footer("\u200b", Proxy.getInstance().getPlayerHeadURL(event.playerEntry().getProfileId()).toString()));
+    }
+
+    final Cache<String, Pattern> ignoreRegexCache = CacheBuilder.newBuilder()
+        .expireAfterAccess(Duration.ofMinutes(1))
+        .build();
+
+    private boolean ignoreRegexFilter(String contents) {
+        for (int i = 0; i < CONFIG.discord.chatRelay.ignoreRegex.size(); i++) {
+            var regex = CONFIG.discord.chatRelay.ignoreRegex.get(i);
+            Pattern pattern;
+            try {
+                pattern = ignoreRegexCache.get(regex, () -> Pattern.compile(regex));
+            } catch (Exception e) {
+                CONFIG.discord.chatRelay.ignoreRegex.remove(i);
+                i--;
+                continue;
+            }
+            if (pattern.matcher(contents).find()) {
+                DISCORD_LOG.debug("Filtering relay message: '{}' matched regex: '{}'", contents, regex);
+                return true;
+            }
+        }
+        return false;
     }
 
     private void sendPrivateMessage(String message, MessageReceivedEvent event) {

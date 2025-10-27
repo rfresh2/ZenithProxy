@@ -2768,6 +2768,12 @@
           "name": "enabled"
         },
         {
+          "name": "logCommandActionOutput"
+        },
+        {
+          "name": "taskCommandExecutedNotification"
+        },
+        {
           "name": "tasks"
         }
       ],

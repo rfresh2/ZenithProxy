@@ -1,12 +1,10 @@
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.tasks.Exec
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
 import java.io.ByteArrayOutputStream
-import java.io.File
 import javax.inject.Inject
 
 abstract class CommitHashTask : DefaultTask() {

@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import static com.zenith.Globals.CACHE_LOG;
+import static com.zenith.Globals.CONFIG;
+
 @Data
 @Accessors(chain = true)
 public class MapDataCache implements CachedData {
@@ -21,6 +24,10 @@ public class MapDataCache implements CachedData {
     public void upsert(final ClientboundMapItemDataPacket serverMapDataPacket) {
         mapDataMap.compute(serverMapDataPacket.getMapId(), (key, oldValue) -> {
             if (oldValue == null) {
+                if (mapDataMap.size() > CONFIG.debug.server.cache.maxCachedMaps) {
+                    CACHE_LOG.debug("Map cache size limit: {} reached, skipping map: {}", CONFIG.debug.server.cache.maxCachedMaps, serverMapDataPacket.getMapId());
+                    return null;
+                }
                 return new StoredMapData(serverMapDataPacket);
             } else {
                 oldValue.setScale(serverMapDataPacket.getScale());

@@ -7,6 +7,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentTypes;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.*;
@@ -16,7 +17,7 @@ public class AutoMend extends AbstractInventoryModule {
     int delay = 0;
 
     public AutoMend() {
-        super(HandRestriction.OFF_HAND, 0, 50);
+        super(HandRestriction.OFF_HAND, 0);
     }
 
     @Override
@@ -24,6 +25,11 @@ public class AutoMend extends AbstractInventoryModule {
         return List.of(
             of(ClientBotTick.class, this::handleBotTick)
         );
+    }
+
+    @Override
+    public int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.autoMend.priority, 4000);
     }
 
     private void handleBotTick(ClientBotTick event) {

@@ -16,12 +16,12 @@ import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.*;
 
 public class AutoDrop extends Module {
-    public static final int MOVEMENT_PRIORITY = 20;
     private final Timer dropTimer = Timers.tickTimer();
 
     @Override
@@ -35,6 +35,10 @@ public class AutoDrop extends Module {
         );
     }
 
+    public int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.autoDrop.priority, 3000);
+    }
+
     public void onTick(ClientBotTick event) {
         if (!dropTimer.tick(CONFIG.client.extra.autoDrop.delayTicks)) return;
         int slotId = InventoryUtil.searchPlayerInventory(this::dropItemPredicate);
@@ -44,7 +48,7 @@ public class AutoDrop extends Module {
                 .owner(this)
                 .yaw(CONFIG.client.extra.autoDrop.yaw)
                 .pitch(CONFIG.client.extra.autoDrop.pitch)
-                .priority(MOVEMENT_PRIORITY)
+                .priority(getPriority())
                 .build();
             INPUTS.submit(inputRequest);
             if (!MathHelper.isYawInRange(CONFIG.client.extra.autoDrop.yaw, CACHE.getPlayerCache().getYaw(), 0.1f)
@@ -59,7 +63,7 @@ public class AutoDrop extends Module {
             .actions(new DropItem(slotId, CONFIG.client.extra.autoDrop.dropStack
                 ? DropItemAction.DROP_SELECTED_STACK
                 : DropItemAction.DROP_FROM_SELECTED))
-            .priority(MOVEMENT_PRIORITY)
+            .priority(getPriority())
             .build();
         INVENTORY.submit(request);
         var itemData = ItemRegistry.REGISTRY.get(CACHE.getPlayerCache().getPlayerInventory().get(slotId).getId());

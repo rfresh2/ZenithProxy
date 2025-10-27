@@ -23,11 +23,12 @@ import java.time.Instant;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
-import static com.zenith.Globals.COMMAND;
-import static com.zenith.Globals.MODULE;
+import static com.zenith.Globals.*;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.command.brigadier.TimeArgument.time;
+import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
+import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 
 public class TasksCommand extends Command {
     private static final BiMap<String, Class<?>> EVENT_MAP = ImmutableBiMap.of(
@@ -55,7 +56,9 @@ public class TasksCommand extends Command {
                 "add event <id> <" + String.join("/", EVENT_MAP.keySet().stream().sorted().toList()) + "> <repeat/once> <command>",
                 "del <id>",
                 "list",
-                "clear"
+                "clear",
+                "logCommandActionOutput on/off",
+                "taskCommandExecutedNotification on/off"
             )
             .aliases("task")
             .build();
@@ -194,8 +197,18 @@ public class TasksCommand extends Command {
             .then(literal("clear").executes(c -> {
                 MODULE.get(Tasks.class).clearTasks();
                 c.getSource().getEmbed()
-                    .title("All Tasks Cleared");
-            }));
+                    .title("Tasks Cleared");
+            }))
+            .then(literal("logCommandActionOutput").requires(Command::validateAccountOwner).then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.tasks.logCommandActionOutput = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Log Command Action Output " + toggleStrCaps(CONFIG.client.extra.tasks.logCommandActionOutput));
+            })))
+            .then(literal("taskCommandExecutedNotification").requires(Command::validateAccountOwner).then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.tasks.taskCommandExecutedNotification = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Task Command Executed Notification " + toggleStrCaps(CONFIG.client.extra.tasks.taskCommandExecutedNotification));
+            })));
     }
 
     @Override

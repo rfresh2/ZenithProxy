@@ -1,6 +1,7 @@
 package com.zenith.network.server.handler.shared.incoming;
 
 import com.zenith.Proxy;
+import com.zenith.event.player.PlayerConfigurationEvent;
 import com.zenith.network.codec.PacketHandler;
 import com.zenith.network.server.ServerSession;
 import net.kyori.adventure.key.Key;
@@ -10,6 +11,7 @@ import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.Clie
 import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundLoginAcknowledgedPacket;
 
 import static com.zenith.Globals.CACHE;
+import static com.zenith.Globals.EVENT_BUS;
 
 public class LoginAckHandler implements PacketHandler<ServerboundLoginAcknowledgedPacket, ServerSession> {
     @Override
@@ -24,9 +26,11 @@ public class LoginAckHandler implements PacketHandler<ServerboundLoginAcknowledg
             session.disconnect("Proxy is not connected to a server.");
             return null;
         }
+        EVENT_BUS.post(new PlayerConfigurationEvent.Entered(session));
         CACHE.getRegistriesCache().getRegistryPackets(session::sendAsync, session);
         CACHE.getConfigurationCache().getConfigurationPackets(session::sendAsync, session);
         session.sendAsync(new ClientboundCustomPayloadPacket(Key.key("minecraft:brand"), CACHE.getChunkCache().getServerBrand()));
+        EVENT_BUS.post(new PlayerConfigurationEvent.Exiting(session));
         session.sendAsync(new ClientboundFinishConfigurationPacket());
         return null;
     }

@@ -28,17 +28,17 @@ import static java.util.Objects.nonNull;
 public abstract class AbstractInventoryModule extends Module {
     private final HandRestriction handRestriction;
     private final int targetMainHandHotbarSlot;
-    private final int inventoryActionPriority;
     @Getter
     private @Nullable Hand hand = null;
 
-    public AbstractInventoryModule(HandRestriction handRestriction, int targetMainHandHotbarSlot, int inventoryActionPriority) {
+    public AbstractInventoryModule(HandRestriction handRestriction, int targetMainHandHotbarSlot) {
         this.handRestriction = handRestriction;
         this.targetMainHandHotbarSlot = targetMainHandHotbarSlot;
-        this.inventoryActionPriority = inventoryActionPriority;
     }
 
     public abstract boolean itemPredicate(ItemStack itemStack);
+
+    public abstract int getPriority();
 
     public enum HandRestriction {
         MAIN_HAND,
@@ -99,7 +99,7 @@ public abstract class AbstractInventoryModule extends Module {
                 INVENTORY.submit(InventoryActionRequest.builder()
                     .owner(this)
                     .actions(actions)
-                    .priority(inventoryActionPriority)
+                    .priority(getPriority())
                     .build());
                 return true;
             }

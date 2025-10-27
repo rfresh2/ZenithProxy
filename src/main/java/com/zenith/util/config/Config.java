@@ -12,6 +12,7 @@ import lombok.Getter;
 import org.geysermc.mcprotocollib.network.ProxyInfo;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -144,6 +145,7 @@ public final class Config {
             public boolean killMessage = true;
             public boolean logChatMessages = true;
             public boolean logOnlyQueuePositionUpdates = true;
+            public boolean reconfiguringNotification = true;
             public final CoordObfuscation coordObfuscation = new CoordObfuscation();
             public final ActionLimiter actionLimiter = new ActionLimiter();
             public final VisualRange visualRange = new VisualRange();
@@ -165,6 +167,8 @@ public final class Config {
             public static final class Tasks {
                 public boolean enabled = true;
                 public final LinkedHashMap<String, Task> tasks = new LinkedHashMap<>();
+                public boolean logCommandActionOutput = true;
+                public boolean taskCommandExecutedNotification = true;
             }
 
             public static final class Waypoints {
@@ -183,6 +187,7 @@ public final class Config {
             }
 
             public static final class Pathfinder {
+                public @Nullable Integer priority = null;
                 public boolean allowBreak = true;
                 public boolean allowSprint = false;
                 public boolean allowPlace = true;
@@ -225,6 +230,7 @@ public final class Config {
             }
 
             public static class Click {
+                public @Nullable Integer priority = null;
                 public boolean enabled = true;
                 public boolean holdLeftClick = false;
                 public boolean holdRightClick = false;
@@ -252,6 +258,7 @@ public final class Config {
             }
 
             public static class SpawnPatrol {
+                public @Nullable Integer priority = null;
                 public boolean enabled = false;
                 public boolean ignoreFriends = true;
                 public boolean targetOnlyNakeds = true;
@@ -276,6 +283,7 @@ public final class Config {
             }
 
             public static class AutoMend {
+                public @Nullable Integer priority = null;
                 public boolean enabled = false;
             }
 
@@ -300,6 +308,7 @@ public final class Config {
             }
 
             public static class AutoArmor {
+                public @Nullable Integer priority = null;
                 public boolean enabled = false;
             }
 
@@ -321,6 +330,7 @@ public final class Config {
             }
 
             public static final class AutoTotem {
+                public @Nullable Integer priority = null;
                 public boolean enabled = true;
                 public boolean inGame = false;
                 public int healthThreshold = 20;
@@ -339,6 +349,7 @@ public final class Config {
             }
 
             public static final class KillAura {
+                public @Nullable Integer actionPriority = null;
                 public boolean enabled = false;
                 public boolean targetPlayers = false;
                 public boolean targetHostileMobs = true;
@@ -349,6 +360,9 @@ public final class Config {
                 public boolean switchWeapon = true;
                 public boolean targetArmorStands = false;
                 public int attackDelayTicks = 10;
+                // When enabled, adjusts attackDelayTicks by current server TPS
+                // so attack rate stays consistent.
+                public boolean tpsSync = false;
                 public boolean raycast = false;
                 public final ArrayList<EntityType> customTargets = new ArrayList<>();
                 public Priority priority = Priority.NONE;
@@ -360,6 +374,7 @@ public final class Config {
             }
 
             public static final class AutoEat {
+                public @Nullable Integer priority = null;
                 public boolean enabled = true;
                 public int healthThreshold = 10;
                 public int hungerThreshold = 10;
@@ -369,6 +384,7 @@ public final class Config {
             }
 
             public static final class AutoOmen {
+                public @Nullable Integer priority = null;
                 public boolean enabled = false;
                 public boolean whileRaidActive = false;
                 public boolean whileOmenActive = false;
@@ -382,12 +398,14 @@ public final class Config {
             }
 
             public static final class AutoFish {
+                public @Nullable Integer priority = null;
                 public boolean enabled = false;
                 public float yaw = 0.0f;
                 public float pitch = 0.0f;
             }
 
             public static final class AntiAFK {
+                public @Nullable Integer priority = null;
                 public Actions actions = new Actions();
                 public boolean enabled = true;
 
@@ -412,6 +430,7 @@ public final class Config {
             }
 
             public static final class Spook {
+                public @Nullable Integer priority = null;
                 public boolean enabled = false;
                 public TargetingMode spookTargetingMode = TargetingMode.VISUAL_RANGE;
 
@@ -583,6 +602,7 @@ public final class Config {
             public String password = "";
         }
         public static final class AutoDrop {
+            public @Nullable Integer priority = null;
             public boolean enabled = false;
             public Mode mode = Mode.WHITELIST;
             public enum Mode {
@@ -631,9 +651,10 @@ public final class Config {
             public final Cache cache = new Cache();
 
             public static final class Cache {
-                public boolean unlockAllRecipes = true;
                 public boolean fullbrightChunkSkylight = true;
                 public boolean fullbrightChunkBlocklight = false;
+                // each map is 16kb, so 128 maps = ~2MB
+                public int maxCachedMaps = 128;
             }
         }
     }
@@ -853,6 +874,7 @@ public final class Config {
             public boolean deathMessages = true;
             public boolean sendMessages = true;
             public String channelId = "";
+            public ArrayList<String> ignoreRegex = new ArrayList<>();
         }
     }
 

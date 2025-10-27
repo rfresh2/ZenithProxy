@@ -1,9 +1,8 @@
-package com.zenith.docs;
+package com.zenith.util;
 
 import com.zenith.Globals;
 import com.zenith.command.api.Command;
 import com.zenith.command.api.CommandCategory;
-import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,10 +12,8 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 
 public class CommandDocsGenerator {
-
-    @Test
-    public void generateDocs() {
-        var outputFile = new File("../build/Commands.md");
+    public static void main(String[] args) {
+        var outputFile = new File(args[0]);
         if (outputFile.exists()) {
             outputFile.delete();
         }

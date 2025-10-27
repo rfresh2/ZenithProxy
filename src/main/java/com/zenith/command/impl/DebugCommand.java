@@ -69,7 +69,6 @@ public class DebugCommand extends Command {
                     CONFIG.debug.packetLog.enabled = getToggle(c, "toggle");
                     c.getSource().getEmbed()
                         .title("Packet Log " + toggleStrCaps(CONFIG.debug.packetLog.enabled));
-                    return OK;
                 }))
                 .then(literal("client")
                     .then(argument("toggle", toggle()).executes(c -> {
@@ -86,7 +85,6 @@ public class DebugCommand extends Command {
                         }
                         c.getSource().getEmbed()
                             .title("Client Packet Log " + toggleStrCaps(toggle));
-                        return OK;
                     })))
                 .then(literal("server")
                     .then(argument("toggle", toggle()).executes(c -> {
@@ -103,7 +101,6 @@ public class DebugCommand extends Command {
                         }
                         c.getSource().getEmbed()
                             .title("Server Packet Log " + toggleStrCaps(toggle));
-                        return OK;
                     })))
                 .then(literal("filter")
                     .then(argument("filter", wordWithChars()).executes(c -> {
@@ -112,13 +109,11 @@ public class DebugCommand extends Command {
                             CONFIG.debug.packetLog.packetFilter = "";
                         c.getSource().getEmbed()
                             .title("Packet Log Filter Set: " + CONFIG.debug.packetLog.packetFilter);
-                        return OK;
                     })))
                 .then(literal("logLevelDebug").then(argument("toggle", toggle()).executes(c -> {
                     CONFIG.debug.packetLog.logLevelDebug = getToggle(c, "toggle");
                     c.getSource().getEmbed()
                         .title("Log Level Debug " + toggleStrCaps(CONFIG.debug.packetLog.logLevelDebug));
-                    return OK;
                 }))))
             .then(literal("sync")
                 .then(literal("inventory").executes(c -> {
@@ -126,14 +121,12 @@ public class DebugCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Inventory Synced");
                     c.getSource().getData().put("noDefaultEmbed", true);
-                    return OK;
                 }))
                 .then(literal("chunks").executes(c -> {
                     ChunkCache.sync();
                     c.getSource().getEmbed()
                         .title("Synced Chunks");
                     c.getSource().getData().put("noDefaultEmbed", true);
-                    return OK;
                 })))
             .then(literal("clearEffects").executes(c -> {
                 CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().clear();
@@ -146,13 +139,11 @@ public class DebugCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Cleared Effects");
                 c.getSource().getData().put("noDefaultEmbed", true);
-                return OK;
             }))
             .then(literal("kickDisconnect").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.debug.kickDisconnect = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Kick Disconnect " + toggleStrCaps(CONFIG.debug.kickDisconnect));
-                return OK;
             })))
             // insta disconnect
             .then(literal("dc").executes(c -> {
@@ -163,25 +154,26 @@ public class DebugCommand extends Command {
                 CONFIG.debug.debugLogs = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Debug Logs " + toggleStrCaps(CONFIG.debug.debugLogs));
-                return OK;
             })))
             .then(literal("terminalDebugLogs").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.debug.terminalDebugLogs = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Terminal Debug Logs " + toggleStrCaps(CONFIG.debug.terminalDebugLogs));
-                return OK;
             })))
             .then(literal("chunkCacheFullbright").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.debug.server.cache.fullbrightChunkBlocklight = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Chunk Cache Fullbright " + toggleStrCaps(CONFIG.debug.server.cache.fullbrightChunkBlocklight));
-                return OK;
+            })))
+            .then(literal("maxCachedMaps").then(argument("count", integer(0)).executes(c -> {
+                CONFIG.debug.server.cache.maxCachedMaps = getInteger(c, "count");
+                c.getSource().getEmbed()
+                    .title("Max Cached Maps Set");
             })))
             .then(literal("binaryNbtComponentSerializer").then(argument("toggle", toggle()).executes(c -> {
                 MinecraftTypes.useBinaryNbtComponentSerializer = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Binary NBT Component Serializer " + toggleStrCaps(MinecraftTypes.useBinaryNbtComponentSerializer));
-                return OK;
             })))
             .then(literal("defaultClientRenderDistance").then(argument("dist", integer(1, 256)).executes(c -> {
                 CONFIG.client.defaultClientRenderDistance = getInteger(c, "dist");
@@ -302,6 +294,7 @@ public class DebugCommand extends Command {
                 .addField("Debug Logs", toggleStr(CONFIG.debug.debugLogs))
                 .addField("Terminal Debug Logs", toggleStr(CONFIG.debug.terminalDebugLogs))
                 .addField("Chunk Cache Fullbright", toggleStr(CONFIG.debug.server.cache.fullbrightChunkBlocklight))
+                .addField("Max Cached Maps", CONFIG.debug.server.cache.maxCachedMaps)
                 .addField("Default Client Render Distance", CONFIG.client.defaultClientRenderDistance)
                 .addField("Lock File", toggleStr(CONFIG.debug.lockFile));
         }

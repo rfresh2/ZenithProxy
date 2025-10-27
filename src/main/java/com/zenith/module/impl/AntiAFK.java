@@ -13,6 +13,7 @@ import com.zenith.util.timer.Timers;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -38,7 +39,6 @@ public class AntiAFK extends Module {
     );
     private final Iterator<WalkDirection> walkDirectionIterator = Iterators.cycle(walkDirections);
     private BlockPos currentPathingGoal;
-    public static final int MOVEMENT_PRIORITY = 100;
 
     @Override
     public List<EventConsumer<?>> registerEvents() {
@@ -53,6 +53,10 @@ public class AntiAFK extends Module {
     @Override
     public boolean enabledSetting() {
         return CONFIG.client.extra.antiafk.enabled;
+    }
+
+    public int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.antiafk.priority, 5000);
     }
 
     public void handleClientTickEvent(final ClientBotTick event) {
@@ -87,7 +91,7 @@ public class AntiAFK extends Module {
                 .input(Input.builder()
                     .sneaking(true)
                     .build())
-                .priority(MOVEMENT_PRIORITY - 1)
+                .priority(getPriority() - 1)
                 .build());
         }
     }
@@ -122,7 +126,7 @@ public class AntiAFK extends Module {
                 .owner(this)
                 .yaw(-180 + (360 * ThreadLocalRandom.current().nextFloat()))
                 .pitch(-90 + (180 * ThreadLocalRandom.current().nextFloat()))
-                .priority(MOVEMENT_PRIORITY - 1)
+                .priority(getPriority() - 1)
                 .build());
         }
     }
@@ -135,7 +139,7 @@ public class AntiAFK extends Module {
                 .input(Input.builder()
                     .jumping(true)
                     .build())
-                .priority(MOVEMENT_PRIORITY + 1)
+                .priority(getPriority() + 1)
                 .build());
         }
     }
@@ -165,7 +169,7 @@ public class AntiAFK extends Module {
                         .sneaking(shouldSneak)
                         .build())
                     .yaw(RotationHelper.yawToXZ(currentPathingGoal.x() + 0.5, currentPathingGoal.z() + 0.5))
-                    .priority(MOVEMENT_PRIORITY)
+                    .priority(getPriority())
                     .build());
             }
         }
@@ -188,7 +192,7 @@ public class AntiAFK extends Module {
                     .clickTarget(ClickTarget.None.INSTANCE)
                     .sneaking((CONFIG.client.extra.antiafk.actions.walk && CONFIG.client.extra.antiafk.actions.safeWalk) || CONFIG.client.extra.antiafk.actions.sneak)
                     .build())
-                .priority(MOVEMENT_PRIORITY * 10)
+                .priority(getPriority() * 10)
                 .build());
         }
     }
