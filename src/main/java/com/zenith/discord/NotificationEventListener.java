@@ -55,6 +55,7 @@ public class NotificationEventListener {
             this,
             of(ClientConnectEvent.class, this::handleConnectEvent),
             of(ClientOnlineEvent.class, this::handlePlayerOnlineEvent),
+            of(ClientConfigurationEvent.Entering.class, this::handleClientConfigurationEnteringEvent),
             of(ClientDisconnectEvent.class, this::handleDisconnectEvent),
             of(QueuePositionUpdateEvent.class, this::handleQueuePositionUpdateEvent),
             of(QueueWarningEvent.class, this::handleQueueWarning),
@@ -101,6 +102,7 @@ public class NotificationEventListener {
     }
 
     private void handleScheduledTaskCommandExecutedEvent(TasksCommandExecutedEvent event) {
+        if (!CONFIG.client.extra.tasks.taskCommandExecutedNotification) return;
         sendEmbedMessage(Embed.builder()
             .title("Scheduled Task Executed")
             .addField("Command", "`" + event.command() + "`")
@@ -177,6 +179,14 @@ public class NotificationEventListener {
         }
     }
 
+    private void handleClientConfigurationEnteringEvent(ClientConfigurationEvent.Entering event) {
+        if (!CONFIG.client.extra.reconfiguringNotification) return;
+        var embedBuilder = Embed.builder()
+            .title("Reconfiguring...")
+            .inQueueColor();
+        sendEmbedMessage(embedBuilder);
+    }
+
     public void handleDisconnectEvent(ClientDisconnectEvent event) {
         var category = DisconnectReasonInfo.getDisconnectCategory(event.reason());
         var embed = Embed.builder()
@@ -186,42 +196,49 @@ public class NotificationEventListener {
             .addField("Category", category.toString(), false)
             .addField("Online Duration", formatDuration(event.onlineDurationWithQueueSkip()), false)
             .errorColor();
-        if (Proxy.getInstance().isOn2b2t()
-            && !Proxy.getInstance().isPrio()
-            && category == DisconnectReasonInfo.DisconnectCategory.KICK) {
-            if (event.onlineDuration().toSeconds() >= 0L
-                && event.onlineDuration().toSeconds() <= 1L) {
-                embed.description("""
+        if (Proxy.getInstance().isOn2b2t()) {
+            switch (category) {
+                case KICK -> {
+                    if (!Proxy.getInstance().isPrio()) {
+                        if (event.onlineDuration().toSeconds() >= 0L && event.onlineDuration().toSeconds() <= 1L) {
+                            embed.description("""
                       You have likely been kicked for reaching the 2b2t non-prio account IP limit.
                       Consider configuring a connection proxy with the `clientConnection` command.
                       Or migrate ZenithProxy instances to multiple hosts/IP's.
                       """);
-            } else if (event.wasInQueue() && event.queuePosition() <= 1) {
-                embed.description("""
+                        } else if (event.wasInQueue() && event.queuePosition() <= 1) {
+                            embed.description("""
                       You have likely been kicked due to being IP banned by 2b2t.
 
                       To check, try connecting and waiting through queue with the same account from a different IP.
                       """);
-            } else if (!event.wasInQueue()
-                && MathHelper.isInRange( // whether we were kicked at session time limit +- 30s
-                event.onlineDuration().toSeconds(),
-                MODULE.get(SessionTimeLimit.class).getSessionTimeLimit().toSeconds(),
-                30L)) {
-                embed.description("""
+                        } else if (!event.wasInQueue()
+                            && MathHelper.isInRange( // whether we were kicked at session time limit +- 30s
+                            event.onlineDuration().toSeconds(),
+                            MODULE.get(SessionTimeLimit.class).getSessionTimeLimit().toSeconds(), 30L)
+                        ) {
+                            embed.description("""
                         You have likely been kicked for reaching the non-prio session time limit.
 
                         2b2t kicks non-prio players after %s hours online.
                         """.formatted(MODULE.get(SessionTimeLimit.class).getSessionTimeLimit().toHours()));
-            } else if (!event.wasInQueue()
-                && MathHelper.isInRange( // whether we were kicked at 20 minutes +- 30s
-                event.onlineDuration().toSeconds(),
-                TimeUnit.MINUTES.toSeconds(20),
-                30L)) {
-                String msg = "You have possibly been kicked by 2b2t's AntiAFK plugin";
-                if (!MODULE.get(AntiAFK.class).isEnabled()) {
-                    msg += "\n\nConsider enabling ZenithProxy's AntiAFK module: `antiAFK on`";
+                        } else if (!event.wasInQueue()
+                            && MathHelper.isInRange( // whether we were kicked at 20 minutes +- 30s
+                            event.onlineDuration().toSeconds(),
+                            TimeUnit.MINUTES.toSeconds(20),
+                            30L)
+                        ) {
+                            String msg = "You have possibly been kicked by 2b2t's AntiAFK plugin";
+                            if (!MODULE.get(AntiAFK.class).isEnabled()) {
+                                msg += "\n\nConsider enabling ZenithProxy's AntiAFK module: `antiAFK on`";
+                            }
+                            embed.description(msg);
+                        }
+                    }
                 }
-                embed.description(msg);
+                case CONNECTION_ISSUE, CONNECTION_ISSUE_PLAYER, CONNECTION_ISSUE_2B2T -> {
+                    embed.addField("2b2t Status", "https://status.2b2t.org/");
+                }
             }
         }
         if (CONFIG.discord.mentionRoleOnDisconnect) {
@@ -355,7 +372,7 @@ public class NotificationEventListener {
                 .description(desc)
                 .errorColor();
             var buttonId = "via-" + ThreadLocalRandom.current().nextInt(1000000);
-            var button = Button.secondary(buttonId, "Auto-Configure ViaVersion");
+            var button = Button.primary(buttonId, "Auto-Configure ViaVersion");
             Consumer<ButtonInteractionEvent> mapper = e -> {
                 if (e.getComponentId().equals(buttonId)) {
                     CONFIG.client.viaversion.protocolVersion = playerProtocolVersion.getVersion();

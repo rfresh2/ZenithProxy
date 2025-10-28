@@ -11,15 +11,13 @@ import com.zenith.util.timer.Timers;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.Globals.INPUTS;
 
 public class Click extends Module {
-
-    public static final int MOVEMENT_PRIORITY = 501;
-
     private final Timer holdRightClickTimer = Timers.tickTimer();
     private final Timer holdLeftClickTimer = Timers.tickTimer();
     private Hand holdRightClickLastHand = Hand.MAIN_HAND;
@@ -36,10 +34,14 @@ public class Click extends Module {
         return CONFIG.client.extra.click.enabled;
     }
 
+    public int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.autoTotem.priority, 9000);
+    }
+
     private void onClientBotTick(ClientBotTick event) {
         if (CONFIG.client.extra.click.holdLeftClick) {
             if (holdLeftClickTimer.tick(CONFIG.client.extra.click.holdLeftClickInterval)) {
-                var req = InputRequest.builder().priority(MOVEMENT_PRIORITY);
+                var req = InputRequest.builder().priority(getPriority());
                 var in = Input.builder().leftClick(true);
                 if (CONFIG.client.extra.click.hasRotation) {
                     req.yaw(CONFIG.client.extra.click.rotationYaw)
@@ -68,7 +70,7 @@ public class Click extends Module {
             }
         } else if (CONFIG.client.extra.click.holdRightClick) {
             if (holdRightClickTimer.tick(CONFIG.client.extra.click.holdRightClickInterval)) {
-                var req = InputRequest.builder().owner(this).priority(MOVEMENT_PRIORITY);
+                var req = InputRequest.builder().owner(this).priority(getPriority());
                 var in = Input.builder().rightClick(true);
                 Hand hand = switch (CONFIG.client.extra.click.holdRightClickMode) {
                     case MAIN_HAND -> Hand.MAIN_HAND;

@@ -17,6 +17,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.*;
@@ -25,10 +26,9 @@ public class AutoEat extends AbstractInventoryModule {
     private int delay = 0;
     private Instant lastAutoEatOutOfFoodWarning = Instant.EPOCH;
     private boolean isEating = false;
-    public static final int MOVEMENT_PRIORITY = 1000;
 
     public AutoEat() {
-        super(HandRestriction.EITHER, 0, MOVEMENT_PRIORITY);
+        super(HandRestriction.EITHER, 0);
     }
 
     @Override
@@ -37,6 +37,11 @@ public class AutoEat extends AbstractInventoryModule {
             of(ClientBotTick.class, this::handleClientTick),
             of(ClientBotTick.Starting.class, this::handleBotTickStarting)
         );
+    }
+
+    @Override
+    public int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.autoEat.priority, 11000);
     }
 
     public boolean isEating() {
@@ -57,8 +62,8 @@ public class AutoEat extends AbstractInventoryModule {
             if (delay > 0) {
                 delay--;
                 if (isEating) {
-                    INPUTS.submit(InputRequest.noInput(this, MOVEMENT_PRIORITY));
-                    INVENTORY.submit(InventoryActionRequest.noAction(this, MOVEMENT_PRIORITY));
+                    INPUTS.submit(InputRequest.noInput(this, getPriority()));
+                    INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                 }
                 return;
             }
@@ -94,7 +99,7 @@ public class AutoEat extends AbstractInventoryModule {
                     .rightClick(true)
                     .clickTarget(ClickTarget.None.INSTANCE)
                     .build())
-                .priority(MOVEMENT_PRIORITY)
+                .priority(getPriority())
                 .build())
             .addInputExecutedListener(future -> {
                 isEating = true;

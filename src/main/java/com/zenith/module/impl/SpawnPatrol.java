@@ -32,6 +32,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.Serverbound
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadLocalRandom;
@@ -43,7 +44,6 @@ import static com.zenith.Globals.*;
 public class SpawnPatrol extends Module {
     private final Timer pathTimer = Timers.tickTimer();
     private final Timer killTimer = Timers.tickTimer();
-    public static final int MOVEMENT_PRIORITY = 150;
     private double lastX = Double.MIN_VALUE;
     private double lastY = Double.MIN_VALUE;
     private double lastZ = Double.MIN_VALUE;
@@ -69,6 +69,10 @@ public class SpawnPatrol extends Module {
     @Override
     public boolean enabledSetting() {
         return CONFIG.client.extra.spawnPatrol.enabled;
+    }
+
+    public int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.spawnPatrol.priority, 6000);
     }
 
     @Override
@@ -111,7 +115,7 @@ public class SpawnPatrol extends Module {
             var req = InputRequest.builder()
                 .owner(this)
                 .input(in)
-                .priority(MOVEMENT_PRIORITY);
+                .priority(getPriority());
             if (ThreadLocalRandom.current().nextFloat() > 0.95f) {
                 req.yaw(ThreadLocalRandom.current().nextFloat() * 360);
             }

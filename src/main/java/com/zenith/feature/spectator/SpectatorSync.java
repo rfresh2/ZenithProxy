@@ -96,7 +96,7 @@ public final class SpectatorSync {
         spectatorEntityPlayer.setYaw(CACHE.getPlayerCache().getYaw());
         spectatorEntityPlayer.setPitch(CACHE.getPlayerCache().getPitch());
         spectatorEntityPlayer.getMetadata().put(9, new FloatEntityMetadata(9, MetadataTypes.FLOAT, 20.0f)); // health
-        spectatorEntityPlayer.getMetadata().put(17, new ByteEntityMetadata(17, MetadataTypes.BYTE, (byte) 255)); // visible skin parts
+        spectatorEntityPlayer.getMetadata().put(16, new ByteEntityMetadata(16, MetadataTypes.BYTE, (byte) 255)); // visible skin parts
         return spectatorEntityPlayer;
     }
 

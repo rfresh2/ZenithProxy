@@ -1,9 +1,11 @@
-package com.zenith.plugin.api;
+package com.zenith.plugin;
 
 import com.zenith.command.api.Command;
 import com.zenith.module.api.Module;
-import com.zenith.plugin.DefaultGsonConfigSerializer;
-import com.zenith.plugin.KotlinObjectGsonConfigSerializer;
+import com.zenith.plugin.api.ConfigSerializer;
+import com.zenith.plugin.api.PluginAPI;
+import com.zenith.plugin.api.PluginInfo;
+import com.zenith.plugin.api.ZenithProxyPlugin;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 
 import static com.zenith.Globals.*;

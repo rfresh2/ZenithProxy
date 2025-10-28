@@ -145,7 +145,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                     .input(in.build())
                     .yaw(rotation.yaw())
                     .pitch(rotation.pitch())
-                    .priority(Baritone.MOVEMENT_PRIORITY + 1)
+                    .priority(Baritone.getPriority() + 1)
                     .build()
             ).addInputExecutedListener(f -> {
                 if (futureSucceeded(f, placeTarget)) {
@@ -189,13 +189,13 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                     if (itemSlot >= 36 && itemSlot <= 44) { // in hotbar
                         INVENTORY.submit(InventoryActionRequest.builder()
                             .owner(this)
-                            .priority(Baritone.MOVEMENT_PRIORITY + 1)
+                            .priority(Baritone.getPriority() + 1)
                             .actions(new SetHeldItem(itemSlot - 36))
                             .build());
                     } else if (itemSlot >= 9 && itemSlot <= 36) { // in main inv
                         INVENTORY.submit(InventoryActionRequest.builder()
                             .owner(this)
-                            .priority(Baritone.MOVEMENT_PRIORITY + 1)
+                            .priority(Baritone.getPriority() + 1)
                             .actions(
                                 new MoveToHotbarSlot(itemSlot, MoveToHotbarAction.SLOT_6),
                                 new SetHeldItem(6))
@@ -203,7 +203,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                     } else if (itemSlot == 45) { // in offhand
                         INVENTORY.submit(InventoryActionRequest.builder()
                             .owner(this)
-                            .priority(Baritone.MOVEMENT_PRIORITY + 1)
+                            .priority(Baritone.getPriority() + 1)
                             .actions(new WaitAction())
                             .build());
                         hand = Hand.OFF_HAND;
@@ -361,13 +361,13 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                             INVENTORY.submit(InventoryActionRequest.builder()
                                 .owner(this)
                                 .actions(new MoveToHotbarSlot(toolSlot, MoveToHotbarAction.from(0)))
-                                .priority(Baritone.MOVEMENT_PRIORITY)
+                                .priority(Baritone.getPriority())
                                 .build());
                         } else if (toolSlot <= 44) { // in hotbar
                             INVENTORY.submit(InventoryActionRequest.builder()
                                 .owner(this)
                                 .actions(new SetHeldItem(toolSlot - 36))
-                                .priority(Baritone.MOVEMENT_PRIORITY)
+                                .priority(Baritone.getPriority())
                                 .build());
                         } else if (toolSlot == 45) { // in offhand
                             hand = Hand.OFF_HAND;
@@ -438,7 +438,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                     .input(in.build())
                     .yaw(rot.getX())
                     .pitch(rot.getY())
-                    .priority(Baritone.MOVEMENT_PRIORITY + 1)
+                    .priority(Baritone.getPriority() + 1)
                     .build()
             ).addInputExecutedListener(f -> {
                 if (futureSucceeded(f)) {
@@ -521,7 +521,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                     .input(in.build())
                     .yaw(rot.getX())
                     .pitch(rot.getY())
-                    .priority(Baritone.MOVEMENT_PRIORITY + 1)
+                    .priority(Baritone.getPriority() + 1)
                     .build())
                 .addInputExecutedListener(future -> {
                     if (futureSucceeded(future)) {
@@ -617,7 +617,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                     .input(in.build())
                     .yaw(rot.getX())
                     .pitch(rot.getY())
-                    .priority(Baritone.MOVEMENT_PRIORITY + 1)
+                    .priority(Baritone.getPriority() + 1)
                     .build())
                 .addInputExecutedListener(future -> {
                     if (futureSucceeded(future)) {

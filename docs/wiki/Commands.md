@@ -248,7 +248,11 @@ Mentions can be configured when a whisper is received or your name is seen in ch
 
 Messages typed in the ChatRelay discord channel will be sent as chat messages in-game
 
-Discord message replies will be sent as whispers in-game
+Discord message replies will be sent as whispers in-game.
+
+
+
+Ignore regex will filter out messages, see here for help writing regex: https://regex101.com/ (Java flavor)
 
 **Usage**
 
@@ -275,6 +279,14 @@ Discord message replies will be sent as whispers in-game
   ```chatRelay ignoreQueue on/off```
 
   ```chatRelay sendMessages on/off```
+
+  ```chatRelay ignoreRegex add <regex>```
+
+  ```chatRelay ignoreRegex del <index>```
+
+  ```chatRelay ignoreRegex list```
+
+  ```chatRelay ignoreRegex clear```
 
 
 ### chatSchema
@@ -1725,6 +1737,8 @@ Aggressive mobs are mobs that are actively targeting and attacking the player.
 
   ```killAura attackDelay <ticks>```
 
+  ```killAura tpsSync on/off```
+
   ```killAura targetPlayers on/off```
 
   ```killAura targetHostileMobs on/off```
@@ -1746,6 +1760,53 @@ Aggressive mobs are mobs that are actively targeting and attacking the player.
   ```killAura raycast on/off```
 
   ```killAura priority <none/nearest>```
+
+
+### modulePriority
+
+Configures the priority of ZenithProxy modules.
+
+
+
+A higher priority means the module's actions (like rotations, clicks, etc.) will take precedence over modules with lower priorities.
+
+
+
+Should not be edited normally, only for advanced use cases.
+
+
+
+Default module priorities may be changed between versions.
+
+**Usage**
+
+  ```modulePriority autoTotem <default/int>```
+
+  ```modulePriority autoArmor <default/int>```
+
+  ```modulePriority autoEat <default/int>```
+
+  ```modulePriority autoOmen <default/int>```
+
+  ```modulePriority click <default/int>```
+
+  ```modulePriority killAura <default/int>```
+
+  ```modulePriority pathfinder <default/int>```
+
+  ```modulePriority spawnPatrol <default/int>```
+
+  ```modulePriority antiAfk <default/int>```
+
+  ```modulePriority autoMend <default/int>```
+
+  ```modulePriority autoDrop <default/int>```
+
+  ```modulePriority autoFish <default/int>```
+
+  ```modulePriority spook <default/int>```
+
+  ```modulePriority list```
 
 
 ### pathfinder
@@ -2114,6 +2175,10 @@ Schedules commands to be executed after a delay or after specified events.
   ```tasks list```
 
   ```tasks clear```
+
+  ```tasks logCommandActionOutput on/off```
+
+  ```tasks taskCommandExecutedNotification on/off```
 
 
 ### spawnPatrol

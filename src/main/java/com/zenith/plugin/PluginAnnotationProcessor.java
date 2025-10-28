@@ -1,10 +1,13 @@
-package com.zenith.plugin.api;
+package com.zenith.plugin;
 
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.auto.service.AutoService;
+import com.zenith.plugin.api.Plugin;
+import com.zenith.plugin.api.PluginInfo;
+import com.zenith.plugin.api.Version;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;

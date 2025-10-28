@@ -35,6 +35,7 @@ public class KillAuraCommand extends Command {
             .usageLines(
                 "on/off",
                 "attackDelay <ticks>",
+                "tpsSync on/off",
                 "targetPlayers on/off",
                 "targetHostileMobs on/off",
                 "targetHostileMobs onlyAggressive on/off",
@@ -64,6 +65,11 @@ public class KillAuraCommand extends Command {
                 CONFIG.client.extra.killAura.attackDelayTicks = c.getArgument("ticks", Integer.class);
                 c.getSource().getEmbed()
                     .title("Attack Delay Ticks Set!");
+            })))
+            .then(literal("tpsSync").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.killAura.tpsSync = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("TPS Sync " + toggleStrCaps(CONFIG.client.extra.killAura.tpsSync));
             })))
             .then(literal("targetPlayers").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.killAura.targetPlayers = getToggle(c, "toggle");
@@ -153,6 +159,7 @@ public class KillAuraCommand extends Command {
             .addField("Target Armor Stands", toggleStr(CONFIG.client.extra.killAura.targetArmorStands))
             .addField("Weapon Switching", toggleStr(CONFIG.client.extra.killAura.switchWeapon))
             .addField("Attack Delay Ticks", CONFIG.client.extra.killAura.attackDelayTicks)
+            .addField("TPS Sync", toggleStr(CONFIG.client.extra.killAura.tpsSync))
             .addField("Raycast", toggleStr(CONFIG.client.extra.killAura.raycast))
             .addField("Priority", CONFIG.client.extra.killAura.priority.name().toLowerCase())
             .primaryColor();

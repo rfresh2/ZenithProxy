@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 
 import java.util.List;
 
+import static com.zenith.Globals.MODULE_LOG;
 import static java.util.Arrays.asList;
 
 public class ModuleManager {
@@ -63,6 +64,9 @@ public class ModuleManager {
     }
 
     public void registerModule(Module module) {
+        if (moduleClassMap.containsKey(module.getClass())) {
+            MODULE_LOG.warn("Duplicate module class being registered: {}", module.getClass().getSimpleName(), new RuntimeException());
+        }
         addModule(module);
         module.syncEnabledFromConfig();
     }

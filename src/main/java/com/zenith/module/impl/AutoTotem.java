@@ -17,6 +17,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -25,12 +26,11 @@ import static java.util.Objects.nonNull;
 
 public class AutoTotem extends AbstractInventoryModule {
     private int delay = 0;
-    public static final int MOVEMENT_PRIORITY = 1000;
     private Instant lastNoTotemsAlert = Instant.EPOCH;
     private static final Duration noTotemsAlertCooldown = Duration.ofMinutes(30);
 
     public AutoTotem() {
-        super(HandRestriction.OFF_HAND, -1, MOVEMENT_PRIORITY);
+        super(HandRestriction.OFF_HAND, -1);
     }
 
     @Override
@@ -46,6 +46,11 @@ public class AutoTotem extends AbstractInventoryModule {
     @Override
     public boolean enabledSetting() {
         return CONFIG.client.extra.autoTotem.enabled;
+    }
+
+    @Override
+    public int getPriority() {
+        return Objects.requireNonNullElse(CONFIG.client.extra.autoTotem.priority, 13000);
     }
 
     // todo: these are not synced at all to the player's normal tick loop (neither bot nor controlling player)
