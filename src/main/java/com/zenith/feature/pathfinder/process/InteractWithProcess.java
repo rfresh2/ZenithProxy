@@ -30,6 +30,8 @@ import java.util.List;
 
 import static com.zenith.Globals.*;
 
+// todo: raycast setting for choosing path goals
+//  ie. if raycast to target is blocked after near goal, find a new pathing goal that has direct line of sight
 public class InteractWithProcess extends BaritoneProcessHelper {
 
     private @Nullable PathingRequestFuture future;
@@ -219,7 +221,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                 }
             }
             // todo: some antistuck func here
-            int rangeSq = MathHelper.clamp(((int) Math.pow(BOT.getBlockReachDistance(), 2)) - 1, 1, 4);
+            int rangeSq = Math.max(2, ((int) Math.pow(BOT.getBlockReachDistance() - 1, 2)));
             return new PathingCommand(new GoalNear(x, y, z, rangeSq), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
         }
 
@@ -378,7 +380,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                 return new PathingCommand(null, PathingCommandType.REQUEST_PAUSE);
             }
             // todo: some antistuck func here
-            int rangeSq = MathHelper.clamp(((int) Math.pow(BOT.getBlockReachDistance(), 2)) - 1, 1, 4);
+            int rangeSq = Math.max(2, ((int) Math.pow(BOT.getBlockReachDistance() - 1, 2)));
             return new PathingCommand(new GoalNear(x, y, z, rangeSq), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
         }
 
@@ -470,7 +472,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                 return new PathingCommand(null, PathingCommandType.REQUEST_PAUSE);
             }
             // todo: some antistuck func here
-            int rangeSq = MathHelper.clamp(((int) Math.pow(BOT.getBlockReachDistance(), 2)) - 1, 1, 4);
+            int rangeSq = Math.max(2, ((int) Math.pow(BOT.getBlockReachDistance() - 1, 2)));
             return new PathingCommand(new GoalNear(x, y, z, rangeSq), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
         }
 
@@ -562,7 +564,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                 return new PathingCommand(null, PathingCommandType.REQUEST_PAUSE);
             }
             // todo: some antistuck func here
-            int rangeSq = MathHelper.clamp(((int) Math.pow(BOT.getEntityInteractDistance(), 2)) - 1, 1, 4);
+            int rangeSq = Math.max(2, ((int) Math.pow(BOT.getEntityInteractDistance() - 1, 2)));
             return new PathingCommand(new GoalNear(entity.blockPos(), rangeSq), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
         }
 
