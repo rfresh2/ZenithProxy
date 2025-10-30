@@ -221,7 +221,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                 }
             }
             // todo: some antistuck func here
-            int rangeSq = Math.max(2, ((int) Math.pow(BOT.getBlockReachDistance() - 1, 2)));
+            int rangeSq = Math.max(2, ((int) Math.pow(BOT.getBlockReachDistance(), 2) - 1));
             return new PathingCommand(new GoalNear(x, y, z, rangeSq), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
         }
 
@@ -380,7 +380,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                 return new PathingCommand(null, PathingCommandType.REQUEST_PAUSE);
             }
             // todo: some antistuck func here
-            int rangeSq = Math.max(2, ((int) Math.pow(BOT.getBlockReachDistance() - 1, 2)));
+            int rangeSq = Math.max(2, ((int) Math.pow(BOT.getBlockReachDistance(), 2) - 1));
             return new PathingCommand(new GoalNear(x, y, z, rangeSq), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
         }
 
@@ -472,7 +472,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                 return new PathingCommand(null, PathingCommandType.REQUEST_PAUSE);
             }
             // todo: some antistuck func here
-            int rangeSq = Math.max(2, ((int) Math.pow(BOT.getBlockReachDistance() - 1, 2)));
+            int rangeSq = Math.max(2, ((int) Math.pow(BOT.getBlockReachDistance(), 2) - 1));
             return new PathingCommand(new GoalNear(x, y, z, rangeSq), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
         }
 
@@ -564,7 +564,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                 return new PathingCommand(null, PathingCommandType.REQUEST_PAUSE);
             }
             // todo: some antistuck func here
-            int rangeSq = Math.max(2, ((int) Math.pow(BOT.getEntityInteractDistance() - 1, 2)));
+            int rangeSq = Math.max(2, ((int) Math.pow(BOT.getEntityInteractDistance(), 2) - 1));
             return new PathingCommand(new GoalNear(entity.blockPos(), rangeSq), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
         }
 
