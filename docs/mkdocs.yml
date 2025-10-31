@@ -36,14 +36,16 @@ theme:
         icon: material/brightness-4
         name: Switch to system preference
 markdown_extensions:
-  - github-callouts
+  - admonition
+#  - github-callouts
   - attr_list
-  - md_in_html
-  - pymdownx.blocks.caption
+#  - md_in_html
+#  - pymdownx.blocks.caption
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
+  - pymdownx.details
   - pymdownx.inlinehilite
   - pymdownx.magiclink
   - pymdownx.snippets
@@ -58,8 +60,10 @@ extra_css:
   - _assets/styles/extra.css
 nav:
   - Home: index.md
+  - Setup: Setup.md
   - DigitalOcean Setup Guide: DigitalOcean-Setup-Guide.md
   - Windows Launcher Guide: Windows-Python-Launcher-Guide.md
+  - Discord Bot Guide: Discord-Bot-Guide.md
   - Commands: Commands.md
   - Frequently Asked Questions (FAQ): FAQ.md
   - Disconnects: Disconnects.md

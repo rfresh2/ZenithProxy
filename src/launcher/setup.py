@@ -156,8 +156,8 @@ def setup_execute(config):
     print("")
 
     if discord_bot:
-        print("See README.md for Discord bot setup instructions")
-        print("https://github.com/rfresh2/ZenithProxy/?tab=readme-ov-file#discord-bot-setup")
+        print("See Discord bot setup instructions:")
+        print("https://wiki.2b2t.vc/Discord-Bot-Guide")
         discord_verify_verbose = False
         while True:
             print("Enter Discord bot token:")
