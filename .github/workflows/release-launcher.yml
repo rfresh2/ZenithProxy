@@ -208,3 +208,10 @@ jobs:
           omitBodyDuringUpdate: true
           removeArtifacts: true
           makeLatest: true
+
+      - name: Docker Update
+        uses: peter-evans/repository-dispatch@v4
+        with:
+          token: ${{ secrets.DOCKER_REPO_TOKEN }}
+          repository: rfresh2/ZenithProxyDocker
+          event-type: launcher-release
