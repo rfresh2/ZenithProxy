@@ -78,6 +78,12 @@ During setup, select the `linux` platform:
 
 Complete the rest of the setup and you're done.
 
-See the main [README](https://github.com/rfresh2/ZenithProxy) and [commands documentation](https://wiki.2b2t.vc/Commands) for more info.
+Refer to the other documentation pages for further help:
 
-for tmux help click [here](https://tmuxcheatsheet.com/)
+[Discord Bot Guide](Discord-Bot-Guide.md){ .md-button .md-button--primary }
+
+[Commands](Commands.md){ .md-button .md-button--primary }
+
+[Setup](Setup.md){ .md-button .md-button--primary }
+
+for tmux help see: https://tmuxcheatsheet.com/

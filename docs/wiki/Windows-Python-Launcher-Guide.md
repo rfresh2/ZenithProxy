@@ -46,6 +46,12 @@ Enter `.\launch.bat` and press enter
 
 ![](./_assets/img/windows-setup/Windows-Python-Launcher-7.png)
 
-That's it. Complete the setup prompts.
+Complete the setup prompts
 
-Refer to the main readme for discord bot setup instructions: https://github.com/rfresh2/ZenithProxy
+Refer to the other documentation pages for further help:
+
+[Discord Bot Guide](Discord-Bot-Guide.md){ .md-button .md-button--primary }
+
+[Commands](Commands.md){ .md-button .md-button--primary }
+
+[Setup](Setup.md){ .md-button .md-button--primary }
