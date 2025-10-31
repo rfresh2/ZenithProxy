@@ -1,1 +1,9 @@
 /src/main/resources/
+docs/
+licenses/
+gradle/
+*.md
+*.json
+*.lock
+*.yml
+*.yaml

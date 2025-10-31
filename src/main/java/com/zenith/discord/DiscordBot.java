@@ -154,7 +154,7 @@ public class DiscordBot {
             jda.awaitReady();
         } catch (ShutdownException e) {
             if (e.getShutdownReason() == ShutdownReason.DISALLOWED_INTENTS) {
-                throw new RuntimeException("You must enable MESSAGE CONTENT INTENT on the Discord developer website: https://i.imgur.com/iznLeDV.png");
+                throw new RuntimeException("You must enable MESSAGE CONTENT INTENT on the Discord developer website: https://wiki.2b2t.vc/_assets/img/discord-setup/DiscordSetup2.png");
             }
             throw e;
         } catch (InterruptedException e) {

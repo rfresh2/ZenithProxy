@@ -40,7 +40,7 @@ Look for `Proxy IP`
 
 Connect to that IP in your MC client
 
-![](./_assets/img/add-proxy-server.png)
+![](./_assets/img/faq/add-proxy-server.png)
 
 ## I can't connect to my proxy!
 
@@ -87,7 +87,7 @@ AWS calls their firewall a "Security Group".
 
 Edit it to allow all traffic:
 
-![](./_assets/img/aws-security-group.png)
+![](./_assets/img/faq/aws-security-group.png)
 
 ### Other
 

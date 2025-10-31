@@ -30,7 +30,7 @@ public class DiscordManageCommand extends Command {
             .category(CommandCategory.MANAGE)
             .description("""
             Manages the Discord bot's configuration.
-            
+
             The relay is configured using the `chatRelay` command
             """)
             .usageLines(
@@ -263,7 +263,7 @@ public class DiscordManageCommand extends Command {
             String errorMsg = e.getMessage();
             var reason = e.getShutdownReason();
             if (reason == ShutdownReason.DISALLOWED_INTENTS) {
-                errorMsg = "You must enable MESSAGE CONTENT INTENT on the Discord developer website: https://i.imgur.com/iznLeDV.png";
+                errorMsg = "You must enable MESSAGE CONTENT INTENT on the Discord developer website: https://wiki.2b2t.vc/_assets/img/discord-setup/DiscordSetup2.png";
             }
             return new LoginResult(false, errorMsg);
         } catch (final Throwable e) {

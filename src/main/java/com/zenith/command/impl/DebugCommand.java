@@ -56,7 +56,8 @@ public class DebugCommand extends Command {
                 "defaultClientRenderDistance <int>",
                 "lockFile on/off",
                 "uploadLog",
-                "uploadDebugLog"
+                "uploadDebugLog",
+                "passthroughResourcePacks on/off"
             )
             .build();
     }
@@ -257,7 +258,12 @@ public class DebugCommand extends Command {
             }))
             .then(literal("uploadDebugLog").executes(c -> {
                 uploadLog(c.getSource(), "log/debug.log");
-            }));
+            }))
+            .then(literal("passthroughResourcePacks").then(argument("toggle", toggle()).executes(c -> {;
+                CONFIG.debug.passthroughResourcePacks = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Passthrough Resource Packs " + toggleStrCaps(CONFIG.debug.passthroughResourcePacks));
+            })));
     }
 
     private static void uploadLog(CommandContext c, String path) {
@@ -296,7 +302,8 @@ public class DebugCommand extends Command {
                 .addField("Chunk Cache Fullbright", toggleStr(CONFIG.debug.server.cache.fullbrightChunkBlocklight))
                 .addField("Max Cached Maps", CONFIG.debug.server.cache.maxCachedMaps)
                 .addField("Default Client Render Distance", CONFIG.client.defaultClientRenderDistance)
-                .addField("Lock File", toggleStr(CONFIG.debug.lockFile));
+                .addField("Lock File", toggleStr(CONFIG.debug.lockFile))
+                .addField("Passthrough Resource Packs", toggleStr(CONFIG.debug.passthroughResourcePacks));
         }
         ctx.getEmbed()
             .primaryColor();

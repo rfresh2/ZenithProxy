@@ -19,9 +19,10 @@ And additional info will be written below the example.
 > You have lost connection to the server
 
 You can be kicked by 2b2t for:
+
 * Flagging the AntiCheat
 * Failing to bypass AntiAFK
-* Reaching the 6hr session time limit (non-prio players only)
+* Reaching the 8hr session time limit (non-prio players only)
 
 ## Manual Disconnect
 > Manual Disconnect
@@ -102,4 +103,8 @@ The account you're connecting to 2b2t with is already logged into 2b2t.
 ## Illegal Disconnect
 > Illegal characters in chat
 
-You are using a client with an IllegalDisconnect setting. This is often a setting in AutoDisconnect modules. There is a glitch on 2b2t that causes the player to stay logged in after you disconnect sometimes. Your client is forcing 2b2t to kick you by sending an illegal chat packet so you avoid getting that glitch.
+You are using a client with an IllegalDisconnect setting. This is often a setting in AutoDisconnect modules.
+
+There is a glitch on 2b2t that causes the player to stay logged in after you disconnect sometimes.
+
+Your client is forcing 2b2t to kick you by sending an illegal chat packet so you avoid getting that glitch.
