@@ -477,6 +477,8 @@ Debug settings for features in testing or for use in development.
 
   ```debug uploadDebugLog```
 
+  ```debug passthroughResourcePacks on/off```
+
 
 ### discord
 
