@@ -2031,6 +2031,10 @@ Servers being switched to must have transfers enabled and be on an MC version >=
 
   ```switch register <name> <address> <port>```
 
+  ```switch del <name>```
+
+  ```switch clear```
+
   ```switch list```
 
   ```switch <name>```
