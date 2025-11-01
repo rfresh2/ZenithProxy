@@ -31,14 +31,16 @@ public class ServerSwitcherCommand extends Command {
             .category(CommandCategory.MODULE)
             .description("""
             Switch the connected player to an alternate MC server.
-            
+
             Can be used to switch between multiple ZenithProxy instances quickly.
-            
+
             Servers being switched to must have transfers enabled and be on an MC version >=1.20.6
             """)
             .usageLines(
                 "",
                 "register <name> <address> <port>",
+                "del <name>",
+                "clear",
                 "list",
                 "<name>"
             )
@@ -97,8 +99,18 @@ public class ServerSwitcherCommand extends Command {
                             servers.add(newServer);
                             c.getSource().getEmbed()
                                 .title("Server registered");
-                            return OK;
                         })))))
+            .then(literal("del").then(argument("name", wordWithChars()).executes(c -> {
+                var name = getString(c, "name");
+                CONFIG.server.extra.serverSwitcher.servers.removeIf(s -> s.name().equalsIgnoreCase(name));
+                c.getSource().getEmbed()
+                    .title("Server removed");
+            })))
+            .then(literal("clear").executes(c -> {
+                CONFIG.server.extra.serverSwitcher.servers.clear();
+                c.getSource().getEmbed()
+                    .title("Servers Cleared");
+            }))
             .then(literal("list").executes(c -> {
                 c.getSource().getEmbed()
                     .title("Server List");
