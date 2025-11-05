@@ -366,10 +366,24 @@ public final class Config {
                 public boolean raycast = false;
                 public final ArrayList<EntityType> customTargets = new ArrayList<>();
                 public Priority priority = Priority.NONE;
+                public WeaponType weaponType = WeaponType.ANY;
+                public WeaponMaterial weaponMaterial = WeaponMaterial.ANY;
 
                 public enum Priority {
                     NONE,
                     NEAREST
+                }
+
+                public enum WeaponType {
+                    ANY,
+                    SWORD,
+                    AXE
+                }
+
+                public enum WeaponMaterial {
+                    ANY,
+                    NETHERITE,
+                    DIAMOND
                 }
             }
 

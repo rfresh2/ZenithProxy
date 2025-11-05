@@ -2633,6 +2633,34 @@
       "allDeclaredFields": true
     },
     {
+      "type": "com.zenith.util.config.Config$Client$Extra$KillAura$WeaponMaterial",
+      "fields": [
+        {
+          "name": "ANY"
+        },
+        {
+          "name": "DIAMOND"
+        },
+        {
+          "name": "NETHERITE"
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.util.config.Config$Client$Extra$KillAura$WeaponType",
+      "fields": [
+        {
+          "name": "ANY"
+        },
+        {
+          "name": "AXE"
+        },
+        {
+          "name": "SWORD"
+        }
+      ]
+    },
+    {
       "type": "com.zenith.util.config.Config$Client$Extra$Pathfinder",
       "allDeclaredFields": true,
       "methods": [

@@ -9,11 +9,12 @@ import com.zenith.feature.inventory.InventoryActionRequest;
 import com.zenith.feature.player.*;
 import com.zenith.feature.player.raycast.RaycastHelper;
 import com.zenith.mc.item.ItemRegistry;
+import com.zenith.mc.item.ToolTier;
+import com.zenith.mc.item.ToolType;
 import com.zenith.util.math.MathHelper;
-import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import org.cloudburstmc.math.vector.Vector2f;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.jspecify.annotations.Nullable;
@@ -48,16 +49,6 @@ public class KillAura extends AbstractInventoryModule {
     private int delay = 0;
     private final WeakReference<EntityLiving> nullRef = new WeakReference<>(null);
     private WeakReference<EntityLiving> attackTarget = nullRef;
-    private final IntSet swords = IntSet.of(
-        ItemRegistry.DIAMOND_SWORD.id(),
-        ItemRegistry.NETHERITE_SWORD.id(),
-        ItemRegistry.IRON_SWORD.id()
-    );
-    private final IntSet axes = IntSet.of(
-        ItemRegistry.NETHERITE_AXE.id(),
-        ItemRegistry.DIAMOND_AXE.id(),
-        ItemRegistry.IRON_AXE.id()
-    );
 
     public KillAura() {
         super(HandRestriction.MAIN_HAND, 1);
@@ -189,13 +180,9 @@ public class KillAura extends AbstractInventoryModule {
 
     private static boolean isAggressive(final EntityLiving entity) {
         // https://minecraft.wiki/w/Java_Edition_protocol/Entity_metadata#Mob
-        var byteMetadata = entity.getMetadata().get(15);
-        if (byteMetadata == null) return false;
-        if (byteMetadata instanceof ByteEntityMetadata byteData) {
-            var data = byteData.getPrimitiveValue() & 0x04;
-            return data != 0;
-        }
-        return false;
+        var byteData = entity.getMetadataValue(15, MetadataTypes.BYTE, Byte.class);
+        if (byteData == null) return false;
+        return (byteData & 0x04) != 0;
     }
 
     private void handleBotTickStopped(final ClientBotTick.Stopped event) {
@@ -330,7 +317,21 @@ public class KillAura extends AbstractInventoryModule {
     }
 
     private boolean isWeapon(int id) {
-        return swords.contains(id) || axes.contains(id);
+        var itemData = ItemRegistry.REGISTRY.get(id);
+        if (itemData == null) return false;
+        var toolTag = itemData.toolTag();
+        if (toolTag == null) return false;
+        boolean typeMatch = switch (CONFIG.client.extra.killAura.weaponType) {
+            case ANY -> toolTag.type() == ToolType.SWORD || toolTag.type() == ToolType.AXE;
+            case SWORD -> toolTag.type() == ToolType.SWORD;
+            case AXE -> toolTag.type() == ToolType.AXE;
+        };
+        if (!typeMatch) return false;
+        return switch (CONFIG.client.extra.killAura.weaponMaterial) {
+            case ANY -> toolTag.tier() == ToolTier.IRON || toolTag.tier() == ToolTier.DIAMOND || toolTag.tier() == ToolTier.NETHERITE;
+            case DIAMOND -> toolTag.tier() == ToolTier.DIAMOND;
+            case NETHERITE -> toolTag.tier() == ToolTier.NETHERITE;
+        };
     }
 
     @Override

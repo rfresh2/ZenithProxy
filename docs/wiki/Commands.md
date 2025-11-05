@@ -1759,6 +1759,10 @@ Aggressive mobs are mobs that are actively targeting and attacking the player.
 
   ```killAura weaponSwitch on/off```
 
+  ```killAura weaponType <any/sword/axe>```
+
+  ```killAura weaponMaterial <any/diamond/netherite>```
+
   ```killAura raycast on/off```
 
   ```killAura priority <none/nearest>```
