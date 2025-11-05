@@ -157,4 +157,24 @@ So, you can symlink the map/waypoint folders used by each ZenithProxy IP to your
 
 More info in my discord: https://discord.com/channels/1127460556710883391/1127461243054202921/1272355246206619711
 
+## Who are these unknown people pinging or trying to connect to my proxy?
 
+if you host something on your home PC, that is not exposed to the public internet by default in most cases
+
+Windows comes with a firewall, and your router would need to have port forwarding configured to expose it
+
+but if you host something on the public internet, anyone on the public internet can find it
+
+there's only around 4b possible ip's, and it's very feasible to scan 4b ip's in under an hour
+
+people have been doing this for many years for every minecraft server, e.g. 5c, serverseeker, matscan, and many more
+
+to be clear, finding a proxy's public ip does not let them get past the whitelist
+
+if you are hosting on the public internet, and it does make you uncomfortable there's many things you can do:
+
+* disable server list pings: `serverConnection ping off`
+* set up a DNS hostname, and then set `serverConnection enforceMatchingConnectingAddress on`
+* make yourself more difficult to find: `serverConnection port <port>` with something non-standard, maybe something random between 30000-65535
+* set up a firewall on your OS that only allows you/your friends ip's to connect
+* host on a private network instead like with tailscale, hamachi, etc
