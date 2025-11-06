@@ -2170,6 +2170,16 @@ Sends alerts when players join or leave
 
 Schedules commands to be executed after a delay or after specified events.
 
+
+
+Examples:
+
+`tasks add timed 15m pearlLoader load rfresh`
+
+`tasks add interval mapgen 30s 1h map generate`
+
+`tasks add event continueTraveling online once b goto 0 1500`
+
 **Aliases:** `task`
 
 **Usage**
