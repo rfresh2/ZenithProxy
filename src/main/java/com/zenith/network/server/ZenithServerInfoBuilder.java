@@ -9,6 +9,7 @@ import com.zenith.event.client.ClientOnlineEvent;
 import com.zenith.event.queue.QueueCompleteEvent;
 import com.zenith.event.queue.QueueStartEvent;
 import com.zenith.event.server.MotdBuildEvent;
+import com.zenith.event.server.ServerIconBuildEvent;
 import com.zenith.feature.queue.Queue;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
@@ -79,9 +80,15 @@ public class ZenithServerInfoBuilder {
             getMotd(),
             getPlayerInfo(),
             getVersionInfo(session),
-            Proxy.getInstance().getServerIcon(),
+            getServerIcon(),
             false
         );
+    }
+
+    private byte[] getServerIcon() {
+        var event = new ServerIconBuildEvent(Proxy.getInstance().getServerIcon());
+        EVENT_BUS.post(event);
+        return event.getIcon();
     }
 
     private VersionInfo getVersionInfo(@Nullable Session session) {
