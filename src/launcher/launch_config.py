@@ -27,15 +27,17 @@ def read_launch_config_file():
 
 
 class LaunchConfig:
-    auto_update = True
-    auto_update_launcher = True
-    release_channel = "java.1.21.4"
-    version = "0.0.0"
-    local_version = "0.0.0"
-    repo_owner = "rfresh2"
-    repo_name = "ZenithProxy"
-    custom_jvm_args = None
-    launch_dir = "launcher/"
+
+    def __init__(self):
+        self.auto_update = True
+        self.auto_update_launcher = True
+        self.release_channel = "java.1.21.4"
+        self.version = "0.0.0"
+        self.local_version = "0.0.0"
+        self.repo_owner = "rfresh2"
+        self.repo_name = "ZenithProxy"
+        self.custom_jvm_args = None
+        self.launch_dir = "launcher/"
 
     def load_launch_config_data(self, data):
         if data is None:
@@ -47,7 +49,7 @@ class LaunchConfig:
         self.local_version = data.get("local_version", self.local_version)
         self.repo_owner = data.get("repo_owner", self.repo_owner)
         self.repo_name = data.get("repo_name", self.repo_name)
-        self.custom_jvm_args = data.get("custom_jvm_args", None)
+        self.custom_jvm_args = data.get("custom_jvm_args", self.custom_jvm_args)
         if self.custom_jvm_args is not None and self.custom_jvm_args != "":
             print("Using custom JVM args:", self.custom_jvm_args)
 
