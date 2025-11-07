@@ -1,6 +1,7 @@
 package com.zenith.feature.pathfinder.goals;
 
 import com.zenith.mc.block.BlockPos;
+import com.zenith.util.math.MathHelper;
 import it.unimi.dsi.fastutil.doubles.DoubleIterator;
 import it.unimi.dsi.fastutil.doubles.DoubleOpenHashSet;
 
@@ -12,10 +13,7 @@ public record GoalNear(int x, int y, int z, int rangeSq) implements Goal, PosGoa
 
     @Override
     public boolean isInGoal(int x, int y, int z) {
-        int xDiff = x - this.x;
-        int yDiff = y - this.y;
-        int zDiff = z - this.z;
-        return xDiff * xDiff + yDiff * yDiff + zDiff * zDiff <= rangeSq;
+        return MathHelper.distanceSq3d(x, y, z, this.x, this.y, this.z) <= rangeSq;
     }
 
     @Override
