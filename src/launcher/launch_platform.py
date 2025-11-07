@@ -167,5 +167,7 @@ def check_port_in_use(port):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind(("localhost", port))
             return False
-    except socket.error:
+    except socket.error as e:
+        if "already in use" in e.strerror:
+            return True
         return False
