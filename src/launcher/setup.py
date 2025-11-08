@@ -35,6 +35,7 @@ def setup_execute(config):
     if release_channel == "java":
         if not launch_platform.validate_java_system(config, JavaInstallType.USER_PROMPT):
             critical_error("Setup cancelled")
+        print("")
 
     # while True:
     #     print("Select a Minecraft version: (1/2)")
@@ -66,6 +67,7 @@ def setup_execute(config):
     config.repo_name = "ZenithProxy"
     config.write_launch_config()
     print("launch_config.json written successfully!")
+    print("")
 
     if os.path.exists("config.json"):
         while True:

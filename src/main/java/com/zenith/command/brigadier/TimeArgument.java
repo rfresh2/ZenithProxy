@@ -64,7 +64,7 @@ public class TimeArgument implements SerializableArgumentType<Integer> {
     /**
      * returns ticks as int
      */
-    public Integer getTime(final com.mojang.brigadier.context.CommandContext<CommandContext> context, String name) {
+    public static Integer getTime(final com.mojang.brigadier.context.CommandContext<CommandContext> context, String name) {
         return context.getArgument(name, Integer.class);
     }
 

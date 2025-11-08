@@ -2,10 +2,7 @@ package com.zenith.module.impl;
 
 import com.zenith.cache.data.inventory.Container;
 import com.zenith.feature.inventory.InventoryActionRequest;
-import com.zenith.feature.inventory.actions.DropMouseStack;
-import com.zenith.feature.inventory.actions.InventoryAction;
-import com.zenith.feature.inventory.actions.MoveToHotbarSlot;
-import com.zenith.feature.inventory.actions.SetHeldItem;
+import com.zenith.feature.inventory.actions.*;
 import com.zenith.module.api.Module;
 import lombok.Getter;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
@@ -88,6 +85,10 @@ public abstract class AbstractInventoryModule extends Module {
             ItemStack itemStack = inventory.get(i);
             if (nonNull(itemStack) && itemPredicate(itemStack)) {
                 List<InventoryAction> actions = new ArrayList<>();
+                var openContainer = CACHE.getPlayerCache().getInventoryCache().getOpenContainerId();
+                if (openContainer != 0) {
+                    actions.add(new CloseContainer(openContainer));
+                }
                 if (CACHE.getPlayerCache().getInventoryCache().getMouseStack() != Container.EMPTY_STACK) {
                     actions.add(new DropMouseStack(ClickItemAction.LEFT_CLICK));
                 }

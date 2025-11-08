@@ -565,7 +565,8 @@ public class InteractWithProcess extends BaritoneProcessHelper {
             }
             // todo: some antistuck func here
             int rangeSq = Math.max(2, ((int) Math.pow(BOT.getEntityInteractDistance() - 1, 2)));
-            return new PathingCommand(new GoalNear(entity.blockPos(), rangeSq), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
+            BlockPos entityPos = new BlockPos(MathHelper.floorI(entity.getX()), Math.round(entity.getY()), MathHelper.floorI(entity.getZ()));
+            return new PathingCommand(new GoalNear(entityPos, rangeSq), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
         }
 
         @Override

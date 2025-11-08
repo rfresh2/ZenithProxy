@@ -1,6 +1,8 @@
 import os
 import platform
 import subprocess
+import time
+from collections import deque
 
 from jdk_install import get_java_executable, get_java_version_from_subprocess
 from utils import critical_error
@@ -16,6 +18,11 @@ java24_addnl_args = """\
 default_linux_xmx = 225
 
 default_linux_args = ""
+
+bootloop_threshold = 10
+bootloop_window = 60
+launch_history = deque()
+
 
 def git_build():
     if platform.system() == "Windows":
@@ -38,9 +45,18 @@ def launch_linux(config):
         jvm_args += f" -Xmx{default_linux_xmx}M"
     run_script = f"./{config.launch_dir}ZenithProxy {jvm_args}"
     print(">", run_script)
+    _record_launch()
+    before = time.time()
     try:
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
+        if config.custom_jvm_args is not None:
+            after = time.time()
+            if after - before <= 1:
+                config.custom_jvm_args = None
+                config.write_launch_config()
+                print("Resetting custom JVM args and retrying.")
+                return
         critical_error("Error launching application:", e)
 
 
@@ -49,7 +65,7 @@ def launch_java(config):
     print("Using Java installation:", java_executable)
     java_version = int(get_java_version_from_subprocess(java_executable))
     if platform.system() == "Windows":
-        java_executable = "\"" + java_executable.replace("/", "\\") + "\""
+        java_executable = '"' + java_executable.replace("/", "\\") + '"'
     if not os.path.isfile(config.launch_dir + "ZenithProxy.jar"):
         critical_error("ZenithProxy.jar not found")
     if config.custom_jvm_args is not None and config.custom_jvm_args != "":
@@ -71,9 +87,18 @@ def launch_java(config):
         jar_command = "-jar " + config.launch_dir + "ZenithProxy.jar"
     run_script = f"{java_executable} {jvm_args} {jar_command}"
     print(">", run_script)
+    _record_launch()
+    before = time.time()
     try:
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
+        if config.custom_jvm_args is not None:
+            after = time.time()
+            if after - before <= 1:
+                config.custom_jvm_args = None
+                config.write_launch_config()
+                print("Resetting custom JVM args and retrying.")
+                return
         critical_error("Error launching application:", str(e))
 
 
@@ -95,14 +120,23 @@ def launch_git(config):
         jar_command = "-jar build/libs/ZenithProxy.jar"
     run_script = f"{toolchain_command} {jvm_args} {jar_command}"
     print(">", run_script)
+    _record_launch()
+    before = time.time()
     try:
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
+        if config.custom_jvm_args is not None:
+            after = time.time()
+            if after - before <= 1:
+                config.custom_jvm_args = None
+                config.write_launch_config()
+                print("Resetting custom JVM args and retrying.")
         critical_error("Error launching application:", e)
 
 
 def launcher_exec(config):
     print("Launching ZenithProxy...")
+    check_bootloop()
     if config.release_channel == "git":
         launch_git(config)
     elif config.release_channel.startswith("java"):
@@ -111,3 +145,20 @@ def launcher_exec(config):
         launch_linux(config)
     else:
         critical_error("Invalid release channel:", config.release_channel)
+
+
+def _record_launch():
+    now = time.time()
+    launch_history.append(now)
+
+
+def _launch_count_in_window():
+    now = time.time()
+    cutoff = now - bootloop_window
+    return sum(1 for t in launch_history if t >= cutoff)
+
+
+def check_bootloop():
+    count = _launch_count_in_window()
+    if count > bootloop_threshold:
+        critical_error(f"Possible bootloop detected {count} launches within {bootloop_window} seconds. ")

@@ -8,11 +8,14 @@ import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
 import com.zenith.module.impl.KillAura;
 import com.zenith.util.config.Config;
+import com.zenith.util.config.Config.Client.Extra.KillAura.WeaponMaterial;
+import com.zenith.util.config.Config.Client.Extra.KillAura.WeaponType;
 
 import java.util.stream.Collectors;
 
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.Globals.MODULE;
+import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.RegistryDataArgument.entity;
 import static com.zenith.command.brigadier.RegistryDataArgument.getEntity;
 import static com.zenith.command.brigadier.TimeArgument.time;
@@ -45,6 +48,8 @@ public class KillAuraCommand extends Command {
                 "targetCustom on/off",
                 "targetCustom add/del <entityType>",
                 "weaponSwitch on/off",
+                "weaponType <any/sword/axe>",
+                "weaponMaterial <any/diamond/netherite>",
                 "raycast on/off",
                 "priority <none/nearest>"
             )
@@ -109,6 +114,16 @@ public class KillAuraCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Weapon Switching " + toggleStrCaps(CONFIG.client.extra.killAura.switchWeapon));
             })))
+            .then(literal("weaponType").then(argument("type", enumStrings(WeaponType.values())).executes(c -> {
+                CONFIG.client.extra.killAura.weaponType = WeaponType.valueOf(getString(c, "type").toUpperCase());
+                c.getSource().getEmbed()
+                    .title("Weapon Type Set");
+            })))
+            .then(literal("weaponMaterial").then(argument("material", enumStrings(WeaponMaterial.values())).executes(c -> {
+                CONFIG.client.extra.killAura.weaponMaterial = WeaponMaterial.valueOf(getString(c, "material").toUpperCase());
+                c.getSource().getEmbed()
+                    .title("Weapon Material Set");
+            })))
             .then(literal("targetCustom")
                 .then(argument("toggle", toggle()).executes(c -> {
                     CONFIG.client.extra.killAura.targetCustom = getToggle(c, "toggle");
@@ -158,6 +173,8 @@ public class KillAuraCommand extends Command {
             .addField("Target Custom", toggleStr(CONFIG.client.extra.killAura.targetCustom))
             .addField("Target Armor Stands", toggleStr(CONFIG.client.extra.killAura.targetArmorStands))
             .addField("Weapon Switching", toggleStr(CONFIG.client.extra.killAura.switchWeapon))
+            .addField("Weapon Type", CONFIG.client.extra.killAura.weaponType.name().toLowerCase())
+            .addField("Weapon Material", CONFIG.client.extra.killAura.weaponMaterial.name().toLowerCase())
             .addField("Attack Delay Ticks", CONFIG.client.extra.killAura.attackDelayTicks)
             .addField("TPS Sync", toggleStr(CONFIG.client.extra.killAura.tpsSync))
             .addField("Raycast", toggleStr(CONFIG.client.extra.killAura.raycast))

@@ -440,7 +440,7 @@ public class Proxy {
 
     public synchronized void connect(final String address, final int port) {
         if (this.isConnected()) throw new IllegalStateException("Already connected!");
-        if (this.client != null && !this.client.isDisconnected()) throw new IllegalStateException("Not Disconnected!");
+        if (this.client != null && !this.client.isTerminalState()) throw new IllegalStateException("Not Disconnected!");
         this.connectTime = Instant.now();
         final MinecraftProtocol minecraftProtocol;
         try {
@@ -464,7 +464,7 @@ public class Proxy {
         this.client.setFlag(MinecraftConstants.CLIENT_CHANNEL_INITIALIZER, ZenithClientChannelInitializer.FACTORY);
         this.client.connect(true);
         // wait for connection state to stabilize
-        Wait.waitUntil(() -> this.client.isConnected() || this.client.isDisconnected(), 30);
+        Wait.waitUntil(() -> this.client.isConnected() || this.client.isTerminalState(), 30);
     }
 
     @Nullable
