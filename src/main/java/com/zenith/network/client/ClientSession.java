@@ -50,7 +50,10 @@ public class ClientSession extends TcpClientSession {
     // in game
     private boolean online = false;
     private boolean wasOnline = false;
+    // if we are still attempting to connect or this session has disconnected
     private boolean disconnected = true;
+    // if we have been disconnected and this session cannot be reused
+    private boolean terminalState = false;
     // profile we logged in with
     // MC servers can send a different profile back, which will be stored in `CACHE.getProfileCache()`
     private final GameProfile profile;
@@ -80,6 +83,7 @@ public class ClientSession extends TcpClientSession {
 
     public void setDisconnected(final boolean disconnected) {
         this.disconnected = disconnected;
+        if (disconnected) setTerminalState(true);
         setOnline(false);
     }
 
