@@ -115,15 +115,15 @@ def _locate_java(min_version):
     if java_home_version:
         return java_home_version
 
-    jdk_dir_java = _locate_in_dir(_JDK_DIR)
+    jdk_dir_java = _locate_in_dir(_JDK_DIR, min_version)
     if jdk_dir_java:
         return jdk_dir_java
 
-    jdks_dir_java = _locate_in_dir(_JDKS_DIR)
+    jdks_dir_java = _locate_in_dir(_JDKS_DIR, min_version)
     if jdks_dir_java:
         return jdks_dir_java
 
-    jre_dir_java = _locate_in_dir(_JRE_DIR)
+    jre_dir_java = _locate_in_dir(_JRE_DIR, min_version)
     if jre_dir_java:
         return jre_dir_java
     return None
