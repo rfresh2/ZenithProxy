@@ -2,7 +2,7 @@ plugins {
     `java-library`
     id("org.graalvm.buildtools.native") version "0.11.2"
     id("com.gradleup.shadow") version "9.2.2"
-    id("io.freefair.lombok") version "9.0.0"
+    id("io.freefair.lombok") version "9.1.0"
     `maven-publish`
 }
 
@@ -78,7 +78,7 @@ dependencies {
     api("org.postgresql:postgresql:42.7.8")
     api("org.jdbi:jdbi3-postgres:3.49.6")
     api("com.google.guava:guava:33.5.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.20")
+    api("ch.qos.logback:logback-classic:1.5.21")
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")
