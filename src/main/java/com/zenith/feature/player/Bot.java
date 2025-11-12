@@ -1441,7 +1441,9 @@ public final class Bot extends ModuleUtils {
         if (playerAttachment == null) return;
         var vehicleAttachY = vehicle.getY() + vehicleAttachment.passenger();
         var playerAttachY = playerAttachment.vehicle();
+        x = vehicle.getX();
         y = vehicleAttachY - playerAttachY;
+        z = vehicle.getZ();
     }
 
     public void onUpdateAbilities() {

@@ -40,6 +40,8 @@ public class MoveVehicleHandler implements ClientEventLoopPacketHandler<Clientbo
             var vehicleAttachY = riddenEntity.getY() + riddenAttachmentData.passenger();
             var passengerAttachY = passengerAttachmentData.vehicle();
             passengerEntity.setY(vehicleAttachY - passengerAttachY);
+            passengerEntity.setX(riddenEntity.getX());
+            passengerEntity.setZ(riddenEntity.getZ());
         }
         BOT.syncFromCache(true);
         SpectatorSync.syncPlayerPositionWithSpectators();
