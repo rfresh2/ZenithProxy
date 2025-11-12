@@ -87,10 +87,10 @@ public class ReplayRecording implements Closeable {
         writerStream = new BufferedOutputStream(zipOutputStream);
         if (Proxy.getInstance().isConnected() && Proxy.getInstance().getClient().isOnline()) {
             lateStartRecording();
+            started = true;
         } else {
             preConnectRecording();
         }
-        started = true;
     }
 
     // Start recording while we already have a logged in session
@@ -262,6 +262,7 @@ public class ReplayRecording implements Closeable {
                 writeToFile(System.currentTimeMillis(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
                 time = System.currentTimeMillis();
                 preConnectSyncNeeded = false;
+                started = true;
             }
         }
         if (session.getPacketProtocol().getOutboundState() == ProtocolState.GAME
