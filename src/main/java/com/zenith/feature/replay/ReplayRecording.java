@@ -87,10 +87,10 @@ public class ReplayRecording implements Closeable {
         writerStream = new BufferedOutputStream(zipOutputStream);
         if (Proxy.getInstance().isConnected() && Proxy.getInstance().getClient().isOnline()) {
             lateStartRecording();
-            started = true;
         } else {
             preConnectRecording();
         }
+        started = true;
     }
 
     // Start recording while we already have a logged in session
@@ -221,6 +221,7 @@ public class ReplayRecording implements Closeable {
     private boolean recordSelfSpawn = false;
 
     public void handleOutgoingPacket(final long time, final MinecraftPacket packet, final Session session) {
+        if (preConnectSyncNeeded) return;
         if (packet instanceof ServerboundAcceptTeleportationPacket) {
             if (recordSelfSpawn) {
                 recordSelfSpawn = false;
@@ -262,8 +263,10 @@ public class ReplayRecording implements Closeable {
                 writeToFile(System.currentTimeMillis(), new ClientboundFinishConfigurationPacket(), Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION);
                 time = System.currentTimeMillis();
                 preConnectSyncNeeded = false;
-                started = true;
             }
+        }
+        if (preConnectSyncNeeded) {
+            return;
         }
         if (session.getPacketProtocol().getOutboundState() == ProtocolState.GAME
             && session.getPacketProtocol().getInboundState() == ProtocolState.GAME) {
