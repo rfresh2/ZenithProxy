@@ -3,16 +3,45 @@ package com.zenith.network.client.handler.incoming.entity;
 import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.codec.ClientEventLoopPacketHandler;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntStack;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundMoveVehiclePacket;
 
-import static com.zenith.Globals.CACHE;
+import static com.zenith.Globals.*;
 
 public class MoveVehicleHandler implements ClientEventLoopPacketHandler<ClientboundMoveVehiclePacket, ClientSession> {
     @Override
     public boolean applyAsync(final ClientboundMoveVehiclePacket packet, final ClientSession session) {
-        CACHE.getPlayerCache().setX(packet.getX());
-        CACHE.getPlayerCache().setY(packet.getY());
-        CACHE.getPlayerCache().setZ(packet.getZ());
+        var vehicleId = CACHE.getPlayerCache().getThePlayer().getVehicleId();
+        var vehicleEntity = CACHE.getEntityCache().get(vehicleId);
+        IntStack toUpdate = new IntArrayList();
+        // todo: sync nested ridden entity positions
+        //  currently this is only updating the root vehicle
+        while (vehicleEntity != null && vehicleEntity.isInVehicle()) {
+            toUpdate.push(vehicleEntity.getEntityId());
+            vehicleEntity = CACHE.getEntityCache().get(vehicleEntity.getVehicleId());
+        }
+        if (vehicleEntity != null) {
+            vehicleEntity.setX(packet.getX());
+            vehicleEntity.setY(packet.getY());
+            vehicleEntity.setZ(packet.getZ());
+            vehicleEntity.setYaw(packet.getYaw());
+            vehicleEntity.setPitch(packet.getPitch());
+        }
+        while (!toUpdate.isEmpty()) {
+            var passengerId = toUpdate.popInt();
+            var passengerEntity = CACHE.getEntityCache().get(passengerId);
+            if (passengerEntity == null) continue;
+            var passengerAttachmentData = ENTITY_DATA.getAttachment(passengerEntity.getEntityData().id());
+            var riddenEntity = CACHE.getEntityCache().get(passengerEntity.getVehicleId());
+            if (riddenEntity == null) continue;
+            var riddenAttachmentData = ENTITY_DATA.getAttachment(riddenEntity.getEntityData().id());
+            if (passengerAttachmentData == null || riddenAttachmentData == null) continue;
+            var vehicleAttachY = riddenEntity.getY() + riddenAttachmentData.passenger();
+            var passengerAttachY = passengerAttachmentData.vehicle();
+            passengerEntity.setY(vehicleAttachY - passengerAttachY);
+        }
+        BOT.syncFromCache(true);
         SpectatorSync.syncPlayerPositionWithSpectators();
         return true;
     }

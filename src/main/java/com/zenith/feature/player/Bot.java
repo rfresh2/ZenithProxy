@@ -8,6 +8,7 @@ import com.zenith.mc.block.*;
 import com.zenith.mc.block.properties.api.BlockStateProperties;
 import com.zenith.mc.dimension.DimensionRegistry;
 import com.zenith.mc.entity.EntityData;
+import com.zenith.mc.entity.EntityRegistry;
 import com.zenith.module.api.ModuleUtils;
 import com.zenith.util.math.MathHelper;
 import com.zenith.util.math.MutableVec3d;
@@ -257,6 +258,10 @@ public final class Bot extends ModuleUtils {
         if (Math.abs(velocity.getY()) < 0.003) velocity.setY(0);
         if (Math.abs(velocity.getZ()) < 0.003) velocity.setZ(0);
 
+        if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
+            velocity.set(0, 0, 0);
+        }
+
         var fallFlyingMetadata = CACHE.getPlayerCache().getThePlayer().getMetadata().get(0);
         if (fallFlyingMetadata instanceof ByteEntityMetadata byteEntityMetadata) {
             var b = byteEntityMetadata.getPrimitiveValue();
@@ -342,10 +347,6 @@ public final class Bot extends ModuleUtils {
         }
 
         if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
-            // resync position from any vehicle movements
-            this.x = this.lastX = CACHE.getPlayerCache().getX();
-            this.y = this.lastY = CACHE.getPlayerCache().getY();
-            this.z = this.lastZ = CACHE.getPlayerCache().getZ();
             this.isSneaking = this.wasSneaking = false;
             this.isSprinting = this.lastSprinting = false;
             syncPlayerCollisionBox();
@@ -418,6 +419,7 @@ public final class Bot extends ModuleUtils {
             this.lastSprinting = this.isSprinting;
         }
         tickEntityPushing();
+        rideTick();
         this.movementInput.reset();
     }
 
@@ -1207,6 +1209,7 @@ public final class Bot extends ModuleUtils {
             this.isSneaking = this.wasSneaking = CACHE.getPlayerCache().isSneaking();
             this.isSprinting = this.lastSprinting = CACHE.getPlayerCache().isSprinting();
         }
+        rideTick();
         syncPlayerCollisionBox();
         updateAttributes();
     }
@@ -1426,12 +1429,27 @@ public final class Bot extends ModuleUtils {
         return true;
     }
 
+    private void rideTick() {
+        var player = CACHE.getPlayerCache().getThePlayer();
+        if (!player.isInVehicle()) return;
+        var vehicle = CACHE.getEntityCache().get(player.getVehicleId());
+        if (vehicle == null) return;
+        var vehicleEntityData = vehicle.getEntityData();
+        var vehicleAttachment = ENTITY_DATA.getAttachment(vehicleEntityData.id());
+        if (vehicleAttachment == null) return;
+        var playerAttachment = ENTITY_DATA.getAttachment(EntityRegistry.PLAYER.id());
+        if (playerAttachment == null) return;
+        var vehicleAttachY = vehicle.getY() + vehicleAttachment.passenger();
+        var playerAttachY = playerAttachment.vehicle();
+        y = vehicleAttachY - playerAttachY;
+    }
+
     public void onUpdateAbilities() {
         sendClientPacketAsync(new ServerboundPlayerAbilitiesPacket(CACHE.getPlayerCache().isFlying()));
     }
 
     public double getEyeY() {
-        return playerCollisionBox.maxY() - 0.18;
+        return getY() + (isSneaking ? 1.27 : 1.62);
     }
 
     public double getBlockReachDistance() {
