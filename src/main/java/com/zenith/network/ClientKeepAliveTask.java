@@ -1,5 +1,6 @@
 package com.zenith.network;
 
+import com.zenith.Proxy;
 import com.zenith.network.client.ClientSession;
 import lombok.Data;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
@@ -23,7 +24,7 @@ public class ClientKeepAliveTask implements Runnable {
         if (keepAliveRequest != null) {
             var elapsed = System.nanoTime() - keepAliveRequest.receivedTime();
             var timeout = TimeUnit.MILLISECONDS.toNanos(CONFIG.client.keepAliveHandling.keepAliveQueueTimeoutMs);
-            if (elapsed >= timeout) {
+            if (elapsed >= timeout || !Proxy.getInstance().hasActivePlayer()) {
                 CLIENT_LOG.debug("Sending timed out KeepAlive: {} queue size: {}", keepAliveQueue, keepAliveQueue.size());
                 client.send(new ServerboundKeepAlivePacket(keepAliveRequest.id()));
             }
