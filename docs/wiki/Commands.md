@@ -366,9 +366,11 @@ Manages the connection configuration from ZenithProxy to the destination MC serv
 
   ```clientConnection timeout <seconds>```
 
-  ```clientConnection ping mode <tablist/packet>```
-
   ```clientConnection ping packetInterval <seconds>```
+
+  ```clientConnection keepAlive mode <passthrough/independent>```
+
+  ```clientConnection keepAlive queueTimeout <ms>```
 
 
 ### commandConfig

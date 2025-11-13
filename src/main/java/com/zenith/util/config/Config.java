@@ -75,7 +75,6 @@ public final class Config {
         public String bindAddress = "0.0.0.0";
         public boolean maxPlaytimeReconnect = false;
         public long maxPlaytimeReconnectMins = 1440;
-        public boolean automaticKeepAliveManagement = true;
         public int defaultClientRenderDistance = 25;
         public final ClientTimeout timeout = new ClientTimeout();
         public final Ping ping = new Ping();
@@ -83,6 +82,16 @@ public final class Config {
         public final Extra extra = new Extra();
         public final Inventory inventory = new Inventory();
         public final ChatSchemas chatSchemas = new ChatSchemas();
+        public final KeepAliveHandling keepAliveHandling = new KeepAliveHandling();
+
+        public static final class KeepAliveHandling {
+            public KeepAliveMode keepAliveMode = KeepAliveMode.PASSTHROUGH;
+            public int keepAliveQueueTimeoutMs = 2000;
+            public enum KeepAliveMode {
+                PASSTHROUGH,
+                INDEPENDENT
+            }
+        }
 
         public static final class ChatSchemas {
             public LinkedHashMap<String, ChatSchema> serverSchemas = new LinkedHashMap<>();
@@ -114,12 +123,7 @@ public final class Config {
         }
 
         public static final class Ping {
-            public Mode mode = Mode.TABLIST;
-            public int packetPingIntervalSeconds = 10;
-
-            public enum Mode {
-                TABLIST, PACKET
-            }
+            public int pingIntervalSeconds = 5;
         }
 
         public static final class Extra {

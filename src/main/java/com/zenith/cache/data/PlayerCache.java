@@ -82,6 +82,7 @@ public class PlayerCache implements CachedData {
     private static final MutableVec3i DEFAULT_SPAWN_POSITION = new MutableVec3i(0, 0, 0);
     protected MutableVec3i spawnPosition = DEFAULT_SPAWN_POSITION;
     protected Queue<ClientboundPlayerPositionPacket> teleportQueue = new LinkedBlockingQueue<>();
+    protected Queue<KeepAliveRequest> keepAliveQueue = new LinkedBlockingQueue<>();
     protected boolean respawning = false;
 
     public PlayerCache(final EntityCache entityCache) {
@@ -126,11 +127,13 @@ public class PlayerCache implements CachedData {
             this.inventoryCache.reset();
             this.doLimitedCrafting = false;
             this.teleportQueue.clear();
+            this.keepAliveQueue.clear();
             this.actionId.set(0);
             this.seqId.set(0);
         }
         if (type == CacheResetType.LOGIN) {
             this.teleportQueue.clear();
+            this.keepAliveQueue.clear(); // todo: maybe not?
         }
         this.spawnPosition = DEFAULT_SPAWN_POSITION;
         this.gameMode = null;
@@ -324,4 +327,6 @@ public class PlayerCache implements CachedData {
     public List<ItemStack> getPlayerInventory() {
         return this.inventoryCache.getPlayerInventory().getContents();
     }
+
+    public record KeepAliveRequest(long receivedTime, long id) {}
 }

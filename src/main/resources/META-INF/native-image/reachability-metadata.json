@@ -2907,6 +2907,34 @@
       ]
     },
     {
+      "type": "com.zenith.util.config.Config$Client$KeepAliveHandling",
+      "fields": [
+        {
+          "name": "keepAliveMode"
+        },
+        {
+          "name": "keepAliveQueueTimeoutMs"
+        }
+      ],
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.util.config.Config$Client$KeepAliveHandling$KeepAliveMode",
+      "fields": [
+        {
+          "name": "INDEPENDENT"
+        },
+        {
+          "name": "PASSTHROUGH"
+        }
+      ]
+    },
+    {
       "type": "com.zenith.util.config.Config$Client$Ping",
       "allDeclaredFields": true,
       "methods": [
