@@ -42,7 +42,6 @@ public final class Config {
         // updated on successful login
         public String username = "Unknown";
         public boolean prio = false;
-        public boolean prioBanned = false;
         public boolean authTokenRefresh = true;
         public int msaLoginAttemptsBeforeCacheWipe = 2;
         public boolean openBrowserOnLogin = true;
@@ -870,7 +869,6 @@ public final class Config {
         public boolean mentionOnNonWhitelistedClientConnected = false;
         public boolean mentionOnSpectatorDisconnected = false;
         public boolean mentionRoleOnPrioUpdate = true;
-        public boolean mentionRoleOnPrioBanUpdate = true;
         public boolean mentionRoleOnDeviceCodeAuth = true;
         public boolean manageProfileImage = true;
         public boolean manageNickname = true;

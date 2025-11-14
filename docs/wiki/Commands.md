@@ -1001,17 +1001,11 @@ Gets the playtime of a player on 2b2t using https://api.2b2t.vc/
 
 ### prio
 
-Configure alerts for 2b2t priority queue status and bans
+Configure alerts for 2b2t priority queue status
 
 **Usage**
 
   ```prio mentions on/off```
-
-  ```prio banMentions on/off```
-
-  ```prio banCheck```
-
-  ```prio banCheck <playerName>```
 
 
 ### queueStatus

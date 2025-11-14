@@ -84,7 +84,6 @@ public class NotificationEventListener {
             of(ClientLoginFailedEvent.class, this::handleProxyLoginFailedEvent),
             of(ClientStartConnectEvent.class, this::handleStartConnectEvent),
             of(PrioStatusUpdateEvent.class, this::handlePrioStatusUpdateEvent),
-            of(PrioBanStatusUpdateEvent.class, this::handlePrioBanStatusUpdateEvent),
             of(AutoReconnectEvent.class, this::handleAutoReconnectEvent),
             of(MsaDeviceCodeLoginEvent.class, this::handleMsaDeviceCodeLoginEvent),
             of(UpdateAvailableEvent.class, this::handleUpdateAvailableEvent),
@@ -722,25 +721,6 @@ public class NotificationEventListener {
         }
         embed.addField("User", escape(CONFIG.authentication.username), false);
         if (CONFIG.discord.mentionRoleOnPrioUpdate) {
-            sendEmbedMessage(notificationMention(), embed);
-        } else {
-            sendEmbedMessage(embed);
-        }
-    }
-
-    public void handlePrioBanStatusUpdateEvent(PrioBanStatusUpdateEvent event) {
-        var embed = Embed.builder();
-        if (event.prioBanned()) {
-            embed
-                .title("Prio Ban Detected")
-                .errorColor();
-        } else {
-            embed
-                .title("Prio Unban Detected")
-                .successColor();
-        }
-        embed.addField("User", escape(CONFIG.authentication.username), false);
-        if (CONFIG.discord.mentionRoleOnPrioBanUpdate) {
             sendEmbedMessage(notificationMention(), embed);
         } else {
             sendEmbedMessage(embed);

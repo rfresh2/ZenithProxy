@@ -143,7 +143,7 @@ public class StatusCommand extends Command {
                                : CONFIG.theme.error.discord())
                     .thumbnail(getThumbnailImage())
                     .addField("Status", getStatus(), true)
-                    .addField("Connected Player", getCurrentClientUserName(), true)
+                    .addField("Uptime", MathHelper.formatDuration(Duration.ofMillis(System.currentTimeMillis() - Proxy.getInstance().getStartTime())))
                     .addField("Online Duration", getOnlineTime(), true)
                     // end row 1
                     .addField("Health",  (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
@@ -154,9 +154,11 @@ public class StatusCommand extends Command {
                     // end row 2
                     .addField("Proxy IP", CONFIG.server.getProxyAddress(), true)
                     .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
-                    .addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no") + " [" + (CONFIG.authentication.prioBanned ? "banned" : "unbanned") + "]", true);
+                    .addField("Connected Player", getCurrentClientUserName(), true);
                     // end row 3
-                embed.addField("Spectators", toggleStr(CONFIG.server.spectator.allowSpectator),true);
+                if (Proxy.getInstance().isOn2b2t()) {
+                    embed.addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no"), true);
+                }
                 if (!getSpectatorUserNames().isEmpty())
                     embed.addField("Online Spectators", String.join(", ", getSpectatorUserNames()), true);
                 if (CONFIG.server.queueStatusRefreshWhileNotOn2b2t || Proxy.getInstance().isOn2b2t()) {
