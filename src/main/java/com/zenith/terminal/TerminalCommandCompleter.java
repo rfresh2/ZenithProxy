@@ -22,6 +22,7 @@ public class TerminalCommandCompleter implements Completer {
                 .thenApply(suggestions -> suggestions.getList().stream()
                     .map(Suggestion::getText)
                     .map(Candidate::new)
+                    .limit(99)
                     .toList())
                 .get(2, TimeUnit.SECONDS);
             list.addAll(candidates);
