@@ -163,6 +163,8 @@ public class McplBrigadierConverter {
 
     /** To Brigadier **/
 
+    // todo: fix redirects
+
     private static @NotNull CommandDispatcher<CommandContext> convertTopLevelMcplNodes(final CommandNode[] nodes, final CommandNode rootNode) {
         var nodeMap = new Int2ObjectOpenHashMap<com.mojang.brigadier.tree.CommandNode>();
         var dispatcher = new CommandDispatcher<CommandContext>();
@@ -289,7 +291,7 @@ public class McplBrigadierConverter {
             if (redirectNode != null) {
                 argBuilder.redirect(redirectNode);
             } else {
-                CLIENT_LOG.debug("Failed to find redirect node at index {} for node {}", node.getRedirectIndex().getAsInt(), node);
+//                CLIENT_LOG.debug("Failed to find redirect node at index {} for node {}", node.getRedirectIndex().getAsInt(), node);
             }
         }
         var build = argBuilder.build();

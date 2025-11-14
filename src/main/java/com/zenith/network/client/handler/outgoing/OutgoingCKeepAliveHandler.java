@@ -22,7 +22,7 @@ public class OutgoingCKeepAliveHandler implements PacketHandler<ServerboundKeepA
                     CACHE.getPlayerCache().getKeepAliveQueue().poll();
                     return packet;
                 } else {
-                    CLIENT_LOG.debug("Out-of-order KeepAlive ID: expected: {}, actual: {}", expectedKeepAliveId, packet.getPingId());
+                    CLIENT_LOG.debug("Out-of-order KeepAlive ID: expected: {}, actual: {}", expectedKeepAlive, packet.getPingId());
                 }
             } else {
                 CLIENT_LOG.debug("Out-of-order KeepAlive ID: actual: {}", packet.getPingId());

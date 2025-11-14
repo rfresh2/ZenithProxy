@@ -14,7 +14,7 @@ public class CKeepAliveHandler implements PacketHandler<ClientboundKeepAlivePack
     public static final CKeepAliveHandler INSTANCE = new CKeepAliveHandler();
     @Override
     public ClientboundKeepAlivePacket apply(final ClientboundKeepAlivePacket packet, final ClientSession session) {
-        CACHE.getPlayerCache().getKeepAliveQueue().add(new PlayerCache.KeepAliveRequest(System.nanoTime(), packet.getPingId()));
+        CACHE.getPlayerCache().getKeepAliveQueue().add(new PlayerCache.KeepAliveRequest(System.currentTimeMillis(), packet.getPingId()));
         return switch (CONFIG.client.keepAliveHandling.keepAliveMode) {
             case INDEPENDENT -> {
                 session.sendAsync(new ServerboundKeepAlivePacket(packet.getPingId()));

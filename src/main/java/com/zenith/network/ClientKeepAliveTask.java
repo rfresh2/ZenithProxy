@@ -6,8 +6,6 @@ import lombok.Data;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundKeepAlivePacket;
 
-import java.util.concurrent.TimeUnit;
-
 import static com.zenith.Globals.*;
 
 @Data
@@ -22,11 +20,13 @@ public class ClientKeepAliveTask implements Runnable {
         var keepAliveQueue = CACHE.getPlayerCache().getKeepAliveQueue();
         var keepAliveRequest = keepAliveQueue.peek();
         if (keepAliveRequest != null) {
-            var elapsed = System.nanoTime() - keepAliveRequest.receivedTime();
-            var timeout = TimeUnit.MILLISECONDS.toNanos(CONFIG.client.keepAliveHandling.keepAliveQueueTimeoutMs);
+            var elapsed = System.currentTimeMillis() - keepAliveRequest.receivedTime();
+            var timeout = CONFIG.client.keepAliveHandling.keepAliveQueueTimeoutMs;
             if (elapsed >= timeout || !Proxy.getInstance().hasActivePlayer()) {
-                CLIENT_LOG.debug("Sending timed out KeepAlive: {} queue size: {}", keepAliveQueue, keepAliveQueue.size());
-                client.send(new ServerboundKeepAlivePacket(keepAliveRequest.id()));
+                keepAliveQueue.forEach(r -> {
+                    CLIENT_LOG.debug("Sending timed out KeepAlive: {} queue size: {}", r, keepAliveQueue.size());
+                    client.send(new ServerboundKeepAlivePacket(r.id()));
+                });
             }
         }
     }
