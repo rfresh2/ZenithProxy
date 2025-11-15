@@ -1,16 +1,13 @@
 package com.zenith.network.client.handler.incoming;
 
-import com.zenith.Proxy;
 import com.zenith.event.server.ServerPlayerConnectedEvent;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.codec.ClientEventLoopPacketHandler;
-import com.zenith.util.config.Config;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundPlayerInfoUpdatePacket;
 import org.jspecify.annotations.NonNull;
 
-import java.util.Objects;
-
-import static com.zenith.Globals.*;
+import static com.zenith.Globals.CACHE;
+import static com.zenith.Globals.EVENT_BUS;
 import static org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntryAction.*;
 
 public class PlayerInfoUpdateHandler implements ClientEventLoopPacketHandler<ClientboundPlayerInfoUpdatePacket, ClientSession> {
@@ -37,11 +34,6 @@ public class PlayerInfoUpdateHandler implements ClientEventLoopPacketHandler<Cli
                     e.setListed(entry.isListed());
                 if (packet.getActions().contains(UPDATE_LATENCY)) {
                     e.setLatency(entry.getLatency());
-                    if (CONFIG.client.ping.mode == Config.Client.Ping.Mode.TABLIST
-                        && !Proxy.getInstance().isOn2b2t()
-                        && Objects.equals(e.getProfileId(), CACHE.getPlayerCache().getThePlayer().getUuid())) {
-                        session.setPing(e.getLatency());
-                    }
                 }
                 if (packet.getActions().contains(UPDATE_DISPLAY_NAME))
                     e.setDisplayName(entry.getDisplayName());

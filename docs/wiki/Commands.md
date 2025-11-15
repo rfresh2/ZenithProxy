@@ -366,9 +366,11 @@ Manages the connection configuration from ZenithProxy to the destination MC serv
 
   ```clientConnection timeout <seconds>```
 
-  ```clientConnection ping mode <tablist/packet>```
-
   ```clientConnection ping packetInterval <seconds>```
+
+  ```clientConnection keepAlive mode <passthrough/independent>```
+
+  ```clientConnection keepAlive queueTimeout <ms>```
 
 
 ### commandConfig
@@ -999,17 +1001,11 @@ Gets the playtime of a player on 2b2t using https://api.2b2t.vc/
 
 ### prio
 
-Configure alerts for 2b2t priority queue status and bans
+Configure alerts for 2b2t priority queue status
 
 **Usage**
 
   ```prio mentions on/off```
-
-  ```prio banMentions on/off```
-
-  ```prio banCheck```
-
-  ```prio banCheck <playerName>```
 
 
 ### queueStatus

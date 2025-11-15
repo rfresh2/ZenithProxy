@@ -7,7 +7,7 @@ import com.zenith.command.api.CommandCategory;
 import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
-import com.zenith.util.config.Config;
+import com.zenith.util.config.Config.Client.KeepAliveHandling.KeepAliveMode;
 import org.geysermc.mcprotocollib.network.ProxyInfo;
 
 import java.util.Arrays;
@@ -43,8 +43,9 @@ public class ClientConnectionCommand extends Command {
                 "bindAddress <address>",
                 "timeout on/off",
                 "timeout <seconds>",
-                "ping mode <tablist/packet>",
-                "ping packetInterval <seconds>"
+                "ping packetInterval <seconds>",
+                "keepAlive mode <passthrough/independent>",
+                "keepAlive queueTimeout <ms>"
             )
             .build();
     }
@@ -147,22 +148,8 @@ public class ClientConnectionCommand extends Command {
                     return OK;
                 })))
             .then(literal("ping")
-                .then(literal("mode")
-                    .then(literal("tablist").executes(c -> {
-                        CONFIG.client.ping.mode = Config.Client.Ping.Mode.TABLIST;
-                        c.getSource().getEmbed()
-                            .title("Ping Mode Set");
-                        return OK;
-                    }))
-                    .then(literal("packet").executes(c -> {
-                        CONFIG.client.ping.mode = Config.Client.Ping.Mode.PACKET;
-                        c.getSource().getEmbed()
-                            .title("Ping Mode Set")
-                            .addField("Info", "Will be applied on next reconnect", false);
-                        return OK;
-                    })))
-                .then(literal("packetInterval").then(argument("seconds", integer(5, 300)).executes(c -> {
-                    CONFIG.client.ping.packetPingIntervalSeconds = getInteger(c, "seconds");
+                .then(literal("packetInterval").then(argument("seconds", integer(1)).executes(c -> {
+                    CONFIG.client.ping.pingIntervalSeconds = getInteger(c, "seconds");
                     c.getSource().getEmbed()
                         .title("Ping Packet Interval Set");
                     return OK;
@@ -171,7 +158,18 @@ public class ClientConnectionCommand extends Command {
                 CONFIG.client.extra.reconfiguringNotification = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Reconfiguring Notification " + toggleStrCaps(CONFIG.client.extra.reconfiguringNotification));
-            })));
+            })))
+            .then(literal("keepAlive")
+                .then(literal("mode").then(argument("keepAliveMode", enumStrings(KeepAliveMode.values())).executes(c -> {
+                    CONFIG.client.keepAliveHandling.keepAliveMode = KeepAliveMode.valueOf(getString(c, "keepAliveMode").toUpperCase());
+                    c.getSource().getEmbed()
+                        .title("Keep Alive Mode Set");
+                })))
+                .then(literal("queueTimeout").then(argument("ms", integer(1)).executes(c -> {
+                    CONFIG.client.keepAliveHandling.keepAliveQueueTimeoutMs = getInteger(c, "ms");
+                    c.getSource().getEmbed()
+                        .title("Keep Alive Queue Timeout Set");
+                }))));
     }
 
     private void syncTimeout() {
@@ -185,16 +183,17 @@ public class ClientConnectionCommand extends Command {
     public void defaultEmbed(final Embed embed) {
         embed
             .primaryColor()
-            .addField("Auto Connect", toggleStr(CONFIG.client.autoConnect), false)
-            .addField("Proxy", toggleStr(CONFIG.client.connectionProxy.enabled), false)
-            .addField("Proxy Type", CONFIG.client.connectionProxy.type.toString(), false)
-            .addField("Proxy Host", CONFIG.client.connectionProxy.host, false)
-            .addField("Proxy Port", String.valueOf(CONFIG.client.connectionProxy.port), false)
+            .addField("Auto Connect", toggleStr(CONFIG.client.autoConnect))
+            .addField("Proxy", toggleStr(CONFIG.client.connectionProxy.enabled))
+            .addField("Proxy Type", CONFIG.client.connectionProxy.type.toString())
+            .addField("Proxy Host", CONFIG.client.connectionProxy.host)
+            .addField("Proxy Port", String.valueOf(CONFIG.client.connectionProxy.port))
             .addField("Authentication", CONFIG.client.connectionProxy.password.isEmpty() && CONFIG.client.connectionProxy.user.isEmpty()
-                ? "Off" : "On", false)
-            .addField("Bind Address", CONFIG.client.bindAddress, false)
-            .addField("Timeout", CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : toggleStr(false), false)
-            .addField("Ping Mode", CONFIG.client.ping.mode.toString().toLowerCase(), false)
-            .addField("Ping Packet Interval", CONFIG.client.ping.packetPingIntervalSeconds + "s", false);
+                ? "Off" : "On")
+            .addField("Bind Address", CONFIG.client.bindAddress)
+            .addField("Timeout", CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : toggleStr(false))
+            .addField("Ping Packet Interval", CONFIG.client.ping.pingIntervalSeconds + "s")
+            .addField("KeepAlive Mode", CONFIG.client.keepAliveHandling.keepAliveMode.name().toLowerCase())
+            .addField("KeepAlive Queue Timeout", CONFIG.client.keepAliveHandling.keepAliveQueueTimeoutMs + "ms");
     }
 }

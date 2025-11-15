@@ -114,7 +114,7 @@ public class ReplayMod extends Module {
     public void onInboundPacket(final Packet packet, final Session session) {
         if (!replayRecording.ready()) return;
         try {
-            replayRecording.handleInboundPacket(System.currentTimeMillis(), (MinecraftPacket) packet, session);
+            replayRecording.handleInboundPacket(System.nanoTime(), (MinecraftPacket) packet, session);
         } catch (final Throwable e) {
             error("Failed to handle inbound packet", e);
         }
@@ -123,7 +123,7 @@ public class ReplayMod extends Module {
     public void onPostOutgoing(final Packet packet, final Session session) {
         if (!replayRecording.ready()) return;
         try {
-            replayRecording.handleOutgoingPacket(System.currentTimeMillis(), (MinecraftPacket) packet, session);
+            replayRecording.handleOutgoingPacket(System.nanoTime(), (MinecraftPacket) packet, session);
         } catch (final Throwable e) {
             error("Failed to handle outgoing packet", e);
         }

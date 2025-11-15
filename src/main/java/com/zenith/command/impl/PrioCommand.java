@@ -6,11 +6,8 @@ import com.zenith.command.api.CommandCategory;
 import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
-import com.zenith.feature.api.prioban.PriobanApi;
 
 import static com.zenith.Globals.CONFIG;
-import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
-import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 
@@ -20,12 +17,9 @@ public class PrioCommand extends Command {
         return CommandUsage.builder()
             .name("prio")
             .category(CommandCategory.INFO)
-            .description("Configure alerts for 2b2t priority queue status and bans")
+            .description("Configure alerts for 2b2t priority queue status")
             .usageLines(
-                "mentions on/off",
-                "banMentions on/off",
-                "banCheck",
-                "banCheck <playerName>"
+                "mentions on/off"
             )
             .build();
     }
@@ -39,41 +33,13 @@ public class PrioCommand extends Command {
                             c.getSource().getEmbed()
                                 .title("Prio Mentions " + toggleStrCaps(CONFIG.discord.mentionRoleOnPrioUpdate));
                             return OK;
-                        })))
-            .then(literal("banMentions")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.discord.mentionRoleOnPrioBanUpdate = getToggle(c, "toggle");
-                            c.getSource().getEmbed()
-                                .title("Prio Ban Mentions " + toggleStrCaps(CONFIG.discord.mentionRoleOnPrioBanUpdate));
-                            return OK;
-                        })))
-            .then(literal("banCheck")
-                      .then(argument("name", wordWithChars()).executes(c -> {
-                          String playerName = getString(c, "name");
-                          String status = PriobanApi.INSTANCE.checkPrioBan(playerName)
-                              .map(Object::toString)
-                              .orElse("unknown");
-                          c.getSource().getEmbed()
-                              .title("Checking Prio ban")
-                              .addField("Banned", status, true);
-                          return OK;
-                      }))
-                      .executes(c -> {
-                          String status = PriobanApi.INSTANCE.checkPrioBan(CONFIG.authentication.username)
-                              .map(Object::toString)
-                              .orElse("unknown");
-                          c.getSource().getEmbed()
-                              .title("Checking Prio ban")
-                              .addField("Banned", status, true);
-                          return OK;
-                      }));
+                        })));
     }
 
     @Override
     public void defaultEmbed(Embed builder) {
         builder
             .addField("Prio Status Mentions", toggleStr(CONFIG.discord.mentionRoleOnPrioUpdate), true)
-            .addField("Prio Ban Mentions", toggleStr(CONFIG.discord.mentionRoleOnPrioBanUpdate), true)
             .primaryColor();
     }
 }

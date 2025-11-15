@@ -98,6 +98,7 @@ public class Proxy {
     private LanBroadcaster lanBroadcaster;
     private TcpConnectionManager tcpManager;
     private FileLock fileLock;
+    private final long startTime = System.currentTimeMillis();
 
     public static void main(String... args) {
         Locale.setDefault(Locale.ENGLISH);

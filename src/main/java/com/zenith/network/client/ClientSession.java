@@ -6,10 +6,10 @@ import com.zenith.event.client.ClientConnectEvent;
 import com.zenith.event.client.ClientDisconnectEvent;
 import com.zenith.mc.biome.BiomeRegistry;
 import com.zenith.mc.block.BlockRegistry;
+import com.zenith.network.ClientKeepAliveTask;
 import com.zenith.network.ClientPacketPingTask;
 import com.zenith.network.codec.PacketCodecRegistries;
 import com.zenith.util.ComponentSerializer;
-import com.zenith.util.config.Config;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -174,7 +174,8 @@ public class ClientSession extends TcpClientSession {
         updateClientProtocolVersion();
         EVENT_BUS.postAsync(new ClientConnectEvent());
         send(new ServerboundHelloPacket(profile.getName(), profile.getId()));
-        if (CONFIG.client.ping.mode == Config.Client.Ping.Mode.PACKET) EXECUTOR.execute(new ClientPacketPingTask(this));
+        clientEventLoop.scheduleAtFixedRate(new ClientPacketPingTask(this), 0, CONFIG.client.ping.pingIntervalSeconds, TimeUnit.SECONDS);
+        clientEventLoop.scheduleAtFixedRate(new ClientKeepAliveTask(this), 0, 50, TimeUnit.MILLISECONDS);
     }
 
     private void updateClientProtocolVersion() {
