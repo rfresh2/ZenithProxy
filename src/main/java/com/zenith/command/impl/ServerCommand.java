@@ -123,7 +123,7 @@ public class ServerCommand extends Command {
     private void pingServer(CommandContext c, String ip, int port) {
         EXECUTOR.execute(() -> {
             try {
-                MCPing.INSTANCE.ping(ip, port, 3000, true);
+                MCPing.INSTANCE.getProtocolVersion(ip, port, 3000, true);
             } catch (Throwable e) {
                 c.getSource().logEmbed(c, Embed.builder()
                     .title("Server Ping Failed")
