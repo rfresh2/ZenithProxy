@@ -9,7 +9,7 @@ import com.zenith.command.api.CommandSources;
 import com.zenith.command.brigadier.MessageArgument;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import net.raphimc.minecraftauth.step.java.StepPlayerCertificates;
+import net.raphimc.minecraftauth.java.model.MinecraftPlayerCertificates;
 import org.geysermc.mcprotocollib.protocol.data.game.ArgumentSignature;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandSignedPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
@@ -29,13 +29,13 @@ import static com.zenith.Globals.CACHE;
 @Accessors(chain = true)
 public class ChatSession {
     private final UUID sessionId;
-    protected StepPlayerCertificates.PlayerCertificates playerCertificates;
+    protected MinecraftPlayerCertificates playerCertificates;
     protected int chainIndex = 0;
 
     public void sign(ServerboundChatPacket packet) {
         try {
             Signature signature = Signature.getInstance("SHA256withRSA");
-            signature.initSign(playerCertificates.getPrivateKey());
+            signature.initSign(playerCertificates.getKeyPair().getPrivate());
             signature.update(Ints.toByteArray(1));
             // message link
             signature.update(uuidToByteArray(CACHE.getProfileCache().getProfile().getId()));
@@ -67,7 +67,7 @@ public class ChatSession {
 
             List<ArgumentSignature> signatures = new ArrayList<>(1);
             Signature signature = Signature.getInstance("SHA256withRSA");
-            signature.initSign(playerCertificates.getPrivateKey());
+            signature.initSign(playerCertificates.getKeyPair().getPrivate());
             signature.update(Ints.toByteArray(1));
             // message link
             signature.update(uuidToByteArray(CACHE.getProfileCache().getProfile().getId()));

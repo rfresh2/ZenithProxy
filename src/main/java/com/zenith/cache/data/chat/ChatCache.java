@@ -8,7 +8,7 @@ import com.zenith.command.brigadier.McplBrigadierConverter;
 import lombok.Data;
 import lombok.Locked;
 import lombok.experimental.Accessors;
-import net.raphimc.minecraftauth.step.java.StepPlayerCertificates;
+import net.raphimc.minecraftauth.java.model.MinecraftPlayerCertificates;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.network.tcp.TcpSession;
 import org.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;
@@ -32,7 +32,7 @@ public class ChatCache implements CachedData {
     protected volatile long lastChatTimestamp = System.currentTimeMillis();
     protected boolean enforcesSecureChat = false;
     protected ChatSession chatSession = new ChatSession(UUID.randomUUID());
-    protected StepPlayerCertificates.@Nullable PlayerCertificates playerCertificates;
+    protected @Nullable MinecraftPlayerCertificates playerCertificates;
 
     @Override
     public void getPackets(@NonNull final Consumer<Packet> consumer, final @NonNull TcpSession session) {

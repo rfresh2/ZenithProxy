@@ -84,12 +84,11 @@ public class AuthCommand extends Command {
                 return OK;
             })))
             .then(literal("type").requires(this::validateDiscordOrTerminalSource)
-                .then(argument("typeArg", enumStrings("deviceCode", "emailAndPassword", "deviceCode2", "prism")).executes(c -> {
+                .then(argument("typeArg", enumStrings("deviceCode", "emailAndPassword", "prism")).executes(c -> {
                     String type = getString(c, "typeArg");
                     Config.Authentication.AccountType accountType = switch (type) {
                         case "deviceCode" -> Config.Authentication.AccountType.DEVICE_CODE;
                         case "emailAndPassword" -> Config.Authentication.AccountType.MSA;
-                        case "deviceCode2" -> Config.Authentication.AccountType.DEVICE_CODE_WITHOUT_DEVICE_TOKEN;
                         case "prism" -> Config.Authentication.AccountType.PRISM;
                         default -> null;
                     };

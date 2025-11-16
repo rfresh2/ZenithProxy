@@ -3,7 +3,6 @@ package com.zenith.network.client;
 import com.google.gson.JsonObject;
 import com.zenith.event.client.MsaDeviceCodeLoginEvent;
 import com.zenith.util.WebBrowserHelper;
-import com.zenith.util.math.MathHelper;
 import lombok.Getter;
 import lombok.Locked;
 import lombok.SneakyThrows;
@@ -11,27 +10,29 @@ import net.lenni0451.commons.httpclient.HttpClient;
 import net.lenni0451.commons.httpclient.proxy.ProxyHandler;
 import net.lenni0451.commons.httpclient.proxy.ProxyType;
 import net.raphimc.minecraftauth.MinecraftAuth;
-import net.raphimc.minecraftauth.step.java.StepMCProfile;
-import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession;
-import net.raphimc.minecraftauth.step.java.session.StepFullJavaSession.FullJavaSession;
-import net.raphimc.minecraftauth.step.msa.StepCredentialsMsaCode;
-import net.raphimc.minecraftauth.step.msa.StepMsaDeviceCode;
-import net.raphimc.minecraftauth.util.MicrosoftConstants;
-import net.raphimc.minecraftauth.util.logging.Slf4jConsoleLogger;
+import net.raphimc.minecraftauth.java.JavaAuthManager;
+import net.raphimc.minecraftauth.java.model.MinecraftPlayerCertificates;
+import net.raphimc.minecraftauth.java.model.MinecraftProfile;
+import net.raphimc.minecraftauth.java.model.MinecraftToken;
+import net.raphimc.minecraftauth.msa.data.MsaConstants;
+import net.raphimc.minecraftauth.msa.model.MsaApplicationConfig;
+import net.raphimc.minecraftauth.msa.model.MsaCredentials;
+import net.raphimc.minecraftauth.msa.model.MsaDeviceCode;
+import net.raphimc.minecraftauth.msa.service.impl.CredentialsMsaAuthService;
+import net.raphimc.minecraftauth.msa.service.impl.DeviceCodeMsaAuthService;
+import net.raphimc.minecraftauth.util.MinecraftAuth4To5Migrator;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.protocol.MinecraftProtocol;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.security.KeyPairGenerator;
-import java.time.Duration;
-import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 import static com.zenith.Globals.*;
 import static com.zenith.util.config.Config.Authentication.AccountType.OFFLINE;
@@ -43,39 +44,6 @@ public class Authenticator {
 
     private ScheduledFuture<?> refreshTask;
     private int refreshTryCount = 0;
-    @Getter(lazy = true) private final StepFullJavaSession deviceCodeAuthStep = MinecraftAuth.builder()
-        .withTimeout(300)
-        .withClientId(MicrosoftConstants.JAVA_TITLE_ID)
-        .withScope(MicrosoftConstants.SCOPE_TITLE_AUTH)
-        .deviceCode()
-        .withDeviceToken("Win32")
-        .sisuTitleAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
-        .buildMinecraftJavaProfileStep(true);
-    @Getter(lazy = true) private final StepFullJavaSession deviceCodeAuthWithoutDeviceTokenStep = MinecraftAuth.builder()
-        .withTimeout(300)
-        .withClientId(MicrosoftConstants.JAVA_TITLE_ID)
-        .withScope(MicrosoftConstants.SCOPE_TITLE_AUTH)
-        .deviceCode()
-        .withoutDeviceToken()
-        .regularAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
-        .buildMinecraftJavaProfileStep(true);
-    @Getter(lazy = true) private final StepFullJavaSession msaAuthStep = MinecraftAuth.builder()
-        .withClientId(MicrosoftConstants.JAVA_TITLE_ID).withScope(MicrosoftConstants.SCOPE_TITLE_AUTH)
-        .credentials()
-        .withDeviceToken("Win32")
-        .sisuTitleAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
-        .buildMinecraftJavaProfileStep(true);
-    @Getter(lazy = true) private final StepFullJavaSession prismDeviceCodeAuthStep = MinecraftAuth.builder()
-        .withTimeout(300)
-        .withClientId("c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb")
-        .deviceCode()
-        .withoutDeviceToken()
-        .regularAuthentication(MicrosoftConstants.JAVA_XSTS_RELYING_PARTY)
-        .buildMinecraftJavaProfileStep(true);
-
-    static {
-        MinecraftAuth.LOGGER = new Slf4jConsoleLogger(AUTH_LOG);
-    }
 
     public static final File AUTH_CACHE_FILE = new File("mc_auth_cache.json");
 
@@ -87,137 +55,45 @@ public class Authenticator {
         }
     }
 
-    /**
-     * Login Sequence:
-     *
-     * 1. Load auth cache
-     * 2. If auth cache is present, attempt to refresh until refreshTryCount limit is reached
-     * 2a. If refreshTryCount limit is reached, wipe cache and full login
-     * 3. If auth cache is not present, full login
-     *
-     * caller process will stop login attempts after 3 tries
-     * so the auth cache wipe could happen before or after that is reached depending on config
-     *
-     */
-
-    @SneakyThrows
     public MinecraftProtocol login()  {
         if (CONFIG.authentication.accountType == OFFLINE) {
             AUTH_LOG.warn("Using offline account: '{}'. Offline accounts will not receive user support.", CONFIG.authentication.username);
-            return createMinecraftProtocol(offlineLogin());
+            return createMinecraftProtocol(new MinecraftProfile(UUID.randomUUID(), CONFIG.authentication.username), null, null);
         }
-        var cachedAuth = loadAuthCache()
-            .flatMap(this::checkAuthCacheMatchesConfig);
-        // throws on failed login
-        var authSession = cachedAuth
-            .map(this::useCacheOrRefreshLogin)
-            .orElseGet(this::fullLogin);
+        var authSession = loadAuthCache()
+            // todo: validate JavaAuthManager from cache matches configured auth type?
+            .flatMap(this::checkAuthCacheMatchesConfiguredUsername)
+            .orElseGet(this::loginJavaAuthManager);
+        authSession.getMinecraftProfile().getUpToDateUnchecked();
+        authSession.getMinecraftPlayerCertificates().getUpToDateUnchecked();
         this.refreshTryCount = 0;
         saveAuthCacheAsync(authSession);
         updateConfig(authSession);
         if (this.refreshTask != null) this.refreshTask.cancel(true);
         if (CONFIG.authentication.authTokenRefresh) scheduleAuthCacheRefresh(authSession);
-        return createMinecraftProtocol(authSession);
+        return createMinecraftProtocol(authSession.getMinecraftProfile().getCached(), authSession.getMinecraftToken().getCached(), authSession.getMinecraftPlayerCertificates().getCached());
     }
 
-    private FullJavaSession useCacheOrRefreshLogin(FullJavaSession session) {
-        if (!CONFIG.authentication.alwaysRefreshOnLogin && shouldUseCachedSessionWithoutRefresh(session)) {
-            AUTH_LOG.debug("Using cached auth session without refresh. expiry time: {}",
-                           MathHelper.formatDuration(Duration.ofMillis(session.getMcProfile().getMcToken().getExpireTimeMs() - System.currentTimeMillis())));
-            return session;
-        }
-        else return refreshOrFullLogin(session);
+    @SneakyThrows
+    private JavaAuthManager loginJavaAuthManager() {
+        var builder = JavaAuthManager.create(createHttpClient());
+        return switch (CONFIG.authentication.accountType) {
+            case MSA -> builder
+                .login(CredentialsMsaAuthService::new, new MsaCredentials(CONFIG.authentication.email, CONFIG.authentication.password));
+            case DEVICE_CODE, DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> builder
+                .login(DeviceCodeMsaAuthService::new, (Consumer<MsaDeviceCode>) this::onDeviceCodeLogin);
+            case PRISM -> builder
+                .msaApplicationConfig(new MsaApplicationConfig("c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb", MsaConstants.SCOPE_OFFLINE_ACCESS)) // todo: this is probably not correct
+                .login(DeviceCodeMsaAuthService::new, (Consumer<MsaDeviceCode>) this::onDeviceCodeLogin);
+            case OFFLINE -> throw new RuntimeException("can't login offline account");
+        };
     }
 
-    private FullJavaSession refreshOrFullLogin(FullJavaSession session) {
-        var refreshSession = tryRefresh(session);
-        if (refreshSession.isPresent()) {
-            return refreshSession.get();
-        } else {
-            if (refreshTryCount < CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe) {
-                AUTH_LOG.error("Failed to refresh auth attempt {}", refreshTryCount++);
-                throw new RuntimeException("Unable to log in");
-            } else {
-                AUTH_LOG.error("Failed to refresh auth {} times, clearing cache", refreshTryCount);
-                clearAuthCache();
-                return fullLogin();
-            }
-        }
-    }
-
-    private boolean shouldUseCachedSessionWithoutRefresh(FullJavaSession session) {
-        var playerCertificates = session.getPlayerCertificates();
-        if (playerCertificates != null && playerCertificates.getExpireTimeMs() < System.currentTimeMillis()) return false;
-        return session.getMcProfile().getMcToken().getExpireTimeMs() > System.currentTimeMillis();
-    }
-
-    private MinecraftProtocol createMinecraftProtocol(FullJavaSession authSession) {
-        var javaProfile = authSession.getMcProfile();
-        var gameProfile = new GameProfile(javaProfile.getId(), javaProfile.getName());
-        gameProfile.setPlayerCertificates(authSession.getPlayerCertificates());
-        var mcToken = javaProfile.getMcToken();
-        var accessToken = mcToken != null ? mcToken.getAccessToken() : null;
+    private MinecraftProtocol createMinecraftProtocol(MinecraftProfile minecraftProfile, MinecraftToken minecraftToken, MinecraftPlayerCertificates minecraftPlayerCertificates) {
+        var gameProfile = new GameProfile(minecraftProfile.getId(), minecraftProfile.getName());
+        gameProfile.setPlayerCertificates(minecraftPlayerCertificates);
+        var accessToken = minecraftToken != null ? minecraftToken.getToken() : null;
         return new MinecraftProtocol(MinecraftCodec.CODEC, gameProfile, accessToken);
-    }
-
-    @SneakyThrows
-    private FullJavaSession deviceCodeLogin() {
-        return getDeviceCodeAuthStep().getFromInput(createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
-    }
-
-    @SneakyThrows
-    private FullJavaSession withoutDeviceTokenLogin() {
-        return getDeviceCodeAuthWithoutDeviceTokenStep().getFromInput(createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
-    }
-
-    @SneakyThrows
-    private FullJavaSession msaLogin() {
-        return getMsaAuthStep().getFromInput(createHttpClient(), new StepCredentialsMsaCode.MsaCredentials(CONFIG.authentication.email, CONFIG.authentication.password));
-    }
-
-    @SneakyThrows
-    private FullJavaSession prismDeviceCodeLogin() {
-        return getPrismDeviceCodeAuthStep().getFromInput(createHttpClient(), new StepMsaDeviceCode.MsaDeviceCodeCallback(this::onDeviceCode));
-    }
-
-    public Optional<FullJavaSession> tryRefresh(final FullJavaSession session) {
-        AUTH_LOG.debug("Performing token refresh..");
-        try {
-            return Optional.of(getAuthStep().refresh(createHttpClient(), session));
-        } catch (Exception e) {
-            AUTH_LOG.debug("Failed to refresh token", e);
-            return Optional.empty();
-        }
-    }
-
-    public StepFullJavaSession getAuthStep() {
-        return switch (CONFIG.authentication.accountType) {
-            case MSA -> getMsaAuthStep();
-            case DEVICE_CODE -> getDeviceCodeAuthStep();
-            case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> getDeviceCodeAuthWithoutDeviceTokenStep();
-            case PRISM -> getPrismDeviceCodeAuthStep();
-            case OFFLINE -> null;
-        };
-    }
-
-    public FullJavaSession fullLogin() {
-        return switch (CONFIG.authentication.accountType) {
-            case MSA -> msaLogin();
-            case DEVICE_CODE -> deviceCodeLogin();
-            case DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> withoutDeviceTokenLogin();
-            case PRISM -> prismDeviceCodeLogin();
-            case OFFLINE -> offlineLogin();
-        };
-    }
-
-    private FullJavaSession offlineLogin() {
-        return new FullJavaSession(new StepMCProfile.MCProfile(UUID.randomUUID(), CONFIG.authentication.username, null, null), null);
-    }
-
-    private void onDeviceCode(final StepMsaDeviceCode.MsaDeviceCode code) {
-        AUTH_LOG.error("Login Here: {} with code: {}", code.getDirectVerificationUri(), code.getUserCode());
-        EVENT_BUS.postAsync(new MsaDeviceCodeLoginEvent(code));
-        if (CONFIG.authentication.openBrowserOnLogin) tryOpenBrowser(code.getDirectVerificationUri());
     }
 
     private void tryOpenBrowser(final String url) {
@@ -228,8 +104,8 @@ public class Authenticator {
         }
     }
 
-    private void scheduleAuthCacheRefresh(FullJavaSession session) {
-        var time = session.getMcProfile().getMcToken().getExpireTimeMs() - System.currentTimeMillis();
+    private void scheduleAuthCacheRefresh(JavaAuthManager session) {
+        var time = session.getMinecraftToken().getCached().getExpireTimeMs() - System.currentTimeMillis();
         if (time <= 0) {
             AUTH_LOG.debug("Auth token refresh time is negative? {}", time);
             return;
@@ -243,7 +119,8 @@ public class Authenticator {
         this.refreshTask = EXECUTOR.schedule(
             this::executeAuthCacheRefresh,
             Math.max(minRefreshDelayMs, Math.min(expireTimeDelayMs, maxRefreshIntervalMs)),
-            MILLISECONDS);
+            MILLISECONDS
+        );
         AUTH_LOG.debug("Auth cache refresh scheduled in {} minutes", this.refreshTask.getDelay(TimeUnit.MINUTES));
     }
 
@@ -255,22 +132,18 @@ public class Authenticator {
                 AUTH_LOG.error("No auth cache found to background refresh");
                 return;
             }
-            var refreshResult = tryRefresh(authCache.get());
-            if (refreshResult.isEmpty()) {
-                AUTH_LOG.error("Failed to perform background auth refresh");
-                return;
-            }
-            var authSession = refreshResult.get();
-            updateConfig(authSession);
-            saveAuthCacheAsync(authSession);
-            scheduleAuthCacheRefresh(authSession);
+            var javaAuthManager = authCache.get();
+            javaAuthManager.getMinecraftToken().refresh();
+            updateConfig(javaAuthManager);
+            saveAuthCacheAsync(javaAuthManager);
+            scheduleAuthCacheRefresh(javaAuthManager);
         } catch (Throwable e) {
             AUTH_LOG.error("Error refreshing auth token", e);
         }
     }
 
-    public void saveAuthCache(final FullJavaSession session) {
-        saveAuthCacheJson(getAuthStep().toJson(session));
+    public void saveAuthCache(final JavaAuthManager session) {
+        saveAuthCacheJson(JavaAuthManager.toJson(session));
     }
 
     @Locked
@@ -287,23 +160,23 @@ public class Authenticator {
         AUTH_LOG.debug("Auth cache saved!");
     }
 
-    public void updateConfig(FullJavaSession javaSession) {
-        var javaProfile = javaSession.getMcProfile();
+    public void updateConfig(JavaAuthManager javaSession) {
+        var javaProfile = javaSession.getMinecraftProfile().getCached();
         if (!CONFIG.authentication.username.equals(javaProfile.getName())) {
             CONFIG.authentication.username = javaProfile.getName();
             saveConfigAsync();
         }
     }
 
-    public void saveAuthCacheAsync(final FullJavaSession session) {
+    public void saveAuthCacheAsync(final JavaAuthManager session) {
         Thread.ofVirtual().name("Auth Cache Writer").start(() -> saveAuthCache(session));
     }
 
-    public Optional<FullJavaSession> loadAuthCache() {
+    public Optional<JavaAuthManager> loadAuthCache() {
         if (!AUTH_CACHE_FILE.exists()) return Optional.empty();
-        fixupAuthCacheIfPlayerCertsMissing();
         return readAuthCacheJson()
-            .map(json -> getAuthStep().fromJson(json));
+            .map(this::upgradeAuthCache4To5)
+            .map(json -> JavaAuthManager.fromJson(createHttpClient(), json));
     }
 
     @Locked
@@ -311,57 +184,43 @@ public class Authenticator {
         try (Reader reader = new FileReader(AUTH_CACHE_FILE)) {
             final JsonObject json = GSON.fromJson(reader, JsonObject.class);
             return Optional.of(json);
-        } catch (final NullPointerException e) {
-            AUTH_LOG.debug("Unable to load auth cache!", e);
-            if (e.getMessage().contains("com.google.gson.JsonObject")) {
-                AUTH_LOG.warn("Auth cache incompatible with current auth type");
-            }
-            return Optional.empty();
         } catch (Exception e) {
             AUTH_LOG.debug("Unable to load auth cache!", e);
             return Optional.empty();
         }
     }
 
-    private void fixupAuthCacheIfPlayerCertsMissing() {
-        var jsonOptional = readAuthCacheJson();
-        if (jsonOptional.isEmpty()) return;
-        var json = jsonOptional.get();
+    private JsonObject upgradeAuthCache4To5(JsonObject json) {
         try {
-            var playerCertificatesJson = json.getAsJsonObject("playerCertificates");
-            if (playerCertificatesJson != null) return;
+            if (json.get("_saveVersion") != null) return json;
+            var convertedJson = MinecraftAuth4To5Migrator.migrateJavaSave(json);
+            var javaAuthManager = JavaAuthManager.fromJson(createHttpClient(), convertedJson);
+            javaAuthManager.getMinecraftProfile().getUpToDateUnchecked();
+            saveAuthCache(javaAuthManager);
+            return JavaAuthManager.toJson(javaAuthManager);
         } catch (Exception e) {
-            AUTH_LOG.warn("Error reading auth cache while fixing up player certs in auth cache", e);
-            return;
-        }
-        AUTH_LOG.info("Found auth cache without player certs, inserting dummy data fixup");
-        try {
-            var certsJson = new JsonObject();
-            certsJson.addProperty("expireTimeMs", 0);
-            var generator = KeyPairGenerator.getInstance("RSA");
-            generator.initialize(2048);
-            var keypair = generator.generateKeyPair();
-            var dummyPubKey = keypair.getPublic().getEncoded();
-            var dummyPrivKey = keypair.getPrivate().getEncoded();
-            certsJson.addProperty("publicKey", Base64.getEncoder().encodeToString(dummyPubKey));
-            certsJson.addProperty("privateKey", Base64.getEncoder().encodeToString(dummyPrivKey));
-            certsJson.addProperty("publicKeySignature", Base64.getEncoder().encodeToString("foo".getBytes()));
-            certsJson.addProperty("legacyPublicKeySignature", Base64.getEncoder().encodeToString("bar".getBytes()));
-            json.add("playerCertificates", certsJson);
-            saveAuthCacheJson(json);
-            AUTH_LOG.info("Auth cache fixup dummy data write completed");
-        } catch (final Exception e) {
-            AUTH_LOG.warn("Error writing auth cache while fixing up player certs in auth cache", e);
+            AUTH_LOG.warn("Failed upgrading auth cache!", e);
+            return json;
         }
     }
 
-    private Optional<FullJavaSession> checkAuthCacheMatchesConfig(FullJavaSession authCacheSession) {
-        if (!authCacheSession.getMcProfile().getName().equals(CONFIG.authentication.username)) {
+    private Optional<JavaAuthManager> checkAuthCacheMatchesConfiguredUsername(JavaAuthManager authCacheSession) {
+        var profileHolder = authCacheSession.getMinecraftProfile();
+        var name = Optional.ofNullable(profileHolder.getCached())
+            .map(MinecraftProfile::getName)
+            .orElse(null);
+        if (name == null || !name.equals(CONFIG.authentication.username)) {
             AUTH_LOG.info("Cached auth username does not match config username, clearing cache");
             clearAuthCache();
             return Optional.empty();
         }
         return Optional.of(authCacheSession);
+    }
+
+    private void onDeviceCodeLogin(MsaDeviceCode code) {
+        AUTH_LOG.error("Login Here: {} with code: {}", code.getDirectVerificationUri(), code.getUserCode());
+        EVENT_BUS.postAsync(new MsaDeviceCodeLoginEvent(code));
+        if (CONFIG.authentication.openBrowserOnLogin) tryOpenBrowser(code.getDirectVerificationUri());
     }
 
     public HttpClient createHttpClient() {

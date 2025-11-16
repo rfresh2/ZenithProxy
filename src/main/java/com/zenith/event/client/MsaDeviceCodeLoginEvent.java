@@ -1,5 +1,5 @@
 package com.zenith.event.client;
 
-import net.raphimc.minecraftauth.step.msa.StepMsaDeviceCode;
+import net.raphimc.minecraftauth.msa.model.MsaDeviceCode;
 
-public record MsaDeviceCodeLoginEvent(StepMsaDeviceCode.MsaDeviceCode deviceCode) { }
+public record MsaDeviceCodeLoginEvent(MsaDeviceCode deviceCode) { }
