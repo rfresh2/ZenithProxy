@@ -40,7 +40,7 @@ public class AuthCommand extends Command {
                 "clear",
                 "attempts <int>",
                 "alwaysRefreshOnLogin on/off",
-                "type <deviceCode/emailAndPassword/deviceCode2/prism>",
+                "type <deviceCode/emailAndPassword/prism>",
                 "email <email>",
                 "password <password>",
                 "mention on/off",
