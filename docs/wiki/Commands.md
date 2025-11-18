@@ -767,6 +767,21 @@ Toggles spectators between player and entity cameras. Only usable by spectators
   ```playerCam```
 
 
+### terminal
+
+Configures the ZenithProxy interactive terminal.
+
+
+
+All subcommands only usable from the terminal.
+
+**Usage**
+
+  ```terminal autoCompletions```
+
+  ```terminal logToDiscord on/off```
+
+
 ### theme
 
 Changes the color theme of alerts and messages.

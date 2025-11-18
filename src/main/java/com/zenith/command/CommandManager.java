@@ -111,6 +111,7 @@ public class CommandManager {
         new TablistCommand(),
         new TasksCommand(),
         new SpawnPatrolCommand(),
+        new TerminalCommand(),
         new ThemeCommand(),
         new TransferCommand(),
         new UpdateCommand(),
