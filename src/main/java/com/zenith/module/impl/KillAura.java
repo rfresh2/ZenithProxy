@@ -58,6 +58,7 @@ public class KillAura extends AbstractInventoryModule {
                 CONFIG.client.extra.killAura.customTargets.add(EntityType.ARMOR_STAND);
             }
             CONFIG.client.extra.killAura.targetArmorStands = false;
+            CONFIG.client.extra.killAura.targetCustom = true;
             saveConfigAsync();
         }
     }
