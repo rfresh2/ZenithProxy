@@ -44,7 +44,6 @@ public class KillAuraCommand extends Command {
                 "targetHostileMobs onlyAggressive on/off",
                 "targetNeutralMobs on/off",
                 "targetNeutralMobs onlyAggressive on/off",
-                "targetArmorStands on/off",
                 "targetCustom on/off",
                 "targetCustom add/del <entityType>",
                 "weaponSwitch on/off",
@@ -104,11 +103,6 @@ public class KillAuraCommand extends Command {
                         c.getSource().getEmbed()
                             .title("Target Neutral Mobs Only Aggressive " + toggleStrCaps(CONFIG.client.extra.killAura.onlyNeutralAggressive));
                     }))))
-            .then(literal("targetArmorStands").then(argument("toggle", toggle()).executes(c -> {
-                CONFIG.client.extra.killAura.targetArmorStands = getToggle(c, "toggle");
-                c.getSource().getEmbed()
-                    .title("Target Armor Stands " + toggleStrCaps(CONFIG.client.extra.killAura.targetArmorStands));
-            })))
             .then(literal("weaponSwitch").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.killAura.switchWeapon = getToggle(c, "toggle");
                 c.getSource().getEmbed()
@@ -171,7 +165,6 @@ public class KillAuraCommand extends Command {
             .addField("Target Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.targetHostileMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.onlyHostileAggressive) + "]")
             .addField("Target Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.onlyNeutralAggressive) + "]")
             .addField("Target Custom", toggleStr(CONFIG.client.extra.killAura.targetCustom))
-            .addField("Target Armor Stands", toggleStr(CONFIG.client.extra.killAura.targetArmorStands))
             .addField("Weapon Switching", toggleStr(CONFIG.client.extra.killAura.switchWeapon))
             .addField("Weapon Type", CONFIG.client.extra.killAura.weaponType.name().toLowerCase())
             .addField("Weapon Material", CONFIG.client.extra.killAura.weaponMaterial.name().toLowerCase())

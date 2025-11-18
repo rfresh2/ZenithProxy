@@ -52,6 +52,14 @@ public class KillAura extends AbstractInventoryModule {
 
     public KillAura() {
         super(HandRestriction.MAIN_HAND, 1);
+        // convert legacy config
+        if (CONFIG.client.extra.killAura.targetArmorStands) {
+            if (!CONFIG.client.extra.killAura.customTargets.contains(EntityType.ARMOR_STAND)) {
+                CONFIG.client.extra.killAura.customTargets.add(EntityType.ARMOR_STAND);
+            }
+            CONFIG.client.extra.killAura.targetArmorStands = false;
+            saveConfigAsync();
+        }
     }
 
     public boolean isActive() {
@@ -173,9 +181,6 @@ public class KillAura extends AbstractInventoryModule {
                         return true;
                     }
                 }
-            }
-            if (CONFIG.client.extra.killAura.targetArmorStands) {
-                if (e.getEntityType() == EntityType.ARMOR_STAND) return true;
             }
             if (CONFIG.client.extra.killAura.targetNeutralMobs) {
                 if (neutralEntities.contains(e.getEntityType())) {
