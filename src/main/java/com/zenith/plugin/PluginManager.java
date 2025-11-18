@@ -94,7 +94,9 @@ public class PluginManager {
                 .description("""
                 Plugins are not supported on the `linux` release channel.
 
-                To use plugins, switch to the `java` channel: `channel set java %s`"
+                To use plugins, switch to the `java` release channel:
+
+                `channel set java %s`
 
                 Detected %d potential plugin jars in the plugins directory.
                 """.formatted(Objects.requireNonNullElse(LAUNCH_CONFIG.getMcVersion(), MinecraftCodec.CODEC.getMinecraftVersion()), potentialPluginCount))
