@@ -36,7 +36,7 @@ import dev.omega24.upnp4j.util.Protocol;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import net.raphimc.minecraftauth.responsehandler.exception.MinecraftRequestException;
+import net.raphimc.minecraftauth.bedrock.exception.MinecraftRequestException;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.BuiltinFlags;
 import org.geysermc.mcprotocollib.network.ProxyInfo;

@@ -1,11 +1,16 @@
 package com.zenith.plugin;
 
 import com.zenith.Globals;
+import com.zenith.discord.Embed;
 import com.zenith.event.plugin.PluginLoadFailureEvent;
 import com.zenith.event.plugin.PluginLoadedEvent;
-import com.zenith.plugin.api.*;
+import com.zenith.plugin.api.ConfigSerializer;
+import com.zenith.plugin.api.PluginInfo;
+import com.zenith.plugin.api.PluginInstance;
+import com.zenith.plugin.api.ZenithProxyPlugin;
 import com.zenith.util.ImageInfo;
 import lombok.SneakyThrows;
+import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -84,12 +89,17 @@ public class PluginManager {
         var potentialJars = findPotentialPluginJars();
         int potentialPluginCount = potentialJars.size();
         if (potentialPluginCount > 0) {
-            PLUGIN_LOG.warn("""
+            DISCORD.sendEmbedMessage(Embed.builder()
+                .title("Potential Plugins Found")
+                .description("""
                 Plugins are not supported on the `linux` release channel.
-                Detected {} potential plugin jars in the plugins directory.
 
-                To use plugins, switch to the `java` channel: `channel set java <mcVersion>`
-                """, potentialPluginCount);
+                To use plugins, switch to the `java` channel: `channel set java %s`"
+
+                Detected %d potential plugin jars in the plugins directory.
+                """.formatted(Objects.requireNonNullElse(LAUNCH_CONFIG.getMcVersion(), MinecraftCodec.CODEC.getMinecraftVersion()), potentialPluginCount))
+                .errorColor()
+            );
         }
     }
 

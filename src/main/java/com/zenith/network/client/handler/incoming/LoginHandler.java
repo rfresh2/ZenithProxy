@@ -55,7 +55,7 @@ public class LoginHandler implements PacketHandler<ClientboundLoginPacket, Clien
                     session.sendAsync(new ServerboundChatSessionUpdatePacket(
                         chatSession.getSessionId(),
                         chatSession.getPlayerCertificates().getExpireTimeMs(),
-                        chatSession.getPlayerCertificates().getPublicKey(),
+                        chatSession.getPlayerCertificates().getKeyPair().getPublic(),
                         chatSession.getPlayerCertificates().getPublicKeySignature()
                     ));
                     CLIENT_LOG.info("Server enforces secure chat, chat signing enabled");

@@ -196,7 +196,7 @@ If this still fails, try one of the alternate auth types.
 
   ```auth alwaysRefreshOnLogin on/off```
 
-  ```auth type <deviceCode/emailAndPassword/deviceCode2/prism>```
+  ```auth type <deviceCode/emailAndPassword/prism>```
 
   ```auth email <email>```
 

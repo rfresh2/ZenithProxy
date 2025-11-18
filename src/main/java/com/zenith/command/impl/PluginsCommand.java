@@ -9,6 +9,8 @@ import com.zenith.discord.DiscordBot;
 import com.zenith.feature.api.Api;
 import com.zenith.plugin.PluginManager;
 import com.zenith.plugin.api.PluginInfo;
+import com.zenith.util.ImageInfo;
+import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -18,6 +20,7 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.zenith.Globals.*;
@@ -59,9 +62,8 @@ public class PluginsCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Plugins " + toggleStrCaps(CONFIG.plugins.enabled))
                     .addField("Plugins", toggleStr(CONFIG.plugins.enabled), false)
-                    .description("Restart ZenithProxy for changes to take effect: `restart`")
+                    .description(appendWarningToDescription("Restart ZenithProxy for changes to take effect: `restart`"))
                     .primaryColor();
-                return OK;
             }))
             .then(literal("list").executes(c -> {
                 var plugins = PLUGIN_MANAGER.getPluginInfos();
@@ -86,7 +88,7 @@ public class PluginsCommand extends Command {
                     .collect(Collectors.joining("\n"));
                 c.getSource().getEmbed()
                     .title("Loaded Plugins (" + plugins.size() + ")")
-                    .description(plugins.isEmpty() ? "None" : info)
+                    .description(appendWarningToDescription(plugins.isEmpty() ? "None" : info))
                     .primaryColor();
             }))
             .then(literal("download").then(argument("url", wordWithChars()).executes(c -> {
@@ -121,7 +123,7 @@ public class PluginsCommand extends Command {
                 }
                 c.getSource().getEmbed()
                     .title("Jar Downloaded")
-                    .description("Restart ZenithProxy to reload plugins: `restart`")
+                    .description(appendWarningToDescription("Restart ZenithProxy to reload plugins: `restart`"))
                     .primaryColor();
                 return OK;
             })))
@@ -132,7 +134,7 @@ public class PluginsCommand extends Command {
                         instance.getJarPath().toFile().deleteOnExit();
                         c.getSource().getEmbed()
                             .title("Plugin Removed")
-                            .description("Changes will take effect on next restart")
+                            .description(appendWarningToDescription("Changes will take effect on next restart"))
                             .addField("Plugin", instance.getPluginInfo().id())
                             .addField("Jar", instance.getJarPath().toString())
                             .primaryColor();
@@ -143,6 +145,17 @@ public class PluginsCommand extends Command {
                     .title("Plugin Jar Not Found");
                 return ERROR;
             })));
+    }
+
+    private String appendWarningToDescription(String description) {
+        if (ImageInfo.inImageRuntimeCode() && PLUGIN_MANAGER.getPluginInfos().isEmpty()) {
+            return """
+                   %s
+
+                   You must switch to the `java` release channel for plugins to work: `channel set java %s`"""
+                .formatted(description, Objects.requireNonNullElse(LAUNCH_CONFIG.getMcVersion(), MinecraftCodec.CODEC.getMinecraftVersion()));
+        }
+        return description;
     }
 
     private static class PluginDownloadApi extends Api {
