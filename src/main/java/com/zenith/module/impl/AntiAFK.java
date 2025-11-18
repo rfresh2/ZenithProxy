@@ -191,6 +191,7 @@ public class AntiAFK extends Module {
                     .leftClick(true)
                     .clickTarget(ClickTarget.None.INSTANCE)
                     .sneaking((CONFIG.client.extra.antiafk.actions.walk && CONFIG.client.extra.antiafk.actions.safeWalk) || CONFIG.client.extra.antiafk.actions.sneak)
+                    .clickRequiresRotation(false)
                     .build())
                 .priority(getPriority() * 10)
                 .build());
