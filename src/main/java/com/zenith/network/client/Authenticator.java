@@ -134,9 +134,16 @@ public class Authenticator {
                 return;
             }
             var javaAuthManager = authCache.get();
-            javaAuthManager.getMinecraftToken().refresh();
-            updateConfig(javaAuthManager);
-            saveAuthCacheAsync(javaAuthManager);
+            try {
+                javaAuthManager.getMinecraftToken().refresh();
+                javaAuthManager.getMinecraftProfile().refresh();
+                javaAuthManager.getMinecraftPlayerCertificates().refresh();
+                AUTH_LOG.info("Refreshed profile: {} [{}]", javaAuthManager.getMinecraftProfile().getCached().getName(), javaAuthManager.getMinecraftProfile().getCached().getId());
+                updateConfig(javaAuthManager);
+                saveAuthCacheAsync(javaAuthManager);
+            } catch (final Exception e) {
+                AUTH_LOG.error("Failed while refreshing auth cache", e);
+            }
             scheduleAuthCacheRefresh(javaAuthManager);
         } catch (Throwable e) {
             AUTH_LOG.error("Error refreshing auth token", e);
