@@ -47,7 +47,7 @@ public class InGameCommandManager {
     private boolean executeInGameCommand(final String command, final ServerSession session, final boolean printUnhandled) {
         final CommandContext commandContext = CommandContext.createInGamePlayerContext(command, session);
         var parse = COMMAND.parse(commandContext);
-        if (!COMMAND.hasCommandNode(parse)) return false;
+        if (!parse.getContext().getSource().getEmbed().isTitlePresent() && !COMMAND.hasCommandNode(parse)) return false;
         EXECUTOR.execute(() -> {
             COMMAND.execute(commandContext, parse);
             var embed = commandContext.getEmbed();
