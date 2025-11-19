@@ -9,13 +9,11 @@ import com.mojang.brigadier.context.ParsedCommandNode;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.zenith.command.api.Command;
-import com.zenith.command.api.CommandCategory;
-import com.zenith.command.api.CommandContext;
-import com.zenith.command.api.CommandSource;
+import com.zenith.command.api.*;
 import com.zenith.command.brigadier.CaseInsensitiveLiteralCommandNode;
 import com.zenith.command.brigadier.McplBrigadierConverter;
 import com.zenith.command.impl.*;
+import com.zenith.network.server.ServerSession;
 import lombok.Getter;
 import lombok.Locked;
 import org.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;
@@ -250,6 +248,17 @@ public class CommandManager {
             stringReader.skip();
         }
         final ParseResults<CommandContext> parse = this.dispatcher.parse(stringReader, CommandContext.create(input, commandSource));
+        return this.dispatcher.getCompletionSuggestions(parse);
+    }
+
+    public CompletableFuture<Suggestions> suggestions(final String input, PlayerCommandSource commandSource, ServerSession session) {
+        var stringReader = new StringReader(downcaseFirstWord(input));
+        if (stringReader.canRead() && stringReader.peek() == '/') {
+            stringReader.skip();
+        }
+        var ctx = CommandContext.create(input, commandSource);
+        ctx.setInGamePlayerInfo(new CommandContext.InGamePlayerInfo(session));
+        final ParseResults<CommandContext> parse = this.dispatcher.parse(stringReader, ctx);
         return this.dispatcher.getCompletionSuggestions(parse);
     }
 }

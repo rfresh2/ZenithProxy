@@ -34,7 +34,7 @@ public class CommandSuggestionHandler implements PacketHandler<ServerboundComman
     private static void retrieveSuggestions(final ServerboundCommandSuggestionPacket packet, final ServerSession session) {
         Suggestions suggestions;
         try {
-            suggestions = COMMAND.suggestions(packet.getText(), CommandSources.PLAYER).get(5L, TimeUnit.SECONDS);
+            suggestions = COMMAND.suggestions(packet.getText(), CommandSources.PLAYER, session).get(5L, TimeUnit.SECONDS);
         } catch (Exception e) {
             SERVER_LOG.debug("Timed out retrieving command suggestions", e);
             suggestions = Suggestions.empty().resultNow();
