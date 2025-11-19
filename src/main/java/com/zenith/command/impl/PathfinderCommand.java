@@ -9,6 +9,7 @@ import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
 import com.zenith.feature.inventory.util.InventoryUtil;
+import com.zenith.feature.pathfinder.goals.GoalNear;
 import com.zenith.feature.player.World;
 import com.zenith.mc.block.Block;
 import com.zenith.mc.block.BlockPos;
@@ -63,9 +64,10 @@ public class PathfinderCommand extends Command {
                 "mine <block>",
                 "click <left/right> <x> <y> <z>",
                 "click <left/right> <waypointId>",
-                "click <left/right> entity <type>",
+                "click <left/right> entity <type/id>",
                 "break <x> <y> <z>",
                 "place <x> <y> <z> <item>",
+                "near <x> <y> <z> <rangeSq>",
                 "pickup",
                 "pickup <item>",
                 "clearArea <pos1> <pos2>",
@@ -422,6 +424,33 @@ public class PathfinderCommand extends Command {
                             .primaryColor();
                     }))
                     .then(literal("entity")
+                        .then(argument("id", integer()).executes(c -> {
+                            var entity = CACHE.getEntityCache().get(getInteger(c, "id"));
+                            if (entity == null || !(entity instanceof EntityLiving)) {
+                                c.getSource().getEmbed()
+                                    .title("Entity not found!")
+                                    .errorColor();
+                                return OK;
+                            }
+                            BARITONE.rightClickEntity((EntityLiving) entity)
+                                .addExecutedListener(f -> {
+                                    c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
+                                        .title("Entity Right Clicked!")
+                                        .addField("Target", entity.getEntityType()
+                                            + (CONFIG.discord.reportCoords
+                                            ? " ||[" + entity.position() + "]||"
+                                            : ""))
+                                        .primaryColor());
+                                });
+                            c.getSource().getEmbed()
+                                .title("Pathing")
+                                .addField("Right Click", entity.getEntityType()
+                                    + (CONFIG.discord.reportCoords
+                                    ? " ||[" + entity.position() + "]||"
+                                    : ""))
+                                .primaryColor();
+                            return OK;
+                        }))
                         .then(argument("type", entity()).executes(c -> {
                             EntityData entityData = getEntity(c, "type");
                             String entityType = entityData.name();
@@ -545,6 +574,24 @@ public class PathfinderCommand extends Command {
                     .primaryColor();
                 return OK;
             }))))
+            .then(literal("near")
+                .then(argument("pos", blockPos()).then(argument("rangeSq", integer(1)).executes(c -> {
+                    var pos = getBlockPos(c, "pos");
+                    var rangeSq = getInteger(c, "rangeSq");
+                    var goal = new GoalNear(pos, rangeSq);
+                    BARITONE.getCustomGoalProcess().setGoalAndPath(goal)
+                        .addExecutedListener(f -> {
+                            c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
+                                .title("Pathing Completed!")
+                                .addField("Pos", CONFIG.discord.reportCoords
+                                    ? "||[" + pos.x() + ", " + pos.y() + ", " + pos.z() + "]||"
+                                    : "Coords disabled")
+                                .primaryColor());
+                        });
+                    c.getSource().getEmbed()
+                        .title("Pathing")
+                        .primaryColor();
+                }))))
             .then(literal("status").executes(c -> {
                 boolean isActive = BARITONE.isActive();
                 c.getSource().getEmbed()
