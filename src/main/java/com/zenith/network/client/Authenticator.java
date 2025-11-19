@@ -64,6 +64,7 @@ public class Authenticator {
             // todo: validate JavaAuthManager from cache matches configured auth type?
             .flatMap(this::checkAuthCacheMatchesConfiguredUsername)
             .orElseGet(this::loginJavaAuthManager);
+        authSession.getMinecraftToken().getUpToDateUnchecked();
         authSession.getMinecraftProfile().getUpToDateUnchecked();
         authSession.getMinecraftPlayerCertificates().getUpToDateUnchecked();
         this.refreshTryCount = 0;
