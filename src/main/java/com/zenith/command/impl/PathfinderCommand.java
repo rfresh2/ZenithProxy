@@ -166,7 +166,7 @@ public class PathfinderCommand extends Command {
                 BARITONE.stop();
                 c.getSource().getEmbed()
                     .title("Pathing Stopped")
-                    .addField("Status", "Stopped", false)
+                    .addField("Status", "Stopped")
                     .primaryColor();
                 return OK;
             }))
@@ -189,7 +189,7 @@ public class PathfinderCommand extends Command {
                                 BARITONE.follow(player);
                                 c.getSource().getEmbed()
                                     .title("Following")
-                                    .addField("Player", escape(playerName), false)
+                                    .addField("Player", escape(playerName))
                                     .primaryColor();
                             },
                             () -> c.getSource().getEmbed()
@@ -203,7 +203,7 @@ public class PathfinderCommand extends Command {
                     CONFIG.client.extra.pathfinder.followRadius = radius;
                     c.getSource().getEmbed()
                         .title("Following")
-                        .addField("Radius", radius, false)
+                        .addField("Radius", radius)
                         .primaryColor();
                     return OK;
                 }))))
@@ -220,24 +220,24 @@ public class PathfinderCommand extends Command {
                         .primaryColor();
                 })
                 .then(argument("item", item()).executes(c -> {
-                var item = getItem(c, "item");
-                if (item == null) {
+                    var item = getItem(c, "item");
+                    if (item == null) {
+                        c.getSource().getEmbed()
+                            .title("Item Not found");
+                        return ERROR;
+                    }
+                    BARITONE.pickup(item)
+                        .addExecutedListener(f -> {
+                            c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
+                                .title("Item Picked Up!")
+                                .primaryColor());
+                        });
                     c.getSource().getEmbed()
-                        .title("Item Not found");
-                    return ERROR;
-                }
-                BARITONE.pickup(item)
-                    .addExecutedListener(f -> {
-                        c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
-                            .title("Item Picked Up!")
-                            .primaryColor());
-                    });
-                c.getSource().getEmbed()
-                    .title("Picking up item")
-                    .addField("Item", escape(item.name()))
-                    .primaryColor();
-                return OK;
-            })))
+                        .title("Picking up item")
+                        .addField("Item", escape(item.name()))
+                        .primaryColor();
+                    return OK;
+                })))
             .then(literal("clearArea").then(argument("pos1", blockPos()).then(argument("pos2", blockPos()).executes(c -> {
                 var pos1 = getBlockPos(c, "pos1");
                 var pos2 = getBlockPos(c, "pos2");
@@ -271,7 +271,7 @@ public class PathfinderCommand extends Command {
                     });
                 c.getSource().getEmbed()
                     .title("Pathing")
-                    .addField("This Way", dist, false)
+                    .addField("This Way", dist)
                     .primaryColor();
                 return OK;
             })))
@@ -579,234 +579,198 @@ public class PathfinderCommand extends Command {
                 CONFIG.client.extra.pathfinder.allowBreak = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Allow Break", CONFIG.client.extra.pathfinder.allowBreak, false)
+                    .addField("Allow Break", CONFIG.client.extra.pathfinder.allowBreak)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("blockBreakAdditionalCost").then(argument("cost", floatArg(0, 1000)).executes(c -> {
                 CONFIG.client.extra.pathfinder.blockBreakAdditionalCost = getFloat(c, "cost");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Block Break Additional Cost", CONFIG.client.extra.pathfinder.blockBreakAdditionalCost, false)
+                    .addField("Block Break Additional Cost", CONFIG.client.extra.pathfinder.blockBreakAdditionalCost)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("allowSprint").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.allowSprint = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Allow Sprint", CONFIG.client.extra.pathfinder.allowSprint, false)
+                    .addField("Allow Sprint", CONFIG.client.extra.pathfinder.allowSprint)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("allowPlace").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.allowPlace = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Allow Place", CONFIG.client.extra.pathfinder.allowPlace, false)
+                    .addField("Allow Place", CONFIG.client.extra.pathfinder.allowPlace)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("allowInventory").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.allowInventory = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Allow Inventory", CONFIG.client.extra.pathfinder.allowInventory, false)
+                    .addField("Allow Inventory", CONFIG.client.extra.pathfinder.allowInventory)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("allowDownward").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.allowDownward = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Allow Downward", CONFIG.client.extra.pathfinder.allowDownward, false)
+                    .addField("Allow Downward", CONFIG.client.extra.pathfinder.allowDownward)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("allowParkour").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.allowParkour = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Allow Parkour", CONFIG.client.extra.pathfinder.allowParkour, false)
+                    .addField("Allow Parkour", CONFIG.client.extra.pathfinder.allowParkour)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("allowParkourPlace").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.allowParkourPlace = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Allow Parkour Place", CONFIG.client.extra.pathfinder.allowParkourPlace, false)
+                    .addField("Allow Parkour Place", CONFIG.client.extra.pathfinder.allowParkourPlace)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("allowParkourAscend").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.allowParkourAscend = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Allow Parkour Ascend", CONFIG.client.extra.pathfinder.allowParkourAscend, false)
+                    .addField("Allow Parkour Ascend", CONFIG.client.extra.pathfinder.allowParkourAscend)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("allowDiagonalDescend").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.allowDiagonalDescend = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Allow Diagonal Descend", CONFIG.client.extra.pathfinder.allowDiagonalDescend, false)
+                    .addField("Allow Diagonal Descend", CONFIG.client.extra.pathfinder.allowDiagonalDescend)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("allowDiagonalAscend").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.allowDiagonalAscend = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Allow Diagonal Ascend", CONFIG.client.extra.pathfinder.allowDiagonalAscend, false)
+                    .addField("Allow Diagonal Ascend", CONFIG.client.extra.pathfinder.allowDiagonalAscend)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("maxFallHeightNoWater").then(argument("fallHeight", integer()).executes(c -> {
                 CONFIG.client.extra.pathfinder.maxFallHeightNoWater = getInteger(c, "fallHeight");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Max Fall Height No Water", CONFIG.client.extra.pathfinder.maxFallHeightNoWater, false)
+                    .addField("Max Fall Height No Water", CONFIG.client.extra.pathfinder.maxFallHeightNoWater)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("allowLongFall").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.allowLongFall = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Allow Long Fall", CONFIG.client.extra.pathfinder.allowLongFall, false)
+                    .addField("Allow Long Fall", CONFIG.client.extra.pathfinder.allowLongFall)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("longFallCostMultiplier").then(argument("multiplier", doubleArg(1.0, 1000.0)).executes(c -> {
                 CONFIG.client.extra.pathfinder.longFallCostLogMultiplier = getDouble(c, "multiplier");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Long Fall Cost Log Multiplier", CONFIG.client.extra.pathfinder.longFallCostLogMultiplier, false)
+                    .addField("Long Fall Cost Log Multiplier", CONFIG.client.extra.pathfinder.longFallCostLogMultiplier)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("longFallCostAddCost").then(argument("cost", doubleArg(1.0, 10000.0)).executes(c -> {
                 CONFIG.client.extra.pathfinder.longFallCostAddCost = getDouble(c, "cost");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Long Fall Cost Add Cost", CONFIG.client.extra.pathfinder.longFallCostAddCost, false)
+                    .addField("Long Fall Cost Add Cost", CONFIG.client.extra.pathfinder.longFallCostAddCost)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("primaryTimeoutMs").then(argument("ms", integer(100, 10000)).executes(c -> {
                 CONFIG.client.extra.pathfinder.primaryTimeoutMs = getInteger(c, "ms");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Primary Timeout", CONFIG.client.extra.pathfinder.primaryTimeoutMs, false)
+                    .addField("Primary Timeout", CONFIG.client.extra.pathfinder.primaryTimeoutMs)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("failureTimeoutMs").then(argument("ms", integer(100, 10000)).executes(c -> {
                 CONFIG.client.extra.pathfinder.failureTimeoutMs = getInteger(c, "ms");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Failure Timeout", CONFIG.client.extra.pathfinder.failureTimeoutMs, false)
+                    .addField("Failure Timeout", CONFIG.client.extra.pathfinder.failureTimeoutMs)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("planAheadPrimaryTimeoutMs").then(argument("ms", integer(100, 10000)).executes(c -> {
                 CONFIG.client.extra.pathfinder.planAheadPrimaryTimeoutMs = getInteger(c, "ms");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Plan Ahead Primary Timeout", CONFIG.client.extra.pathfinder.planAheadPrimaryTimeoutMs, false)
+                    .addField("Plan Ahead Primary Timeout", CONFIG.client.extra.pathfinder.planAheadPrimaryTimeoutMs)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("planAheadFailureTimeoutMs").then(argument("ms", integer(100, 10000)).executes(c -> {
                 CONFIG.client.extra.pathfinder.planAheadFailureTimeoutMs = getInteger(c, "ms");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Plan Ahead Failure Timeout", CONFIG.client.extra.pathfinder.planAheadFailureTimeoutMs, false)
+                    .addField("Plan Ahead Failure Timeout", CONFIG.client.extra.pathfinder.planAheadFailureTimeoutMs)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("failedPathSearchCooldownMs").then(argument("ms", integer(100, 10000)).executes(c -> {
                 CONFIG.client.extra.pathfinder.failedPathSearchCooldownMs = getInteger(c, "ms");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Failed Path Search Cooldown", CONFIG.client.extra.pathfinder.failedPathSearchCooldownMs, false)
+                    .addField("Failed Path Search Cooldown", CONFIG.client.extra.pathfinder.failedPathSearchCooldownMs)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("renderPath").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.renderPath = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Render Path", CONFIG.client.extra.pathfinder.renderPath, false)
+                    .addField("Render Path", CONFIG.client.extra.pathfinder.renderPath)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("renderPathIntervalTicks").then(argument("ticks", integer(1, 20)).executes(c -> {
                 CONFIG.client.extra.pathfinder.pathRenderIntervalTicks = getInteger(c, "ticks");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Render Path Interval", CONFIG.client.extra.pathfinder.pathRenderIntervalTicks, false)
+                    .addField("Render Path Interval", CONFIG.client.extra.pathfinder.pathRenderIntervalTicks)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("renderPathDetailed").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.renderPathDetailed = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Render Path Detailed", CONFIG.client.extra.pathfinder.renderPathDetailed, false)
+                    .addField("Render Path Detailed", CONFIG.client.extra.pathfinder.renderPathDetailed)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("teleportDelay").then(argument("delay", integer(1)).executes(c -> {
                 CONFIG.client.extra.pathfinder.teleportDelayMs = getInteger(c, "delay");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Teleport Delay", CONFIG.client.extra.pathfinder.teleportDelayMs, false)
+                    .addField("Teleport Delay", CONFIG.client.extra.pathfinder.teleportDelayMs)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("getToBlockExploreForBlocks").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.getToBlockExploreForBlocks = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Get To Block Explore For Blocks", CONFIG.client.extra.pathfinder.getToBlockExploreForBlocks, false)
+                    .addField("Get To Block Explore For Blocks", CONFIG.client.extra.pathfinder.getToBlockExploreForBlocks)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("getToBlockBlacklistClosestOnFailure").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.getToBlockBlacklistClosestOnFailure = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Get To Block Blacklist Closest On Failure", CONFIG.client.extra.pathfinder.getToBlockBlacklistClosestOnFailure, false)
+                    .addField("Get To Block Blacklist Closest On Failure", CONFIG.client.extra.pathfinder.getToBlockBlacklistClosestOnFailure)
                     .primaryColor();
-                return OK;
             })))
             .then(literal("placeBlockVerifyAbleToPlace").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
-                    .addField("Place Block Verify Able To Place", CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace, false)
+                    .addField("Place Block Verify Able To Place", CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace)
                     .primaryColor();
-                return OK;
+            })))
+            .then(literal("interactWithProcessMaxPathTries").then(argument("count", integer(1)).executes(c -> {
+                CONFIG.client.extra.pathfinder.interactWithProcessMaxPathTries = getInteger(c, "count");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Interact With Process Max Path Tries", CONFIG.client.extra.pathfinder.interactWithProcessMaxPathTries)
+                    .primaryColor();
             })));
-//            .then(literal("diagonalCentering").then(argument("toggle", toggle()).executes(c -> {
-//                CONFIG.client.extra.pathfinder.diagonalCentering = getToggle(c, "toggle");
-//                c.getSource().getEmbed()
-//                    .title("Pathfinder")
-//                    .addField("Diagonal Centering", CONFIG.client.extra.pathfinder.diagonalCentering, false)
-//                    .primaryColor();
-//                return OK;
-//            })))
-//            .then(literal("traverseCentering").then(argument("toggle", toggle()).executes(c -> {
-//                CONFIG.client.extra.pathfinder.traverseCentering = getToggle(c, "toggle");
-//                c.getSource().getEmbed()
-//                    .title("Pathfinder")
-//                    .addField("Traverse Centering", CONFIG.client.extra.pathfinder.traverseCentering, false)
-//                    .primaryColor();
-//                return OK;
-//            })));
     }
 
     private Map<String, String> getSettingsMap() {
@@ -834,6 +798,7 @@ public class PathfinderCommand extends Command {
         settingsMap.put("renderPath", toggleStr(CONFIG.client.extra.pathfinder.renderPath));
         settingsMap.put("renderPathIntervalTicks", String.valueOf(CONFIG.client.extra.pathfinder.pathRenderIntervalTicks));
         settingsMap.put("renderPathDetailed", toggleStr(CONFIG.client.extra.pathfinder.renderPathDetailed));
+        settingsMap.put("interactWithProcessMaxPathTries", String.valueOf(CONFIG.client.extra.pathfinder.interactWithProcessMaxPathTries));
         return settingsMap;
     }
 }
