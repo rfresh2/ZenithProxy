@@ -1854,11 +1854,13 @@ Baritone pathfinder
 
   ```pathfinder click <left/right> <waypointId>```
 
-  ```pathfinder click <left/right> entity <type>```
+  ```pathfinder click <left/right> entity <type/id>```
 
   ```pathfinder break <x> <y> <z>```
 
   ```pathfinder place <x> <y> <z> <item>```
+
+  ```pathfinder near <x> <y> <z> <rangeSq>```
 
   ```pathfinder pickup```
 

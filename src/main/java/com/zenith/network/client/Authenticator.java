@@ -84,7 +84,7 @@ public class Authenticator {
             case DEVICE_CODE, DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> builder
                 .login(DeviceCodeMsaAuthService::new, (Consumer<MsaDeviceCode>) this::onDeviceCodeLogin);
             case PRISM -> builder
-                .msaApplicationConfig(new MsaApplicationConfig("c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb", MsaConstants.SCOPE_OFFLINE_ACCESS)) // todo: this is probably not correct
+                .msaApplicationConfig(new MsaApplicationConfig("c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb", MsaConstants.SCOPE_OFFLINE_ACCESS))
                 .login(DeviceCodeMsaAuthService::new, (Consumer<MsaDeviceCode>) this::onDeviceCodeLogin);
             case OFFLINE -> throw new RuntimeException("can't login offline account");
         };
