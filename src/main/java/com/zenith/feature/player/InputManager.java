@@ -4,8 +4,7 @@ import com.zenith.event.client.ClientBotTick;
 import org.jspecify.annotations.NullMarked;
 
 import static com.github.rfresh2.EventConsumer.of;
-import static com.zenith.Globals.BOT;
-import static com.zenith.Globals.EVENT_BUS;
+import static com.zenith.Globals.*;
 
 @NullMarked
 public class InputManager {
@@ -37,13 +36,14 @@ public class InputManager {
 
     private synchronized void handleTick(final ClientBotTick event) {
         if (currentMovementInputRequest == DEFAULT_MOVEMENT_INPUT_REQUEST) return;
-        // todo: config setting for enabling input debug logs (will be giga spammy)
-//        CLIENT_LOG.debug("[Input Manager] Executing movement input: {} requester: {}",
-//            currentMovementInputRequest.input(),
-//            currentMovementInputRequest.owner() != null
-//                ? currentMovementInputRequest.owner().getClass().getSimpleName()
-//                : "Unknown"
-//        );
+        if (CONFIG.debug.inputManagerDebugLogs) {
+            CLIENT_LOG.debug("[Input Manager] Executing movement input: {} requester: {}",
+                currentMovementInputRequest.input(),
+                currentMovementInputRequest.owner() != null
+                    ? currentMovementInputRequest.owner().getClass().getSimpleName()
+                    : "Unknown"
+            );
+        }
         BOT.requestMovement(currentMovementInputRequest, currentMovementInputRequestFuture);
         currentMovementInputRequest = DEFAULT_MOVEMENT_INPUT_REQUEST;
         currentMovementInputRequestFuture.complete(true);

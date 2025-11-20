@@ -263,6 +263,11 @@ public class DebugCommand extends Command {
                 CONFIG.debug.passthroughResourcePacks = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Passthrough Resource Packs " + toggleStrCaps(CONFIG.debug.passthroughResourcePacks));
+            })))
+            .then(literal("inputManagerDebugLogs").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.inputManagerDebugLogs = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Input Manager Debug Logs " + toggleStrCaps(CONFIG.debug.inputManagerDebugLogs));
             })));
     }
 
