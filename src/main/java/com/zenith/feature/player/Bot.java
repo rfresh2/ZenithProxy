@@ -145,9 +145,11 @@ public final class Bot extends ModuleUtils {
         }
         if (reqPitch != null) {
             this.requestedPitch = MathHelper.clamp(reqPitch, -90f, 90f);
-            float difference = Math.abs(reqPitch - this.pitch);
-            if (difference < 0.01f) { // avoid flagging for very small adjustments
-                this.requestedPitch = this.pitch;
+            if (CONFIG.debug.botPitchPrecisionClamping) {
+                float difference = Math.abs(reqPitch - this.pitch);
+                if (difference < 0.01f) { // avoid flagging for very small adjustments
+                    this.requestedPitch = this.pitch;
+                }
             }
         } else {
             this.requestedPitch = this.pitch;

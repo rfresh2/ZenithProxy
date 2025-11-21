@@ -268,6 +268,11 @@ public class DebugCommand extends Command {
                 CONFIG.debug.inputManagerDebugLogs = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Input Manager Debug Logs " + toggleStrCaps(CONFIG.debug.inputManagerDebugLogs));
+            })))
+            .then(literal("botPitchPrecisionClamping").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.botPitchPrecisionClamping = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Bot Pitch Precision Clamping " + toggleStrCaps(CONFIG.debug.botPitchPrecisionClamping));
             })));
     }
 

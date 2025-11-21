@@ -648,6 +648,7 @@ public final class Config {
         public boolean lockFile = true;
         public boolean passthroughResourcePacks = true;
         public boolean inputManagerDebugLogs = false;
+        public boolean botPitchPrecisionClamping = true;
 
         public static final class PacketLog {
             public boolean enabled = false;
