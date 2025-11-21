@@ -146,6 +146,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         public void interact(Hand hand, PlaceTarget placeTarget, Rotation rotation) {
             var in = Input.builder()
                 .hand(hand)
+                .clickRequiresRotation(true)
                 .clickTarget(new ClickTarget.BlockPosition(placeTarget.supportingBlockState().x(), placeTarget.supportingBlockState().y(), placeTarget.supportingBlockState().z()))
                 .rightClick(true);
             // will often need a second tick to place with rotation
@@ -438,6 +439,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         public void interact(Hand hand) {
             var in = Input.builder()
                 .hand(hand)
+                .clickRequiresRotation(true)
                 .clickTarget(new ClickTarget.BlockPosition(x, y, z))
                 .leftClick(true);
             Position center = World.blockInteractionCenter(x, y, z);
@@ -517,6 +519,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         public void interact() {
             var in = Input.builder()
                 .hand(Hand.MAIN_HAND)
+                .clickRequiresRotation(true)
                 .clickTarget(new ClickTarget.BlockPosition(x, y, z));
             if (leftClick) {
                 in.leftClick(true);
@@ -624,6 +627,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
             if (entity == null) return;
             var in = Input.builder()
                 .hand(Hand.MAIN_HAND)
+                .clickRequiresRotation(true)
                 .clickTarget(new ClickTarget.EntityInstance(entity));
             if (leftClick) {
                 in.leftClick(true);

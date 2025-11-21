@@ -145,7 +145,10 @@ public final class Bot extends ModuleUtils {
         }
         if (reqPitch != null) {
             this.requestedPitch = MathHelper.clamp(reqPitch, -90f, 90f);
-            this.requestedPitch = ((int) (this.requestedPitch * 10.0f)) / 10.0f; // always clamp pitch to 1 decimal place to avoid flagging for very small adjustments
+            float difference = Math.abs(reqPitch - this.pitch);
+            if (difference < 0.01f) { // avoid flagging for very small adjustments
+                this.requestedPitch = this.pitch;
+            }
         } else {
             this.requestedPitch = this.pitch;
         }

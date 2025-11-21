@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import lombok.Data;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.cloudburstmc.math.vector.Vector2d;
 import org.cloudburstmc.math.vector.Vector3d;
@@ -37,14 +38,14 @@ import static com.zenith.Globals.ENTITY_DATA;
 @Data
 @Accessors(chain = true)
 public abstract class Entity {
-    protected EntityType entityType = EntityType.PLAYER;
+    @ToString.Include protected EntityType entityType = EntityType.PLAYER;
     protected double x;
     protected double y;
     protected double z;
     protected float yaw;
     protected float pitch;
     protected float headYaw;
-    protected int entityId;
+    @ToString.Include protected int entityId;
     protected UUID uuid;
     protected double velX;
     protected double velY;

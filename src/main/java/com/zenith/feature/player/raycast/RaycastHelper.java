@@ -162,7 +162,7 @@ public class RaycastHelper {
             EntityData data = ENTITY_DATA.getEntityData(e.getEntityType());
             if (data == null) continue;
             if (!data.pickable()) continue;
-            LocalizedCollisionBox cb = entityCollisionBox(e, data);
+            LocalizedCollisionBox cb = entityCollisionBox(e);
             RayIntersection intersection = cb.rayIntersection(startX, startY, startZ, endX, endY, endZ);
             if (intersection != null) {
                 double intersectingRayLen = MathHelper.distanceSq3d(startX, startY, startZ, intersection.x(), intersection.y(), intersection.z());
@@ -200,7 +200,7 @@ public class RaycastHelper {
         EntityRaycastResult resultRaycast = EntityRaycastResult.miss();
         EntityData data = ENTITY_DATA.getEntityData(target.getEntityType());
         if (data == null) return resultRaycast;
-        LocalizedCollisionBox cb = entityCollisionBox(target, data);
+        LocalizedCollisionBox cb = entityCollisionBox(target);
         RayIntersection intersection = cb.rayIntersection(startX, startY, startZ, endX, endY, endZ);
         if (intersection != null) {
             resultRaycast = new EntityRaycastResult(true, intersection, target);
@@ -212,7 +212,7 @@ public class RaycastHelper {
         return playerEyeRaycastThroughToTarget(target, yaw, pitch, BOT.getEntityInteractDistance());
     }
 
-    private static LocalizedCollisionBox entityCollisionBox(final Entity entity, final EntityData data) {
+    private static LocalizedCollisionBox entityCollisionBox(final Entity entity) {
         var dimensions = entity.dimensions();
         double width = dimensions.getX();
         double height = dimensions.getY();
