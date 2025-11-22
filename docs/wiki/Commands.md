@@ -777,7 +777,7 @@ All subcommands only usable from the terminal.
 
 **Usage**
 
-  ```terminal autoCompletions```
+  ```terminal autoCompletions on/off```
 
   ```terminal logToDiscord on/off```
 

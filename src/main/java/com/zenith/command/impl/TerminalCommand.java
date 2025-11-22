@@ -19,7 +19,7 @@ public class TerminalCommand extends Command {
                 All subcommands only usable from the terminal.
                 """)
             .usageLines(
-                "autoCompletions",
+                "autoCompletions on/off",
                 "logToDiscord on/off",
                 "logChatMessages on/off",
                 "logOnlyQueuePositionUpdates on/off"
