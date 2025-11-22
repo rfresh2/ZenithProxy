@@ -767,6 +767,21 @@ Toggles spectators between player and entity cameras. Only usable by spectators
   ```playerCam```
 
 
+### terminal
+
+Configures the ZenithProxy interactive terminal.
+
+
+
+All subcommands only usable from the terminal.
+
+**Usage**
+
+  ```terminal autoCompletions```
+
+  ```terminal logToDiscord on/off```
+
+
 ### theme
 
 Changes the color theme of alerts and messages.
@@ -1747,8 +1762,6 @@ Aggressive mobs are mobs that are actively targeting and attacking the player.
 
   ```killAura targetNeutralMobs onlyAggressive on/off```
 
-  ```killAura targetArmorStands on/off```
-
   ```killAura targetCustom on/off```
 
   ```killAura targetCustom add/del <entityType>```
@@ -1841,11 +1854,13 @@ Baritone pathfinder
 
   ```pathfinder click <left/right> <waypointId>```
 
-  ```pathfinder click <left/right> entity <type>```
+  ```pathfinder click <left/right> entity <type/id>```
 
   ```pathfinder break <x> <y> <z>```
 
   ```pathfinder place <x> <y> <z> <item>```
+
+  ```pathfinder near <x> <y> <z> <rangeSq>```
 
   ```pathfinder pickup```
 

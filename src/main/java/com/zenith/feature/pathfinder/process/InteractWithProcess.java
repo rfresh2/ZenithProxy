@@ -36,6 +36,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
 
     private @Nullable PathingRequestFuture future;
     private @Nullable InteractTarget target = null;
+    private int tries = 0;
 
     public InteractWithProcess(final Baritone baritone) {
         super(baritone);
@@ -93,6 +94,12 @@ public class InteractWithProcess extends BaritoneProcessHelper {
             onLostControl();
             return new PathingCommand(null, PathingCommandType.DEFER);
         }
+        if (calcFailed) {
+            if (++tries > CONFIG.client.extra.pathfinder.interactWithProcessMaxPathTries) {
+                onLostControl();
+                return null;
+            }
+        }
         return pathingCommand;
     }
 
@@ -103,6 +110,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
             future.complete(false);
         }
         future = null;
+        tries = 0;
     }
 
     @Override
@@ -138,6 +146,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         public void interact(Hand hand, PlaceTarget placeTarget, Rotation rotation) {
             var in = Input.builder()
                 .hand(hand)
+                .clickRequiresRotation(true)
                 .clickTarget(new ClickTarget.BlockPosition(placeTarget.supportingBlockState().x(), placeTarget.supportingBlockState().y(), placeTarget.supportingBlockState().z()))
                 .rightClick(true);
             // will often need a second tick to place with rotation
@@ -430,6 +439,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         public void interact(Hand hand) {
             var in = Input.builder()
                 .hand(hand)
+                .clickRequiresRotation(true)
                 .clickTarget(new ClickTarget.BlockPosition(x, y, z))
                 .leftClick(true);
             Position center = World.blockInteractionCenter(x, y, z);
@@ -509,6 +519,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         public void interact() {
             var in = Input.builder()
                 .hand(Hand.MAIN_HAND)
+                .clickRequiresRotation(true)
                 .clickTarget(new ClickTarget.BlockPosition(x, y, z));
             if (leftClick) {
                 in.leftClick(true);
@@ -550,6 +561,15 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         private final WeakReference<EntityLiving> entityRef;
         private final boolean leftClick;
         private boolean succeeded = false;
+
+        @Override
+        public String toString() {
+            return "InteractWithEntity{" +
+                "entityRef=" + entityRef.get() +
+                ", leftClick=" + leftClick +
+                ", succeeded=" + succeeded +
+                '}';
+        }
 
         @Override
         public PathingCommand pathingCommand() {
@@ -607,6 +627,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
             if (entity == null) return;
             var in = Input.builder()
                 .hand(Hand.MAIN_HAND)
+                .clickRequiresRotation(true)
                 .clickTarget(new ClickTarget.EntityInstance(entity));
             if (leftClick) {
                 in.leftClick(true);

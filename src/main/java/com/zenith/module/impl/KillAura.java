@@ -52,6 +52,15 @@ public class KillAura extends AbstractInventoryModule {
 
     public KillAura() {
         super(HandRestriction.MAIN_HAND, 1);
+        // convert legacy config
+        if (CONFIG.client.extra.killAura.targetArmorStands) {
+            if (!CONFIG.client.extra.killAura.customTargets.contains(EntityType.ARMOR_STAND)) {
+                CONFIG.client.extra.killAura.customTargets.add(EntityType.ARMOR_STAND);
+            }
+            CONFIG.client.extra.killAura.targetArmorStands = false;
+            CONFIG.client.extra.killAura.targetCustom = true;
+            saveConfigAsync();
+        }
     }
 
     public boolean isActive() {
@@ -160,19 +169,28 @@ public class KillAura extends AbstractInventoryModule {
                 && !PLAYER_LISTS.getSpectatorWhitelist().contains(player.getUuid());
 
         } else if (entity instanceof EntityStandard e) {
-            if (CONFIG.client.extra.killAura.targetHostileMobs) {
-                if (hostileEntities.contains(e.getEntityType()))
-                    return !CONFIG.client.extra.killAura.onlyHostileAggressive || isAggressive(entity);
+            if (CONFIG.client.extra.killAura.targetCustom) {
+                if (CONFIG.client.extra.killAura.customTargets.contains(e.getEntityType())) {
+                    return true;
+                }
             }
-            if (CONFIG.client.extra.killAura.targetArmorStands) {
-                if (e.getEntityType() == EntityType.ARMOR_STAND) return true;
+            if (CONFIG.client.extra.killAura.targetHostileMobs) {
+                if (hostileEntities.contains(e.getEntityType())) {
+                    if (CONFIG.client.extra.killAura.onlyHostileAggressive) {
+                        if (isAggressive(e)) return true;
+                    } else {
+                        return true;
+                    }
+                }
             }
             if (CONFIG.client.extra.killAura.targetNeutralMobs) {
-                if (neutralEntities.contains(e.getEntityType()))
-                    return !CONFIG.client.extra.killAura.onlyNeutralAggressive || isAggressive(entity);
-            }
-            if (CONFIG.client.extra.killAura.targetCustom) {
-                return CONFIG.client.extra.killAura.customTargets.contains(e.getEntityType());
+                if (neutralEntities.contains(e.getEntityType())) {
+                    if (CONFIG.client.extra.killAura.onlyNeutralAggressive) {
+                        if (isAggressive(e)) return true;
+                    } else {
+                        return true;
+                    }
+                }
             }
         }
         return false;

@@ -64,6 +64,7 @@ public class Authenticator {
             // todo: validate JavaAuthManager from cache matches configured auth type?
             .flatMap(this::checkAuthCacheMatchesConfiguredUsername)
             .orElseGet(this::loginJavaAuthManager);
+        authSession.getMinecraftToken().getUpToDateUnchecked();
         authSession.getMinecraftProfile().getUpToDateUnchecked();
         authSession.getMinecraftPlayerCertificates().getUpToDateUnchecked();
         this.refreshTryCount = 0;
@@ -83,7 +84,7 @@ public class Authenticator {
             case DEVICE_CODE, DEVICE_CODE_WITHOUT_DEVICE_TOKEN -> builder
                 .login(DeviceCodeMsaAuthService::new, (Consumer<MsaDeviceCode>) this::onDeviceCodeLogin);
             case PRISM -> builder
-                .msaApplicationConfig(new MsaApplicationConfig("c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb", MsaConstants.SCOPE_OFFLINE_ACCESS)) // todo: this is probably not correct
+                .msaApplicationConfig(new MsaApplicationConfig("c36a9fb6-4f2a-41ff-90bd-ae7cc92031eb", MsaConstants.SCOPE_OFFLINE_ACCESS))
                 .login(DeviceCodeMsaAuthService::new, (Consumer<MsaDeviceCode>) this::onDeviceCodeLogin);
             case OFFLINE -> throw new RuntimeException("can't login offline account");
         };
@@ -133,9 +134,16 @@ public class Authenticator {
                 return;
             }
             var javaAuthManager = authCache.get();
-            javaAuthManager.getMinecraftToken().refresh();
-            updateConfig(javaAuthManager);
-            saveAuthCacheAsync(javaAuthManager);
+            try {
+                javaAuthManager.getMinecraftToken().refresh();
+                javaAuthManager.getMinecraftProfile().refresh();
+                javaAuthManager.getMinecraftPlayerCertificates().refresh();
+                AUTH_LOG.info("Refreshed profile: {} [{}]", javaAuthManager.getMinecraftProfile().getCached().getName(), javaAuthManager.getMinecraftProfile().getCached().getId());
+                updateConfig(javaAuthManager);
+                saveAuthCacheAsync(javaAuthManager);
+            } catch (final Exception e) {
+                AUTH_LOG.error("Failed while refreshing auth cache", e);
+            }
             scheduleAuthCacheRefresh(javaAuthManager);
         } catch (Throwable e) {
             AUTH_LOG.error("Error refreshing auth token", e);

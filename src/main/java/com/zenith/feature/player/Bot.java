@@ -137,10 +137,19 @@ public final class Bot extends ModuleUtils {
             if (difference > 180) difference -= 360;
             else if (difference < -180) difference += 360;
             this.requestedYaw = this.yaw + difference;
+        } else {
+            this.requestedYaw = this.yaw;
         }
         if (reqPitch != null) {
             this.requestedPitch = MathHelper.clamp(reqPitch, -90f, 90f);
-            this.requestedPitch = ((int) (this.requestedPitch * 10.0f)) / 10.0f; // always clamp pitch to 1 decimal place to avoid flagging for very small adjustments
+            if (CONFIG.debug.botPitchPrecisionClamping) {
+                float difference = Math.abs(reqPitch - this.pitch);
+                if (difference < 0.01f) { // avoid flagging for very small adjustments
+                    this.requestedPitch = this.pitch;
+                }
+            }
+        } else {
+            this.requestedPitch = this.pitch;
         }
         this.inputRequestFuture = inputRequestFuture;
     }

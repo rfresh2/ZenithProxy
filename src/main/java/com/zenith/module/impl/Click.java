@@ -35,7 +35,7 @@ public class Click extends Module {
     }
 
     public int getPriority() {
-        return Objects.requireNonNullElse(CONFIG.client.extra.autoTotem.priority, 9000);
+        return Objects.requireNonNullElse(CONFIG.client.extra.click.priority, 9000);
     }
 
     private void onClientBotTick(ClientBotTick event) {

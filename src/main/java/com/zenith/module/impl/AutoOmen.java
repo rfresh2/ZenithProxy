@@ -119,6 +119,7 @@ public class AutoOmen extends AbstractInventoryModule {
                 .input(Input.builder()
                     .rightClick(true)
                     .clickTarget(ClickTarget.None.INSTANCE)
+                    .clickRequiresRotation(false)
                     .build())
                 .priority(getPriority())
                 .build())

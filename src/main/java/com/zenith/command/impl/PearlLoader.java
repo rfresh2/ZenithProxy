@@ -7,6 +7,7 @@ import com.zenith.command.api.CommandCategory;
 import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
+import com.zenith.feature.player.World;
 import com.zenith.mc.block.BlockPos;
 import com.zenith.util.config.Config.Client.Extra.PearlLoader.Pearl;
 
@@ -26,9 +27,9 @@ public class PearlLoader extends Command {
             .category(CommandCategory.MODULE)
             .description("""
            Loads player's pearls.
-           
+
            Positions must be of interactable blocks like levers, buttons, trapdoors, etc.
-           
+
            They should be unobstructed and reachable.
            """)
             .usageLines(
@@ -46,24 +47,29 @@ public class PearlLoader extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("pearlLoader")
             .then(literal("add").then(argument("id", wordWithChars()).then(argument("pos", blockPos()).executes(c -> {
-                    String id = getString(c, "id");
-                    var pos = getBlockPos(c, "pos");
-                    int x = pos.x();
-                    int y = pos.y();
-                    int z = pos.z();
-                    Pearl pearl = new Pearl(id, x, y, z);
-                    var pearls = CONFIG.client.extra.pearlLoader.pearls;
-                    for (var p : pearls) {
-                        if (p.id().equals(id)) {
-                            pearls.remove(p);
-                            break;
-                        }
-                    }
-                    pearls.add(pearl);
+                String id = getString(c, "id");
+                var pos = getBlockPos(c, "pos");
+                int x = pos.x();
+                int y = pos.y();
+                int z = pos.z();
+                if (World.isChunkLoadedBlockPos(x, z)) {
+                    var block = World.getBlock(x, y, z);
                     c.getSource().getEmbed()
-                        .title("Pearl Added")
-                        .successColor();
-                }))))
+                        .addField("Block At Position", block.name());
+                }
+                Pearl pearl = new Pearl(id, x, y, z);
+                var pearls = CONFIG.client.extra.pearlLoader.pearls;
+                for (var p : pearls) {
+                    if (p.id().equals(id)) {
+                        pearls.remove(p);
+                        break;
+                    }
+                }
+                pearls.add(pearl);
+                c.getSource().getEmbed()
+                    .title("Pearl Added")
+                    .successColor();
+            }))))
             .then(literal("del").then(argument("id", wordWithChars()).executes(c -> {
                 String id = getString(c, "id");
                 var pearls = CONFIG.client.extra.pearlLoader.pearls;

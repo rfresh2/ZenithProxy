@@ -222,6 +222,7 @@ public final class Config {
                 public boolean getToBlockBlacklistClosestOnFailure = false;
                 public boolean simplifyUnloadedYGoal = false;
                 public boolean placeBlockVerifyAbleToPlace = true;
+                public int interactWithProcessMaxPathTries = 5;
             }
 
             public static class SessionTimeLimit {
@@ -361,7 +362,7 @@ public final class Config {
                 public boolean onlyNeutralAggressive = false;
                 public boolean onlyHostileAggressive = false;
                 public boolean switchWeapon = true;
-                public boolean targetArmorStands = false;
+                public boolean targetArmorStands = false; // soft deprecated
                 public int attackDelayTicks = 10;
                 // When enabled, adjusts attackDelayTicks by current server TPS
                 // so attack rate stays consistent.
@@ -646,6 +647,8 @@ public final class Config {
         public boolean inventorySyncOnLogin = false;
         public boolean lockFile = true;
         public boolean passthroughResourcePacks = true;
+        public boolean inputManagerDebugLogs = false;
+        public boolean botPitchPrecisionClamping = true;
 
         public static final class PacketLog {
             public boolean enabled = false;
