@@ -781,6 +781,10 @@ All subcommands only usable from the terminal.
 
   ```terminal logToDiscord on/off```
 
+  ```terminal logChatMessages on/off```
+
+  ```terminal logOnlyQueuePositionUpdates on/off```
+
 
 ### theme
 
@@ -1707,10 +1711,6 @@ Hide certain types of messages in-game or in the terminal chat log.
   ```extraChat insertClickableLinks on/off```
 
   ```extraChat hide2b2tActionBarText on/off```
-
-  ```extraChat logChatMessages on/off```
-
-  ```extraChat logOnlyQueuePositionUpdates on/off```
 
   ```extraChat whisperCommand <command>```
 
