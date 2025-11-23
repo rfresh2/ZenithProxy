@@ -30,8 +30,6 @@ public class ExtraChatCommand extends Command {
                 "showConnectionMessages on/off",
                 "insertClickableLinks on/off",
                 "hide2b2tActionBarText on/off",
-                "logChatMessages on/off",
-                "logOnlyQueuePositionUpdates on/off",
                 "whisperCommand <command>"
             )
             .build();
@@ -109,8 +107,6 @@ public class ExtraChatCommand extends Command {
             .addField("Show Connection Messages", toggleStr(CONFIG.client.extra.chat.showConnectionMessages))
             .addField("Insert Clickable Links", toggleStr(CONFIG.client.extra.chat.insertClickableLinks))
             .addField("Hide 2b2t Action Bar Text", toggleStr(CONFIG.client.extra.chat.hide2b2tActionBarText))
-            .addField("Log Chat Messages", toggleStr(CONFIG.client.extra.logChatMessages))
-            .addField("Log Only Queue Pos Updates", toggleStr(CONFIG.client.extra.logOnlyQueuePositionUpdates))
             .addField("Whisper Command", CONFIG.client.extra.whisperCommand)
             .primaryColor();
     }
