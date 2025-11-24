@@ -100,108 +100,108 @@ public class InventoryCommand extends Command {
                 return OK;
             })))
             .then(literal("swap")
-                      .then(argument("from", integer(0, 200)).then(argument("to", integer(0, 200)).executes(c -> {
-                          if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return OK;
-                          var from = getInteger(c, "from");
-                          var to = getInteger(c, "to");
-                          var containerSize = CACHE.getPlayerCache().getInventoryCache().getOpenContainer().getSize();
-                          if (from >= containerSize) {
-                              c.getSource().getEmbed()
-                                  .title("Error")
-                                  .description("From slot: " + from + " is out of bounds")
-                                  .errorColor();
-                              return OK;
-                          }
-                          if (to >= containerSize) {
-                              c.getSource().getEmbed()
-                                  .title("Error")
-                                  .description("To slot: " + to + " is out of bounds")
-                                  .errorColor();
-                              return OK;
-                          }
-                          var accepted = INVENTORY.submit(InventoryActionRequest.builder()
-                                  .owner(this)
-                                  .actions(InventoryActionMacros.swapSlots(getOpenContainerId(), from, to))
-                                  .priority(INV_ACTION_PRIORITY)
-                                  .build())
-                              .get();
-                          if (accepted) {
-                              logInv();
-                              c.getSource().setNoOutput(true);
-                          } else {
-                              c.getSource().getEmbed()
-                                  .title("Failed")
-                                  .description("Another inventory action has taken priority this tick, try again")
-                                  .errorColor();
-                          }
-                          return OK;
-                      }))))
+                .then(argument("from", integer(0, 200)).then(argument("to", integer(0, 200)).executes(c -> {
+                    if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return OK;
+                    var from = getInteger(c, "from");
+                    var to = getInteger(c, "to");
+                    var containerSize = CACHE.getPlayerCache().getInventoryCache().getOpenContainer().getSize();
+                    if (from >= containerSize) {
+                        c.getSource().getEmbed()
+                            .title("Error")
+                            .description("From slot: " + from + " is out of bounds")
+                            .errorColor();
+                        return OK;
+                    }
+                    if (to >= containerSize) {
+                        c.getSource().getEmbed()
+                            .title("Error")
+                            .description("To slot: " + to + " is out of bounds")
+                            .errorColor();
+                        return OK;
+                    }
+                    var accepted = INVENTORY.submit(InventoryActionRequest.builder()
+                            .owner(this)
+                            .actions(InventoryActionMacros.swapSlots(getOpenContainerId(), from, to))
+                            .priority(INV_ACTION_PRIORITY)
+                            .build())
+                        .get();
+                    if (accepted) {
+                        logInv();
+                        c.getSource().setNoOutput(true);
+                    } else {
+                        c.getSource().getEmbed()
+                            .title("Failed")
+                            .description("Another inventory action has taken priority this tick, try again")
+                            .errorColor();
+                    }
+                    return OK;
+                }))))
             .then(literal("drop")
-                      .then(literal("stack")
-                                .then(argument("slot", integer(0, 200)).executes(c -> {
-                                    if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return OK;
-                                    var slot = getInteger(c, "slot");
-                                    Container container = CACHE.getPlayerCache().getInventoryCache().getOpenContainer();
-                                    var containerSize = container.getSize();
-                                    if (slot >= containerSize) {
-                                        c.getSource().getEmbed()
-                                            .title("Error")
-                                            .description("Slot: " + slot + " is out of bounds")
-                                            .errorColor();
-                                        return OK;
-                                    }
-                                    var stack = container.getItemStack(slot);
-                                    if (stack == Container.EMPTY_STACK) {
-                                        c.getSource().getEmbed()
-                                            .title("Error")
-                                            .description("Slot: " + slot + " is empty")
-                                            .errorColor();
-                                        return OK;
-                                    }
-                                    var accepted = drop(slot, true).get();
-                                    if (accepted) {
-                                        logInv();
-                                        c.getSource().setNoOutput(true);
-                                    } else {
-                                        c.getSource().getEmbed()
-                                            .title("Failed")
-                                            .description("Another inventory action has taken priority this tick, try again")
-                                            .errorColor();
-                                    }
-                                    return OK;
-                                })))
-                      .then(argument("slot", integer(0, 200)).executes(c -> {
-                          if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return OK;
-                          var slot = getInteger( c, "slot");
-                          Container container = CACHE.getPlayerCache().getInventoryCache().getOpenContainer();
-                          var containerSize = container.getSize();
-                          if (slot >= containerSize) {
-                              c.getSource().getEmbed()
-                                  .title("Error")
-                                  .description("Slot: " + slot + " is out of bounds")
-                                  .errorColor();
-                              return OK;
-                          }
-                          var stack = container.getItemStack(slot);
-                          if (stack == Container.EMPTY_STACK) {
-                              c.getSource().getEmbed()
-                                  .title("Error")
-                                  .description("Slot: " + slot + " is empty")
-                                  .errorColor();
-                              return OK;
-                          }
-                          var accepted = drop(slot, false).get();
-                          if (accepted) {
-                              logInv();
-                              c.getSource().setNoOutput(true);
-                          } else {
-                              c.getSource().getEmbed()
-                                  .title("Failed")
-                                  .description("Another inventory action has taken priority this tick, try again")
-                                  .errorColor();
-                          }
-                          return OK;
-                      })))
+                .then(literal("stack")
+                    .then(argument("slot", integer(0, 200)).executes(c -> {
+                        if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return OK;
+                        var slot = getInteger(c, "slot");
+                        Container container = CACHE.getPlayerCache().getInventoryCache().getOpenContainer();
+                        var containerSize = container.getSize();
+                        if (slot >= containerSize) {
+                            c.getSource().getEmbed()
+                                .title("Error")
+                                .description("Slot: " + slot + " is out of bounds")
+                                .errorColor();
+                            return OK;
+                        }
+                        var stack = container.getItemStack(slot);
+                        if (stack == Container.EMPTY_STACK) {
+                            c.getSource().getEmbed()
+                                .title("Error")
+                                .description("Slot: " + slot + " is empty")
+                                .errorColor();
+                            return OK;
+                        }
+                        var accepted = drop(slot, true).get();
+                        if (accepted) {
+                            logInv();
+                            c.getSource().setNoOutput(true);
+                        } else {
+                            c.getSource().getEmbed()
+                                .title("Failed")
+                                .description("Another inventory action has taken priority this tick, try again")
+                                .errorColor();
+                        }
+                        return OK;
+                    })))
+                .then(argument("slot", integer(0, 200)).executes(c -> {
+                    if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return OK;
+                    var slot = getInteger( c, "slot");
+                    Container container = CACHE.getPlayerCache().getInventoryCache().getOpenContainer();
+                    var containerSize = container.getSize();
+                    if (slot >= containerSize) {
+                        c.getSource().getEmbed()
+                            .title("Error")
+                            .description("Slot: " + slot + " is out of bounds")
+                            .errorColor();
+                        return OK;
+                    }
+                    var stack = container.getItemStack(slot);
+                    if (stack == Container.EMPTY_STACK) {
+                        c.getSource().getEmbed()
+                            .title("Error")
+                            .description("Slot: " + slot + " is empty")
+                            .errorColor();
+                        return OK;
+                    }
+                    var accepted = drop(slot, false).get();
+                    if (accepted) {
+                        logInv();
+                        c.getSource().setNoOutput(true);
+                    } else {
+                        c.getSource().getEmbed()
+                            .title("Failed")
+                            .description("Another inventory action has taken priority this tick, try again")
+                            .errorColor();
+                    }
+                    return OK;
+                })))
             .then(literal("close").executes(c -> {
                 if (!verifyAbleToDoInvActions(c.getSource().getEmbed())) return OK;
                 var openContainerId = getOpenContainerId();
@@ -363,16 +363,16 @@ public class InventoryCommand extends Command {
                     .title("NCP Strict " + toggleStrCaps(CONFIG.client.inventory.ncpStrict)));
             })))
             .then(literal("autoCloseOpenContainers")
-                      .then(argument("toggle", toggle()).executes(c -> {
-                            CONFIG.client.inventory.autoCloseOpenContainers = getToggle(c, "toggle");
-                            settingsEmbed(c.getSource().getEmbed()
-                                .title("Auto Close " + toggleStrCaps(CONFIG.client.inventory.autoCloseOpenContainers)));
-                      }))
-                      .then(literal("delaySeconds").then(argument("seconds", integer(1, 1000)).executes(c -> {
-                          CONFIG.client.inventory.autoCloseOpenContainerAfterSeconds = getInteger(c, "seconds");
-                          settingsEmbed(c.getSource().getEmbed()
-                              .title("Auto Close Delay Set"));
-                      }))));
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.inventory.autoCloseOpenContainers = getToggle(c, "toggle");
+                    settingsEmbed(c.getSource().getEmbed()
+                        .title("Auto Close " + toggleStrCaps(CONFIG.client.inventory.autoCloseOpenContainers)));
+                }))
+                .then(literal("delaySeconds").then(argument("seconds", integer(1, 1000)).executes(c -> {
+                    CONFIG.client.inventory.autoCloseOpenContainerAfterSeconds = getInteger(c, "seconds");
+                    settingsEmbed(c.getSource().getEmbed()
+                        .title("Auto Close Delay Set"));
+                }))));
     }
 
     private int getOpenContainerId() {
@@ -397,10 +397,10 @@ public class InventoryCommand extends Command {
             dropStack ? DropItemAction.DROP_SELECTED_STACK : DropItemAction.DROP_FROM_SELECTED
         ));
         return INVENTORY.submit(InventoryActionRequest.builder()
-                .owner(this)
-                .actions(actions)
-                .priority(INV_ACTION_PRIORITY)
-                .build());
+            .owner(this)
+            .actions(actions)
+            .priority(INV_ACTION_PRIORITY)
+            .build());
     }
 
     private void logInv() {
