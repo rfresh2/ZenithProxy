@@ -35,6 +35,12 @@ public class LogSourceFilter extends Filter<ILoggingEvent> {
     }
     private static final AtomicBoolean INIT = new AtomicBoolean(false);
 
+    public static void registerLogger(final String loggerName, final Level level) {
+        if (SOURCE_MAP.containsKey(loggerName)) return;
+        SOURCE_MAP.put(loggerName, level);
+        ((LoggerContext) LoggerFactory.getILoggerFactory()).getLogger(loggerName).setLevel(level);
+    }
+
     @Override
     public FilterReply decide(final ILoggingEvent event) {
         if (INIT.compareAndSet(false, true)) {
