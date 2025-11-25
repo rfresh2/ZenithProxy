@@ -1,9 +1,11 @@
 package com.zenith.feature.player;
 
 import com.google.common.collect.Lists;
+import com.zenith.Proxy;
 import com.zenith.cache.data.entity.EntityLiving;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.client.ClientBotTick;
+import com.zenith.event.client.ClientTickEvent;
 import com.zenith.mc.block.*;
 import com.zenith.mc.block.properties.api.BlockStateProperties;
 import com.zenith.mc.dimension.DimensionRegistry;
@@ -92,7 +94,7 @@ public final class Bot extends ModuleUtils {
     private float jumpStrength = 0.42f;
     private float flyingSpeed = 0.05f;
     private boolean onGroundNoBlocks = false;
-    private Optional<BlockPos> supportingBlockPos = Optional.empty();
+    @Getter Optional<BlockPos> supportingBlockPos = Optional.empty();
     private int jumpingCooldown;
     @Getter private boolean horizontalCollision = false;
     private boolean horizontalCollisionMinor = false;
@@ -111,8 +113,14 @@ public final class Bot extends ModuleUtils {
             of(ClientBotTick.class, TICK_PRIORITY, this::tick),
             of(ClientBotTick.class, POST_TICK_PRIORITY, this::postTick),
             of(ClientBotTick.Starting.class, this::handleClientTickStarting),
-            of(ClientBotTick.Stopped.class, this::handleClientTickStopped)
+            of(ClientBotTick.Stopped.class, this::handleClientTickStopped),
+            of(ClientTickEvent.class, this::syncWhilePlayerControlling)
         );
+    }
+
+    private void syncWhilePlayerControlling(ClientTickEvent event) {
+        if (!Proxy.getInstance().hasActivePlayer()) return;
+        syncFromCache(true);
     }
 
     private void handleClientTickStarting(final ClientBotTick.Starting event) {
@@ -258,9 +266,14 @@ public final class Bot extends ModuleUtils {
             this.inputRequestFuture.complete(false);
             this.inputRequestFuture = InputRequestFuture.rejected;
         } else {
-            interactionTick();
+            if (!CONFIG.debug.botRotateBeforeInteract) {
+                interactionTick();
+            }
             this.yaw = this.requestedYaw;
             this.pitch = this.requestedPitch;
+            if (CONFIG.debug.botRotateBeforeInteract) {
+                interactionTick();
+            }
         }
 
         if (Math.abs(velocity.getX()) < 0.003) velocity.setX(0);

@@ -649,6 +649,7 @@ public final class Config {
         public boolean passthroughResourcePacks = true;
         public boolean inputManagerDebugLogs = false;
         public boolean botPitchPrecisionClamping = true;
+        public boolean botRotateBeforeInteract = true;
 
         public static final class PacketLog {
             public boolean enabled = false;
