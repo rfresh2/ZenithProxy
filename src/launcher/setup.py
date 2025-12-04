@@ -128,6 +128,7 @@ def setup_execute(config):
     if ip == "localhost":
         while True:
             print("Enable automatic port forwarding with UPnP (https://w.wiki/Ebjt)? (y/n)")
+            print("If you are unsure, press enter to select 'n'")
             i1 = input("> ")
             if i1 == "y":
                 upnp = True
@@ -137,7 +138,7 @@ def setup_execute(config):
                     ip = public_ip
                     print("Found IP:", ip)
                 break
-            elif i1 == "n":
+            elif i1 == "n" or i1 == "":
                 upnp = False
                 break
             else:
