@@ -321,7 +321,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "com.zenith"
             artifactId = "ZenithProxy"
-            version =  providers.environmentVariable("ZENITH_RELEASE_TAG").orElse("0.0.0+${project.version}").get()
+            version = providers.environmentVariable("ZENITH_RELEASE_TAG").orElse("0.0.0+${project.version}").get()
             from(components["java"])
         }
     }

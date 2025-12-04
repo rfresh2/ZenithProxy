@@ -66,8 +66,29 @@ Command Prefixes:
 
 ### Release Channels
 
-* (Default) `java` - Supports all operating systems
+ZenithProxy releases for multiple MC versions and OS/hardware platforms, known as "release channels"
+
+**Platforms**
+
+* (Default) `java` - Works on all systems. Supports [Plugins](Plugins.md).
 * (Recommended) `linux` - Linux native x86_64 executable. ~50% reduced memory usage and instant startup
+
+**MC Versions**
+
+* (Default) `1.21.4` - Matches current 2b2t server version
+* Latest MC version is also usually supported. Other MC versions may exist but are deprecated.
+
+??? note "Connecting to or from other MC versions with ZenithProxy's built-in ViaVersion"
+
+    ZenithProxy's built-in ViaVersion is configured by default to work with any MC version.
+
+    It can be configured with the [`via`](Commands.md#via) command
+
+To select a specific release channel, use the [`channel`](Commands.md#channel) command
+
+Example: `channel set java 1.21.4`
+
+To see the current release channel, use the [`status`](Commands.md#status) command, the channel is at the top of the response.
 
 ### Running on Linux Servers
 
