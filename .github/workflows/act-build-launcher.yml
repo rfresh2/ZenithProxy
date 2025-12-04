@@ -1,5 +1,9 @@
 name: Build Launcher
 
+# Command:
+
+# act workflow_dispatch -W .github\workflows\act-build-launcher.yml --artifact-server-path build\artifacts
+
 on:
   workflow_dispatch:
 
@@ -32,8 +36,14 @@ jobs:
           uv tool install pyinstaller@${{ env.pyinstaller_version }}
 
       - name: Build launcher
-        run: |
-          uv tool run --with-requirements src/launcher/requirements.txt pyinstaller --specpath ./build -p ./src/launcher --onefile --runtime-tmpdir .launcher.tmp --noconfirm ./src/launcher/__main__.py
+        run: >
+          uv tool run --with-requirements src/launcher/requirements.txt --upgrade
+          pyinstaller@${{ env.pyinstaller_version }} --specpath ./build
+          -p ./src/launcher --onefile
+          --runtime-tmpdir .launcher.tmp
+          --noconfirm
+          -i ../src/launcher/icon.ico
+          ./src/launcher/__main__.py
 
       - name: Rename executable
         run: |

@@ -67,7 +67,7 @@ jobs:
 
       - name: Build launcher
         run: >
-          uv tool run --with-requirements src/launcher/requirements.txt
+          uv tool run --with-requirements src/launcher/requirements.txt --upgrade
           pyinstaller@${{ env.pyinstaller_version }} --specpath ./build
           -p ./src/launcher --onefile
           --runtime-tmpdir .launcher.tmp
