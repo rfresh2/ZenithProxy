@@ -1,6 +1,9 @@
+import time
+
 from requests import Session
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
+
 
 class GitHubAPI:
     launch_config = None
@@ -38,10 +41,10 @@ class GitHubAPI:
         session.mount("https://", adapter)
         return session
 
-    def _send_request(self, url, headers, params=None, timeout=10, allow_redirects=False):
+    def _send_request(self, url, headers, params=None, timeout=10, allow_redirects=False, stream=False):
         try:
             with self._create_session() as session:
-                response = session.get(url, headers=headers, params=params, timeout=timeout, allow_redirects=allow_redirects)
+                response = session.get(url, headers=headers, params=params, timeout=timeout, allow_redirects=allow_redirects, stream=stream)
                 if response.status_code == 200:
                     return response
                 raise Exception(f"Request to {url} failed with status code {response.status_code}")
@@ -87,13 +90,45 @@ class GitHubAPI:
     def get_release_tag_asset_id(self, release_id, asset_name):
         return self.get_asset_id(release_id, asset_name, True)
 
-    def download_asset(self, asset_id):
+    def download_asset(self, asset_id, verbose=False):
         url = f"{self.get_base_url()}/assets/{asset_id}"
         download_headers = self.get_headers()
         download_headers["Accept"] = "application/octet-stream"
         try:
-            response = self._send_request(url, download_headers, allow_redirects=True, timeout=60)
-            return response.content
+            response = self._send_request(url, download_headers, allow_redirects=True, timeout=60, stream=True)
+            total_header = response.headers.get("Content-Length")
+            total = int(total_header) if total_header and total_header.isdigit() else None
+            chunk_size = 8192
+            downloaded = 0
+            data = bytearray()
+            # start timer when streaming begins
+            start_time = time.time()
+
+            for chunk in response.iter_content(chunk_size=chunk_size):
+                if not chunk:
+                    continue
+                data.extend(chunk)
+                downloaded += len(chunk)
+                downloaded_kb = downloaded / 1024
+                # elapsed time -> format MM:SS.mmm (milliseconds)
+                elapsed_total = time.time() - start_time
+                elapsed_ms = int(elapsed_total * 1000)
+                minutes = elapsed_ms // 60000
+                seconds = (elapsed_ms % 60000) // 1000
+                ms = elapsed_ms % 1000
+                elapsed_str = f"{minutes:02d}:{seconds:02d}.{ms:03d}"
+                if total:
+                    percent = downloaded * 100 / total
+                    total_kb = total / 1024
+                    if verbose:
+                        print(f"\rDownloading {url}: {percent:.1f}% ({downloaded_kb:.1f}/{total_kb:.1f} KB) {elapsed_str}", end="", flush=True)
+                else:
+                    if verbose:
+                        print(f"\rDownloading {url}: {asset_id}: {downloaded_kb:.1f} KB {elapsed_str}", end="", flush=True)
+            if verbose:
+                print()
+
+            return bytes(data)
         except Exception as e:
             print("Failed to download asset:", e)
             return None
