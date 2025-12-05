@@ -250,7 +250,7 @@ public class World {
         for (int i = 0; i < blockPosList.size(); i++) {
             var blockPos = blockPosList.getLong(i);
             var blockState = getBlockState(blockPos);
-            if (BLOCK_DATA.isAir(blockState.block())) continue; // air
+            if (blockState.block().isAir()) continue; // air
             List<LocalizedCollisionBox> blockStateCBs = blockState.getLocalizedCollisionBoxes();
             for (int j = 0; j < blockStateCBs.size(); j++) {
                 if (blockStateCBs.get(j).intersects(cb)) {
@@ -268,7 +268,7 @@ public class World {
         for (int i = 0; i < blockPosList.size(); i++) {
             var blockPos = blockPosList.getLong(i);
             var blockState = getBlockState(blockPos);
-            if (BLOCK_DATA.isAir(blockState.block())) continue; // air
+            if (blockState.block().isAir()) continue; // air
             blockStates.add(blockState);
         }
         return blockStates;
@@ -369,7 +369,7 @@ public class World {
     }
 
     public boolean blocksMotion(Block block) {
-        return block != BlockRegistry.COBWEB && block != BlockRegistry.BAMBOO_SAPLING && block.isBlock();
+        return block != BlockRegistry.COBWEB && block != BlockRegistry.BAMBOO_SAPLING && block.solidBlock();
     }
 
     public float getFluidHeight(final @Nullable FluidState fluidState) {

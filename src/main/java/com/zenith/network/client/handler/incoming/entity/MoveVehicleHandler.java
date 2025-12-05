@@ -7,7 +7,8 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntStack;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundMoveVehiclePacket;
 
-import static com.zenith.Globals.*;
+import static com.zenith.Globals.BOT;
+import static com.zenith.Globals.CACHE;
 
 public class MoveVehicleHandler implements ClientEventLoopPacketHandler<ClientboundMoveVehiclePacket, ClientSession> {
     @Override
@@ -32,10 +33,10 @@ public class MoveVehicleHandler implements ClientEventLoopPacketHandler<Clientbo
             var passengerId = toUpdate.popInt();
             var passengerEntity = CACHE.getEntityCache().get(passengerId);
             if (passengerEntity == null) continue;
-            var passengerAttachmentData = ENTITY_DATA.getAttachment(passengerEntity.getEntityData().id());
+            var passengerAttachmentData = passengerEntity.getEntityData().entityAttachment();
             var riddenEntity = CACHE.getEntityCache().get(passengerEntity.getVehicleId());
             if (riddenEntity == null) continue;
-            var riddenAttachmentData = ENTITY_DATA.getAttachment(riddenEntity.getEntityData().id());
+            var riddenAttachmentData = riddenEntity.getEntityData().entityAttachment();
             if (passengerAttachmentData == null || riddenAttachmentData == null) continue;
             var vehicleAttachY = riddenEntity.getY() + riddenAttachmentData.passenger();
             var passengerAttachY = passengerAttachmentData.vehicle();

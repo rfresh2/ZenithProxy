@@ -242,7 +242,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
             }
             if (World.isChunkLoadedBlockPos(x, z)) {
                 Block block = World.getBlock(x, y, z);
-                if (CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace && !BLOCK_DATA.isAir(block)) {
+                if (CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace && !block.isAir()) {
                     info("A block: {} is already at [{}, {}, {}], stopping", block.name(), x, y, z);
                     return false;
                 }
@@ -401,7 +401,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         public boolean targetValid() {
             if (World.isChunkLoadedBlockPos(x, z)) {
                 Block block = World.getBlock(x, y, z);
-                if (BLOCK_DATA.isAir(block)) {
+                if (block.isAir()) {
                     if (isBreaking) {
                         succeeded = true;
                         info("Block [{}, {}, {}] broken!", x, y, z);
@@ -494,7 +494,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         public boolean targetValid() {
             if (World.isChunkLoadedBlockPos(x, z)) {
                 Block block = World.getBlock(x, y, z);
-                if (BLOCK_DATA.isAir(block)) {
+                if (block.isAir()) {
                     info("No block is at [{}, {}, {}], stopping", x, y, z);
                     return false;
                 }

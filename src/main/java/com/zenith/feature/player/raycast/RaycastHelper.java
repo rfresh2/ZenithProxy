@@ -43,7 +43,7 @@ public class RaycastHelper {
 
         final int insideBlockState = World.getBlockStateId(resX, resY, resZ);
         Block block = BLOCK_DATA.getBlockDataFromBlockStateId(insideBlockState);
-        if (!BLOCK_DATA.isAir(block)) {
+        if (!block.isAir()) {
             var raycastResult = checkBlockRaycast(startX, startY, startZ, endX, endY, endZ, resX, resY, resZ, insideBlockState, block, includeFluids);
             if (raycastResult.hit()) return raycastResult;
         }
@@ -80,7 +80,7 @@ public class RaycastHelper {
 
             final int blockStateId = World.getBlockStateId(resX, resY, resZ);
             block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
-            if (!BLOCK_DATA.isAir(block)) {
+            if (!block.isAir()) {
                 var raycastResult = checkBlockRaycast(startX, startY, startZ, endX, endY, endZ, resX, resY, resZ, blockStateId, block, includeFluids);
                 if (raycastResult.hit()) return raycastResult;
             }
@@ -112,7 +112,7 @@ public class RaycastHelper {
         final double endZ = MathHelper.lerp(-1.0E-7, rayEndPos.getZ(), z1);
         final int blockStateId = World.getBlockStateId(blockX, blockY, blockZ);
         Block block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
-        if (block == null || BLOCK_DATA.isAir(block)) return BlockRaycastResult.miss();
+        if (block == null || block.isAir()) return BlockRaycastResult.miss();
         final List<CollisionBox> collisionBoxes = BLOCK_DATA.getInteractionBoxesFromBlockStateId(blockStateId);
         if (collisionBoxes == null || collisionBoxes.isEmpty()) return BlockRaycastResult.miss();
         BlockRaycastResult result = BlockRaycastResult.miss();

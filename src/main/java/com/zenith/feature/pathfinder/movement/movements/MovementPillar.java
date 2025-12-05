@@ -18,7 +18,6 @@ import org.cloudburstmc.math.vector.Vector3d;
 import java.util.Set;
 
 import static com.zenith.Globals.BARITONE;
-import static com.zenith.Globals.BLOCK_DATA;
 import static com.zenith.feature.pathfinder.movement.ActionCosts.*;
 
 @ToString(callSuper = true)
@@ -73,7 +72,7 @@ public class MovementPillar extends Movement {
             if (placeCost >= COST_INF) {
                 return COST_INF;
             }
-            if (BLOCK_DATA.isAir(fromDownBlock)) {
+            if (fromDownBlock.isAir()) {
                 placeCost += 0.1; // slightly (1/200th of a second) penalize pillaring on what's currently air
             }
         }
@@ -235,7 +234,7 @@ public class MovementPillar extends Movement {
                 int frState = BlockStateInterface.getId(src);
                 Block fr = BlockStateInterface.getBlock(frState);
                 // TODO: Evaluate usage of getMaterial().isReplaceable()
-                if (!(BLOCK_DATA.isAir(fr) || BLOCK_DATA.isReplaceable(frState))) {
+                if (!(fr.isAir() || fr.replaceable())) {
                     RotationUtils.reachable(ctx, src, ctx.player().getBlockReachDistance())
                             .map(rot -> new MovementState.MovementTarget(rot, true))
                             .ifPresent(state::setTarget);

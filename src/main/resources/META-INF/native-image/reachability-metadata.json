@@ -2174,6 +2174,95 @@
       ]
     },
     {
+      "type": "com.zenith.mc.RegistryData"
+    },
+    {
+      "type": "com.zenith.mc.block.Block",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int",
+            "java.lang.String",
+            "int",
+            "int",
+            "int",
+            "com.zenith.mc.block.BlockOffsetType",
+            "float",
+            "float",
+            "boolean",
+            "float",
+            "boolean",
+            "java.util.EnumSet",
+            "boolean",
+            "float",
+            "float",
+            "float",
+            "boolean",
+            "org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType"
+          ]
+        },
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int",
+            "java.lang.String",
+            "int",
+            "int",
+            "int",
+            "com.zenith.mc.block.BlockOffsetType",
+            "float",
+            "float",
+            "boolean",
+            "float",
+            "boolean",
+            "java.util.EnumSet",
+            "boolean",
+            "org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.mc.block.BlockOffsetType"
+    },
+    {
+      "type": "com.zenith.mc.block.BlockTags"
+    },
+    {
+      "type": "com.zenith.mc.entity.EntityAttachment",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "double",
+            "double"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.mc.entity.EntityData",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int",
+            "java.lang.String",
+            "float",
+            "float",
+            "boolean",
+            "boolean",
+            "boolean",
+            "boolean",
+            "boolean",
+            "org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType",
+            "com.zenith.mc.entity.EntityAttachment"
+          ]
+        }
+      ]
+    },
+    {
       "type": "com.zenith.module.impl.ActiveHours$ActiveTime",
       "allDeclaredFields": true,
       "methods": [
@@ -5595,6 +5684,9 @@
     {
       "type": "org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType",
       "allDeclaredFields": true
+    },
+    {
+      "type": "org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType"
     },
     {
       "type": "org.jdbi.v3.core.Handles",

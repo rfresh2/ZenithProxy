@@ -209,7 +209,7 @@ public final class MineProcess extends BaritoneProcessHelper implements IBariton
             return true;
         }
         Block state = BlockStateInterface.getBlock(pos);
-        if (BLOCK_DATA.isAir(state)) {
+        if (state.isAir()) {
             return true;
         }
         return filter.getBlockSet().contains(state) && plausibleToBreak(context, pos);

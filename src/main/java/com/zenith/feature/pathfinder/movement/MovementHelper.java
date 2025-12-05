@@ -97,7 +97,7 @@ public final class MovementHelper {
 
     public static Ternary canWalkThroughBlockState(int blockStateId) {
         Block block = BlockStateInterface.getBlock(blockStateId);
-        if (BLOCK_DATA.isAir(block)) {
+        if (block.isAir()) {
             return YES;
         }
         if (block == BlockRegistry.FIRE
@@ -211,7 +211,7 @@ public final class MovementHelper {
 
     public static boolean fullyPassableBlockState(int state) {
         Block block = BlockStateInterface.getBlock(state);
-        if (BLOCK_DATA.isAir(block)) { // early return for most common case
+        if (block.isAir()) { // early return for most common case
             return true;
         }
         // exceptions - blocks that are isPassable true, but we can't actually jump through
@@ -270,7 +270,7 @@ public final class MovementHelper {
          *     }
          */
         Block block = BlockStateInterface.getBlock(blockStateId);
-        if (BLOCK_DATA.isAir(block)) {
+        if (block.isAir()) {
             // early return for common cases hehe
             return true;
         }

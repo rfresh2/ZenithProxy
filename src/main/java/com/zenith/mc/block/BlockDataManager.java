@@ -30,7 +30,6 @@ public class BlockDataManager {
     private static final Int2ObjectOpenHashMap<List<CollisionBox>> blockStateIdToInteractionBoxes = new Int2ObjectOpenHashMap<>(blockStateIdCount, Maps.FAST_LOAD_FACTOR);
     private static final Int2ObjectOpenHashMap<FluidState> blockStateIdToFluidState = new Int2ObjectOpenHashMap<>(100, Maps.FAST_LOAD_FACTOR);
     private static final IntOpenHashSet pathfindableStateIds = new IntOpenHashSet();
-    private static final IntOpenHashSet replaceableStateIds = new IntOpenHashSet();
     static {
         init();
     }
@@ -66,14 +65,6 @@ public class BlockDataManager {
             ArrayNode pathfindableArray = (ArrayNode) pathfindableNode;
             pathfindableArray.elements().forEachRemaining((stateId) -> {
                 pathfindableStateIds.add(stateId.asInt());
-            });
-        }
-        try (JsonParser replaceableParse = OBJECT_MAPPER.createParser(BlockDataManager.class.getResourceAsStream(
-            "/mcdata/replaceable.json"))) {
-            TreeNode replaceableNode = replaceableParse.getCodec().readTree(replaceableParse);
-            ArrayNode replaceableArray = (ArrayNode) replaceableNode;
-            replaceableArray.elements().forEachRemaining((stateId) -> {
-                replaceableStateIds.add(stateId.asInt());
             });
         }
     }
@@ -194,22 +185,20 @@ public class BlockDataManager {
         return pathfindableStateIds.contains(blockStateId);
     }
 
+    /**
+     * @deprecated Use {@link Block#replaceable()} instead
+     */
+    @Deprecated
     public boolean isReplaceable(int blockStateId) {
-        return replaceableStateIds.contains(blockStateId);
+        return getBlockDataFromBlockStateId(blockStateId).replaceable();
     }
 
+    /**
+     * @deprecated Use {@link Block#isAir()} instead
+     */
+    @Deprecated
     public boolean isAir(Block block) {
-        return block == BlockRegistry.AIR || block == BlockRegistry.CAVE_AIR || block == BlockRegistry.VOID_AIR;
-    }
-
-    public float getBlockSlipperiness(Block block) {
-        float slippy = 0.6f;
-        if (block == BlockRegistry.ICE) slippy = 0.98f;
-        if (block == BlockRegistry.SLIME_BLOCK) slippy = 0.8f;
-        if (block == BlockRegistry.PACKED_ICE) slippy = 0.98f;
-        if (block == BlockRegistry.FROSTED_ICE) slippy = 0.98f;
-        if (block == BlockRegistry.BLUE_ICE) slippy = 0.989f;
-        return slippy;
+        return block.isAir();
     }
 
     public boolean isShapeFullBlock(int blockStateId) {

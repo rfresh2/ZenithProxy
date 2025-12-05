@@ -34,7 +34,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-import static com.zenith.Globals.*;
+import static com.zenith.Globals.BOT;
+import static com.zenith.Globals.CACHE;
 
 @Getter
 public class PlayerInteractionManager {
@@ -85,7 +86,7 @@ public class PlayerInteractionManager {
             }
 
             Block block = World.getBlock(x, y, z);
-            if (!BLOCK_DATA.isAir(block) && blockBreakSpeed(block) >= 1.0) {
+            if (!block.isAir() && blockBreakSpeed(block) >= 1.0) {
                 destroyBlock(x, y, z);
                 BOT.debug("[{}] [{}, {}, {}] StartDestroyBlock START: Instant break", System.currentTimeMillis(), x, y, z);
             } else {
@@ -143,7 +144,7 @@ public class PlayerInteractionManager {
             return true;
         } else if (this.sameDestroyTarget(x, y, z)) {
             Block block = World.getBlock(x, y, z);
-            if (BLOCK_DATA.isAir(block)) {
+            if (block.isAir()) {
                 this.isDestroying = false;
                 return false;
             } else {
