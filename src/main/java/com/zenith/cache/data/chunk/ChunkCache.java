@@ -5,7 +5,6 @@ import com.viaversion.nbt.mini.MNBTWriter;
 import com.zenith.Proxy;
 import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
-import com.zenith.mc.block.BlockRegistry;
 import com.zenith.mc.dimension.DimensionData;
 import com.zenith.mc.dimension.DimensionRegistry;
 import com.zenith.network.server.ServerSession;
@@ -160,14 +159,14 @@ public class ChunkCache implements CachedData {
     // update any block entities implicitly affected by this block update
     // server doesn't send us tile entity update packets and relies on logic in client
     private void handleBlockUpdateBlockEntity(BlockChangeEntry record, int relativeX, int y, int relativeZ, Chunk chunk) {
-        if (BlockRegistry.REGISTRY.get(record.getBlock()).isAir()) {
+        var block = BLOCK_DATA.getBlockDataFromBlockStateId(record.getBlock());
+        if (block == null) {
+            CLIENT_LOG.debug("Received block update packet for unknown block id: {}", record.getBlock());
+            return;
+        }
+        if (block.isAir()) {
             chunk.blockEntities.removeIf(tileEntity -> tileEntity.getX() == relativeX && tileEntity.getY() == y && tileEntity.getZ() == relativeZ);
         } else {
-            final var block = BLOCK_DATA.getBlockDataFromBlockStateId(record.getBlock());
-            if (block == null) {
-                CLIENT_LOG.debug("Received block update packet for unknown block: {}", record.getBlock());
-                return;
-            }
             if (block.blockEntityType() != null && !chunkContainsBlockEntityTypeAtPos(chunk, relativeX, y, relativeZ, block.blockEntityType())) {
                 writeBlockEntity(chunk, block.name(), block.blockEntityType(), relativeX, y, relativeZ);
             }
