@@ -17,6 +17,7 @@ def setup_execute(config):
     if validate_linux_system(config):  # otherwise we will always select java
         while True:
             print("Select a ZenithProxy platform: (1/2)")
+            print("More info: https://wiki.2b2t.vc/Setup/#release-channels")
             print("1. java")
             print("2. linux (Recommended)")
             i1 = input("> ")
@@ -159,8 +160,7 @@ def setup_execute(config):
     print("")
 
     if discord_bot:
-        print("See Discord bot setup instructions:")
-        print("https://wiki.2b2t.vc/Discord-Bot-Guide")
+        print("Discord bot setup instructions: https://wiki.2b2t.vc/Discord-Bot-Guide")
         discord_verify_verbose = False
         while True:
             print("Enter Discord bot token:")
@@ -179,7 +179,16 @@ def setup_execute(config):
                 discord_channel_id = int(discord_channel_id)
                 if discord_channel_id < 1000000000 or discord_channel_id > 9999999999999999999:
                     raise ValueError
-                # todo: verify the bot is in this channel
+                channel_json = verify_discord_channel(discord_bot_token, str(discord_channel_id))
+                if channel_json is None:
+                    print("Invalid channel ID or bot does not have access to this channel")
+                    continue
+                guild_id = channel_json["guild_id"]
+                guild_json = get_discord_guild(discord_bot_token, guild_id)
+                if guild_json is None:
+                    print("Failed to get guild information for channel")
+                    continue
+                print(f"Found channel: '{channel_json["name"]}' ({channel_json["id"]}) in server: '{guild_json["name"]}' ({guild_id})")
                 break
             except ValueError:
                 print("Invalid ID")
@@ -191,7 +200,9 @@ def setup_execute(config):
                 discord_admin_role_id = int(discord_admin_role_id)
                 if discord_admin_role_id < 1000000000 or discord_admin_role_id > 9999999999999999999:
                     raise ValueError
-                # todo: verify the bot has this role
+                if not verify_discord_role(discord_bot_token, guild_id, str(discord_admin_role_id)):
+                    print("Invalid role ID or role does not exist in the server")
+                    continue
                 break
             except ValueError:
                 print("Invalid ID")
@@ -219,7 +230,14 @@ def setup_execute(config):
                     if discord_chat_relay_channel == discord_channel_id:
                         print("Chat Relay and Management cannot have the same channel")
                         continue
-                    # todo: verify the bot is in this channel
+                    channel_json = verify_discord_channel(discord_bot_token, str(discord_channel_id))
+                    if channel_json is None:
+                        print("Invalid channel ID or bot does not have access to this channel")
+                        continue
+                    if guild_id != channel_json["guild_id"]:
+                        print("Chat Relay channel must be in the same server as the Management channel")
+                        continue
+                    print(f"Found channel: '{channel_json["name"]}' ({channel_json["id"]}) in server: '{guild_json["name"]}' ({guild_id})")
                     break
                 except ValueError:
                     print("Invalid ID")
@@ -300,6 +318,62 @@ def verify_discord_bot_token(token, verbose=False):
         return True
     except Exception as e:
         print("ERROR: Verifying discord bot", e)
+        return False
+
+
+def verify_discord_channel(token, channel_id):
+    headers = {
+        "Authorization": "Bot " + token,
+        "User-Agent": "DiscordBot (https://github.com/rfresh2/ZenithProxy, 1.0)"
+    }
+    try:
+        response = requests.get("https://discord.com/api/channels/" + channel_id, headers=headers, timeout=10)
+        if response.status_code != 200:
+            print("ERROR: Discord API response code:", response.status_code)
+            return None
+        return response.json()
+    except Exception as e:
+        print("ERROR: Verifying discord channel", e)
+        return None
+
+
+def get_discord_guild(token, guild_id):
+    headers = {
+        "Authorization": "Bot " + token,
+        "User-Agent": "DiscordBot (https://github.com/rfresh2/ZenithProxy, 1.0)"
+    }
+    try:
+        response = requests.get("https://discord.com/api/guilds/" + guild_id, headers=headers, timeout=10)
+        if response.status_code != 200:
+            print("ERROR: Discord API response code:", response.status_code)
+            return None
+        response_json = response.json()
+        return response_json
+    except Exception as e:
+        print("ERROR: Verifying discord guild", e)
+        return None
+
+
+def verify_discord_role(token, guild_id, role_id):
+    headers = {
+        "Authorization": "Bot " + token,
+        "User-Agent": "DiscordBot (https://github.com/rfresh2/ZenithProxy, 1.0)"
+    }
+    try:
+        response = requests.get(f"https://discord.com/api/guilds/{guild_id}/roles", headers=headers, timeout=10)
+        if response.status_code != 200:
+            print("ERROR: Discord API response code:", response.status_code)
+            return False
+        response_json = response.json()
+        for role_json in response_json:
+            json_role_id = str(role_json["id"])
+            if json_role_id == role_id:
+                print(f"Found role: '{role_json['name']}' ({json_role_id})")
+                return True
+        print("ERROR: Role not found in server:", guild_id)
+        return False
+    except Exception as e:
+        print("ERROR: Verifying discord role", e)
         return False
 
 

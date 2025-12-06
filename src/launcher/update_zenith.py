@@ -27,7 +27,7 @@ def rest_update_check(config, api, asset_name, executable_name):
     if not latest_release_and_ver:
         raise RestUpdateError("Failed to get latest release for channel: " + config.release_channel)
     if latest_release_and_ver[1] == config.version and os.path.isfile(config.launch_dir + executable_name):
-        print("Already on the latest version:", config.version)
+        print(f"ZenithProxy up-to-date: {config.version}")
         return
     rest_get_assets(config, api, asset_name, latest_release_and_ver)
 
@@ -56,7 +56,7 @@ def rest_get_assets(config, api, asset_name, release_and_version):
         for existing_file in existing_files:
             if existing_file == ".gitkeep":
                 continue
-            print("Removing existing file:", existing_file)
+            print(f"Removing existing file: {existing_file}")
             os.remove(config.launch_dir + existing_file)
         with open(config.launch_dir + asset_name, "wb") as f:
             f.write(asset_data)
@@ -119,7 +119,7 @@ def update_zenith_exec(config, api):
             elif config.release_channel.startswith("linux"):
                 linux_native_get_version(config, api, config.version)
         else:
-            print("Auto update is disabled, did not check for update")
+            print("Did not check for update, AutoUpdate is disabled")
         if config.release_channel == "git":
             git_read_version(config)
         config.write_launch_config()
