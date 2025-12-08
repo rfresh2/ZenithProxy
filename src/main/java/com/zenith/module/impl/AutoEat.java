@@ -58,12 +58,16 @@ public class AutoEat extends AbstractInventoryModule {
             && CACHE.getPlayerCache().getGameMode() != GameMode.CREATIVE
             && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR
             && playerHealthBelowThreshold()
-            && Proxy.getInstance().getOnlineTimeSeconds() > 1) {
+            && Proxy.getInstance().getOnlineTimeSeconds() > 1
+        ) {
+            debug("Considering eating...");
             if (delay > 0) {
+                debug("Waiting for delay: {}", delay);
                 delay--;
                 if (isEating) {
                     INPUTS.submit(InputRequest.noInput(this, getPriority()));
                     INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
+                    debug("Currently eating...");
                 }
                 return;
             }
@@ -73,12 +77,27 @@ public class AutoEat extends AbstractInventoryModule {
                     EVENT_BUS.postAsync(new AutoEatOutOfFoodEvent());
                     lastAutoEatOutOfFoodWarning = Instant.now();
                 }
+                debug("Didn't find food in inventory");
                 return;
             }
             if (switchToFood()) {
+                debug("Requesting start to eat...");
                 startEating();
             }
         } else {
+            if (!CACHE.getPlayerCache().getThePlayer().isAlive()) {
+                debug("Not eating because player is dead!");
+            }
+            if (CACHE.getPlayerCache().getGameMode() == GameMode.CREATIVE
+                || CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
+                debug("Not eating because in creative/spectator!");
+            }
+            if (!playerHealthBelowThreshold()) {
+                debug("Not eating because health/hunger above threshold!");
+            }
+            if (Proxy.getInstance().getOnlineTimeSeconds() <= 1) {
+                debug("Not eating because online time <= 1 second!");
+            }
             isEating = false;
         }
     }
@@ -105,6 +124,7 @@ public class AutoEat extends AbstractInventoryModule {
             .addInputExecutedListener(future -> {
                 isEating = true;
                 delay = 50;
+                debug("Started eating");
             });
     }
 
