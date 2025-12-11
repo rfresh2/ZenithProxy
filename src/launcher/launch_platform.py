@@ -8,9 +8,11 @@ from enum import Enum
 import requests
 
 from jdk_install import get_java_executable, JavaInstallType
+from launch_config import LaunchConfig
+from version import Version
 
 
-def validate_linux_cpu_flags():
+def validate_linux_cpu_flags() -> bool:
     x86_64_v3_flags = ["avx", "avx2", "bmi1", "bmi2", "fma", "sse4_1", "sse4_2", "ssse3"]
     try:
         output = subprocess.check_output(["cat", "/proc/cpuinfo"], stderr=subprocess.STDOUT, text=True)
@@ -34,7 +36,7 @@ def validate_linux_cpu_flags():
         return False
 
 
-def validate_linux_glibc_version(config):
+def validate_linux_glibc_version(config: LaunchConfig) -> bool:
     try:
         mc_version = config.get_mc_version()
         old_versions = ["1.12.2", "1.20.1", "1.20.4", "1.20.6", "1.21.0"]
@@ -61,7 +63,7 @@ def validate_linux_glibc_version(config):
         return False
 
 
-def validate_linux_system(config):
+def validate_linux_system(config: LaunchConfig) -> bool:
     try:
         return (
             get_platform_os() == OperatingSystem.LINUX
@@ -73,20 +75,29 @@ def validate_linux_system(config):
         return False
 
 
-def validate_java_system(config, install_type):
-    min_java_version = 17 if config.version.startswith("1") else 21
-    java_executable = get_java_executable(install_type=install_type)
+def validate_java_system(config: LaunchConfig, install_type) -> bool:
+    java_version = min_java_version(config)
+    java_executable = get_java_executable(java_version, install_type=install_type)
     if java_executable is None:
-        print(f"Java >={min_java_version} not found.")
+        print(f"Java >={java_version} not found.")
         return False
     return True
 
 
-def validate_git_system():
+def min_java_version(config: LaunchConfig) -> int:
+    if config.version.startswith("1"):
+        return 17
+    mc_version = Version(config.get_mc_version())
+    if mc_version < Version("1.21.11"):
+        return 21
+    return 25
+
+
+def validate_git_system() -> bool:
     return os.path.isdir(".git")
 
 
-def validate_system_with_config(config):
+def validate_system_with_config(config: LaunchConfig) -> bool:
     if config.release_channel == "git":
         return validate_git_system()
     elif config.release_channel.startswith("java"):
@@ -97,19 +108,19 @@ def validate_system_with_config(config):
         return False
 
 
-def is_pyinstaller_bundle():
+def is_pyinstaller_bundle() -> bool:
     return getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS")
 
 
-def is_nuitka_bundle():
+def is_nuitka_bundle() -> bool:
     return "__compiled__" in globals()
 
 
-def is_windows_python_bundle():
+def is_windows_python_bundle() -> bool:
     return os.path.exists("python/python.exe")
 
 
-def executable_path():
+def executable_path() -> str:
     if is_nuitka_bundle():
         return sys.argv[0]
     return sys.executable
@@ -125,7 +136,7 @@ class OperatingSystem(Enum):
     MACOS = "macos"
 
 
-def get_platform_os():
+def get_platform_os() -> OperatingSystem:
     if platform.system() == "Windows":
         return OperatingSystem.WINDOWS
     elif platform.system() == "Linux":
@@ -141,7 +152,7 @@ class CpuArch(Enum):
     AARCH64 = "aarch64"
 
 
-def get_platform_arch():
+def get_platform_arch() -> CpuArch:
     uname = platform.machine().lower()
     arm64_names = ["aarch64", "arm64", "aarch64_be", "armv8b", "armv8l"]
     x64_names = ["amd64", "x86_64", "x64"]
@@ -153,7 +164,7 @@ def get_platform_arch():
         raise PlatformError("Unsupported CPU architecture: " + uname)
 
 
-def get_public_ip():
+def get_public_ip() -> str | None:
     response = requests.get("https://api.ipify.org", timeout=10)
     if response.status_code == 200:
         return response.content.decode()
@@ -162,7 +173,7 @@ def get_public_ip():
         return None
 
 
-def check_port_in_use(port):
+def check_port_in_use(port) -> bool:
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind(("localhost", port))

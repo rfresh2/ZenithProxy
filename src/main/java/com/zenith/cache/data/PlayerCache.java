@@ -46,6 +46,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import static com.zenith.Globals.CACHE;
+import static com.zenith.Globals.BOT;
 import static org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot.*;
 
 
@@ -233,7 +234,7 @@ public class PlayerCache implements CachedData {
     }
 
     public double getEyeY() {
-        return getY() + (isSneaking ? 1.27 : 1.62);
+        return getY() + BOT.getEntityDimensions(getThePlayer().getPose()).getEyeHeight();
     }
 
     public PlayerCache setY(double y)    {

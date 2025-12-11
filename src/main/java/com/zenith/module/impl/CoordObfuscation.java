@@ -17,7 +17,6 @@ import com.zenith.feature.coordobf.ObfPlayerState;
 import com.zenith.feature.coordobf.ServerTeleport;
 import com.zenith.feature.coordobf.handlers.inbound.*;
 import com.zenith.feature.coordobf.handlers.outbound.*;
-import com.zenith.feature.player.Bot;
 import com.zenith.feature.player.World;
 import com.zenith.mc.block.BlockOffsetType;
 import com.zenith.mc.block.BlockPos;
@@ -42,6 +41,7 @@ import lombok.Getter;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTypes;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.Pose;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PositionElement;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
@@ -564,7 +564,7 @@ public class CoordObfuscation extends Module {
     }
 
     public boolean isNearOffsetBlockStates() {
-        var playerCb = new LocalizedCollisionBox(Bot.STANDING_COLLISION_BOX, CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY(), CACHE.getPlayerCache().getZ());
+        var playerCb = new LocalizedCollisionBox(BOT.getCollisionBox(Pose.STANDING), CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY(), CACHE.getPlayerCache().getZ());
         for (var posLong : World.getBlockPosLongListInCollisionBox(playerCb)) {
             int blockStateId = World.getBlockStateId(BlockPos.getX(posLong), BlockPos.getY(posLong), BlockPos.getZ(posLong));
             var block = World.getBlock(blockStateId);
