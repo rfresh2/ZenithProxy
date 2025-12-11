@@ -1251,11 +1251,12 @@ public final class Bot extends ModuleUtils {
         if (full) {
             this.isSneaking = this.wasSneaking = false;
             this.isSprinting = this.lastSprinting = false;
-            this.pose = CACHE.getPlayerCache().getThePlayer().getPose();
         } else {
             this.isSneaking = this.wasSneaking = CACHE.getPlayerCache().isSneaking();
             this.isSprinting = this.lastSprinting = CACHE.getPlayerCache().isSprinting();
         }
+        this.pose = CACHE.getPlayerCache().getThePlayer().getPose();
+        this.isSwimming = CACHE.getPlayerCache().getThePlayer().isSwimming();
         rideTick();
         syncPlayerCollisionBox();
         updateAttributes();
