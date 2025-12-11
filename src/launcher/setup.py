@@ -9,6 +9,7 @@ import launch_platform
 from jdk_install import get_java_executable, JavaInstallType
 from launch_config import read_launch_config_file
 from launch_platform import get_public_ip, check_port_in_use
+from launch_platform import min_java_version
 from launch_platform import validate_linux_system
 from utils import critical_error
 
@@ -405,7 +406,7 @@ def setup_unattended(config):
                 config.release_channel = "linux." + mc_version
             else:
                 config.release_channel = "java." + mc_version
-                java_exec = get_java_executable(install_type=JavaInstallType.AUTO_INSTALL)
+                java_exec = get_java_executable(min_java_version(config), install_type=JavaInstallType.AUTO_INSTALL)
                 if java_exec is None:
                     critical_error("Java not found and auto install failed")
         config.write_launch_config()

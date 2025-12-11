@@ -3,12 +3,10 @@ package com.zenith.feature.chatschema;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.zenith.Proxy;
 import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,12 +55,7 @@ public class ChatSchemaParser {
     }
 
     public static String getServerAddress() {
-        var connectedRemoteAddress = ((InetSocketAddress) Proxy.getInstance().getClient().getRemoteAddress());
-        if (connectedRemoteAddress != null) {
-            return connectedRemoteAddress.getHostString().toLowerCase().trim();
-        } else {
-            return CONFIG.client.server.address.toLowerCase().trim();
-        }
+        return CONFIG.client.server.address.toLowerCase().trim();
     }
 
     public static @Nullable ChatParseResult tryParsePublicChat(String rawInput, String publicChatSchema) {
