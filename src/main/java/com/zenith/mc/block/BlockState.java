@@ -12,7 +12,7 @@ import static com.zenith.Globals.BLOCK_DATA;
 
 public record BlockState(Block block, int id, int x, int y, int z) {
     public boolean isSolidBlock() {
-        return block.isBlock();
+        return block.solidBlock();
     }
 
     public boolean isShapeFullBlock() {

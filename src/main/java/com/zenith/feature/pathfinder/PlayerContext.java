@@ -56,7 +56,7 @@ public final class PlayerContext {
     //    }
     //
     public Vector3d playerHead() {
-        return Vector3d.from(player().getX(), player().getY() + eyeHeight(player().isSneaking()), player().getZ());
+        return Vector3d.from(player().getX(), player().getEyeY(), player().getZ());
     }
 
 //

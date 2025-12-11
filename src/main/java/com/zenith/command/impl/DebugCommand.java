@@ -273,6 +273,11 @@ public class DebugCommand extends Command {
                 CONFIG.debug.botPitchPrecisionClamping = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Bot Pitch Precision Clamping " + toggleStrCaps(CONFIG.debug.botPitchPrecisionClamping));
+            })))
+            .then(literal("botRotateBeforeInteract").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.botRotateBeforeInteract = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Bot Rotate Before Interact " + toggleStrCaps(CONFIG.debug.botRotateBeforeInteract));
             })));
     }
 

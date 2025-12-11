@@ -47,18 +47,17 @@ In the discord server settings:
 
 ![](./_assets/img/discord-setup/DiscordSetup5.png)
 
-Create a role for users to manage the bot:
+1: Create a role for users to manage the bot:
 
 ![](./_assets/img/discord-setup/DiscordSetup4.png)
 
+2: Assign the role to yourself and any other users who should be able to manage the bot.
 
-Assign the role to yourself and any other users who should be able to manage the bot.
-
-Create a channel to manage the bot in:
+3: Create a channel to manage the bot in:
 
 ![](./_assets/img/discord-setup/DiscordSetup6.png)
 
-(Optional) Then create another channel for ZenithProxy's chat relay (live chat)
+4: (Optional) Create another channel for ZenithProxy's chat relay (live chat)
 
 ## Configure ZenithProxy
 

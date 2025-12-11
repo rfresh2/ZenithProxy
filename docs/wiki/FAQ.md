@@ -8,6 +8,8 @@
 
 `connect`
 
+If the Microsoft website is automatically logging you in with the wrong account, open the login link in an incognito/private browsing window.
+
 ## Switch the MC server ZenithProxy connects to
 
 `server <address>`

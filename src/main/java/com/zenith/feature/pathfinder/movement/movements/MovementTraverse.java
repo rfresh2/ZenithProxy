@@ -20,7 +20,8 @@ import org.cloudburstmc.math.vector.Vector3d;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.zenith.Globals.*;
+import static com.zenith.Globals.CONFIG;
+import static com.zenith.Globals.PATH_LOG;
 import static com.zenith.feature.pathfinder.movement.ActionCosts.*;
 
 @ToString(callSuper = true)
@@ -187,7 +188,7 @@ public class MovementTraverse extends Movement {
 
             float yawToDest = RotationHelper.rotationTo(blockCenter.getX(), blockCenter.getY(), blockCenter.getZ()).getX(); // RotationUtils.calcRotationFromVec3d(ctx.playerHead(), VecUtils.calculateBlockCenter(dest), ctx.playerRotations()).getYaw();
             float pitchToBreak = state.getTarget().rotation().pitch();
-            if ((MovementHelper.isBlockNormalCube(pb0) || BLOCK_DATA.isAir(pb0Block) && (MovementHelper.isBlockNormalCube(pb1) || BLOCK_DATA.isAir(pb1Block)))) {
+            if ((MovementHelper.isBlockNormalCube(pb0) || pb0Block.isAir() && (MovementHelper.isBlockNormalCube(pb1) || pb1Block.isAir()))) {
                 // in the meantime, before we're right up against the block, we can break efficiently at this angle
                 pitchToBreak = 26;
             }

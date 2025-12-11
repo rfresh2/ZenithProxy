@@ -1,9 +1,11 @@
 package com.zenith.feature.player;
 
 import com.google.common.collect.Lists;
+import com.zenith.Proxy;
 import com.zenith.cache.data.entity.EntityLiving;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.client.ClientBotTick;
+import com.zenith.event.client.ClientTickEvent;
 import com.zenith.mc.block.*;
 import com.zenith.mc.block.properties.api.BlockStateProperties;
 import com.zenith.mc.dimension.DimensionRegistry;
@@ -92,7 +94,7 @@ public final class Bot extends ModuleUtils {
     private float jumpStrength = 0.42f;
     private float flyingSpeed = 0.05f;
     private boolean onGroundNoBlocks = false;
-    private Optional<BlockPos> supportingBlockPos = Optional.empty();
+    @Getter Optional<BlockPos> supportingBlockPos = Optional.empty();
     private int jumpingCooldown;
     @Getter private boolean horizontalCollision = false;
     private boolean horizontalCollisionMinor = false;
@@ -111,8 +113,14 @@ public final class Bot extends ModuleUtils {
             of(ClientBotTick.class, TICK_PRIORITY, this::tick),
             of(ClientBotTick.class, POST_TICK_PRIORITY, this::postTick),
             of(ClientBotTick.Starting.class, this::handleClientTickStarting),
-            of(ClientBotTick.Stopped.class, this::handleClientTickStopped)
+            of(ClientBotTick.Stopped.class, this::handleClientTickStopped),
+            of(ClientTickEvent.class, this::syncWhilePlayerControlling)
         );
+    }
+
+    private void syncWhilePlayerControlling(ClientTickEvent event) {
+        if (!Proxy.getInstance().hasActivePlayer()) return;
+        syncFromCache(true);
     }
 
     private void handleClientTickStarting(final ClientBotTick.Starting event) {
@@ -255,9 +263,14 @@ public final class Bot extends ModuleUtils {
             this.inputRequestFuture.complete(false);
             this.inputRequestFuture = InputRequestFuture.rejected;
         } else {
-            interactionTick();
+            if (!CONFIG.debug.botRotateBeforeInteract) {
+                interactionTick();
+            }
             this.yaw = this.requestedYaw;
             this.pitch = this.requestedPitch;
+            if (CONFIG.debug.botRotateBeforeInteract) {
+                interactionTick();
+            }
         }
 
         if (Math.abs(velocity.getX()) < 0.003) velocity.setX(0);
@@ -526,15 +539,14 @@ public final class Bot extends ModuleUtils {
     }
 
     private float getJumpPower() {
-        float blockJumpFactor = 1f;
         Block inBlock = World.getBlock(MathHelper.floorI(x), MathHelper.floorI(y), MathHelper.floorI(z));
-        if (inBlock == BlockRegistry.HONEY_BLOCK)
-            blockJumpFactor = 0.5f;
-        else if (supportingBlockPos.isPresent()) {
+        float inBlockJumpFactor = inBlock.jumpFactor();
+        float supportingBlockJumpFactor = 1.0f;
+        if (supportingBlockPos.isPresent()) {
             Block supportingBlock = World.getBlock(supportingBlockPos.get());
-            if (supportingBlock == BlockRegistry.HONEY_BLOCK)
-                blockJumpFactor = 0.5f;
+            supportingBlockJumpFactor = supportingBlock.jumpFactor();
         }
+        float blockJumpFactor = inBlockJumpFactor == 1.0f ? supportingBlockJumpFactor : inBlockJumpFactor;
         float jumpBoostPower = 0f;
         if (CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().containsKey(Effect.JUMP_BOOST)) {
             jumpBoostPower = 0.1f * (CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().get(Effect.JUMP_BOOST).getAmplifier() + 1.0f);
@@ -667,7 +679,7 @@ public final class Bot extends ModuleUtils {
 
     private void travelInAir(MutableVec3d movementInputVec) {
         final Block floorBlock = World.getBlock(getVelocityAffectingPos());
-        float floorSlipperiness = BLOCK_DATA.getBlockSlipperiness(floorBlock);
+        float floorSlipperiness = floorBlock.friction();
         float friction = this.onGround ? floorSlipperiness * 0.91f : 0.91F;
         applyMovementInput(movementInputVec, floorSlipperiness);
         if (!isFlying) velocity.setY(velocity.getY() - gravity);
@@ -811,13 +823,13 @@ public final class Bot extends ModuleUtils {
                 var dragDownState = World.getBlockStateProperty(localState.block(), localState.id(), BlockStateProperties.DRAG);
                 if (dragDownState == null) continue;
                 if (dragDownState) {
-                    if (BLOCK_DATA.isAir(World.getBlock(localState.x(), localState.y() + 1, localState.z()))) {
+                    if (World.getBlock(localState.x(), localState.y() + 1, localState.z()).isAir()) {
                         velocity.setY(Math.max(-0.9, velocity.getY() - 0.03));
                     } else {
                         velocity.setY(Math.max(-0.3, velocity.getY() - 0.03));
                     }
                 } else {
-                    if (BLOCK_DATA.isAir(World.getBlock(localState.x(), localState.y() + 1, localState.z()))) {
+                    if (World.getBlock(localState.x(), localState.y() + 1, localState.z()).isAir()) {
                         velocity.setY(Math.min(1.8, velocity.getY() + 0.1));
                     } else {
                         velocity.setY(Math.min(0.7, velocity.getY() + 0.06));
@@ -1158,7 +1170,7 @@ public final class Bot extends ModuleUtils {
     private float getBlockSpeedFactor() {
         if (this.isGliding || this.isFlying) return 1.0f;
         Block inBlock = World.getBlock(MathHelper.floorI(x), MathHelper.floorI(y), MathHelper.floorI(z));
-        float inBlockSpeedFactor = getBlockSpeedFactor(inBlock);
+        float inBlockSpeedFactor = inBlock.speedFactor();
         if (inBlockSpeedFactor != 1.0f || World.isWater(inBlock)) return inBlockSpeedFactor;
         int blockX, blockY, blockZ;
         if (supportingBlockPos.isPresent()) {
@@ -1172,12 +1184,7 @@ public final class Bot extends ModuleUtils {
             blockZ = MathHelper.floorI(z);
         }
         Block underPlayer = World.getBlock(blockX, blockY, blockZ);
-        return getBlockSpeedFactor(underPlayer);
-    }
-
-    private float getBlockSpeedFactor(Block block) {
-        if (block == BlockRegistry.HONEY_BLOCK || block == BlockRegistry.SOUL_SAND) return 0.4f;
-        return 1.0f;
+        return underPlayer.speedFactor();
     }
 
     public void handleSetMotion(final double motionX, final double motionY, final double motionZ) {
@@ -1436,9 +1443,9 @@ public final class Bot extends ModuleUtils {
         var vehicle = CACHE.getEntityCache().get(player.getVehicleId());
         if (vehicle == null) return;
         var vehicleEntityData = vehicle.getEntityData();
-        var vehicleAttachment = ENTITY_DATA.getAttachment(vehicleEntityData.id());
+        var vehicleAttachment = vehicleEntityData.entityAttachment();
         if (vehicleAttachment == null) return;
-        var playerAttachment = ENTITY_DATA.getAttachment(EntityRegistry.PLAYER.id());
+        var playerAttachment = EntityRegistry.PLAYER.entityAttachment();
         if (playerAttachment == null) return;
         var vehicleAttachY = vehicle.getY() + vehicleAttachment.passenger();
         var playerAttachY = playerAttachment.vehicle();

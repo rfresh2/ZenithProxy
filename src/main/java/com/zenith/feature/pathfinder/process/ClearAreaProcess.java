@@ -57,7 +57,7 @@ public class ClearAreaProcess extends BaritoneProcessHelper {
             for (int x : area.xList) {
                 for (int z : area.zList) {
                     Block block = World.getBlock(x, y, z);
-                    if (BLOCK_DATA.isAir(block)) continue;
+                    if (block.isAir()) continue;
                     if (targetValid(x, y, z)) {
                         BARITONE.breakBlock(x, y, z, true);
                         return new PathingCommand(null, PathingCommandType.DEFER);
@@ -76,7 +76,7 @@ public class ClearAreaProcess extends BaritoneProcessHelper {
     public boolean targetValid(int x, int y, int z) {
         if (World.isChunkLoadedBlockPos(x, z)) {
             Block block = World.getBlock(x, y, z);
-            if (BLOCK_DATA.isAir(block)) return false;
+            if (block.isAir()) return false;
             if (World.isFluid(block)) return false;
             if (block.destroySpeed() < 0) return false;
             var cbs = BLOCK_DATA.getInteractionBoxesFromBlockStateId(World.getBlockStateId(x, y, z));

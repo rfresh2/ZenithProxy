@@ -1,6 +1,8 @@
 package com.zenith.terminal;
 
+import ch.qos.logback.classic.Level;
 import com.google.auto.service.AutoService;
+import com.zenith.terminal.logback.LogSourceFilter;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.kyori.adventure.text.logger.slf4j.ComponentLoggerProvider;
@@ -20,6 +22,7 @@ public class ZenithComponentLoggerProvider implements ComponentLoggerProvider {
         final ComponentLogger initial = this.loggers.get(name);
         if (initial != null) return initial;
         final Logger backing = LoggerFactory.getLogger(name);
+        LogSourceFilter.registerLogger(name, Level.TRACE);
         return helper.delegating(backing, ComponentSerializer::serializeAnsi);
     }
 }

@@ -823,11 +823,23 @@ Where Colors Are Used:
 
 ### transfer
 
-Transfers connected players to a destination MC server
+Transfers connected players to a destination MC server.
+
+
+
+If no player is specified, all currently connected players will be transferred.
+
+If no port is specified, it will be looked up via DNS, or default to 25565.
 
 **Usage**
 
   ```transfer <address>```
+
+  ```transfer <address> <playerName>```
+
+  ```transfer <address> <port>```
+
+  ```transfer <address> <port> <playerName>```
 
 
 ### unsupported

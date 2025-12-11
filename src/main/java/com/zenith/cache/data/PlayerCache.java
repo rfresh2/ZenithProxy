@@ -137,7 +137,6 @@ public class PlayerCache implements CachedData {
         }
         if (type == CacheResetType.LOGIN) {
             this.teleportQueue.clear();
-            this.keepAliveQueue.clear(); // todo: maybe not?
         }
         this.spawnPosition = DEFAULT_SPAWN_POSITION;
         this.gameMode = null;

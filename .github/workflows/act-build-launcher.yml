@@ -1,5 +1,9 @@
 name: Build Launcher
 
+# Command:
+
+# act workflow_dispatch -W .github\workflows\act-build-launcher.yml --artifact-server-path build\artifacts
+
 on:
   workflow_dispatch:
 
@@ -22,7 +26,7 @@ jobs:
             sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -32,8 +36,14 @@ jobs:
           uv tool install pyinstaller@${{ env.pyinstaller_version }}
 
       - name: Build launcher
-        run: |
-          uv tool run --with-requirements src/launcher/requirements.txt pyinstaller --specpath ./build -p ./src/launcher --onefile --runtime-tmpdir .launcher.tmp --noconfirm ./src/launcher/__main__.py
+        run: >
+          uv tool run --with-requirements src/launcher/requirements.txt --upgrade
+          pyinstaller@${{ env.pyinstaller_version }} --specpath ./build
+          -p ./src/launcher --onefile
+          --runtime-tmpdir .launcher.tmp
+          --noconfirm
+          -i ../src/launcher/icon.ico
+          ./src/launcher/__main__.py
 
       - name: Rename executable
         run: |
@@ -64,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Create Python executable zip
         run: zip -j launcher-py.zip src/launcher/*.py
@@ -98,7 +108,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Create Python executable zip
         run: zip -j launcher-py.zip src/launcher/*.py
@@ -134,7 +144,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Download job artifacts
         uses: actions/download-artifact@v5

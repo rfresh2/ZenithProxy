@@ -92,19 +92,12 @@ public final class MovementHelper {
     }
 
     public static boolean canWalkThrough(int x, int y, int z, int blockStateId) {
-        Ternary canWalkThrough = canWalkThroughBlockState(blockStateId);
-        if (canWalkThrough == YES) {
-            return true;
-        }
-        if (canWalkThrough == NO) {
-            return false;
-        }
-        return canWalkThroughPosition(x, y, z, blockStateId);
+        return PrecomputedData.INSTANCE.canWalkThrough(x, y, z, blockStateId);
     }
 
     public static Ternary canWalkThroughBlockState(int blockStateId) {
         Block block = BlockStateInterface.getBlock(blockStateId);
-        if (BLOCK_DATA.isAir(block)) {
+        if (block.isAir()) {
             return YES;
         }
         if (block == BlockRegistry.FIRE
@@ -218,7 +211,7 @@ public final class MovementHelper {
 
     public static boolean fullyPassableBlockState(int state) {
         Block block = BlockStateInterface.getBlock(state);
-        if (BLOCK_DATA.isAir(block)) { // early return for most common case
+        if (block.isAir()) { // early return for most common case
             return true;
         }
         // exceptions - blocks that are isPassable true, but we can't actually jump through
@@ -277,7 +270,7 @@ public final class MovementHelper {
          *     }
          */
         Block block = BlockStateInterface.getBlock(blockStateId);
-        if (BLOCK_DATA.isAir(block)) {
+        if (block.isAir()) {
             // early return for common cases hehe
             return true;
         }
@@ -366,14 +359,7 @@ public final class MovementHelper {
      * @return Whether or not the specified block can be walked on
      */
     public static boolean canWalkOn(int x, int y, int z, int blockStateId) {
-        Ternary canWalkOn = canWalkOnBlockState(blockStateId);
-        if (canWalkOn == YES) {
-            return true;
-        }
-        if (canWalkOn == NO) {
-            return false;
-        }
-        return canWalkOnPosition(x, y, z, blockStateId);
+        return PrecomputedData.INSTANCE.canWalkOn(x, y, z, blockStateId);
     }
 
     public static Ternary canWalkOnBlockState(int blockStateId) {

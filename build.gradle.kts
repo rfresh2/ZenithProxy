@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     id("org.graalvm.buildtools.native") version "0.11.3"
-    id("com.gradleup.shadow") version "9.2.2"
+    id("com.gradleup.shadow") version "9.3.0"
     id("io.freefair.lombok") version "9.1.0"
     `maven-publish`
 }
@@ -26,9 +26,9 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.10.8"
+val mcplVersion = "1.21.10.9"
 dependencies {
-    api("com.github.rfresh2:JDA:6.1.21") {
+    api("com.github.rfresh2:JDA:6.1.23") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -76,15 +76,13 @@ dependencies {
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
     api("org.postgresql:postgresql:42.7.8")
-    api("org.jdbi:jdbi3-postgres:3.49.6")
+    api("org.jdbi:jdbi3-postgres:3.50.0")
     api("com.google.guava:guava:33.5.0-jre")
     api("ch.qos.logback:logback-classic:1.5.21")
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1")
-    api("org.jspecify:jspecify:1.0.0")
-    api("net.kyori:adventure-text-logger-slf4j:4.25.0")
+    api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
     testImplementation("org.junit.jupiter:junit-jupiter:6.0.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -324,7 +322,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "com.zenith"
             artifactId = "ZenithProxy"
-            version =  providers.environmentVariable("ZENITH_RELEASE_TAG").orElse("0.0.0+${project.version}").get()
+            version = providers.environmentVariable("ZENITH_RELEASE_TAG").orElse("0.0.0+${project.version}").get()
             from(components["java"])
         }
     }

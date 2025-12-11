@@ -29,7 +29,7 @@ def update_launcher_exec(config, api):
             raise LauncherUpdateError("Launcher executable not found, skipping launcher update:", current_executable_name)
         current_launcher_sha1 = compute_sha1(current_executable_name)
         if current_launcher_sha1 in hashes_list:
-            print("Already on the latest launcher")
+            print(f"Launcher up-to-date: {current_launcher_sha1}")
             return
         print("Found new launcher, current version:", current_launcher_sha1)
         launcher_asset_id = api.get_release_tag_asset_id(launcher_tag, launcher_asset_file_name)
@@ -49,7 +49,7 @@ def update_launcher_exec(config, api):
         if not os.path.isfile(new_executable_path):
             raise LauncherUpdateError("Failed to extract launcher executable:", new_executable_path)
         new_launcher_sha1 = compute_sha1(new_executable_path)
-        print("New launcher version:", new_launcher_sha1)
+        print(f"New launcher version: {new_launcher_sha1}")
         # Preserve current launcher executable name if its changed
         replace_launcher_executable(os_platform, current_executable_name, new_executable_path, current_launcher_sha1)
         if is_pyinstaller:
