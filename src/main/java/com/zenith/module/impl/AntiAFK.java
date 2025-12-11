@@ -29,12 +29,12 @@ public class AntiAFK extends Module {
     private boolean shouldSneak = false;
     private boolean shouldWalk = false;
     private final List<WalkDirection> walkDirections = asList(
-            new WalkDirection(1, 0), new WalkDirection(-1, 0),
-            new WalkDirection(1, 1), new WalkDirection(-1, -1),
-            new WalkDirection(0, -1), new WalkDirection(0, 1),
-            new WalkDirection(-1, 1), new WalkDirection(1, -1),
-            new WalkDirection(-1, 0), new WalkDirection(1, 0),
-            new WalkDirection(1, -1), new WalkDirection(-1, 1),
+//            new WalkDirection(1, 0), new WalkDirection(-1, 0),
+//            new WalkDirection(1, 1), new WalkDirection(-1, -1),
+//            new WalkDirection(0, -1), new WalkDirection(0, 1),
+//            new WalkDirection(-1, 1), new WalkDirection(1, -1),
+//            new WalkDirection(-1, 0), new WalkDirection(1, 0),
+//            new WalkDirection(1, -1), new WalkDirection(-1, 1),
             new WalkDirection(0, 1), new WalkDirection(0, -1)
     );
     private final Iterator<WalkDirection> walkDirectionIterator = Iterators.cycle(walkDirections);

@@ -811,6 +811,10 @@ public class Proxy {
         if (isOn2b2t()) EXECUTOR.execute(Queue::updateQueueStatusNow);
         else {
             if (!ChatSchemaParser.hasCustomSchema()) {
+                DISCORD.sendEmbedMessage(Embed.builder()
+                    .title("No Chat Schema")
+                    .errorColor()
+                );
                 CLIENT_LOG.warn("No custom chat schema found for server: {}, setting one may be required for chats and whispers to parse correctly: `help chatSchema`", ChatSchemaParser.getServerAddress());
             }
         }

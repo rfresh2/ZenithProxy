@@ -1,5 +1,6 @@
 package com.zenith.feature.player;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.zenith.Proxy;
 import com.zenith.cache.data.entity.EntityLiving;
@@ -10,6 +11,7 @@ import com.zenith.mc.block.*;
 import com.zenith.mc.block.properties.api.BlockStateProperties;
 import com.zenith.mc.dimension.DimensionRegistry;
 import com.zenith.mc.entity.EntityData;
+import com.zenith.mc.entity.EntityDimensions;
 import com.zenith.mc.entity.EntityRegistry;
 import com.zenith.module.api.ModuleUtils;
 import com.zenith.util.math.MathHelper;
@@ -24,6 +26,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.Attribute;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeModifier;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeType;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.ModifierOperation;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.Pose;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
@@ -63,12 +66,23 @@ public final class Bot extends ModuleUtils {
     private float lastPitch;
     @Getter private boolean onGround;
     private boolean lastOnGround;
+    private Pose pose = Pose.STANDING;
+    public final ImmutableMap<Pose, EntityDimensions> poseDimensions = ImmutableMap.of(
+        Pose.STANDING, new EntityDimensions(0.6f, 1.8f, 1.62f),
+        Pose.SLEEPING, new EntityDimensions(0.2f, 0.2f, 0.2f),
+        Pose.FALL_FLYING, new EntityDimensions(0.6F, 0.6F, 0.4F),
+        Pose.SWIMMING, new EntityDimensions(0.6f, 0.6f, 0.4f),
+        Pose.SPIN_ATTACK, new EntityDimensions(0.6f, 0.6f, 0.4f),
+        Pose.SNEAKING, new EntityDimensions(0.6f, 1.5f, 1.27f),
+        Pose.DYING, new EntityDimensions(0.2f, 0.2f, 1.62f)
+    );
     @Getter private boolean isSneaking;
     private boolean wasSneaking;
     private boolean isSprinting;
     private boolean lastSprinting;
     private boolean isFlying;
     private boolean isFallFlying;
+    private boolean isSwimming;
     private boolean isGliding;
     private double fallDistance;
     @Getter private boolean isTouchingWater;
@@ -82,9 +96,7 @@ public final class Bot extends ModuleUtils {
     private final Input movementInput = new Input();
     private InputRequestFuture inputRequestFuture = InputRequestFuture.rejected;
     private Input lastSentMovementInput = new Input(movementInput);
-    public static final CollisionBox STANDING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.8, -0.3, 0.3);
-    public static final CollisionBox SNEAKING_COLLISION_BOX = new CollisionBox(-0.3, 0.3, 0, 1.5, -0.3, 0.3);
-    @Getter private LocalizedCollisionBox playerCollisionBox = new LocalizedCollisionBox(STANDING_COLLISION_BOX, 0, 0, 0);
+    @Getter private LocalizedCollisionBox playerCollisionBox = new LocalizedCollisionBox(getCollisionBox(Pose.STANDING), 0, 0, 0);
     private double gravity = 0.08;
     private float stepHeight = 0.6f;
     private float waterMovementEfficiency = 0.0f;
@@ -294,8 +306,8 @@ public final class Bot extends ModuleUtils {
 
         isSneaking = !isFlying
             && !CACHE.getPlayerCache().getThePlayer().isInVehicle()
-            && canPlayerFitWithinBlocksAndEntitiesWhen(SNEAKING_COLLISION_BOX)
-            && (movementInput.sneaking || !CACHE.getPlayerCache().getThePlayer().isSleeping() && !canPlayerFitWithinBlocksAndEntitiesWhen(STANDING_COLLISION_BOX));
+            && canPlayerFitWithinBlocksAndEntitiesWhen(getCollisionBox(Pose.SNEAKING))
+            && (movementInput.sneaking || !CACHE.getPlayerCache().getThePlayer().isSleeping() && !canPlayerFitWithinBlocksAndEntitiesWhen(getCollisionBox(Pose.STANDING)));
         isSprinting = movementInput.sprinting
             && isOnGround()
             && !isTouchingWater
@@ -308,7 +320,7 @@ public final class Bot extends ModuleUtils {
         if (isSprinting != lastSprinting) applySprintingSpeedAttributeModifier();
 
         updateInWaterStateAndDoFluidPushing();
-
+        updateSwimming();
         if (CACHE.getPlayerCache().isCanFly()) {
             if (CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
                 if (!CACHE.getPlayerCache().isFlying()) {
@@ -442,6 +454,7 @@ public final class Bot extends ModuleUtils {
         }
         tickEntityPushing();
         rideTick();
+        updatePlayerPose();
         this.movementInput.reset();
     }
 
@@ -479,6 +492,14 @@ public final class Bot extends ModuleUtils {
         this.inputRequestFuture.notifyListeners();
         this.inputRequestFuture = InputRequestFuture.rejected;
         sendClientPacket(ServerboundClientTickEndPacket.INSTANCE);
+    }
+
+    public CollisionBox getCollisionBox(Pose pose) {
+        return poseDimensions.get(pose).getCollisionBox();
+    }
+
+    public EntityDimensions getEntityDimensions(Pose pose) {
+        return poseDimensions.get(pose);
     }
 
     private static final String SPRINT_ATTRIBUTE_ID = "minecraft:sprinting";
@@ -581,8 +602,17 @@ public final class Bot extends ModuleUtils {
 
     private void playerTravel(MutableVec3d movementInputVec) {
         if (!CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
-            // todo: swimming movement
-            // if (swimming) { ...  }
+             if (isSwimming) {
+                 var lookAngle = MathHelper.calculateViewVector(yaw, pitch);
+                 double lookY = lookAngle.getY();
+                 double yFactor = lookY < -0.2 ? 0.085 : 0.06;
+                 if (lookY <= 0.0
+                     || movementInput.isJumping()
+                     || World.getFluidState(MathHelper.floorI(x), MathHelper.floorI(y + 1.0 - 0.1), MathHelper.floorI(z)) != null
+                 ) {
+                     velocity.add(0, ((lookY - velocity.getY()) * yFactor), 0);
+                 }
+             }
             if (isFlying) {
                 var d = velocity.getY();
                 travel(movementInputVec);
@@ -685,7 +715,7 @@ public final class Bot extends ModuleUtils {
         move();
     }
 
-    private void travelInAir(MutableVec3d movementInputVec) {
+    private void    travelInAir(MutableVec3d movementInputVec) {
         final Block floorBlock = World.getBlock(getVelocityAffectingPos());
         float floorSlipperiness = floorBlock.friction();
         float friction = this.onGround ? floorSlipperiness * 0.91f : 0.91F;
@@ -1008,7 +1038,7 @@ public final class Bot extends ModuleUtils {
     private void syncPlayerCollisionBox() {
         // todo: handle sneaking collision box y change
         //  need to store some additional state about the player's sneaking status in the cb or elsewhere
-        playerCollisionBox = new LocalizedCollisionBox(isSneaking ? SNEAKING_COLLISION_BOX : STANDING_COLLISION_BOX, x, y, z);
+        playerCollisionBox = new LocalizedCollisionBox(getCollisionBox(pose), x, y, z);
     }
 
     private void applyMovementInput(MutableVec3d movementInputVec, float slipperiness) {
@@ -1221,6 +1251,7 @@ public final class Bot extends ModuleUtils {
         if (full) {
             this.isSneaking = this.wasSneaking = false;
             this.isSprinting = this.lastSprinting = false;
+            this.pose = CACHE.getPlayerCache().getThePlayer().getPose();
         } else {
             this.isSneaking = this.wasSneaking = CACHE.getPlayerCache().isSneaking();
             this.isSprinting = this.lastSprinting = CACHE.getPlayerCache().isSprinting();
@@ -1467,7 +1498,56 @@ public final class Bot extends ModuleUtils {
     }
 
     public double getEyeY() {
-        return getY() + (isSneaking ? 1.27 : 1.62);
+        return getY() + getEntityDimensions(pose).getEyeHeight();
+    }
+
+    private void updateSwimming() {
+        if (isFlying) {
+            isSwimming = false;
+        } else {
+            if (isSwimming) {
+                isSwimming = isSprinting && isTouchingWater() && !CACHE.getPlayerCache().getThePlayer().isInVehicle();
+            } else {
+                isSwimming = isSprinting && isUnderWater() && !CACHE.getPlayerCache().getThePlayer().isInVehicle() && isTouchingWater();
+            }
+        }
+    }
+
+    private boolean isUnderWater() {
+        var eyeFluid = World.getFluidState(MathHelper.floorI(x), MathHelper.ceilI(getEyeY()), MathHelper.floorI(z));
+        if (eyeFluid == null) return false;
+        return eyeFluid.water();
+    }
+
+    private void updatePlayerPose() {
+        var swimCb = getCollisionBox(Pose.SWIMMING);
+        if (canPlayerFitWithinBlocksAndEntitiesWhen(swimCb)) {
+            Pose pose;
+            if (isFallFlying) {
+                pose = Pose.FALL_FLYING;
+            } else if (CACHE.getPlayerCache().getThePlayer().isSleeping()) {
+                pose = Pose.SLEEPING;
+            } else if (isSwimming) {
+                pose = Pose.SWIMMING;
+            } else if (isSneaking) {
+                pose = Pose.SNEAKING;
+            } else {
+                pose = Pose.STANDING;
+            }
+
+            Pose pose2;
+            if (CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR || CACHE.getPlayerCache().getThePlayer().isInVehicle() || canPlayerFitWithinBlocksAndEntitiesWhen(getCollisionBox(pose))) {
+                pose2 = pose;
+            } else if (canPlayerFitWithinBlocksAndEntitiesWhen(getCollisionBox(Pose.SNEAKING))) {
+                pose2 = Pose.SNEAKING;
+            } else {
+                pose2 = Pose.SWIMMING;
+            }
+            if (this.pose != pose2) {
+                info("Updated pose: {}", pose2);
+                this.pose = pose2;
+            }
+        }
     }
 
     public double getBlockReachDistance() {

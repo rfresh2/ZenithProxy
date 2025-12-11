@@ -55,6 +55,7 @@ public class EntityPlayer extends EntityLiving {
         if (this.selfPlayer) BOT.updateAttributes();
     }
 
+    @Override
     public boolean isAlive() {
         return this.health > 0.0f;
     }
