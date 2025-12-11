@@ -4,7 +4,7 @@ package com.zenith.mc.food;
 import com.zenith.mc.Registry;
 
 public final class FoodRegistry {
-    public static final Registry<FoodData> REGISTRY = new Registry<FoodData>(40);
+    public static final Registry<FoodData> REGISTRY = new Registry<FoodData>(44);
 
     public static final FoodData APPLE = REGISTRY.register(new FoodData(893, "apple", 64, 4.0f, 19.2f, false, true));
 
@@ -19,6 +19,14 @@ public final class FoodRegistry {
     public static final FoodData GOLDEN_APPLE = REGISTRY.register(new FoodData(986, "golden_apple", 64, 4.0f, 76.8f, true, true));
 
     public static final FoodData ENCHANTED_GOLDEN_APPLE = REGISTRY.register(new FoodData(987, "enchanted_golden_apple", 64, 4.0f, 76.8f, true, true));
+
+    public static final FoodData PUFFERFISH_BUCKET = REGISTRY.register(new FoodData(1019, "pufferfish_bucket", 1, 1.0f, 0.4f, false, true));
+
+    public static final FoodData SALMON_BUCKET = REGISTRY.register(new FoodData(1020, "salmon_bucket", 1, 2.0f, 1.6f, false, true));
+
+    public static final FoodData COD_BUCKET = REGISTRY.register(new FoodData(1021, "cod_bucket", 1, 2.0f, 1.6f, false, true));
+
+    public static final FoodData TROPICAL_FISH_BUCKET = REGISTRY.register(new FoodData(1022, "tropical_fish_bucket", 1, 1.0f, 0.4f, false, true));
 
     public static final FoodData COD = REGISTRY.register(new FoodData(1057, "cod", 64, 2.0f, 1.6f, false, true));
 
@@ -50,39 +58,39 @@ public final class FoodRegistry {
 
     public static final FoodData SPIDER_EYE = REGISTRY.register(new FoodData(1122, "spider_eye", 64, 2.0f, 12.8f, false, false));
 
-    public static final FoodData CARROT = REGISTRY.register(new FoodData(1223, "carrot", 64, 3.0f, 21.6f, false, true));
+    public static final FoodData CARROT = REGISTRY.register(new FoodData(1227, "carrot", 64, 3.0f, 21.6f, false, true));
 
-    public static final FoodData POTATO = REGISTRY.register(new FoodData(1224, "potato", 64, 1.0f, 1.2f, false, true));
+    public static final FoodData POTATO = REGISTRY.register(new FoodData(1228, "potato", 64, 1.0f, 1.2f, false, true));
 
-    public static final FoodData BAKED_POTATO = REGISTRY.register(new FoodData(1225, "baked_potato", 64, 5.0f, 60.0f, false, true));
+    public static final FoodData BAKED_POTATO = REGISTRY.register(new FoodData(1229, "baked_potato", 64, 5.0f, 60.0f, false, true));
 
-    public static final FoodData POISONOUS_POTATO = REGISTRY.register(new FoodData(1226, "poisonous_potato", 64, 2.0f, 4.8f, false, false));
+    public static final FoodData POISONOUS_POTATO = REGISTRY.register(new FoodData(1230, "poisonous_potato", 64, 2.0f, 4.8f, false, false));
 
-    public static final FoodData GOLDEN_CARROT = REGISTRY.register(new FoodData(1228, "golden_carrot", 64, 6.0f, 172.8f, false, true));
+    public static final FoodData GOLDEN_CARROT = REGISTRY.register(new FoodData(1232, "golden_carrot", 64, 6.0f, 172.8f, false, true));
 
-    public static final FoodData PUMPKIN_PIE = REGISTRY.register(new FoodData(1237, "pumpkin_pie", 64, 8.0f, 76.8f, false, true));
+    public static final FoodData PUMPKIN_PIE = REGISTRY.register(new FoodData(1241, "pumpkin_pie", 64, 8.0f, 76.8f, false, true));
 
-    public static final FoodData RABBIT = REGISTRY.register(new FoodData(1245, "rabbit", 64, 3.0f, 10.8f, false, true));
+    public static final FoodData RABBIT = REGISTRY.register(new FoodData(1249, "rabbit", 64, 3.0f, 10.8f, false, true));
 
-    public static final FoodData COOKED_RABBIT = REGISTRY.register(new FoodData(1246, "cooked_rabbit", 64, 5.0f, 60.0f, false, true));
+    public static final FoodData COOKED_RABBIT = REGISTRY.register(new FoodData(1250, "cooked_rabbit", 64, 5.0f, 60.0f, false, true));
 
-    public static final FoodData RABBIT_STEW = REGISTRY.register(new FoodData(1247, "rabbit_stew", 1, 10.0f, 240.0f, false, true));
+    public static final FoodData RABBIT_STEW = REGISTRY.register(new FoodData(1251, "rabbit_stew", 1, 10.0f, 240.0f, false, true));
 
-    public static final FoodData MUTTON = REGISTRY.register(new FoodData(1259, "mutton", 64, 2.0f, 4.8f, false, true));
+    public static final FoodData MUTTON = REGISTRY.register(new FoodData(1264, "mutton", 64, 2.0f, 4.8f, false, true));
 
-    public static final FoodData COOKED_MUTTON = REGISTRY.register(new FoodData(1260, "cooked_mutton", 64, 6.0f, 115.200005f, false, true));
+    public static final FoodData COOKED_MUTTON = REGISTRY.register(new FoodData(1265, "cooked_mutton", 64, 6.0f, 115.200005f, false, true));
 
-    public static final FoodData CHORUS_FRUIT = REGISTRY.register(new FoodData(1278, "chorus_fruit", 64, 4.0f, 19.2f, true, false));
+    public static final FoodData CHORUS_FRUIT = REGISTRY.register(new FoodData(1283, "chorus_fruit", 64, 4.0f, 19.2f, true, false));
 
-    public static final FoodData BEETROOT = REGISTRY.register(new FoodData(1282, "beetroot", 64, 1.0f, 2.4f, false, true));
+    public static final FoodData BEETROOT = REGISTRY.register(new FoodData(1287, "beetroot", 64, 1.0f, 2.4f, false, true));
 
-    public static final FoodData BEETROOT_SOUP = REGISTRY.register(new FoodData(1284, "beetroot_soup", 1, 6.0f, 86.4f, false, true));
+    public static final FoodData BEETROOT_SOUP = REGISTRY.register(new FoodData(1289, "beetroot_soup", 1, 6.0f, 86.4f, false, true));
 
-    public static final FoodData SUSPICIOUS_STEW = REGISTRY.register(new FoodData(1323, "suspicious_stew", 1, 6.0f, 86.4f, true, true));
+    public static final FoodData SUSPICIOUS_STEW = REGISTRY.register(new FoodData(1340, "suspicious_stew", 1, 6.0f, 86.4f, true, true));
 
-    public static final FoodData SWEET_BERRIES = REGISTRY.register(new FoodData(1356, "sweet_berries", 64, 2.0f, 1.6f, false, true));
+    public static final FoodData SWEET_BERRIES = REGISTRY.register(new FoodData(1373, "sweet_berries", 64, 2.0f, 1.6f, false, true));
 
-    public static final FoodData GLOW_BERRIES = REGISTRY.register(new FoodData(1357, "glow_berries", 64, 2.0f, 1.6f, false, true));
+    public static final FoodData GLOW_BERRIES = REGISTRY.register(new FoodData(1374, "glow_berries", 64, 2.0f, 1.6f, false, true));
 
-    public static final FoodData HONEY_BOTTLE = REGISTRY.register(new FoodData(1364, "honey_bottle", 16, 6.0f, 14.400001f, true, false));
+    public static final FoodData HONEY_BOTTLE = REGISTRY.register(new FoodData(1381, "honey_bottle", 16, 6.0f, 14.400001f, true, false));
 }

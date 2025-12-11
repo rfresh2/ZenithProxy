@@ -1,9 +1,9 @@
-name: 1.21.10 Build and Release
+name: 1.21.11 Build and Release
 
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+\+1.21.10'
+      - '[0-9]+.[0-9]+.[0-9]+\+1.21.11'
 
 jobs:
   build-java-and-linux-amd64:

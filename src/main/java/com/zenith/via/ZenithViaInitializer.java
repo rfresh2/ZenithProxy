@@ -36,6 +36,7 @@ public class ZenithViaInitializer {
 
     public void clientViaChannelInitializer(Channel channel) {
         if (!CONFIG.client.viaversion.enabled) return;
+        if (true) return;
         if (CONFIG.client.viaversion.autoProtocolVersion) updateClientViaProtocolVersion();
         if (CONFIG.client.viaversion.protocolVersion == MinecraftCodec.CODEC.getProtocolVersion()) {
             CLIENT_LOG.warn("ViaVersion enabled but the protocol is the same as ours, connecting without ViaVersion");
@@ -54,6 +55,7 @@ public class ZenithViaInitializer {
 
     public void serverViaChannelInitializer(final Channel channel) {
         if (!CONFIG.server.viaversion.enabled) return;
+        if (true) return;
         init();
         var userConnection = new UserConnectionImpl(channel, false);
         new ProtocolPipelineImpl(userConnection);

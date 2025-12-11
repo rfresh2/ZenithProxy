@@ -6,7 +6,7 @@ import com.zenith.mc.DynamicRegistry;
 import java.util.function.Supplier;
 
 public final class EnchantmentRegistry {
-    public static final DynamicRegistry<EnchantmentData> REGISTRY = new DynamicRegistry<EnchantmentData>(42);
+    public static final DynamicRegistry<EnchantmentData> REGISTRY = new DynamicRegistry<EnchantmentData>(43);
 
     public static final Supplier<EnchantmentData> AQUA_AFFINITY = () -> REGISTRY.get("aqua_affinity");
 
@@ -49,6 +49,8 @@ public final class EnchantmentRegistry {
     public static final Supplier<EnchantmentData> LOYALTY = () -> REGISTRY.get("loyalty");
 
     public static final Supplier<EnchantmentData> LUCK_OF_THE_SEA = () -> REGISTRY.get("luck_of_the_sea");
+
+    public static final Supplier<EnchantmentData> LUNGE = () -> REGISTRY.get("lunge");
 
     public static final Supplier<EnchantmentData> LURE = () -> REGISTRY.get("lure");
 
@@ -114,26 +116,27 @@ public final class EnchantmentRegistry {
         REGISTRY.register(new EnchantmentData(18, "looting", 3));
         REGISTRY.register(new EnchantmentData(19, "loyalty", 3));
         REGISTRY.register(new EnchantmentData(20, "luck_of_the_sea", 3));
-        REGISTRY.register(new EnchantmentData(21, "lure", 3));
-        REGISTRY.register(new EnchantmentData(22, "mending", 1));
-        REGISTRY.register(new EnchantmentData(23, "multishot", 1));
-        REGISTRY.register(new EnchantmentData(24, "piercing", 4));
-        REGISTRY.register(new EnchantmentData(25, "power", 5));
-        REGISTRY.register(new EnchantmentData(26, "projectile_protection", 4));
-        REGISTRY.register(new EnchantmentData(27, "protection", 4));
-        REGISTRY.register(new EnchantmentData(28, "punch", 2));
-        REGISTRY.register(new EnchantmentData(29, "quick_charge", 3));
-        REGISTRY.register(new EnchantmentData(30, "respiration", 3));
-        REGISTRY.register(new EnchantmentData(31, "riptide", 3));
-        REGISTRY.register(new EnchantmentData(32, "sharpness", 5));
-        REGISTRY.register(new EnchantmentData(33, "silk_touch", 1));
-        REGISTRY.register(new EnchantmentData(34, "smite", 5));
-        REGISTRY.register(new EnchantmentData(35, "soul_speed", 3));
-        REGISTRY.register(new EnchantmentData(36, "sweeping_edge", 3));
-        REGISTRY.register(new EnchantmentData(37, "swift_sneak", 3));
-        REGISTRY.register(new EnchantmentData(38, "thorns", 3));
-        REGISTRY.register(new EnchantmentData(39, "unbreaking", 3));
-        REGISTRY.register(new EnchantmentData(40, "vanishing_curse", 1));
-        REGISTRY.register(new EnchantmentData(41, "wind_burst", 3));
+        REGISTRY.register(new EnchantmentData(21, "lunge", 3));
+        REGISTRY.register(new EnchantmentData(22, "lure", 3));
+        REGISTRY.register(new EnchantmentData(23, "mending", 1));
+        REGISTRY.register(new EnchantmentData(24, "multishot", 1));
+        REGISTRY.register(new EnchantmentData(25, "piercing", 4));
+        REGISTRY.register(new EnchantmentData(26, "power", 5));
+        REGISTRY.register(new EnchantmentData(27, "projectile_protection", 4));
+        REGISTRY.register(new EnchantmentData(28, "protection", 4));
+        REGISTRY.register(new EnchantmentData(29, "punch", 2));
+        REGISTRY.register(new EnchantmentData(30, "quick_charge", 3));
+        REGISTRY.register(new EnchantmentData(31, "respiration", 3));
+        REGISTRY.register(new EnchantmentData(32, "riptide", 3));
+        REGISTRY.register(new EnchantmentData(33, "sharpness", 5));
+        REGISTRY.register(new EnchantmentData(34, "silk_touch", 1));
+        REGISTRY.register(new EnchantmentData(35, "smite", 5));
+        REGISTRY.register(new EnchantmentData(36, "soul_speed", 3));
+        REGISTRY.register(new EnchantmentData(37, "sweeping_edge", 3));
+        REGISTRY.register(new EnchantmentData(38, "swift_sneak", 3));
+        REGISTRY.register(new EnchantmentData(39, "thorns", 3));
+        REGISTRY.register(new EnchantmentData(40, "unbreaking", 3));
+        REGISTRY.register(new EnchantmentData(41, "vanishing_curse", 1));
+        REGISTRY.register(new EnchantmentData(42, "wind_burst", 3));
     }
 }

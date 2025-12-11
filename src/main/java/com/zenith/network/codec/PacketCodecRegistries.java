@@ -78,7 +78,7 @@ public final class PacketCodecRegistries {
         ClientboundContainerSetContentPacket.class,
         ClientboundContainerSetDataPacket.class,
         ClientboundContainerSetSlotPacket.class,
-        ClientboundHorseScreenOpenPacket.class,
+        ClientboundMountScreenOpenPacket.class,
         ClientboundMoveVehiclePacket.class,
         ClientboundOpenBookPacket.class,
         ClientboundOpenScreenPacket.class,
