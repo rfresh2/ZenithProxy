@@ -1544,10 +1544,7 @@ public final class Bot extends ModuleUtils {
             } else {
                 pose2 = Pose.SWIMMING;
             }
-            if (this.pose != pose2) {
-                info("Updated pose: {}", pose2);
-                this.pose = pose2;
-            }
+            this.pose = pose2;
         }
     }
 
