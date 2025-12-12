@@ -6,6 +6,7 @@ import com.zenith.event.player.PlayerConnectedEvent;
 import com.zenith.event.player.PlayerLoginEvent;
 import com.zenith.event.player.SpectatorConnectedEvent;
 import com.zenith.feature.player.World;
+import com.zenith.network.client.handler.incoming.CustomPayloadHandler;
 import com.zenith.network.server.ServerSession;
 import com.zenith.network.server.ZenithServerInfoBuilder;
 import com.zenith.util.Wait;
@@ -16,6 +17,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.ServerLink;
 import org.geysermc.mcprotocollib.protocol.data.game.ServerLinkType;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerSpawnInfo;
+import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundCustomPayloadPacket;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundCustomReportDetailsPacket;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundServerLinksPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundLoginPacket;
@@ -121,6 +123,9 @@ public class ProxyServerLoginHandler {
             ZenithServerInfoBuilder.INSTANCE.getMotd(),
             Proxy.getInstance().getServerIcon()
         ));
+        if (CONFIG.server.plasmoVoice.enabled && CONFIG.server.plasmoVoice.udpRelay) {
+            CustomPayloadHandler.INSTANCE.sendCachedPlasmoVoiceHandshake(connection);
+        }
         connection.send(new ClientboundServerLinksPacket(asList(
             new ServerLink(ServerLinkType.WEBSITE, null, "https://github.com/rfresh2/ZenithProxy"),
             new ServerLink(ServerLinkType.SUPPORT, null, "https://discord.gg/nJZrSaRKtb")

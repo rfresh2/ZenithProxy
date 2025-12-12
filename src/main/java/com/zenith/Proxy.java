@@ -31,6 +31,7 @@ import com.zenith.util.Wait;
 import com.zenith.util.struct.FastArrayList;
 import com.zenith.via.ZenithClientChannelInitializer;
 import com.zenith.via.ZenithServerChannelInitializer;
+import com.zenith.voice.VoiceUdpRelay;
 import dev.omega24.upnp4j.UPnP4J;
 import dev.omega24.upnp4j.util.Protocol;
 import lombok.Getter;
@@ -99,6 +100,7 @@ public class Proxy {
     private TcpConnectionManager tcpManager;
     private FileLock fileLock;
     private final long startTime = System.currentTimeMillis();
+    private VoiceUdpRelay voiceUdpRelay;
 
     public static void main(String... args) {
         Locale.setDefault(Locale.ENGLISH);
@@ -544,6 +546,11 @@ public class Proxy {
         }
         this.server.addListener(new ProxyServerListener());
         this.server.bind(false);
+        if (voiceUdpRelay == null && CONFIG.server.plasmoVoice.enabled && CONFIG.server.plasmoVoice.udpRelay) {
+            voiceUdpRelay = new VoiceUdpRelay();
+            int udpPort = CONFIG.server.getProxyPortForTransfer();
+            voiceUdpRelay.start(address, udpPort);
+        }
         if (CONFIG.server.upnp) {
             EXECUTOR.execute(this::openUpnp);
         }
@@ -556,6 +563,18 @@ public class Proxy {
                     SERVER_LOG.info("Opened UPnP address: {}:{}", UPnP4J.getExternalIP(), server.getPort());
                 } else {
                     SERVER_LOG.info("Failed to open UPnP address: {}:{}", UPnP4J.getExternalIP(), server.getPort());
+                }
+                if (CONFIG.server.plasmoVoice.enabled && CONFIG.server.plasmoVoice.udpRelay) {
+                    try {
+                        int udpPort = CONFIG.server.getProxyPortForTransfer();
+                        if (UPnP4J.open(udpPort, Protocol.UDP)) {
+                            SERVER_LOG.info("Opened UDP UPnP address: {}:{}", UPnP4J.getExternalIP(), udpPort);
+                        } else {
+                            SERVER_LOG.info("Failed to open UDP UPnP address: {}:{}", UPnP4J.getExternalIP(), udpPort);
+                        }
+                    } catch (Exception e) {
+                        SERVER_LOG.debug("UDP UPnP not available: {}", e.getMessage());
+                    }
                 }
             } else {
                 SERVER_LOG.debug("UPnP not available!");
@@ -573,6 +592,18 @@ public class Proxy {
                 } else {
                     SERVER_LOG.info("Failed to close UPnP address: {}:{}", UPnP4J.getExternalIP(), server.getPort());
                 }
+                if (CONFIG.server.plasmoVoice.enabled && CONFIG.server.plasmoVoice.udpRelay) {
+                    try {
+                        int udpPort = CONFIG.server.getProxyPortForTransfer();
+                        if (UPnP4J.close(udpPort, Protocol.UDP)) {
+                            SERVER_LOG.info("Closed UDP UPnP address: {}:{}", UPnP4J.getExternalIP(), udpPort);
+                        } else {
+                            SERVER_LOG.info("Failed to close UDP UPnP address: {}:{}", UPnP4J.getExternalIP(), udpPort);
+                        }
+                    } catch (Exception e) {
+                        SERVER_LOG.debug("UDP UPnP not available: {}", e.getMessage());
+                    }
+                }
             } else {
                 SERVER_LOG.debug("UPnP not available!");
             }
@@ -584,6 +615,10 @@ public class Proxy {
     public synchronized void stopServer() {
         SERVER_LOG.info("Stopping server...");
         if (this.server != null && this.server.isListening()) this.server.close(true);
+        if (this.voiceUdpRelay != null) {
+            this.voiceUdpRelay.stop();
+            this.voiceUdpRelay = null;
+        }
         if (this.lanBroadcaster != null) {
             this.lanBroadcaster.stop();
             this.lanBroadcaster = null;
