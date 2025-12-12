@@ -733,6 +733,12 @@ The `timeout` arguments configures how long until players are kicked due no pack
 
   ```serverConnection chatSigning mode <disguised/passthrough/system>```
 
+  ```serverConnection plasmoVoice on/off```
+
+  ```serverConnection plasmoVoice registerChannels on/off```
+
+  ```serverConnection plasmoVoice udpRelay on/off```
+
 
 ### spectatorEntity
 
