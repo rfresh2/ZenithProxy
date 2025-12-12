@@ -374,6 +374,9 @@
       "type": "com.aayushatharva.brotli4j.Brotli4jLoader"
     },
     {
+      "type": "com.aayushatharva.brotli4j.decoder.BrotliInputStream"
+    },
+    {
       "type": "com.collarmc.pounce.MethodAccessor",
       "methods": [
         {
@@ -591,6 +594,9 @@
     },
     {
       "type": "com.github.luben.zstd.Zstd"
+    },
+    {
+      "type": "com.github.luben.zstd.ZstdInputStream"
     },
     {
       "type": "com.google.common.util.concurrent.AbstractFuture",
@@ -1149,6 +1155,9 @@
       "type": "com.viaversion.viaversion.api.minecraft.data.StructuredData[]"
     },
     {
+      "type": "com.viaversion.viaversion.api.minecraft.data.predicate.DataComponentPredicate[]"
+    },
+    {
       "type": "com.viaversion.viaversion.api.minecraft.item.DataItem",
       "allDeclaredFields": true,
       "methods": [
@@ -1175,6 +1184,9 @@
     },
     {
       "type": "com.viaversion.viaversion.api.minecraft.item.data.BlockPredicate[]"
+    },
+    {
+      "type": "com.viaversion.viaversion.api.minecraft.item.data.Consumable1_21_2$ConsumeEffect[]"
     },
     {
       "type": "com.viaversion.viaversion.api.minecraft.item.data.FilterableString[]"
@@ -3483,6 +3495,12 @@
       "type": "int[]"
     },
     {
+      "type": "io.airlift.compress.v3.zstd.ZstdInputStream"
+    },
+    {
+      "type": "io.airlift.compress.zstd.ZstdInputStream"
+    },
+    {
       "type": "io.jsonwebtoken.impl.security.StandardSecureDigestAlgorithms",
       "methods": [
         {
@@ -5524,6 +5542,9 @@
           "parameterTypes": []
         }
       ]
+    },
+    {
+      "type": "org.brotli.dec.BrotliInputStream"
     },
     {
       "type": "org.cloudburstmc.math.immutable.vector.ImmutableVectorProvider"

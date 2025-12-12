@@ -87,7 +87,7 @@ public class ChatSchemaParser {
             if (c == '$' && (i + 1 < schema.length())) {
                 var potentialToken = schema.substring(i, i + 2);
                 String p = switch (potentialToken) {
-                    case senderToken, receiverToken -> "([\\w\\d_]+)";
+                    case senderToken, receiverToken -> "([\\w\\d_.]+)";
                     case messageToken, wildcardStringToken -> "(.+)";
                     default -> null;
                 };

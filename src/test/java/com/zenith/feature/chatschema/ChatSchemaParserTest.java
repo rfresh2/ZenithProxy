@@ -16,6 +16,10 @@ public class ChatSchemaParserTest {
         "rfresh2", UUID.fromString("572e683c-888a-4a0d-bc10-5d9cfa76d892")
     );
 
+    PlayerListEntry rfresh2BedrockEntry = new PlayerListEntry(
+        ".rfresh2", UUID.fromString("00000000-0000-0000-0009-01f6c03c69e5")
+    );
+
     PlayerListEntry arrfreshEntry = new PlayerListEntry(
         "aRRfresh", UUID.fromString("7cb31e32-65dc-494e-b812-3391670374c3")
     );
@@ -35,6 +39,7 @@ public class ChatSchemaParserTest {
     public void setUp() {
         CACHE.getTabListCache().add(rfresh2Entry);
         CACHE.getTabListCache().add(arrfreshEntry);
+        CACHE.getTabListCache().add(rfresh2BedrockEntry);
         CACHE.getProfileCache().setProfile(new GameProfile(rfresh2Entry.getProfileId(), rfresh2Entry.getName()));
     }
 
@@ -55,6 +60,18 @@ public class ChatSchemaParserTest {
         assertNull(result.receiver());
         assertEquals("what's up?", result.messageContent());
     }
+
+    @Test
+    public void test2b2tBedrockPublicChat() {
+        String input = "<.rfresh2> what's up?";
+        var result = ChatSchemaParser.parse(input, schema2b2t);
+        assertNotNull(result);
+        assertEquals(ChatType.PUBLIC_CHAT, result.type());
+        assertEquals(rfresh2BedrockEntry, result.sender());
+        assertNull(result.receiver());
+        assertEquals("what's up?", result.messageContent());
+    }
+
 
     @Test
     public void test2b2tWhisperOutgoing() {

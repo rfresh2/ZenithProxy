@@ -14,7 +14,7 @@ import static java.util.Objects.isNull;
 public final class DeathMessageSchemaInstance {
     private final String schemaRaw;
     private final List<String> schema;
-    private static final Pattern userNameValidPattern = Pattern.compile("[A-Za-z0-9_]{1,16}");
+    private static final Pattern userNameValidPattern = Pattern.compile("[A-Za-z0-9_.]{1,16}");
     private final List<String> mobs;
 
     public DeathMessageSchemaInstance(final String schemaRaw, final List<String> mobs) {
