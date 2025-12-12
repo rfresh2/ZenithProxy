@@ -708,6 +708,7 @@ public final class Config {
         public boolean welcomeMessages = true;
         public boolean updateServerIcon = true;
         public final ChatSigning chatSigning = new ChatSigning();
+        public final PlasmoVoice plasmoVoice = new PlasmoVoice();
 
         public static final class ChatSigning {
             public ChatSigningMode mode = ChatSigningMode.DISGUISED;
@@ -717,6 +718,12 @@ public final class Config {
                 DISGUISED,
                 SYSTEM
             }
+        }
+
+        public static final class PlasmoVoice {
+            public boolean enabled = false;
+            public boolean registerChannels = true;
+            public boolean udpRelay = true;
         }
 
         public static final class PacketRateLimiter {
