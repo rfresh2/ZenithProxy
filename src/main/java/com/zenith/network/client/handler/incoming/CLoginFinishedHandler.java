@@ -20,6 +20,12 @@ public class CLoginFinishedHandler implements PacketHandler<ClientboundLoginFini
         session.switchOutboundState(ProtocolState.CONFIGURATION);
         session.send(new ServerboundCustomPayloadPacket(Key.key("minecraft", "brand"), BrandSerializer.serializeBrand("vanilla")));
         session.send(CACHE.getClientInfoCache().getClientInfoPacket());
+        if (com.zenith.Globals.CONFIG.server.plasmoVoice.enabled && com.zenith.Globals.CONFIG.server.plasmoVoice.registerChannels) {
+            try {
+                byte[] registerPayload = ("plasmo:voice/v2\0plasmo:voice/v2/installed\0plasmo:voice/v2/service").getBytes(java.nio.charset.StandardCharsets.UTF_8);
+                session.send(new ServerboundCustomPayloadPacket(Key.key("minecraft", "register"), registerPayload));
+            } catch (Exception ignored) {}
+        }
         return null;
     }
 }
