@@ -57,7 +57,10 @@ public class ServerConnectionCommand extends Command {
                 "timeout <seconds>",
                 "autoConnectOnLogin on/off",
                 "updateServerIcon on/off",
-                "chatSigning mode <disguised/passthrough/system>"
+                "chatSigning mode <disguised/passthrough/system>",
+                "plasmoVoice on/off",
+                "plasmoVoice registerChannels on/off",
+                "plasmoVoice udpRelay on/off"
             )
             .build();
     }
@@ -167,7 +170,35 @@ public class ServerConnectionCommand extends Command {
                 CONFIG.server.chatSigning.mode = Config.Server.ChatSigning.ChatSigningMode.valueOf(getString(c, "mode").toUpperCase());
                 c.getSource().getEmbed()
                     .title("Chat Signing Mode Set");
-            }))));
+            }))))
+            .then(literal("plasmoVoice")
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.server.plasmoVoice.enabled = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Plasmo Voice " + toggleStrCaps(CONFIG.server.plasmoVoice.enabled))
+                        .description("Restarting server...");
+                    EXECUTOR.execute(() -> {
+                        Proxy.getInstance().stopServer();
+                        Proxy.getInstance().startServer();
+                    });
+                }))
+                .then(literal("registerChannels").then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.server.plasmoVoice.registerChannels = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("PV Register Channels " + toggleStrCaps(CONFIG.server.plasmoVoice.registerChannels));
+                })))
+                .then(literal("udpRelay").then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.server.plasmoVoice.udpRelay = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("PV UDP Relay " + toggleStrCaps(CONFIG.server.plasmoVoice.udpRelay))
+                        .description("Restarting server...");
+                    EXECUTOR.execute(() -> {
+                        Proxy.getInstance().stopServer();
+                        Proxy.getInstance().startServer();
+                    });
+                })))
+            )
+        ;
     }
 
     private void syncTimeout() {
@@ -194,6 +225,9 @@ public class ServerConnectionCommand extends Command {
             .addField("Ping Log", toggleStr(CONFIG.server.ping.logPings))
             .addField("Enforce Matching Connecting Address", toggleStr(CONFIG.server.enforceMatchingConnectingAddress))
             .addField("Timeout", CONFIG.server.extra.timeout.enable ? CONFIG.server.extra.timeout.seconds : toggleStr(false))
-            .addField("Auto Connect On Login", toggleStr(CONFIG.client.extra.autoConnectOnLogin));
+            .addField("Auto Connect On Login", toggleStr(CONFIG.client.extra.autoConnectOnLogin))
+            .addField("Plasmo Voice", toggleStr(CONFIG.server.plasmoVoice.enabled))
+            .addField("PV Register Channels", toggleStr(CONFIG.server.plasmoVoice.registerChannels))
+            .addField("PV UDP Relay", toggleStr(CONFIG.server.plasmoVoice.udpRelay));
     }
 }
