@@ -30,7 +30,7 @@ public class CustomPayloadHandler implements PacketHandler<ClientboundCustomPayl
         Key channel = packet.getChannel();
         byte[] data = packet.getData();
         if (CONFIG.debug.debugLogs && !"minecraft".equals(channel.namespace())) {
-            CLIENT_LOG.info("CustomPayload received: {} len={}", channel.asString(), data != null ? data.length : -1);
+            CLIENT_LOG.debug("CustomPayload received: {} len={}", channel.asString(), data != null ? data.length : -1);
         }
         if (channel.namespace().equals("minecraft") && channel.value().equals("brand")) {
             CACHE.getChunkCache().setServerBrand(data);
