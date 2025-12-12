@@ -144,6 +144,12 @@ public class DeathMessageParserTest {
                   "LavamanHero", null, null, "Discount code Egg @ Rusherhack.org");
     }
 
+    @Test
+    public void bedrockUserTest() {
+        parseTest(".yakyyakyyou was assassinated by pillagers.",
+            ".yakyyakyyou", "pillagers", KillerType.MOB, null);
+    }
+
     private void parseTest(final String rawInput, final String victim, final String killerName, final KillerType killerType, final String weapon) {
         final var componentBuilder = Component.text();
         componentBuilder.append(Component.text(victim).clickEvent(ClickEvent.suggestCommand("/w " + victim)));
