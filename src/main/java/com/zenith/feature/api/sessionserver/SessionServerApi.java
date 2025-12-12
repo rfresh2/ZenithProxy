@@ -65,24 +65,29 @@ public class SessionServerApi extends Api {
     public Optional<GameProfile> hasJoined(final String name, final String serverId) {
         var usernameEncoded = URLEncoder.encode(name, StandardCharsets.UTF_8);
         var serverIdEncoded = URLEncoder.encode(serverId, StandardCharsets.UTF_8);
-        final HttpRequest httpRequest = buildBaseRequest("/session/minecraft/hasJoined?username=" + usernameEncoded + "&serverId=" + serverIdEncoded)
-            .GET()
-            .build();
-        try (var client = buildHttpClient()) {
-            var response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() != 200) {
+        for (int attempt = 0; attempt < 3; attempt++) {
+            final HttpRequest httpRequest = buildBaseRequest("/session/minecraft/hasJoined?username=" + usernameEncoded + "&serverId=" + serverIdEncoded)
+                .GET()
+                .build();
+            try (var client = buildHttpClient()) {
+                var response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+                if (response.statusCode() == 200) {
+                    return Optional.of(GSON.fromJson(response.body(), HasJoinedResponse.class).toGameProfile());
+                }
                 if (response.body().startsWith("<!DOCTYPE html>")) {
                     DEFAULT_LOG.error("Player: {} join has been rate limited by Mojang", name);
                     return Optional.empty();
                 }
-                DEFAULT_LOG.error("Player: {} failed to join server. Status code: {}, Response body: {}", name, response.statusCode(), response.body());
-                return Optional.empty();
+            } catch (Exception e) {
+                if (attempt == 2) {
+                    DEFAULT_LOG.error("Failed to join server. name: {}, serverId: {}", name, serverId, e);
+                }
             }
-            return Optional.of(GSON.fromJson(response.body(), HasJoinedResponse.class).toGameProfile());
-        } catch (Exception e) {
-            DEFAULT_LOG.error("Failed to join server. name: {}, serverId: {}", name, serverId, e);
-            return Optional.empty();
+            try {
+                Thread.sleep(300L + (long) (Math.random() * 700L));
+            } catch (InterruptedException ignored) {}
         }
+        return Optional.empty();
     }
 
     public Optional<GameProfile> getProfileAndSkin(final UUID uuid) {

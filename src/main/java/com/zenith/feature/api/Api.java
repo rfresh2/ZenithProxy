@@ -19,7 +19,7 @@ public abstract class Api {
     protected HttpClient buildHttpClient() {
         return HttpClient.newBuilder()
             .followRedirects(java.net.http.HttpClient.Redirect.ALWAYS)
-            .connectTimeout(Duration.ofSeconds(2))
+            .connectTimeout(Duration.ofSeconds(8))
             .build();
     }
 
