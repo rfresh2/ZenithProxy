@@ -33,6 +33,7 @@ public class SpawnPatrolCommand extends Command {
                 "goal <x> <y> <z>",
                 "maxPatrolRange <blocks>",
                 "targetOnlyNakeds on/off",
+                "targetOnlyBedrock on/off",
                 "stickyTargeting on/off",
                 "targetAttackers on/off",
                 "nether on/off",
@@ -56,7 +57,6 @@ public class SpawnPatrolCommand extends Command {
                 MODULE.get(SpawnPatrol.class).syncEnabledFromConfig();
                 c.getSource().getEmbed()
                     .title("SpawnPatrol " + toggleStrCaps(CONFIG.client.extra.spawnPatrol.enabled));
-                return OK;
             }))
             .then(literal("goal").then(argument("pos", blockPos()).executes(c -> {
                 var pos = getBlockPos(c, "pos");
@@ -70,56 +70,52 @@ public class SpawnPatrolCommand extends Command {
                 CONFIG.client.extra.spawnPatrol.maxPatrolRange = getInteger(c, "blocks");
                 c.getSource().getEmbed()
                     .title("Max Patrol Range Set");
-                return OK;
             })))
             .then(literal("targetOnlyNakeds").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.spawnPatrol.targetOnlyNakeds = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Target Only Nakeds " + toggleStrCaps(CONFIG.client.extra.spawnPatrol.targetOnlyNakeds));
-                return OK;
+            })))
+            .then(literal("targetOnlyBedrock").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.spawnPatrol.targetOnlyBedrock = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Target Only Bedrock " + toggleStrCaps(CONFIG.client.extra.spawnPatrol.targetOnlyBedrock));
             })))
             .then(literal("stickyTargeting").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.spawnPatrol.stickyTargeting = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Sticky Targeting " + toggleStrCaps(CONFIG.client.extra.spawnPatrol.stickyTargeting));
-                return OK;
             })))
             .then(literal("targetAttackers").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.spawnPatrol.targetAttackers = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Target Attackers " + toggleStrCaps(CONFIG.client.extra.spawnPatrol.targetAttackers));
-                return OK;
             })))
             .then(literal("nether").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.spawnPatrol.nether = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Nether " + toggleStrCaps(CONFIG.client.extra.spawnPatrol.nether));
-                return OK;
             })))
             .then(literal("stuckKill")
                       .then(argument("toggle", toggle()).executes(c -> {
                             CONFIG.client.extra.spawnPatrol.stuckKill = getToggle(c, "toggle");
                             c.getSource().getEmbed()
                                 .title("Stuck /kill " + toggleStrCaps(CONFIG.client.extra.spawnPatrol.stuckKill));
-                            return OK;
                       }))
                       .then(literal("seconds").then(argument("seconds", integer()).executes(c -> {
                             CONFIG.client.extra.spawnPatrol.stuckKillSeconds = getInteger(c, "seconds");
                             c.getSource().getEmbed()
                                 .title("Stuck /kill Seconds Set");
-                            return OK;
                       })))
                       .then(literal("minDist").then(argument("blocks", integer()).executes(c -> {
                           CONFIG.client.extra.spawnPatrol.stuckKillMinDist = getInteger(c, "blocks");
                           c.getSource().getEmbed()
                               .title("Stuck /kill MinDist Set");
-                          return OK;
                       })))
                       .then(literal("antiStuck").then(argument("toggle", toggle()).executes(c -> {
                           CONFIG.client.extra.spawnPatrol.stuckKillAntiStuck = getToggle(c, "toggle");
                           c.getSource().getEmbed()
                               .title("Stuck /kill AntiStuck " + toggleStrCaps(CONFIG.client.extra.spawnPatrol.stuckKillAntiStuck));
-                          return OK;
                       })))
             )
             .then(literal("ignore")
@@ -133,7 +129,6 @@ public class SpawnPatrolCommand extends Command {
                               c.getSource().getEmbed()
                                   .title("Failed");
                           });
-                          return OK;
                       })))
                       .then(literal("addAll").then(argument("playerList", wordWithChars()).executes(c -> {
                           String playerList = getString(c, "playerList");
@@ -157,20 +152,17 @@ public class SpawnPatrolCommand extends Command {
                           c.getSource().getEmbed()
                               .title("Removed " + player + " from ignore list")
                               .description(playerListToString(PLAYER_LISTS.getSpawnPatrolIgnoreList()));
-                          return OK;
                       })))
                       .then(literal("clear").executes(c -> {
                           PLAYER_LISTS.getSpawnPatrolIgnoreList().clear();
                           c.getSource().getEmbed()
                               .title("Cleared ignore list")
                               .description(playerListToString(PLAYER_LISTS.getSpawnPatrolIgnoreList()));
-                          return OK;
                       }))
                       .then(literal("list").executes(c -> {
                             c.getSource().getEmbed()
                                 .title("Ignore List")
                                 .description(playerListToString(PLAYER_LISTS.getSpawnPatrolIgnoreList()));
-                            return OK;
                       })));
     }
 
