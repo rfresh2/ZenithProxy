@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class VoiceUdpRelay {
     private static final int MAGIC = 0x4e9004e9;
+    private static final int MAX_SECRETS = 4096;
     private final Map<UUID, InetSocketAddress> secretToClient = new ConcurrentHashMap<>();
     private final Map<UUID, InetSocketAddress> secretToRemote = new ConcurrentHashMap<>();
     private volatile boolean running;
@@ -43,6 +44,10 @@ public class VoiceUdpRelay {
 
     public void updateSecretRemote(UUID secret, InetSocketAddress remote) {
         if (secret == null || remote == null) return;
+        if (secretToRemote.size() >= MAX_SECRETS) {
+            secretToRemote.clear();
+            secretToClient.clear();
+        }
         secretToRemote.put(secret, remote);
         if (com.zenith.Globals.CONFIG.debug.debugLogs) com.zenith.Globals.SERVER_LOG.info("PV secret mapped: {} -> {}:{}", secret, remote.getHostString(), remote.getPort());
     }
