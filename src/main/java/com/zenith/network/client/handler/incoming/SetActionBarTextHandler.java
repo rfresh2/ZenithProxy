@@ -58,7 +58,8 @@ public class SetActionBarTextHandler implements ClientEventLoopPacketHandler<Cli
                     if (m3.find()) return m3.group(1);
                     return "" + Integer.MAX_VALUE;
                 })
-                .map(Integer::parseInt);
+                .map(Integer::parseInt)
+                .filter(pos -> pos != Integer.MAX_VALUE);
             if (position.isPresent()) {
                 if (position.get() != session.getLastQueuePosition()) {
                     EVENT_BUS.postAsync(new QueuePositionUpdateEvent(position.get()));
