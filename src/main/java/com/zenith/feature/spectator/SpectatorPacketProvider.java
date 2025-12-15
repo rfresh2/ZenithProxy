@@ -5,7 +5,6 @@ import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.Equipment;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTypes;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.Pose;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ObjectEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Animation;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
@@ -16,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.zenith.Globals.BOT;
 import static com.zenith.Globals.CACHE;
 import static java.util.Arrays.asList;
 
@@ -88,11 +88,11 @@ public class SpectatorPacketProvider {
         return list;
     }
 
-    public static List<Packet> playerSneak() {
+    public static List<Packet> playerPose() {
         return asList(
             new ClientboundSetEntityDataPacket(
                 CACHE.getPlayerCache().getEntityId(),
-                newArrayList(new ObjectEntityMetadata<>(6, MetadataTypes.POSE, CACHE.getPlayerCache().isSneaking() ? Pose.SNEAKING : Pose.STANDING)))
+                newArrayList(new ObjectEntityMetadata<>(6, MetadataTypes.POSE, BOT.getPose())))
         );
     }
 

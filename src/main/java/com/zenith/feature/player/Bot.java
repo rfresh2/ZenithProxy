@@ -7,6 +7,7 @@ import com.zenith.cache.data.entity.EntityLiving;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.event.client.ClientBotTick;
 import com.zenith.event.client.ClientTickEvent;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.mc.block.*;
 import com.zenith.mc.block.properties.api.BlockStateProperties;
 import com.zenith.mc.dimension.DimensionRegistry;
@@ -66,7 +67,7 @@ public final class Bot extends ModuleUtils {
     private float lastPitch;
     @Getter private boolean onGround;
     private boolean lastOnGround;
-    private Pose pose = Pose.STANDING;
+    @Getter private Pose pose = Pose.STANDING;
     public final ImmutableMap<Pose, EntityDimensions> poseDimensions = ImmutableMap.of(
         Pose.STANDING, new EntityDimensions(0.6f, 1.8f, 1.62f),
         Pose.SLEEPING, new EntityDimensions(0.2f, 0.2f, 0.2f),
@@ -133,6 +134,11 @@ public final class Bot extends ModuleUtils {
     private void syncWhilePlayerControlling(ClientTickEvent event) {
         if (!Proxy.getInstance().hasActivePlayer()) return;
         syncFromCache(true);
+        var currentPose = pose;
+        updatePlayerPose();
+        if (currentPose != pose) {
+            SpectatorSync.sendPlayerPose();
+        }
     }
 
     private void handleClientTickStarting(final ClientBotTick.Starting event) {
@@ -454,7 +460,11 @@ public final class Bot extends ModuleUtils {
         }
         tickEntityPushing();
         rideTick();
+        var currentPose = pose;
         updatePlayerPose();
+        if (currentPose != pose) {
+            SpectatorSync.sendPlayerPose();
+        }
         this.movementInput.reset();
     }
 
@@ -1255,7 +1265,6 @@ public final class Bot extends ModuleUtils {
             this.isSneaking = this.wasSneaking = CACHE.getPlayerCache().isSneaking();
             this.isSprinting = this.lastSprinting = CACHE.getPlayerCache().isSprinting();
         }
-        this.pose = CACHE.getPlayerCache().getThePlayer().getPose();
         this.isSwimming = CACHE.getPlayerCache().getThePlayer().isSwimming();
         rideTick();
         syncPlayerCollisionBox();

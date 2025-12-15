@@ -14,11 +14,11 @@ public class PostOutgoingPlayerCommandHandler implements ClientEventLoopPacketHa
         switch (packet.getState()) {
             case START_SNEAKING -> {
                 CACHE.getPlayerCache().setSneaking(true);
-                SpectatorSync.sendPlayerSneakStatus();
+                SpectatorSync.sendPlayerPose();
             }
             case STOP_SNEAKING -> {
                 CACHE.getPlayerCache().setSneaking(false);
-                SpectatorSync.sendPlayerSneakStatus();
+                SpectatorSync.sendPlayerPose();
             }
             case START_SPRINTING -> CACHE.getPlayerCache().setSprinting(true);
             case STOP_SPRINTING -> CACHE.getPlayerCache().setSprinting(false);

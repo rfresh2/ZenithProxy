@@ -132,6 +132,7 @@ public class ReplayRecording implements Closeable {
         CACHE.getAllData().forEach(d ->
             d.getPackets(packet -> writePacket(System.nanoTime(), (MinecraftPacket) packet, Proxy.getInstance().getClient()), Proxy.getInstance().getClient()));
         SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(System.nanoTime(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
+        SpectatorPacketProvider.playerPose().forEach(p -> writePacket(System.nanoTime(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
         SpectatorPacketProvider.playerPosition().forEach(p -> writePacket(System.nanoTime(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
         SpectatorPacketProvider.playerEquipment().forEach(p -> writePacket(System.nanoTime(), (MinecraftPacket) p, Proxy.getInstance().getClient()));
     }
@@ -227,6 +228,7 @@ public class ReplayRecording implements Closeable {
             if (recordSelfSpawn) {
                 recordSelfSpawn = false;
                 SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(time, (MinecraftPacket) p, session, ProtocolState.GAME));
+                SpectatorPacketProvider.playerPose().forEach(p -> writePacket(time, (MinecraftPacket) p, session, ProtocolState.GAME));
             }
         } else if (packet instanceof ServerboundMovePlayerPosPacket
             || packet instanceof ServerboundMovePlayerPosRotPacket
@@ -239,7 +241,7 @@ public class ReplayRecording implements Closeable {
         } else if (packet instanceof ServerboundSwingPacket) {
             SpectatorPacketProvider.playerSwing().forEach(p -> writePacket(time, (MinecraftPacket) p, session, ProtocolState.GAME));
         } else if (packet instanceof ServerboundPlayerCommandPacket) {
-            SpectatorPacketProvider.playerSneak().forEach(p -> writePacket(time, (MinecraftPacket) p, session, ProtocolState.GAME));
+            SpectatorPacketProvider.playerPose().forEach(p -> writePacket(time, (MinecraftPacket) p, session, ProtocolState.GAME));
         }
         /**
          * Known issues because we don't cache these states:
@@ -276,6 +278,7 @@ public class ReplayRecording implements Closeable {
         if (packet instanceof ClientboundRespawnPacket) {
             final long t = time;
             SpectatorPacketProvider.playerSpawn().forEach(p -> writePacket(t, (MinecraftPacket) p, session));
+            SpectatorPacketProvider.playerPose().forEach(p -> writePacket(t, (MinecraftPacket) p, session));
         }
     }
 }
