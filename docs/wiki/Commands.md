@@ -482,6 +482,15 @@ Debug settings for features in testing or for use in development.
   ```debug passthroughResourcePacks on/off```
 
 
+### deprecationWarning
+
+Configures the ZenithProxy deprecation warning notifications
+
+**Usage**
+
+  ```deprecationWarning on/off```
+
+
 ### discord
 
 Manages the Discord bot's configuration.
