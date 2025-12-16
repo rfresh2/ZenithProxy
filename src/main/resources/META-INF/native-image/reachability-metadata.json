@@ -1663,6 +1663,24 @@
       ]
     },
     {
+      "type": "com.zenith.feature.api.mcprofile.model.MCProfileBedrockResponse",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.lang.String",
+            "java.lang.String",
+            "java.util.UUID",
+            "java.lang.String",
+            "java.lang.String",
+            "boolean",
+            "java.lang.String",
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
       "type": "com.zenith.feature.api.mcsrvstatus.model.MCSrvStatusResponse",
       "allDeclaredFields": true,
       "methods": [

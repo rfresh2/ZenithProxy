@@ -266,6 +266,7 @@ public final class Config {
                 public boolean enabled = false;
                 public boolean ignoreFriends = true;
                 public boolean targetOnlyNakeds = true;
+                public boolean targetOnlyBedrock = false;
                 public boolean targetAttackers = true;
                 public boolean stickyTargeting = true;
                 public boolean nether = true;

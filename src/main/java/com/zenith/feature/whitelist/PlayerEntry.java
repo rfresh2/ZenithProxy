@@ -1,5 +1,6 @@
 package com.zenith.feature.whitelist;
 
+import com.zenith.util.BedrockUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,5 +18,8 @@ public class PlayerEntry {
     public PlayerEntry() {} // for gson deserialization
     public String getNameMCLink() {
         return "https://namemc.com/profile/" + uuid.toString();
+    }
+    public boolean isBedrock() {
+        return BedrockUtil.isBedrock(uuid);
     }
 }
