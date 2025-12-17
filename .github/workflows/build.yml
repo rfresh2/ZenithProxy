@@ -1,4 +1,3 @@
-# Note: does not build a jar file, only runs basic build and test tasks
 name: ZenithProxy Build
 
 on:
