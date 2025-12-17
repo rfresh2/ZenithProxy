@@ -14,7 +14,7 @@ public class PostOutgoingPlayerInputHandler implements PostOutgoingPacketHandler
         var cacheSneak = CACHE.getPlayerCache().isSneaking();
         if (sneak != cacheSneak) {
             CACHE.getPlayerCache().setSneaking(sneak);
-            SpectatorSync.sendPlayerSneakStatus();
+            SpectatorSync.sendPlayerPose();
         }
     }
 }

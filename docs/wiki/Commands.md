@@ -2238,6 +2238,8 @@ Patrols spawn and paths to any player it finds, killing them if you have kill au
 
   ```spawnPatrol targetOnlyNakeds on/off```
 
+  ```spawnPatrol targetOnlyBedrock on/off```
+
   ```spawnPatrol stickyTargeting on/off```
 
   ```spawnPatrol targetAttackers on/off```

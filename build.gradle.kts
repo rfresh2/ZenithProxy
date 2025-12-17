@@ -26,9 +26,9 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.11.2"
+val mcplVersion = "1.21.11.3"
 dependencies {
-    api("com.github.rfresh2:JDA:6.1.23") {
+    api("com.github.rfresh2:JDA:6.2.24") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -36,7 +36,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.7.Final"))
+    api(platform("io.netty:netty-bom:4.2.9.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -76,9 +76,9 @@ dependencies {
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
     api("org.postgresql:postgresql:42.7.8")
-    api("org.jdbi:jdbi3-postgres:3.50.0")
+    api("org.jdbi:jdbi3-postgres:3.51.0")
     api("com.google.guava:guava:33.5.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.21")
+    api("ch.qos.logback:logback-classic:1.5.22")
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")

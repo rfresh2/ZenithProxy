@@ -251,6 +251,14 @@ public class SpawnPatrol extends Module {
         if (player.isSelfPlayer()) return false;
         if (PLAYER_LISTS.getSpawnPatrolIgnoreList().contains(player.getUuid())) return false;
         if (CONFIG.client.extra.spawnPatrol.ignoreFriends && PLAYER_LISTS.getFriendsList().contains(player.getUuid())) return false;
+        if (CONFIG.client.extra.spawnPatrol.targetOnlyBedrock) {
+            var tablistEntry = CACHE.getTabListCache().get(e.getUuid());
+            if (tablistEntry.isPresent()) {
+                if (!tablistEntry.get().getName().startsWith(".")) {
+                    return false;
+                }
+            }
+        }
         if (CONFIG.client.extra.spawnPatrol.targetOnlyNakeds) {
             int equipCount = 0;
             for (var equipEntry : e.getEquipment().entrySet()) {

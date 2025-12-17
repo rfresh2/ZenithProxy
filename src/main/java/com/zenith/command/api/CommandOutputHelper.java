@@ -85,7 +85,12 @@ public class CommandOutputHelper {
         var output = new StringBuilder();
         for (int i = 0; i < entries.size(); i++) {
             var entry = entries.get(i);
-            var line = "[" + entry.getUsername() + "](" + entry.getNameMCLink() + ")\n";
+            String line;
+            if (entry.isBedrock()) {
+                line = String.format("`%s` (Bedrock)\n", entry.getUsername());
+            } else {
+                line = String.format("[%s](%s)\n", entry.getUsername(), entry.getNameMCLink());
+            }
             if (output.length() + line.length() > 4000) { // 4096 max len + some buffer for more text before/after
                 output.append("and ").append(entries.size() - i).append(" more...");
                 break;

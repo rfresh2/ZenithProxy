@@ -125,6 +125,7 @@ public final class SpectatorSync {
         session.sendAsync(session.getEntitySpawnPacket());
         session.sendAsync(session.getSelfEntityMetadataPacket());
         SpectatorPacketProvider.playerSpawn().forEach(session::sendAsync);
+        SpectatorPacketProvider.playerPose().forEach(session::sendAsync);
         var connections = Proxy.getInstance().getActiveConnections().getArray();
         for (int i = 0; i < connections.length; i++) {
             var connection = connections[i];
@@ -191,8 +192,8 @@ public final class SpectatorSync {
         }
     }
 
-    public static void sendPlayerSneakStatus() {
-        sendSpectatorPackets(SpectatorPacketProvider::playerSneak);
+    public static void sendPlayerPose() {
+        sendSpectatorPackets(SpectatorPacketProvider::playerPose);
     }
 
     public static void sendSwing() {
