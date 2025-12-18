@@ -370,7 +370,14 @@ public class Proxy {
         }
     }
 
+    /**
+     * Launcher will restart it after this
+     */
     public void stop() {
+        stop(true);
+    }
+
+    public void stop(boolean restart) {
         DEFAULT_LOG.info("Shutting Down...");
         try {
             CompletableFuture.runAsync(() -> {
@@ -388,7 +395,7 @@ public class Proxy {
             try {
                 ((LoggerContext) LoggerFactory.getILoggerFactory()).stop();
             } finally {
-                System.exit(0);
+                System.exit(restart ? 0 : 69);
             }
         }
     }

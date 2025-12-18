@@ -84,7 +84,7 @@ public class TerminalManager {
         switch (command) {
             case "exit" -> {
                 TERMINAL_LOG.info("Exiting...");
-                Proxy.getInstance().stop();
+                Proxy.getInstance().stop(false);
             }
             default -> executeDiscordCommand(command);
         }

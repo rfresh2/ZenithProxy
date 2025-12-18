@@ -50,6 +50,8 @@ def launch_linux(config):
     try:
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
+        if e.returncode == 69:
+            critical_error("Shutdown requested by user.")
         if config.custom_jvm_args is not None:
             after = time.time()
             if after - before <= 1:
@@ -92,6 +94,8 @@ def launch_java(config):
     try:
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
+        if e.returncode == 69:
+            critical_error("Shutdown requested by user.")
         if config.custom_jvm_args is not None:
             after = time.time()
             if after - before <= 1:
@@ -125,6 +129,8 @@ def launch_git(config):
     try:
         subprocess.run(run_script, shell=True, check=True)
     except subprocess.CalledProcessError as e:
+        if e.returncode == 69:
+            critical_error("Shutdown requested by user.")
         if config.custom_jvm_args is not None:
             after = time.time()
             if after - before <= 1:

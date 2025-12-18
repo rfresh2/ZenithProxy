@@ -117,7 +117,7 @@ Prints the current status of ZenithProxy, the in-game player, and modules.
 
 Restarts and updates ZenithProxy if `autoUpdate` is enabled
 
-**Aliases:** `restart` / `shutdown` / `reboot`
+**Aliases:** `restart` / `reboot`
 
 **Usage**
 
@@ -732,6 +732,17 @@ The `timeout` arguments configures how long until players are kicked due no pack
   ```serverConnection updateServerIcon on/off```
 
   ```serverConnection chatSigning mode <disguised/passthrough/system>```
+
+
+### shutdown
+
+Shuts down ZenithProxy, without letting the launcher restart it.
+
+**Aliases:** `exit`
+
+**Usage**
+
+  ```shutdown```
 
 
 ### spectatorEntity

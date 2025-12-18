@@ -95,6 +95,7 @@ public class CommandManager {
         new ServerConnectionCommand(),
         new ServerSwitcherCommand(),
         new SessionTimeLimitCommand(),
+        new ShutdownCommand(),
         new SkinCommand(),
         new SpammerCommand(),
         new SpectatorCommand(),
