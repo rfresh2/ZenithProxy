@@ -2330,6 +2330,8 @@ To add players to the friends list see the `friends` command.
 
   ```visualRange enter whisper command <command>```
 
+  ```visualRange enter whisper whilePlayerConnected on/off```
+
   ```visualRange leave on/off```
 
   ```visualRange logout on/off```
