@@ -19,7 +19,6 @@ public class UpdateCommand extends Command {
             .description("Restarts and updates ZenithProxy if `autoUpdate` is enabled")
             .aliases(
                 "restart",
-                "shutdown",
                 "reboot"
             )
             .build();

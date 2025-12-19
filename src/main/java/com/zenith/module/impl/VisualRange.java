@@ -54,7 +54,7 @@ public class VisualRange extends Module {
 
     public void enterWhisperHandler(VisualRangeEnterEvent event) {
         if (!CONFIG.client.extra.visualRange.enterWhisper) return;
-        if (CONFIG.client.extra.visualRange.enterWhisperWhilePlayerConnected && Proxy.getInstance().hasActivePlayer()) return;
+        if (!CONFIG.client.extra.visualRange.enterWhisperWhilePlayerConnected && Proxy.getInstance().hasActivePlayer()) return;
         if (Instant.now().minusSeconds(CONFIG.client.extra.visualRange.enterWhisperCooldownSeconds).isBefore(lastWhisper)) return;
         lastWhisper = Instant.now();
         sendClientPacketAsync(ChatUtil.getWhisperChatPacket(event.playerEntry().getName(), CONFIG.client.extra.visualRange.enterWhisperMessage));
