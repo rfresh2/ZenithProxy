@@ -32,15 +32,15 @@ public class VisualRangeCommand extends Command {
             .category(CommandCategory.MODULE)
             .description("""
             Configure the VisualRange notification feature.
-            
+
             Alerts are sent both in the terminal and in discord, with optional discord mentions.
-            
+
             `replayRecording` settings will start recording when players enter your visual range and stop
             when players leave, after the set cooldown.
-            
+
             `enemy` mode will only record players who are not on your friends list.
             `all` mode will record all players, regardless of being on the friends list.
-            
+
             To add players to the friends list see the `friends` command.
             """)
             .usageLines(
@@ -52,6 +52,7 @@ public class VisualRangeCommand extends Command {
                 "enter whisper message <message>",
                 "enter whisper cooldown <seconds>",
                 "enter whisper command <command>",
+                "enter whisper whilePlayerConnected on/off",
                 "leave on/off",
                 "logout on/off",
                 "ignoreFriends on/off",
@@ -139,6 +140,11 @@ public class VisualRangeCommand extends Command {
                         c.getSource().getEmbed()
                             .title("VisualRange Enter Whisper Cooldown Set");
                         return OK;
+                    })))
+                    .then(literal("whilePlayerConnected").then(argument("toggle", toggle()).executes(c -> {
+                        CONFIG.client.extra.visualRange.enterWhisperWhilePlayerConnected = getToggle(c, "toggle");
+                        c.getSource().getEmbed()
+                            .title("VisualRange Enter Whisper While Player Connected " + toggleStrCaps(CONFIG.client.extra.visualRange.enterWhisperWhilePlayerConnected));
                     })))))
             .then(literal("ignoreFriends")
                 .then(argument("toggle", toggle()).executes(c -> {
@@ -203,6 +209,7 @@ public class VisualRangeCommand extends Command {
             .addField("Enter Whisper", toggleStr(CONFIG.client.extra.visualRange.enterWhisper))
             .addField("Enter Whisper Message", escape(CONFIG.client.extra.visualRange.enterWhisperMessage))
             .addField("Enter Whisper Cooldown", CONFIG.client.extra.visualRange.enterWhisperCooldownSeconds + "s")
+            .addField("Enter Whisper While Player Connected", toggleStr(CONFIG.client.extra.visualRange.enterWhisperWhilePlayerConnected))
             .addField("Ignore Friends", toggleStr(CONFIG.client.extra.visualRange.ignoreFriends))
             .addField("Leave Alerts", toggleStr(CONFIG.client.extra.visualRange.leaveAlert))
             .addField("Logout Alerts", toggleStr(CONFIG.client.extra.visualRange.logoutAlert))
