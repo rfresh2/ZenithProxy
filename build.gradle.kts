@@ -54,7 +54,7 @@ dependencies {
     api("io.netty:netty-resolver-dns-native-macos") { artifact { classifier = "osx-aarch_64" } }
     api("org.cloudburstmc.math:api:2.0")
     api("org.cloudburstmc.math:immutable:2.0")
-    api("org.redisson:redisson:3.52.0") {
+    api("org.redisson:redisson:4.0.0") {
         exclude(group = "io.netty")
     }
     api("com.github.rfresh2:SimpleEventBus:1.6")
@@ -78,7 +78,7 @@ dependencies {
     api("org.postgresql:postgresql:42.7.8")
     api("org.jdbi:jdbi3-postgres:3.51.0")
     api("com.google.guava:guava:33.5.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.22")
+    api("ch.qos.logback:logback-classic:1.5.23")
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")
