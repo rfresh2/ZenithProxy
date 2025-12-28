@@ -84,6 +84,10 @@ dependencies {
     api("com.mojang:brigadier:1.3.10")
     api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
+    // todo: update jda to jackson 3
+    api("com.fasterxml.jackson.core:jackson-core:2.20.1")
+    api("com.fasterxml.jackson.core:jackson-databind:2.20.1")
+    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1")
     testImplementation("org.junit.jupiter:junit-jupiter:6.0.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
