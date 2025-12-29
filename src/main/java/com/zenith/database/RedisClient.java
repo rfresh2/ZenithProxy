@@ -66,10 +66,10 @@ public class RedisClient {
         config.setNettyThreads(1)
             .setAddressResolverGroupFactory((channelType, socketChannelType, nameServerProvider) -> DefaultAddressResolverGroup.INSTANCE)
             .setThreads(1)
-            .useSingleServer()
-            .setAddress(CONFIG.database.lock.redisAddress)
             .setUsername(CONFIG.database.lock.redisUsername)
             .setPassword(CONFIG.database.lock.redisPassword)
+            .useSingleServer()
+            .setAddress(CONFIG.database.lock.redisAddress)
             .setConnectionPoolSize(1)
             .setConnectionMinimumIdleSize(1);
         config.setLockWatchdogTimeout(15000);
