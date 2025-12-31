@@ -8458,6 +8458,18 @@
       "type": "sun.util.resources.cldr.TimeZoneNames_en_US"
     },
     {
+      "type": "tools.jackson.databind.deser.Deserializers[]"
+    },
+    {
+      "type": "tools.jackson.databind.deser.KeyDeserializers[]"
+    },
+    {
+      "type": "tools.jackson.databind.deser.ValueInstantiators[]"
+    },
+    {
+      "type": "tools.jackson.databind.ser.Serializers[]"
+    },
+    {
       "type": {
         "proxy": [
           "java.sql.Connection"

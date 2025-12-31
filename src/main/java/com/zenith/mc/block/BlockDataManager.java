@@ -1,12 +1,5 @@
 package com.zenith.mc.block;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.TreeNode;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.DoubleNode;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.zenith.util.struct.Maps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -14,8 +7,14 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import lombok.SneakyThrows;
 import org.jspecify.annotations.Nullable;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static com.zenith.Globals.OBJECT_MAPPER;
 
@@ -44,98 +43,80 @@ public class BlockDataManager {
         }
         initShapeCache("blockCollisionShapes", blockStateIdToCollisionBoxes);
         initShapeCache("blockInteractionShapes", blockStateIdToInteractionBoxes);
-        try (JsonParser fluidsParse = OBJECT_MAPPER.createParser(BlockDataManager.class.getResourceAsStream(
-            "/mcdata/fluidStates.json"))) {
-            TreeNode treeNode = fluidsParse.getCodec().readTree(fluidsParse);
-            ObjectNode fluidStatesNode = (ObjectNode) treeNode;
-            for (Iterator<String> it = fluidStatesNode.fieldNames(); it.hasNext(); ) {
-                String stateIdString = it.next();
-                int stateId = Integer.parseInt(stateIdString);
-                ObjectNode fluidStateNode = (ObjectNode) fluidStatesNode.get(stateIdString);
-                boolean water = fluidStateNode.get("water").asBoolean();
-                boolean source = fluidStateNode.get("source").asBoolean();
-                int amount = fluidStateNode.get("amount").asInt();
-                boolean falling = fluidStateNode.get("falling").asBoolean();
-                blockStateIdToFluidState.put(stateId, new FluidState(water, source, amount, falling));
-            }
+        var fluidStatesNode = (ObjectNode) OBJECT_MAPPER.readTree(BlockDataManager.class.getResourceAsStream("/mcdata/fluidStates.json"));
+        for (var stateIdString : fluidStatesNode.propertyNames()) {
+            int stateId = Integer.parseInt(stateIdString);
+            ObjectNode fluidStateNode = (ObjectNode) fluidStatesNode.get(stateIdString);
+            boolean water = fluidStateNode.get("water").asBoolean();
+            boolean source = fluidStateNode.get("source").asBoolean();
+            int amount = fluidStateNode.get("amount").asInt();
+            boolean falling = fluidStateNode.get("falling").asBoolean();
+            blockStateIdToFluidState.put(stateId, new FluidState(water, source, amount, falling));
         }
-        try (JsonParser pathfindableParse = OBJECT_MAPPER.createParser(BlockDataManager.class.getResourceAsStream(
-            "/mcdata/pathfindable.json"))) {
-            TreeNode pathfindableNode = pathfindableParse.getCodec().readTree(pathfindableParse);
-            ArrayNode pathfindableArray = (ArrayNode) pathfindableNode;
-            pathfindableArray.elements().forEachRemaining((stateId) -> {
-                pathfindableStateIds.add(stateId.asInt());
-            });
-        }
+        var pathfindableArray = (ArrayNode) OBJECT_MAPPER.readTree(BlockDataManager.class.getResourceAsStream("/mcdata/pathfindable.json"));
+        pathfindableArray.elements().forEach((stateId) -> {
+            pathfindableStateIds.add(stateId.asInt());
+        });
     }
 
     @SneakyThrows
     private static void initShapeCache(String name, Int2ObjectOpenHashMap<List<CollisionBox>> output) {
-        try (JsonParser shapesParser = OBJECT_MAPPER.createParser(BlockDataManager.class.getResourceAsStream(
-            "/mcdata/" + name + ".json"))) {
-            final Int2ObjectOpenHashMap<List<CollisionBox>> shapeIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(100);
-            final Int2ObjectOpenHashMap<CollisionBox> boxIdToBox = new Int2ObjectOpenHashMap<>(100);
-            TreeNode node = shapesParser.getCodec().readTree(shapesParser);
-
-            ObjectNode boxesNode = (ObjectNode) node.get("boxes");
-            for (Iterator<String> it = boxesNode.fieldNames(); it.hasNext(); ) {
-                String boxIdName = it.next();
-                int boxId = Integer.parseInt(boxIdName);
-                ArrayNode cbArray = (ArrayNode) boxesNode.get(boxIdName);
-                double[] cbArr = new double[6];
-                int i = 0;
-                for (Iterator<JsonNode> it2 = cbArray.elements(); it2.hasNext(); ) {
-                    DoubleNode doubleNode = (DoubleNode) it2.next();
-                    cbArr[i++] = doubleNode.asDouble();
-                }
-                CollisionBox collisionBox = new CollisionBox(cbArr[0], cbArr[1], cbArr[2], cbArr[3], cbArr[4], cbArr[5]);
-                boxIdToBox.put(boxId, collisionBox);
+        final Int2ObjectOpenHashMap<List<CollisionBox>> shapeIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(100);
+        final Int2ObjectOpenHashMap<CollisionBox> boxIdToBox = new Int2ObjectOpenHashMap<>(100);
+        var node = (ObjectNode) OBJECT_MAPPER.readTree(BlockDataManager.class.getResourceAsStream("/mcdata/" + name + ".json"));
+        ObjectNode boxesNode = (ObjectNode) node.get("boxes");
+        for (var boxIdName : boxesNode.propertyNames()) {
+            int boxId = Integer.parseInt(boxIdName);
+            ArrayNode cbArray = (ArrayNode) boxesNode.get(boxIdName);
+            double[] cbArr = new double[6];
+            int i = 0;
+            for (var doubleNode : cbArray.elements()) {
+                cbArr[i++] = doubleNode.asDouble();
             }
+            CollisionBox collisionBox = new CollisionBox(cbArr[0], cbArr[1], cbArr[2], cbArr[3], cbArr[4], cbArr[5]);
+            boxIdToBox.put(boxId, collisionBox);
+        }
 
-            ObjectNode shapesNode = (ObjectNode) node.get("shapes");
-            for (Iterator<String> it = shapesNode.fieldNames(); it.hasNext(); ) {
-                String shapeIdName = it.next();
-                int shapeId = Integer.parseInt(shapeIdName);
-                ArrayNode outerCbArray = (ArrayNode) shapesNode.get(shapeIdName);
-                List<CollisionBox> collisionBoxes;
-                if (outerCbArray.isEmpty()) {
-                    collisionBoxes = Collections.emptyList();
-                } else {
-                    collisionBoxes = new ArrayList<>(outerCbArray.size());
-                    for (Iterator<JsonNode> it2 = outerCbArray.elements(); it2.hasNext(); ) {
-                        IntNode boxIdNode = (IntNode) it2.next();
-                        CollisionBox box = boxIdToBox.get(boxIdNode.asInt());
-                        collisionBoxes.add(box);
-                    }
+        ObjectNode shapesNode = (ObjectNode) node.get("shapes");
+        for (var shapeIdName : shapesNode.propertyNames()) {
+            int shapeId = Integer.parseInt(shapeIdName);
+            ArrayNode outerCbArray = (ArrayNode) shapesNode.get(shapeIdName);
+            List<CollisionBox> collisionBoxes;
+            if (outerCbArray.isEmpty()) {
+                collisionBoxes = Collections.emptyList();
+            } else {
+                collisionBoxes = new ArrayList<>(outerCbArray.size());
+                for (var boxIdNode : outerCbArray.elements()) {
+                    CollisionBox box = boxIdToBox.get(boxIdNode.asInt());
+                    collisionBoxes.add(box);
                 }
-                shapeIdToCollisionBoxes.put(shapeId, collisionBoxes);
             }
+            shapeIdToCollisionBoxes.put(shapeId, collisionBoxes);
+        }
 
-            ObjectNode blocksNode = (ObjectNode) node.get("blocks");
-            for (Iterator<String> it = blocksNode.fieldNames(); it.hasNext(); ) {
-                String blockName = it.next();
-                int blockId = Integer.parseInt(blockName);
-                JsonNode shapeNode = blocksNode.get(blockName);
-                final IntArrayList shapeIds = new IntArrayList(2);
-                if (shapeNode.isInt()) {
-                    int shapeId = shapeNode.asInt();
+        ObjectNode blocksNode = (ObjectNode) node.get("blocks");
+        for (var blockName : blocksNode.propertyNames()) {
+            int blockId = Integer.parseInt(blockName);
+            JsonNode shapeNode = blocksNode.get(blockName);
+            final IntArrayList shapeIds = new IntArrayList(2);
+            if (shapeNode.isInt()) {
+                int shapeId = shapeNode.asInt();
+                shapeIds.add(shapeId);
+            } else if (shapeNode.isArray()) {
+                ArrayNode shapeIdArray = (ArrayNode) shapeNode;
+                for (var shadeIdNode : shapeIdArray.elements()) {
+                    int shapeId = shadeIdNode.asInt();
                     shapeIds.add(shapeId);
-                } else if (shapeNode.isArray()) {
-                    ArrayNode shapeIdArray = (ArrayNode) shapeNode;
-                    for (Iterator<JsonNode> it2 = shapeIdArray.elements(); it2.hasNext(); ) {
-                        int shapeId = it2.next().asInt();
-                        shapeIds.add(shapeId);
-                    }
-                } else throw new RuntimeException("Unexpected shape node type: " + shapeNode.getNodeType());
-
-                Block blockData = BlockRegistry.REGISTRY.get(blockId);
-                for (int i = blockData.minStateId(); i <= blockData.maxStateId(); i++) {
-                    int nextShapeId = shapeIds.getInt(0);
-                    if (shapeIds.size() > 1)
-                        nextShapeId = shapeIds.getInt(i - blockData.minStateId());
-                    List<CollisionBox> collisionBoxes = shapeIdToCollisionBoxes.get(nextShapeId);
-                    output.put(i, collisionBoxes);
                 }
+            } else throw new RuntimeException("Unexpected shape node type: " + shapeNode.getNodeType());
+
+            Block blockData = BlockRegistry.REGISTRY.get(blockId);
+            for (int i = blockData.minStateId(); i <= blockData.maxStateId(); i++) {
+                int nextShapeId = shapeIds.getInt(0);
+                if (shapeIds.size() > 1)
+                    nextShapeId = shapeIds.getInt(i - blockData.minStateId());
+                List<CollisionBox> collisionBoxes = shapeIdToCollisionBoxes.get(nextShapeId);
+                output.put(i, collisionBoxes);
             }
         }
     }

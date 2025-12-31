@@ -1,6 +1,5 @@
 package com.zenith.database;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zenith.Globals;
 import com.zenith.database.dto.records.ChatsRecord;
 import org.redisson.api.RReliableTopic;
@@ -14,7 +13,7 @@ import static com.zenith.Globals.OBJECT_MAPPER;
 public class LiveChatTest {
 
 //    @Test
-    public void liveChatTest() throws JsonProcessingException {
+    public void liveChatTest() {
         var c = Globals.CONFIG;
         final RedisClient redisClient = new RedisClient();
         RedissonClient redissonClient = redisClient.getRedissonClient();

@@ -1,7 +1,5 @@
 package com.zenith.feature.queue.mcping;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.zenith.feature.queue.mcping.data.MCResponse;
 import com.zenith.feature.queue.mcping.rawData.Player;
 import com.zenith.feature.queue.mcping.rawData.Players;
@@ -15,6 +13,8 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.handler.codec.dns.*;
 import io.netty.resolver.dns.DnsNameResolver;
 import io.netty.resolver.dns.DnsNameResolverBuilder;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -101,7 +101,7 @@ public class MCPing {
             var jsonTree = OBJECT_MAPPER.readTree(json);
             var versionNode = jsonTree.get("version");
             var protocol = versionNode.get("protocol").asInt();
-            var versionName = versionNode.get("name").asText();
+            var versionName = versionNode.get("name").asString();
             var version = new Version(versionName, protocol);
             var playersNode = jsonTree.get("players");
             var online = playersNode.get("online").asInt();
@@ -111,19 +111,19 @@ public class MCPing {
             for (JsonNode playerListNode : sampleNode) {
                 JsonNode nameNode = playerListNode.get("name");
                 String name = null;
-                if (nameNode != null && nameNode.isTextual())
-                    name = nameNode.asText();
+                if (nameNode != null && nameNode.isString())
+                    name = nameNode.asString();
                 JsonNode idNode = playerListNode.get("id");
                 String id = null;
-                if (idNode != null && idNode.isTextual())
-                    id = idNode.asText();
+                if (idNode != null && idNode.isString())
+                    id = idNode.asString();
                 var player = new Player(name, id);
                 playersList.add(player);
             }
             var players = new Players(max, online, playersList);
             var descriptionNode = jsonTree.get("description");
-            var descriptionText = descriptionNode.get("text").asText();
-            var favicon = jsonTree.get("favicon").asText();
+            var descriptionText = descriptionNode.get("text").asString();
+            var favicon = jsonTree.get("favicon").asString();
             return new MCResponse(players, version, favicon, descriptionText);
         } catch (final Exception e) {
             throw new RuntimeException(e);

@@ -1,7 +1,7 @@
 package com.zenith.feature.autoupdater;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.zenith.util.struct.Pair;
+import tools.jackson.databind.JsonNode;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -117,12 +117,12 @@ public class RestAutoUpdater extends AutoUpdater {
 
             List<JsonNode> releaseNodes = releases.findParents("tag_name");
             releaseNodes.removeIf(node -> node.get("draft").asBoolean());
-            releaseNodes.removeIf(node -> !node.get("tag_name").textValue().endsWith("+" + LAUNCH_CONFIG.release_channel));
+            releaseNodes.removeIf(node -> !node.get("tag_name").asString().endsWith("+" + LAUNCH_CONFIG.release_channel));
 
-            releaseNodes.sort((a, b) -> b.get("published_at").asText().compareTo(a.get("published_at").asText()));
+            releaseNodes.sort((a, b) -> b.get("published_at").asString().compareTo(a.get("published_at").asString()));
 
             if (!releaseNodes.isEmpty()) {
-                return Pair.of(releaseNodes.getFirst().get("id").asText(), releaseNodes.getFirst().get("tag_name").asText());
+                return Pair.of(releaseNodes.getFirst().get("id").asString(), releaseNodes.getFirst().get("tag_name").asString());
             }
         } catch (Throwable e) {
             DEFAULT_LOG.error("Failed to parse latest release ID.", e);

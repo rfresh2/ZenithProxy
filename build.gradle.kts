@@ -28,7 +28,7 @@ repositories {
 
 val mcplVersion = "1.21.4.37"
 dependencies {
-    api("com.github.rfresh2:JDA:6.2.24") {
+    api("com.github.rfresh2:JDA:6.2.25") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -84,10 +84,9 @@ dependencies {
     api("com.mojang:brigadier:1.3.10")
     api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
-    // todo: update jda to jackson 3
-    api("com.fasterxml.jackson.core:jackson-core:2.20.1")
-    api("com.fasterxml.jackson.core:jackson-databind:2.20.1")
-    api("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.20.1")
+    implementation(platform("tools.jackson:jackson-bom:3.0.3"))
+    // Now declare Jackson modules WITHOUT versions
+    implementation("tools.jackson.core:jackson-databind")
     testImplementation("org.junit.jupiter:junit-jupiter:6.0.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
