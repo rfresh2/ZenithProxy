@@ -5,6 +5,5 @@ description = "ZenithProxy Wiki Documentation"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "markdown-callouts>=0.4.0",
-    "mkdocs-material>=9.6.21",
+    "zensical>=0.0.15",
 ]
