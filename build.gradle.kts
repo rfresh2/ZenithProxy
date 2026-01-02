@@ -84,10 +84,11 @@ dependencies {
     api("com.mojang:brigadier:1.3.10")
     api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
-    implementation(platform("tools.jackson:jackson-bom:3.0.3"))
-    // Now declare Jackson modules WITHOUT versions
-    implementation("tools.jackson.core:jackson-databind")
-    testImplementation("org.junit.jupiter:junit-jupiter:6.0.1")
+    api(platform("tools.jackson:jackson-bom:3.0.3"))
+    api("tools.jackson.core:jackson-databind")
+
+    testImplementation(platform("org.junit:junit-bom:6.0.1"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
     annotationProcessor("com.google.auto.service:auto-service:1.1.1")
