@@ -137,7 +137,7 @@ public class ServerConnectionCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Server Timeout " + toggleStrCaps(CONFIG.server.extra.timeout.enable));
                 }))
-                .then(argument("timeout", integer(10, 120)).executes(c -> {
+                .then(argument("timeout", integer(1, 120)).executes(c -> {
                     CONFIG.server.extra.timeout.seconds = getInteger(c, "timeout");
                     syncTimeout();
                     c.getSource().getEmbed()
