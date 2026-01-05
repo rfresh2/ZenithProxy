@@ -9,7 +9,7 @@ plugins {
 group = "com.zenith"
 version = "1.21.11"
 
-val javaReleaseVersion = 21
+val javaReleaseVersion = 25
 val javaVersion = JavaLanguageVersion.of(25)
 val javaLauncherProvider = javaToolchains.launcherFor { languageVersion = javaVersion }
 java {
