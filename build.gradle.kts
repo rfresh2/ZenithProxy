@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     id("org.graalvm.buildtools.native") version "0.11.3"
-    id("com.gradleup.shadow") version "9.3.0"
+    id("com.gradleup.shadow") version "9.3.1"
     id("io.freefair.lombok") version "9.1.0"
     `maven-publish`
 }
@@ -87,7 +87,7 @@ dependencies {
     api(platform("tools.jackson:jackson-bom:3.0.3"))
     api("tools.jackson.core:jackson-databind")
 
-    testImplementation(platform("org.junit:junit-bom:6.0.1"))
+    testImplementation(platform("org.junit:junit-bom:6.0.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
