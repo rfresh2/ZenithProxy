@@ -66,8 +66,7 @@ public final class MovementHelper {
                 return true;
             }
             FluidState fluidState = World.getFluidState(state);
-            float level = World.getFluidHeight(fluidState);
-            if (level == 0) return true; // source blocks like to flow horizontally
+            if (fluidState != null && fluidState.source()) return true; // source blocks like to flow horizontally
 
             // everything else will prefer flowing down
             return !isLiquid(BlockStateInterface.getBlock(x, y -1, z)); // assume everything is in a static state
