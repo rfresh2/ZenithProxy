@@ -831,6 +831,7 @@ public final class Config {
 
     public static class Plugins {
         public boolean enabled = true;
+        public boolean blockCommandsUntilLoaded = false;
     }
 
     public static final class InteractiveTerminal {

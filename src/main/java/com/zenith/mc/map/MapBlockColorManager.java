@@ -1,8 +1,5 @@
 package com.zenith.mc.map;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.TreeNode;
-import com.fasterxml.jackson.databind.node.IntNode;
 import com.zenith.feature.map.Brightness;
 import com.zenith.util.Color;
 import com.zenith.util.struct.Maps;
@@ -20,15 +17,11 @@ public class MapBlockColorManager {
     }
 
     private static void init() {
-        try (JsonParser mapColorsParser = OBJECT_MAPPER.createParser(MapBlockColorManager.class.getResourceAsStream("/mcdata/mapColorIdToColor.json"))) {
-            TreeNode node = mapColorsParser.getCodec().readTree(mapColorsParser);
-            node.fieldNames().forEachRemaining((colorId) -> {
-                var color = ((IntNode) node.get(colorId)).asInt();
-                mapColorIdToColor.put(Integer.parseInt(colorId), color);
-            });
-        } catch (final Exception e) {
-            throw new RuntimeException(e);
-        }
+        var tree = OBJECT_MAPPER.readTree(MapBlockColorManager.class.getResourceAsStream("/mcdata/mapColorIdToColor.json"));
+        tree.propertyNames().forEach((colorId) -> {
+            var color = tree.get(colorId).asInt();
+            mapColorIdToColor.put(Integer.parseInt(colorId), color);
+        });
     }
 
     public int getColor(final int mapColorId) {

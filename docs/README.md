@@ -6,8 +6,8 @@
 
 ## Build
 
-`uv run mkdocs build`
+`uv run zensical build`
 
 ## Serve locally
 
-`uv run mkdocs serve`
+`uv run zensical serve`

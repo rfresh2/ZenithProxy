@@ -94,7 +94,7 @@ public abstract class Movement implements IMovement {
     public MovementStatus update() {
         currentState = updateState(currentState);
 
-        if (BOT.isTouchingWater() && BOT.getY() < dest.y() + 0.6) {
+        if (MovementHelper.isLiquid(ctx.playerFeet()) && BOT.getY() < dest.y() + 0.6) {
             LocalizedCollisionBox predictedCb = BOT
                 .getPlayerCollisionBox()
                 .move(dest.x() - src.x(), dest.y() - src.y(), dest.z() - src.z());

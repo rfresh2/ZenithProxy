@@ -1,8 +1,5 @@
 package com.zenith;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.github.rfresh2.SimpleEventBus;
 import com.google.common.io.Files;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -39,6 +36,7 @@ import com.zenith.via.ZenithViaInitializer;
 import lombok.Locked;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.jspecify.annotations.Nullable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.*;
 import java.util.concurrent.Executors;
@@ -52,9 +50,7 @@ public class Globals {
         .registerTypeHierarchyAdapter(Condition.class, new ConditionTypeAdapter())
         .registerTypeHierarchyAdapter(Continuation.class, new ContinuationTypeAdapter())
         .create();
-    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        .registerModule(new JavaTimeModule());
+    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     public static final ComponentLogger DEFAULT_LOG = ComponentLogger.logger("Proxy");
     public static final ComponentLogger AUTH_LOG = ComponentLogger.logger("Auth");
     public static final ComponentLogger CACHE_LOG = ComponentLogger.logger("Cache");

@@ -1,13 +1,13 @@
 package com.zenith.plugin;
 
-import com.fasterxml.jackson.core.util.DefaultIndenter;
-import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.auto.service.AutoService;
 import com.zenith.plugin.api.Plugin;
 import com.zenith.plugin.api.PluginInfo;
 import com.zenith.plugin.api.Version;
+import tools.jackson.core.util.DefaultIndenter;
+import tools.jackson.core.util.DefaultPrettyPrinter;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -96,12 +96,14 @@ public class PluginAnnotationProcessor extends AbstractProcessor {
             try {
                 FileObject object = environment.getFiler()
                     .createResource(StandardLocation.CLASS_OUTPUT, "", "zenithproxy.plugin.json");
-                var objectMapper = new ObjectMapper()
-                    .enable(SerializationFeature.INDENT_OUTPUT);
                 var pp = new DefaultPrettyPrinter();
                 pp.indentArraysWith(DefaultIndenter.SYSTEM_LINEFEED_INSTANCE);
+                var objectMapper = JsonMapper.builder()
+                    .enable(SerializationFeature.INDENT_OUTPUT)
+                    .defaultPrettyPrinter(pp)
+                    .build();
                 try (Writer writer = new BufferedWriter(object.openWriter())) {
-                    objectMapper.writer(pp).writeValue(writer, pluginJson);
+                    objectMapper.writerWithDefaultPrettyPrinter().writeValue(writer, pluginJson);
                 }
                 pluginClassFound = qualifiedName.toString();
             } catch (IOException e) {
