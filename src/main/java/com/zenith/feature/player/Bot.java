@@ -87,7 +87,7 @@ public final class Bot extends ModuleUtils {
     private boolean isGliding;
     private double fallDistance;
     @Getter private boolean isTouchingWater;
-    private boolean isTouchingLava;
+    @Getter private boolean isTouchingLava;
     private double waterHeight;
     private double lavaHeight;
     private int ticksSinceLastPositionPacketSent;
@@ -358,10 +358,10 @@ public final class Bot extends ModuleUtils {
         }
 
         if (movementInput.isJumping()) {
-            if (this.onGround && jumpingCooldown == 0 && !isTouchingWater) {
+            if (this.onGround && jumpingCooldown == 0 && (!isTouchingWater && !isTouchingLava)) {
                 jump();
                 jumpingCooldown = 10;
-            } else if (isTouchingWater) {
+            } else if (isTouchingWater || isTouchingLava) {
                 this.velocity.setY(this.velocity.getY() + 0.04F);
             }
             // todo: lava swimming
@@ -646,6 +646,7 @@ public final class Bot extends ModuleUtils {
     }
 
     private void travelInFluid(MutableVec3d movementInputVec) {
+        double beforeMoveY = getY();
         if (isTouchingWater) {
             boolean falling = velocity.getY() <= 0.0;
             float waterSlowdown = isSprinting ? 0.9f : 0.8f;
@@ -693,9 +694,13 @@ public final class Bot extends ModuleUtils {
             }
         }
         // todo: autojump when near shore block. need more checks for water level collisions
-//            if (horizontalCollision && World.isFree(playerCollisionBox.move(velocity.getX(), velocity.getY() + 0.6 - getY() + beforeMoveY, velocity.getZ()))) {
-//                velocity.setY(0.3);
-//            }
+        if (horizontalCollision && isFree(playerCollisionBox.move(velocity.getX(), velocity.getY() + 0.6 - getY() + beforeMoveY, velocity.getZ()))) {
+            velocity.setY(0.3);
+        }
+    }
+
+    private boolean isFree(final LocalizedCollisionBox cb) {
+        return World.getCollidingBlockStatesInside(cb).isEmpty() && !World.containsLiquid(cb);
     }
 
     private void travelFallFlying(MutableVec3d movementInputVec) {

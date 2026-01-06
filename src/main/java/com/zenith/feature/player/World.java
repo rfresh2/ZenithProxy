@@ -171,6 +171,23 @@ public class World {
         });
     }
 
+    public boolean containsLiquid(final LocalizedCollisionBox cb) {
+        var minX = MathHelper.floorI(cb.minX());
+        var maxX = MathHelper.ceilI(cb.maxX());
+        var minY = MathHelper.floorI(cb.minY());
+        var maxY = MathHelper.ceilI(cb.maxY());
+        var minZ = MathHelper.floorI(cb.minZ());
+        var maxZ = MathHelper.ceilI(cb.maxZ());
+        for (int x = minX; x < maxX; x++) {
+            for (int y = minY; y < maxY; y++) {
+                for (int z = minZ; z < maxZ; z++) {
+                    if (getFluidState(getBlockStateId(x, y, z)) != null) return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void getEntityCollisionBoxes(final LocalizedCollisionBox cb, final List<LocalizedCollisionBox> results, Predicate<Entity> filter) {
         for (var entity : CACHE.getEntityCache().getEntities().values()) {
             if (!filter.test(entity)) continue;
