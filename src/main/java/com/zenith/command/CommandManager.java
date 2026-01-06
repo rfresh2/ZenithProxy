@@ -23,8 +23,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.zenith.Globals.DEFAULT_LOG;
-import static com.zenith.Globals.saveConfigAsync;
+import static com.zenith.Globals.*;
 import static java.util.Arrays.asList;
 
 @Getter
@@ -209,6 +208,10 @@ public class CommandManager {
     }
 
     private void execute0(final CommandContext context, final ParseResults<CommandContext> parse) throws CommandSyntaxException {
+        if (CONFIG.plugins.enabled && CONFIG.plugins.blockCommandsUntilLoaded && !PLUGIN_MANAGER.isInitialized()) {
+            DEFAULT_LOG.warn("Blocked command execution until plugins are loaded: `{}`", context.getInput());
+            return;
+        }
         var commandNodeOptional = parse.getContext()
             .getNodes()
             .stream()

@@ -75,14 +75,18 @@ public class PluginManager {
         return new ArrayList<>(pluginConfigurations.values());
     }
 
+    public boolean isInitialized() {
+        return initialized.get();
+    }
+
     public record ConfigInstance(Object instance, Class<?> clazz, File file, ConfigSerializer serializer) { }
 
-    public void initialize() {
-        if (initialized.compareAndSet(false, true)) {
-            ensurePluginsFolderExists();
-            preLoadPlugins();
-            loadPlugins();
-        }
+    public synchronized void initialize() {
+        if (initialized.get()) return;
+        ensurePluginsFolderExists();
+        preLoadPlugins();
+        loadPlugins();
+        initialized.set(true);
     }
 
     private void linuxChannelIncompatibilityWarning() {
