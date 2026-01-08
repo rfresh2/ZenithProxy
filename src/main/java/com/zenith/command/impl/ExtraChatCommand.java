@@ -6,8 +6,10 @@ import com.zenith.command.api.CommandCategory;
 import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
+import com.zenith.module.impl.ExtraChat;
 
 import static com.zenith.Globals.CONFIG;
+import static com.zenith.Globals.MODULE;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
@@ -40,6 +42,7 @@ public class ExtraChatCommand extends Command {
         return command("extraChat")
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.chat.enabled = getToggle(c, "toggle");
+                MODULE.get(ExtraChat.class).syncEnabledFromConfig();
                 c.getSource().getEmbed().title("ExtraChat " + toggleStrCaps(CONFIG.client.extra.chat.enabled));
             }))
             .then(literal("hideChat").then(argument("toggle", toggle()).executes(c -> {
