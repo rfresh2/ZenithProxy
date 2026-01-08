@@ -43,10 +43,6 @@ public abstract class AbstractNodeCostSearch {
      */
     protected static final double[] COEFFICIENTS = {1.5, 2, 2.5, 3, 4, 5, 10};
 
-    /**
-     * If a path goes less than 5 blocks and doesn't make it to its goal, it's not worth considering.
-     */
-    protected static final double MIN_DIST_PATH = 5;
 
     /**
      * there are floating point errors caused by random combinations of traverse and diagonal over a flat area
@@ -170,7 +166,7 @@ public abstract class AbstractNodeCostSearch {
             if (dist > bestDist) {
                 bestDist = dist;
             }
-            if (dist > MIN_DIST_PATH * MIN_DIST_PATH) { // square the comparison since distFromStartSq is squared
+            if (dist > context.minDistPath * context.minDistPath) { // square the comparison since distFromStartSq is squared
                 return Optional.of(new Path(realStart, startNode, bestSoFar[i], numNodes, goal, context));
             }
         }

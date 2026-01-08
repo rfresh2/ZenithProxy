@@ -133,7 +133,7 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
                         if (bestHeuristicSoFar[i] - heuristic > minimumImprovement) {
                             bestHeuristicSoFar[i] = heuristic;
                             bestSoFar[i] = neighbor;
-                            if (failing && getDistFromStartSq(neighbor) > MIN_DIST_PATH * MIN_DIST_PATH) {
+                            if (failing && getDistFromStartSq(neighbor) > minDistPathSq) {
                                 failing = false;
                             }
                         }

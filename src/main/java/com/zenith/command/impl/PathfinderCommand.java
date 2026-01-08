@@ -762,6 +762,13 @@ public class PathfinderCommand extends Command {
                     .addField("Failed Path Search Cooldown", CONFIG.client.extra.pathfinder.failedPathSearchCooldownMs)
                     .primaryColor();
             })))
+            .then(literal("minDistPath").then(argument("blocks", doubleArg(0.0, 1000.0)).executes(c -> {
+                CONFIG.client.extra.pathfinder.minDistPath = getDouble(c, "blocks");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Min Dist Path", CONFIG.client.extra.pathfinder.minDistPath)
+                    .primaryColor();
+            })))
             .then(literal("renderPath").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.renderPath = getToggle(c, "toggle");
                 c.getSource().getEmbed()
@@ -842,6 +849,7 @@ public class PathfinderCommand extends Command {
         settingsMap.put("planAheadPrimaryTimeoutMs", String.valueOf(CONFIG.client.extra.pathfinder.planAheadPrimaryTimeoutMs));
         settingsMap.put("planAheadFailureTimeoutMs", String.valueOf(CONFIG.client.extra.pathfinder.planAheadFailureTimeoutMs));
         settingsMap.put("failedPathSearchCooldownMs", String.valueOf(CONFIG.client.extra.pathfinder.failedPathSearchCooldownMs));
+        settingsMap.put("minDistPath", String.valueOf(CONFIG.client.extra.pathfinder.minDistPath));
         settingsMap.put("renderPath", toggleStr(CONFIG.client.extra.pathfinder.renderPath));
         settingsMap.put("renderPathIntervalTicks", String.valueOf(CONFIG.client.extra.pathfinder.pathRenderIntervalTicks));
         settingsMap.put("renderPathDetailed", toggleStr(CONFIG.client.extra.pathfinder.renderPathDetailed));

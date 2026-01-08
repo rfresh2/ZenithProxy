@@ -36,6 +36,7 @@ public class CalculationContext {
     public final boolean allowLongFall = CONFIG.client.extra.pathfinder.allowLongFall;
     public final double longFallCostLogMultiplier = CONFIG.client.extra.pathfinder.longFallCostLogMultiplier;
     public final double longFallCostAddCost = CONFIG.client.extra.pathfinder.longFallCostAddCost;
+    public final double minDistPath = CONFIG.client.extra.pathfinder.minDistPath;
 //    public final int maxFallHeightBucket;
     public final double waterWalkSpeed = ActionCosts.WALK_ONE_IN_WATER_COST + ActionCosts.WALK_ONE_BLOCK_COST;
     public final double breakBlockAdditionalCost = CONFIG.client.extra.pathfinder.blockBreakAdditionalCost;

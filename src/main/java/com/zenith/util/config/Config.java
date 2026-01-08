@@ -209,6 +209,7 @@ public final class Config {
                 public double longFallCostLogMultiplier = 50;
                 public double longFallCostAddCost = 100;
                 public int followRadius = 2;
+                public double minDistPath = 5;
                 public int teleportDelayMs = 500;
                 public boolean renderPath = true;
                 public int pathRenderIntervalTicks = 10;
