@@ -41,9 +41,9 @@ public class TablistCommand extends Command {
         return command("tablist").executes(c -> {
             if (!Proxy.getInstance().isConnected()) {
                 c.getSource().getEmbed()
-                    .title("Proxy is not online!")
+                    .title("Not online!")
                     .errorColor();
-                return;
+                return ERROR;
             }
             // embeds will be too small for tablist
             List<String> playerNames = CACHE.getTabListCache().getEntries().stream()
@@ -100,19 +100,35 @@ public class TablistCommand extends Command {
                     outputMessage -> c.getSource().getMultiLineOutput().add("```\n" + outputMessage + "\n```"));
             } catch (final Exception e) {
                 DEFAULT_LOG.error("", e);
-            }})
+            }
+            return OK;
+        })
             .then(literal("header").executes(c -> {
                 if (!Proxy.getInstance().isConnected()) {
                     c.getSource().getEmbed()
-                        .title("Proxy is not online!")
-                        .errorColor();
-                    return;
+                        .title("Not online!");
+                    return ERROR;
                 }
                 Component header = CACHE.getTabListCache().getHeader();
                 c.getSource().getEmbed()
                     .title("Tablist Title")
                     .description(ComponentSerializer.serializePlain(header))
                     .primaryColor();
+                return OK;
+            }))
+            .then(literal("footer").executes(c -> {
+                if (!Proxy.getInstance().isConnected()) {
+                    c.getSource().getEmbed()
+                        .title("Not online!")
+                        .errorColor();
+                    return ERROR;
+                }
+                Component footer = CACHE.getTabListCache().getFooter();
+                c.getSource().getEmbed()
+                    .title("Tablist Footer")
+                    .description(ComponentSerializer.serializePlain(footer))
+                    .primaryColor();
+                return OK;
             }));
     }
 }
