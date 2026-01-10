@@ -334,6 +334,11 @@ public final class Config {
                 public boolean hide2b2tActionBarText = false;
                 public boolean replace2b2tChatCommands = false;
                 public boolean ignoreReplace2b2tChatCommandWhileDatabaseOn = true;
+                public boolean prefixChats = false;
+                public String prefix = ">";
+                public boolean suffixChats = false;
+                public String suffix = "| Sent from my ZenithProxy";
+                public boolean randomSuffix = false;
             }
 
             public static final class AutoTotem {

@@ -22,7 +22,7 @@ public class ExtraChatCommand extends Command {
             .name("extraChat")
             .category(CommandCategory.MODULE)
             .description("""
-                 Hide certain types of messages in-game or in the terminal chat log.
+                 Extra chat features and modifications.
                  """)
             .usageLines(
                 "on/off",
@@ -33,7 +33,12 @@ public class ExtraChatCommand extends Command {
                 "insertClickableLinks on/off",
                 "hide2b2tActionBarText on/off",
                 "whisperCommand <command>",
-                "replace2b2tChatCommands on/off"
+                "replace2b2tChatCommands on/off",
+                "prefix on/off",
+                "prefix set <prefix>",
+                "suffix on/off",
+                "suffix set <suffix>",
+                "suffix random on/off"
             )
             .build();
     }
@@ -107,7 +112,34 @@ public class ExtraChatCommand extends Command {
                 CONFIG.client.extra.chat.ignoreReplace2b2tChatCommandWhileDatabaseOn = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Ignore Replace 2b2t Chat Commands While Database On " + toggleStrCaps(CONFIG.client.extra.chat.ignoreReplace2b2tChatCommandWhileDatabaseOn));
-            })));
+            })))
+            .then(literal("prefix")
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.chat.prefixChats = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Prefix Chats " + toggleStrCaps(CONFIG.client.extra.chat.prefixChats));
+                }))
+                .then(literal("set").then(argument("prefix", wordWithChars()).executes(c -> {
+                    CONFIG.client.extra.chat.prefix = getString(c, "prefix");
+                    c.getSource().getEmbed()
+                        .title("Prefix Set");
+                }))))
+            .then(literal("suffix")
+                .then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.chat.suffixChats = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Suffix Chats " + toggleStrCaps(CONFIG.client.extra.chat.suffixChats));
+                }))
+                .then(literal("set").then(argument("suffix", wordWithChars()).executes(c -> {
+                    CONFIG.client.extra.chat.suffix = getString(c, "suffix");
+                    c.getSource().getEmbed()
+                        .title("Suffix Set");
+                })))
+                .then(literal("random").then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.chat.randomSuffix = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Random Suffix " + toggleStrCaps(CONFIG.client.extra.chat.randomSuffix));
+                }))));
     }
 
 
@@ -123,6 +155,8 @@ public class ExtraChatCommand extends Command {
             .addField("Hide 2b2t Action Bar Text", toggleStr(CONFIG.client.extra.chat.hide2b2tActionBarText))
             .addField("Whisper Command", CONFIG.client.extra.whisperCommand)
             .addField("Replace 2b2t Chat Commands", toggleStr(CONFIG.client.extra.chat.replace2b2tChatCommands))
+            .addField("Prefix", toggleStr(CONFIG.client.extra.chat.prefixChats) + (CONFIG.client.extra.chat.prefixChats ? " - `" + CONFIG.client.extra.chat.prefix + "`" : ""))
+            .addField("Suffix", toggleStr(CONFIG.client.extra.chat.suffixChats) + (CONFIG.client.extra.chat.suffixChats ? CONFIG.client.extra.chat.randomSuffix ? " - random" : " - `" + CONFIG.client.extra.chat.suffix + "`" : ""))
             .primaryColor();
     }
 }
