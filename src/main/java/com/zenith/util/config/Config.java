@@ -332,6 +332,8 @@ public final class Config {
                 public boolean showConnectionMessages = false;
                 public boolean insertClickableLinks = false;
                 public boolean hide2b2tActionBarText = false;
+                public boolean replace2b2tChatCommands = false;
+                public boolean ignoreReplace2b2tChatCommandWhileDatabaseOn = true;
             }
 
             public static final class AutoTotem {

@@ -32,7 +32,8 @@ public class ExtraChatCommand extends Command {
                 "showConnectionMessages on/off",
                 "insertClickableLinks on/off",
                 "hide2b2tActionBarText on/off",
-                "whisperCommand <command>"
+                "whisperCommand <command>",
+                "replace2b2tChatCommands on/off"
             )
             .build();
     }
@@ -96,6 +97,16 @@ public class ExtraChatCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Whisper Command Set");
                 return OK;
+            })))
+            .then(literal("replace2b2tChatCommands").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.chat.replace2b2tChatCommands = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Replace 2b2t Chat Commands " + toggleStrCaps(CONFIG.client.extra.chat.replace2b2tChatCommands));
+            })))
+            .then(literal("ignoreReplace2b2tChatCommandWhileDatabaseOn").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.chat.ignoreReplace2b2tChatCommandWhileDatabaseOn = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Ignore Replace 2b2t Chat Commands While Database On " + toggleStrCaps(CONFIG.client.extra.chat.ignoreReplace2b2tChatCommandWhileDatabaseOn));
             })));
     }
 
@@ -111,6 +122,7 @@ public class ExtraChatCommand extends Command {
             .addField("Insert Clickable Links", toggleStr(CONFIG.client.extra.chat.insertClickableLinks))
             .addField("Hide 2b2t Action Bar Text", toggleStr(CONFIG.client.extra.chat.hide2b2tActionBarText))
             .addField("Whisper Command", CONFIG.client.extra.whisperCommand)
+            .addField("Replace 2b2t Chat Commands", toggleStr(CONFIG.client.extra.chat.replace2b2tChatCommands))
             .primaryColor();
     }
 }
