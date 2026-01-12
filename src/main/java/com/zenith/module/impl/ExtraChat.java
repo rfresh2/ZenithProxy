@@ -20,6 +20,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.title.ClientboundSetActionBarTextPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandSignedPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -50,13 +51,25 @@ public class ExtraChat extends Module {
     public PacketHandlerCodec registerServerPacketHandlerCodec() {
         return PacketHandlerCodec.serverBuilder()
             .setId("extra-chat")
-            .setPriority(-1)
+            .setPriority(-10)
             .state(ProtocolState.GAME, PacketHandlerStateCodec.serverBuilder()
                 .outbound(ClientboundSystemChatPacket.class, new ECSystemChatOutgoingHandler())
                 .outbound(ClientboundPlayerChatPacket.class, new ECPlayerChatOutgoingHandler())
                 .outbound(ClientboundSetActionBarTextPacket.class, new ECSetActionBarTextHandler())
                 .inbound(ServerboundChatCommandPacket.class, new ECChatCommandIncomingHandler())
                 .inbound(ServerboundChatCommandSignedPacket.class, new ECSignedChatCommandIncomingHandler())
+                .build())
+            .build();
+    }
+
+
+    @Override
+    public PacketHandlerCodec registerClientPacketHandlerCodec() {
+        return PacketHandlerCodec.clientBuilder()
+            .setId("extra-chat")
+            .setPriority(-10)
+            .state(ProtocolState.GAME, PacketHandlerStateCodec.clientBuilder()
+                .outbound(ServerboundChatPacket.class, new ECClientOutgoingChatHandler())
                 .build())
             .build();
     }

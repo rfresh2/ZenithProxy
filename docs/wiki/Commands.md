@@ -1717,7 +1717,7 @@ and impact of the offset being discovered.
 
 ### extraChat
 
-Hide certain types of messages in-game or in the terminal chat log.
+Extra chat features and modifications.
 
 **Usage**
 
@@ -1736,6 +1736,18 @@ Hide certain types of messages in-game or in the terminal chat log.
   ```extraChat hide2b2tActionBarText on/off```
 
   ```extraChat whisperCommand <command>```
+
+  ```extraChat replace2b2tChatCommands on/off```
+
+  ```extraChat prefix on/off```
+
+  ```extraChat prefix set <prefix>```
+
+  ```extraChat suffix on/off```
+
+  ```extraChat suffix set <suffix>```
+
+  ```extraChat suffix random on/off```
 
 
 ### ignore

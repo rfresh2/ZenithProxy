@@ -320,18 +320,27 @@ public class InteractWithProcess extends BaritoneProcessHelper {
             return false;
         }
 
+        // ordered by priority
+        static final Direction[] placeDirections = new Direction[]{
+            // some blocks like shulkers should prefer to be placed on the floor face
+            Direction.DOWN,
+            Direction.SOUTH,
+            Direction.EAST,
+            Direction.NORTH,
+            Direction.WEST,
+            Direction.UP
+        };
+
         public List<PlaceTarget> findPlaceTargets() {
             ArrayList<PlaceTarget> validPlaces = new ArrayList<>();
-            for (var plane : Direction.Plane.values()) {
-                for (var face : plane) {
-                    int dx = x + face.x();
-                    int dy = y + face.y();
-                    int dz = z + face.z();
-                    int blockStateId = World.getBlockStateId(dx, dy, dz);
-                    if (!MovementHelper.canPlaceAgainst(blockStateId)) continue;
-                    var blockState = World.getBlockState(dx, dy, dz); // found a supporting block
-                    validPlaces.add(new PlaceTarget(blockState, face.invert()));
-                }
+            for (var faceVec : placeDirections) {
+                int dx = x + faceVec.x();
+                int dy = y + faceVec.y();
+                int dz = z + faceVec.z();
+                int blockStateId = World.getBlockStateId(dx, dy, dz);
+                if (!MovementHelper.canPlaceAgainst(blockStateId)) continue;
+                var blockState = World.getBlockState(dx, dy, dz);
+                validPlaces.add(new PlaceTarget(blockState, faceVec.invert()));
             }
             return validPlaces;
         }
@@ -454,6 +463,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                     .build()
             ).addInputExecutedListener(f -> {
                 if (futureSucceeded(f)) {
+                    info("Started breaking block {} at [{}, {}, {}]", World.getBlock(x, y, z).name(), x, y, z);
                     isBreaking = true;
                 }
             });
@@ -538,7 +548,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                     .build())
                 .addInputExecutedListener(future -> {
                     if (futureSucceeded(future)) {
-                        info("{} clicked block at: [{}, {}, {}]", leftClick ? "left" : "right", x, y, z);
+                        info("{} clicked block: {} at: [{}, {}, {}]", leftClick ? "left" : "right", World.getBlock(x, y, z).name(), x, y, z);
                         succeeded = true;
                     }
                 });

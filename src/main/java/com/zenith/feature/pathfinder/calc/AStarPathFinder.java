@@ -151,7 +151,7 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
         PATH_LOG.debug("Open set size: {}", openSet.size());
         PATH_LOG.debug("PathNode map size: {}", mapSize());
         PATH_LOG.debug("{} nodes per second", (int) (numNodes * 1.0 / ((System.currentTimeMillis() - startTime) / 1000F)));
-        Optional<IPath> result = bestSoFar(true, numNodes);
+        Optional<IPath> result = bestSoFar(numNodes);
         if (result.isPresent()) {
             PATH_LOG.info("Calculated path in {}ms, goes for: {} blocks, {} movements considered",
                           System.currentTimeMillis() - startTime,

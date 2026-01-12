@@ -78,7 +78,7 @@ dependencies {
     api("org.postgresql:postgresql:42.7.8")
     api("org.jdbi:jdbi3-postgres:3.51.0")
     api("com.google.guava:guava:33.5.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.23")
+    api("ch.qos.logback:logback-classic:1.5.24")
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")
