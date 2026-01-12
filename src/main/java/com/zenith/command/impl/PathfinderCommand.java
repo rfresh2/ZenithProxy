@@ -1,6 +1,7 @@
 package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.zenith.Proxy;
 import com.zenith.cache.data.entity.EntityLiving;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.command.api.Command;
@@ -86,6 +87,7 @@ public class PathfinderCommand extends Command {
         return command("pathfinder")
             .then(literal("goto")
                 .then(argument("xz", vec2()).executes(c -> {
+                    if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                     var vec2 = getVec2(c, "xz");
                     int x = MathHelper.floorI(vec2.getX());
                     int z = MathHelper.floorI(vec2.getY());
@@ -104,8 +106,10 @@ public class PathfinderCommand extends Command {
                             ? "||[" + x + ", " + z + "]||"
                             : "Coords disabled")
                         .primaryColor();
+                    return OK;
                 }))
                 .then(argument("xyz", blockPos()).executes(c -> {
+                    if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                     var pos = getBlockPos(c, "xyz");
                     int x = pos.x();
                     int y = pos.y();
@@ -125,8 +129,10 @@ public class PathfinderCommand extends Command {
                             ? "||[" + x + ", " + y + ", " + z + "]||"
                             : "Coords disabled")
                         .primaryColor();
+                    return OK;
                 }))
                 .then(argument("waypoint", wordWithChars()).executes(c -> {
+                    if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                     String id = getString(c, "waypoint");
                     var wpOptional = CONFIG.client.extra.waypoints.waypoints.stream()
                         .filter(w -> w.id().equalsIgnoreCase(id))
@@ -174,12 +180,15 @@ public class PathfinderCommand extends Command {
             }))
             .then(literal("follow")
                 .executes(c -> {
+                    if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                     BARITONE.follow((e) -> e instanceof EntityPlayer);
                     c.getSource().getEmbed()
                         .title("Following")
                         .primaryColor();
+                    return OK;
                 })
                 .then(argument("playerName", wordWithChars()).executes(c -> {
+                    if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                     String playerName = getString(c, "playerName");
                     CACHE.getEntityCache().getPlayers().values().stream()
                         .filter(e -> CACHE.getTabListCache()
@@ -211,6 +220,7 @@ public class PathfinderCommand extends Command {
                 }))))
             .then(literal("pickup")
                 .executes(c -> {
+                    if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                     BARITONE.pickup()
                         .addExecutedListener(f -> {
                             c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
@@ -220,8 +230,10 @@ public class PathfinderCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Picking up all items")
                         .primaryColor();
+                    return OK;
                 })
                 .then(argument("item", item()).executes(c -> {
+                    if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                     var item = getItem(c, "item");
                     if (item == null) {
                         c.getSource().getEmbed()
@@ -241,6 +253,7 @@ public class PathfinderCommand extends Command {
                     return OK;
                 })))
             .then(literal("clearArea").then(argument("pos1", blockPos()).then(argument("pos2", blockPos()).executes(c -> {
+                if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                 var pos1 = getBlockPos(c, "pos1");
                 var pos2 = getBlockPos(c, "pos2");
                 BARITONE.clearArea(pos1, pos2)
@@ -258,8 +271,10 @@ public class PathfinderCommand extends Command {
                         ? "||[" + pos1.x() + ", " + pos1.y() + ", " + pos1.z() + "] <> [" + pos2.x() + ", " + pos2.y() + ", " + pos2.z() + "]||"
                         : "Coords disabled")
                     .primaryColor();
+                return OK;
             }))))
             .then(literal("thisway").then(argument("dist", integer()).executes(c -> {
+                if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                 int dist = getInteger(c, "dist");
                 BARITONE.thisWay(dist)
                     .addExecutedListener(f -> {
@@ -278,6 +293,7 @@ public class PathfinderCommand extends Command {
                 return OK;
             })))
             .then(literal("getTo").then(argument("block", block()).executes(c -> {
+                if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                 Block block = getBlock(c, "block");
                 BARITONE.getTo(block)
                     .addExecutedListener(f -> {
@@ -296,6 +312,7 @@ public class PathfinderCommand extends Command {
                 return OK;
             })))
             .then(literal("mine").then(argument("block", block()).executes(c -> {
+                if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                 Block block = getBlock(c, "block");
                 BARITONE.mine(block);
                 c.getSource().getEmbed()
@@ -307,6 +324,7 @@ public class PathfinderCommand extends Command {
             .then(literal("click")
                 .then(literal("left")
                     .then(argument("pos", blockPos()).executes(c -> {
+                        if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                         var pos = getBlockPos(c, "pos");
                         int x = pos.x();
                         int y = pos.y();
@@ -326,9 +344,11 @@ public class PathfinderCommand extends Command {
                                 ? "||[" + x + ", " + y + ", " + z + "]||"
                                 : "Coords disabled")
                             .primaryColor();
+                        return OK;
                     }))
                     .then(literal("entity")
                         .then(argument("type", entity()).executes(c -> {
+                            if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                             EntityData entityData = getEntity(c, "type");
                             String entityType = entityData.name();
                             var entityOptional = CACHE.getEntityCache().getEntities().values().stream()
@@ -364,6 +384,7 @@ public class PathfinderCommand extends Command {
                             return OK;
                         })))
                     .then(argument("waypoint", wordWithChars()).executes(c -> {
+                        if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                         String id = getString(c, "waypoint");
                         var wpOptional = CONFIG.client.extra.waypoints.waypoints.stream()
                             .filter(w -> w.id().equalsIgnoreCase(id))
@@ -403,6 +424,7 @@ public class PathfinderCommand extends Command {
                     })))
                 .then(literal("right")
                     .then(argument("pos", blockPos()).executes(c -> {
+                        if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                         var pos = getBlockPos(c, "pos");
                         int x = pos.x();
                         int y = pos.y();
@@ -422,9 +444,11 @@ public class PathfinderCommand extends Command {
                                 ? "||[" + x + ", " + y + ", " + z + "]||"
                                 : "Coords disabled")
                             .primaryColor();
+                        return OK;
                     }))
                     .then(literal("entity")
                         .then(argument("id", integer()).executes(c -> {
+                            if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                             var entity = CACHE.getEntityCache().get(getInteger(c, "id"));
                             if (entity == null || !(entity instanceof EntityLiving)) {
                                 c.getSource().getEmbed()
@@ -452,6 +476,7 @@ public class PathfinderCommand extends Command {
                             return OK;
                         }))
                         .then(argument("type", entity()).executes(c -> {
+                            if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                             EntityData entityData = getEntity(c, "type");
                             String entityType = entityData.name();
                             var entityOptional = CACHE.getEntityCache().getEntities().values().stream()
@@ -487,6 +512,7 @@ public class PathfinderCommand extends Command {
                             return OK;
                         })))
                     .then(argument("waypoint", wordWithChars()).executes(c -> {
+                        if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                         String id = getString(c, "waypoint");
                         var wpOptional = CONFIG.client.extra.waypoints.waypoints.stream()
                             .filter(w -> w.id().equalsIgnoreCase(id))
@@ -525,6 +551,7 @@ public class PathfinderCommand extends Command {
                         return OK;
                     }))))
             .then(literal("break").then(argument("pos", blockPos()).executes(c -> {
+                if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                 BlockPos pos = getBlockPos(c, "pos");
                 int x = pos.x();
                 int y = pos.y();
@@ -544,8 +571,10 @@ public class PathfinderCommand extends Command {
                         ? "||[" + x + ", " + y + ", " + z + "]||"
                         : "Coords disabled")
                     .primaryColor();
+                return OK;
             })))
             .then(literal("place").then(argument("pos", blockPos()).then(argument("item", item()).executes(c -> {
+                if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                 BlockPos pos = getBlockPos(c, "pos");
                 ItemData itemData = getItem(c, "item");
                 if (InventoryUtil.searchPlayerInventory(i -> i.getId() == itemData.id()) == -1) {
@@ -576,6 +605,7 @@ public class PathfinderCommand extends Command {
             }))))
             .then(literal("near")
                 .then(argument("pos", blockPos()).then(argument("rangeSq", integer(1)).executes(c -> {
+                    if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
                     var pos = getBlockPos(c, "pos");
                     var rangeSq = getInteger(c, "rangeSq");
                     var goal = new GoalNear(pos, rangeSq);
@@ -591,6 +621,7 @@ public class PathfinderCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Pathing")
                         .primaryColor();
+                    return OK;
                 }))))
             .then(literal("status").executes(c -> {
                 boolean isActive = BARITONE.isActive();
@@ -847,5 +878,13 @@ public class PathfinderCommand extends Command {
         settingsMap.put("renderPathDetailed", toggleStr(CONFIG.client.extra.pathfinder.renderPathDetailed));
         settingsMap.put("interactWithProcessMaxPathTries", String.valueOf(CONFIG.client.extra.pathfinder.interactWithProcessMaxPathTries));
         return settingsMap;
+    }
+
+    private boolean verifyAbleToPathfind(final Embed embed) {
+        if (Proxy.getInstance().isConnected() && !Proxy.getInstance().hasActivePlayer()) return true;
+        embed
+            .title("Error")
+            .description("Unable to pathfind while not logged in or while a player is controlling");
+        return false;
     }
 }
