@@ -154,10 +154,14 @@ public abstract class AbstractNodeCostSearch {
     }
 
     public Optional<IPath> bestPathSoFar() {
-        return bestSoFar(false, 0);
+        return bestSoFar(0);
     }
 
-    protected Optional<IPath> bestSoFar(boolean logInfo, int numNodes) {
+    public Optional<IPath> bestSoFar(final int numNodes) {
+        return bestSoFar(numNodes, MIN_DIST_PATH).or(() -> bestSoFar(numNodes, 1));
+    }
+
+    public Optional<IPath> bestSoFar(int numNodes, double minDist) {
         if (startNode == null) {
             return Optional.empty();
         }
@@ -170,14 +174,9 @@ public abstract class AbstractNodeCostSearch {
             if (dist > bestDist) {
                 bestDist = dist;
             }
-            if (dist > MIN_DIST_PATH * MIN_DIST_PATH) { // square the comparison since distFromStartSq is squared
+            if (dist > minDist * minDist) { // square the comparison since distFromStartSq is squared
                 return Optional.of(new Path(realStart, startNode, bestSoFar[i], numNodes, goal, context));
             }
-        }
-        // instead of returning bestSoFar[0], be less misleading
-        // if it actually won't find any path, don't make them think it will by rendering a dark blue that will never actually happen
-        if (logInfo) {
-            PATH_LOG.info("No path found, couldn't get more than {} blocks", Math.sqrt(bestDist));
         }
         return Optional.empty();
     }
