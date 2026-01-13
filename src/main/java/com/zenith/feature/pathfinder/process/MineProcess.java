@@ -216,7 +216,7 @@ public final class MineProcess extends BaritoneProcessHelper implements IBariton
     }
 
     private Goal coalesce(BlockPos loc, List<BlockPos> locs, CalculationContext context) {
-        boolean assumeVerticalShaftMine = true;
+        boolean assumeVerticalShaftMine = !BlockStateInterface.getBlock(loc.above()).fallingBlock();
         boolean upwardGoal = internalMiningGoal(loc.above(), context, locs);
         boolean downwardGoal = internalMiningGoal(loc.below(), context, locs);
         boolean doubleDownwardGoal = internalMiningGoal(loc.below(2), context, locs);
@@ -449,7 +449,8 @@ public final class MineProcess extends BaritoneProcessHelper implements IBariton
             return null;
         }
         if (!CONFIG.client.extra.pathfinder.allowBreak) {
-            PATH_LOG.warn("Unable to mine when allowBreak is off!");
+            // todo: discord noti?
+            error("Unable to mine when allowBreak is off!");
             return null;
         }
         return filter;

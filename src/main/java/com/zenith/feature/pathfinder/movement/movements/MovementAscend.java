@@ -75,24 +75,25 @@ public class MovementAscend extends Movement {
             }
         }
         int srcUp2 = context.getId(x, y + 2, z); // used lower down anyway
-//        if (context.get(x, y + 3, z).getBlock() instanceof FallingBlock && (MovementHelper.canWalkThrough(context, x, y + 1, z) || !(srcUp2.getBlock() instanceof FallingBlock))) {//it would fall on us and possibly suffocate us
-//            // HOWEVER, we assume that we're standing in the start position
-//            // that means that src and src.up(1) are both air
-//            // maybe they aren't now, but they will be by the time this starts
-//            // if the lower one is can't walk through and the upper one is falling, that means that by standing on src
-//            // (the presupposition of this Movement)
-//            // we have necessarily already cleared the entire FallingBlock stack
-//            // on top of our head
-//
-//            // as in, if we have a block, then two FallingBlocks on top of it
-//            // and that block is x, y+1, z, and we'd have to clear it to even start this movement
-//            // we don't need to worry about those FallingBlocks because we've already cleared them
-//            return COST_INF;
-//            // you may think we only need to check srcUp2, not srcUp
-//            // however, in the scenario where glitchy world gen where unsupported sand / gravel generates
-//            // it's possible srcUp is AIR from the start, and srcUp2 is falling
-//            // and in that scenario, when we arrive and break srcUp2, that lets srcUp3 fall on us and suffocate us
-//        }
+        Block srcUp2Block = BlockStateInterface.getBlock(srcUp2);
+        if (context.getBlock(x, y + 3, z).fallingBlock() && (MovementHelper.canWalkThrough(context, x, y + 1, z) || !(srcUp2Block.fallingBlock()))) {//it would fall on us and possibly suffocate us
+            // HOWEVER, we assume that we're standing in the start position
+            // that means that src and src.up(1) are both air
+            // maybe they aren't now, but they will be by the time this starts
+            // if the lower one is can't walk through and the upper one is falling, that means that by standing on src
+            // (the presupposition of this Movement)
+            // we have necessarily already cleared the entire FallingBlock stack
+            // on top of our head
+
+            // as in, if we have a block, then two FallingBlocks on top of it
+            // and that block is x, y+1, z, and we'd have to clear it to even start this movement
+            // we don't need to worry about those FallingBlocks because we've already cleared them
+            return COST_INF;
+            // you may think we only need to check srcUp2, not srcUp
+            // however, in the scenario where glitchy world gen where unsupported sand / gravel generates
+            // it's possible srcUp is AIR from the start, and srcUp2 is falling
+            // and in that scenario, when we arrive and break srcUp2, that lets srcUp3 fall on us and suffocate us
+        }
         int srcDown = context.getId(x, y - 1, z);
         Block srcDownBlock = BlockStateInterface.getBlock(srcDown);
         if (srcDownBlock == BlockRegistry.LADDER || srcDownBlock == BlockRegistry.VINE) {

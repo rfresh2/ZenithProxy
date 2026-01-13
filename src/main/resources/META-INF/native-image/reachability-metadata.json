@@ -2248,6 +2248,11 @@
             "boolean",
             "java.util.EnumSet",
             "boolean",
+            "float",
+            "float",
+            "float",
+            "boolean",
+            "boolean",
             "org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType"
           ]
         }

@@ -24,6 +24,7 @@ public record Block(
     float speedFactor,
     float jumpFactor,
     boolean isAir,
+    boolean fallingBlock,
     @Nullable BlockEntityType blockEntityType
 ) implements RegistryData {
     @Override
