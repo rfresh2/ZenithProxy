@@ -848,6 +848,20 @@ public class PathfinderCommand extends Command {
                     .title("Pathfinder")
                     .addField("Interact With Process Max Path Tries", CONFIG.client.extra.pathfinder.interactWithProcessMaxPathTries)
                     .primaryColor();
+            })))
+            .then(literal("avoidUpdatingFallingBlocks").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.pathfinder.avoidUpdatingFallingBlocks = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Avoid Updating Falling Blocks", CONFIG.client.extra.pathfinder.avoidUpdatingFallingBlocks)
+                    .primaryColor();
+            })))
+            .then(literal("pauseMiningForFallingBlocks").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.pathfinder.pauseMiningForFallingBlocks = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Pause Mining For Falling Blocks", CONFIG.client.extra.pathfinder.pauseMiningForFallingBlocks)
+                    .primaryColor();
             })));
     }
 
@@ -877,6 +891,8 @@ public class PathfinderCommand extends Command {
         settingsMap.put("renderPathIntervalTicks", String.valueOf(CONFIG.client.extra.pathfinder.pathRenderIntervalTicks));
         settingsMap.put("renderPathDetailed", toggleStr(CONFIG.client.extra.pathfinder.renderPathDetailed));
         settingsMap.put("interactWithProcessMaxPathTries", String.valueOf(CONFIG.client.extra.pathfinder.interactWithProcessMaxPathTries));
+        settingsMap.put("avoidUpdatingFallingBlocks", String.valueOf(CONFIG.client.extra.pathfinder.avoidUpdatingFallingBlocks));
+        settingsMap.put("pauseMiningForFallingBlocks", String.valueOf(CONFIG.client.extra.pathfinder.pauseMiningForFallingBlocks));
         return settingsMap;
     }
 

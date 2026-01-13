@@ -51,14 +51,13 @@ public final class MovementHelper {
         // we assume that it's ALWAYS okay to break the block thats ABOVE liquid
         int state = BlockStateInterface.getId(x, y, z);
         Block block = BlockStateInterface.getBlock(state);
-//        if (!directlyAbove // it is fine to mine a block that has a falling block directly above, this (the cost of breaking the stacked fallings) is included in cost calculations
-//            // therefore if directlyAbove is true, we will actually ignore if this is falling
-//            && block instanceof FallingBlock // obviously, this check is only valid for falling blocks
-//            && Baritone.settings().avoidUpdatingFallingBlockRegistry.value // and if the setting is enabled
-//            && FallingBlock.isFree(bsi.get0(x, y - 1, z))) { // and if it would fall (i.e. it's unsupported)
-//        ) {
-//            return true; // dont break a block that is adjacent to unsupported gravel because it can cause really weird stuff
-//        }
+        if (!directlyAbove // it is fine to mine a block that has a falling block directly above, this (the cost of breaking the stacked fallings) is included in cost calculations
+            // therefore if directlyAbove is true, we will actually ignore if this is falling
+            && block.fallingBlock() // obviously, this check is only valid for falling blocks
+            && CONFIG.client.extra.pathfinder.avoidUpdatingFallingBlocks // and if the setting is enabled
+            && freeForFallingBlock(x, y - 1, z)) { // and if it would fall (i.e. it's unsupported)
+            return true; // dont break a block that is adjacent to unsupported gravel because it can cause really weird stuff
+        }
         // only pure liquids for now
         // waterlogged blocks can have closed bottom sides and such
         if (isLiquid(block)) {
@@ -72,6 +71,15 @@ public final class MovementHelper {
             return !isLiquid(BlockStateInterface.getBlock(x, y -1, z)); // assume everything is in a static state
         }
         return World.getFluidState(x, y, z) != null;
+    }
+
+    static boolean freeForFallingBlock(int x, int y, int z) {
+        var block = BlockStateInterface.getBlock(x, y, z);
+        return block.isAir()
+            || block == BlockRegistry.FIRE || block == BlockRegistry.SOUL_FIRE
+            || isLiquid(block)
+            || block.replaceable();
+
     }
 
     public static boolean canWalkThrough(BlockPos pos) {
@@ -561,6 +569,12 @@ public final class MovementHelper {
             double result = 1 / strVsBlock;
             result += context.breakBlockAdditionalCost;
             result *= mult;
+            if (includeFalling) {
+                var above = BlockStateInterface.getBlock(x, y + 1, z);
+                if (above.fallingBlock()) {
+                    result += getMiningDurationTicks(context, x, y + 1, z, true);
+                }
+            }
             if (context.goal != null && context.goal.isInGoal(x, y, z)) {
                 result = Math.min(result, 20);
             }
