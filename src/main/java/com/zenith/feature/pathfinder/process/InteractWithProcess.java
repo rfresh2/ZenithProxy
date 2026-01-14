@@ -463,7 +463,9 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                     .build()
             ).addInputExecutedListener(f -> {
                 if (futureSucceeded(f)) {
-                    info("Started breaking block {} at [{}, {}, {}]", World.getBlock(x, y, z).name(), x, y, z);
+                    if (!isBreaking) {
+                        info("Started breaking block {} at [{}, {}, {}]", World.getBlock(x, y, z).name(), x, y, z);
+                    }
                     isBreaking = true;
                 }
             });
