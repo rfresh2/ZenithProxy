@@ -1,0 +1,49 @@
+name: ZenithProxy Plugin Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Setup JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'corretto'
+
+      - name: Elevate wrapper permissions
+        run: chmod +x ./gradlew
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          dependency-graph: generate-and-submit
+          cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      - name: Build ZenithProxy
+        run: ./gradlew build
+
+      - name: Setup Plugin Load Test
+        run: |
+          mkdir -p run/plugins
+          wget https://github.com/rfresh2/ZenithProxyWebAPI/releases/download/1.0.5/ZenithProxyWebAPI-1.0.5.jar -O run/plugins/ZenithProxyWebAPI.jar
+          wget https://github.com/rfresh2/ZenithProxyVillagerTrader/releases/download/2.0.3/ZenithProxyVillagerTrader-2.0.3.jar -O run/plugins/ZenithProxyVillagerTrader.jar
+          wget https://github.com/rfresh2/ZenithProxyChatControl/releases/download/1.0.4/ZenithProxyChatControl-1.0.4.jar -O run/plugins/ZenithProxyChatControl.jar
+          wget https://github.com/rfresh2/ZenithProxySparkPlugin/releases/download/1.0.3/ZenithProxySparkPlugin-1.0.3.jar -O run/plugins/ZenithProxySparkPlugin.jar
+
+      - name: Run Plugin Load Test
+        run: ./gradlew pluginLoadTest
+
+      - name: Upload Java Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: ZenithProxy-java
+          path: build/libs/ZenithProxy.jar
+          if-no-files-found: error
