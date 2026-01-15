@@ -611,7 +611,7 @@ public class CoordObfuscation extends Module {
         }
 
         // todo: remove after implementing
-        invalidReasons.add("1.21.5 item component obfuscation is not implemented yet. Items like beehives and recovery compasses may leak coords. Downgrade release channel to 1.21.0: `channel set <linux/java> 1.21.0`");
+        invalidReasons.add("1.21.5+ item component obfuscation is not implemented yet. Items like beehives and recovery compasses may leak coords. Downgrade release channel to 1.21.4: `channel set <linux/java> 1.21.4`");
         valid = false;
 
         return new ValidationResult(valid, invalidReasons);
