@@ -129,6 +129,11 @@ public class Baritone implements Pathfinder {
     }
 
     @Override
+    public PathingRequestFuture getTo(final Block block, boolean rightClickContainerOnArrival) {
+        return getGetToBlockProcess().getToBlock(block, rightClickContainerOnArrival);
+    }
+
+    @Override
     public PathingRequestFuture mine(Block... blocks) {
         return getMineProcess().mine(blocks);
     }

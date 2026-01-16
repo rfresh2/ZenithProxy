@@ -16,6 +16,7 @@ public interface Pathfinder {
     PathingRequestFuture pathTo(int x, int y, int z);
     PathingRequestFuture thisWay(int dist);
     PathingRequestFuture getTo(Block block);
+    PathingRequestFuture getTo(Block block, boolean rightClickContainerOnArrival);
     PathingRequestFuture mine(Block... blocks);
     PathingRequestFuture follow(Predicate<EntityLiving> entityPredicate);
     PathingRequestFuture follow(EntityLiving entity);
