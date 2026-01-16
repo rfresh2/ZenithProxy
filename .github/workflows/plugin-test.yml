@@ -38,7 +38,7 @@ jobs:
           mkdir -p run/plugins
           wget https://github.com/rfresh2/ZenithProxyWebAPI/releases/download/1.0.5/ZenithProxyWebAPI-1.0.5.jar -O run/plugins/ZenithProxyWebAPI.jar
           wget https://github.com/rfresh2/ZenithProxyVillagerTrader/releases/download/2.0.3/ZenithProxyVillagerTrader-2.0.3.jar -O run/plugins/ZenithProxyVillagerTrader.jar
-          wget https://github.com/rfresh2/ZenithProxyChatControl/releases/download/1.0.4/ZenithProxyChatControl-1.0.4.jar -O run/plugins/ZenithProxyChatControl.jar
+          wget https://github.com/rfresh2/ZenithProxyChatControl/releases/download/1.0.5/ZenithProxyChatControl-1.0.5.jar -O run/plugins/ZenithProxyChatControl.jar
           wget https://github.com/rfresh2/ZenithProxySparkPlugin/releases/download/1.0.3/ZenithProxySparkPlugin-1.0.3.jar -O run/plugins/ZenithProxySparkPlugin.jar
 
       - name: Run Plugin Load Test

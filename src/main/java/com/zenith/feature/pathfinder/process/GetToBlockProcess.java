@@ -1,5 +1,7 @@
 package com.zenith.feature.pathfinder.process;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.zenith.feature.pathfinder.*;
 import com.zenith.feature.pathfinder.goals.*;
@@ -234,19 +236,19 @@ public final class GetToBlockProcess extends BaritoneProcessHelper {
     }
 
     private boolean rightClickOnArrival(Block block) {
-        return rightClickContainerOnArrival && clickableContainers.contains(block);
+        return rightClickContainerOnArrival && clickableContainersSupplier.get().contains(block);
     }
 
     private boolean blockOnTopMustBeRemoved(Block block) {
         if (!rightClickOnArrival(block)) { // only if we plan to actually open it on arrival
             return false;
         }
-        return blockOnTopMustBeRemovedContainers.contains(block);
+        return blockOnTopMustBeRemovedContainersSupplier.get().contains(block);
     }
 
     private BlockPos onTopOfContainer(BlockPos pos) {
         var containerBlock = World.getBlock(pos);
-        if (!clickableContainers.contains(containerBlock)) {
+        if (!clickableContainersSupplier.get().contains(containerBlock)) {
             return pos;
         }
         if (containerBlock.name().contains("shulker")) {
@@ -258,8 +260,9 @@ public final class GetToBlockProcess extends BaritoneProcessHelper {
         return pos.above();
     }
 
-
-    private static final Set<Block> clickableContainers = Set.of(
+    // graalvm trick to fix compilation
+    // need to defer init refs to BlockRegistry
+    private final Supplier<Set<Block>> clickableContainersSupplier = Suppliers.memoize(() -> Set.of(
         BlockRegistry.CRAFTING_TABLE,
         BlockRegistry.FURNACE,
         BlockRegistry.BLAST_FURNACE,
@@ -295,9 +298,9 @@ public final class GetToBlockProcess extends BaritoneProcessHelper {
         BlockRegistry.GREEN_SHULKER_BOX,
         BlockRegistry.RED_SHULKER_BOX,
         BlockRegistry.BLACK_SHULKER_BOX
-    );
+    ));
 
-    private static final Set<Block> blockOnTopMustBeRemovedContainers = Set.of(
+    private final Supplier<Set<Block>> blockOnTopMustBeRemovedContainersSupplier = Suppliers.memoize(() -> Set.of(
         BlockRegistry.ENDER_CHEST,
         BlockRegistry.CHEST,
         BlockRegistry.TRAPPED_CHEST,
@@ -318,5 +321,5 @@ public final class GetToBlockProcess extends BaritoneProcessHelper {
         BlockRegistry.GREEN_SHULKER_BOX,
         BlockRegistry.RED_SHULKER_BOX,
         BlockRegistry.BLACK_SHULKER_BOX
-    );
+    ));
 }

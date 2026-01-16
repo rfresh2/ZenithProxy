@@ -2,7 +2,6 @@
 package com.zenith.mc.block;
 
 import com.zenith.mc.Registry;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 public final class BlockRegistry {
     public static final Registry<Block> REGISTRY = new Registry<Block>(1095);
@@ -2198,13 +2197,8 @@ public final class BlockRegistry {
     public static final Block POTTED_CLOSED_EYEBLOSSOM;
 
     static {
-        Int2ObjectMap<Block> data = null;
-        try {
-            var jsonRegistrySpec = new BlockRegistrySpec();
-            data = jsonRegistrySpec.read();
-        } catch (Exception e) {
-            System.err.println("Failed to load block registry data!");
-        }
+        var jsonRegistrySpec = new BlockRegistrySpec();
+        var data = jsonRegistrySpec.read();
         AIR = REGISTRY.register(data.get(0));
         STONE = REGISTRY.register(data.get(1));
         GRANITE = REGISTRY.register(data.get(2));
