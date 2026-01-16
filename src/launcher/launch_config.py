@@ -91,7 +91,9 @@ class LaunchConfig:
     def get_mc_version(self):
         # extract mc version from release channel
         # e.g. java.1.20.1 -> 1.20.1 or linux.1.20.1 -> 1.20.1
-        channel = self.release_channel.removesuffix(".pre")
+        channel = self.release_channel
+        if channel.endswith(".pre"):
+            channel = channel[:-4]
         java = channel.startswith("java")
         linux = channel.startswith("linux")
         if channel.find(".") == -1 or (not java and not linux):

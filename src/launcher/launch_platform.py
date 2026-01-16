@@ -4,6 +4,7 @@ import socket
 import subprocess
 import sys
 from enum import Enum
+from typing import Optional
 
 import requests
 
@@ -165,7 +166,7 @@ def get_platform_arch() -> CpuArch:
         raise PlatformError("Unsupported CPU architecture: " + uname)
 
 
-def get_public_ip() -> str | None:
+def get_public_ip() -> Optional[str]:
     response = requests.get("https://api.ipify.org", timeout=10)
     if response.status_code == 200:
         return response.content.decode()

@@ -189,7 +189,10 @@ def setup_execute(config):
                 if guild_json is None:
                     error("Failed to get guild information for channel")
                     continue
-                info(f"Found channel: '{channel_json["name"]}' ({channel_json["id"]}) in server: '{guild_json["name"]}' ({guild_id})")
+                channel_name = channel_json["name"]
+                channel_id = channel_json["id"]
+                guild_name = guild_json["name"]
+                info(f"Found channel: '{channel_name}' ({channel_id}) in server: '{guild_name}' ({guild_id})")
                 break
             except ValueError:
                 error("Invalid ID")
@@ -238,7 +241,10 @@ def setup_execute(config):
                     if guild_id != channel_json["guild_id"]:
                         error("Chat Relay channel must be in the same server as the Management channel")
                         continue
-                    info(f"Found channel: '{channel_json["name"]}' ({channel_json["id"]}) in server: '{guild_json["name"]}' ({guild_id})")
+                    channel_name = channel_json["name"]
+                    channel_id = channel_json["id"]
+                    guild_name = guild_json["name"]
+                    info(f"Found channel: '{channel_name}' ({channel_id}) in server: '{guild_name}' ({guild_id})")
                     break
                 except ValueError:
                     error("Invalid ID")

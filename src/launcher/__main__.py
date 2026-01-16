@@ -5,17 +5,23 @@ import time
 
 if sys.version_info[0] < 3 or sys.version_info[1] < 6:
     # f strings added in 3.6
-    # very well possible other things will break pre 3.10, not sure tho
-    print("CRITICAL: Python 3.10 or higher is required")
+    # it's possible other things will break pre 3.10, not sure tho
+    print("CRITICAL: Python 3.10 or higher is required. Current version: " + str(sys.version_info[0]) + "." + str(sys.version_info[1]))
     sys.exit(1)
 
-import certifi
+if sys.version_info[1] < 10:
+    print("WARNING: Python 3.10 or higher is required. Current version: " + str(sys.version_info[0]) + "." + str(sys.version_info[1]))
 
+from log import info, critical_error
+
+info("ZenithProxy Launcher Initializing...")
+info(f"Python Version: {sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]}")
+
+import certifi
 import github_api
 import launch_platform
 from launch_config import LaunchConfig, read_launch_config_file
 from launcher import launcher_exec
-from log import info, critical_error
 from setup import setup_execute, rescue_invalid_system, setup_unattended
 from update_launcher import update_launcher_exec
 from update_zenith import update_zenith_exec
@@ -24,8 +30,6 @@ ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=ce
 
 config = LaunchConfig()
 api = github_api.GitHubAPI(config)
-
-info("ZenithProxy Launcher Initializing...")
 
 # Certain platforms like mac seem to not have the correct cwd set correctly when double clicking the executable
 if launch_platform.is_pyinstaller_bundle():
