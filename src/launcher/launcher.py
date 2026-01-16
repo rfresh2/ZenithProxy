@@ -5,7 +5,7 @@ import time
 from collections import deque
 
 from jdk_install import get_java_executable, get_java_version_from_subprocess
-from utils import critical_error
+from log import info, warn, critical_error
 
 default_java_xmx = 300
 
@@ -44,7 +44,7 @@ def launch_linux(config):
     if "-Xmx" not in jvm_args:
         jvm_args += f" -Xmx{default_linux_xmx}M"
     run_script = f"./{config.launch_dir}ZenithProxy {jvm_args}"
-    print(">", run_script)
+    info(f"> {run_script}")
     _record_launch()
     before = time.time()
     try:
@@ -57,14 +57,14 @@ def launch_linux(config):
             if after - before <= 1:
                 config.custom_jvm_args = None
                 config.write_launch_config()
-                print("Resetting custom JVM args and retrying.")
+                warn("Resetting custom JVM args and retrying.")
                 return
         critical_error("Error launching application:", e)
 
 
 def launch_java(config):
     java_executable = get_java_executable()
-    print("Using Java installation:", java_executable)
+    info(f"Using Java installation: {java_executable}")
     java_version = int(get_java_version_from_subprocess(java_executable))
     if platform.system() == "Windows":
         java_executable = '"' + java_executable.replace("/", "\\") + '"'
@@ -88,7 +88,7 @@ def launch_java(config):
     else:
         jar_command = "-jar " + config.launch_dir + "ZenithProxy.jar"
     run_script = f"{java_executable} {jvm_args} {jar_command}"
-    print(">", run_script)
+    info(f"> {run_script}")
     _record_launch()
     before = time.time()
     try:
@@ -101,7 +101,7 @@ def launch_java(config):
             if after - before <= 1:
                 config.custom_jvm_args = None
                 config.write_launch_config()
-                print("Resetting custom JVM args and retrying.")
+                warn("Resetting custom JVM args and retrying.")
                 return
         critical_error("Error launching application:", str(e))
 
@@ -123,7 +123,7 @@ def launch_git(config):
         toolchain_command = "./build/java_toolchain"
         jar_command = "-jar build/libs/ZenithProxy.jar"
     run_script = f"{toolchain_command} {jvm_args} {jar_command}"
-    print(">", run_script)
+    info(f"> {run_script}")
     _record_launch()
     before = time.time()
     try:
@@ -136,12 +136,12 @@ def launch_git(config):
             if after - before <= 1:
                 config.custom_jvm_args = None
                 config.write_launch_config()
-                print("Resetting custom JVM args and retrying.")
+                warn("Resetting custom JVM args and retrying.")
         critical_error("Error launching application:", e)
 
 
 def launcher_exec(config):
-    print("Launching ZenithProxy...")
+    info("Launching ZenithProxy...")
     check_bootloop()
     if config.release_channel == "git":
         launch_git(config)

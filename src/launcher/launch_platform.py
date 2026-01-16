@@ -9,6 +9,7 @@ import requests
 
 from jdk_install import get_java_executable, JavaInstallType
 from launch_config import LaunchConfig
+from log import error, warn
 from version import Version
 
 
@@ -23,7 +24,7 @@ def validate_linux_cpu_flags() -> bool:
                 break
         for flag in x86_64_v3_flags:
             if flag not in flags:
-                print(
+                warn(
                     "Unsupported CPU. "
                     + "Use the Java release channel instead. Re-run setup to change the release channel. "
                     + "\nFlag not found: "
@@ -32,7 +33,7 @@ def validate_linux_cpu_flags() -> bool:
                 return False
         return True
     except Exception as e:
-        print("Error checking CPU flags:", e)
+        error("Error checking CPU flags: %s", e)
         return False
 
 
@@ -50,7 +51,7 @@ def validate_linux_glibc_version(config: LaunchConfig) -> bool:
         version = output.splitlines()[0].split(" ")[-1]
         version = version.split(".")
         if int(version[0]) != 2 or int(version[1]) < glibc_minor_version_min:
-            print(
+            warn(
                 "Unsupported OS for linux release channel.\nglibc version too low: "
                 + str(int(version[0])) + "." + str(int(version[1]))
                 + "\nMin glibc version needed: 2."
@@ -59,7 +60,7 @@ def validate_linux_glibc_version(config: LaunchConfig) -> bool:
             return False
         return True
     except Exception as e:
-        print("Error checking GLIBC version.")
+        error("Error checking GLIBC version.")
         return False
 
 
@@ -79,7 +80,7 @@ def validate_java_system(config: LaunchConfig, install_type) -> bool:
     java_version = min_java_version(config)
     java_executable = get_java_executable(java_version, install_type=install_type)
     if java_executable is None:
-        print(f"Java >={java_version} not found.")
+        warn(f"Java >={java_version} not found.")
         return False
     return True
 
@@ -169,7 +170,7 @@ def get_public_ip() -> str | None:
     if response.status_code == 200:
         return response.content.decode()
     else:
-        print("Failed to get public IP:", response.status_code, response.reason)
+        error(f"Failed to get public IP: {response.status_code} {response.reason}")
         return None
 
 

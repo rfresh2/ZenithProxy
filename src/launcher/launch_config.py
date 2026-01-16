@@ -2,7 +2,7 @@ import json
 import os
 import re
 
-from utils import critical_error
+from log import info, error, critical_error
 
 
 def version_looks_valid(ver):
@@ -19,10 +19,10 @@ def read_launch_config_file():
             data = json.load(f)
             return data
     except FileNotFoundError:
-        print("launch_config.json not found")
+        info("launch_config.json not found")
         return None
     except json.decoder.JSONDecodeError:
-        print("launch_config.json is invalid")
+        error("launch_config.json is invalid")
         return None
 
 
@@ -51,7 +51,7 @@ class LaunchConfig:
         self.repo_name = data.get("repo_name", self.repo_name)
         self.custom_jvm_args = data.get("custom_jvm_args", self.custom_jvm_args)
         if self.custom_jvm_args is not None and self.custom_jvm_args != "":
-            print("Using custom JVM args:", self.custom_jvm_args)
+            info(f"Using custom JVM args: {self.custom_jvm_args}")
 
     def write_launch_config(self):
         output = {
@@ -70,21 +70,21 @@ class LaunchConfig:
         os.replace("launch_config.json.tmp", "launch_config.json")
 
     def create_default_launch_config(self):
-        print("Creating default launch_config.json")
+        info("Creating default launch_config.json")
         self.write_launch_config()
 
     def validate_launch_config(self):
         if not valid_release_channel(self.release_channel):
-            print("Invalid release channel:", self.release_channel)
+            error(f"Invalid release channel: {self.release_channel}")
             return False
         if not version_looks_valid(self.version):
-            print("Invalid version string:", self.version)
+            error(f"Invalid version string: {self.version}")
             return False
         if self.repo_name == "":
-            print("Invalid repo name:", self.repo_name)
+            error(f"Invalid repo name: {self.repo_name}")
             return False
         if self.repo_owner == "":
-            print("Invalid repo owner:", self.repo_owner)
+            error(f"Invalid repo owner: {self.repo_owner}")
             return False
         return True
 

@@ -3,23 +3,29 @@ import ssl
 import sys
 import time
 
+if sys.version_info[0] < 3 or sys.version_info[1] < 6:
+    # f strings added in 3.6
+    # very well possible other things will break pre 3.10, not sure tho
+    print("CRITICAL: Python 3.10 or higher is required")
+    sys.exit(1)
+
 import certifi
 
 import github_api
 import launch_platform
 from launch_config import LaunchConfig, read_launch_config_file
 from launcher import launcher_exec
+from log import info, critical_error
 from setup import setup_execute, rescue_invalid_system, setup_unattended
 from update_launcher import update_launcher_exec
 from update_zenith import update_zenith_exec
-from utils import critical_error
 
 ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
 
 config = LaunchConfig()
 api = github_api.GitHubAPI(config)
 
-print("ZenithProxy Launcher Initializing...")
+info("ZenithProxy Launcher Initializing...")
 
 # Certain platforms like mac seem to not have the correct cwd set correctly when double clicking the executable
 if launch_platform.is_pyinstaller_bundle():
@@ -56,17 +62,17 @@ try:
         if json_data is None:
             if unattended:
                 critical_error("launch_config.json not found and unattended setup is enabled")
-            print("Running setup...")
+            info("Running setup...")
             setup_execute(config)
             continue
         config.load_launch_config_data(json_data)
         if not config.validate_launch_config():
             if unattended:
                 critical_error("launch_config.json has invalid values and unattended setup is enabled")
-            print("launch_config.json has invalid values, running setup...")
+            info("launch_config.json has invalid values, running setup...")
             setup_execute(config)
             continue
-        print("Loaded launch_config.json successfully")
+        info("Loaded launch_config.json successfully")
         if not launch_platform.validate_system_with_config(config):
             if unattended:
                 critical_error("System validation failed and unattended setup is enabled")
@@ -78,7 +84,7 @@ try:
             update_launcher_exec(config, api)
         update_zenith_exec(config, api)
         launcher_exec(config)
-        print("Restarting in 3 seconds...")
+        info("Restarting in 3 seconds...")
         time.sleep(3)
 except KeyboardInterrupt:
     sys.exit(0)

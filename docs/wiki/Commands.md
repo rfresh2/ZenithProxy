@@ -479,6 +479,8 @@ Debug settings for features in testing or for use in development.
 
   ```debug uploadDebugLog```
 
+  ```debug uploadLauncherLog```
+
   ```debug passthroughResourcePacks on/off```
 
 

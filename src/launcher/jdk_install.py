@@ -6,7 +6,7 @@ from enum import Enum
 import jdk
 
 import launch_platform
-from utils import critical_error
+from log import info, error, warn, critical_error
 
 _USER_DIR = os.path.expanduser("~")
 _JDK_DIR = os.path.join(_USER_DIR, ".jdk")
@@ -32,7 +32,7 @@ def get_java_executable(min_version=21, install_type=JavaInstallType.AUTO_INSTAL
         elif install_type == JavaInstallType.NO_INSTALL:
             critical_error("Java not found and both auto install and user prompt disabled.")
         if not java_path:
-            print("Failed to install Java.")
+            warn("Failed to install Java.")
             return None
     return java_path
 
@@ -73,9 +73,9 @@ def _locate_java_from_env(env_var, min_version):
 
 
 def _install_java():
-    print("Installing Java to:", _JDK_DIR)
+    info(f"Installing Java to: {_JDK_DIR}")
     install_dir = jdk.install("25", path=_JDK_DIR)
-    print("Java installed successfully to:", install_dir)
+    info(f"Java installed successfully to: {install_dir}")
 
 
 def _java_exe_extension():
@@ -131,13 +131,13 @@ def _locate_java(min_version):
 
 def _java_install_prompt():
     while True:
-        print("Automatically install Java? (y/n)")
+        info("Automatically install Java? (y/n)")
         i1 = input("> ")
         if i1 == "y":
             _install_java()
             break
         elif i1 == "n":
-            print("Please install Java 21+ and try again.")
+            error("Please install Java 21+ and try again.")
             break
         else:
-            print("Invalid input. Enter y or n")
+            error("Invalid input. Enter y or n")

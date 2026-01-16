@@ -11,16 +11,16 @@ from launch_config import read_launch_config_file
 from launch_platform import get_public_ip, check_port_in_use
 from launch_platform import min_java_version
 from launch_platform import validate_linux_system
-from utils import critical_error
+from log import info, error, critical_error
 
 
 def setup_execute(config):
     if validate_linux_system(config):  # otherwise we will always select java
         while True:
-            print("Select a ZenithProxy platform: (1/2)")
-            print("More info: https://wiki.2b2t.vc/Setup/#release-channels")
-            print("1. java")
-            print("2. linux (Recommended)")
+            info("Select a ZenithProxy platform: (1/2)")
+            info("More info: https://wiki.2b2t.vc/Setup/#release-channels")
+            info("1. java")
+            info("2. linux (Recommended)")
             i1 = input("> ")
             if i1 == "1":
                 release_channel = "java"
@@ -29,15 +29,15 @@ def setup_execute(config):
                 release_channel = "linux"
                 break
             else:
-                print("Invalid input. Enter 1 or 2")
+                error("Invalid input. Enter 1 or 2")
     else:
         release_channel = "java"
-    print("")
+    info("")
 
     if release_channel == "java":
         if not launch_platform.validate_java_system(config, JavaInstallType.USER_PROMPT):
             critical_error("Setup cancelled")
-        print("")
+        info("")
 
     # while True:
     #     print("Select a Minecraft version: (1/2)")
@@ -68,44 +68,44 @@ def setup_execute(config):
     config.repo_owner = "rfresh2"
     config.repo_name = "ZenithProxy"
     config.write_launch_config()
-    print("launch_config.json written successfully!")
-    print("")
+    info("launch_config.json written successfully!")
+    info("")
 
     if os.path.exists("config.json"):
         while True:
-            print("config.json already exists, overwrite and continue anyway? (y/n)")
+            info("config.json already exists, overwrite and continue anyway? (y/n)")
             i1 = input("> ").lower()
             if i1 == "n":
                 return
             elif i1 == "y":
                 break
             else:
-                print("Invalid input. Enter y or n")
-        print("")
+                error("Invalid input. Enter y or n")
+        info("")
 
     while True:
-        print("Select the type of environment you are running ZenithProxy on.")
-        print("1. PC or other computer in your home")
-        print("2. VPS or server outside your home")
+        info("Select the type of environment you are running ZenithProxy on.")
+        info("1. PC or other computer in your home")
+        info("2. VPS or server outside your home")
         i1 = input("> ")
         if i1 == "1":
             ip = "localhost"
             break
         elif i1 == "2":
-            print("Attempting to determine IP for players to connect to...")
+            info("Attempting to determine IP for players to connect to...")
             ip = get_public_ip()
             if ip is not None:
-                print("Found IP:", ip)
+                info(f"Found IP: {ip}")
             else:
                 ip = "localhost"
             break
         else:
-            print("Invalid input. Enter 1 or 2.")
-    print("")
+            error("Invalid input. Enter 1 or 2.")
+    info("")
 
     while True:
-        print("Select the port ZenithProxy will be hosted on.")
-        print("If you are unsure, press enter to select a random port.")
+        info("Select the port ZenithProxy will be hosted on.")
+        info("If you are unsure, press enter to select a random port.")
         port = input("> ")
         if port == "":
             port = int(random.uniform(35000, 65000))
@@ -122,33 +122,33 @@ def setup_execute(config):
                 raise ValueError
             break
         except ValueError:
-            print("Invalid port number. Must be between 1 and 65535")
-    print("Using port:", port)
-    print("")
+            error("Invalid port number. Must be between 1 and 65535")
+    info(f"Using port: {port}")
+    info("")
 
     upnp = False
     if ip == "localhost":
         while True:
-            print("Enable automatic port forwarding with UPnP (https://w.wiki/Ebjt)? (y/n)")
-            print("If you are unsure, press enter to select 'n'")
+            info("Enable automatic port forwarding with UPnP (https://w.wiki/Ebjt)? (y/n)")
+            info("If you are unsure, press enter to select 'n'")
             i1 = input("> ")
             if i1 == "y":
                 upnp = True
-                print("Attempting to determine IP for players to connect to...")
+                info("Attempting to determine IP for players to connect to...")
                 public_ip = get_public_ip()
                 if public_ip is not None:
                     ip = public_ip
-                    print("Found IP:", ip)
+                    info(f"Found IP: {ip}")
                 break
             elif i1 == "n" or i1 == "":
                 upnp = False
                 break
             else:
-                print("Invalid input. Enter y or n")
-        print("")
+                error("Invalid input. Enter y or n")
+        info("")
 
     while True:
-        print("Enable Discord bot? (y/n)")
+        info("Enable Discord bot? (y/n)")
         i2 = input("> ")
         if i2 == "y":
             discord_bot = True
@@ -157,24 +157,24 @@ def setup_execute(config):
             discord_bot = False
             break
         else:
-            print("Invalid input. Enter y or n")
-    print("")
+            error("Invalid input. Enter y or n")
+    info("")
 
     if discord_bot:
-        print("Discord bot setup instructions: https://wiki.2b2t.vc/Discord-Bot-Guide")
+        info("Discord bot setup instructions: https://wiki.2b2t.vc/Discord-Bot-Guide")
         discord_verify_verbose = False
         while True:
-            print("Enter Discord bot token:")
+            info("Enter Discord bot token:")
             discord_bot_token = input("> ")
             if len(discord_bot_token) < 50:
-                print("Invalid token")
+                error("Invalid token")
                 continue
             if verify_discord_bot_token(discord_bot_token, discord_verify_verbose):
                 break
             discord_verify_verbose = True # verbose on second attempt
-        print("")
+        info("")
         while True:
-            print("Enter a Discord channel ID to manage ZenithProxy in:")
+            info("Enter a Discord channel ID to manage ZenithProxy in:")
             discord_channel_id = input("> ")
             try:
                 discord_channel_id = int(discord_channel_id)
@@ -182,34 +182,34 @@ def setup_execute(config):
                     raise ValueError
                 channel_json = verify_discord_channel(discord_bot_token, str(discord_channel_id))
                 if channel_json is None:
-                    print("Invalid channel ID or bot does not have access to this channel")
+                    error("Invalid channel ID or bot does not have access to this channel")
                     continue
                 guild_id = channel_json["guild_id"]
                 guild_json = get_discord_guild(discord_bot_token, guild_id)
                 if guild_json is None:
-                    print("Failed to get guild information for channel")
+                    error("Failed to get guild information for channel")
                     continue
-                print(f"Found channel: '{channel_json["name"]}' ({channel_json["id"]}) in server: '{guild_json["name"]}' ({guild_id})")
+                info(f"Found channel: '{channel_json["name"]}' ({channel_json["id"]}) in server: '{guild_json["name"]}' ({guild_id})")
                 break
             except ValueError:
-                print("Invalid ID")
-        print("")
+                error("Invalid ID")
+        info("")
         while True:
-            print("Enter a Discord Role ID to grant management permissions like the whitelist to:")
+            info("Enter a Discord Role ID to grant management permissions like the whitelist to:")
             discord_admin_role_id = input("> ")
             try:
                 discord_admin_role_id = int(discord_admin_role_id)
                 if discord_admin_role_id < 1000000000 or discord_admin_role_id > 9999999999999999999:
                     raise ValueError
                 if not verify_discord_role(discord_bot_token, guild_id, str(discord_admin_role_id)):
-                    print("Invalid role ID or role does not exist in the server")
+                    info("Invalid role ID or role does not exist in the server")
                     continue
                 break
             except ValueError:
-                print("Invalid ID")
-        print("")
+                error("Invalid ID")
+        info("")
         while True:
-            print("Enable Discord Chat Relay? (y/n)")
+            info("Enable Discord Chat Relay? (y/n)")
             i3 = input("> ")
             if i3 == "y":
                 chat_relay = True
@@ -218,31 +218,31 @@ def setup_execute(config):
                 chat_relay = False
                 break
             else:
-                print("Invalid input. Enter y or n")
-        print("")
+                error("Invalid input. Enter y or n")
+        info("")
         if chat_relay:
             while True:
-                print("Enter a Discord channel ID for the Chat Relay:")
+                info("Enter a Discord channel ID for the Chat Relay:")
                 discord_chat_relay_channel = input("> ")
                 try:
                     discord_chat_relay_channel = int(discord_chat_relay_channel)
                     if discord_chat_relay_channel < 1000000000 or discord_chat_relay_channel > 9999999999999999999:
                         raise ValueError
                     if discord_chat_relay_channel == discord_channel_id:
-                        print("Chat Relay and Management cannot have the same channel")
+                        error("Chat Relay and Management cannot have the same channel")
                         continue
                     channel_json = verify_discord_channel(discord_bot_token, str(discord_channel_id))
                     if channel_json is None:
-                        print("Invalid channel ID or bot does not have access to this channel")
+                        error("Invalid channel ID or bot does not have access to this channel")
                         continue
                     if guild_id != channel_json["guild_id"]:
-                        print("Chat Relay channel must be in the same server as the Management channel")
+                        error("Chat Relay channel must be in the same server as the Management channel")
                         continue
-                    print(f"Found channel: '{channel_json["name"]}' ({channel_json["id"]}) in server: '{guild_json["name"]}' ({guild_id})")
+                    info(f"Found channel: '{channel_json["name"]}' ({channel_json["id"]}) in server: '{guild_json["name"]}' ({guild_id})")
                     break
                 except ValueError:
-                    print("Invalid ID")
-            print("")
+                    error("Invalid ID")
+            info("")
 
     # Write config.json
     config = {}
@@ -279,15 +279,15 @@ def setup_execute(config):
 
     with open("config.json", "w") as f:
         f.write(json.dumps(config, indent=2))
-        print("config.json written successfully!")
-    print("")
-    print("Setup complete!")
+        info("config.json written successfully!")
+    info("")
+    info("Setup complete!")
 
 
 def rescue_invalid_system(config):
-    print("CRITICAL: Invalid system for release channel: " + config.release_channel)
+    error("CRITICAL: Invalid system for release channel: " + config.release_channel)
     while True:
-        print("Run setup? (y/n)")
+        info("Run setup? (y/n)")
         i1 = input("> ")
         if i1 == "y":
             setup_execute(config)
@@ -304,21 +304,21 @@ def verify_discord_bot_token(token, verbose=False):
     try:
         response = requests.get("https://discord.com/api/applications/@me", headers=headers, timeout=10)
         if response.status_code != 200:
-            print("Invalid token. Discord API response code:", response.status_code)
+            error(f"Invalid token. Discord API response code: {response.status_code}")
             if verbose:
-                print("Full Discord Response:", response.text)
+                error(f"Full Discord Response: {response.text}")
             return False
         response_json = response.json()
         flags = response_json["flags"]
         gateway_message_content = (flags & (1 << 18) == (1 << 18))
         gateway_message_content_limited = (flags & (1 << 19) == (1 << 19))
         if not (gateway_message_content or gateway_message_content_limited):
-            print("ERROR: Message content intent is not enabled, flags: " + str(flags))
-            print("Enable 'Message Content Intent' in the discord bot settings")
+            error(f"ERROR: Message content intent is not enabled, flags: {str(flags)}")
+            info("Enable 'Message Content Intent' in the discord bot settings")
             return False
         return True
     except Exception as e:
-        print("ERROR: Verifying discord bot", e)
+        error("ERROR: Verifying discord bot", e)
         return False
 
 
@@ -330,11 +330,11 @@ def verify_discord_channel(token, channel_id):
     try:
         response = requests.get("https://discord.com/api/channels/" + channel_id, headers=headers, timeout=10)
         if response.status_code != 200:
-            print("ERROR: Discord API response code:", response.status_code)
+            error(f"ERROR: Discord API response code: {response.status_code}")
             return None
         return response.json()
     except Exception as e:
-        print("ERROR: Verifying discord channel", e)
+        error("ERROR: Verifying discord channel: %s", e)
         return None
 
 
@@ -346,12 +346,12 @@ def get_discord_guild(token, guild_id):
     try:
         response = requests.get("https://discord.com/api/guilds/" + guild_id, headers=headers, timeout=10)
         if response.status_code != 200:
-            print("ERROR: Discord API response code:", response.status_code)
+            error(f"ERROR: Discord API response code: {response.status_code}")
             return None
         response_json = response.json()
         return response_json
     except Exception as e:
-        print("ERROR: Verifying discord guild", e)
+        error("ERROR: Verifying discord guild: %s", e)
         return None
 
 
@@ -363,25 +363,25 @@ def verify_discord_role(token, guild_id, role_id):
     try:
         response = requests.get(f"https://discord.com/api/guilds/{guild_id}/roles", headers=headers, timeout=10)
         if response.status_code != 200:
-            print("ERROR: Discord API response code:", response.status_code)
+            error(f"ERROR: Discord API response code: {response.status_code}")
             return False
         response_json = response.json()
         for role_json in response_json:
             json_role_id = str(role_json["id"])
             if json_role_id == role_id:
-                print(f"Found role: '{role_json['name']}' ({json_role_id})")
+                info(f"Found role: '{role_json['name']}' ({json_role_id})")
                 return True
-        print("ERROR: Role not found in server:", guild_id)
+        error(f"ERROR: Role not found in server: {guild_id}")
         return False
     except Exception as e:
-        print("ERROR: Verifying discord role", e)
+        error("ERROR: Verifying discord role: %s", e)
         return False
 
 
 def setup_unattended(config):
     # check if launch_config.json exists
     if read_launch_config_file() is None:
-        print("Creating unattended launch_config.json")
+        info("Creating unattended launch_config.json")
         mc_version = os.getenv("ZENITH_MC_VERSION", "1.21.4")
         mc_ver_pattern = re.compile(r"(\d+)\.(\d+)\.(\d+)$")
         if not mc_ver_pattern.match(mc_version):
@@ -411,7 +411,7 @@ def setup_unattended(config):
                     critical_error("Java not found and auto install failed")
         config.write_launch_config()
     if not os.path.exists("config.json"):
-        print("Creating unattended config.json")
+        info("Creating unattended config.json")
         config = {}
         # some env vars have default values
         port = os.getenv("ZENITH_PORT", 25565)
@@ -475,6 +475,6 @@ def setup_unattended(config):
                 }
         with open("config.json", "w") as f:
             f.write(json.dumps(config, indent=2))
-            print("config.json written successfully!")
-        print("")
-        print("Unattended Setup complete!")
+            info("config.json written successfully!")
+        info("")
+        info("Unattended Setup complete!")

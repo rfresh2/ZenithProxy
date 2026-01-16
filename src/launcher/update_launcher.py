@@ -7,6 +7,7 @@ import tempfile
 import launch_platform
 import zip_fixed
 from launch_platform import OperatingSystem
+from log import info, error
 
 launcher_tag = "launcher-v3"
 hashes_file_name = "hashes.txt"
@@ -15,7 +16,7 @@ hashes_file_name = "hashes.txt"
 def update_launcher_exec(config, api):
     if not config.auto_update_launcher:
         return
-    print("Checking for launcher update...")
+    info("Checking for launcher update...")
     try:
         is_pyinstaller = launch_platform.is_pyinstaller_bundle() or launch_platform.is_nuitka_bundle()
         is_windows_python = not is_pyinstaller and launch_platform.is_windows_python_bundle()
@@ -29,9 +30,9 @@ def update_launcher_exec(config, api):
             raise LauncherUpdateError("Launcher executable not found, skipping launcher update:", current_executable_name)
         current_launcher_sha1 = compute_sha1(current_executable_name)
         if current_launcher_sha1 in hashes_list:
-            print(f"Launcher up-to-date: {current_launcher_sha1}")
+            info(f"Launcher up-to-date: {current_launcher_sha1}")
             return
-        print("Found new launcher, current version:", current_launcher_sha1)
+        info(f"Found new launcher, current version: {current_launcher_sha1}")
         launcher_asset_id = api.get_release_tag_asset_id(launcher_tag, launcher_asset_file_name)
         if launcher_asset_id is None:
             raise LauncherUpdateError("Failed to get launcher asset ID:", launcher_asset_file_name)
@@ -47,9 +48,9 @@ def update_launcher_exec(config, api):
             zip_file.extractall("launcher")
         new_executable_path = "launcher/" + expected_executable_name
         if not os.path.isfile(new_executable_path):
-            raise LauncherUpdateError("Failed to extract launcher executable:", new_executable_path)
+            raise LauncherUpdateError(f"Failed to extract launcher executable: {new_executable_path}")
         new_launcher_sha1 = compute_sha1(new_executable_path)
-        print(f"New launcher version: {new_launcher_sha1}")
+        info(f"New launcher version: {new_launcher_sha1}")
         # Preserve current launcher executable name if its changed
         replace_launcher_executable(os_platform, current_executable_name, new_executable_path, current_launcher_sha1)
         if is_pyinstaller:
@@ -58,7 +59,7 @@ def update_launcher_exec(config, api):
             replace_extra_python_launcher_files(os_platform, is_windows_python, current_launcher_sha1)
             relaunch_python(os_platform, current_executable_name)
     except Exception as e:
-        print("Error during launcher updater check, skipping update:", e)
+        error("Error during launcher updater check, skipping update: %s", e)
 
 
 def get_launcher_asset_zip_file_name(is_pyinstaller, is_windows_python, os_platform, os_arch):
@@ -121,7 +122,7 @@ def get_launcher_hashes(api):
 
 
 def relaunch_executable(os_platform, executable_name):
-    print("Relaunching...")
+    info("Relaunching...")
     if os_platform == OperatingSystem.WINDOWS:
         subprocess.run([executable_name, "--no-launcher-update"])
     else:
@@ -137,7 +138,7 @@ def relaunch_python(os_platform, executable_name):
 
 
 def replace_launcher_executable(os_platform, exec_name, new_exec_name, current_sha1):
-    print("Replacing launcher files...")
+    info("Replacing launcher files...")
     if os_platform == OperatingSystem.WINDOWS:
         # on windows, we can't replace the executable while it's running
         # so we're moving the files around and then launching a subprocess
