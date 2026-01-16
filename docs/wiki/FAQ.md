@@ -125,11 +125,13 @@ and [ZenithProxyMod](https://github.com/rfresh2/ZenithProxyMod/)
 
 Load pearls over the API [with this command](https://github.com/rfresh2/ZenithProxyMod#web-api-commands)
 
-## Can I ZenithProxy run while my PC is off?
+## Can I run ZenithProxy while my PC is off?
 
 No.
 
-You can use a spare computer kept on all the time, or you can run ZenithProxy on a [VPS](./DigitalOcean-Setup-Guide.md).
+Some people use a spare computer.
+
+Some choose to rent a computer in a datacenter (VPS), I recommend [DigitalOcean](./DigitalOcean-Setup-Guide.md).
 
 ## How can I make my Xaero map work while using ZenithProxy?
 

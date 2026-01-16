@@ -742,6 +742,17 @@
       ]
     },
     {
+      "type": "com.sun.crypto.provider.HKDFKeyDerivation$HKDFSHA256",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "javax.crypto.KDFParameters"
+          ]
+        }
+      ]
+    },
+    {
       "type": "com.sun.crypto.provider.HKDFKeyDerivation$HKDFSHA384",
       "methods": [
         {
@@ -2333,6 +2344,34 @@
     },
     {
       "type": "com.zenith.network.server.ServerSession[]"
+    },
+    {
+      "type": "com.zenith.plugin.api.PluginInfo",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.lang.String",
+            "java.lang.String",
+            "com.zenith.plugin.api.Version",
+            "java.lang.String",
+            "java.lang.String",
+            "java.util.List",
+            "java.util.List"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.plugin.api.Version",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.lang.String"
+          ]
+        }
+      ]
     },
     {
       "type": "com.zenith.terminal.ZenithComponentLoggerProvider"
@@ -5426,6 +5465,9 @@
     },
     {
       "type": "javax.smartcardio.CardPermission"
+    },
+    {
+      "type": "jdk.internal.jrtfs.JrtFileSystemProvider"
     },
     {
       "type": "jdk.internal.misc.Unsafe",

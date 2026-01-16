@@ -1,5 +1,7 @@
 package com.zenith.feature.pathfinder.process;
 
+import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.zenith.feature.pathfinder.*;
 import com.zenith.feature.pathfinder.goals.*;
@@ -8,9 +10,11 @@ import com.zenith.feature.pathfinder.util.BlockOptionalMetaLookup;
 import com.zenith.feature.pathfinder.util.RotationUtils;
 import com.zenith.feature.pathfinder.util.WorldScanner;
 import com.zenith.feature.player.Rotation;
+import com.zenith.feature.player.World;
 import com.zenith.mc.block.Block;
 import com.zenith.mc.block.BlockPos;
 import com.zenith.mc.block.BlockRegistry;
+import com.zenith.mc.block.properties.api.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
@@ -24,6 +28,7 @@ public final class GetToBlockProcess extends BaritoneProcessHelper {
     private List<BlockPos> blacklist; // locations we failed to calc to
     private BlockPos start;
     @Nullable ListenableFuture<?> scanFuture;
+    private boolean rightClickContainerOnArrival = true;
 
     private int tickCount = 0;
     private int arrivalTickCount = 0;
@@ -33,12 +38,17 @@ public final class GetToBlockProcess extends BaritoneProcessHelper {
     }
 
     public PathingRequestFuture getToBlock(Block block) {
+        return getToBlock(block, true);
+    }
+
+    public PathingRequestFuture getToBlock(Block block, boolean rightClickContainerOnArrival) {
         onLostControl();
         future = new PathingRequestFuture();
         gettingTo = block;
         start = ctx.playerFeet();
         blacklist = new ArrayList<>();
         arrivalTickCount = 0;
+        this.rightClickContainerOnArrival = rightClickContainerOnArrival;
         rescan();
         return future;
     }
@@ -142,7 +152,7 @@ public final class GetToBlockProcess extends BaritoneProcessHelper {
             }
             break;
         }
-        PATH_LOG.info("Blacklisting unreachable locations " + newBlacklist);
+        PATH_LOG.info("Blacklisting unreachable locations {}", newBlacklist);
         blacklist.addAll(newBlacklist);
         return !newBlacklist.isEmpty();
     }
@@ -190,8 +200,8 @@ public final class GetToBlockProcess extends BaritoneProcessHelper {
         if (walkIntoInsteadOfAdjacent(gettingTo)) {
             return new GoalBlock(pos);
         }
-        if (blockOnTopMustBeRemoved(gettingTo) && MovementHelper.isBlockNormalCube(BlockStateInterface.getId(pos.above()))) { // TODO this should be the check for chest openability
-            return new GoalBlock(pos.above());
+        if (blockOnTopMustBeRemoved(gettingTo) && MovementHelper.isBlockNormalCube(BlockStateInterface.getId(onTopOfContainer(pos)))) { // TODO this should be the check for chest openability
+            return new GoalBlock(onTopOfContainer(pos));
         }
         return new GoalGetToBlock(pos);
     }
@@ -226,17 +236,90 @@ public final class GetToBlockProcess extends BaritoneProcessHelper {
     }
 
     private boolean rightClickOnArrival(Block block) {
-//        if (!Baritone.settings().rightClickContainerOnArrival.value) {
-//            return false;
-//        }
-        return block == BlockRegistry.CRAFTING_TABLE || block == BlockRegistry.FURNACE || block == BlockRegistry.BLAST_FURNACE || block == BlockRegistry.ENDER_CHEST || block == BlockRegistry.CHEST || block == BlockRegistry.TRAPPED_CHEST;
+        return rightClickContainerOnArrival && clickableContainersSupplier.get().contains(block);
     }
 
     private boolean blockOnTopMustBeRemoved(Block block) {
         if (!rightClickOnArrival(block)) { // only if we plan to actually open it on arrival
             return false;
         }
-        // only these chests; you can open a crafting table or furnace even with a block on top
-        return block == BlockRegistry.ENDER_CHEST || block == BlockRegistry.CHEST || block == BlockRegistry.TRAPPED_CHEST;
+        return blockOnTopMustBeRemovedContainersSupplier.get().contains(block);
     }
+
+    private BlockPos onTopOfContainer(BlockPos pos) {
+        var containerBlock = World.getBlock(pos);
+        if (!clickableContainersSupplier.get().contains(containerBlock)) {
+            return pos;
+        }
+        if (containerBlock.name().contains("shulker")) {
+            var facingProperty = World.getBlockStateProperty(World.getBlockStateId(pos), BlockStateProperties.FACING);
+            if (facingProperty != null) {
+                return pos.relative(facingProperty);
+            }
+        }
+        return pos.above();
+    }
+
+    // graalvm trick to fix compilation
+    // need to defer init refs to BlockRegistry
+    private final Supplier<Set<Block>> clickableContainersSupplier = Suppliers.memoize(() -> Set.of(
+        BlockRegistry.CRAFTING_TABLE,
+        BlockRegistry.FURNACE,
+        BlockRegistry.BLAST_FURNACE,
+        BlockRegistry.ENDER_CHEST,
+        BlockRegistry.CHEST,
+        BlockRegistry.TRAPPED_CHEST,
+        BlockRegistry.ANVIL,
+        BlockRegistry.BREWING_STAND,
+        BlockRegistry.BARREL,
+        BlockRegistry.BEACON,
+        BlockRegistry.SMOKER,
+        BlockRegistry.LECTERN,
+        BlockRegistry.ENCHANTING_TABLE,
+        BlockRegistry.GRINDSTONE,
+        BlockRegistry.LOOM,
+        BlockRegistry.SMITHING_TABLE,
+        BlockRegistry.CARTOGRAPHY_TABLE,
+        BlockRegistry.STONECUTTER,
+        BlockRegistry.SHULKER_BOX,
+        BlockRegistry.WHITE_SHULKER_BOX,
+        BlockRegistry.ORANGE_SHULKER_BOX,
+        BlockRegistry.MAGENTA_SHULKER_BOX,
+        BlockRegistry.LIGHT_BLUE_SHULKER_BOX,
+        BlockRegistry.YELLOW_SHULKER_BOX,
+        BlockRegistry.LIME_SHULKER_BOX,
+        BlockRegistry.PINK_SHULKER_BOX,
+        BlockRegistry.GRAY_SHULKER_BOX,
+        BlockRegistry.LIGHT_GRAY_SHULKER_BOX,
+        BlockRegistry.CYAN_SHULKER_BOX,
+        BlockRegistry.PURPLE_SHULKER_BOX,
+        BlockRegistry.BLUE_SHULKER_BOX,
+        BlockRegistry.BROWN_SHULKER_BOX,
+        BlockRegistry.GREEN_SHULKER_BOX,
+        BlockRegistry.RED_SHULKER_BOX,
+        BlockRegistry.BLACK_SHULKER_BOX
+    ));
+
+    private final Supplier<Set<Block>> blockOnTopMustBeRemovedContainersSupplier = Suppliers.memoize(() -> Set.of(
+        BlockRegistry.ENDER_CHEST,
+        BlockRegistry.CHEST,
+        BlockRegistry.TRAPPED_CHEST,
+        BlockRegistry.SHULKER_BOX,
+        BlockRegistry.WHITE_SHULKER_BOX,
+        BlockRegistry.ORANGE_SHULKER_BOX,
+        BlockRegistry.MAGENTA_SHULKER_BOX,
+        BlockRegistry.LIGHT_BLUE_SHULKER_BOX,
+        BlockRegistry.YELLOW_SHULKER_BOX,
+        BlockRegistry.LIME_SHULKER_BOX,
+        BlockRegistry.PINK_SHULKER_BOX,
+        BlockRegistry.GRAY_SHULKER_BOX,
+        BlockRegistry.LIGHT_GRAY_SHULKER_BOX,
+        BlockRegistry.CYAN_SHULKER_BOX,
+        BlockRegistry.PURPLE_SHULKER_BOX,
+        BlockRegistry.BLUE_SHULKER_BOX,
+        BlockRegistry.BROWN_SHULKER_BOX,
+        BlockRegistry.GREEN_SHULKER_BOX,
+        BlockRegistry.RED_SHULKER_BOX,
+        BlockRegistry.BLACK_SHULKER_BOX
+    ));
 }

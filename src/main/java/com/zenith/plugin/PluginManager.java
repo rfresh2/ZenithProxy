@@ -200,10 +200,6 @@ public class PluginManager {
 
     protected void preLoadPluginInstance(final PluginInfo pluginInfo, Path jarPath, ClassLoader classLoader) {
         String id = pluginInfo.id();
-        if (pluginInstances.containsKey(id)) {
-            // todo: we could try to sort by version and load the "newest" one
-            throw new RuntimeException("Plugin id already exists: " + id);
-        }
         if (pluginInfo.mcVersions().isEmpty()) {
             PLUGIN_LOG.error("Plugin: {} has no MC versions specified", jarPath);
             throw new RuntimeException("Plugin has no MC versions specified");
@@ -211,6 +207,25 @@ public class PluginManager {
         if (!pluginInfo.mcVersions().contains("*") && !pluginInfo.mcVersions().contains(MC_VERSION)) {
             PLUGIN_LOG.warn("Plugin: {} not compatible with current MC version. Actual: {}, Plugin Required: {}", jarPath, MC_VERSION, pluginInfo.mcVersions());
             return;
+        }
+
+        if (pluginInstances.containsKey(id)) {
+            PLUGIN_LOG.info("Found duplicate plugin IDs: {}", id);
+            var existing = pluginInstances.get(id);
+            if (existing.getPluginInfo().version().compareTo(pluginInfo.version()) < 0) {
+                PLUGIN_LOG.info("Unloading existing plugin ID: {} with lower version: {} vs {}", id, existing.getPluginInfo().version(), pluginInfo.version());
+                var existingClassloader = existing.getClassLoader();
+                if (existingClassloader instanceof URLClassLoader urlClassLoader) {
+                    try {
+                        urlClassLoader.close();
+                    } catch (Exception e) {
+                        throw new RuntimeException("Failed to close existing plugin classloader", e);
+                    }
+                }
+                pluginInstances.remove(id);
+            } else {
+                throw new RuntimeException("Plugin id already exists: " + id);
+            }
         }
 
         PLUGIN_LOG.info(

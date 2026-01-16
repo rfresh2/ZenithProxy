@@ -152,6 +152,14 @@ tasks {
         environment("ZENITH_DEV", "true")
         outputs.file(outputFile)
     }
+    val pluginLoadTestTask = register("pluginLoadTest", PluginLoadTestTask::class.java) {
+        group = "verification"
+        description = "Tests that plugins are able to load"
+        javaLauncher = javaLauncherProvider
+        workingDir = layout.projectDirectory.dir("run").asFile
+        classpath = sourceSets.main.get().runtimeClasspath
+        mainClass.set("com.zenith.Proxy")
+    }
     val updateWikiTask = register<UpdateWikiTask>("updateWiki") {
         inputs.files(generateCommandDocsTask.get().outputs.files)
         wikiDirectory = layout.projectDirectory.dir("docs/wiki").asFile

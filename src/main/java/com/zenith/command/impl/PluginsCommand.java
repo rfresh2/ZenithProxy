@@ -1,25 +1,27 @@
 package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.zenith.command.api.Command;
-import com.zenith.command.api.CommandCategory;
-import com.zenith.command.api.CommandContext;
-import com.zenith.command.api.CommandUsage;
+import com.zenith.command.api.*;
 import com.zenith.discord.DiscordBot;
 import com.zenith.feature.api.Api;
 import com.zenith.plugin.PluginManager;
 import com.zenith.plugin.api.PluginInfo;
 import com.zenith.util.ImageInfo;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
+import org.jspecify.annotations.Nullable;
 
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -56,7 +58,10 @@ public class PluginsCommand extends Command {
 
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
-        return command("plugins").requires(Command::validateAccountOwner)
+        return command("plugins")
+            .requires(c -> Command.validateAccountOwner(c)
+                    // todo: consider blocking discord source by default, overridable by config
+                    && Command.validateCommandSource(c, List.of(CommandSources.TERMINAL, CommandSources.DISCORD)))
             .then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.plugins.enabled = getToggle(c, "toggle");
                 c.getSource().getEmbed()
@@ -115,15 +120,38 @@ public class PluginsCommand extends Command {
                     return ERROR;
                 }
                 var api = new PluginDownloadApi();
-                if (!api.download(url)) {
+                var downloadResult = api.download(url);
+                if (!downloadResult.success()) {
                     c.getSource().getEmbed()
                         .title("Download Failed")
-                        .description("More info may be in ZenithProxy logs");
+                        .description(downloadResult.error());
+                    if (downloadResult.file() != null) downloadResult.file().delete();
                     return ERROR;
                 }
+                var readResult = readPluginInfo(downloadResult.file());
+                if (!readResult.success()) {
+                    c.getSource().getEmbed()
+                        .title("Invalid Plugin Jar")
+                        .description(readResult.error());
+                    downloadResult.file().delete();
+                    return ERROR;
+                }
+                var pluginId = readResult.pluginInfo().id();
+                var existingPlugin = PLUGIN_MANAGER.getPluginInstance(pluginId);
+                String desc = "Restart ZenithProxy to reload plugins: `restart`";
+                if (existingPlugin != null) {
+                    existingPlugin.getJarPath().toFile().deleteOnExit();
+                    desc += "\n\nExisting plugin with ID: `%s` found. It will be replaced/updated on next restart.".formatted(pluginId);
+                }
                 c.getSource().getEmbed()
-                    .title("Jar Downloaded")
-                    .description(appendWarningToDescription("Restart ZenithProxy to reload plugins: `restart`"))
+                    .title("Plugin Downloaded")
+                    .description(appendWarningToDescription(desc))
+                    .addField("ID", pluginId)
+                    .addField("Description", readResult.pluginInfo().description())
+                    .addField("Version", readResult.pluginInfo().version())
+                    .addField("URL", readResult.pluginInfo().url())
+                    .addField("Author(s)", String.join(", ", readResult.pluginInfo().authors()))
+                    .addField("Jar", downloadResult.file().toPath().getFileName())
                     .primaryColor();
                 return OK;
             })))
@@ -158,33 +186,59 @@ public class PluginsCommand extends Command {
         return description;
     }
 
+    private PluginInfoReadResult readPluginInfo(File jarFile) {
+        var zipUri = URI.create("jar:file:" + jarFile.toURI().getPath());
+        try (var fs = FileSystems.newFileSystem(zipUri, Collections.emptyMap())) {
+            var root = fs.getPath("/");
+            var pluginJson = root.resolve("zenithproxy.plugin.json");
+            if (!Files.exists(pluginJson)) {
+                return new PluginInfoReadResult(false, "No zenithproxy.plugin.json found in jar", null);
+            }
+            // should never be larger than a few kb
+            if (Files.size(pluginJson) > 100 * 1024) {
+                return new PluginInfoReadResult(false, "zenithproxy.plugin.json is too large", null);
+            }
+            var jsonString = Files.readString(pluginJson);
+            var pluginInfo = OBJECT_MAPPER.readValue(jsonString, PluginInfo.class);
+            return new PluginInfoReadResult(true, null, pluginInfo);
+        } catch (Exception e) {
+            return new PluginInfoReadResult(false, e.getMessage(), null);
+        }
+    }
+
+    record PluginInfoReadResult(boolean success, @Nullable String error, @Nullable PluginInfo pluginInfo) {}
+
     private static class PluginDownloadApi extends Api {
 
         public PluginDownloadApi() {
             super("");
         }
 
-        public boolean download(URL url) {
+        public PluginDownloadResult download(URL url) {
             HttpRequest request = buildBaseRequest(url.toString())
                 .GET()
                 .build();
+            File resFile = null;
             try (var client = buildHttpClient()) {
                 var response = client
                     .send(request, HttpResponse.BodyHandlers.ofFileDownload(PluginManager.PLUGINS_PATH, StandardOpenOption.CREATE, StandardOpenOption.WRITE));
                 if (response.statusCode() >= 400) {
                     PLUGIN_LOG.error("Failed to download plugin from: {} - {}", url, response.statusCode());
-                    return false;
+                    return new PluginDownloadResult(false, "Failed to download plugin, HTTP error code: %s".formatted(url, response.statusCode()), null);
                 }
                 // verify the jar was written to file
                 if (!Files.exists(response.body())) {
                     PLUGIN_LOG.error("Failed to download plugin from: {} - File not written", url);
-                    return false;
+                    return new PluginDownloadResult(false, "Failed to download plugin, file not written", null);
                 }
-                return true;
+                resFile = response.body().toFile();
+                return new PluginDownloadResult(true, null, resFile);
             } catch (Exception e) {
                 PLUGIN_LOG.error("Failed to download plugin from: {} - {}", url, e.getMessage());
+                return new PluginDownloadResult(false, "Failed to download plugin, %s".formatted(e.getMessage()), resFile);
             }
-            return false;
         }
     }
+
+    record PluginDownloadResult(boolean success, @Nullable String error, @Nullable File file) { }
 }
