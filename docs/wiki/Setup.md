@@ -10,9 +10,9 @@
     * `java` release channel (Any OS and CPU):
         * ~600MB RAM
 
-??? tip "Don't have enough RAM on your Linux VPS?"
+???+ tip "Don't have enough RAM on your Linux VPS?"
 
-    Use your hard drive as RAM: https://linuxize.com/post/create-a-linux-swap-file/
+    Use your hard drive as (slow) RAM: [https://linuxize.com/post/create-a-linux-swap-file/](https://linuxize.com/post/create-a-linux-swap-file/)
 
 ### Setup Guides
 
@@ -21,7 +21,16 @@
 
 ### Downloads
 
-1. Download [the launcher zip](https://github.com/rfresh2/ZenithProxy/releases/launcher-v3) for your OS and CPU
+* [Windows x64](https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-windows-python-amd64.zip)
+* Linux: [x64](https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-linux-amd64.zip) or [aarch64 (ARM)](https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-linux-aarch64.zip)
+* Mac: [M-series CPU](https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-macos-aarch64.zip) or [x64 (Intel)](https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-macos-amd64.zip)
+* Other: [Python (Universal)](https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-python.zip)
+
+Source: https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3
+
+#### Instructions
+
+1. Download the above launcher release for your OS and CPU
 2. Unzip the file.
 3. Run the launcher in a terminal:
     * Linux/Mac: `./launch`
@@ -48,10 +57,6 @@
 
 The launcher will ask for required configuration on first launch
 
-??? note "How to Rerun Launcher Setup"
-
-    Run the launcher with the `--setup` flag. e.g. `./launch --setup`
-
 Use the `connect` command to link an MC account and log in once launched
 
 Command Prefixes:
@@ -59,6 +64,16 @@ Command Prefixes:
 * Discord: `.` (e.g. `.help`)
 * In-game: `/` OR `!` -> (e.g. `/help`)
 * Terminal: N/A -> (e.g. `help`)
+
+???+ tip "How to Rerun Launcher Setup"
+
+    Run the launcher with the `--setup` flag. e.g. `./launch --setup`
+
+???+ tip "How to exit a running instance"
+
+    Press the keybind: `control + c`
+
+    Some terminals have alternate keybinds. If all else fails, just close the window
 
 [Full Commands Documentation](Commands.md){ .md-button .md-button--primary }
 
@@ -71,7 +86,7 @@ ZenithProxy releases for multiple MC versions and OS/hardware platforms, known a
 **Platforms**
 
 * (Default) `java` - Works on all systems. Supports [Plugins](Plugins.md).
-* (Recommended) `linux` - Linux native x86_64 executable. ~50% reduced memory usage and instant startup
+* (Recommended) `linux` - Linux native x64 executable. ~50% reduced memory usage and instant startup
 
 **MC Versions**
 

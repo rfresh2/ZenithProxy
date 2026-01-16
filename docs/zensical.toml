@@ -243,7 +243,7 @@ features = [
     # automatically updated with the active anchor as highlighted in the table
     # of contents.
     # https://zensical.org/docs/setup/navigation/#anchor-tracking
-    "navigation.tracking",
+    # "navigation.tracking",
 
     # When search highlighting is enabled and a user clicks on a search result,
     # Zensical will highlight all occurrences after following the link.
