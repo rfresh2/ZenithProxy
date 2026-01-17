@@ -45,9 +45,10 @@ public abstract class Command {
         var allowed = allowedSources.contains(context.getSource());
         if (!allowed)
             context.getEmbed()
+                .title("Not Authorized!")
                 .addField("Error",
-                          "Command source: " + context.getSource().name()
-                              + " is not authorized to execute this command!", false);
+                          "Command source: `" + context.getSource().name()
+                              + "` is not authorized to execute this command!", false);
         return allowed;
     }
 
@@ -55,9 +56,10 @@ public abstract class Command {
         var allowed = allowedSource.equals(context.getSource());
         if (!allowed)
             context.getEmbed()
+                .title("Not Authorized!")
                 .addField("Error",
-                          "Command source: " + context.getSource().name()
-                              + " is not authorized to execute this command!", false);
+                          "Command source: `" + context.getSource().name()
+                              + "` is not authorized to execute this command!", false);
         return allowed;
     }
 
