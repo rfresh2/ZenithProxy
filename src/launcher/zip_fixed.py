@@ -1,6 +1,8 @@
 import os
 from zipfile import ZipFile, ZipInfo
 
+from log import info
+
 
 class ZipFileWithPermissions(ZipFile):
     """Custom ZipFile class handling file permissions."""
@@ -14,5 +16,5 @@ class ZipFileWithPermissions(ZipFile):
         attr = member.external_attr >> 16
         if attr != 0:
             os.chmod(targetpath, attr)
-        print("Extracted:", targetpath)
+        info(f"Extracted: {targetpath}")
         return targetpath

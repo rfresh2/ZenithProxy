@@ -36,4 +36,5 @@ buildSrc/.gradle
 buildSrc/.kotlin
 buildSrc/build
 .python-version
-uv.lock
+src/launcher/uv.lock
+src/launcher/pyproject.toml

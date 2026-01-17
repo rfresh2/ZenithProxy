@@ -4,6 +4,8 @@ from requests import Session
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
+from log import info, error
+
 
 class GitHubAPI:
     launch_config = None
@@ -62,7 +64,7 @@ class GitHubAPI:
             )
             return (latest_release["id"], latest_release["tag_name"]) if latest_release else None
         except Exception as e:
-            print("Failed to get releases:", e)
+            error("Failed to get releases: %s", e)
         return None
 
     def get_release_for_ver(self, tag_name):
@@ -72,7 +74,7 @@ class GitHubAPI:
             release = response.json()
             return release["id"], release["tag_name"]
         except Exception as e:
-            print("Failed to get release for version:", e)
+            error("Failed to get release for version: %s", e)
         return None
 
     def get_asset_id(self, release_id, asset_name, tag=False):
@@ -81,7 +83,7 @@ class GitHubAPI:
             response = self._send_request(url, self.get_headers())
             return next((asset["id"] for asset in response.json()["assets"] if asset["name"] == asset_name), None)
         except Exception as e:
-            print("Failed to get release asset ID:", e)
+            error("Failed to get release asset ID: %s", e)
         return None
 
     def get_release_asset_id(self, release_id, asset_name):
@@ -103,6 +105,8 @@ class GitHubAPI:
             data = bytearray()
             # start timer when streaming begins
             start_time = time.time()
+            if verbose:
+                info(f"Downloading {url}:")
 
             for chunk in response.iter_content(chunk_size=chunk_size):
                 if not chunk:
@@ -121,14 +125,14 @@ class GitHubAPI:
                     percent = downloaded * 100 / total
                     total_kb = total / 1024
                     if verbose:
-                        print(f"\rDownloading {url}: {percent:.1f}% ({downloaded_kb:.1f}/{total_kb:.1f} KB) {elapsed_str}", end="", flush=True)
+                        print(f"\r{percent:.1f}% ({downloaded_kb:.1f}/{total_kb:.1f} KB) {elapsed_str}", end="", flush=True)
                 else:
                     if verbose:
-                        print(f"\rDownloading {url}: {asset_id}: {downloaded_kb:.1f} KB {elapsed_str}", end="", flush=True)
+                        print(f"\r{downloaded_kb:.1f} KB {elapsed_str}", end="", flush=True)
             if verbose:
                 print()
 
             return bytes(data)
         except Exception as e:
-            print("Failed to download asset:", e)
+            error("Failed to download asset: %s", e)
             return None

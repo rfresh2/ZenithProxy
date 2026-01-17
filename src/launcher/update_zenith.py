@@ -2,6 +2,7 @@ import os
 import subprocess
 
 import zip_fixed
+from log import info, error
 
 
 class UpdateError(Exception):
@@ -14,11 +15,11 @@ class RestUpdateError(UpdateError):
 
 def git_update_check():
     try:
-        print("Running git pull...")
+        info("Running git pull...")
         subprocess.run(["git", "pull"], check=True, capture_output=True, text=True)
     except subprocess.CalledProcessError as e:
-        print("Error pulling from git:")
-        print(e.stderr)
+        error("Error pulling from git:")
+        error(e.stderr)
     return None
 
 
@@ -27,7 +28,7 @@ def rest_update_check(config, api, asset_name, executable_name):
     if not latest_release_and_ver:
         raise RestUpdateError("Failed to get latest release for channel: " + config.release_channel)
     if latest_release_and_ver[1] == config.version and os.path.isfile(config.launch_dir + executable_name):
-        print(f"ZenithProxy up-to-date: {config.version}")
+        info(f"ZenithProxy up-to-date: {config.version}")
         return
     rest_get_assets(config, api, asset_name, latest_release_and_ver)
 
@@ -42,7 +43,7 @@ def rest_get_version(config, api, asset_name, target_version):
 
 
 def rest_get_assets(config, api, asset_name, release_and_version):
-    print("Downloading version:", release_and_version[1])
+    info(f"Downloading version: {release_and_version[1]}")
     asset_id = api.get_asset_id(release_and_version[0], asset_name)
     if not asset_id:
         raise RestUpdateError("Failed to get executable asset ID")
@@ -56,7 +57,7 @@ def rest_get_assets(config, api, asset_name, release_and_version):
         for existing_file in existing_files:
             if existing_file == ".gitkeep":
                 continue
-            print(f"Removing existing file: {existing_file}")
+            info(f"Removing existing file: {existing_file}")
             os.remove(config.launch_dir + existing_file)
         with open(config.launch_dir + asset_name, "wb") as f:
             f.write(asset_data)
@@ -74,7 +75,7 @@ def java_update_check(config, api):
 
 
 def java_get_version(config, api, target_version):
-    print("Getting version: " + target_version)
+    info("Getting version: " + target_version)
     rest_get_version(config, api, "ZenithProxy.jar", target_version)
 
 
@@ -83,7 +84,7 @@ def linux_native_update_check(config, api):
 
 
 def linux_native_get_version(config, api, target_version):
-    print("Getting version: " + target_version)
+    info("Getting version: " + target_version)
     rest_get_version(config, api, "ZenithProxy.zip", target_version)
 
 
@@ -94,18 +95,18 @@ def git_read_version(config):
         if len(v) == 8:
             config.version = v
             config.local_version = v
-            print("Git commit:", config.version)
+            info("Git commit:", config.version)
         else:
-            print("Invalid version string found from git:", output)
+            error("Invalid version string found from git:", output)
     except subprocess.CalledProcessError as e:
-        print("Error reading local git version:")
-        print(e.stderr)
+        error("Error reading local git version:")
+        error(e.stderr)
 
 
 def update_zenith_exec(config, api):
     try:
         if config.auto_update:
-            print("Checking for ZenithProxy update...")
+            info("Checking for ZenithProxy update...")
             if config.release_channel == "git":
                 git_update_check()
             elif config.release_channel.startswith("java"):
@@ -113,15 +114,15 @@ def update_zenith_exec(config, api):
             elif config.release_channel.startswith("linux"):
                 linux_native_update_check(config, api)
         elif config.release_channel != "git" and config.version != config.local_version:
-            print("Desired version is different from local version, attempting to download version:", config.version)
+            info(f"Desired version is different from local version, attempting to download version: {config.version}")
             if config.release_channel.startswith("java"):
                 java_get_version(config, api, config.version)
             elif config.release_channel.startswith("linux"):
                 linux_native_get_version(config, api, config.version)
         else:
-            print("Did not check for update, AutoUpdate is disabled")
+            info("Did not check for update, AutoUpdate is disabled")
         if config.release_channel == "git":
             git_read_version(config)
         config.write_launch_config()
     except Exception as e:
-        print("Error checking for ZenithProxy update:", e)
+        error("Error checking for ZenithProxy update: %s", e)
