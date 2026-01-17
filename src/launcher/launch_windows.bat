@@ -13,7 +13,7 @@ if not exist python\python.exe (
 
     echo Downloading Python...
     REM --ssl-no-revoke necessary as some users have broken windows installs? https://discord.com/channels/1127460556710883391/1127461501960208465/1320859617487618078
-    curl -L --ssl-no-revoke -o python.tar.gz "https://github.com/astral-sh/python-build-standalone/releases/download/20251014/cpython-3.13.9+20251014-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"
+    curl -L --ssl-no-revoke -o python.tar.gz "https://github.com/astral-sh/python-build-standalone/releases/download/20260114/cpython-3.14.2+20260114-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"
 
   	if errorlevel 1 (
 		echo Error: Failed to download Python.
@@ -47,7 +47,7 @@ if not exist python\python.exe (
     echo Found existing Python installation.
 )
 
-echo Verifying requirements...
+echo Updating Python dependencies...
 python\python.exe -m pip install --upgrade --requirement requirements.txt -qq --disable-pip-version-check --no-input
 
 if errorlevel 1 (
