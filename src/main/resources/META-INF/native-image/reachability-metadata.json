@@ -988,6 +988,9 @@
       ]
     },
     {
+      "type": "com.velocitypowered.natives.compression.VelocityCompressor"
+    },
+    {
       "type": "com.viaversion.nbt.tag.ByteArrayTag",
       "methods": [
         {

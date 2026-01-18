@@ -1,8 +1,8 @@
 package com.zenith.via;
 
-import com.viaversion.vialoader.impl.platform.ViaVersionPlatformImpl;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.configuration.AbstractViaConfig;
+import com.viaversion.viaversion.platform.UserConnectionViaVersionPlatform;
 import com.zenith.Globals;
 import com.zenith.Proxy;
 import com.zenith.network.server.ServerSession;
@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.Optional;
 
-public class ZenithViaPlatform extends ViaVersionPlatformImpl {
+public class ZenithViaPlatform extends UserConnectionViaVersionPlatform {
     private static final Logger LOGGER = LoggerFactory.getLogger("ViaVersion");
     public ZenithViaPlatform() {
         super(null);
@@ -36,6 +36,16 @@ public class ZenithViaPlatform extends ViaVersionPlatformImpl {
         var config = new ZenithViaConfig(new File(getDataFolder(), "viaversion.yml"));
         config.reload();
         return config;
+    }
+
+    @Override
+    public java.util.logging.Logger createLogger(final String s) {
+        return java.util.logging.Logger.getLogger(s);
+    }
+
+    @Override
+    public boolean isProxy() {
+        return true;
     }
 
     @Override

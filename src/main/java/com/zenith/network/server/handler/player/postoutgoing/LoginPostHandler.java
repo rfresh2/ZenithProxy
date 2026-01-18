@@ -1,7 +1,7 @@
 package com.zenith.network.server.handler.player.postoutgoing;
 
-import com.viaversion.vialoader.netty.VLPipeline;
 import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.platform.ViaCodecHandler;
 import com.zenith.Proxy;
 import com.zenith.cache.DataCache;
 import com.zenith.event.player.PlayerLoginEvent;
@@ -66,13 +66,13 @@ public class LoginPostHandler implements PostOutgoingPacketHandler<ClientboundLo
             var channel = session.getChannel();
             if (session.getProtocolVersion().getVersion() == MinecraftCodec.CODEC.getProtocolVersion()
                 && channel.hasAttr(ZenithViaInitializer.VIA_USER)
-                && channel.pipeline().get(VLPipeline.VIA_CODEC_NAME) != null
+                && channel.pipeline().get(ViaCodecHandler.NAME) != null
             ) {
                 SERVER_LOG.debug("Disabling ViaVersion for player: {}", session.getName());
                 try {
                     var viaUser = channel.attr(ZenithViaInitializer.VIA_USER).get();
                     // remove via codec from channel pipeline
-                    channel.pipeline().remove(VLPipeline.VIA_CODEC_NAME);
+                    channel.pipeline().remove(ViaCodecHandler.NAME);
                     // dispose via connection state
                     Via.getManager().getConnectionManager().onDisconnect(viaUser);
                 } catch (final Throwable e) {

@@ -1,8 +1,8 @@
 package com.zenith.via;
 
 import com.viaversion.viabackwards.protocol.v1_20_5to1_20_3.provider.TransferProvider;
-import com.viaversion.vialoader.impl.viaversion.VLLoader;
 import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.platform.ViaPlatformLoader;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.api.protocol.version.VersionProvider;
 import com.zenith.Proxy;
@@ -10,7 +10,7 @@ import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 
 import static com.zenith.Globals.*;
 
-public class ZenithViaLoader extends VLLoader {
+public class ZenithViaLoader implements ViaPlatformLoader {
 
     @Override
     public void load() {
@@ -29,5 +29,10 @@ public class ZenithViaLoader extends VLLoader {
                 // ???
             }
         });
+    }
+
+    @Override
+    public void unload() {
+
     }
 }

@@ -1,12 +1,13 @@
 package com.zenith.via;
 
-import com.viaversion.vialoader.ViaLoader;
-import com.viaversion.vialoader.impl.platform.ViaBackwardsPlatformImpl;
-import com.viaversion.vialoader.impl.platform.ViaRewindPlatformImpl;
-import com.viaversion.vialoader.netty.VLPipeline;
-import com.viaversion.vialoader.netty.ViaCodec;
+import com.viaversion.viabackwards.ViaBackwardsPlatformImpl;
+import com.viaversion.viarewind.ViaRewindPlatformImpl;
+import com.viaversion.viaversion.ViaManagerImpl;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
+import com.viaversion.viaversion.commands.ViaCommandHandler;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
+import com.viaversion.viaversion.platform.NoopInjector;
+import com.viaversion.viaversion.platform.ViaCodecHandler;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import com.zenith.Proxy;
 import io.netty.channel.Channel;
@@ -23,11 +24,11 @@ public class ZenithViaInitializer {
 
     public void init() {
         if (this.initialized.compareAndSet(false, true)) {
-            ViaLoader.init(
+            ViaManagerImpl.initAndLoad(
                 new ZenithViaPlatform(),
+                new NoopInjector(),
+                new ViaCommandHandler(false),
                 new ZenithViaLoader(),
-                null,
-                null,
                 ViaBackwardsPlatformImpl::new,
                 ViaRewindPlatformImpl::new
             );
@@ -45,7 +46,7 @@ public class ZenithViaInitializer {
             init();
             UserConnectionImpl userConnection = new UserConnectionImpl(channel, true);
             new ProtocolPipelineImpl(userConnection);
-            channel.pipeline().addBefore(TcpPacketCodec.ID, VLPipeline.VIA_CODEC_NAME, new ViaCodec(userConnection));
+            channel.pipeline().addBefore(TcpPacketCodec.ID, ViaCodecHandler.NAME, new ViaCodecHandler(userConnection));
             channel.attr(VIA_USER).set(userConnection);
         }
     }
@@ -57,7 +58,7 @@ public class ZenithViaInitializer {
         init();
         var userConnection = new UserConnectionImpl(channel, false);
         new ProtocolPipelineImpl(userConnection);
-        channel.pipeline().addBefore(TcpPacketCodec.ID, VLPipeline.VIA_CODEC_NAME, new ViaCodec(userConnection));
+        channel.pipeline().addBefore(TcpPacketCodec.ID, ViaCodecHandler.NAME, new ViaCodecHandler(userConnection));
         channel.attr(VIA_USER).set(userConnection);
     }
 

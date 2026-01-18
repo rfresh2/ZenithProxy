@@ -384,7 +384,7 @@ public class Proxy {
                 if (nonNull(this.client)) this.client.disconnect(SERVER_CLOSING_MESSAGE);
                 MODULE.get(AutoReconnect.class).cancelAutoReconnect();
                 stopServer();
-                tcpManager.close();
+                if (nonNull(tcpManager)) tcpManager.close();
                 saveConfig();
                 if (CONFIG.database.enabled) DATABASE.stop();
                 DISCORD.stop(true);
