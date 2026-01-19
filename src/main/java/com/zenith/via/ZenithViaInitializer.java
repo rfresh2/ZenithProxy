@@ -6,7 +6,6 @@ import com.viaversion.viaversion.ViaManagerImpl;
 import com.viaversion.viaversion.api.protocol.version.ProtocolVersion;
 import com.viaversion.viaversion.commands.ViaCommandHandler;
 import com.viaversion.viaversion.connection.UserConnectionImpl;
-import com.viaversion.viaversion.platform.NoopInjector;
 import com.viaversion.viaversion.platform.ViaCodecHandler;
 import com.viaversion.viaversion.protocol.ProtocolPipelineImpl;
 import com.zenith.Proxy;
@@ -26,7 +25,7 @@ public class ZenithViaInitializer {
         if (this.initialized.compareAndSet(false, true)) {
             ViaManagerImpl.initAndLoad(
                 new ZenithViaPlatform(),
-                new NoopInjector(),
+                new ZenithViaInjector(),
                 new ViaCommandHandler(false),
                 new ZenithViaLoader(),
                 ViaBackwardsPlatformImpl::new,
