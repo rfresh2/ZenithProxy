@@ -10,23 +10,32 @@ public class ContainerTypeInfoRegistry {
     public record ContainerTypeInfo(
         String ascii,
         int totalSlots,
-        int topSlots
-    ) {};
+        int topSlots,
+        int bottomSlots
+    ) { }
 
     public static final EnumMap<ContainerType, ContainerTypeInfo> REGISTRY = new EnumMap<>(ContainerType.class);
 
-    private static void register(ContainerType containerType, String topAscii, int topSlots) {
-        var ascii = generateAscii(topAscii, topSlots);
-        int totalSlots = topSlots + 36;
-        ContainerTypeInfo containerTypeInfo = new ContainerTypeInfo(ascii, totalSlots, topSlots);
+    private static void register(ContainerType containerType, String topAscii, int topSlots, int bottomSlots) {
+        var ascii = generateAscii(topAscii, topSlots, bottomSlots);
+        int totalSlots = topSlots + 36 + bottomSlots;
+        ContainerTypeInfo containerTypeInfo = new ContainerTypeInfo(ascii, totalSlots, topSlots, bottomSlots);
         REGISTRY.put(containerType, containerTypeInfo);
     }
 
-    private static void register(List<ContainerType> containerTypes, String topAscii, int topSlots) {
-        var ascii = generateAscii(topAscii, topSlots);
-        int totalSlots = topSlots + 36;
-        ContainerTypeInfo containerTypeInfo = new ContainerTypeInfo(ascii, totalSlots, topSlots);
+    private static void register(ContainerType containerType, String topAscii, int topSlots) {
+        register(containerType, topAscii, topSlots, 0);
+    }
+
+    private static void register(List<ContainerType> containerTypes, String topAscii, int topSlots, int bottomSlots) {
+        var ascii = generateAscii(topAscii, topSlots, bottomSlots);
+        int totalSlots = topSlots + 36 + bottomSlots;
+        ContainerTypeInfo containerTypeInfo = new ContainerTypeInfo(ascii, totalSlots, topSlots, bottomSlots);
         containerTypes.forEach(type -> REGISTRY.put(type, containerTypeInfo));
+    }
+
+    private static void register(List<ContainerType> containerTypes, String topAscii, int topSlots) {
+        register(containerTypes, topAscii, topSlots, 0);
     }
 
     public static final String playerInventoryAscii =
@@ -140,7 +149,7 @@ public class ContainerTypeInfoRegistry {
             54
         );
         register(
-            List.of(ContainerType.GENERIC_3X3, ContainerType.CRAFTER_3x3),
+            ContainerType.GENERIC_3X3,
             """
             ╔═══╦═══╦═══╗
             ║%1$2s ║%2$2s ║%3$2s ║
@@ -151,6 +160,20 @@ public class ContainerTypeInfoRegistry {
             ╚═══╩═══╩═══╝
             """,
             9
+        );
+        register(
+            ContainerType.CRAFTER_3x3,
+            """
+            ╔═══╦═══╦═══╗
+            ║%1$2s ║%2$2s ║%3$2s ║
+            ╠═══╬═══╬═══╣    ╔═══╗
+            ║%4$2s ║%5$2s ║%6$2s ║    ║%46$2s ║
+            ╠═══╬═══╬═══╣    ╚═══╝
+            ║%7$2s ║%8$2s ║%9$2s ║
+            ╚═══╩═══╩═══╝
+            """,
+            9,
+            1
         );
         register(
             List.of(ContainerType.ANVIL, ContainerType.MERCHANT),
@@ -261,7 +284,7 @@ public class ContainerTypeInfoRegistry {
         ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝
         """;
 
-    private static String generateAscii(String topContainerAscii, int topContainerSize) {
+    private static String generateAscii(String topContainerAscii, int topContainerSize, final int bottomSlots) {
         String[] bottomSectionReplacements = new String[36];
         for (int i = 0; i < 36; i++) {
             int index = i + topContainerSize + 1;

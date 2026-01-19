@@ -1,6 +1,7 @@
 package com.zenith.cache.data.inventory;
 
 import com.zenith.Proxy;
+import com.zenith.mc.item.ContainerTypeInfoRegistry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Data;
@@ -94,7 +95,8 @@ public class InventoryCache {
         if (container != containers.defaultReturnValue() && container.getSize() >= 36) {
             var playerInventory = getPlayerInventory();
             int playerIndex = 44;
-            for (int containerIndex = container.getSize() - 1; containerIndex >= 0 && playerIndex >= 9; containerIndex--) {
+            var containerTypeInfo = ContainerTypeInfoRegistry.REGISTRY.get(container.getType());
+            for (int containerIndex = container.getSize() - containerTypeInfo.bottomSlots() - 1; containerIndex >= 0 && playerIndex >= 9; containerIndex--) {
                 var stack = container.getItemStack(containerIndex);
                 playerInventory.setItemStack(playerIndex, stack);
                 playerIndex--;
