@@ -9,6 +9,7 @@ import com.zenith.network.server.ServerSession;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundCustomPayloadPacket;
+import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundCustomPayloadPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,14 +77,27 @@ public class ZenithViaPlatform extends UserConnectionViaVersionPlatform {
     }
 
     @Override
-    public void sendCustomPayload(UserConnection connection, String channel, byte[] message) {
+    public void sendCustomPayloadToClient(UserConnection connection, String channel, byte[] message) {
         var serverConnection = getServerConnection(connection);
         if (serverConnection.isPresent()) {
             LOGGER.info("Sending custom payload: {} to player: {}", channel, serverConnection.get().getLoginProfileUUID());
             serverConnection.get().send(new ClientboundCustomPayloadPacket(Key.key(channel), message));
         } else {
-            LOGGER.warn("Failed to send custom payload: {}", channel);
+            LOGGER.warn("Failed to send player custom payload: {}", channel);
         }
+    }
+
+    @Override
+    public void sendCustomPayload(UserConnection connection, String channel, byte[] message) {
+        var nettyChannel = connection.getChannel();
+        var client = Proxy.getInstance().getClient();
+        if (client.getChannel() == nettyChannel) {
+            LOGGER.info("Sending custom payload: {} to server", channel);
+            client.send(new ServerboundCustomPayloadPacket(Key.key(channel), message));
+        } else {
+            LOGGER.warn("Failed to send server custom payload: {}", channel);
+        }
+
     }
 
     private Optional<ServerSession> getServerConnection(final UserConnection userConnection) {
