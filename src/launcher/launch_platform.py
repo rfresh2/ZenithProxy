@@ -47,7 +47,7 @@ def validate_linux_glibc_version(config: LaunchConfig) -> bool:
         else:
             glibc_minor_version_min = 35
         debug(f"glibc_minor_version_min: {glibc_minor_version_min}")
-        output = subprocess.run(["ldd", "--version"], stderr=subprocess.STDOUT, stdout=subprocess.STDOUT, text=True)
+        output = subprocess.run(["ldd", "--version"], stderr=subprocess.STDOUT, stdout=subprocess.PIPE, text=True)
         output = output.stdout.lower()
         debug(f"ldd output: \n{output}")
         # ldd (Ubuntu GLIBC 2.35-0ubuntu3.4) 2.35
@@ -65,7 +65,7 @@ def validate_linux_glibc_version(config: LaunchConfig) -> bool:
             return False
         return True
     except Exception as e:
-        error("Error checking GLIBC version.")
+        error("Error checking GLIBC version. %s", e)
         return False
 
 
