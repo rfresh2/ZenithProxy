@@ -1431,11 +1431,11 @@ Dropping can be configured based on modes:
 
 
 
-    * `all`: any item
+* `all`: any item
 
-    * `whitelist`: only added items
+* `whitelist`: only added items
 
-    * `blacklist`: any item not added
+* `blacklist`: any item not added
 
 **Usage**
 
