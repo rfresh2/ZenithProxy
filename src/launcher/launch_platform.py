@@ -8,7 +8,6 @@ from typing import Optional
 
 import requests
 
-from jdk_install import get_java_executable, JavaInstallType
 from launch_config import LaunchConfig
 from log import error, warn, debug
 from version import Version
@@ -83,7 +82,8 @@ def validate_linux_system(config: LaunchConfig) -> bool:
 
 def validate_java_system(config: LaunchConfig, install_type) -> bool:
     java_version = min_java_version(config)
-    java_executable = get_java_executable(java_version, install_type=install_type)
+    import jdk_install
+    java_executable = jdk_install.get_java_executable(java_version, install_type=install_type)
     if java_executable is None:
         warn(f"Java >={java_version} not found.")
         return False
@@ -107,7 +107,8 @@ def validate_system_with_config(config: LaunchConfig) -> bool:
     if config.release_channel == "git":
         return validate_git_system()
     elif config.release_channel.startswith("java"):
-        return validate_java_system(config, JavaInstallType.AUTO_INSTALL)
+        import jdk_install
+        return validate_java_system(config, jdk_install.JavaInstallType.AUTO_INSTALL)
     elif config.release_channel.startswith("linux"):
         return validate_linux_system(config)
     else:

@@ -54,6 +54,7 @@ def update_launcher_exec(config, api):
         info(f"New launcher version: {new_launcher_sha1}")
         # Preserve current launcher executable name if its changed
         replace_launcher_executable(os_platform, current_executable_name, new_executable_path, current_launcher_sha1)
+        info("Relaunching...")
         if is_pyinstaller:
             relaunch_executable(os_platform, current_executable_name)
         else:
@@ -123,7 +124,7 @@ def get_launcher_hashes(api):
 
 
 def relaunch_executable(os_platform, executable_name):
-    info("Relaunching...")
+    debug(f"> {executable_name} --no-launcher-update")
     if os_platform == OperatingSystem.WINDOWS:
         subprocess.run([executable_name, "--no-launcher-update"])
     else:

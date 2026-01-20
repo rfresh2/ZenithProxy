@@ -33,3 +33,7 @@ def error(*args):
 def critical_error(*args):
     logger.critical(*args)
     sys.exit(69)
+
+def close():
+    fh.close()
+    ch.close()

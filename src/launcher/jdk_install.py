@@ -6,13 +6,12 @@ from enum import Enum
 import jdk
 
 import launch_platform
-from log import info, error, warn, critical_error
+from log import info, error, warn, critical_error, debug
 
 _USER_DIR = os.path.expanduser("~")
 _JDK_DIR = os.path.join(_USER_DIR, ".jdk")
 _JDKS_DIR = os.path.join(_USER_DIR, ".jdks")
 _JRE_DIR = os.path.join(_USER_DIR, ".jre")
-
 
 class JavaInstallType(Enum):
     USER_PROMPT = 1
@@ -74,7 +73,14 @@ def _locate_java_from_env(env_var, min_version):
 
 def _install_java():
     info(f"Installing Java to: {_JDK_DIR}")
-    install_dir = jdk.install("25", path=_JDK_DIR)
+
+    install_os = jdk.OS
+    # default detector doesn't even attempt to detect alpine
+    if launch_platform.get_platform_os() == launch_platform.OperatingSystem.ALPINE:
+        debug("Installing java for alpine")
+        install_os = jdk.OperatingSystem.ALPINE_LINUX
+
+    install_dir = jdk.install("25", path=_JDK_DIR, vendor="Adoptium", operating_system=install_os)
     info(f"Java installed successfully to: {install_dir}")
 
 
