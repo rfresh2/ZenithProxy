@@ -121,6 +121,23 @@ jobs:
             artifact-name: 'launcher-alpine-aarch64'
             sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
     steps:
+      # https://github.com/dart-musl/setup-node-alpine-for-javascript-actions
+      - if: ${{ matrix.os == 'ubuntu-24.04-arm' }}
+        run: |
+          if grep -q '^ID=alpine$' /etc/os-release; then
+            ROOT=$(TMPDIR="$RUNNER_TEMP" mktemp -d)
+            apk add --root "$ROOT" --repositories-file /etc/apk/repositories --allow-untrusted --no-cache --no-scripts --initdb -- docker-cli
+            "$ROOT/usr/bin/docker" run --rm --net host --user 0:0 --volume /:/hostfs --entrypoint /usr/sbin/chroot "$("$ROOT/usr/bin/docker" inspect '${{ job.container.id }}' --format "{{ .Image }}")" /hostfs /bin/bash -xc \
+              'exec sudo -u "$(stat -c "%U" -- "$7")" -- /bin/bash -xc "$@"' -- \
+              'find "$5" -type f -executable -name node -not -path "*_alpine/*" -print0 | exec xargs -0 -n 1 -- /bin/bash -xc "$@"' -- \
+              'exec docker run --rm --volume /:/hostfs --entrypoint /bin/sh "docker.io/library/node:$("$4" -e "console.log(process.versions.node)")-alpine" -xc "$@"' -- \
+              'apk add --no-cache -- patchelf && apk info --quiet --contents -- libgcc libstdc++ | xargs -- tar -cC / -T- | tar -xvC "$(dirname "/hostfs$2")/../lib" --strip-components 2 && cp "$(which node)" "/hostfs$2" && patchelf --set-rpath \$ORIGIN/../lib "/hostfs$2" && ldd "/hostfs$2"' -- \
+              "$("$ROOT/usr/bin/docker" inspect '${{ job.container.id }}' --format '{{ range.Mounts }}{{ if eq .Destination "/__e" }}{{ .Source }}{{ end }}{{ end }}')"
+            rm -rf -- "$ROOT"
+            sed -i -e 's/^ID=alpine$/ID=linux/' /etc/os-release
+          fi
+        shell: sh
+
       - name: Install Deps
         run: apk add zip bash build-base ca-certificates curl gcc git libc-dev libffi-dev libgcc make musl-dev openssl openssl-dev zlib-dev
 
@@ -245,6 +262,7 @@ jobs:
   release-artifacts:
     needs:
       - build-pyinstaller
+      - build-alpine
       - package-python
       - package-windows-python
     runs-on: ubuntu-latest
