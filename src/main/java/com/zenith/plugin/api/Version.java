@@ -10,7 +10,8 @@ import java.util.regex.Pattern;
 
 @Data
 public class Version implements Comparable<Version> {
-    private static final Pattern VERSION_PATTERN = Pattern.compile("[0-9]+\\.[0-9]+\\.[0-9]+");
+    public static final String VERSION_PATTERN_STRING = "[0-9]+\\.[0-9]+\\.[0-9]+";
+    public static final Pattern VERSION_PATTERN = Pattern.compile(VERSION_PATTERN_STRING);
     private final String version;
     private final int[] parts = new int[3];
 

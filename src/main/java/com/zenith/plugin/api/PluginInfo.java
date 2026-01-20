@@ -18,5 +18,6 @@ public record PluginInfo(
     List<String> authors,
     List<String> mcVersions
 ) {
-    public static final Pattern ID_PATTERN = Pattern.compile("[a-z][a-z0-9-_]{0,63}");
+    public static final String ID_PATTERN_STRING = "[a-z][a-z0-9-_]{0,63}";
+    public static final Pattern ID_PATTERN = Pattern.compile(ID_PATTERN_STRING);
 }
