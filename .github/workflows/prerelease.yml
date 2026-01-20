@@ -54,10 +54,10 @@ jobs:
           path: build/libs/ZenithProxy.jar
           if-no-files-found: error
 
-#      - name: Download GraalVM Profile
-#        run: |
-#          wget https://cdn.2b2t.vc/profile.iprof
-#          echo "GRAALVM_PGO_PATH=$(pwd)/profile.iprof" >> "$GITHUB_ENV"
+      - name: Download GraalVM Profile
+        run: |
+          wget https://cdn.2b2t.vc/profile.iprof
+          echo "GRAALVM_PGO_PATH=$(pwd)/profile.iprof" >> "$GITHUB_ENV"
 
 #      - name: Enable GraalVM Profile Instrumenting
 #        run: |
