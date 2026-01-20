@@ -59,7 +59,7 @@ def launch_linux(config):
                 config.write_launch_config()
                 warn("Resetting custom JVM args and retrying.")
                 return
-        critical_error("Error launching application:", e)
+        critical_error("Error launching application: %s", e)
 
 
 def launch_java(config):
@@ -103,7 +103,7 @@ def launch_java(config):
                 config.write_launch_config()
                 warn("Resetting custom JVM args and retrying.")
                 return
-        critical_error("Error launching application:", str(e))
+        critical_error("Error launching application: %s", e)
 
 
 def launch_git(config):
@@ -137,7 +137,7 @@ def launch_git(config):
                 config.custom_jvm_args = None
                 config.write_launch_config()
                 warn("Resetting custom JVM args and retrying.")
-        critical_error("Error launching application:", e)
+        critical_error("Error launching application: %s", e)
 
 
 def launcher_exec(config):

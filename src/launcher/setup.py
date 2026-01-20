@@ -324,7 +324,7 @@ def verify_discord_bot_token(token, verbose=False):
             return False
         return True
     except Exception as e:
-        error("ERROR: Verifying discord bot", e)
+        error("ERROR: Verifying discord bot: %s", e)
         return False
 
 
