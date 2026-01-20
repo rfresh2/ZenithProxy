@@ -100,6 +100,78 @@ jobs:
           path: ZenithProxy-${{ matrix.artifact-name }}.sha1
           if-no-files-found: error
 
+  build-alpine:
+    env:
+      pyinstaller_version: "6.18.0"
+      UV_PYTHON: '3.14.2'
+    runs-on: ${{ matrix.os }}
+    container:
+      image: ${{ matrix.image || '' }}
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ 'ubuntu-latest', 'ubuntu-24.04-arm']
+        include:
+          - os: 'ubuntu-latest'
+            image: 'node:24-alpine3.23'
+            artifact-name: 'launcher-alpine-amd64'
+            sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
+          - os: 'ubuntu-24.04-arm'
+            image: 'node:24-alpine3.23'
+            artifact-name: 'launcher-alpine-aarch64'
+            sha1-command: 'sha1sum -b dist/launch | cut -d" " -f 1'
+    steps:
+      - name: Install Deps
+        run: apk add zip bash build-base ca-certificates curl gcc git libc-dev libffi-dev libgcc make musl-dev openssl openssl-dev zlib-dev
+
+      - name: Check out repository
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Install PyInstaller
+        run: |
+          uv tool install pyinstaller@${{ env.pyinstaller_version }}
+
+      - name: Build launcher
+        run: >
+          uv tool run --with-requirements src/launcher/requirements.txt --upgrade
+          pyinstaller@${{ env.pyinstaller_version }} --specpath ./build
+          -p ./src/launcher --onefile
+          --runtime-tmpdir .launcher.tmp
+          --noconfirm
+          -i ../src/launcher/icon.ico
+          ./src/launcher/__main__.py
+
+      - name: Rename executable
+        run: |
+          mv dist/__main__ dist/launch
+
+      - name: Create zip
+        run: |
+          zip -j dist/ZenithProxy-${{ matrix.artifact-name }}.zip dist/launch
+
+      - name: Upload Binary
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: dist/ZenithProxy-${{ matrix.artifact-name }}.zip
+          if-no-files-found: error
+
+      - name: Get Binary Hash
+        run: ${{ matrix.sha1-command }} > ZenithProxy-${{ matrix.artifact-name }}.sha1
+
+      - name: Upload Launcher Hash Version
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ matrix.artifact-name }}.sha1
+          path: ZenithProxy-${{ matrix.artifact-name }}.sha1
+          if-no-files-found: error
+
+
   package-python:
     runs-on: ubuntu-latest
     steps:

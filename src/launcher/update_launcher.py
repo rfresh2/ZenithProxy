@@ -7,7 +7,7 @@ import tempfile
 import launch_platform
 import zip_fixed
 from launch_platform import OperatingSystem
-from log import info, error
+from log import info, error, debug
 
 launcher_tag = "launcher-v3"
 hashes_file_name = "hashes.txt"
@@ -22,6 +22,7 @@ def update_launcher_exec(config, api):
         is_windows_python = not is_pyinstaller and launch_platform.is_windows_python_bundle()
         os_platform = launch_platform.get_platform_os()
         os_arch = launch_platform.get_platform_arch()
+        debug(f"is_pyinstaller: {is_pyinstaller}, is_windows_python: {is_windows_python}, os_platform: {os_platform}, os_arch: {os_arch}")
         launcher_asset_file_name = get_launcher_asset_zip_file_name(is_pyinstaller, is_windows_python, os_platform, os_arch)
         current_executable_name = get_current_launcher_executable_name(is_pyinstaller)
         expected_executable_name = get_expected_launcher_executable_name(is_pyinstaller)

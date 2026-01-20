@@ -6,7 +6,7 @@ import sys
 logger = logging.getLogger("log")
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
+ch.setLevel(logging.INFO)
 logger.addHandler(ch)
 console_formatter = logging.Formatter("%(message)s")
 ch.setFormatter(console_formatter)
@@ -17,6 +17,9 @@ logger.addHandler(fh)
 file_formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s", "%Y/%m/%d %H:%M:%S")
 fh.setFormatter(file_formatter)
 fh.doRollover()
+
+def debug(*args):
+    logger.debug(*args)
 
 def info(*args):
     logger.info(*args)
