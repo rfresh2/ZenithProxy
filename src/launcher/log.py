@@ -18,20 +18,27 @@ file_formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s", 
 fh.setFormatter(file_formatter)
 fh.doRollover()
 
-def debug(*args):
-    logger.debug(*args)
+def debug(msg: str):
+    logger.debug(msg)
 
-def info(*args):
-    logger.info(*args)
+def info(msg: str):
+    logger.info(msg)
 
-def warn(*args):
-    logger.warning(*args)
+def warn(msg: str):
+    logger.warning(msg)
 
-def error(*args):
-    logger.error(*args)
+def error(msg: str):
+    logger.error(msg)
 
-def critical_error(*args):
-    logger.critical(*args)
+def exception(msg: str):
+    logger.exception(msg)
+
+def critical_error(msg: str):
+    logger.critical(msg)
+    sys.exit(69)
+
+def critical_exception(msg: str):
+    logger.critical(msg, exc_info=True)
     sys.exit(69)
 
 def close():

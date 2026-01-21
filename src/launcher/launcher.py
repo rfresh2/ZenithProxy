@@ -5,7 +5,7 @@ import time
 from collections import deque
 
 from jdk_install import get_java_executable, get_java_version_from_subprocess
-from log import info, warn, critical_error
+from log import info, warn, critical_error, critical_exception
 
 default_java_xmx = 300
 
@@ -59,7 +59,7 @@ def launch_linux(config):
                 config.write_launch_config()
                 warn("Resetting custom JVM args and retrying.")
                 return
-        critical_error("Error launching application: %s", e)
+        critical_exception("Error launching application")
 
 
 def launch_java(config):
@@ -103,7 +103,7 @@ def launch_java(config):
                 config.write_launch_config()
                 warn("Resetting custom JVM args and retrying.")
                 return
-        critical_error("Error launching application: %s", e)
+        critical_exception("Error launching application")
 
 
 def launch_git(config):
@@ -137,7 +137,8 @@ def launch_git(config):
                 config.custom_jvm_args = None
                 config.write_launch_config()
                 warn("Resetting custom JVM args and retrying.")
-        critical_error("Error launching application: %s", e)
+                return
+        critical_exception("Error launching application: %s")
 
 
 def launcher_exec(config):
@@ -150,7 +151,7 @@ def launcher_exec(config):
     elif config.release_channel.startswith("linux"):
         launch_linux(config)
     else:
-        critical_error("Invalid release channel:", config.release_channel)
+        critical_error(f"Invalid release channel: {config.release_channel}")
 
 
 def _record_launch():

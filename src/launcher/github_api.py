@@ -4,7 +4,7 @@ from requests import Session
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
-from log import info, error
+from log import info, error, exception
 
 
 class GitHubAPI:
@@ -63,8 +63,8 @@ class GitHubAPI:
                 default=None,
             )
             return (latest_release["id"], latest_release["tag_name"]) if latest_release else None
-        except Exception as e:
-            error("Failed to get releases: %s", e)
+        except:
+            exception("Failed to get releases")
         return None
 
     def get_release_for_ver(self, tag_name):
@@ -73,8 +73,8 @@ class GitHubAPI:
             response = self._send_request(url, self.get_headers())
             release = response.json()
             return release["id"], release["tag_name"]
-        except Exception as e:
-            error("Failed to get release for version: %s", e)
+        except:
+            exception("Failed to get release for version")
         return None
 
     def get_asset_id(self, release_id, asset_name, tag=False):
@@ -82,8 +82,8 @@ class GitHubAPI:
         try:
             response = self._send_request(url, self.get_headers())
             return next((asset["id"] for asset in response.json()["assets"] if asset["name"] == asset_name), None)
-        except Exception as e:
-            error("Failed to get release asset ID: %s", e)
+        except:
+            error("Failed to get release asset ID")
         return None
 
     def get_release_asset_id(self, release_id, asset_name):
@@ -133,6 +133,6 @@ class GitHubAPI:
                 print()
 
             return bytes(data)
-        except Exception as e:
-            error("Failed to download asset: %s", e)
+        except:
+            exception("Failed to download asset")
             return None

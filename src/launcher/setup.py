@@ -11,7 +11,7 @@ from launch_config import read_launch_config_file
 from launch_platform import get_public_ip, check_port_in_use
 from launch_platform import min_java_version
 from launch_platform import validate_linux_system
-from log import info, error, critical_error
+from log import info, error, critical_error, exception
 
 
 def setup_execute(config):
@@ -291,7 +291,7 @@ def setup_execute(config):
 
 
 def rescue_invalid_system(config):
-    error("CRITICAL: Invalid system for release channel: " + config.release_channel)
+    error(f"CRITICAL: Invalid system for release channel: {config.release_channel}")
     while True:
         info("Run setup? (y/n)")
         i1 = input("> ")
@@ -299,7 +299,7 @@ def rescue_invalid_system(config):
             setup_execute(config)
             return
         elif i1 == "n":
-            critical_error("Invalid system for release channel:", config.release_channel)
+            critical_error(f"Invalid system for release channel: {config.release_channel}")
 
 
 def verify_discord_bot_token(token, verbose=False):
@@ -323,8 +323,8 @@ def verify_discord_bot_token(token, verbose=False):
             info("Enable 'Message Content Intent' in the discord bot settings")
             return False
         return True
-    except Exception as e:
-        error("ERROR: Verifying discord bot: %s", e)
+    except:
+        exception("ERROR: Verifying discord bot")
         return False
 
 
@@ -339,8 +339,8 @@ def verify_discord_channel(token, channel_id):
             error(f"ERROR: Discord API response code: {response.status_code}")
             return None
         return response.json()
-    except Exception as e:
-        error("ERROR: Verifying discord channel: %s", e)
+    except:
+        exception("ERROR: Verifying discord channel")
         return None
 
 
@@ -356,8 +356,8 @@ def get_discord_guild(token, guild_id):
             return None
         response_json = response.json()
         return response_json
-    except Exception as e:
-        error("ERROR: Verifying discord guild: %s", e)
+    except:
+        exception("ERROR: Verifying discord guild")
         return None
 
 
@@ -379,8 +379,8 @@ def verify_discord_role(token, guild_id, role_id):
                 return True
         error(f"ERROR: Role not found in server: {guild_id}")
         return False
-    except Exception as e:
-        error("ERROR: Verifying discord role: %s", e)
+    except:
+        exception("ERROR: Verifying discord role")
         return False
 
 
@@ -391,7 +391,7 @@ def setup_unattended(config):
         mc_version = os.getenv("ZENITH_MC_VERSION", "1.21.4")
         mc_ver_pattern = re.compile(r"(\d+)\.(\d+)\.(\d+)$")
         if not mc_ver_pattern.match(mc_version):
-            critical_error("Invalid ZENITH_MC_VERSION.")
+            critical_error(f"Invalid ZENITH_MC_VERSION: {mc_version}. Must be formatted like: '1.21.4'")
         if os.getenv("ZENITH_PLATFORM") is not None:
             platform = os.getenv("ZENITH_PLATFORM").lower()
             if platform not in ["java", "linux"]:

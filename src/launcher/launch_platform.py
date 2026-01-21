@@ -9,7 +9,7 @@ from typing import Optional
 import requests
 
 from launch_config import LaunchConfig
-from log import error, warn, debug
+from log import error, warn, debug, exception
 from version import Version
 
 
@@ -32,8 +32,8 @@ def validate_linux_cpu_flags() -> bool:
                 )
                 return False
         return True
-    except Exception as e:
-        error("Error checking CPU flags: %s", e)
+    except:
+        exception("Error checking CPU flags")
         return False
 
 
@@ -63,8 +63,8 @@ def validate_linux_glibc_version(config: LaunchConfig) -> bool:
             )
             return False
         return True
-    except Exception as e:
-        error("Error checking GLIBC version. %s", e)
+    except:
+        exception("Error checking GLIBC version")
         return False
 
 
@@ -151,6 +151,7 @@ class LinuxLibC(Enum):
 
 def get_linux_libc() -> Optional[LinuxLibC]:
     try:
+        debug(f"> ldd --version")
         output = subprocess.run(["ldd", "--version"], stderr=subprocess.STDOUT, stdout=subprocess.PIPE, text=True)
         output = output.stdout.lower()
         debug(f"ldd output: \n{output}")
@@ -160,8 +161,8 @@ def get_linux_libc() -> Optional[LinuxLibC]:
         elif "musl" in output:
             debug("Detected musl")
             return LinuxLibC.MUSL
-    except Exception as e:
-        error("Error checking linux libc type %s", e)
+    except:
+        exception("Error checking linux libc type")
     return None
 
 

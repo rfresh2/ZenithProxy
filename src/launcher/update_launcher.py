@@ -7,7 +7,7 @@ import tempfile
 import launch_platform
 import zip_fixed
 from launch_platform import OperatingSystem
-from log import info, error, debug
+from log import info, debug, exception
 
 launcher_tag = "launcher-v3"
 hashes_file_name = "hashes.txt"
@@ -60,8 +60,8 @@ def update_launcher_exec(config, api):
         else:
             replace_extra_python_launcher_files(os_platform, is_windows_python, current_launcher_sha1)
             relaunch_python(os_platform, current_executable_name)
-    except Exception as e:
-        error("Error during launcher updater check, skipping update: %s", e)
+    except:
+        exception("Error during launcher updater check, skipping update")
 
 
 def get_launcher_asset_zip_file_name(is_pyinstaller, is_windows_python, os_platform, os_arch):

@@ -2,7 +2,7 @@ import os
 import subprocess
 
 import zip_fixed
-from log import info, error
+from log import info, error, exception
 
 
 class UpdateError(Exception):
@@ -15,11 +15,10 @@ class RestUpdateError(UpdateError):
 
 def git_update_check():
     try:
-        info("Running git pull...")
+        info("> git pull")
         subprocess.run(["git", "pull"], check=True, capture_output=True, text=True)
-    except subprocess.CalledProcessError as e:
-        error("Error pulling from git:")
-        error(e.stderr)
+    except:
+        exception("Error pulling from git")
     return None
 
 
@@ -75,7 +74,7 @@ def java_update_check(config, api):
 
 
 def java_get_version(config, api, target_version):
-    info("Getting version: " + target_version)
+    info(f"Getting version: {target_version}")
     rest_get_version(config, api, "ZenithProxy.jar", target_version)
 
 
@@ -84,23 +83,23 @@ def linux_native_update_check(config, api):
 
 
 def linux_native_get_version(config, api, target_version):
-    info("Getting version: " + target_version)
+    info(f"Getting version: {target_version}")
     rest_get_version(config, api, "ZenithProxy.zip", target_version)
 
 
 def git_read_version(config):
     try:
+        info("> git rev-parse --short=8 HEAD")
         output = subprocess.check_output(["git", "rev-parse", "--short=8", "HEAD"], stderr=subprocess.STDOUT, text=True)
         v = str(output).splitlines()[0].strip()
         if len(v) == 8:
             config.version = v
             config.local_version = v
-            info("Git commit:", config.version)
+            info(f"Git commit: {config.version}")
         else:
-            error("Invalid version string found from git:", output)
-    except subprocess.CalledProcessError as e:
-        error("Error reading local git version:")
-        error(e.stderr)
+            error(f"Invalid version string found from git: {output}")
+    except:
+        exception("Error reading local git version")
 
 
 def update_zenith_exec(config, api):
@@ -124,5 +123,5 @@ def update_zenith_exec(config, api):
         if config.release_channel == "git":
             git_read_version(config)
         config.write_launch_config()
-    except Exception as e:
-        error("Error checking for ZenithProxy update: %s", e)
+    except:
+        exception("Error checking for ZenithProxy update")
