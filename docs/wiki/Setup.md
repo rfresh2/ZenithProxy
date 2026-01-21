@@ -26,6 +26,7 @@
 * Mac: [M-series CPU](https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-macos-aarch64.zip) or [x64 (Intel)](https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-macos-amd64.zip)
 * Alpine Linux (musl): [x64](https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-alpine-amd64.zip) or [aarch64](https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-alpine-aarch64.zip)
 * Other: [Python (Universal)](https://github.com/rfresh2/ZenithProxy/releases/download/launcher-v3/ZenithProxy-launcher-python.zip)
+  * Recommended with: [install uv](https://docs.astral.sh/uv/getting-started/installation/#installing-uv)
 
 Source: https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3
 
