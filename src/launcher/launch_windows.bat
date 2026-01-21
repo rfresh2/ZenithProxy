@@ -1,6 +1,14 @@
 @echo off
 setlocal
 
+where uv >nul 2>nul
+if %errorlevel% == 0 (
+  echo Found uv
+  echo Starting Launcher...
+  uv run --python ">=3.14" --upgrade --with-requirements requirements.txt -- launcher-py.zip %*
+  exit /b
+)
+
 if "%1" == "--reinstall-python" (
 	echo Reinstalling Python...
 	del python /Q
@@ -52,6 +60,7 @@ python\python.exe -m pip install --upgrade --requirement requirements.txt -qq --
 
 if errorlevel 1 (
 	echo Error: Failed installing Python requirements.
+	echo Install uv: https://docs.astral.sh/uv/getting-started/installation/
 	exit /b 1
 )
 
