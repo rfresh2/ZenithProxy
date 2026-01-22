@@ -8,10 +8,7 @@ import com.zenith.network.client.handler.incoming.scoreboard.*;
 import com.zenith.network.client.handler.incoming.spawn.AddEntityHandler;
 import com.zenith.network.client.handler.incoming.spawn.AddExperienceOrbHandler;
 import com.zenith.network.client.handler.incoming.spawn.SpawnPositionHandler;
-import com.zenith.network.client.handler.outgoing.OutgoingCKeepAliveHandler;
-import com.zenith.network.client.handler.outgoing.OutgoingChatCommandSignedHandler;
-import com.zenith.network.client.handler.outgoing.OutgoingChatHandler;
-import com.zenith.network.client.handler.outgoing.OutgoingContainerClickHandler;
+import com.zenith.network.client.handler.outgoing.*;
 import com.zenith.network.client.handler.postoutgoing.*;
 import com.zenith.network.server.ServerSession;
 import com.zenith.network.server.handler.player.incoming.*;
@@ -134,6 +131,7 @@ public final class PacketCodecRegistries {
                 .inbound(ClientboundTransferPacket.class, new CTransferHandler())
                 .inbound(ClientboundKeepAlivePacket.class, CKeepAliveHandler.INSTANCE)
                 .outbound(ServerboundKeepAlivePacket.class, OutgoingCKeepAliveHandler.INSTANCE)
+                .outbound(ServerboundPongPacket.class, OutgoingCPongHandler.INSTANCE)
                 .postOutbound(ServerboundFinishConfigurationPacket.class, new PostOutgoingFinishConfigurationHandler())
                 .build())
             .state(ProtocolState.GAME, PacketHandlerStateCodec.clientBuilder()
@@ -229,6 +227,7 @@ public final class PacketCodecRegistries {
                 .outbound(ServerboundContainerClickPacket.class, new OutgoingContainerClickHandler())
                 .inbound(ClientboundKeepAlivePacket.class, CKeepAliveHandler.INSTANCE)
                 .outbound(ServerboundKeepAlivePacket.class, OutgoingCKeepAliveHandler.INSTANCE)
+                .outbound(ServerboundPongPacket.class, OutgoingCPongHandler.INSTANCE)
                 .postOutbound(ServerboundAcceptTeleportationPacket.class, new PostOutgoingAcceptTeleportHandler())
                 .postOutbound(ServerboundConfigurationAcknowledgedPacket.class, new PostOutgoingConfigurationAckHandler())
                 .postOutbound(ServerboundMoveVehiclePacket.class, new PostOutgoingMoveVehicleHandler())

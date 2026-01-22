@@ -84,6 +84,7 @@ public class PlayerCache implements CachedData {
     protected MutableVec3i spawnPosition = DEFAULT_SPAWN_POSITION;
     protected Queue<ClientboundPlayerPositionPacket> teleportQueue = new LinkedBlockingQueue<>();
     protected Queue<KeepAliveRequest> keepAliveQueue = new LinkedBlockingQueue<>();
+    protected Queue<PingRequest> pingQueue = new LinkedBlockingQueue<>();
     protected boolean respawning = false;
 
     public PlayerCache(final EntityCache entityCache) {
@@ -129,6 +130,7 @@ public class PlayerCache implements CachedData {
             this.doLimitedCrafting = false;
             this.teleportQueue.clear();
             this.keepAliveQueue.clear();
+            this.pingQueue.clear();
             this.actionId.set(0);
             this.seqId.set(0);
         }
@@ -329,4 +331,5 @@ public class PlayerCache implements CachedData {
     }
 
     public record KeepAliveRequest(long receivedTime, long id) {}
+    public record PingRequest(long receivedTime, int id) {}
 }

@@ -123,6 +123,7 @@ public final class Config {
 
         public static final class Ping {
             public int pingIntervalSeconds = 5;
+            public int pingQueueTimeoutMs = 2000;
         }
 
         public static final class Extra {
