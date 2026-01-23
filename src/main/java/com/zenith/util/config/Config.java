@@ -747,7 +747,7 @@ public final class Config {
             public boolean allowSpectator = true;
             public String spectatorEntity = "cat";
             public boolean spectatorPublicChatEnabled = true;
-            public boolean fullCommandsEnabled = false;
+            public boolean fullCommandsEnabled = true;
             public boolean fullCommandsAcceptSlashCommands = true;
             public boolean fullCommandsRequireRegularWhitelist = true;
             public boolean playerCamOnJoin = false;
