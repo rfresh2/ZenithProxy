@@ -3,6 +3,8 @@ package com.zenith.database;
 import com.zenith.util.Wait;
 import org.redisson.api.RLock;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 public class DatabaseUtil {
 
 //    @Test
@@ -37,7 +39,7 @@ public class DatabaseUtil {
                 System.out.println("Failed to unlock, stopping");
                 break;
             }
-            Wait.wait(10 + ((int) (Math.random() * 10)));
+            Wait.wait(ThreadLocalRandom.current().nextInt(10, 20));
         }
     }
 

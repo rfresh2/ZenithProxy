@@ -64,6 +64,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -608,7 +609,7 @@ public class Proxy {
             minecraftProtocol = retrieveLoginTaskResult(loginTask());
             if (minecraftProtocol != null || !loggingIn.get()) break;
             AUTH_LOG.warn("Failed login attempt {}", tries + 1);
-            Wait.wait((int) (3 + (Math.random() * 7.0)));
+            Wait.wait(ThreadLocalRandom.current().nextInt(3, 8));
         }
         if (!loggingIn.compareAndSet(true, false)) throw new RuntimeException("Login Cancelled");
         if (minecraftProtocol == null) throw new RuntimeException("Auth failed");
