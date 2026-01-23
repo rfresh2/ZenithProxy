@@ -20,8 +20,8 @@ import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChar
 
 public class ServerCommand extends Command {
     private final Pattern ipWithPortPattern = Pattern.compile("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}:[0-9]{1,5}$");
-    private final Pattern domainPattern = Pattern.compile("^[a-zA-Z0-9.]+$");
-    private final Pattern domainWithPortPattern = Pattern.compile("^[a-zA-Z0-9.]+:[0-9]{1,5}$");
+    private final Pattern domainPattern = Pattern.compile("^[a-zA-Z0-9.-]+$");
+    private final Pattern domainWithPortPattern = Pattern.compile("^[a-zA-Z0-9.-]+:[0-9]{1,5}$");
     private final Pattern ipv6Pattern = Pattern.compile("^((([0-9A-Fa-f]{1,4}:){1,6}:)|(([0-9A-Fa-f]{1,4}:){7}))([0-9A-Fa-f]{1,4})$");
 
     @Override
