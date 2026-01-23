@@ -6,14 +6,16 @@ import tempfile
 
 import launch_platform
 import zip_fixed
-from launch_platform import OperatingSystem
+from github_api import GitHubAPI
+from launch_config import LaunchConfig
+from launch_platform import OperatingSystem, CpuArch
 from log import info, debug, exception
 
 launcher_tag = "launcher-v3"
 hashes_file_name = "hashes.txt"
 
 
-def update_launcher_exec(config, api):
+def update_launcher_exec(config: LaunchConfig, api: GitHubAPI):
     if not config.auto_update_launcher:
         return
     info("Checking for launcher update...")
@@ -64,7 +66,7 @@ def update_launcher_exec(config, api):
         exception("Error during launcher updater check, skipping update")
 
 
-def get_launcher_asset_zip_file_name(is_pyinstaller, is_windows_python, os_platform, os_arch):
+def get_launcher_asset_zip_file_name(is_pyinstaller, is_windows_python, os_platform: OperatingSystem, os_arch: CpuArch):
     if is_pyinstaller:
         return f"ZenithProxy-launcher-{os_platform.value}-{os_arch.value}.zip"
     elif is_windows_python:
@@ -91,7 +93,7 @@ def get_expected_launcher_executable_name(is_pyinstaller):
         return "launcher-py.zip"
 
 
-def compute_sha1(file_path):
+def compute_sha1(file_path) -> str:
     sha1 = hashlib.sha1()
     with open(file_path, "rb") as f:
         while True:
@@ -102,7 +104,7 @@ def compute_sha1(file_path):
     return sha1.hexdigest()
 
 
-def get_launcher_hashes(api):
+def get_launcher_hashes(api: GitHubAPI):
     hashes_asset_id = api.get_release_tag_asset_id(launcher_tag, hashes_file_name)
     if hashes_asset_id is None:
         raise LauncherUpdateError("Failed to get launcher hashes asset ID:", hashes_file_name)
@@ -123,7 +125,7 @@ def get_launcher_hashes(api):
     return hashes_list
 
 
-def relaunch_executable(os_platform, executable_name):
+def relaunch_executable(os_platform: OperatingSystem, executable_name):
     debug(f"> {executable_name} --no-launcher-update")
     if os_platform == OperatingSystem.WINDOWS:
         subprocess.run([executable_name, "--no-launcher-update"])
@@ -132,14 +134,14 @@ def relaunch_executable(os_platform, executable_name):
         os.execl(executable_name, "--no-launcher-update")
 
 
-def relaunch_python(os_platform, executable_name):
+def relaunch_python(os_platform: OperatingSystem, executable_name):
     if os_platform == OperatingSystem.WINDOWS:
         relaunch_executable(os_platform, "launch.bat")
     else:
         relaunch_executable(executable_name, "launch.sh")
 
 
-def replace_launcher_executable(os_platform, exec_name, new_exec_name, current_sha1):
+def replace_launcher_executable(os_platform: OperatingSystem, exec_name, new_exec_name, current_sha1):
     info("Replacing launcher files...")
     if os_platform == OperatingSystem.WINDOWS:
         # on windows, we can't replace the executable while it's running
@@ -151,7 +153,7 @@ def replace_launcher_executable(os_platform, exec_name, new_exec_name, current_s
         os.replace(new_exec_name, exec_name)
 
 
-def replace_extra_python_launcher_files(os_platform, is_windows_python, current_sha1):
+def replace_extra_python_launcher_files(os_platform: OperatingSystem, is_windows_python, current_sha1):
     os.replace("launcher/requirements.txt", "requirements.txt")
     # todo: handle the case where users change the script's name
     if not is_windows_python:

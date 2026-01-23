@@ -7,14 +7,14 @@ import requests
 
 import launch_platform
 from jdk_install import get_java_executable, JavaInstallType
-from launch_config import read_launch_config_file
+from launch_config import read_launch_config_file, LaunchConfig
 from launch_platform import get_public_ip, check_port_in_use
 from launch_platform import min_java_version
 from launch_platform import validate_linux_system
 from log import info, error, critical_error, exception
 
 
-def setup_execute(config):
+def setup_execute(config: LaunchConfig):
     if validate_linux_system(config):  # otherwise we will always select java
         while True:
             info("Select a ZenithProxy platform: (1/2)")
@@ -290,7 +290,7 @@ def setup_execute(config):
     info("Setup complete!")
 
 
-def rescue_invalid_system(config):
+def rescue_invalid_system(config: LaunchConfig):
     error(f"CRITICAL: Invalid system for release channel: {config.release_channel}")
     while True:
         info("Run setup? (y/n)")

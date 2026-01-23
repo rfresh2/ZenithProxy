@@ -21,6 +21,9 @@ fh.doRollover()
 def debug(msg: str):
     logger.debug(msg)
 
+def debug_exception(msg: str):
+    logger.debug(msg, exc_info=True)
+
 def info(msg: str):
     logger.info(msg)
 

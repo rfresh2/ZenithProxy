@@ -1,19 +1,20 @@
 import json
 import os
 import re
+from typing import Optional
 
 from log import info, error, critical_error
 
 
-def version_looks_valid(ver):
+def version_looks_valid(ver: str) -> bool:
     return re.match(r"[0-9]+\.[0-9]+\.[0-9]+", ver) or (len(ver) == 8 and re.match(r"[0-9a-f]+", ver))
 
 
-def valid_release_channel(channel):
+def valid_release_channel(channel: str) -> bool:
     return channel.startswith("git") or channel.startswith("java") or channel.startswith("linux")
 
 
-def read_launch_config_file():
+def read_launch_config_file() -> Optional[dict]:
     try:
         with open("launch_config.json") as f:
             data = json.load(f)
@@ -88,7 +89,7 @@ class LaunchConfig:
             return False
         return True
 
-    def get_mc_version(self):
+    def get_mc_version(self) -> str:
         # extract mc version from release channel
         # e.g. java.1.20.1 -> 1.20.1 or linux.1.20.1 -> 1.20.1
         channel = self.release_channel

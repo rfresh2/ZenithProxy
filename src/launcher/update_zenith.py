@@ -2,6 +2,8 @@ import os
 import subprocess
 
 import zip_fixed
+from github_api import GitHubAPI
+from launch_config import LaunchConfig
 from log import info, error, exception
 
 
@@ -22,7 +24,7 @@ def git_update_check():
     return None
 
 
-def rest_update_check(config, api, asset_name, executable_name):
+def rest_update_check(config: LaunchConfig, api: GitHubAPI, asset_name, executable_name):
     latest_release_and_ver = api.get_latest_release_and_ver(config.release_channel)
     if not latest_release_and_ver:
         raise RestUpdateError("Failed to get latest release for channel: " + config.release_channel)
@@ -32,7 +34,7 @@ def rest_update_check(config, api, asset_name, executable_name):
     rest_get_assets(config, api, asset_name, latest_release_and_ver)
 
 
-def rest_get_version(config, api, asset_name, target_version):
+def rest_get_version(config: LaunchConfig, api: GitHubAPI, asset_name, target_version):
     release_and_version = api.get_release_for_ver(target_version)
     if not release_and_version:
         raise RestUpdateError(
@@ -41,7 +43,7 @@ def rest_get_version(config, api, asset_name, target_version):
     rest_get_assets(config, api, asset_name, release_and_version)
 
 
-def rest_get_assets(config, api, asset_name, release_and_version):
+def rest_get_assets(config: LaunchConfig, api: GitHubAPI, asset_name, release_and_version):
     info(f"Downloading version: {release_and_version[1]}")
     asset_id = api.get_asset_id(release_and_version[0], asset_name)
     if not asset_id:
@@ -69,25 +71,25 @@ def rest_get_assets(config, api, asset_name, release_and_version):
         raise RestUpdateError("Failed to write executable asset: " + str(e))
 
 
-def java_update_check(config, api):
+def java_update_check(config: LaunchConfig, api: GitHubAPI):
     rest_update_check(config, api, "ZenithProxy.jar", "ZenithProxy.jar")
 
 
-def java_get_version(config, api, target_version):
+def java_get_version(config: LaunchConfig, api: GitHubAPI, target_version):
     info(f"Getting version: {target_version}")
     rest_get_version(config, api, "ZenithProxy.jar", target_version)
 
 
-def linux_native_update_check(config, api):
+def linux_native_update_check(config: LaunchConfig, api: GitHubAPI):
     rest_update_check(config, api, "ZenithProxy.zip", "ZenithProxy")
 
 
-def linux_native_get_version(config, api, target_version):
+def linux_native_get_version(config: LaunchConfig, api: GitHubAPI, target_version):
     info(f"Getting version: {target_version}")
     rest_get_version(config, api, "ZenithProxy.zip", target_version)
 
 
-def git_read_version(config):
+def git_read_version(config: LaunchConfig):
     try:
         info("> git rev-parse --short=8 HEAD")
         output = subprocess.check_output(["git", "rev-parse", "--short=8", "HEAD"], stderr=subprocess.STDOUT, text=True)

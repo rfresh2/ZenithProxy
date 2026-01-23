@@ -1,6 +1,7 @@
 import time
+from typing import Optional, Tuple
 
-from requests import Session
+from requests import Session, Response
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
@@ -13,14 +14,14 @@ class GitHubAPI:
     def __init__(self, launch_config):
         self.launch_config = launch_config
 
-    def get_base_url(self):
+    def _get_base_url(self):
         if self.launch_config.repo_owner == "rfresh2" and self.launch_config.repo_name == "ZenithProxy":
             host = "github.2b2t.vc"
         else:
             host = "api.github.com"
         return f"https://{host}/repos/{self.launch_config.repo_owner}/{self.launch_config.repo_name}/releases"
 
-    def get_headers(self):
+    def _get_headers(self):
         return {
             "User-Agent": "ZenithProxy/" + self.launch_config.local_version,
             "Accept": "application/vnd.github+json",
@@ -43,7 +44,7 @@ class GitHubAPI:
         session.mount("https://", adapter)
         return session
 
-    def _send_request(self, url, headers, params=None, timeout=10, allow_redirects=False, stream=False):
+    def _send_request(self, url, headers, params=None, timeout=10, allow_redirects=False, stream=False) -> Response:
         try:
             with self._create_session() as session:
                 response = session.get(url, headers=headers, params=params, timeout=timeout, allow_redirects=allow_redirects, stream=stream)
@@ -53,9 +54,9 @@ class GitHubAPI:
         except Exception as e:
             raise Exception(f"Request to {url} failed with exception {e}")
 
-    def get_latest_release_and_ver(self, channel):
+    def get_latest_release_and_ver(self, channel) -> Optional[Tuple[int, str]]:
         try:
-            response = self._send_request(self.get_base_url(), self.get_headers(), params={"per_page": 100})
+            response = self._send_request(self._get_base_url(), self._get_headers(), params={"per_page": 100})
             releases = response.json()
             latest_release = max(
                 (r for r in releases if not r["draft"] and r["tag_name"].endswith("+" + channel)),
@@ -67,34 +68,31 @@ class GitHubAPI:
             exception("Failed to get releases")
         return None
 
-    def get_release_for_ver(self, tag_name):
-        url = f"{self.get_base_url()}/tags/{tag_name}"
+    def get_release_for_ver(self, tag_name) -> Optional[Tuple[int, str]]:
+        url = f"{self._get_base_url()}/tags/{tag_name}"
         try:
-            response = self._send_request(url, self.get_headers())
+            response = self._send_request(url, self._get_headers())
             release = response.json()
             return release["id"], release["tag_name"]
         except:
             exception("Failed to get release for version")
         return None
 
-    def get_asset_id(self, release_id, asset_name, tag=False):
-        url = f"{self.get_base_url()}/{'tags/' if tag else ''}{release_id}"
+    def get_asset_id(self, release_id, asset_name, tag=False) -> Optional[str]:
+        url = f"{self._get_base_url()}/{'tags/' if tag else ''}{release_id}"
         try:
-            response = self._send_request(url, self.get_headers())
+            response = self._send_request(url, self._get_headers())
             return next((asset["id"] for asset in response.json()["assets"] if asset["name"] == asset_name), None)
         except:
             error("Failed to get release asset ID")
         return None
 
-    def get_release_asset_id(self, release_id, asset_name):
-        return self.get_asset_id(release_id, asset_name)
-
-    def get_release_tag_asset_id(self, release_id, asset_name):
+    def get_release_tag_asset_id(self, release_id, asset_name) -> Optional[str]:
         return self.get_asset_id(release_id, asset_name, True)
 
-    def download_asset(self, asset_id, verbose=False):
-        url = f"{self.get_base_url()}/assets/{asset_id}"
-        download_headers = self.get_headers()
+    def download_asset(self, asset_id, verbose=False) -> Optional[bytes]:
+        url = f"{self._get_base_url()}/assets/{asset_id}"
+        download_headers = self._get_headers()
         download_headers["Accept"] = "application/octet-stream"
         try:
             response = self._send_request(url, download_headers, allow_redirects=True, timeout=60, stream=True)
