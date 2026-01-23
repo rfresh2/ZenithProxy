@@ -718,6 +718,7 @@ public final class Config {
         public boolean injectTablistFooter = true;
         public boolean welcomeMessages = true;
         public boolean updateServerIcon = true;
+        public boolean preferLoginAsController = true;
         public final ChatSigning chatSigning = new ChatSigning();
 
         public static final class ChatSigning {

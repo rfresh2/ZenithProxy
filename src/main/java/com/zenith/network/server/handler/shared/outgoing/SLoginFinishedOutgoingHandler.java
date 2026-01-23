@@ -12,7 +12,6 @@ import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundLoginFinishedPacket;
 import org.jspecify.annotations.NonNull;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.zenith.Globals.*;
@@ -20,6 +19,12 @@ import static com.zenith.Globals.*;
 public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundLoginFinishedPacket, ServerSession> {
     // can be anything really, just needs to be unique and not taken by a real player seen in-game
     private static final UUID spectatorFakeUUID = UUID.fromString("c9560dfb-a792-4226-ad06-db1b6dc40b95");
+
+    enum AuthorizationState {
+        SPECTATOR_ONLY,
+        CONTROLLER_ONLY,
+        CONTROLLER_OR_SPECTATOR
+    }
 
     @Override
     public ClientboundLoginFinishedPacket apply(@NonNull ClientboundLoginFinishedPacket packet, @NonNull ServerSession session) {
@@ -41,14 +46,8 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
                 }
             }
 
-            // this has some bearing on authorization
-            // can be set by cookie. or forcefully set if they're only on spectator whitelist
-            // true: only spectator -> also set by authorization, overrides any cookie state
-            // false: only controlling player
-            // empty: no preference, whichever is available
-            Optional<Boolean> onlySpectator = Optional.empty();
+            var authState = AuthorizationState.CONTROLLER_OR_SPECTATOR;
             if (session.isTransferring()) {
-                onlySpectator = session.getCookieCache().getSpectatorCookieValue();
                 var transferSrc = session.getCookieCache().getZenithTransferSrc();
                 transferSrc.ifPresent(s -> SERVER_LOG.info("{} transferring from ZenithProxy instance: {}", clientGameProfile.getName(), s));
                 if (CONFIG.server.onlyZenithTransfers && transferSrc.isEmpty()) {
@@ -57,10 +56,16 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
                     session.disconnect("Transfer Blocked");
                     return null;
                 }
+                var onlySpectator = session.getCookieCache().getSpectatorCookieValue();
+                if (onlySpectator.isPresent()) {
+                    authState = onlySpectator.get()
+                        ? AuthorizationState.SPECTATOR_ONLY
+                        : AuthorizationState.CONTROLLER_ONLY;
+                }
             }
             if (CONFIG.server.extra.whitelist.enable && !PLAYER_LISTS.getWhitelist().contains(clientGameProfile)) {
                 if (CONFIG.server.spectator.allowSpectator && (!CONFIG.server.spectator.whitelistEnabled || PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile))) {
-                    onlySpectator = Optional.of(true);
+                    authState = AuthorizationState.SPECTATOR_ONLY; // must NOT be configurable by the player after this point
                 } else {
                     session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
                     SERVER_LOG.warn("Username: {} UUID: {} [{}] MC: {} tried to connect!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getMCVersion(), session.getRemoteAddress());
@@ -68,13 +73,13 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
                     return null;
                 }
             }
-            SERVER_LOG.info("Username: {} UUID: {} MC: {} [{}] has passed the whitelist check!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getMCVersion(), session.getRemoteAddress());
+            SERVER_LOG.info("Username: {} UUID: {} MC: {} [{}] has passed the whitelist check with auth: {}", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getMCVersion(), session.getRemoteAddress(), authState.name());
             session.setWhitelistChecked(true);
-            final Optional<Boolean> finalOnlySpectator = onlySpectator;
+            final AuthorizationState finalAuthState = authState;
             EXECUTOR.execute(() -> {
                 try {
                     // this method is called asynchronously off the event loop due to blocking calls possibly causing thread starvation
-                    finishLogin(session, finalOnlySpectator);
+                    finishLogin(session, finalAuthState);
                 } catch (final Throwable e) {
                     session.disconnect("Login Failed", e);
                 }
@@ -86,11 +91,11 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
         }
     }
 
-    private void finishLogin(ServerSession session, final Optional<Boolean> onlySpectator) {
+    private void finishLogin(ServerSession session, final AuthorizationState authState) {
         final GameProfile clientGameProfile = session.getProfileCache().getProfile();
         synchronized (this) {
             if (!Proxy.getInstance().isConnected()) {
-                    if (CONFIG.client.extra.autoConnectOnLogin && !onlySpectator.orElse(false)) {
+                    if (CONFIG.client.extra.autoConnectOnLogin && authState != AuthorizationState.SPECTATOR_ONLY) {
                     try {
                         SERVER_LOG.info("Auto connecting client on player login...");
                         Proxy.getInstance().connect();
@@ -127,29 +132,56 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
         // avoid race condition if player disconnects sometime during our wait
         if (!session.isConnected()) return;
         SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", clientGameProfile.getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
-        if (!onlySpectator.orElse(false) && Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
+
+        switch (authState) {
+            case SPECTATOR_ONLY -> {
+                if (!trySpectatorLogin(session, clientGameProfile)) {
+                    session.disconnect("Spectator mode is disabled");
+                }
+            }
+            case CONTROLLER_ONLY -> {
+                if (!tryControllerLogin(session, clientGameProfile)) {
+                    session.disconnect("Someone is already controlling the player");
+                }
+            }
+            case CONTROLLER_OR_SPECTATOR -> {
+                if (CONFIG.server.preferLoginAsController) {
+                    if (tryControllerLogin(session, clientGameProfile)) return;
+                    if (trySpectatorLogin(session, clientGameProfile)) return;
+                    session.disconnect("Someone is already controlling the player and spectator mode is disabled");
+                } else {
+                    if (trySpectatorLogin(session, clientGameProfile)) return;
+                    if (tryControllerLogin(session, clientGameProfile)) return;
+                    session.disconnect("Someone is already controlling the player and spectator mode is disabled");
+                }
+            }
+        }
+    }
+
+    private boolean tryControllerLogin(ServerSession session, GameProfile clientGameProfile) {
+        if (Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
             SERVER_LOG.info("Logging in {} [{}] ({}) as controlling player", clientGameProfile.getName(), clientGameProfile.getId().toString(), session.getMCVersion());
             session.getEventLoop().execute(() -> {
                 session.send(new ClientboundLoginFinishedPacket(CACHE.getProfileCache().getProfile()));
                 session.switchOutboundState(ProtocolState.CONFIGURATION);
             });
-            return;
+            return true;
         }
-        if (onlySpectator.isPresent() && !onlySpectator.get()) { // the above operation failed and we don't want to be put into spectator
-            session.disconnect("Someone is already controlling the player");
-            return;
-        }
+        return false;
+    }
+
+    private boolean trySpectatorLogin(ServerSession session, GameProfile clientGameProfile) {
         if (!CONFIG.server.spectator.allowSpectator) {
             session.disconnect("Spectator mode is disabled");
-            return;
+            return false;
         }
         SERVER_LOG.info("Logging in {} [{}] ({}) as spectator", clientGameProfile.getName(), clientGameProfile.getId().toString(), session.getMCVersion());
         session.setSpectator(true);
         final GameProfile spectatorFakeProfile = new GameProfile(spectatorFakeUUID, clientGameProfile.getName());
         if (clientGameProfile.getProperty("textures") == null) {
-                SessionServerApi.INSTANCE.getProfileAndSkin(clientGameProfile.getId())
-                    .ifPresentOrElse(p -> spectatorFakeProfile.setProperties(p.getProperties()),
-                                     () -> SERVER_LOG.info("Failed getting spectator skin for {} [{}] ({})", clientGameProfile.getName(), clientGameProfile.getId().toString(), session.getMCVersion()));
+            SessionServerApi.INSTANCE.getProfileAndSkin(clientGameProfile.getId())
+                .ifPresentOrElse(p -> spectatorFakeProfile.setProperties(p.getProperties()),
+                    () -> SERVER_LOG.info("Failed getting spectator skin for {} [{}] ({})", clientGameProfile.getName(), clientGameProfile.getId().toString(), session.getMCVersion()));
         } else {
             spectatorFakeProfile.setProperties(clientGameProfile.getProperties());
         }
@@ -158,6 +190,6 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
             session.send(new ClientboundLoginFinishedPacket(spectatorFakeProfile));
             session.switchOutboundState(ProtocolState.CONFIGURATION);
         });
-        return;
+        return true;
     }
 }

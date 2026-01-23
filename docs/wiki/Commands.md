@@ -735,6 +735,8 @@ The `timeout` arguments configures how long until players are kicked due no pack
 
   ```serverConnection chatSigning mode <disguised/passthrough/system>```
 
+  ```serverConnection preferLoginAsController on/off```
+
 
 ### shutdown
 
