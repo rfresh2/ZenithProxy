@@ -11,8 +11,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.inventory.DropItemAction;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 
-import static com.zenith.Globals.CACHE;
-import static com.zenith.Globals.CLIENT_LOG;
+import static com.zenith.Globals.*;
 
 @Data
 @RequiredArgsConstructor
@@ -57,7 +56,9 @@ public class DropItem implements InventoryAction {
         }
         return new ServerboundContainerClickPacket(
             containerId,
-            CACHE.getPlayerCache().getActionId().incrementAndGet(),
+            CONFIG.debug.inventoryRequestServerSyncOnAction
+                ? CACHE.getPlayerCache().getActionId().get() + 1
+                : CACHE.getPlayerCache().getActionId().get(),
             slotId,
             containerActionType,
             dropItemAction,

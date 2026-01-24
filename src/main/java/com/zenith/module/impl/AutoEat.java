@@ -1,7 +1,6 @@
 package com.zenith.module.impl;
 
 import com.github.rfresh2.EventConsumer;
-import com.zenith.Proxy;
 import com.zenith.event.client.ClientBotTick;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.feature.inventory.InventoryActionRequest;
@@ -58,7 +57,7 @@ public class AutoEat extends AbstractInventoryModule {
             && CACHE.getPlayerCache().getGameMode() != GameMode.CREATIVE
             && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR
             && playerHealthBelowThreshold()
-            && Proxy.getInstance().getOnlineTimeSeconds() > 1) {
+        ) {
             if (delay > 0) {
                 delay--;
                 if (isEating) {

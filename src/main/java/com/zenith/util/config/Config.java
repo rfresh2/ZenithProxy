@@ -661,6 +661,7 @@ public final class Config {
         public boolean inputManagerDebugLogs = false;
         public boolean botPitchPrecisionClamping = true;
         public boolean botRotateBeforeInteract = true;
+        public boolean inventoryRequestServerSyncOnAction = false;
 
         public static final class PacketLog {
             public boolean enabled = false;

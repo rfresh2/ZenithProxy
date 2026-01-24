@@ -121,7 +121,7 @@ public class InventoryCache {
             CACHE_LOG.debug("Attempted to click in unknown container {}", packet.getContainerId());
             return;
         }
-        if (packet.getContainerId() != 0 ) {
+        if (packet.getContainerId() != 0) {
             if (packet.getActionType() == ContainerActionType.MOVE_TO_HOTBAR_SLOT
                 && packet.getActionParam() instanceof MoveToHotbarAction hotbarAction
                 && hotbarAction == MoveToHotbarAction.OFF_HAND

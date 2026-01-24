@@ -282,6 +282,12 @@ public class DebugCommand extends Command {
                 CONFIG.debug.botRotateBeforeInteract = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Bot Rotate Before Interact " + toggleStrCaps(CONFIG.debug.botRotateBeforeInteract));
+            })))
+            .then(literal("inventoryRequestServerSyncOnAction").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.inventoryRequestServerSyncOnAction = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Inventory Request Server Sync On Action " + toggleStrCaps(CONFIG.debug.inventoryRequestServerSyncOnAction));
+                c.getSource().getData().put("noDefaultEmbed", true);
             })));
     }
 

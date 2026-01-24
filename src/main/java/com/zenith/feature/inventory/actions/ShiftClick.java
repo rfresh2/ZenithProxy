@@ -63,7 +63,7 @@ public class ShiftClick implements InventoryAction {
 
         return new ServerboundContainerClickPacket(
             containerId,
-            CACHE.getPlayerCache().getActionId().incrementAndGet(),
+            CACHE.getPlayerCache().getActionId().get() + 1, // todo: logic unhandled, always requesting full state response from server
             slotId,
             containerActionType,
             action,
