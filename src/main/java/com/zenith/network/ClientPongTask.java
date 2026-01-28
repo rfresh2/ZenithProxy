@@ -24,7 +24,7 @@ public class ClientPongTask implements Runnable {
         if (pingRequest != null) {
             var elapsed = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - pingRequest.receivedTime());
             // once a queue builds up we can't easily escape the backlog
-            // on keep alive receive, the handler tries to respond immediately which will get blocked for being out of order
+            // on ping receive, the handler tries to respond immediately which will get blocked for being out of order
             // so at that point, this task is the only thing that can get us unstuck
             var timeout = Proxy.getInstance().hasActivePlayer()
                 ? CONFIG.client.ping.pingQueueTimeoutMs

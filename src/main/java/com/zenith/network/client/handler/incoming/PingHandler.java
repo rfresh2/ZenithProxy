@@ -11,9 +11,16 @@ import static com.zenith.Globals.CACHE;
 
 public class PingHandler implements ClientEventLoopPacketHandler<ClientboundPingPacket, ClientSession> {
     public static final PingHandler INSTANCE = new PingHandler();
+
+    @Override
+    public ClientboundPingPacket apply(ClientboundPingPacket packet, ClientSession session) {
+        if (packet == null) return null;
+        CACHE.getPlayerCache().getPingQueue().add(new PlayerCache.PingRequest(System.nanoTime(), packet.getId()));
+        return ClientEventLoopPacketHandler.super.apply(packet, session);
+    }
+
     @Override
     public boolean applyAsync(final ClientboundPingPacket packet, final ClientSession session) {
-        CACHE.getPlayerCache().getPingQueue().add(new PlayerCache.PingRequest(System.nanoTime(), packet.getId()));
         // grim ac uses this to determine leniency in player movements. should be synced to actual ping from player
         if (!Proxy.getInstance().hasActivePlayer()) {
             // race condition may be possible here causing a pong to be lost
