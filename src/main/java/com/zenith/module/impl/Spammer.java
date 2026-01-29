@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.CACHE;
@@ -48,7 +49,7 @@ public class Spammer extends Module {
         whisperedPlayers.clear();
     }
 
-    public void handleClientTickEvent(final ClientTickEvent event) {
+    private void handleClientTickEvent(final ClientTickEvent event) {
         if (Proxy.getInstance().isInQueue()) return;
         if (!Proxy.getInstance().isOnlineForAtLeastDuration(Duration.ofSeconds(5))) return;
         if (!CONFIG.client.extra.spammer.whilePlayerConnected && Proxy.getInstance().hasActivePlayer()) return;
@@ -57,7 +58,7 @@ public class Spammer extends Module {
         }
     }
 
-    public void clientTickStarting(final ClientTickEvent.Starting event) {
+    private void clientTickStarting(final ClientTickEvent.Starting event) {
         tickTimer.reset();
         spamIndex = 0;
     }
@@ -65,20 +66,23 @@ public class Spammer extends Module {
     private void sendSpam() {
         if (CONFIG.client.extra.spammer.messages.isEmpty()) return;
         if (CONFIG.client.extra.spammer.randomOrder) {
-            spamIndex = (int) (Math.random() * CONFIG.client.extra.spammer.messages.size());
+            spamIndex = ThreadLocalRandom.current().nextInt(0, CONFIG.client.extra.spammer.messages.size());
         } else {
             spamIndex = (spamIndex + 1) % CONFIG.client.extra.spammer.messages.size();
         }
+        var msg = CONFIG.client.extra.spammer.messages.get(spamIndex)
+            + (CONFIG.client.extra.spammer.appendRandom ? " " + UUID.randomUUID().toString().substring(0, 6) : "");
         if (CONFIG.client.extra.spammer.whisper) {
-            String player = getNextPlayer();
+            var player = getNextPlayer();
             if (player != null) {
-                var packet = ChatUtil.getWhisperChatPacket(player, CONFIG.client.extra.spammer.messages.get(spamIndex) + (CONFIG.client.extra.spammer.appendRandom ? " " + UUID.randomUUID().toString().substring(0, 6) : ""));
+                var packet = ChatUtil.getWhisperChatPacket(player, msg);
                 debug("> {}", packet.getMessage());
                 sendClientPacketAsync(packet);
             }
         } else {
-            debug("> {}", CONFIG.client.extra.spammer.messages.get(spamIndex));
-            sendClientPacketAsync(new ServerboundChatPacket(CONFIG.client.extra.spammer.messages.get(spamIndex) + (CONFIG.client.extra.spammer.appendRandom ? " " + UUID.randomUUID().toString().substring(0, 6) : "")));
+            var packet = new ServerboundChatPacket(ChatUtil.sanitizeChatMessage(msg));
+            debug("> {}", packet.getMessage());
+            sendClientPacketAsync(packet);
         }
     }
 

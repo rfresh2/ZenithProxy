@@ -123,6 +123,7 @@ public final class Config {
 
         public static final class Ping {
             public int pingIntervalSeconds = 5;
+            public int pingQueueTimeoutMs = 2000;
         }
 
         public static final class Extra {
@@ -660,6 +661,7 @@ public final class Config {
         public boolean inputManagerDebugLogs = false;
         public boolean botPitchPrecisionClamping = true;
         public boolean botRotateBeforeInteract = true;
+        public boolean inventoryRequestServerSyncOnAction = false;
 
         public static final class PacketLog {
             public boolean enabled = false;
@@ -717,6 +719,7 @@ public final class Config {
         public boolean injectTablistFooter = true;
         public boolean welcomeMessages = true;
         public boolean updateServerIcon = true;
+        public boolean preferLoginAsController = true;
         public final ChatSigning chatSigning = new ChatSigning();
 
         public static final class ChatSigning {
@@ -745,7 +748,7 @@ public final class Config {
             public boolean allowSpectator = true;
             public String spectatorEntity = "cat";
             public boolean spectatorPublicChatEnabled = true;
-            public boolean fullCommandsEnabled = false;
+            public boolean fullCommandsEnabled = true;
             public boolean fullCommandsAcceptSlashCommands = true;
             public boolean fullCommandsRequireRegularWhitelist = true;
             public boolean playerCamOnJoin = false;
@@ -811,9 +814,9 @@ public final class Config {
         }
 
         public String getProxyAddress() {
-            // if the proxy IP is not a DNS name, also return the port appended
-            if (!this.proxyIP.contains(":") // port already appended
-                && (this.proxyIP.contains("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+") || this.proxyIP.startsWith("localhost"))) // IP address
+            // if the proxy IP is not a DNS name and port is not present, append the port
+            if (!this.proxyIP.contains(":")
+                && (this.proxyIP.matches("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+") || this.proxyIP.startsWith("localhost"))) // IP address
                 return this.proxyIP + ":" + this.bind.port;
              else
                 return this.proxyIP;

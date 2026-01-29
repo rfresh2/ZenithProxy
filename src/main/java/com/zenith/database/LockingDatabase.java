@@ -87,7 +87,7 @@ public abstract class LockingDatabase extends Database {
                         .build());
             }
         }
-        lockExecutorService.scheduleAtFixedRate(this::tryLockProcess, (long) (Math.random() * 10), 10L, TimeUnit.SECONDS);
+        lockExecutorService.scheduleAtFixedRate(this::tryLockProcess, ThreadLocalRandom.current().nextLong(1,10), 10L, TimeUnit.SECONDS);
     }
 
     @Override

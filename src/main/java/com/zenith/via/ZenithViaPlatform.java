@@ -1,21 +1,22 @@
 package com.zenith.via;
 
-import com.viaversion.vialoader.impl.platform.ViaVersionPlatformImpl;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.configuration.AbstractViaConfig;
+import com.viaversion.viaversion.platform.UserConnectionViaVersionPlatform;
 import com.zenith.Globals;
 import com.zenith.Proxy;
 import com.zenith.network.server.ServerSession;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundCustomPayloadPacket;
+import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundCustomPayloadPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Optional;
 
-public class ZenithViaPlatform extends ViaVersionPlatformImpl {
+public class ZenithViaPlatform extends UserConnectionViaVersionPlatform {
     private static final Logger LOGGER = LoggerFactory.getLogger("ViaVersion");
     public ZenithViaPlatform() {
         super(null);
@@ -36,6 +37,16 @@ public class ZenithViaPlatform extends ViaVersionPlatformImpl {
         var config = new ZenithViaConfig(new File(getDataFolder(), "viaversion.yml"));
         config.reload();
         return config;
+    }
+
+    @Override
+    public java.util.logging.Logger createLogger(final String s) {
+        return java.util.logging.Logger.getLogger(s);
+    }
+
+    @Override
+    public boolean isProxy() {
+        return true;
     }
 
     @Override
@@ -66,14 +77,27 @@ public class ZenithViaPlatform extends ViaVersionPlatformImpl {
     }
 
     @Override
-    public void sendCustomPayload(UserConnection connection, String channel, byte[] message) {
+    public void sendCustomPayloadToClient(UserConnection connection, String channel, byte[] message) {
         var serverConnection = getServerConnection(connection);
         if (serverConnection.isPresent()) {
             LOGGER.info("Sending custom payload: {} to player: {}", channel, serverConnection.get().getLoginProfileUUID());
             serverConnection.get().send(new ClientboundCustomPayloadPacket(Key.key(channel), message));
         } else {
-            LOGGER.warn("Failed to send custom payload: {}", channel);
+            LOGGER.warn("Failed to send player custom payload: {}", channel);
         }
+    }
+
+    @Override
+    public void sendCustomPayload(UserConnection connection, String channel, byte[] message) {
+        var nettyChannel = connection.getChannel();
+        var client = Proxy.getInstance().getClient();
+        if (client.getChannel() == nettyChannel) {
+            LOGGER.info("Sending custom payload: {} to server", channel);
+            client.send(new ServerboundCustomPayloadPacket(Key.key(channel), message));
+        } else {
+            LOGGER.warn("Failed to send server custom payload: {}", channel);
+        }
+
     }
 
     private Optional<ServerSession> getServerConnection(final UserConnection userConnection) {

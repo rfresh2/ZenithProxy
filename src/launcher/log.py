@@ -6,7 +6,7 @@ import sys
 logger = logging.getLogger("log")
 logger.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
+ch.setLevel(logging.INFO)
 logger.addHandler(ch)
 console_formatter = logging.Formatter("%(message)s")
 ch.setFormatter(console_formatter)
@@ -18,15 +18,32 @@ file_formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s", 
 fh.setFormatter(file_formatter)
 fh.doRollover()
 
-def info(*args):
-    logger.info(*args)
+def debug(msg: str):
+    logger.debug(msg)
 
-def warn(*args):
-    logger.warning(*args)
+def debug_exception(msg: str):
+    logger.debug(msg, exc_info=True)
 
-def error(*args):
-    logger.error(*args)
+def info(msg: str):
+    logger.info(msg)
 
-def critical_error(*args):
-    logger.critical(*args)
+def warn(msg: str):
+    logger.warning(msg)
+
+def error(msg: str):
+    logger.error(msg)
+
+def exception(msg: str):
+    logger.exception(msg)
+
+def critical_error(msg: str):
+    logger.critical(msg)
     sys.exit(69)
+
+def critical_exception(msg: str):
+    logger.critical(msg, exc_info=True)
+    sys.exit(69)
+
+def close():
+    fh.close()
+    ch.close()

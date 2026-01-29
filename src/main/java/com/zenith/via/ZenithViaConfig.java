@@ -1,13 +1,13 @@
 package com.zenith.via;
 
-import com.viaversion.vialoader.impl.viaversion.VLViaConfig;
 import com.viaversion.viaversion.api.configuration.RateLimitConfig;
+import com.viaversion.viaversion.configuration.AbstractViaConfig;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.LogManager;
 
-public class ZenithViaConfig extends VLViaConfig {
+public class ZenithViaConfig extends AbstractViaConfig {
     public ZenithViaConfig(final File configFile) {
         super(configFile, LogManager.getLogManager().getLogger("ViaVersion"));
     }

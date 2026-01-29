@@ -57,7 +57,8 @@ public class ServerConnectionCommand extends Command {
                 "timeout <seconds>",
                 "autoConnectOnLogin on/off",
                 "updateServerIcon on/off",
-                "chatSigning mode <disguised/passthrough/system>"
+                "chatSigning mode <disguised/passthrough/system>",
+                "preferLoginAsController on/off"
             )
             .build();
     }
@@ -167,7 +168,12 @@ public class ServerConnectionCommand extends Command {
                 CONFIG.server.chatSigning.mode = Config.Server.ChatSigning.ChatSigningMode.valueOf(getString(c, "mode").toUpperCase());
                 c.getSource().getEmbed()
                     .title("Chat Signing Mode Set");
-            }))));
+            }))))
+            .then(literal("preferLoginAsController").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.server.preferLoginAsController = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Prefer Login As Controller " + toggleStrCaps(CONFIG.server.preferLoginAsController));
+            })));
     }
 
     private void syncTimeout() {
@@ -194,6 +200,7 @@ public class ServerConnectionCommand extends Command {
             .addField("Ping Log", toggleStr(CONFIG.server.ping.logPings))
             .addField("Enforce Matching Connecting Address", toggleStr(CONFIG.server.enforceMatchingConnectingAddress))
             .addField("Timeout", CONFIG.server.extra.timeout.enable ? CONFIG.server.extra.timeout.seconds : toggleStr(false))
-            .addField("Auto Connect On Login", toggleStr(CONFIG.client.extra.autoConnectOnLogin));
+            .addField("Auto Connect On Login", toggleStr(CONFIG.client.extra.autoConnectOnLogin))
+            .addField("Prefer Login As Controller", toggleStr(CONFIG.server.preferLoginAsController));
     }
 }

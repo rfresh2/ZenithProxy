@@ -104,9 +104,7 @@ public class AutoTotem extends AbstractInventoryModule {
             delay--;
             return;
         }
-        if (CACHE.getPlayerCache().getThePlayer().isAlive()
-                && playerHealthBelowThreshold()
-                && Proxy.getInstance().getOnlineTimeSeconds() > 2) {
+        if (CACHE.getPlayerCache().getThePlayer().isAlive() && playerHealthBelowThreshold()) {
             delay = doInventoryActions();
         }
         if (CONFIG.client.extra.autoTotem.noTotemsAlert

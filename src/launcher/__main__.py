@@ -88,7 +88,7 @@ try:
             update_launcher_exec(config, api)
         update_zenith_exec(config, api)
         launcher_exec(config)
-        info("Restarting in 3 seconds...")
+        info("Restarting...")
         time.sleep(3)
 except KeyboardInterrupt:
     sys.exit(0)

@@ -39,9 +39,9 @@ public class AutoDropCommand extends Command {
 
                     Dropping can be configured based on modes:
 
-                        * `all`: any item
-                        * `whitelist`: only added items
-                        * `blacklist`: any item not added
+                    * `all`: any item
+                    * `whitelist`: only added items
+                    * `blacklist`: any item not added
                     """)
                 .usageLines(
                     "on/off",

@@ -163,19 +163,19 @@ More info in my discord: https://discord.com/channels/1127460556710883391/112746
 
 ## Who are these unknown people pinging or trying to connect to my proxy?
 
-if you host something on your home PC, that is not exposed to the public internet by default in most cases
+if you host something on your home PC, in most cases, it is _not_ exposed to the public internet by default
 
-Windows comes with a firewall, and your router would need to have port forwarding configured to expose it
+Windows has a firewall, and your router needs to have port forwarding configured
 
 but if you host something on the public internet, anyone on the public internet can find it
 
-there's only around 4b possible ip's, and it's very feasible to scan 4b ip's in under an hour
+there are only ~4 billion possible ip's. And it's possible to scan 4b ip's in under an hour
 
-people have been doing this for many years for every minecraft server, e.g. 5c, serverseeker, matscan, and many more
+people have been doing this for many years across every minecraft server. some groups involved are: 5c, serverseeker, matscan, and many more
 
 to be clear, finding a proxy's public ip does not let them get past the whitelist
 
-if you are hosting on the public internet, and it does make you uncomfortable there's many things you can do:
+if you are hosting on the public internet, and it makes you uncomfortable, there are some things you can do:
 
 * disable server list pings: `serverConnection ping off`
 * set up a DNS hostname, and then set `serverConnection enforceMatchingConnectingAddress on`

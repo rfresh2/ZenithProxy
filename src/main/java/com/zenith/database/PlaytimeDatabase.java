@@ -81,7 +81,10 @@ public class PlaytimeDatabase extends LockingDatabase {
         }
     }
 
+    int i = 0;
     private void handleDatabaseTick(DatabaseTickEvent databaseTickEvent) {
+        // tick every 5 minutes instead of 1 minute
+        if (i++ % 5 != 0) return;
         synchronized (this) {
             if (Proxy.getInstance().isOn2b2t() && !Proxy.getInstance().isInQueue()) {
                 if (this.lockAcquired.get()) {

@@ -1,8 +1,8 @@
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "0.11.3"
+    id("org.graalvm.buildtools.native") version "0.11.4"
     id("com.gradleup.shadow") version "9.3.1"
-    id("io.freefair.lombok") version "9.1.0"
+    id("io.freefair.lombok") version "9.2.0"
     `maven-publish`
 }
 
@@ -26,7 +26,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.11.4"
+val mcplVersion = "1.21.11.7"
 dependencies {
     api("com.github.rfresh2:JDA:6.3.27") {
         exclude(group = "club.minnced")
@@ -68,23 +68,22 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.maps:long-double-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
-    api("com.viaversion:vialoader:4.0.6")
-    api("com.viaversion:viaversion-common:5.7.0")
-    api("com.viaversion:viabackwards-common:5.7.0")
-    api("com.viaversion:viarewind-common:4.0.13")
+    api("com.viaversion:viaversion-common:5.7.1")
+    api("com.viaversion:viabackwards-common:5.7.1")
+    api("com.viaversion:viarewind-common:4.0.14")
     api("org.jline:jline:3.30.6")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
-    api("org.postgresql:postgresql:42.7.8")
+    api("org.postgresql:postgresql:42.7.9")
     api("org.jdbi:jdbi3-postgres:3.51.0")
     api("com.google.guava:guava:33.5.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.24")
+    api("ch.qos.logback:logback-classic:1.5.26")
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")
     api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
-    api(platform("tools.jackson:jackson-bom:3.0.3"))
+    api(platform("tools.jackson:jackson-bom:3.0.4"))
     api("tools.jackson.core:jackson-databind")
 
     testImplementation(platform("org.junit:junit-bom:6.0.2"))
@@ -92,7 +91,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
     annotationProcessor("com.google.auto.service:auto-service:1.1.1")
-    compileOnly("org.graalvm.sdk:nativeimage:25.0.1")
+    compileOnly("org.graalvm.sdk:nativeimage:25.0.2")
 }
 
 lombok {

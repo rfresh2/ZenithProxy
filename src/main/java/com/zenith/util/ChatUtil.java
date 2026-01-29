@@ -17,11 +17,24 @@ public class ChatUtil {
                 stringbuilder.append(c0);
             }
         }
-        return stringbuilder.toString();
+        return constrainChatMessageSize(stringbuilder.toString(), true);
     }
 
     public static boolean isAllowedChatCharacter(char c0) {
         return c0 != 167 && c0 >= 32 && c0 != 127;
+    }
+
+    /**
+     * @param end if true, characters from the end of the message will be removed (if needed).
+     *            If false, characters from the start will be removed.
+     */
+    public static String constrainChatMessageSize(String message, boolean end) {
+        if (message.length() <= 256) return message;
+        if (end) {
+            return message.substring(0, 256);
+        } else {
+            return message.substring(message.length() - 256);
+        }
     }
 
     static final Pattern validUsernamePattern = Pattern.compile("^[a-zA-Z0-9_]{1,16}$");
@@ -40,8 +53,6 @@ public class ChatUtil {
     }
 
     public static ServerboundChatPacket getWhisperChatPacket(String playerName, String message) {
-        String s = "/" + CONFIG.client.extra.whisperCommand + " " + playerName + " " + sanitizeChatMessage(message);
-        s = s.substring(0, Math.min(s.length(), 256));
-        return new ServerboundChatPacket(s);
+        return new ServerboundChatPacket(sanitizeChatMessage("/" + CONFIG.client.extra.whisperCommand + " " + playerName + " " + message));
     }
 }
