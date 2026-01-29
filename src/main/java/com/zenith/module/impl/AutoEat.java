@@ -72,6 +72,7 @@ public class AutoEat extends AbstractInventoryModule {
                     EVENT_BUS.postAsync(new AutoEatOutOfFoodEvent());
                     lastAutoEatOutOfFoodWarning = Instant.now();
                 }
+                isEating = false;
                 return;
             }
             if (switchToFood()) {
@@ -85,7 +86,6 @@ public class AutoEat extends AbstractInventoryModule {
     public boolean switchToFood() {
         delay = doInventoryActions();
         final boolean shouldStartEating = getHand() != null && delay == 0;
-        isEating = getHand() != null || delay != 0;
         return shouldStartEating;
     }
 
