@@ -315,14 +315,11 @@ public final class Bot extends ModuleUtils {
             && canPlayerFitWithinBlocksAndEntitiesWhen(getCollisionBox(Pose.SNEAKING))
             && (movementInput.sneaking || !CACHE.getPlayerCache().getThePlayer().isSleeping() && !canPlayerFitWithinBlocksAndEntitiesWhen(getCollisionBox(Pose.STANDING)));
         isSprinting = movementInput.sprinting
-            && isOnGround()
+            && (lastSprinting || isOnGround())
+            && (lastSprinting || !CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().containsKey(Effect.BLINDNESS))
             && !isTouchingWater
             && CACHE.getPlayerCache().getThePlayer().getFood() > 6
             && !(horizontalCollision && !horizontalCollisionMinor);
-        // cannot start sprinting while we have blindness
-        if (isSprinting && !lastSprinting && CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().containsKey(Effect.BLINDNESS)) {
-            isSprinting = false;
-        }
         if (isSprinting != lastSprinting) applySprintingSpeedAttributeModifier();
 
         updateInWaterStateAndDoFluidPushing();
