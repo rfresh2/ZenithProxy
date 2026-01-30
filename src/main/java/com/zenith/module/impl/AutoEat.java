@@ -25,6 +25,7 @@ public class AutoEat extends AbstractInventoryModule {
     private int delay = 0;
     private Instant lastAutoEatOutOfFoodWarning = Instant.EPOCH;
     private boolean isEating = false;
+    private boolean isStartingToEat = false;
 
     public AutoEat() {
         super(HandRestriction.EITHER, 0);
@@ -34,7 +35,8 @@ public class AutoEat extends AbstractInventoryModule {
     public List<EventConsumer<?>> registerEvents() {
         return List.of(
             of(ClientBotTick.class, this::handleClientTick),
-            of(ClientBotTick.Starting.class, this::handleBotTickStarting)
+            of(ClientBotTick.Starting.class, this::handleBotTickStarting),
+            of(ClientBotTick.Stopped.class, this::handleBotTickStopped)
         );
     }
 
@@ -47,12 +49,17 @@ public class AutoEat extends AbstractInventoryModule {
         return enabledSetting() && isEating;
     }
 
+    // currently swapping item to hand, or in the process of eating
+    public boolean isStartingToEat() {
+        return enabledSetting() && isStartingToEat;
+    }
+
     @Override
     public boolean enabledSetting() {
         return CONFIG.client.extra.autoEat.enabled;
     }
 
-    public void handleClientTick(final ClientBotTick e) {
+    void handleClientTick(final ClientBotTick e) {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
             && CACHE.getPlayerCache().getGameMode() != GameMode.CREATIVE
             && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR
@@ -60,7 +67,7 @@ public class AutoEat extends AbstractInventoryModule {
         ) {
             if (delay > 0) {
                 delay--;
-                if (isEating) {
+                if (isEating || isStartingToEat) {
                     INPUTS.submit(InputRequest.noInput(this, getPriority()));
                     INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                 }
@@ -73,6 +80,7 @@ public class AutoEat extends AbstractInventoryModule {
                     lastAutoEatOutOfFoodWarning = Instant.now();
                 }
                 isEating = false;
+                isStartingToEat = false;
                 return;
             }
             if (switchToFood()) {
@@ -80,18 +88,25 @@ public class AutoEat extends AbstractInventoryModule {
             }
         } else {
             isEating = false;
+            isStartingToEat = false;
         }
     }
 
-    public boolean switchToFood() {
+    boolean switchToFood() {
         delay = doInventoryActions();
         final boolean shouldStartEating = getHand() != null && delay == 0;
+        isStartingToEat = getHand() != null || delay != 0;
         return shouldStartEating;
     }
 
-    public void startEating() {
+    void startEating() {
         var hand = getHand();
-        if (hand == null) return;
+        if (hand == null) {
+            // shouldn't ever get here but just in case
+            isEating = false;
+            isStartingToEat = false;
+            return;
+        }
         INPUTS.submit(InputRequest.builder()
                 .owner(this)
                 .input(Input.builder()
@@ -107,13 +122,31 @@ public class AutoEat extends AbstractInventoryModule {
             });
     }
 
-    public void handleBotTickStarting(final ClientBotTick.Starting event) {
+    public void onEnable() {
+        reset();
+    }
+
+    public void onDisable() {
+        reset();
+    }
+
+
+    void handleBotTickStarting(final ClientBotTick.Starting event) {
+        reset();
+    }
+
+    void handleBotTickStopped(final ClientBotTick.Stopped event) {
+        reset();
+    }
+
+    void reset() {
         delay = 0;
         lastAutoEatOutOfFoodWarning = Instant.EPOCH;
         isEating = false;
+        isStartingToEat = false;
     }
 
-    private boolean playerHealthBelowThreshold() {
+    boolean playerHealthBelowThreshold() {
         return CACHE.getPlayerCache().getThePlayer().getHealth() <= CONFIG.client.extra.autoEat.healthThreshold
             || CACHE.getPlayerCache().getThePlayer().getFood() <= CONFIG.client.extra.autoEat.hungerThreshold;
     }
@@ -131,11 +164,11 @@ public class AutoEat extends AbstractInventoryModule {
             && (canEat || foodData.canAlwaysEat());
     }
 
-    public boolean hasFoodIgnoreHunger(ItemStack itemStack) {
+    boolean hasFoodIgnoreHunger(ItemStack itemStack) {
         return hasFood(true, itemStack);
     }
 
-    public boolean hasFood(ItemStack itemStack) {
+    boolean hasFood(ItemStack itemStack) {
         return hasFood(false, itemStack);
     }
 }
