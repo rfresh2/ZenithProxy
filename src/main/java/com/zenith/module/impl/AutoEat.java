@@ -83,6 +83,7 @@ public class AutoEat extends AbstractInventoryModule {
                 isStartingToEat = false;
                 return;
             }
+            isEating = false;
             if (switchToFood()) {
                 startEating();
             }
