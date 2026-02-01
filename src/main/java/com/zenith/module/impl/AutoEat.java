@@ -1,6 +1,7 @@
 package com.zenith.module.impl;
 
 import com.github.rfresh2.EventConsumer;
+import com.zenith.Proxy;
 import com.zenith.event.client.ClientBotTick;
 import com.zenith.event.module.AutoEatOutOfFoodEvent;
 import com.zenith.feature.inventory.InventoryActionRequest;
@@ -10,6 +11,7 @@ import com.zenith.feature.player.Input;
 import com.zenith.feature.player.InputRequest;
 import com.zenith.mc.food.FoodData;
 import com.zenith.mc.food.FoodRegistry;
+import com.zenith.util.RequestFuture;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 
@@ -25,7 +27,7 @@ public class AutoEat extends AbstractInventoryModule {
     private int delay = 0;
     private Instant lastAutoEatOutOfFoodWarning = Instant.EPOCH;
     private boolean isEating = false;
-    private boolean isStartingToEat = false;
+    RequestFuture swapFuture = RequestFuture.rejected;
 
     public AutoEat() {
         super(HandRestriction.EITHER, 0);
@@ -49,11 +51,6 @@ public class AutoEat extends AbstractInventoryModule {
         return enabledSetting() && isEating;
     }
 
-    // currently swapping item to hand, or in the process of eating
-    public boolean isStartingToEat() {
-        return enabledSetting() && isStartingToEat;
-    }
-
     @Override
     public boolean enabledSetting() {
         return CONFIG.client.extra.autoEat.enabled;
@@ -67,47 +64,46 @@ public class AutoEat extends AbstractInventoryModule {
         ) {
             if (delay > 0) {
                 delay--;
-                if (isEating || isStartingToEat) {
+                if (isEating || !swapFuture.isDone()) {
                     INPUTS.submit(InputRequest.noInput(this, getPriority()));
                     INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                 }
                 return;
             }
-            if (InventoryUtil.searchPlayerInventory(this::hasFoodIgnoreHunger) == -1) {
-                if (CONFIG.client.extra.autoEat.warning && Instant.now().minus(Duration.ofHours(7)).isAfter(lastAutoEatOutOfFoodWarning)) {
-                    warn("Out of food");
-                    EVENT_BUS.postAsync(new AutoEatOutOfFoodEvent());
-                    lastAutoEatOutOfFoodWarning = Instant.now();
-                }
-                isEating = false;
-                isStartingToEat = false;
+            isEating = false;
+            if (!swapFuture.isDone()) {
                 return;
             }
-            isEating = false;
-            if (switchToFood()) {
-                startEating();
+            var invActionResult = doInventoryActionsV2();
+            switch (invActionResult.state()) {
+                case ITEM_IN_HAND -> {
+                    startEating();
+                }
+                case NO_ITEM -> {
+                    if (CONFIG.client.extra.autoEat.warning
+                        && Instant.now().minus(Duration.ofHours(7)).isAfter(lastAutoEatOutOfFoodWarning)
+                        && InventoryUtil.searchPlayerInventory(this::hasFoodIgnoreHunger) == -1
+                        && Proxy.getInstance().getOnlineTimeSeconds() > 1
+                    ) {
+                        warn("Out of food");
+                        EVENT_BUS.postAsync(new AutoEatOutOfFoodEvent());
+                        lastAutoEatOutOfFoodWarning = Instant.now();
+                    }
+                }
+                case SWAPPING -> {
+                    swapFuture = invActionResult.inventoryActionFuture();
+                }
+                default -> throw new IllegalStateException("Unexpected action state: " + invActionResult.state());
             }
+            delay = invActionResult.expectedDelay();
         } else {
             isEating = false;
-            isStartingToEat = false;
         }
-    }
-
-    boolean switchToFood() {
-        delay = doInventoryActions();
-        final boolean shouldStartEating = getHand() != null && delay == 0;
-        isStartingToEat = getHand() != null || delay != 0;
-        return shouldStartEating;
     }
 
     void startEating() {
         var hand = getHand();
-        if (hand == null) {
-            // shouldn't ever get here but just in case
-            isEating = false;
-            isStartingToEat = false;
-            return;
-        }
+        if (hand == null) return;
         INPUTS.submit(InputRequest.builder()
                 .owner(this)
                 .input(Input.builder()
@@ -131,7 +127,6 @@ public class AutoEat extends AbstractInventoryModule {
         reset();
     }
 
-
     void handleBotTickStarting(final ClientBotTick.Starting event) {
         reset();
     }
@@ -144,7 +139,7 @@ public class AutoEat extends AbstractInventoryModule {
         delay = 0;
         lastAutoEatOutOfFoodWarning = Instant.EPOCH;
         isEating = false;
-        isStartingToEat = false;
+        swapFuture = RequestFuture.rejected;
     }
 
     boolean playerHealthBelowThreshold() {

@@ -9,6 +9,7 @@ import com.zenith.feature.player.InputRequest;
 import com.zenith.mc.block.Direction;
 import com.zenith.mc.item.ItemData;
 import com.zenith.mc.item.ItemRegistry;
+import com.zenith.util.RequestFuture;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
@@ -34,6 +35,7 @@ public class AutoOmen extends AbstractInventoryModule {
     );
     private long lastHadOmen = 0L;
     private long lastRaidActive = 0L;
+    RequestFuture swapFuture = RequestFuture.rejected;
 
     public AutoOmen() {
         super(HandRestriction.EITHER, 3);
@@ -48,7 +50,8 @@ public class AutoOmen extends AbstractInventoryModule {
     public List<EventConsumer<?>> registerEvents() {
         return List.of(
             of(ClientBotTick.class, this::handleClientTick),
-            of(ClientBotTick.Starting.class, this::handleBotTickStarting)
+            of(ClientBotTick.Starting.class, this::handleBotTickStarting),
+            of(ClientBotTick.Stopped.class, this::handleBotTickStopped)
         );
     }
 
@@ -72,15 +75,28 @@ public class AutoOmen extends AbstractInventoryModule {
         ) {
             if (delay > 0) {
                 delay--;
-                if (isEating) {
+                if (isEating || !swapFuture.isDone()) {
                     INPUTS.submit(InputRequest.noInput(this, getPriority()));
                     INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                 }
                 return;
             }
-            if (switchToFood()) {
-                startEating();
+            isEating = false;
+            if (!swapFuture.isDone()) {
+                return;
             }
+            var invActionResult = doInventoryActionsV2();
+            switch (invActionResult.state()) {
+                case ITEM_IN_HAND -> {
+                    startEating();
+                }
+                case NO_ITEM -> {}
+                case SWAPPING -> {
+                    swapFuture = invActionResult.inventoryActionFuture();
+                }
+                default -> throw new IllegalStateException("Unexpected action state: " + invActionResult.state());
+            }
+            delay = invActionResult.expectedDelay();
         } else {
             if (isEating) {
                 if (delay > 0) { // we got interrupted during drinking
@@ -104,13 +120,6 @@ public class AutoOmen extends AbstractInventoryModule {
         }
     }
 
-    public boolean switchToFood() {
-        delay = doInventoryActions();
-        final boolean shouldStartEating = getHand() != null && delay == 0;
-        isEating = getHand() != null || delay != 0;
-        return shouldStartEating;
-    }
-
     public void startEating() {
         var hand = getHand();
         if (hand == null) return;
@@ -130,11 +139,28 @@ public class AutoOmen extends AbstractInventoryModule {
             });
     }
 
-    public void handleBotTickStarting(final ClientBotTick.Starting event) {
+    public void onEnable() {
+        reset();
+    }
+
+    public void onDisable() {
+        reset();
+    }
+
+    void handleBotTickStarting(final ClientBotTick.Starting event) {
+        reset();
+    }
+
+    void handleBotTickStopped(final ClientBotTick.Stopped event) {
+        reset();
+    }
+
+    void reset() {
         delay = 0;
         isEating = false;
         lastHadOmen = 0L;
         lastRaidActive = 0L;
+        swapFuture = RequestFuture.rejected;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.zenith.cache.data.inventory.Container;
 import com.zenith.feature.inventory.InventoryActionRequest;
 import com.zenith.feature.inventory.actions.*;
 import com.zenith.module.api.Module;
+import com.zenith.util.RequestFuture;
 import lombok.Getter;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
@@ -43,10 +44,36 @@ public abstract class AbstractInventoryModule extends Module {
         EITHER
     }
 
+    public enum ActionState {
+        ITEM_IN_HAND,
+        SWAPPING,
+        NO_ITEM
+    }
+
+    public record InventoryActionResult(
+        ActionState state,
+        RequestFuture inventoryActionFuture,
+        int expectedDelay
+    ) {}
+
+    /**
+     * executes and provides additional data about the action, including the action future
+     * do not call both V2 and the original method, select one
+     */
+    public InventoryActionResult doInventoryActionsV2() {
+        if (isItemEquipped())
+            return new InventoryActionResult(ActionState.ITEM_IN_HAND, RequestFuture.rejected, 0);
+        var swapFuture = switchToItem();
+        if (swapFuture != null)
+            return new InventoryActionResult(ActionState.SWAPPING, swapFuture, 5);
+        return new InventoryActionResult(ActionState.NO_ITEM, RequestFuture.rejected, 0);
+    }
+
     // returns delay (if any) before next action
     public int doInventoryActions() {
         if (isItemEquipped()) return 0;
-        if (switchToItem()) return 5;
+        var switchResult = switchToItem();
+        if (switchResult != null) return 5;
         return 0;
     }
 
@@ -78,7 +105,7 @@ public abstract class AbstractInventoryModule extends Module {
 
     // assumes we've already tested that the item is not equipped
     // returns true if we performed an item swap
-    public boolean switchToItem() {
+    private @Nullable RequestFuture switchToItem() {
         // find next and switch it to our hotbar slot
         final List<ItemStack> inventory = CACHE.getPlayerCache().getPlayerInventory();
         for (int i = 44; i >= 9; i--) {
@@ -97,14 +124,17 @@ public abstract class AbstractInventoryModule extends Module {
                 if (actionSlot != MoveToHotbarAction.OFF_HAND) {
                     actions.add(new SetHeldItem(targetMainHandHotbarSlot));
                 }
-                INVENTORY.submit(InventoryActionRequest.builder()
+
+                // todo: we could calculate and return the expected delay given our action list
+                //  count * (CONFIG.client.inventory.actionDelayTicks)
+                //  fyi SetHeldItem skips action delay, and last action has no delay
+                return INVENTORY.submit(InventoryActionRequest.builder()
                     .owner(this)
                     .actions(actions)
                     .priority(getPriority())
                     .build());
-                return true;
             }
         }
-        return false;
+        return null;
     }
 }
