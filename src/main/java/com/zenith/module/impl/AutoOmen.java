@@ -83,6 +83,7 @@ public class AutoOmen extends AbstractInventoryModule {
             }
             isEating = false;
             if (!swapFuture.isDone()) {
+                INPUTS.submit(InputRequest.noInput(this, getPriority()));
                 return;
             }
             var invActionResult = doInventoryActionsV2();
