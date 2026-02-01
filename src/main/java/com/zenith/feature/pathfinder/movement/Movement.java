@@ -129,6 +129,8 @@ public abstract class Movement implements IMovement {
         currentState.getInputStates().forEach((input, forced) -> {
             BARITONE.getInputOverrideHandler().setInputForceState(input, forced);
         });
+        BARITONE.getInputOverrideHandler().setClickTarget(currentState.getClickTarget());
+        currentState.setClickTarget(null);
         currentState.getInputStates().clear();
 
         // If the current status indicates a completed movement
@@ -162,6 +164,7 @@ public abstract class Movement implements IMovement {
                     state.setTarget(new MovementState.MovementTarget(rotTowardsBlock, true));
                     if (ctx.isLookingAt(blockPos) || ctx.playerRotations().isReallyCloseTo(rotTowardsBlock)) {
                         state.setInput(PathInput.LEFT_CLICK_BLOCK, true);
+                        state.setClickTarget(blockPos);
                     }
                     return false;
                 }
@@ -175,6 +178,7 @@ public abstract class Movement implements IMovement {
                 );
                 // don't check selectedblock on this one, this is a fallback when we can't see any face directly, it's intended to be breaking the "incorrect" block
                 state.setInput(PathInput.LEFT_CLICK_BLOCK, true);
+                state.setClickTarget(blockPos);
                 return false;
             }
         }

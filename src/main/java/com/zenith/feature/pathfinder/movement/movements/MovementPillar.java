@@ -240,9 +240,11 @@ public class MovementPillar extends Movement {
                             .map(rot -> new MovementState.MovementTarget(rot, true))
                             .ifPresent(state::setTarget);
                     state.setInput(PathInput.JUMP, false); // breaking is like 5x slower when you're jumping
+                    state.setClickTarget(src);
                     state.setInput(PathInput.LEFT_CLICK_BLOCK, true);
                     blockIsThere = false;
                 } else if (ctx.player().isSneaking() && (ctx.isLookingAt(src.below()) || ctx.isLookingAt(src)) && ctx.player().getY() > dest.y() + 0.1) {
+                    state.setClickTarget(src.below());
                     state.setInput(PathInput.RIGHT_CLICK_BLOCK, true);
                 }
             }

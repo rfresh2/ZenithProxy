@@ -161,6 +161,7 @@ public class MovementAscend extends Movement {
             if (MovementHelper.attemptToPlaceABlock(state, dest.below(), false, true) == PlaceResult.READY_TO_PLACE) {
                 state.setInput(PathInput.SNEAK, true);
                 if (ctx.player().isSneaking()) {
+                    state.setClickTarget(dest.below());
                     state.setInput(PathInput.RIGHT_CLICK_BLOCK, true);
                 }
             }

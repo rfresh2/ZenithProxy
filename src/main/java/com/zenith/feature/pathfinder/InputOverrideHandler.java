@@ -3,6 +3,7 @@ package com.zenith.feature.pathfinder;
 import com.zenith.feature.pathfinder.behavior.Behavior;
 import com.zenith.feature.player.ClickTarget;
 import com.zenith.feature.player.Input;
+import com.zenith.mc.block.BlockPos;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
 import org.jspecify.annotations.Nullable;
 
@@ -14,6 +15,7 @@ public class InputOverrideHandler extends Behavior {
      * Maps inputs to whether or not we are forcing their state down.
      */
     private final Map<PathInput, Boolean> inputForceStateMap = new HashMap<>();
+    private @Nullable BlockPos clickTarget = null;
     @Nullable public Input currentInput;
 
     public InputOverrideHandler(Baritone baritone) {
@@ -40,11 +42,16 @@ public class InputOverrideHandler extends Behavior {
         this.inputForceStateMap.put(input, forced);
     }
 
+    public final void setClickTarget(@Nullable BlockPos pos) {
+        this.clickTarget = pos;
+    }
+
     /**
      * Clears the override state for all keys
      */
     public final void clearAllKeys() {
         this.inputForceStateMap.clear();
+        this.clickTarget = null;
     }
 
     public final void onTick() {
@@ -66,13 +73,21 @@ public class InputOverrideHandler extends Behavior {
                     case SPRINT -> in.sprinting(true);
                     case LEFT_CLICK_BLOCK -> {
                         in.leftClick(true)
-                            .hand(Hand.MAIN_HAND)
-                            .clickTarget(ClickTarget.AnyBlock.INSTANCE);
+                            .hand(Hand.MAIN_HAND);
+                        if (clickTarget != null) {
+                            in.clickTarget(new ClickTarget.BlockPosition(clickTarget.x(), clickTarget.y(), clickTarget.z()));
+                        } else {
+                            in.clickTarget(ClickTarget.AnyBlock.INSTANCE);
+                        }
                     }
                     case RIGHT_CLICK_BLOCK -> {
                         in.rightClick(true)
-                            .hand(Hand.MAIN_HAND)
-                            .clickTarget(ClickTarget.AnyBlock.INSTANCE);
+                            .hand(Hand.MAIN_HAND);
+                        if (clickTarget != null) {
+                            in.clickTarget(new ClickTarget.BlockPosition(clickTarget.x(), clickTarget.y(), clickTarget.z()));
+                        } else {
+                            in.clickTarget(ClickTarget.AnyBlock.INSTANCE);
+                        }
                     }
                 }
             });

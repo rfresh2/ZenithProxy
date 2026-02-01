@@ -263,6 +263,7 @@ public class MovementParkour extends Movement {
                         && MovementHelper.attemptToPlaceABlock(state, dest.below(), true, false) == PlaceResult.READY_TO_PLACE
                 ) {
                     // go in the opposite order to check DOWN before all horizontals -- down is preferable because you don't have to look to the side while in midair, which could mess up the trajectory
+                    state.setClickTarget(dest.below());
                     state.setInput(PathInput.RIGHT_CLICK_BLOCK, true);
                 }
                 // prevent jumping too late by checking for ascend

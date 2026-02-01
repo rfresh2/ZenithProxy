@@ -210,7 +210,8 @@ public class MovementTraverse extends Movement {
 
             if (notPassable && canOpen) {
                 return state.setTarget(new MovementState.MovementTarget(RotationUtils.calcRotationFromVec3d(ctx.playerHead(), VecUtils.calculateBlockCenter(positionsToBreak[0]), ctx.playerRotations()), true))
-                    .setInput(PathInput.RIGHT_CLICK_BLOCK, true);
+                    .setInput(PathInput.RIGHT_CLICK_BLOCK, true)
+                    .setClickTarget(positionsToBreak[0]);
             }
         }
 
@@ -221,7 +222,9 @@ public class MovementTraverse extends Movement {
             if (blocked != null) {
                 Optional<Rotation> rotation = RotationUtils.reachable(ctx, blocked);
                 if (rotation.isPresent()) {
-                    return state.setTarget(new MovementState.MovementTarget(rotation.get(), true)).setInput(PathInput.RIGHT_CLICK_BLOCK, true);
+                    return state.setTarget(new MovementState.MovementTarget(rotation.get(), true))
+                        .setInput(PathInput.RIGHT_CLICK_BLOCK, true)
+                        .setClickTarget(blocked);
                 }
             }
         }
@@ -287,28 +290,31 @@ public class MovementTraverse extends Movement {
             }
             PATH_LOG.debug("PlaceResult: {}", p);
             switch (p) {
-                case READY_TO_PLACE: {
+                case READY_TO_PLACE -> {
                     if (ctx.player().isSneaking()) {
+                        state.setClickTarget(dest.below());
                         state.setInput(PathInput.RIGHT_CLICK_BLOCK, true);
                     }
                     return state;
                 }
-                case ATTEMPTING: {
+                case ATTEMPTING -> {
                     if (dist1 > 0.83) {
                         // might need to go forward a bit
-                        float yaw = RotationUtils.calcRotationFromVec3d(ctx.playerHead(), VecUtils.getBlockPosCenter(dest), ctx.playerRotations()).yaw();
+                        float yaw = RotationUtils.calcRotationFromVec3d(ctx.playerHead(),
+                            VecUtils.getBlockPosCenter(dest),
+                            ctx.playerRotations()).yaw();
                         if (Math.abs(state.getTarget().rotation().yaw() - yaw) < 0.1) {
                             // but only if our attempted place is straight ahead
                             return state.setInput(PathInput.MOVE_FORWARD, true);
                         }
                     } else if (ctx.playerRotations().isReallyCloseTo(state.getTarget().rotation())) {
                         // well i guess theres something in the way
+                        // todo: set input click target?
                         return state.setInput(PathInput.LEFT_CLICK_BLOCK, true);
                     }
                     return state;
                 }
-                default:
-                    break;
+                default -> {}
             }
             if (feet.equals(dest)) {
                 // If we are in the block that we are trying to get to, we are sneaking over air and we need to place a block beneath us against the one we just walked off of
@@ -330,10 +336,12 @@ public class MovementTraverse extends Movement {
                     state.setTarget(new MovementState.MovementTarget(backToFace, true));
                 }
                 if (ctx.isLookingAt(goalLook)) {
+                    state.setClickTarget(goalLook);
                     return state.setInput(PathInput.RIGHT_CLICK_BLOCK, true); // wait to right click until we are able to place
                 }
                 // Out.log("Trying to look at " + goalLook + ", actually looking at" + Baritone.whatAreYouLookingAt());
                 if (ctx.playerRotations().isReallyCloseTo(state.getTarget().rotation())) {
+                    // todo: set click target?
                     state.setInput(PathInput.LEFT_CLICK_BLOCK, true);
                 }
                 return state;
