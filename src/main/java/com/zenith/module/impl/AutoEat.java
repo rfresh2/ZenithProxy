@@ -79,6 +79,7 @@ public class AutoEat extends AbstractInventoryModule {
             switch (invActionResult.state()) {
                 case ITEM_IN_HAND -> {
                     startEating();
+                    INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                 }
                 case NO_ITEM -> {
                     if (CONFIG.client.extra.autoEat.warning

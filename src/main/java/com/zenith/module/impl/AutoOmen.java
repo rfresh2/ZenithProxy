@@ -90,6 +90,7 @@ public class AutoOmen extends AbstractInventoryModule {
             switch (invActionResult.state()) {
                 case ITEM_IN_HAND -> {
                     startEating();
+                    INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                 }
                 case NO_ITEM -> {}
                 case SWAPPING -> {
