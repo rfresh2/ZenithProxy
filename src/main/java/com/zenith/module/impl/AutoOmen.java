@@ -6,7 +6,6 @@ import com.zenith.feature.inventory.InventoryActionRequest;
 import com.zenith.feature.player.ClickTarget;
 import com.zenith.feature.player.Input;
 import com.zenith.feature.player.InputRequest;
-import com.zenith.mc.block.Direction;
 import com.zenith.mc.item.ItemData;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.util.RequestFuture;
@@ -14,9 +13,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerAction;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundPlayerActionPacket;
 
 import java.util.List;
 import java.util.Objects;
@@ -68,14 +65,12 @@ public class AutoOmen extends AbstractInventoryModule {
             lastRaidActive = System.nanoTime();
         }
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
-            && (CONFIG.client.extra.autoOmen.whileRaidActive || (TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastRaidActive) > CONFIG.client.extra.autoOmen.raidCooldownMs))
-            && (CONFIG.client.extra.autoOmen.whileOmenActive || (TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastHadOmen) > CONFIG.client.extra.autoOmen.omenCooldownMs))
             && CACHE.getPlayerCache().getGameMode() != GameMode.CREATIVE
             && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR
         ) {
             if (delay > 0) {
                 delay--;
-                if (isEating || !swapFuture.isDone()) {
+                if (isEating) {
                     INPUTS.submit(InputRequest.noInput(this, getPriority()));
                     INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                 }
@@ -86,11 +81,17 @@ public class AutoOmen extends AbstractInventoryModule {
                 INPUTS.submit(InputRequest.noInput(this, getPriority()));
                 return;
             }
+            var raidActiveCondition = CONFIG.client.extra.autoOmen.whileRaidActive || TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastRaidActive) > CONFIG.client.extra.autoOmen.raidCooldownMs;
+            var omenActiveCondition = CONFIG.client.extra.autoOmen.whileOmenActive || TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastHadOmen) > CONFIG.client.extra.autoOmen.omenCooldownMs;
+            if (!raidActiveCondition || !omenActiveCondition) {
+                return;
+            }
             var invActionResult = doInventoryActionsV2();
             switch (invActionResult.state()) {
                 case ITEM_IN_HAND -> {
                     startEating();
                     INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
+                    delay = invActionResult.expectedDelay();
                 }
                 case NO_ITEM -> {}
                 case SWAPPING -> {
@@ -98,37 +99,20 @@ public class AutoOmen extends AbstractInventoryModule {
                 }
                 default -> throw new IllegalStateException("Unexpected action state: " + invActionResult.state());
             }
-            delay = invActionResult.expectedDelay();
         } else {
-            if (isEating) {
-                if (delay > 0) { // we got interrupted during drinking
-                    // todo: have bot automatically cancel eats if not confirmed every tick?
-                    sendClientPacketAsync(new ServerboundPlayerActionPacket(
-                        PlayerAction.RELEASE_USE_ITEM,
-                        0, 0, 0,
-                        Direction.DOWN.mcpl(),
-                        CACHE.getPlayerCache().getSeqId().incrementAndGet()
-                    ));
-                    debug("Got interrupted during omen drink");
-                    delay = 0;
-                } else {
-                    delay = 20;
-                    debug("Omen drink completed");
-                }
-            } else {
-                delay = 0;
-            }
             isEating = false;
+            delay = 0;
         }
     }
 
     public void startEating() {
+        if (!isItemEquipped()) return;
         var hand = getHand();
-        if (hand == null) return;
         INPUTS.submit(InputRequest.builder()
                 .owner(this)
                 .input(Input.builder()
                     .rightClick(true)
+                    .hand(hand)
                     .clickTarget(ClickTarget.None.INSTANCE)
                     .clickRequiresRotation(false)
                     .build())

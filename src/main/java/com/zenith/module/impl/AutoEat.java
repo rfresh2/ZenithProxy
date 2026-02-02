@@ -60,11 +60,10 @@ public class AutoEat extends AbstractInventoryModule {
         if (CACHE.getPlayerCache().getThePlayer().isAlive()
             && CACHE.getPlayerCache().getGameMode() != GameMode.CREATIVE
             && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR
-            && playerHealthBelowThreshold()
         ) {
             if (delay > 0) {
                 delay--;
-                if (isEating || !swapFuture.isDone()) {
+                if (isEating) {
                     INPUTS.submit(InputRequest.noInput(this, getPriority()));
                     INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                 }
@@ -75,11 +74,15 @@ public class AutoEat extends AbstractInventoryModule {
                 INPUTS.submit(InputRequest.noInput(this, getPriority()));
                 return;
             }
+            if (!playerHealthBelowThreshold()) {
+                return;
+            }
             var invActionResult = doInventoryActionsV2();
             switch (invActionResult.state()) {
                 case ITEM_IN_HAND -> {
                     startEating();
                     INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
+                    delay = invActionResult.expectedDelay();
                 }
                 case NO_ITEM -> {
                     if (CONFIG.client.extra.autoEat.warning
@@ -97,19 +100,20 @@ public class AutoEat extends AbstractInventoryModule {
                 }
                 default -> throw new IllegalStateException("Unexpected action state: " + invActionResult.state());
             }
-            delay = invActionResult.expectedDelay();
         } else {
             isEating = false;
+            delay = 0;
         }
     }
 
     void startEating() {
+        if (!isItemEquipped()) return;
         var hand = getHand();
-        if (hand == null) return;
         INPUTS.submit(InputRequest.builder()
                 .owner(this)
                 .input(Input.builder()
                     .rightClick(true)
+                    .hand(hand)
                     .clickTarget(ClickTarget.None.INSTANCE)
                     .clickRequiresRotation(false)
                     .build())

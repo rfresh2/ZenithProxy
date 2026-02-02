@@ -33,13 +33,13 @@ public class InventoryManager {
         );
     }
 
+    static long t = 0;
     /**
      * Requests inventory actions to be executed at the end of the current tick, and subsequent ticks if applicable
      */
     public synchronized RequestFuture submit(final InventoryActionRequest actionRequest) {
-        if (actionRequest.getPriority() <= currentActionRequest.getPriority() && hasActiveRequest())
+        if (actionRequest.getPriority() <= currentActionRequest.getPriority() || hasActiveRequest())
             return RequestFuture.rejected;
-        if (currentActionRequest.isExecuting()) return RequestFuture.rejected;
         currentRequestFuture.complete(false);
         currentActionRequest = actionRequest;
         currentRequestFuture = new RequestFuture();
@@ -47,6 +47,7 @@ public class InventoryManager {
     }
 
     private synchronized void handleTick(final ClientBotTick event) {
+        t++;
         if (currentActionRequest == DEFAULT_ACTION_REQUEST) return;
         int delay = requireNonNullElse(
             currentActionRequest.getActionDelayTicks(),
@@ -67,7 +68,8 @@ public class InventoryManager {
         var action = currentActionRequest.next();
         if (action != null) {
             if (action.containerId() != CACHE.getPlayerCache().getInventoryCache().getOpenContainerId()) {
-                CLIENT_LOG.debug("[Inventory Manager] Skipping action {} requester: {} requested container: {} != {}",
+                CLIENT_LOG.debug("[Inventory Manager] [{}] Skipping action {} requester: {} requested container: {} != {}",
+                    t,
                     action,
                     currentActionRequest.getOwnerName(),
                     action.containerId(),
@@ -76,7 +78,8 @@ public class InventoryManager {
                 var packet = action.packet();
                 if (packet != null) {
                     // todo: setting for toggling inv debug logging
-                    CLIENT_LOG.debug("[Inventory Manager] Executing action: {} requester: {}",
+                    CLIENT_LOG.debug("[Inventory Manager] [{}] Executing action: {} requester: {}",
+                        t,
                         action,
                         currentActionRequest.getOwnerName());
                     Proxy.getInstance().getClient().sendAwait(packet);
@@ -87,6 +90,8 @@ public class InventoryManager {
                     }
                 }
             }
+        } else {
+            CLIENT_LOG.debug("[Inventory Manager] [{}] Executing no action, requester: {}", t, currentActionRequest.getOwnerName());
         }
         if (currentActionRequest.isCompleted()) {
             currentRequestFuture.complete(true);
@@ -108,6 +113,6 @@ public class InventoryManager {
     }
 
     public boolean hasActiveRequest() {
-        return currentActionRequest != DEFAULT_ACTION_REQUEST;
+        return currentActionRequest != DEFAULT_ACTION_REQUEST && currentActionRequest.isExecuting();
     }
 }

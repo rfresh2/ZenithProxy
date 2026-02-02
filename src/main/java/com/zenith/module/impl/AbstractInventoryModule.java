@@ -16,8 +16,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.zenith.Globals.CACHE;
-import static com.zenith.Globals.INVENTORY;
+import static com.zenith.Globals.*;
 import static java.util.Objects.nonNull;
 
 /**
@@ -65,7 +64,7 @@ public abstract class AbstractInventoryModule extends Module {
             return new InventoryActionResult(ActionState.ITEM_IN_HAND, RequestFuture.rejected, 0);
         var swapFuture = switchToItem();
         if (swapFuture != null)
-            return new InventoryActionResult(ActionState.SWAPPING, swapFuture, 5);
+            return new InventoryActionResult(ActionState.SWAPPING, swapFuture, CONFIG.client.inventory.actionDelayTicks);
         return new InventoryActionResult(ActionState.NO_ITEM, RequestFuture.rejected, 0);
     }
 
@@ -73,7 +72,7 @@ public abstract class AbstractInventoryModule extends Module {
     public int doInventoryActions() {
         if (isItemEquipped()) return 0;
         var switchResult = switchToItem();
-        if (switchResult != null) return 5;
+        if (switchResult != null) return CONFIG.client.inventory.actionDelayTicks;
         return 0;
     }
 
