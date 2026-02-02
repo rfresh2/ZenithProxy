@@ -213,7 +213,7 @@ public final class GetToBlockProcess extends BaritoneProcessHelper {
                 baritone.getLookBehavior().updateRotation(reachable.get());
                 if (knownLocations.contains(ctx.getSelectedBlock().orElse(null))) {
                     baritone.getInputOverrideHandler().setInputForceState(PathInput.RIGHT_CLICK_BLOCK, true);
-                    baritone.getInputOverrideHandler().setClickTarget(pos);
+                    baritone.getInputOverrideHandler().setClickTarget(ctx.getSelectedBlock().orElse(null));
                     if (CACHE.getPlayerCache().getInventoryCache().getOpenContainerId() != 0) {
                         return true;
                     }

@@ -244,7 +244,7 @@ public class MovementPillar extends Movement {
                     state.setInput(PathInput.LEFT_CLICK_BLOCK, true);
                     blockIsThere = false;
                 } else if (ctx.player().isSneaking() && (ctx.isLookingAt(src.below()) || ctx.isLookingAt(src)) && ctx.player().getY() > dest.y() + 0.1) {
-                    state.setClickTarget(src.below());
+                    state.setClickTarget(ctx.getSelectedBlock().orElse(null));
                     state.setInput(PathInput.RIGHT_CLICK_BLOCK, true);
                 }
             }
