@@ -89,9 +89,9 @@ public class AutoOmen extends AbstractInventoryModule {
             var invActionResult = doInventoryActionsV2();
             switch (invActionResult.state()) {
                 case ITEM_IN_HAND -> {
-                    startEating();
-                    INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                     delay = invActionResult.expectedDelay();
+                    startEating(); // if accepted, will set delay to 50 (the eating duration ticks)
+                    INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                 }
                 case NO_ITEM -> {}
                 case SWAPPING -> {
