@@ -3,6 +3,7 @@ package com.zenith.terminal.logback;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.ConsoleAppender;
 import ch.qos.logback.core.status.ErrorStatus;
+import com.zenith.Globals;
 import org.jline.reader.LineReader;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
@@ -62,7 +63,7 @@ public class TerminalConsoleAppender extends ConsoleAppender<ILoggingEvent> {
 
     @Override
     protected void append(ILoggingEvent event) {
-        if (terminal != null && !(terminal instanceof DumbTerminal)) {
+        if (terminal != null && (!(terminal instanceof DumbTerminal) || Globals.inDevEnv())) {
             final String message = new String(this.encoder.encode(event));
             if (reader != null) {
                 reader.printAbove(message);

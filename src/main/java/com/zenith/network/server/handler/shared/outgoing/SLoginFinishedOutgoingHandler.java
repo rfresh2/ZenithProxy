@@ -21,8 +21,8 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
     private static final UUID spectatorFakeUUID = UUID.fromString("c9560dfb-a792-4226-ad06-db1b6dc40b95");
 
     enum AuthorizationState {
-        SPECTATOR_ONLY,
-        CONTROLLER_ONLY,
+        SPECTATOR,
+        CONTROLLER,
         CONTROLLER_OR_SPECTATOR
     }
 
@@ -46,7 +46,7 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
                 }
             }
 
-            var authState = AuthorizationState.CONTROLLER_OR_SPECTATOR;
+            var requestedAuthState = AuthorizationState.CONTROLLER_OR_SPECTATOR;
             if (session.isTransferring()) {
                 var transferSrc = session.getCookieCache().getZenithTransferSrc();
                 transferSrc.ifPresent(s -> SERVER_LOG.info("{} transferring from ZenithProxy instance: {}", clientGameProfile.getName(), s));
@@ -58,28 +58,58 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
                 }
                 var onlySpectator = session.getCookieCache().getSpectatorCookieValue();
                 if (onlySpectator.isPresent()) {
-                    authState = onlySpectator.get()
-                        ? AuthorizationState.SPECTATOR_ONLY
-                        : AuthorizationState.CONTROLLER_ONLY;
+                    requestedAuthState = onlySpectator.get()
+                        ? AuthorizationState.SPECTATOR
+                        : AuthorizationState.CONTROLLER;
                 }
             }
-            if (CONFIG.server.extra.whitelist.enable && !PLAYER_LISTS.getWhitelist().contains(clientGameProfile)) {
-                if (CONFIG.server.spectator.allowSpectator && (!CONFIG.server.spectator.whitelistEnabled || PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile))) {
-                    authState = AuthorizationState.SPECTATOR_ONLY; // must NOT be configurable by the player after this point
-                } else {
-                    session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
-                    SERVER_LOG.warn("Username: {} UUID: {} [{}] MC: {} tried to connect!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getMCVersion(), session.getRemoteAddress());
-                    EVENT_BUS.postAsync(new NonWhitelistedPlayerConnectedEvent(clientGameProfile, session.getRemoteAddress()));
+
+            final AuthorizationState authState;
+            switch (requestedAuthState) {
+                case SPECTATOR -> {
+                    if (!CONFIG.server.spectator.allowSpectator) {
+                        authFailDisconnect(session, clientGameProfile);
+                        return null;
+                    }
+                    if (CONFIG.server.spectator.whitelistEnabled && !PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile)) {
+                        authFailDisconnect(session, clientGameProfile);
+                        return null;
+                    }
+                    authState = AuthorizationState.SPECTATOR;
+                }
+                case CONTROLLER -> {
+                    if (CONFIG.server.extra.whitelist.enable && !PLAYER_LISTS.getWhitelist().contains(clientGameProfile)) {
+                        authFailDisconnect(session, clientGameProfile);
+                        return null;
+                    }
+                    authState = AuthorizationState.CONTROLLER;
+                }
+                case CONTROLLER_OR_SPECTATOR -> {
+                    if (!CONFIG.server.extra.whitelist.enable || PLAYER_LISTS.getWhitelist().contains(clientGameProfile)) {
+                        authState = AuthorizationState.CONTROLLER_OR_SPECTATOR;
+                        break;
+                    }
+                    if (CONFIG.server.spectator.allowSpectator) {
+                        if (!CONFIG.server.spectator.whitelistEnabled || PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile)) {
+                            authState = AuthorizationState.SPECTATOR;
+                            break;
+                        }
+                    }
+                    authFailDisconnect(session, clientGameProfile);
+                    return null;
+                }
+                default -> {
+                    authFailDisconnect(session, clientGameProfile);
                     return null;
                 }
             }
+
             SERVER_LOG.info("Username: {} UUID: {} MC: {} [{}] has passed the whitelist check with auth: {}", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getMCVersion(), session.getRemoteAddress(), authState.name());
             session.setWhitelistChecked(true);
-            final AuthorizationState finalAuthState = authState;
             EXECUTOR.execute(() -> {
                 try {
                     // this method is called asynchronously off the event loop due to blocking calls possibly causing thread starvation
-                    finishLogin(session, finalAuthState);
+                    finishLogin(session, clientGameProfile, authState);
                 } catch (final Throwable e) {
                     session.disconnect("Login Failed", e);
                 }
@@ -91,11 +121,16 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
         }
     }
 
-    private void finishLogin(ServerSession session, final AuthorizationState authState) {
-        final GameProfile clientGameProfile = session.getProfileCache().getProfile();
+    private void authFailDisconnect(ServerSession session, GameProfile clientGameProfile) {
+        session.disconnect(CONFIG.server.extra.whitelist.kickmsg);
+        SERVER_LOG.warn("Username: {} UUID: {} [{}] MC: {} tried to connect!", clientGameProfile.getName(), clientGameProfile.getIdAsString(), session.getMCVersion(), session.getRemoteAddress());
+        EVENT_BUS.postAsync(new NonWhitelistedPlayerConnectedEvent(clientGameProfile, session.getRemoteAddress()));
+    }
+
+    private void finishLogin(ServerSession session, GameProfile clientGameProfile, final AuthorizationState authState) {
         synchronized (this) {
             if (!Proxy.getInstance().isConnected()) {
-                    if (CONFIG.client.extra.autoConnectOnLogin && authState != AuthorizationState.SPECTATOR_ONLY) {
+                    if (CONFIG.client.extra.autoConnectOnLogin && authState != AuthorizationState.SPECTATOR) {
                     try {
                         SERVER_LOG.info("Auto connecting client on player login...");
                         Proxy.getInstance().connect();
@@ -134,12 +169,12 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
         SERVER_LOG.debug("User UUID: {}\nBot UUID: {}", clientGameProfile.getId().toString(), CACHE.getProfileCache().getProfile().getId().toString());
 
         switch (authState) {
-            case SPECTATOR_ONLY -> {
+            case SPECTATOR -> {
                 if (!trySpectatorLogin(session, clientGameProfile)) {
                     session.disconnect("Spectator mode is disabled");
                 }
             }
-            case CONTROLLER_ONLY -> {
+            case CONTROLLER -> {
                 if (!tryControllerLogin(session, clientGameProfile)) {
                     session.disconnect("Someone is already controlling the player");
                 }
