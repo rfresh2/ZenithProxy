@@ -160,13 +160,15 @@ public class AntiAFK extends Module {
             if (reachedPathingGoal()) {
                 shouldWalk = false;
             } else {
-                var shouldSneak = !BOT.isTouchingWater()
+                var inFluid = BOT.isTouchingWater() || BOT.isTouchingLava();
+                var shouldSneak = !inFluid
                     && (CONFIG.client.extra.antiafk.actions.safeWalk || CONFIG.client.extra.antiafk.actions.sneak);
                 INPUTS.submit(InputRequest.builder()
                     .owner(this)
                     .input(Input.builder()
                         .pressingForward(true)
                         .sneaking(shouldSneak)
+                        .jumping(inFluid)
                         .build())
                     .yaw(RotationHelper.yawToXZ(currentPathingGoal.x() + 0.5, currentPathingGoal.z() + 0.5))
                     .priority(getPriority())
