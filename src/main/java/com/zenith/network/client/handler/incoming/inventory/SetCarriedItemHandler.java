@@ -7,12 +7,13 @@ import com.zenith.network.codec.ClientEventLoopPacketHandler;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundSetHeldSlotPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 
+import static com.zenith.Globals.CACHE;
 import static com.zenith.Globals.DEFAULT_LOG;
 
 public class SetCarriedItemHandler implements ClientEventLoopPacketHandler<ClientboundSetHeldSlotPacket, ClientSession> {
     @Override
     public boolean applyAsync(ClientboundSetHeldSlotPacket packet, ClientSession session) {
-        if (!Proxy.getInstance().hasActivePlayer()) {
+        if (!Proxy.getInstance().hasActivePlayer() && CACHE.getPlayerCache().getHeldItemSlot() != packet.getSlot()) {
             try {
                 // the mc server does not know we are using this slot until we say so
                 // so we make sure its synced correctly here
