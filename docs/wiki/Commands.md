@@ -2224,7 +2224,7 @@ Schedules commands to be executed after a delay or after specified events.
 
 Examples:
 
-`tasks add timed 15m pearlLoader load rfresh`
+`tasks add timed loadMyPearl 15m pearlLoader load rfresh`
 
 `tasks add interval mapgen 30s 1h map generate`
 
