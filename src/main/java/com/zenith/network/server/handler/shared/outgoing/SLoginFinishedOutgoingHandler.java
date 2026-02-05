@@ -71,11 +71,14 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
                         authFailDisconnect(session, clientGameProfile);
                         return null;
                     }
-                    if (CONFIG.server.spectator.whitelistEnabled && !PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile)) {
-                        authFailDisconnect(session, clientGameProfile);
-                        return null;
+                    var regularWhitelisted = !CONFIG.server.extra.whitelist.enable || PLAYER_LISTS.getWhitelist().contains(clientGameProfile);
+                    var spectatorWhitelisted = !CONFIG.server.spectator.whitelistEnabled || PLAYER_LISTS.getSpectatorWhitelist().contains(clientGameProfile);
+                    if (regularWhitelisted || spectatorWhitelisted) {
+                        authState = AuthorizationState.SPECTATOR;
+                        break;
                     }
-                    authState = AuthorizationState.SPECTATOR;
+                    authFailDisconnect(session, clientGameProfile);
+                    return null;
                 }
                 case CONTROLLER -> {
                     if (CONFIG.server.extra.whitelist.enable && !PLAYER_LISTS.getWhitelist().contains(clientGameProfile)) {
