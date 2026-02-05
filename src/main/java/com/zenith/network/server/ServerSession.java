@@ -94,6 +94,8 @@ public class ServerSession extends TcpServerSession {
     // we have performed the configuration phase at zenith
     // any subsequent configurations should pass through to client
     protected boolean isConfigured = false;
+    // next player move is the initial spawn tp
+    protected boolean spawning = false;
     // note: on 1.21.3, the position packet is sent before the teleport accept packet
     // player has accepted the spawn teleport and position packets
     // if false, we cancel any outbound teleport and position packets

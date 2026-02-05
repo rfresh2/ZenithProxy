@@ -13,7 +13,7 @@ public class SAcceptTeleportHandler implements PacketHandler<ServerboundAcceptTe
         else {
             if (session.getSpawnTeleportId() == packet.getId()) {
                 SERVER_LOG.debug("[{}] Accepted spawn teleport", session.getName());
-                session.setSpawned(true);
+                session.setSpawning(true);
             } else {
                 SERVER_LOG.debug("[{}] Cancelling unexpected pre-spawn teleport packet with ID: {}", session.getName(), packet.getId());
             }
