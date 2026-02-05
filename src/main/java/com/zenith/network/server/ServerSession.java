@@ -94,12 +94,20 @@ public class ServerSession extends TcpServerSession {
     // we have performed the configuration phase at zenith
     // any subsequent configurations should pass through to client
     protected boolean isConfigured = false;
+    // next player move is the initial spawn tp
+    protected boolean spawning = false;
     // note: on 1.21.3, the position packet is sent before the teleport accept packet
     // player has accepted the spawn teleport and position packets
     // if false, we cancel any outbound teleport and position packets
     protected boolean spawned = false;
     // default spawn teleport id
     protected final int spawnTeleportId = 1234567890;
+    // as reported by the player's ServerboundPlayerLoadedPacket
+    // this packet is technically optional, and may not be sent by via
+    // so don't rely on this necessarily being set
+    protected boolean clientLoaded = false;
+    // set 60 ticks in the future after spawn packet
+    protected long clientLoadedTimeout = 0L;
     // allow spectator to set their camera to client
     // need to persist state to allow them in and out of this
     protected Entity cameraTarget = null;

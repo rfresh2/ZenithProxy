@@ -11,6 +11,8 @@ public class SPlayerPositionRotHandler implements PacketHandler<ServerboundMoveP
     public ServerboundMovePlayerPosRotPacket apply(final ServerboundMovePlayerPosRotPacket packet, final ServerSession session) {
         if (session.isSpawned()) return packet;
         else {
+            session.setSpawned(true);
+            session.setSpawning(false);
             SERVER_LOG.debug("[{}] Cancelling pre-spawn position packet: {}", session.getName(), packet);
             return null;
         }

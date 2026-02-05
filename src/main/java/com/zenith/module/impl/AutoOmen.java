@@ -6,6 +6,7 @@ import com.zenith.feature.inventory.InventoryActionRequest;
 import com.zenith.feature.player.ClickTarget;
 import com.zenith.feature.player.Input;
 import com.zenith.feature.player.InputRequest;
+import com.zenith.mc.block.Direction;
 import com.zenith.mc.item.ItemData;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.util.RequestFuture;
@@ -13,7 +14,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerAction;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundPlayerActionPacket;
 
 import java.util.List;
 import java.util.Objects;
@@ -68,9 +71,24 @@ public class AutoOmen extends AbstractInventoryModule {
             && CACHE.getPlayerCache().getGameMode() != GameMode.CREATIVE
             && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR
         ) {
+            var raidActive = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastRaidActive) <= CONFIG.client.extra.autoOmen.raidCooldownMs;
+            var omenActive = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastHadOmen) <= CONFIG.client.extra.autoOmen.omenCooldownMs;
+            var omenOrRaidActive = ((raidActive && !CONFIG.client.extra.autoOmen.whileRaidActive) || (omenActive && !CONFIG.client.extra.autoOmen.whileOmenActive));
             if (delay > 0) {
                 delay--;
                 if (isEating) {
+                    if (omenOrRaidActive) {
+                        sendClientPacketAsync(new ServerboundPlayerActionPacket(
+                            PlayerAction.RELEASE_USE_ITEM,
+                            0, 0, 0,
+                            Direction.DOWN.mcpl(),
+                            CACHE.getPlayerCache().getSeqId().incrementAndGet()
+                        ));
+                        debug("Cancelling omen drink because omen or raid now active");
+                        delay = 0;
+                        isEating = false;
+                        return;
+                    }
                     INPUTS.submit(InputRequest.noInput(this, getPriority()));
                     INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                 }
@@ -81,9 +99,7 @@ public class AutoOmen extends AbstractInventoryModule {
                 INPUTS.submit(InputRequest.noInput(this, getPriority()));
                 return;
             }
-            var raidActiveCondition = CONFIG.client.extra.autoOmen.whileRaidActive || TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastRaidActive) > CONFIG.client.extra.autoOmen.raidCooldownMs;
-            var omenActiveCondition = CONFIG.client.extra.autoOmen.whileOmenActive || TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastHadOmen) > CONFIG.client.extra.autoOmen.omenCooldownMs;
-            if (!raidActiveCondition || !omenActiveCondition) {
+            if (omenOrRaidActive) {
                 return;
             }
             var invActionResult = doInventoryActionsV2();

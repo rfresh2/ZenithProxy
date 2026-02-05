@@ -28,11 +28,11 @@ public class ClientPongTask implements Runnable {
             // so at that point, this task is the only thing that can get us unstuck
             var timeout = Proxy.getInstance().hasActivePlayer()
                 ? CONFIG.client.ping.pingQueueTimeoutMs
-                : 10; // try to get unstuck asap, can't be zero so we can account for normal responding time
+                : 50; // try to get unstuck asap, can't be zero so we can account for normal responding time
             if (elapsed >= timeout) {
                 pingQueue.forEach(r -> {
                     CLIENT_LOG.debug("Sending timed out Pong: {} queue size: {}", r, pingQueue.size());
-                    client.send(new ServerboundPongPacket(r.id()));
+                    client.sendAsync(new ServerboundPongPacket(r.id()));
                 });
             }
         }

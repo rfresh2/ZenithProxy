@@ -87,6 +87,7 @@ public class PlayerCache implements CachedData {
     protected Queue<KeepAliveRequest> keepAliveQueue = new LinkedBlockingQueue<>();
     protected Queue<PingRequest> pingQueue = new LinkedBlockingQueue<>();
     protected boolean respawning = false;
+    protected boolean clientLoaded = false;
 
     public PlayerCache(final EntityCache entityCache) {
         this.entityCache = entityCache;
@@ -150,6 +151,7 @@ public class PlayerCache implements CachedData {
         this.isSneaking = this.isSprinting = false;
         this.heldItemSlot = 0;
         this.respawning = false;
+        this.clientLoaded = false;
     }
 
     @Override
