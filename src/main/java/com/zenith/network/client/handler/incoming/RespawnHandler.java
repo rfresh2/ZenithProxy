@@ -1,5 +1,6 @@
 package com.zenith.network.client.handler.incoming;
 
+import com.zenith.Proxy;
 import com.zenith.cache.CacheResetType;
 import com.zenith.feature.player.World;
 import com.zenith.feature.spectator.SpectatorSync;
@@ -62,10 +63,9 @@ public class RespawnHandler implements ClientEventLoopPacketHandler<ClientboundR
             CACHE.getPlayerCache().getThePlayer().getMetadata().clear();
         }
         BOT.handleRespawn();
-        // todo: doesn't look like there's any penalty to duplicate sending the player loaded packet
-        //  so doesn't matter if controlling player also sends it
-        //  but we should watch out for anticheats validating this state in the future
-        session.sendAsync(ServerboundPlayerLoadedPacket.INSTANCE);
+        if (!Proxy.getInstance().hasActivePlayer()) {
+            session.sendAsync(ServerboundPlayerLoadedPacket.INSTANCE);
+        }
         return true;
     }
 

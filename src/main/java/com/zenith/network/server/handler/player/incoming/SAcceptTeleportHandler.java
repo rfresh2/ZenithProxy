@@ -4,6 +4,8 @@ import com.zenith.network.codec.PacketHandler;
 import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundAcceptTeleportationPacket;
 
+import java.util.concurrent.TimeUnit;
+
 import static com.zenith.Globals.SERVER_LOG;
 
 public class SAcceptTeleportHandler implements PacketHandler<ServerboundAcceptTeleportationPacket, ServerSession> {
@@ -14,6 +16,9 @@ public class SAcceptTeleportHandler implements PacketHandler<ServerboundAcceptTe
             if (session.getSpawnTeleportId() == packet.getId()) {
                 SERVER_LOG.debug("[{}] Accepted spawn teleport", session.getName());
                 session.setSpawning(true);
+                if (!session.isClientLoaded()) {
+                    session.setClientLoadedTimeout(System.nanoTime() + TimeUnit.SECONDS.toNanos(3)); // 60 ticks in the future
+                }
             } else {
                 SERVER_LOG.debug("[{}] Cancelling unexpected pre-spawn teleport packet with ID: {}", session.getName(), packet.getId());
             }

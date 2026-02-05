@@ -17,6 +17,7 @@ public class LoginAckHandler implements PacketHandler<ServerboundLoginAcknowledg
     @Override
     public ServerboundLoginAcknowledgedPacket apply(final ServerboundLoginAcknowledgedPacket packet, final ServerSession session) {
         session.switchInboundState(ProtocolState.CONFIGURATION);
+        session.setClientLoaded(false);
         if (session.getPacketProtocol().getOutboundState() != ProtocolState.CONFIGURATION || !session.isWhitelistChecked()) {
             session.disconnect("Attempted to enter configuration too early");
             return null;

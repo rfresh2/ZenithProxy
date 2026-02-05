@@ -16,6 +16,7 @@ public class FinishConfigurationHandler implements PacketHandler<ServerboundFini
     @Override
     public ServerboundFinishConfigurationPacket apply(final ServerboundFinishConfigurationPacket packet, final ServerSession session) {
         session.switchInboundState(ProtocolState.GAME);
+        session.setClientLoaded(false);
         if (!session.isConfigured()) {
             ProxyServerLoginHandler.INSTANCE.loggedIn(session);
             session.getEventLoop().scheduleAtFixedRate(new SKeepAliveTask(session), 0, 2, TimeUnit.SECONDS);
