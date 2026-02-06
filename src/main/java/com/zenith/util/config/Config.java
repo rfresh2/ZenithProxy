@@ -6,18 +6,17 @@ import com.zenith.feature.chatschema.ChatSchema;
 import com.zenith.feature.tasks.Task;
 import com.zenith.feature.waypoints.Waypoint;
 import com.zenith.feature.whitelist.PlayerEntry;
+import com.zenith.mc.item.ItemRegistry;
 import com.zenith.module.impl.ActiveHours.ActiveTime;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import lombok.Getter;
 import org.geysermc.mcprotocollib.network.ProxyInfo;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 @NullMarked
 public final class Config {
@@ -204,7 +203,9 @@ public final class Config {
                 public boolean allowDiagonalAscend = false;
                 public boolean diagonalCentering = false;
                 public boolean traverseCentering = false;
+                public double blockPlacementPenalty = 20.0;
                 public double blockBreakAdditionalCost = 2;
+                public double jumpPenalty = 2.0;
                 public int maxFallHeightNoWater = 3;
                 public boolean allowLongFall = false;
                 public double longFallCostLogMultiplier = 50;
@@ -226,6 +227,23 @@ public final class Config {
                 public int interactWithProcessMaxPathTries = 5;
                 public boolean avoidUpdatingFallingBlocks = true;
                 public boolean pauseMiningForFallingBlocks = true;
+                public final Set<String> acceptableThrowawayItems = new ObjectArraySet<>(new String[]{
+                    ItemRegistry.DIRT.name(),
+                    ItemRegistry.COBBLESTONE.name(),
+                    ItemRegistry.NETHERRACK.name(),
+                    ItemRegistry.STONE.name(),
+                    ItemRegistry.OBSIDIAN.name(),
+                    ItemRegistry.CRYING_OBSIDIAN.name(),
+                    ItemRegistry.BIRCH_PLANKS.name(),
+                    ItemRegistry.JUNGLE_PLANKS.name(),
+                    ItemRegistry.SPRUCE_PLANKS.name(),
+                    ItemRegistry.DARK_OAK_PLANKS.name(),
+                    ItemRegistry.ACACIA_PLANKS.name(),
+                    ItemRegistry.WARPED_PLANKS.name(),
+                    ItemRegistry.CHERRY_PLANKS.name(),
+                    ItemRegistry.OAK_PLANKS.name()
+                });
+                public final Set<String> allowBreakAnyway = new ObjectArraySet<>();
             }
 
             public static class SessionTimeLimit {

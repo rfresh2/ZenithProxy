@@ -14,8 +14,10 @@ import com.zenith.feature.pathfinder.goals.GoalNear;
 import com.zenith.feature.player.World;
 import com.zenith.mc.block.Block;
 import com.zenith.mc.block.BlockPos;
+import com.zenith.mc.block.BlockRegistry;
 import com.zenith.mc.entity.EntityData;
 import com.zenith.mc.item.ItemData;
+import com.zenith.mc.item.ItemRegistry;
 import com.zenith.util.math.MathHelper;
 
 import java.util.LinkedHashMap;
@@ -660,11 +662,25 @@ public class PathfinderCommand extends Command {
                     .addField("Allow Break", CONFIG.client.extra.pathfinder.allowBreak)
                     .primaryColor();
             })))
-            .then(literal("blockBreakAdditionalCost").then(argument("cost", floatArg(0, 1000)).executes(c -> {
+            .then(literal("blockBreakAdditionalCost").then(argument("cost", floatArg()).executes(c -> {
                 CONFIG.client.extra.pathfinder.blockBreakAdditionalCost = getFloat(c, "cost");
                 c.getSource().getEmbed()
                     .title("Pathfinder")
                     .addField("Block Break Additional Cost", CONFIG.client.extra.pathfinder.blockBreakAdditionalCost)
+                    .primaryColor();
+            })))
+            .then(literal("blockPlacementPenalty").then(argument("cost", doubleArg()).executes(c -> {
+                CONFIG.client.extra.pathfinder.blockPlacementPenalty = getDouble(c, "cost");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Block Placement Penalty", CONFIG.client.extra.pathfinder.blockPlacementPenalty)
+                    .primaryColor();
+            })))
+            .then(literal("jumpPenalty").then(argument("cost", doubleArg()).executes(c -> {
+                CONFIG.client.extra.pathfinder.jumpPenalty = getDouble(c, "cost");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Jump Penalty", CONFIG.client.extra.pathfinder.jumpPenalty)
                     .primaryColor();
             })))
             .then(literal("allowSprint").then(argument("toggle", toggle()).executes(c -> {
@@ -862,13 +878,81 @@ public class PathfinderCommand extends Command {
                     .title("Pathfinder")
                     .addField("Pause Mining For Falling Blocks", CONFIG.client.extra.pathfinder.pauseMiningForFallingBlocks)
                     .primaryColor();
-            })));
+            })))
+            .then(literal("acceptableThrowawayItems")
+                .then(literal("list").executes(c -> {
+                    CONFIG.client.extra.pathfinder.acceptableThrowawayItems.removeIf(itemName -> ItemRegistry.REGISTRY.get(itemName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.acceptableThrowawayItems))
+                        .primaryColor();
+                }))
+                .then(literal("add").then(argument("item", item()).executes(c -> {
+                    var item = getItem(c, "item");
+                    CONFIG.client.extra.pathfinder.acceptableThrowawayItems.add(item.name());
+                    CONFIG.client.extra.pathfinder.acceptableThrowawayItems.removeIf(itemName -> ItemRegistry.REGISTRY.get(itemName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.acceptableThrowawayItems))
+                        .primaryColor();
+                })))
+                .then(literal("del").then(argument("item", item()).executes(c -> {
+                    var item = getItem(c, "item");
+                    CONFIG.client.extra.pathfinder.acceptableThrowawayItems.remove(item.name());
+                    CONFIG.client.extra.pathfinder.acceptableThrowawayItems.removeIf(itemName -> ItemRegistry.REGISTRY.get(itemName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.acceptableThrowawayItems))
+                        .primaryColor();
+                })))
+                .then(literal("clear").executes(c -> {
+                    CONFIG.client.extra.pathfinder.acceptableThrowawayItems.clear();
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description("Acceptable Throwaway Items Cleared")
+                        .primaryColor();
+                })))
+            .then(literal("allowBreakAnyway")
+                .then(literal("list").executes(c -> {
+                    CONFIG.client.extra.pathfinder.allowBreakAnyway.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.allowBreakAnyway))
+                        .primaryColor();
+                }))
+                .then(literal("add").then(argument("block", block()).executes(c -> {
+                    var block = getBlock(c, "block");
+                    CONFIG.client.extra.pathfinder.allowBreakAnyway.add(block.name());
+                    CONFIG.client.extra.pathfinder.allowBreakAnyway.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.allowBreakAnyway))
+                        .primaryColor();
+                })))
+                .then(literal("del").then(argument("block", block()).executes(c -> {
+                    var block = getBlock(c, "block");
+                    CONFIG.client.extra.pathfinder.allowBreakAnyway.remove(block.name());
+                    CONFIG.client.extra.pathfinder.allowBreakAnyway.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.allowBreakAnyway))
+                        .primaryColor();
+                })))
+                .then(literal("clear").executes(c -> {
+                    CONFIG.client.extra.pathfinder.allowBreakAnyway.clear();
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.allowBreakAnyway))
+                        .primaryColor();
+                })));
     }
 
     private Map<String, String> getSettingsMap() {
         LinkedHashMap<String, String> settingsMap = new LinkedHashMap<>();
         settingsMap.put("allowBreak", toggleStr(CONFIG.client.extra.pathfinder.allowBreak));
         settingsMap.put("blockBreakAdditionalCost", String.valueOf(CONFIG.client.extra.pathfinder.blockBreakAdditionalCost));
+        settingsMap.put("blockPlacementPenalty", String.valueOf(CONFIG.client.extra.pathfinder.blockPlacementPenalty));
+        settingsMap.put("jumpPenalty", String.valueOf(CONFIG.client.extra.pathfinder.jumpPenalty));
         settingsMap.put("allowSprint", toggleStr(CONFIG.client.extra.pathfinder.allowSprint));
         settingsMap.put("allowPlace", toggleStr(CONFIG.client.extra.pathfinder.allowPlace));
         settingsMap.put("allowInventory", toggleStr(CONFIG.client.extra.pathfinder.allowInventory));
