@@ -2312,6 +2312,39 @@
       ]
     },
     {
+      "type": "com.zenith.mc.item.SerializedItemData",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int",
+            "java.lang.String",
+            "int",
+            "it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap",
+            "com.zenith.mc.item.ToolTag"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.mc.item.ToolTag",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "com.zenith.mc.item.ToolTier",
+            "com.zenith.mc.item.ToolType"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.mc.item.ToolTier"
+    },
+    {
+      "type": "com.zenith.mc.item.ToolType"
+    },
+    {
       "type": "com.zenith.module.impl.ActiveHours$ActiveTime",
       "allDeclaredFields": true,
       "methods": [
@@ -4271,6 +4304,30 @@
       ]
     },
     {
+      "type": "it.unimi.dsi.fastutil.Function"
+    },
+    {
+      "type": "it.unimi.dsi.fastutil.ints.AbstractInt2ObjectFunction"
+    },
+    {
+      "type": "it.unimi.dsi.fastutil.ints.AbstractInt2ObjectMap"
+    },
+    {
+      "type": "it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "it.unimi.dsi.fastutil.ints.Int2ObjectFunction"
+    },
+    {
+      "type": "it.unimi.dsi.fastutil.ints.Int2ObjectMap"
+    },
+    {
       "type": "it.unimi.dsi.fastutil.ints.IntArraySet",
       "methods": [
         {
@@ -4372,6 +4429,9 @@
           "parameterTypes": []
         }
       ]
+    },
+    {
+      "type": "java.lang.Cloneable"
     },
     {
       "type": "java.lang.Comparable"
@@ -5123,6 +5183,9 @@
       "type": "java.util.List"
     },
     {
+      "type": "java.util.Map"
+    },
+    {
       "type": "java.util.Optional"
     },
     {
@@ -5230,6 +5293,12 @@
           "name": "value"
         }
       ]
+    },
+    {
+      "type": "java.util.function.Function"
+    },
+    {
+      "type": "java.util.function.IntFunction"
     },
     {
       "type": "java.util.logging.LogManager",

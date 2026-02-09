@@ -267,6 +267,7 @@ graalvmNative {
                 "--initialize-at-build-time=com.zenith.mc",
                 "--initialize-at-build-time=com.zenith.event",
                 "--initialize-at-run-time=com.zenith.mc.chat_type",
+                "--initialize-at-run-time=com.zenith.mc.item",
                 "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl", // fix for windows builds, exception when doing srv lookups with netty
                 "--features=com.zenith.util.graalvm.ReflectionFeature"
             )
