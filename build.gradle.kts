@@ -36,7 +36,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.9.Final"))
+    api(platform("io.netty:netty-bom:4.2.10.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -54,7 +54,7 @@ dependencies {
     api("io.netty:netty-resolver-dns-native-macos") { artifact { classifier = "osx-aarch_64" } }
     api("org.cloudburstmc.math:api:2.0")
     api("org.cloudburstmc.math:immutable:2.0")
-    api("org.redisson:redisson:4.1.0") {
+    api("org.redisson:redisson:4.2.0") {
         exclude(group = "io.netty")
     }
     api("com.github.rfresh2:SimpleEventBus:1.6")
@@ -77,7 +77,7 @@ dependencies {
     api("org.postgresql:postgresql:42.7.9")
     api("org.jdbi:jdbi3-postgres:3.51.0")
     api("com.google.guava:guava:33.5.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.27")
+    api("ch.qos.logback:logback-classic:1.5.29")
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")
