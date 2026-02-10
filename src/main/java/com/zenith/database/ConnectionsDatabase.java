@@ -4,6 +4,7 @@ import com.zenith.Proxy;
 import com.zenith.database.dto.enums.Connectiontype;
 import com.zenith.database.dto.records.ConnectionsRecord;
 import com.zenith.event.client.ClientDisconnectEvent;
+import com.zenith.event.client.ClientOnlineEvent;
 import com.zenith.event.server.ServerPlayerConnectedEvent;
 import com.zenith.event.server.ServerPlayerDisconnectedEvent;
 
@@ -26,6 +27,7 @@ public class ConnectionsDatabase extends LiveDatabase {
     public void subscribeEvents() {
         EVENT_BUS.subscribe(
             this,
+            of(ClientOnlineEvent.class, this::handleClientOnlineEvent),
             of(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
             of(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent),
             of(ClientDisconnectEvent.class, DISCONNECT_PRIORITY, this::handleDisconnectEvent) // higher priority before cache is reset
@@ -57,19 +59,26 @@ public class ConnectionsDatabase extends LiveDatabase {
     }
 
     public void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
-        if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(3))) return;
+        if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(1))) return;
         writeConnection(Connectiontype.JOIN, event.playerEntry().getName(), event.playerEntry().getProfileId(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
     public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
-        if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(3))) return;
+        if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(1))) return;
         writeConnection(Connectiontype.LEAVE, event.playerEntry().getName(), event.playerEntry().getProfileId(), Instant.now().atOffset(ZoneOffset.UTC));
+    }
+
+    public void handleClientOnlineEvent(ClientOnlineEvent event) {
+        if (!Proxy.getInstance().isOn2b2t()) return;
+        var profile = CACHE.getProfileCache().getProfile();
+        if (profile == null || profile.getName() == null || profile.getId() == null) return;
+        writeConnection(Connectiontype.JOIN, profile.getName(), profile.getId(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
     public void handleDisconnectEvent(ClientDisconnectEvent event) {
         if (!Proxy.getInstance().isOn2b2t()
             || event.wasInQueue()
-            || event.onlineDuration().toMinutes() < 15) return;
+            || event.onlineDuration().getSeconds() < 1) return;
         var profile = CACHE.getProfileCache().getProfile();
         if (profile == null || profile.getName() == null || profile.getId() == null) return;
         writeConnection(Connectiontype.LEAVE, profile.getName(), profile.getId(), Instant.now().atOffset(ZoneOffset.UTC));
