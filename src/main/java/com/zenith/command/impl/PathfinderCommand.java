@@ -944,7 +944,42 @@ public class PathfinderCommand extends Command {
                         .title("Pathfinder")
                         .description(String.join("\n", CONFIG.client.extra.pathfinder.allowBreakAnyway))
                         .primaryColor();
-                })));
+                })))
+            .then(literal("autoTool").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.pathfinder.autoTool = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Auto Tool", CONFIG.client.extra.pathfinder.autoTool)
+                    .primaryColor();
+            })))
+            .then(literal("assumeExternalAutoTool").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.pathfinder.assumeExternalAutoTool = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Assume External Auto Tool", CONFIG.client.extra.pathfinder.assumeExternalAutoTool)
+                    .primaryColor();
+            })))
+            .then(literal("itemSaver").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.pathfinder.itemSaver = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Item Saver", CONFIG.client.extra.pathfinder.itemSaver)
+                    .primaryColor();
+            })))
+            .then(literal("itemSaverThreshold").then(argument("threshold", integer()).executes(c -> {
+                CONFIG.client.extra.pathfinder.itemSaverThreshold = getInteger(c, "threshold");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Item Saver Threshold", CONFIG.client.extra.pathfinder.itemSaverThreshold)
+                    .primaryColor();
+            })))
+            .then(literal("preferSilkTouch").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.pathfinder.preferSilkTouch = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Prefer Silk Touch", CONFIG.client.extra.pathfinder.preferSilkTouch)
+                    .primaryColor();
+            })));
     }
 
     private Map<String, String> getSettingsMap() {
@@ -977,6 +1012,10 @@ public class PathfinderCommand extends Command {
         settingsMap.put("interactWithProcessMaxPathTries", String.valueOf(CONFIG.client.extra.pathfinder.interactWithProcessMaxPathTries));
         settingsMap.put("avoidUpdatingFallingBlocks", String.valueOf(CONFIG.client.extra.pathfinder.avoidUpdatingFallingBlocks));
         settingsMap.put("pauseMiningForFallingBlocks", String.valueOf(CONFIG.client.extra.pathfinder.pauseMiningForFallingBlocks));
+        settingsMap.put("autoTool", toggleStr(CONFIG.client.extra.pathfinder.autoTool));
+        settingsMap.put("assumeExternalAutoTool", toggleStr(CONFIG.client.extra.pathfinder.assumeExternalAutoTool));
+        settingsMap.put("itemSaver", toggleStr(CONFIG.client.extra.pathfinder.itemSaver));
+        settingsMap.put("itemSaverThreshold", String.valueOf(CONFIG.client.extra.pathfinder.itemSaverThreshold));
         return settingsMap;
     }
 

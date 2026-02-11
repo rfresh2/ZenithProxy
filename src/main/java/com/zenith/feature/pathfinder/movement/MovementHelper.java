@@ -590,22 +590,21 @@ public final class MovementHelper {
      * @param b   the blockstate to mine
      */
     public static void switchToBestToolFor(Block b) {
-        switchToBestToolFor(b, new ToolSet(), false); // BaritoneAPI.getSettings().preferSilkTouch.value);
+        switchToBestToolFor(b, new ToolSet(), CONFIG.client.extra.pathfinder.preferSilkTouch);
     }
 
     /**
      * AutoTool for a specific block with precomputed ToolSet data
      */
     public static void switchToBestToolFor(Block b, ToolSet ts, boolean preferSilkTouch) {
-//        if (Baritone.settings().autoTool.value && !Baritone.settings().assumeExternalAutoTool.value) {
-//            ctx.player().getInventory().selected = ts.getBestSlot(b.getBlock(), preferSilkTouch);
-//        }
-        int hotbarSlotId = ts.getBestSlot(b, preferSilkTouch);
-        INVENTORY.submit(InventoryActionRequest.builder()
-            .owner(BARITONE)
-            .actions(new SetHeldItem(hotbarSlotId))
-            .priority(Baritone.getPriority())
-            .build());
+        if (CONFIG.client.extra.pathfinder.autoTool && !CONFIG.client.extra.pathfinder.assumeExternalAutoTool) {
+            int hotbarSlotId = ts.getBestSlot(b, preferSilkTouch);
+            INVENTORY.submit(InventoryActionRequest.builder()
+                .owner(BARITONE)
+                .actions(new SetHeldItem(hotbarSlotId))
+                .priority(Baritone.getPriority())
+                .build());
+        }
     }
 
     public static void moveTowards(MovementState state, BlockPos pos) {
