@@ -6,3013 +6,4523 @@ import com.zenith.mc.Registry;
 public final class ItemRegistry {
     public static final Registry<ItemData> REGISTRY = new Registry<ItemData>(1505);
 
-    public static final ItemData AIR = REGISTRY.register(new ItemData(0, "air", 64));
+    public static final ItemData AIR;
 
-    public static final ItemData STONE = REGISTRY.register(new ItemData(1, "stone", 64));
+    public static final ItemData STONE;
 
-    public static final ItemData GRANITE = REGISTRY.register(new ItemData(2, "granite", 64));
+    public static final ItemData GRANITE;
 
-    public static final ItemData POLISHED_GRANITE = REGISTRY.register(new ItemData(3, "polished_granite", 64));
+    public static final ItemData POLISHED_GRANITE;
 
-    public static final ItemData DIORITE = REGISTRY.register(new ItemData(4, "diorite", 64));
+    public static final ItemData DIORITE;
 
-    public static final ItemData POLISHED_DIORITE = REGISTRY.register(new ItemData(5, "polished_diorite", 64));
+    public static final ItemData POLISHED_DIORITE;
 
-    public static final ItemData ANDESITE = REGISTRY.register(new ItemData(6, "andesite", 64));
+    public static final ItemData ANDESITE;
 
-    public static final ItemData POLISHED_ANDESITE = REGISTRY.register(new ItemData(7, "polished_andesite", 64));
+    public static final ItemData POLISHED_ANDESITE;
 
-    public static final ItemData DEEPSLATE = REGISTRY.register(new ItemData(8, "deepslate", 64));
+    public static final ItemData DEEPSLATE;
 
-    public static final ItemData COBBLED_DEEPSLATE = REGISTRY.register(new ItemData(9, "cobbled_deepslate", 64));
+    public static final ItemData COBBLED_DEEPSLATE;
 
-    public static final ItemData POLISHED_DEEPSLATE = REGISTRY.register(new ItemData(10, "polished_deepslate", 64));
+    public static final ItemData POLISHED_DEEPSLATE;
 
-    public static final ItemData CALCITE = REGISTRY.register(new ItemData(11, "calcite", 64));
+    public static final ItemData CALCITE;
 
-    public static final ItemData TUFF = REGISTRY.register(new ItemData(12, "tuff", 64));
+    public static final ItemData TUFF;
 
-    public static final ItemData TUFF_SLAB = REGISTRY.register(new ItemData(13, "tuff_slab", 64));
+    public static final ItemData TUFF_SLAB;
 
-    public static final ItemData TUFF_STAIRS = REGISTRY.register(new ItemData(14, "tuff_stairs", 64));
+    public static final ItemData TUFF_STAIRS;
 
-    public static final ItemData TUFF_WALL = REGISTRY.register(new ItemData(15, "tuff_wall", 64));
+    public static final ItemData TUFF_WALL;
 
-    public static final ItemData CHISELED_TUFF = REGISTRY.register(new ItemData(16, "chiseled_tuff", 64));
+    public static final ItemData CHISELED_TUFF;
 
-    public static final ItemData POLISHED_TUFF = REGISTRY.register(new ItemData(17, "polished_tuff", 64));
+    public static final ItemData POLISHED_TUFF;
 
-    public static final ItemData POLISHED_TUFF_SLAB = REGISTRY.register(new ItemData(18, "polished_tuff_slab", 64));
+    public static final ItemData POLISHED_TUFF_SLAB;
 
-    public static final ItemData POLISHED_TUFF_STAIRS = REGISTRY.register(new ItemData(19, "polished_tuff_stairs", 64));
+    public static final ItemData POLISHED_TUFF_STAIRS;
 
-    public static final ItemData POLISHED_TUFF_WALL = REGISTRY.register(new ItemData(20, "polished_tuff_wall", 64));
+    public static final ItemData POLISHED_TUFF_WALL;
 
-    public static final ItemData TUFF_BRICKS = REGISTRY.register(new ItemData(21, "tuff_bricks", 64));
+    public static final ItemData TUFF_BRICKS;
 
-    public static final ItemData TUFF_BRICK_SLAB = REGISTRY.register(new ItemData(22, "tuff_brick_slab", 64));
+    public static final ItemData TUFF_BRICK_SLAB;
 
-    public static final ItemData TUFF_BRICK_STAIRS = REGISTRY.register(new ItemData(23, "tuff_brick_stairs", 64));
+    public static final ItemData TUFF_BRICK_STAIRS;
 
-    public static final ItemData TUFF_BRICK_WALL = REGISTRY.register(new ItemData(24, "tuff_brick_wall", 64));
+    public static final ItemData TUFF_BRICK_WALL;
 
-    public static final ItemData CHISELED_TUFF_BRICKS = REGISTRY.register(new ItemData(25, "chiseled_tuff_bricks", 64));
+    public static final ItemData CHISELED_TUFF_BRICKS;
 
-    public static final ItemData DRIPSTONE_BLOCK = REGISTRY.register(new ItemData(26, "dripstone_block", 64));
+    public static final ItemData DRIPSTONE_BLOCK;
 
-    public static final ItemData GRASS_BLOCK = REGISTRY.register(new ItemData(27, "grass_block", 64));
+    public static final ItemData GRASS_BLOCK;
 
-    public static final ItemData DIRT = REGISTRY.register(new ItemData(28, "dirt", 64));
+    public static final ItemData DIRT;
 
-    public static final ItemData COARSE_DIRT = REGISTRY.register(new ItemData(29, "coarse_dirt", 64));
+    public static final ItemData COARSE_DIRT;
 
-    public static final ItemData PODZOL = REGISTRY.register(new ItemData(30, "podzol", 64));
+    public static final ItemData PODZOL;
 
-    public static final ItemData ROOTED_DIRT = REGISTRY.register(new ItemData(31, "rooted_dirt", 64));
+    public static final ItemData ROOTED_DIRT;
 
-    public static final ItemData MUD = REGISTRY.register(new ItemData(32, "mud", 64));
+    public static final ItemData MUD;
 
-    public static final ItemData CRIMSON_NYLIUM = REGISTRY.register(new ItemData(33, "crimson_nylium", 64));
+    public static final ItemData CRIMSON_NYLIUM;
 
-    public static final ItemData WARPED_NYLIUM = REGISTRY.register(new ItemData(34, "warped_nylium", 64));
+    public static final ItemData WARPED_NYLIUM;
 
-    public static final ItemData COBBLESTONE = REGISTRY.register(new ItemData(35, "cobblestone", 64));
+    public static final ItemData COBBLESTONE;
 
-    public static final ItemData OAK_PLANKS = REGISTRY.register(new ItemData(36, "oak_planks", 64));
+    public static final ItemData OAK_PLANKS;
 
-    public static final ItemData SPRUCE_PLANKS = REGISTRY.register(new ItemData(37, "spruce_planks", 64));
+    public static final ItemData SPRUCE_PLANKS;
 
-    public static final ItemData BIRCH_PLANKS = REGISTRY.register(new ItemData(38, "birch_planks", 64));
+    public static final ItemData BIRCH_PLANKS;
 
-    public static final ItemData JUNGLE_PLANKS = REGISTRY.register(new ItemData(39, "jungle_planks", 64));
+    public static final ItemData JUNGLE_PLANKS;
 
-    public static final ItemData ACACIA_PLANKS = REGISTRY.register(new ItemData(40, "acacia_planks", 64));
+    public static final ItemData ACACIA_PLANKS;
 
-    public static final ItemData CHERRY_PLANKS = REGISTRY.register(new ItemData(41, "cherry_planks", 64));
+    public static final ItemData CHERRY_PLANKS;
 
-    public static final ItemData DARK_OAK_PLANKS = REGISTRY.register(new ItemData(42, "dark_oak_planks", 64));
+    public static final ItemData DARK_OAK_PLANKS;
 
-    public static final ItemData PALE_OAK_PLANKS = REGISTRY.register(new ItemData(43, "pale_oak_planks", 64));
+    public static final ItemData PALE_OAK_PLANKS;
 
-    public static final ItemData MANGROVE_PLANKS = REGISTRY.register(new ItemData(44, "mangrove_planks", 64));
+    public static final ItemData MANGROVE_PLANKS;
 
-    public static final ItemData BAMBOO_PLANKS = REGISTRY.register(new ItemData(45, "bamboo_planks", 64));
+    public static final ItemData BAMBOO_PLANKS;
 
-    public static final ItemData CRIMSON_PLANKS = REGISTRY.register(new ItemData(46, "crimson_planks", 64));
+    public static final ItemData CRIMSON_PLANKS;
 
-    public static final ItemData WARPED_PLANKS = REGISTRY.register(new ItemData(47, "warped_planks", 64));
+    public static final ItemData WARPED_PLANKS;
 
-    public static final ItemData BAMBOO_MOSAIC = REGISTRY.register(new ItemData(48, "bamboo_mosaic", 64));
+    public static final ItemData BAMBOO_MOSAIC;
 
-    public static final ItemData OAK_SAPLING = REGISTRY.register(new ItemData(49, "oak_sapling", 64));
+    public static final ItemData OAK_SAPLING;
 
-    public static final ItemData SPRUCE_SAPLING = REGISTRY.register(new ItemData(50, "spruce_sapling", 64));
+    public static final ItemData SPRUCE_SAPLING;
 
-    public static final ItemData BIRCH_SAPLING = REGISTRY.register(new ItemData(51, "birch_sapling", 64));
+    public static final ItemData BIRCH_SAPLING;
 
-    public static final ItemData JUNGLE_SAPLING = REGISTRY.register(new ItemData(52, "jungle_sapling", 64));
+    public static final ItemData JUNGLE_SAPLING;
 
-    public static final ItemData ACACIA_SAPLING = REGISTRY.register(new ItemData(53, "acacia_sapling", 64));
+    public static final ItemData ACACIA_SAPLING;
 
-    public static final ItemData CHERRY_SAPLING = REGISTRY.register(new ItemData(54, "cherry_sapling", 64));
+    public static final ItemData CHERRY_SAPLING;
 
-    public static final ItemData DARK_OAK_SAPLING = REGISTRY.register(new ItemData(55, "dark_oak_sapling", 64));
+    public static final ItemData DARK_OAK_SAPLING;
 
-    public static final ItemData PALE_OAK_SAPLING = REGISTRY.register(new ItemData(56, "pale_oak_sapling", 64));
+    public static final ItemData PALE_OAK_SAPLING;
 
-    public static final ItemData MANGROVE_PROPAGULE = REGISTRY.register(new ItemData(57, "mangrove_propagule", 64));
+    public static final ItemData MANGROVE_PROPAGULE;
 
-    public static final ItemData BEDROCK = REGISTRY.register(new ItemData(58, "bedrock", 64));
+    public static final ItemData BEDROCK;
 
-    public static final ItemData SAND = REGISTRY.register(new ItemData(59, "sand", 64));
+    public static final ItemData SAND;
 
-    public static final ItemData SUSPICIOUS_SAND = REGISTRY.register(new ItemData(60, "suspicious_sand", 64));
+    public static final ItemData SUSPICIOUS_SAND;
 
-    public static final ItemData SUSPICIOUS_GRAVEL = REGISTRY.register(new ItemData(61, "suspicious_gravel", 64));
+    public static final ItemData SUSPICIOUS_GRAVEL;
 
-    public static final ItemData RED_SAND = REGISTRY.register(new ItemData(62, "red_sand", 64));
+    public static final ItemData RED_SAND;
 
-    public static final ItemData GRAVEL = REGISTRY.register(new ItemData(63, "gravel", 64));
+    public static final ItemData GRAVEL;
 
-    public static final ItemData COAL_ORE = REGISTRY.register(new ItemData(64, "coal_ore", 64));
+    public static final ItemData COAL_ORE;
 
-    public static final ItemData DEEPSLATE_COAL_ORE = REGISTRY.register(new ItemData(65, "deepslate_coal_ore", 64));
+    public static final ItemData DEEPSLATE_COAL_ORE;
 
-    public static final ItemData IRON_ORE = REGISTRY.register(new ItemData(66, "iron_ore", 64));
+    public static final ItemData IRON_ORE;
 
-    public static final ItemData DEEPSLATE_IRON_ORE = REGISTRY.register(new ItemData(67, "deepslate_iron_ore", 64));
+    public static final ItemData DEEPSLATE_IRON_ORE;
 
-    public static final ItemData COPPER_ORE = REGISTRY.register(new ItemData(68, "copper_ore", 64));
+    public static final ItemData COPPER_ORE;
 
-    public static final ItemData DEEPSLATE_COPPER_ORE = REGISTRY.register(new ItemData(69, "deepslate_copper_ore", 64));
+    public static final ItemData DEEPSLATE_COPPER_ORE;
 
-    public static final ItemData GOLD_ORE = REGISTRY.register(new ItemData(70, "gold_ore", 64));
+    public static final ItemData GOLD_ORE;
 
-    public static final ItemData DEEPSLATE_GOLD_ORE = REGISTRY.register(new ItemData(71, "deepslate_gold_ore", 64));
+    public static final ItemData DEEPSLATE_GOLD_ORE;
 
-    public static final ItemData REDSTONE_ORE = REGISTRY.register(new ItemData(72, "redstone_ore", 64));
+    public static final ItemData REDSTONE_ORE;
 
-    public static final ItemData DEEPSLATE_REDSTONE_ORE = REGISTRY.register(new ItemData(73, "deepslate_redstone_ore", 64));
+    public static final ItemData DEEPSLATE_REDSTONE_ORE;
 
-    public static final ItemData EMERALD_ORE = REGISTRY.register(new ItemData(74, "emerald_ore", 64));
+    public static final ItemData EMERALD_ORE;
 
-    public static final ItemData DEEPSLATE_EMERALD_ORE = REGISTRY.register(new ItemData(75, "deepslate_emerald_ore", 64));
+    public static final ItemData DEEPSLATE_EMERALD_ORE;
 
-    public static final ItemData LAPIS_ORE = REGISTRY.register(new ItemData(76, "lapis_ore", 64));
+    public static final ItemData LAPIS_ORE;
 
-    public static final ItemData DEEPSLATE_LAPIS_ORE = REGISTRY.register(new ItemData(77, "deepslate_lapis_ore", 64));
+    public static final ItemData DEEPSLATE_LAPIS_ORE;
 
-    public static final ItemData DIAMOND_ORE = REGISTRY.register(new ItemData(78, "diamond_ore", 64));
+    public static final ItemData DIAMOND_ORE;
 
-    public static final ItemData DEEPSLATE_DIAMOND_ORE = REGISTRY.register(new ItemData(79, "deepslate_diamond_ore", 64));
+    public static final ItemData DEEPSLATE_DIAMOND_ORE;
 
-    public static final ItemData NETHER_GOLD_ORE = REGISTRY.register(new ItemData(80, "nether_gold_ore", 64));
+    public static final ItemData NETHER_GOLD_ORE;
 
-    public static final ItemData NETHER_QUARTZ_ORE = REGISTRY.register(new ItemData(81, "nether_quartz_ore", 64));
+    public static final ItemData NETHER_QUARTZ_ORE;
 
-    public static final ItemData ANCIENT_DEBRIS = REGISTRY.register(new ItemData(82, "ancient_debris", 64));
+    public static final ItemData ANCIENT_DEBRIS;
 
-    public static final ItemData COAL_BLOCK = REGISTRY.register(new ItemData(83, "coal_block", 64));
+    public static final ItemData COAL_BLOCK;
 
-    public static final ItemData RAW_IRON_BLOCK = REGISTRY.register(new ItemData(84, "raw_iron_block", 64));
+    public static final ItemData RAW_IRON_BLOCK;
 
-    public static final ItemData RAW_COPPER_BLOCK = REGISTRY.register(new ItemData(85, "raw_copper_block", 64));
+    public static final ItemData RAW_COPPER_BLOCK;
 
-    public static final ItemData RAW_GOLD_BLOCK = REGISTRY.register(new ItemData(86, "raw_gold_block", 64));
+    public static final ItemData RAW_GOLD_BLOCK;
 
-    public static final ItemData HEAVY_CORE = REGISTRY.register(new ItemData(87, "heavy_core", 64));
+    public static final ItemData HEAVY_CORE;
 
-    public static final ItemData AMETHYST_BLOCK = REGISTRY.register(new ItemData(88, "amethyst_block", 64));
+    public static final ItemData AMETHYST_BLOCK;
 
-    public static final ItemData BUDDING_AMETHYST = REGISTRY.register(new ItemData(89, "budding_amethyst", 64));
+    public static final ItemData BUDDING_AMETHYST;
 
-    public static final ItemData IRON_BLOCK = REGISTRY.register(new ItemData(90, "iron_block", 64));
+    public static final ItemData IRON_BLOCK;
 
-    public static final ItemData COPPER_BLOCK = REGISTRY.register(new ItemData(91, "copper_block", 64));
+    public static final ItemData COPPER_BLOCK;
 
-    public static final ItemData GOLD_BLOCK = REGISTRY.register(new ItemData(92, "gold_block", 64));
+    public static final ItemData GOLD_BLOCK;
 
-    public static final ItemData DIAMOND_BLOCK = REGISTRY.register(new ItemData(93, "diamond_block", 64));
+    public static final ItemData DIAMOND_BLOCK;
 
-    public static final ItemData NETHERITE_BLOCK = REGISTRY.register(new ItemData(94, "netherite_block", 64));
+    public static final ItemData NETHERITE_BLOCK;
 
-    public static final ItemData EXPOSED_COPPER = REGISTRY.register(new ItemData(95, "exposed_copper", 64));
+    public static final ItemData EXPOSED_COPPER;
 
-    public static final ItemData WEATHERED_COPPER = REGISTRY.register(new ItemData(96, "weathered_copper", 64));
+    public static final ItemData WEATHERED_COPPER;
 
-    public static final ItemData OXIDIZED_COPPER = REGISTRY.register(new ItemData(97, "oxidized_copper", 64));
+    public static final ItemData OXIDIZED_COPPER;
 
-    public static final ItemData CHISELED_COPPER = REGISTRY.register(new ItemData(98, "chiseled_copper", 64));
+    public static final ItemData CHISELED_COPPER;
 
-    public static final ItemData EXPOSED_CHISELED_COPPER = REGISTRY.register(new ItemData(99, "exposed_chiseled_copper", 64));
+    public static final ItemData EXPOSED_CHISELED_COPPER;
 
-    public static final ItemData WEATHERED_CHISELED_COPPER = REGISTRY.register(new ItemData(100, "weathered_chiseled_copper", 64));
+    public static final ItemData WEATHERED_CHISELED_COPPER;
 
-    public static final ItemData OXIDIZED_CHISELED_COPPER = REGISTRY.register(new ItemData(101, "oxidized_chiseled_copper", 64));
+    public static final ItemData OXIDIZED_CHISELED_COPPER;
 
-    public static final ItemData CUT_COPPER = REGISTRY.register(new ItemData(102, "cut_copper", 64));
+    public static final ItemData CUT_COPPER;
 
-    public static final ItemData EXPOSED_CUT_COPPER = REGISTRY.register(new ItemData(103, "exposed_cut_copper", 64));
+    public static final ItemData EXPOSED_CUT_COPPER;
 
-    public static final ItemData WEATHERED_CUT_COPPER = REGISTRY.register(new ItemData(104, "weathered_cut_copper", 64));
+    public static final ItemData WEATHERED_CUT_COPPER;
 
-    public static final ItemData OXIDIZED_CUT_COPPER = REGISTRY.register(new ItemData(105, "oxidized_cut_copper", 64));
+    public static final ItemData OXIDIZED_CUT_COPPER;
 
-    public static final ItemData CUT_COPPER_STAIRS = REGISTRY.register(new ItemData(106, "cut_copper_stairs", 64));
+    public static final ItemData CUT_COPPER_STAIRS;
 
-    public static final ItemData EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(new ItemData(107, "exposed_cut_copper_stairs", 64));
+    public static final ItemData EXPOSED_CUT_COPPER_STAIRS;
 
-    public static final ItemData WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(new ItemData(108, "weathered_cut_copper_stairs", 64));
+    public static final ItemData WEATHERED_CUT_COPPER_STAIRS;
 
-    public static final ItemData OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(new ItemData(109, "oxidized_cut_copper_stairs", 64));
+    public static final ItemData OXIDIZED_CUT_COPPER_STAIRS;
 
-    public static final ItemData CUT_COPPER_SLAB = REGISTRY.register(new ItemData(110, "cut_copper_slab", 64));
+    public static final ItemData CUT_COPPER_SLAB;
 
-    public static final ItemData EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(new ItemData(111, "exposed_cut_copper_slab", 64));
+    public static final ItemData EXPOSED_CUT_COPPER_SLAB;
 
-    public static final ItemData WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(new ItemData(112, "weathered_cut_copper_slab", 64));
+    public static final ItemData WEATHERED_CUT_COPPER_SLAB;
 
-    public static final ItemData OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(new ItemData(113, "oxidized_cut_copper_slab", 64));
+    public static final ItemData OXIDIZED_CUT_COPPER_SLAB;
 
-    public static final ItemData WAXED_COPPER_BLOCK = REGISTRY.register(new ItemData(114, "waxed_copper_block", 64));
+    public static final ItemData WAXED_COPPER_BLOCK;
 
-    public static final ItemData WAXED_EXPOSED_COPPER = REGISTRY.register(new ItemData(115, "waxed_exposed_copper", 64));
+    public static final ItemData WAXED_EXPOSED_COPPER;
 
-    public static final ItemData WAXED_WEATHERED_COPPER = REGISTRY.register(new ItemData(116, "waxed_weathered_copper", 64));
+    public static final ItemData WAXED_WEATHERED_COPPER;
 
-    public static final ItemData WAXED_OXIDIZED_COPPER = REGISTRY.register(new ItemData(117, "waxed_oxidized_copper", 64));
+    public static final ItemData WAXED_OXIDIZED_COPPER;
 
-    public static final ItemData WAXED_CHISELED_COPPER = REGISTRY.register(new ItemData(118, "waxed_chiseled_copper", 64));
+    public static final ItemData WAXED_CHISELED_COPPER;
 
-    public static final ItemData WAXED_EXPOSED_CHISELED_COPPER = REGISTRY.register(new ItemData(119, "waxed_exposed_chiseled_copper", 64));
+    public static final ItemData WAXED_EXPOSED_CHISELED_COPPER;
 
-    public static final ItemData WAXED_WEATHERED_CHISELED_COPPER = REGISTRY.register(new ItemData(120, "waxed_weathered_chiseled_copper", 64));
+    public static final ItemData WAXED_WEATHERED_CHISELED_COPPER;
 
-    public static final ItemData WAXED_OXIDIZED_CHISELED_COPPER = REGISTRY.register(new ItemData(121, "waxed_oxidized_chiseled_copper", 64));
+    public static final ItemData WAXED_OXIDIZED_CHISELED_COPPER;
 
-    public static final ItemData WAXED_CUT_COPPER = REGISTRY.register(new ItemData(122, "waxed_cut_copper", 64));
+    public static final ItemData WAXED_CUT_COPPER;
 
-    public static final ItemData WAXED_EXPOSED_CUT_COPPER = REGISTRY.register(new ItemData(123, "waxed_exposed_cut_copper", 64));
+    public static final ItemData WAXED_EXPOSED_CUT_COPPER;
 
-    public static final ItemData WAXED_WEATHERED_CUT_COPPER = REGISTRY.register(new ItemData(124, "waxed_weathered_cut_copper", 64));
+    public static final ItemData WAXED_WEATHERED_CUT_COPPER;
 
-    public static final ItemData WAXED_OXIDIZED_CUT_COPPER = REGISTRY.register(new ItemData(125, "waxed_oxidized_cut_copper", 64));
+    public static final ItemData WAXED_OXIDIZED_CUT_COPPER;
 
-    public static final ItemData WAXED_CUT_COPPER_STAIRS = REGISTRY.register(new ItemData(126, "waxed_cut_copper_stairs", 64));
+    public static final ItemData WAXED_CUT_COPPER_STAIRS;
 
-    public static final ItemData WAXED_EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(new ItemData(127, "waxed_exposed_cut_copper_stairs", 64));
+    public static final ItemData WAXED_EXPOSED_CUT_COPPER_STAIRS;
 
-    public static final ItemData WAXED_WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(new ItemData(128, "waxed_weathered_cut_copper_stairs", 64));
+    public static final ItemData WAXED_WEATHERED_CUT_COPPER_STAIRS;
 
-    public static final ItemData WAXED_OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(new ItemData(129, "waxed_oxidized_cut_copper_stairs", 64));
+    public static final ItemData WAXED_OXIDIZED_CUT_COPPER_STAIRS;
 
-    public static final ItemData WAXED_CUT_COPPER_SLAB = REGISTRY.register(new ItemData(130, "waxed_cut_copper_slab", 64));
+    public static final ItemData WAXED_CUT_COPPER_SLAB;
 
-    public static final ItemData WAXED_EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(new ItemData(131, "waxed_exposed_cut_copper_slab", 64));
+    public static final ItemData WAXED_EXPOSED_CUT_COPPER_SLAB;
 
-    public static final ItemData WAXED_WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(new ItemData(132, "waxed_weathered_cut_copper_slab", 64));
+    public static final ItemData WAXED_WEATHERED_CUT_COPPER_SLAB;
 
-    public static final ItemData WAXED_OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(new ItemData(133, "waxed_oxidized_cut_copper_slab", 64));
+    public static final ItemData WAXED_OXIDIZED_CUT_COPPER_SLAB;
 
-    public static final ItemData OAK_LOG = REGISTRY.register(new ItemData(134, "oak_log", 64));
+    public static final ItemData OAK_LOG;
 
-    public static final ItemData SPRUCE_LOG = REGISTRY.register(new ItemData(135, "spruce_log", 64));
+    public static final ItemData SPRUCE_LOG;
 
-    public static final ItemData BIRCH_LOG = REGISTRY.register(new ItemData(136, "birch_log", 64));
+    public static final ItemData BIRCH_LOG;
 
-    public static final ItemData JUNGLE_LOG = REGISTRY.register(new ItemData(137, "jungle_log", 64));
+    public static final ItemData JUNGLE_LOG;
 
-    public static final ItemData ACACIA_LOG = REGISTRY.register(new ItemData(138, "acacia_log", 64));
+    public static final ItemData ACACIA_LOG;
 
-    public static final ItemData CHERRY_LOG = REGISTRY.register(new ItemData(139, "cherry_log", 64));
+    public static final ItemData CHERRY_LOG;
 
-    public static final ItemData PALE_OAK_LOG = REGISTRY.register(new ItemData(140, "pale_oak_log", 64));
+    public static final ItemData PALE_OAK_LOG;
 
-    public static final ItemData DARK_OAK_LOG = REGISTRY.register(new ItemData(141, "dark_oak_log", 64));
+    public static final ItemData DARK_OAK_LOG;
 
-    public static final ItemData MANGROVE_LOG = REGISTRY.register(new ItemData(142, "mangrove_log", 64));
+    public static final ItemData MANGROVE_LOG;
 
-    public static final ItemData MANGROVE_ROOTS = REGISTRY.register(new ItemData(143, "mangrove_roots", 64));
+    public static final ItemData MANGROVE_ROOTS;
 
-    public static final ItemData MUDDY_MANGROVE_ROOTS = REGISTRY.register(new ItemData(144, "muddy_mangrove_roots", 64));
+    public static final ItemData MUDDY_MANGROVE_ROOTS;
 
-    public static final ItemData CRIMSON_STEM = REGISTRY.register(new ItemData(145, "crimson_stem", 64));
+    public static final ItemData CRIMSON_STEM;
 
-    public static final ItemData WARPED_STEM = REGISTRY.register(new ItemData(146, "warped_stem", 64));
+    public static final ItemData WARPED_STEM;
 
-    public static final ItemData BAMBOO_BLOCK = REGISTRY.register(new ItemData(147, "bamboo_block", 64));
+    public static final ItemData BAMBOO_BLOCK;
 
-    public static final ItemData STRIPPED_OAK_LOG = REGISTRY.register(new ItemData(148, "stripped_oak_log", 64));
+    public static final ItemData STRIPPED_OAK_LOG;
 
-    public static final ItemData STRIPPED_SPRUCE_LOG = REGISTRY.register(new ItemData(149, "stripped_spruce_log", 64));
+    public static final ItemData STRIPPED_SPRUCE_LOG;
 
-    public static final ItemData STRIPPED_BIRCH_LOG = REGISTRY.register(new ItemData(150, "stripped_birch_log", 64));
+    public static final ItemData STRIPPED_BIRCH_LOG;
 
-    public static final ItemData STRIPPED_JUNGLE_LOG = REGISTRY.register(new ItemData(151, "stripped_jungle_log", 64));
+    public static final ItemData STRIPPED_JUNGLE_LOG;
 
-    public static final ItemData STRIPPED_ACACIA_LOG = REGISTRY.register(new ItemData(152, "stripped_acacia_log", 64));
+    public static final ItemData STRIPPED_ACACIA_LOG;
 
-    public static final ItemData STRIPPED_CHERRY_LOG = REGISTRY.register(new ItemData(153, "stripped_cherry_log", 64));
+    public static final ItemData STRIPPED_CHERRY_LOG;
 
-    public static final ItemData STRIPPED_DARK_OAK_LOG = REGISTRY.register(new ItemData(154, "stripped_dark_oak_log", 64));
+    public static final ItemData STRIPPED_DARK_OAK_LOG;
 
-    public static final ItemData STRIPPED_PALE_OAK_LOG = REGISTRY.register(new ItemData(155, "stripped_pale_oak_log", 64));
+    public static final ItemData STRIPPED_PALE_OAK_LOG;
 
-    public static final ItemData STRIPPED_MANGROVE_LOG = REGISTRY.register(new ItemData(156, "stripped_mangrove_log", 64));
+    public static final ItemData STRIPPED_MANGROVE_LOG;
 
-    public static final ItemData STRIPPED_CRIMSON_STEM = REGISTRY.register(new ItemData(157, "stripped_crimson_stem", 64));
+    public static final ItemData STRIPPED_CRIMSON_STEM;
 
-    public static final ItemData STRIPPED_WARPED_STEM = REGISTRY.register(new ItemData(158, "stripped_warped_stem", 64));
+    public static final ItemData STRIPPED_WARPED_STEM;
 
-    public static final ItemData STRIPPED_OAK_WOOD = REGISTRY.register(new ItemData(159, "stripped_oak_wood", 64));
+    public static final ItemData STRIPPED_OAK_WOOD;
 
-    public static final ItemData STRIPPED_SPRUCE_WOOD = REGISTRY.register(new ItemData(160, "stripped_spruce_wood", 64));
+    public static final ItemData STRIPPED_SPRUCE_WOOD;
 
-    public static final ItemData STRIPPED_BIRCH_WOOD = REGISTRY.register(new ItemData(161, "stripped_birch_wood", 64));
+    public static final ItemData STRIPPED_BIRCH_WOOD;
 
-    public static final ItemData STRIPPED_JUNGLE_WOOD = REGISTRY.register(new ItemData(162, "stripped_jungle_wood", 64));
+    public static final ItemData STRIPPED_JUNGLE_WOOD;
 
-    public static final ItemData STRIPPED_ACACIA_WOOD = REGISTRY.register(new ItemData(163, "stripped_acacia_wood", 64));
+    public static final ItemData STRIPPED_ACACIA_WOOD;
 
-    public static final ItemData STRIPPED_CHERRY_WOOD = REGISTRY.register(new ItemData(164, "stripped_cherry_wood", 64));
+    public static final ItemData STRIPPED_CHERRY_WOOD;
 
-    public static final ItemData STRIPPED_DARK_OAK_WOOD = REGISTRY.register(new ItemData(165, "stripped_dark_oak_wood", 64));
+    public static final ItemData STRIPPED_DARK_OAK_WOOD;
 
-    public static final ItemData STRIPPED_PALE_OAK_WOOD = REGISTRY.register(new ItemData(166, "stripped_pale_oak_wood", 64));
+    public static final ItemData STRIPPED_PALE_OAK_WOOD;
 
-    public static final ItemData STRIPPED_MANGROVE_WOOD = REGISTRY.register(new ItemData(167, "stripped_mangrove_wood", 64));
+    public static final ItemData STRIPPED_MANGROVE_WOOD;
 
-    public static final ItemData STRIPPED_CRIMSON_HYPHAE = REGISTRY.register(new ItemData(168, "stripped_crimson_hyphae", 64));
+    public static final ItemData STRIPPED_CRIMSON_HYPHAE;
 
-    public static final ItemData STRIPPED_WARPED_HYPHAE = REGISTRY.register(new ItemData(169, "stripped_warped_hyphae", 64));
+    public static final ItemData STRIPPED_WARPED_HYPHAE;
 
-    public static final ItemData STRIPPED_BAMBOO_BLOCK = REGISTRY.register(new ItemData(170, "stripped_bamboo_block", 64));
+    public static final ItemData STRIPPED_BAMBOO_BLOCK;
 
-    public static final ItemData OAK_WOOD = REGISTRY.register(new ItemData(171, "oak_wood", 64));
+    public static final ItemData OAK_WOOD;
 
-    public static final ItemData SPRUCE_WOOD = REGISTRY.register(new ItemData(172, "spruce_wood", 64));
+    public static final ItemData SPRUCE_WOOD;
 
-    public static final ItemData BIRCH_WOOD = REGISTRY.register(new ItemData(173, "birch_wood", 64));
+    public static final ItemData BIRCH_WOOD;
 
-    public static final ItemData JUNGLE_WOOD = REGISTRY.register(new ItemData(174, "jungle_wood", 64));
+    public static final ItemData JUNGLE_WOOD;
 
-    public static final ItemData ACACIA_WOOD = REGISTRY.register(new ItemData(175, "acacia_wood", 64));
+    public static final ItemData ACACIA_WOOD;
 
-    public static final ItemData CHERRY_WOOD = REGISTRY.register(new ItemData(176, "cherry_wood", 64));
+    public static final ItemData CHERRY_WOOD;
 
-    public static final ItemData PALE_OAK_WOOD = REGISTRY.register(new ItemData(177, "pale_oak_wood", 64));
+    public static final ItemData PALE_OAK_WOOD;
 
-    public static final ItemData DARK_OAK_WOOD = REGISTRY.register(new ItemData(178, "dark_oak_wood", 64));
+    public static final ItemData DARK_OAK_WOOD;
 
-    public static final ItemData MANGROVE_WOOD = REGISTRY.register(new ItemData(179, "mangrove_wood", 64));
+    public static final ItemData MANGROVE_WOOD;
 
-    public static final ItemData CRIMSON_HYPHAE = REGISTRY.register(new ItemData(180, "crimson_hyphae", 64));
+    public static final ItemData CRIMSON_HYPHAE;
 
-    public static final ItemData WARPED_HYPHAE = REGISTRY.register(new ItemData(181, "warped_hyphae", 64));
+    public static final ItemData WARPED_HYPHAE;
 
-    public static final ItemData OAK_LEAVES = REGISTRY.register(new ItemData(182, "oak_leaves", 64));
+    public static final ItemData OAK_LEAVES;
 
-    public static final ItemData SPRUCE_LEAVES = REGISTRY.register(new ItemData(183, "spruce_leaves", 64));
+    public static final ItemData SPRUCE_LEAVES;
 
-    public static final ItemData BIRCH_LEAVES = REGISTRY.register(new ItemData(184, "birch_leaves", 64));
+    public static final ItemData BIRCH_LEAVES;
 
-    public static final ItemData JUNGLE_LEAVES = REGISTRY.register(new ItemData(185, "jungle_leaves", 64));
+    public static final ItemData JUNGLE_LEAVES;
 
-    public static final ItemData ACACIA_LEAVES = REGISTRY.register(new ItemData(186, "acacia_leaves", 64));
+    public static final ItemData ACACIA_LEAVES;
 
-    public static final ItemData CHERRY_LEAVES = REGISTRY.register(new ItemData(187, "cherry_leaves", 64));
+    public static final ItemData CHERRY_LEAVES;
 
-    public static final ItemData DARK_OAK_LEAVES = REGISTRY.register(new ItemData(188, "dark_oak_leaves", 64));
+    public static final ItemData DARK_OAK_LEAVES;
 
-    public static final ItemData PALE_OAK_LEAVES = REGISTRY.register(new ItemData(189, "pale_oak_leaves", 64));
+    public static final ItemData PALE_OAK_LEAVES;
 
-    public static final ItemData MANGROVE_LEAVES = REGISTRY.register(new ItemData(190, "mangrove_leaves", 64));
+    public static final ItemData MANGROVE_LEAVES;
 
-    public static final ItemData AZALEA_LEAVES = REGISTRY.register(new ItemData(191, "azalea_leaves", 64));
+    public static final ItemData AZALEA_LEAVES;
 
-    public static final ItemData FLOWERING_AZALEA_LEAVES = REGISTRY.register(new ItemData(192, "flowering_azalea_leaves", 64));
+    public static final ItemData FLOWERING_AZALEA_LEAVES;
 
-    public static final ItemData SPONGE = REGISTRY.register(new ItemData(193, "sponge", 64));
+    public static final ItemData SPONGE;
 
-    public static final ItemData WET_SPONGE = REGISTRY.register(new ItemData(194, "wet_sponge", 64));
+    public static final ItemData WET_SPONGE;
 
-    public static final ItemData GLASS = REGISTRY.register(new ItemData(195, "glass", 64));
+    public static final ItemData GLASS;
 
-    public static final ItemData TINTED_GLASS = REGISTRY.register(new ItemData(196, "tinted_glass", 64));
+    public static final ItemData TINTED_GLASS;
 
-    public static final ItemData LAPIS_BLOCK = REGISTRY.register(new ItemData(197, "lapis_block", 64));
+    public static final ItemData LAPIS_BLOCK;
 
-    public static final ItemData SANDSTONE = REGISTRY.register(new ItemData(198, "sandstone", 64));
+    public static final ItemData SANDSTONE;
 
-    public static final ItemData CHISELED_SANDSTONE = REGISTRY.register(new ItemData(199, "chiseled_sandstone", 64));
+    public static final ItemData CHISELED_SANDSTONE;
 
-    public static final ItemData CUT_SANDSTONE = REGISTRY.register(new ItemData(200, "cut_sandstone", 64));
+    public static final ItemData CUT_SANDSTONE;
 
-    public static final ItemData COBWEB = REGISTRY.register(new ItemData(201, "cobweb", 64));
+    public static final ItemData COBWEB;
 
-    public static final ItemData SHORT_GRASS = REGISTRY.register(new ItemData(202, "short_grass", 64));
+    public static final ItemData SHORT_GRASS;
 
-    public static final ItemData FERN = REGISTRY.register(new ItemData(203, "fern", 64));
+    public static final ItemData FERN;
 
-    public static final ItemData BUSH = REGISTRY.register(new ItemData(204, "bush", 64));
+    public static final ItemData BUSH;
 
-    public static final ItemData AZALEA = REGISTRY.register(new ItemData(205, "azalea", 64));
+    public static final ItemData AZALEA;
 
-    public static final ItemData FLOWERING_AZALEA = REGISTRY.register(new ItemData(206, "flowering_azalea", 64));
+    public static final ItemData FLOWERING_AZALEA;
 
-    public static final ItemData DEAD_BUSH = REGISTRY.register(new ItemData(207, "dead_bush", 64));
+    public static final ItemData DEAD_BUSH;
 
-    public static final ItemData FIREFLY_BUSH = REGISTRY.register(new ItemData(208, "firefly_bush", 64));
+    public static final ItemData FIREFLY_BUSH;
 
-    public static final ItemData SHORT_DRY_GRASS = REGISTRY.register(new ItemData(209, "short_dry_grass", 64));
+    public static final ItemData SHORT_DRY_GRASS;
 
-    public static final ItemData TALL_DRY_GRASS = REGISTRY.register(new ItemData(210, "tall_dry_grass", 64));
+    public static final ItemData TALL_DRY_GRASS;
 
-    public static final ItemData SEAGRASS = REGISTRY.register(new ItemData(211, "seagrass", 64));
+    public static final ItemData SEAGRASS;
 
-    public static final ItemData SEA_PICKLE = REGISTRY.register(new ItemData(212, "sea_pickle", 64));
+    public static final ItemData SEA_PICKLE;
 
-    public static final ItemData WHITE_WOOL = REGISTRY.register(new ItemData(213, "white_wool", 64));
+    public static final ItemData WHITE_WOOL;
 
-    public static final ItemData ORANGE_WOOL = REGISTRY.register(new ItemData(214, "orange_wool", 64));
+    public static final ItemData ORANGE_WOOL;
 
-    public static final ItemData MAGENTA_WOOL = REGISTRY.register(new ItemData(215, "magenta_wool", 64));
+    public static final ItemData MAGENTA_WOOL;
 
-    public static final ItemData LIGHT_BLUE_WOOL = REGISTRY.register(new ItemData(216, "light_blue_wool", 64));
+    public static final ItemData LIGHT_BLUE_WOOL;
 
-    public static final ItemData YELLOW_WOOL = REGISTRY.register(new ItemData(217, "yellow_wool", 64));
+    public static final ItemData YELLOW_WOOL;
 
-    public static final ItemData LIME_WOOL = REGISTRY.register(new ItemData(218, "lime_wool", 64));
+    public static final ItemData LIME_WOOL;
 
-    public static final ItemData PINK_WOOL = REGISTRY.register(new ItemData(219, "pink_wool", 64));
+    public static final ItemData PINK_WOOL;
 
-    public static final ItemData GRAY_WOOL = REGISTRY.register(new ItemData(220, "gray_wool", 64));
+    public static final ItemData GRAY_WOOL;
 
-    public static final ItemData LIGHT_GRAY_WOOL = REGISTRY.register(new ItemData(221, "light_gray_wool", 64));
+    public static final ItemData LIGHT_GRAY_WOOL;
 
-    public static final ItemData CYAN_WOOL = REGISTRY.register(new ItemData(222, "cyan_wool", 64));
+    public static final ItemData CYAN_WOOL;
 
-    public static final ItemData PURPLE_WOOL = REGISTRY.register(new ItemData(223, "purple_wool", 64));
+    public static final ItemData PURPLE_WOOL;
 
-    public static final ItemData BLUE_WOOL = REGISTRY.register(new ItemData(224, "blue_wool", 64));
+    public static final ItemData BLUE_WOOL;
 
-    public static final ItemData BROWN_WOOL = REGISTRY.register(new ItemData(225, "brown_wool", 64));
+    public static final ItemData BROWN_WOOL;
 
-    public static final ItemData GREEN_WOOL = REGISTRY.register(new ItemData(226, "green_wool", 64));
+    public static final ItemData GREEN_WOOL;
 
-    public static final ItemData RED_WOOL = REGISTRY.register(new ItemData(227, "red_wool", 64));
+    public static final ItemData RED_WOOL;
 
-    public static final ItemData BLACK_WOOL = REGISTRY.register(new ItemData(228, "black_wool", 64));
+    public static final ItemData BLACK_WOOL;
 
-    public static final ItemData DANDELION = REGISTRY.register(new ItemData(229, "dandelion", 64));
+    public static final ItemData DANDELION;
 
-    public static final ItemData OPEN_EYEBLOSSOM = REGISTRY.register(new ItemData(230, "open_eyeblossom", 64));
+    public static final ItemData OPEN_EYEBLOSSOM;
 
-    public static final ItemData CLOSED_EYEBLOSSOM = REGISTRY.register(new ItemData(231, "closed_eyeblossom", 64));
+    public static final ItemData CLOSED_EYEBLOSSOM;
 
-    public static final ItemData POPPY = REGISTRY.register(new ItemData(232, "poppy", 64));
+    public static final ItemData POPPY;
 
-    public static final ItemData BLUE_ORCHID = REGISTRY.register(new ItemData(233, "blue_orchid", 64));
+    public static final ItemData BLUE_ORCHID;
 
-    public static final ItemData ALLIUM = REGISTRY.register(new ItemData(234, "allium", 64));
+    public static final ItemData ALLIUM;
 
-    public static final ItemData AZURE_BLUET = REGISTRY.register(new ItemData(235, "azure_bluet", 64));
+    public static final ItemData AZURE_BLUET;
 
-    public static final ItemData RED_TULIP = REGISTRY.register(new ItemData(236, "red_tulip", 64));
+    public static final ItemData RED_TULIP;
 
-    public static final ItemData ORANGE_TULIP = REGISTRY.register(new ItemData(237, "orange_tulip", 64));
+    public static final ItemData ORANGE_TULIP;
 
-    public static final ItemData WHITE_TULIP = REGISTRY.register(new ItemData(238, "white_tulip", 64));
+    public static final ItemData WHITE_TULIP;
 
-    public static final ItemData PINK_TULIP = REGISTRY.register(new ItemData(239, "pink_tulip", 64));
+    public static final ItemData PINK_TULIP;
 
-    public static final ItemData OXEYE_DAISY = REGISTRY.register(new ItemData(240, "oxeye_daisy", 64));
+    public static final ItemData OXEYE_DAISY;
 
-    public static final ItemData CORNFLOWER = REGISTRY.register(new ItemData(241, "cornflower", 64));
+    public static final ItemData CORNFLOWER;
 
-    public static final ItemData LILY_OF_THE_VALLEY = REGISTRY.register(new ItemData(242, "lily_of_the_valley", 64));
+    public static final ItemData LILY_OF_THE_VALLEY;
 
-    public static final ItemData WITHER_ROSE = REGISTRY.register(new ItemData(243, "wither_rose", 64));
+    public static final ItemData WITHER_ROSE;
 
-    public static final ItemData TORCHFLOWER = REGISTRY.register(new ItemData(244, "torchflower", 64));
+    public static final ItemData TORCHFLOWER;
 
-    public static final ItemData PITCHER_PLANT = REGISTRY.register(new ItemData(245, "pitcher_plant", 64));
+    public static final ItemData PITCHER_PLANT;
 
-    public static final ItemData SPORE_BLOSSOM = REGISTRY.register(new ItemData(246, "spore_blossom", 64));
+    public static final ItemData SPORE_BLOSSOM;
 
-    public static final ItemData BROWN_MUSHROOM = REGISTRY.register(new ItemData(247, "brown_mushroom", 64));
+    public static final ItemData BROWN_MUSHROOM;
 
-    public static final ItemData RED_MUSHROOM = REGISTRY.register(new ItemData(248, "red_mushroom", 64));
+    public static final ItemData RED_MUSHROOM;
 
-    public static final ItemData CRIMSON_FUNGUS = REGISTRY.register(new ItemData(249, "crimson_fungus", 64));
+    public static final ItemData CRIMSON_FUNGUS;
 
-    public static final ItemData WARPED_FUNGUS = REGISTRY.register(new ItemData(250, "warped_fungus", 64));
+    public static final ItemData WARPED_FUNGUS;
 
-    public static final ItemData CRIMSON_ROOTS = REGISTRY.register(new ItemData(251, "crimson_roots", 64));
+    public static final ItemData CRIMSON_ROOTS;
 
-    public static final ItemData WARPED_ROOTS = REGISTRY.register(new ItemData(252, "warped_roots", 64));
+    public static final ItemData WARPED_ROOTS;
 
-    public static final ItemData NETHER_SPROUTS = REGISTRY.register(new ItemData(253, "nether_sprouts", 64));
+    public static final ItemData NETHER_SPROUTS;
 
-    public static final ItemData WEEPING_VINES = REGISTRY.register(new ItemData(254, "weeping_vines", 64));
+    public static final ItemData WEEPING_VINES;
 
-    public static final ItemData TWISTING_VINES = REGISTRY.register(new ItemData(255, "twisting_vines", 64));
+    public static final ItemData TWISTING_VINES;
 
-    public static final ItemData SUGAR_CANE = REGISTRY.register(new ItemData(256, "sugar_cane", 64));
+    public static final ItemData SUGAR_CANE;
 
-    public static final ItemData KELP = REGISTRY.register(new ItemData(257, "kelp", 64));
+    public static final ItemData KELP;
 
-    public static final ItemData PINK_PETALS = REGISTRY.register(new ItemData(258, "pink_petals", 64));
+    public static final ItemData PINK_PETALS;
 
-    public static final ItemData WILDFLOWERS = REGISTRY.register(new ItemData(259, "wildflowers", 64));
+    public static final ItemData WILDFLOWERS;
 
-    public static final ItemData LEAF_LITTER = REGISTRY.register(new ItemData(260, "leaf_litter", 64));
+    public static final ItemData LEAF_LITTER;
 
-    public static final ItemData MOSS_CARPET = REGISTRY.register(new ItemData(261, "moss_carpet", 64));
+    public static final ItemData MOSS_CARPET;
 
-    public static final ItemData MOSS_BLOCK = REGISTRY.register(new ItemData(262, "moss_block", 64));
+    public static final ItemData MOSS_BLOCK;
 
-    public static final ItemData PALE_MOSS_CARPET = REGISTRY.register(new ItemData(263, "pale_moss_carpet", 64));
+    public static final ItemData PALE_MOSS_CARPET;
 
-    public static final ItemData PALE_HANGING_MOSS = REGISTRY.register(new ItemData(264, "pale_hanging_moss", 64));
+    public static final ItemData PALE_HANGING_MOSS;
 
-    public static final ItemData PALE_MOSS_BLOCK = REGISTRY.register(new ItemData(265, "pale_moss_block", 64));
+    public static final ItemData PALE_MOSS_BLOCK;
 
-    public static final ItemData HANGING_ROOTS = REGISTRY.register(new ItemData(266, "hanging_roots", 64));
+    public static final ItemData HANGING_ROOTS;
 
-    public static final ItemData BIG_DRIPLEAF = REGISTRY.register(new ItemData(267, "big_dripleaf", 64));
+    public static final ItemData BIG_DRIPLEAF;
 
-    public static final ItemData SMALL_DRIPLEAF = REGISTRY.register(new ItemData(268, "small_dripleaf", 64));
+    public static final ItemData SMALL_DRIPLEAF;
 
-    public static final ItemData BAMBOO = REGISTRY.register(new ItemData(269, "bamboo", 64));
+    public static final ItemData BAMBOO;
 
-    public static final ItemData OAK_SLAB = REGISTRY.register(new ItemData(270, "oak_slab", 64));
+    public static final ItemData OAK_SLAB;
 
-    public static final ItemData SPRUCE_SLAB = REGISTRY.register(new ItemData(271, "spruce_slab", 64));
+    public static final ItemData SPRUCE_SLAB;
 
-    public static final ItemData BIRCH_SLAB = REGISTRY.register(new ItemData(272, "birch_slab", 64));
+    public static final ItemData BIRCH_SLAB;
 
-    public static final ItemData JUNGLE_SLAB = REGISTRY.register(new ItemData(273, "jungle_slab", 64));
+    public static final ItemData JUNGLE_SLAB;
 
-    public static final ItemData ACACIA_SLAB = REGISTRY.register(new ItemData(274, "acacia_slab", 64));
+    public static final ItemData ACACIA_SLAB;
 
-    public static final ItemData CHERRY_SLAB = REGISTRY.register(new ItemData(275, "cherry_slab", 64));
+    public static final ItemData CHERRY_SLAB;
 
-    public static final ItemData DARK_OAK_SLAB = REGISTRY.register(new ItemData(276, "dark_oak_slab", 64));
+    public static final ItemData DARK_OAK_SLAB;
 
-    public static final ItemData PALE_OAK_SLAB = REGISTRY.register(new ItemData(277, "pale_oak_slab", 64));
+    public static final ItemData PALE_OAK_SLAB;
 
-    public static final ItemData MANGROVE_SLAB = REGISTRY.register(new ItemData(278, "mangrove_slab", 64));
+    public static final ItemData MANGROVE_SLAB;
 
-    public static final ItemData BAMBOO_SLAB = REGISTRY.register(new ItemData(279, "bamboo_slab", 64));
+    public static final ItemData BAMBOO_SLAB;
 
-    public static final ItemData BAMBOO_MOSAIC_SLAB = REGISTRY.register(new ItemData(280, "bamboo_mosaic_slab", 64));
+    public static final ItemData BAMBOO_MOSAIC_SLAB;
 
-    public static final ItemData CRIMSON_SLAB = REGISTRY.register(new ItemData(281, "crimson_slab", 64));
+    public static final ItemData CRIMSON_SLAB;
 
-    public static final ItemData WARPED_SLAB = REGISTRY.register(new ItemData(282, "warped_slab", 64));
+    public static final ItemData WARPED_SLAB;
 
-    public static final ItemData STONE_SLAB = REGISTRY.register(new ItemData(283, "stone_slab", 64));
+    public static final ItemData STONE_SLAB;
 
-    public static final ItemData SMOOTH_STONE_SLAB = REGISTRY.register(new ItemData(284, "smooth_stone_slab", 64));
+    public static final ItemData SMOOTH_STONE_SLAB;
 
-    public static final ItemData SANDSTONE_SLAB = REGISTRY.register(new ItemData(285, "sandstone_slab", 64));
+    public static final ItemData SANDSTONE_SLAB;
 
-    public static final ItemData CUT_SANDSTONE_SLAB = REGISTRY.register(new ItemData(286, "cut_sandstone_slab", 64));
+    public static final ItemData CUT_SANDSTONE_SLAB;
 
-    public static final ItemData PETRIFIED_OAK_SLAB = REGISTRY.register(new ItemData(287, "petrified_oak_slab", 64));
+    public static final ItemData PETRIFIED_OAK_SLAB;
 
-    public static final ItemData COBBLESTONE_SLAB = REGISTRY.register(new ItemData(288, "cobblestone_slab", 64));
+    public static final ItemData COBBLESTONE_SLAB;
 
-    public static final ItemData BRICK_SLAB = REGISTRY.register(new ItemData(289, "brick_slab", 64));
+    public static final ItemData BRICK_SLAB;
 
-    public static final ItemData STONE_BRICK_SLAB = REGISTRY.register(new ItemData(290, "stone_brick_slab", 64));
+    public static final ItemData STONE_BRICK_SLAB;
 
-    public static final ItemData MUD_BRICK_SLAB = REGISTRY.register(new ItemData(291, "mud_brick_slab", 64));
+    public static final ItemData MUD_BRICK_SLAB;
 
-    public static final ItemData NETHER_BRICK_SLAB = REGISTRY.register(new ItemData(292, "nether_brick_slab", 64));
+    public static final ItemData NETHER_BRICK_SLAB;
 
-    public static final ItemData QUARTZ_SLAB = REGISTRY.register(new ItemData(293, "quartz_slab", 64));
+    public static final ItemData QUARTZ_SLAB;
 
-    public static final ItemData RED_SANDSTONE_SLAB = REGISTRY.register(new ItemData(294, "red_sandstone_slab", 64));
+    public static final ItemData RED_SANDSTONE_SLAB;
 
-    public static final ItemData CUT_RED_SANDSTONE_SLAB = REGISTRY.register(new ItemData(295, "cut_red_sandstone_slab", 64));
+    public static final ItemData CUT_RED_SANDSTONE_SLAB;
 
-    public static final ItemData PURPUR_SLAB = REGISTRY.register(new ItemData(296, "purpur_slab", 64));
+    public static final ItemData PURPUR_SLAB;
 
-    public static final ItemData PRISMARINE_SLAB = REGISTRY.register(new ItemData(297, "prismarine_slab", 64));
+    public static final ItemData PRISMARINE_SLAB;
 
-    public static final ItemData PRISMARINE_BRICK_SLAB = REGISTRY.register(new ItemData(298, "prismarine_brick_slab", 64));
+    public static final ItemData PRISMARINE_BRICK_SLAB;
 
-    public static final ItemData DARK_PRISMARINE_SLAB = REGISTRY.register(new ItemData(299, "dark_prismarine_slab", 64));
+    public static final ItemData DARK_PRISMARINE_SLAB;
 
-    public static final ItemData SMOOTH_QUARTZ = REGISTRY.register(new ItemData(300, "smooth_quartz", 64));
+    public static final ItemData SMOOTH_QUARTZ;
 
-    public static final ItemData SMOOTH_RED_SANDSTONE = REGISTRY.register(new ItemData(301, "smooth_red_sandstone", 64));
+    public static final ItemData SMOOTH_RED_SANDSTONE;
 
-    public static final ItemData SMOOTH_SANDSTONE = REGISTRY.register(new ItemData(302, "smooth_sandstone", 64));
+    public static final ItemData SMOOTH_SANDSTONE;
 
-    public static final ItemData SMOOTH_STONE = REGISTRY.register(new ItemData(303, "smooth_stone", 64));
+    public static final ItemData SMOOTH_STONE;
 
-    public static final ItemData BRICKS = REGISTRY.register(new ItemData(304, "bricks", 64));
+    public static final ItemData BRICKS;
 
-    public static final ItemData ACACIA_SHELF = REGISTRY.register(new ItemData(305, "acacia_shelf", 64));
+    public static final ItemData ACACIA_SHELF;
 
-    public static final ItemData BAMBOO_SHELF = REGISTRY.register(new ItemData(306, "bamboo_shelf", 64));
+    public static final ItemData BAMBOO_SHELF;
 
-    public static final ItemData BIRCH_SHELF = REGISTRY.register(new ItemData(307, "birch_shelf", 64));
+    public static final ItemData BIRCH_SHELF;
 
-    public static final ItemData CHERRY_SHELF = REGISTRY.register(new ItemData(308, "cherry_shelf", 64));
+    public static final ItemData CHERRY_SHELF;
 
-    public static final ItemData CRIMSON_SHELF = REGISTRY.register(new ItemData(309, "crimson_shelf", 64));
+    public static final ItemData CRIMSON_SHELF;
 
-    public static final ItemData DARK_OAK_SHELF = REGISTRY.register(new ItemData(310, "dark_oak_shelf", 64));
+    public static final ItemData DARK_OAK_SHELF;
 
-    public static final ItemData JUNGLE_SHELF = REGISTRY.register(new ItemData(311, "jungle_shelf", 64));
+    public static final ItemData JUNGLE_SHELF;
 
-    public static final ItemData MANGROVE_SHELF = REGISTRY.register(new ItemData(312, "mangrove_shelf", 64));
+    public static final ItemData MANGROVE_SHELF;
 
-    public static final ItemData OAK_SHELF = REGISTRY.register(new ItemData(313, "oak_shelf", 64));
+    public static final ItemData OAK_SHELF;
 
-    public static final ItemData PALE_OAK_SHELF = REGISTRY.register(new ItemData(314, "pale_oak_shelf", 64));
+    public static final ItemData PALE_OAK_SHELF;
 
-    public static final ItemData SPRUCE_SHELF = REGISTRY.register(new ItemData(315, "spruce_shelf", 64));
+    public static final ItemData SPRUCE_SHELF;
 
-    public static final ItemData WARPED_SHELF = REGISTRY.register(new ItemData(316, "warped_shelf", 64));
+    public static final ItemData WARPED_SHELF;
 
-    public static final ItemData BOOKSHELF = REGISTRY.register(new ItemData(317, "bookshelf", 64));
+    public static final ItemData BOOKSHELF;
 
-    public static final ItemData CHISELED_BOOKSHELF = REGISTRY.register(new ItemData(318, "chiseled_bookshelf", 64));
+    public static final ItemData CHISELED_BOOKSHELF;
 
-    public static final ItemData DECORATED_POT = REGISTRY.register(new ItemData(319, "decorated_pot", 64));
+    public static final ItemData DECORATED_POT;
 
-    public static final ItemData MOSSY_COBBLESTONE = REGISTRY.register(new ItemData(320, "mossy_cobblestone", 64));
+    public static final ItemData MOSSY_COBBLESTONE;
 
-    public static final ItemData OBSIDIAN = REGISTRY.register(new ItemData(321, "obsidian", 64));
+    public static final ItemData OBSIDIAN;
 
-    public static final ItemData TORCH = REGISTRY.register(new ItemData(322, "torch", 64));
+    public static final ItemData TORCH;
 
-    public static final ItemData END_ROD = REGISTRY.register(new ItemData(323, "end_rod", 64));
+    public static final ItemData END_ROD;
 
-    public static final ItemData CHORUS_PLANT = REGISTRY.register(new ItemData(324, "chorus_plant", 64));
+    public static final ItemData CHORUS_PLANT;
 
-    public static final ItemData CHORUS_FLOWER = REGISTRY.register(new ItemData(325, "chorus_flower", 64));
+    public static final ItemData CHORUS_FLOWER;
 
-    public static final ItemData PURPUR_BLOCK = REGISTRY.register(new ItemData(326, "purpur_block", 64));
+    public static final ItemData PURPUR_BLOCK;
 
-    public static final ItemData PURPUR_PILLAR = REGISTRY.register(new ItemData(327, "purpur_pillar", 64));
+    public static final ItemData PURPUR_PILLAR;
 
-    public static final ItemData PURPUR_STAIRS = REGISTRY.register(new ItemData(328, "purpur_stairs", 64));
+    public static final ItemData PURPUR_STAIRS;
 
-    public static final ItemData SPAWNER = REGISTRY.register(new ItemData(329, "spawner", 64));
+    public static final ItemData SPAWNER;
 
-    public static final ItemData CREAKING_HEART = REGISTRY.register(new ItemData(330, "creaking_heart", 64));
+    public static final ItemData CREAKING_HEART;
 
-    public static final ItemData CHEST = REGISTRY.register(new ItemData(331, "chest", 64));
+    public static final ItemData CHEST;
 
-    public static final ItemData CRAFTING_TABLE = REGISTRY.register(new ItemData(332, "crafting_table", 64));
+    public static final ItemData CRAFTING_TABLE;
 
-    public static final ItemData FARMLAND = REGISTRY.register(new ItemData(333, "farmland", 64));
+    public static final ItemData FARMLAND;
 
-    public static final ItemData FURNACE = REGISTRY.register(new ItemData(334, "furnace", 64));
+    public static final ItemData FURNACE;
 
-    public static final ItemData LADDER = REGISTRY.register(new ItemData(335, "ladder", 64));
+    public static final ItemData LADDER;
 
-    public static final ItemData COBBLESTONE_STAIRS = REGISTRY.register(new ItemData(336, "cobblestone_stairs", 64));
+    public static final ItemData COBBLESTONE_STAIRS;
 
-    public static final ItemData SNOW = REGISTRY.register(new ItemData(337, "snow", 64));
+    public static final ItemData SNOW;
 
-    public static final ItemData ICE = REGISTRY.register(new ItemData(338, "ice", 64));
+    public static final ItemData ICE;
 
-    public static final ItemData SNOW_BLOCK = REGISTRY.register(new ItemData(339, "snow_block", 64));
+    public static final ItemData SNOW_BLOCK;
 
-    public static final ItemData CACTUS = REGISTRY.register(new ItemData(340, "cactus", 64));
+    public static final ItemData CACTUS;
 
-    public static final ItemData CACTUS_FLOWER = REGISTRY.register(new ItemData(341, "cactus_flower", 64));
+    public static final ItemData CACTUS_FLOWER;
 
-    public static final ItemData CLAY = REGISTRY.register(new ItemData(342, "clay", 64));
+    public static final ItemData CLAY;
 
-    public static final ItemData JUKEBOX = REGISTRY.register(new ItemData(343, "jukebox", 64));
+    public static final ItemData JUKEBOX;
 
-    public static final ItemData OAK_FENCE = REGISTRY.register(new ItemData(344, "oak_fence", 64));
+    public static final ItemData OAK_FENCE;
 
-    public static final ItemData SPRUCE_FENCE = REGISTRY.register(new ItemData(345, "spruce_fence", 64));
+    public static final ItemData SPRUCE_FENCE;
 
-    public static final ItemData BIRCH_FENCE = REGISTRY.register(new ItemData(346, "birch_fence", 64));
+    public static final ItemData BIRCH_FENCE;
 
-    public static final ItemData JUNGLE_FENCE = REGISTRY.register(new ItemData(347, "jungle_fence", 64));
+    public static final ItemData JUNGLE_FENCE;
 
-    public static final ItemData ACACIA_FENCE = REGISTRY.register(new ItemData(348, "acacia_fence", 64));
+    public static final ItemData ACACIA_FENCE;
 
-    public static final ItemData CHERRY_FENCE = REGISTRY.register(new ItemData(349, "cherry_fence", 64));
+    public static final ItemData CHERRY_FENCE;
 
-    public static final ItemData DARK_OAK_FENCE = REGISTRY.register(new ItemData(350, "dark_oak_fence", 64));
+    public static final ItemData DARK_OAK_FENCE;
 
-    public static final ItemData PALE_OAK_FENCE = REGISTRY.register(new ItemData(351, "pale_oak_fence", 64));
+    public static final ItemData PALE_OAK_FENCE;
 
-    public static final ItemData MANGROVE_FENCE = REGISTRY.register(new ItemData(352, "mangrove_fence", 64));
+    public static final ItemData MANGROVE_FENCE;
 
-    public static final ItemData BAMBOO_FENCE = REGISTRY.register(new ItemData(353, "bamboo_fence", 64));
+    public static final ItemData BAMBOO_FENCE;
 
-    public static final ItemData CRIMSON_FENCE = REGISTRY.register(new ItemData(354, "crimson_fence", 64));
+    public static final ItemData CRIMSON_FENCE;
 
-    public static final ItemData WARPED_FENCE = REGISTRY.register(new ItemData(355, "warped_fence", 64));
+    public static final ItemData WARPED_FENCE;
 
-    public static final ItemData PUMPKIN = REGISTRY.register(new ItemData(356, "pumpkin", 64));
+    public static final ItemData PUMPKIN;
 
-    public static final ItemData CARVED_PUMPKIN = REGISTRY.register(new ItemData(357, "carved_pumpkin", 64));
+    public static final ItemData CARVED_PUMPKIN;
 
-    public static final ItemData JACK_O_LANTERN = REGISTRY.register(new ItemData(358, "jack_o_lantern", 64));
+    public static final ItemData JACK_O_LANTERN;
 
-    public static final ItemData NETHERRACK = REGISTRY.register(new ItemData(359, "netherrack", 64));
+    public static final ItemData NETHERRACK;
 
-    public static final ItemData SOUL_SAND = REGISTRY.register(new ItemData(360, "soul_sand", 64));
+    public static final ItemData SOUL_SAND;
 
-    public static final ItemData SOUL_SOIL = REGISTRY.register(new ItemData(361, "soul_soil", 64));
+    public static final ItemData SOUL_SOIL;
 
-    public static final ItemData BASALT = REGISTRY.register(new ItemData(362, "basalt", 64));
+    public static final ItemData BASALT;
 
-    public static final ItemData POLISHED_BASALT = REGISTRY.register(new ItemData(363, "polished_basalt", 64));
+    public static final ItemData POLISHED_BASALT;
 
-    public static final ItemData SMOOTH_BASALT = REGISTRY.register(new ItemData(364, "smooth_basalt", 64));
+    public static final ItemData SMOOTH_BASALT;
 
-    public static final ItemData SOUL_TORCH = REGISTRY.register(new ItemData(365, "soul_torch", 64));
+    public static final ItemData SOUL_TORCH;
 
-    public static final ItemData COPPER_TORCH = REGISTRY.register(new ItemData(366, "copper_torch", 64));
+    public static final ItemData COPPER_TORCH;
 
-    public static final ItemData GLOWSTONE = REGISTRY.register(new ItemData(367, "glowstone", 64));
+    public static final ItemData GLOWSTONE;
 
-    public static final ItemData INFESTED_STONE = REGISTRY.register(new ItemData(368, "infested_stone", 64));
+    public static final ItemData INFESTED_STONE;
 
-    public static final ItemData INFESTED_COBBLESTONE = REGISTRY.register(new ItemData(369, "infested_cobblestone", 64));
+    public static final ItemData INFESTED_COBBLESTONE;
 
-    public static final ItemData INFESTED_STONE_BRICKS = REGISTRY.register(new ItemData(370, "infested_stone_bricks", 64));
+    public static final ItemData INFESTED_STONE_BRICKS;
 
-    public static final ItemData INFESTED_MOSSY_STONE_BRICKS = REGISTRY.register(new ItemData(371, "infested_mossy_stone_bricks", 64));
+    public static final ItemData INFESTED_MOSSY_STONE_BRICKS;
 
-    public static final ItemData INFESTED_CRACKED_STONE_BRICKS = REGISTRY.register(new ItemData(372, "infested_cracked_stone_bricks", 64));
+    public static final ItemData INFESTED_CRACKED_STONE_BRICKS;
 
-    public static final ItemData INFESTED_CHISELED_STONE_BRICKS = REGISTRY.register(new ItemData(373, "infested_chiseled_stone_bricks", 64));
+    public static final ItemData INFESTED_CHISELED_STONE_BRICKS;
 
-    public static final ItemData INFESTED_DEEPSLATE = REGISTRY.register(new ItemData(374, "infested_deepslate", 64));
+    public static final ItemData INFESTED_DEEPSLATE;
 
-    public static final ItemData STONE_BRICKS = REGISTRY.register(new ItemData(375, "stone_bricks", 64));
+    public static final ItemData STONE_BRICKS;
 
-    public static final ItemData MOSSY_STONE_BRICKS = REGISTRY.register(new ItemData(376, "mossy_stone_bricks", 64));
+    public static final ItemData MOSSY_STONE_BRICKS;
 
-    public static final ItemData CRACKED_STONE_BRICKS = REGISTRY.register(new ItemData(377, "cracked_stone_bricks", 64));
+    public static final ItemData CRACKED_STONE_BRICKS;
 
-    public static final ItemData CHISELED_STONE_BRICKS = REGISTRY.register(new ItemData(378, "chiseled_stone_bricks", 64));
+    public static final ItemData CHISELED_STONE_BRICKS;
 
-    public static final ItemData PACKED_MUD = REGISTRY.register(new ItemData(379, "packed_mud", 64));
+    public static final ItemData PACKED_MUD;
 
-    public static final ItemData MUD_BRICKS = REGISTRY.register(new ItemData(380, "mud_bricks", 64));
+    public static final ItemData MUD_BRICKS;
 
-    public static final ItemData DEEPSLATE_BRICKS = REGISTRY.register(new ItemData(381, "deepslate_bricks", 64));
+    public static final ItemData DEEPSLATE_BRICKS;
 
-    public static final ItemData CRACKED_DEEPSLATE_BRICKS = REGISTRY.register(new ItemData(382, "cracked_deepslate_bricks", 64));
+    public static final ItemData CRACKED_DEEPSLATE_BRICKS;
 
-    public static final ItemData DEEPSLATE_TILES = REGISTRY.register(new ItemData(383, "deepslate_tiles", 64));
+    public static final ItemData DEEPSLATE_TILES;
 
-    public static final ItemData CRACKED_DEEPSLATE_TILES = REGISTRY.register(new ItemData(384, "cracked_deepslate_tiles", 64));
+    public static final ItemData CRACKED_DEEPSLATE_TILES;
 
-    public static final ItemData CHISELED_DEEPSLATE = REGISTRY.register(new ItemData(385, "chiseled_deepslate", 64));
+    public static final ItemData CHISELED_DEEPSLATE;
 
-    public static final ItemData REINFORCED_DEEPSLATE = REGISTRY.register(new ItemData(386, "reinforced_deepslate", 64));
+    public static final ItemData REINFORCED_DEEPSLATE;
 
-    public static final ItemData BROWN_MUSHROOM_BLOCK = REGISTRY.register(new ItemData(387, "brown_mushroom_block", 64));
+    public static final ItemData BROWN_MUSHROOM_BLOCK;
 
-    public static final ItemData RED_MUSHROOM_BLOCK = REGISTRY.register(new ItemData(388, "red_mushroom_block", 64));
+    public static final ItemData RED_MUSHROOM_BLOCK;
 
-    public static final ItemData MUSHROOM_STEM = REGISTRY.register(new ItemData(389, "mushroom_stem", 64));
+    public static final ItemData MUSHROOM_STEM;
 
-    public static final ItemData IRON_BARS = REGISTRY.register(new ItemData(390, "iron_bars", 64));
+    public static final ItemData IRON_BARS;
 
-    public static final ItemData COPPER_BARS = REGISTRY.register(new ItemData(391, "copper_bars", 64));
+    public static final ItemData COPPER_BARS;
 
-    public static final ItemData EXPOSED_COPPER_BARS = REGISTRY.register(new ItemData(392, "exposed_copper_bars", 64));
+    public static final ItemData EXPOSED_COPPER_BARS;
 
-    public static final ItemData WEATHERED_COPPER_BARS = REGISTRY.register(new ItemData(393, "weathered_copper_bars", 64));
+    public static final ItemData WEATHERED_COPPER_BARS;
 
-    public static final ItemData OXIDIZED_COPPER_BARS = REGISTRY.register(new ItemData(394, "oxidized_copper_bars", 64));
+    public static final ItemData OXIDIZED_COPPER_BARS;
 
-    public static final ItemData WAXED_COPPER_BARS = REGISTRY.register(new ItemData(395, "waxed_copper_bars", 64));
+    public static final ItemData WAXED_COPPER_BARS;
 
-    public static final ItemData WAXED_EXPOSED_COPPER_BARS = REGISTRY.register(new ItemData(396, "waxed_exposed_copper_bars", 64));
+    public static final ItemData WAXED_EXPOSED_COPPER_BARS;
 
-    public static final ItemData WAXED_WEATHERED_COPPER_BARS = REGISTRY.register(new ItemData(397, "waxed_weathered_copper_bars", 64));
+    public static final ItemData WAXED_WEATHERED_COPPER_BARS;
 
-    public static final ItemData WAXED_OXIDIZED_COPPER_BARS = REGISTRY.register(new ItemData(398, "waxed_oxidized_copper_bars", 64));
+    public static final ItemData WAXED_OXIDIZED_COPPER_BARS;
 
-    public static final ItemData IRON_CHAIN = REGISTRY.register(new ItemData(399, "iron_chain", 64));
+    public static final ItemData IRON_CHAIN;
 
-    public static final ItemData COPPER_CHAIN = REGISTRY.register(new ItemData(400, "copper_chain", 64));
+    public static final ItemData COPPER_CHAIN;
 
-    public static final ItemData EXPOSED_COPPER_CHAIN = REGISTRY.register(new ItemData(401, "exposed_copper_chain", 64));
+    public static final ItemData EXPOSED_COPPER_CHAIN;
 
-    public static final ItemData WEATHERED_COPPER_CHAIN = REGISTRY.register(new ItemData(402, "weathered_copper_chain", 64));
+    public static final ItemData WEATHERED_COPPER_CHAIN;
 
-    public static final ItemData OXIDIZED_COPPER_CHAIN = REGISTRY.register(new ItemData(403, "oxidized_copper_chain", 64));
+    public static final ItemData OXIDIZED_COPPER_CHAIN;
 
-    public static final ItemData WAXED_COPPER_CHAIN = REGISTRY.register(new ItemData(404, "waxed_copper_chain", 64));
+    public static final ItemData WAXED_COPPER_CHAIN;
 
-    public static final ItemData WAXED_EXPOSED_COPPER_CHAIN = REGISTRY.register(new ItemData(405, "waxed_exposed_copper_chain", 64));
+    public static final ItemData WAXED_EXPOSED_COPPER_CHAIN;
 
-    public static final ItemData WAXED_WEATHERED_COPPER_CHAIN = REGISTRY.register(new ItemData(406, "waxed_weathered_copper_chain", 64));
+    public static final ItemData WAXED_WEATHERED_COPPER_CHAIN;
 
-    public static final ItemData WAXED_OXIDIZED_COPPER_CHAIN = REGISTRY.register(new ItemData(407, "waxed_oxidized_copper_chain", 64));
+    public static final ItemData WAXED_OXIDIZED_COPPER_CHAIN;
 
-    public static final ItemData GLASS_PANE = REGISTRY.register(new ItemData(408, "glass_pane", 64));
+    public static final ItemData GLASS_PANE;
 
-    public static final ItemData MELON = REGISTRY.register(new ItemData(409, "melon", 64));
+    public static final ItemData MELON;
 
-    public static final ItemData VINE = REGISTRY.register(new ItemData(410, "vine", 64));
+    public static final ItemData VINE;
 
-    public static final ItemData GLOW_LICHEN = REGISTRY.register(new ItemData(411, "glow_lichen", 64));
+    public static final ItemData GLOW_LICHEN;
 
-    public static final ItemData RESIN_CLUMP = REGISTRY.register(new ItemData(412, "resin_clump", 64));
+    public static final ItemData RESIN_CLUMP;
 
-    public static final ItemData RESIN_BLOCK = REGISTRY.register(new ItemData(413, "resin_block", 64));
+    public static final ItemData RESIN_BLOCK;
 
-    public static final ItemData RESIN_BRICKS = REGISTRY.register(new ItemData(414, "resin_bricks", 64));
+    public static final ItemData RESIN_BRICKS;
 
-    public static final ItemData RESIN_BRICK_STAIRS = REGISTRY.register(new ItemData(415, "resin_brick_stairs", 64));
+    public static final ItemData RESIN_BRICK_STAIRS;
 
-    public static final ItemData RESIN_BRICK_SLAB = REGISTRY.register(new ItemData(416, "resin_brick_slab", 64));
+    public static final ItemData RESIN_BRICK_SLAB;
 
-    public static final ItemData RESIN_BRICK_WALL = REGISTRY.register(new ItemData(417, "resin_brick_wall", 64));
+    public static final ItemData RESIN_BRICK_WALL;
 
-    public static final ItemData CHISELED_RESIN_BRICKS = REGISTRY.register(new ItemData(418, "chiseled_resin_bricks", 64));
+    public static final ItemData CHISELED_RESIN_BRICKS;
 
-    public static final ItemData BRICK_STAIRS = REGISTRY.register(new ItemData(419, "brick_stairs", 64));
+    public static final ItemData BRICK_STAIRS;
 
-    public static final ItemData STONE_BRICK_STAIRS = REGISTRY.register(new ItemData(420, "stone_brick_stairs", 64));
+    public static final ItemData STONE_BRICK_STAIRS;
 
-    public static final ItemData MUD_BRICK_STAIRS = REGISTRY.register(new ItemData(421, "mud_brick_stairs", 64));
+    public static final ItemData MUD_BRICK_STAIRS;
 
-    public static final ItemData MYCELIUM = REGISTRY.register(new ItemData(422, "mycelium", 64));
+    public static final ItemData MYCELIUM;
 
-    public static final ItemData LILY_PAD = REGISTRY.register(new ItemData(423, "lily_pad", 64));
+    public static final ItemData LILY_PAD;
 
-    public static final ItemData NETHER_BRICKS = REGISTRY.register(new ItemData(424, "nether_bricks", 64));
+    public static final ItemData NETHER_BRICKS;
 
-    public static final ItemData CRACKED_NETHER_BRICKS = REGISTRY.register(new ItemData(425, "cracked_nether_bricks", 64));
+    public static final ItemData CRACKED_NETHER_BRICKS;
 
-    public static final ItemData CHISELED_NETHER_BRICKS = REGISTRY.register(new ItemData(426, "chiseled_nether_bricks", 64));
+    public static final ItemData CHISELED_NETHER_BRICKS;
 
-    public static final ItemData NETHER_BRICK_FENCE = REGISTRY.register(new ItemData(427, "nether_brick_fence", 64));
+    public static final ItemData NETHER_BRICK_FENCE;
 
-    public static final ItemData NETHER_BRICK_STAIRS = REGISTRY.register(new ItemData(428, "nether_brick_stairs", 64));
+    public static final ItemData NETHER_BRICK_STAIRS;
 
-    public static final ItemData SCULK = REGISTRY.register(new ItemData(429, "sculk", 64));
+    public static final ItemData SCULK;
 
-    public static final ItemData SCULK_VEIN = REGISTRY.register(new ItemData(430, "sculk_vein", 64));
+    public static final ItemData SCULK_VEIN;
 
-    public static final ItemData SCULK_CATALYST = REGISTRY.register(new ItemData(431, "sculk_catalyst", 64));
+    public static final ItemData SCULK_CATALYST;
 
-    public static final ItemData SCULK_SHRIEKER = REGISTRY.register(new ItemData(432, "sculk_shrieker", 64));
+    public static final ItemData SCULK_SHRIEKER;
 
-    public static final ItemData ENCHANTING_TABLE = REGISTRY.register(new ItemData(433, "enchanting_table", 64));
+    public static final ItemData ENCHANTING_TABLE;
 
-    public static final ItemData END_PORTAL_FRAME = REGISTRY.register(new ItemData(434, "end_portal_frame", 64));
+    public static final ItemData END_PORTAL_FRAME;
 
-    public static final ItemData END_STONE = REGISTRY.register(new ItemData(435, "end_stone", 64));
+    public static final ItemData END_STONE;
 
-    public static final ItemData END_STONE_BRICKS = REGISTRY.register(new ItemData(436, "end_stone_bricks", 64));
+    public static final ItemData END_STONE_BRICKS;
 
-    public static final ItemData DRAGON_EGG = REGISTRY.register(new ItemData(437, "dragon_egg", 64));
+    public static final ItemData DRAGON_EGG;
 
-    public static final ItemData SANDSTONE_STAIRS = REGISTRY.register(new ItemData(438, "sandstone_stairs", 64));
+    public static final ItemData SANDSTONE_STAIRS;
 
-    public static final ItemData ENDER_CHEST = REGISTRY.register(new ItemData(439, "ender_chest", 64));
+    public static final ItemData ENDER_CHEST;
 
-    public static final ItemData EMERALD_BLOCK = REGISTRY.register(new ItemData(440, "emerald_block", 64));
+    public static final ItemData EMERALD_BLOCK;
 
-    public static final ItemData OAK_STAIRS = REGISTRY.register(new ItemData(441, "oak_stairs", 64));
+    public static final ItemData OAK_STAIRS;
 
-    public static final ItemData SPRUCE_STAIRS = REGISTRY.register(new ItemData(442, "spruce_stairs", 64));
+    public static final ItemData SPRUCE_STAIRS;
 
-    public static final ItemData BIRCH_STAIRS = REGISTRY.register(new ItemData(443, "birch_stairs", 64));
+    public static final ItemData BIRCH_STAIRS;
 
-    public static final ItemData JUNGLE_STAIRS = REGISTRY.register(new ItemData(444, "jungle_stairs", 64));
+    public static final ItemData JUNGLE_STAIRS;
 
-    public static final ItemData ACACIA_STAIRS = REGISTRY.register(new ItemData(445, "acacia_stairs", 64));
+    public static final ItemData ACACIA_STAIRS;
 
-    public static final ItemData CHERRY_STAIRS = REGISTRY.register(new ItemData(446, "cherry_stairs", 64));
+    public static final ItemData CHERRY_STAIRS;
 
-    public static final ItemData DARK_OAK_STAIRS = REGISTRY.register(new ItemData(447, "dark_oak_stairs", 64));
+    public static final ItemData DARK_OAK_STAIRS;
 
-    public static final ItemData PALE_OAK_STAIRS = REGISTRY.register(new ItemData(448, "pale_oak_stairs", 64));
+    public static final ItemData PALE_OAK_STAIRS;
 
-    public static final ItemData MANGROVE_STAIRS = REGISTRY.register(new ItemData(449, "mangrove_stairs", 64));
+    public static final ItemData MANGROVE_STAIRS;
 
-    public static final ItemData BAMBOO_STAIRS = REGISTRY.register(new ItemData(450, "bamboo_stairs", 64));
+    public static final ItemData BAMBOO_STAIRS;
 
-    public static final ItemData BAMBOO_MOSAIC_STAIRS = REGISTRY.register(new ItemData(451, "bamboo_mosaic_stairs", 64));
+    public static final ItemData BAMBOO_MOSAIC_STAIRS;
 
-    public static final ItemData CRIMSON_STAIRS = REGISTRY.register(new ItemData(452, "crimson_stairs", 64));
+    public static final ItemData CRIMSON_STAIRS;
 
-    public static final ItemData WARPED_STAIRS = REGISTRY.register(new ItemData(453, "warped_stairs", 64));
+    public static final ItemData WARPED_STAIRS;
 
-    public static final ItemData COMMAND_BLOCK = REGISTRY.register(new ItemData(454, "command_block", 64));
+    public static final ItemData COMMAND_BLOCK;
 
-    public static final ItemData BEACON = REGISTRY.register(new ItemData(455, "beacon", 64));
+    public static final ItemData BEACON;
 
-    public static final ItemData COBBLESTONE_WALL = REGISTRY.register(new ItemData(456, "cobblestone_wall", 64));
+    public static final ItemData COBBLESTONE_WALL;
 
-    public static final ItemData MOSSY_COBBLESTONE_WALL = REGISTRY.register(new ItemData(457, "mossy_cobblestone_wall", 64));
+    public static final ItemData MOSSY_COBBLESTONE_WALL;
 
-    public static final ItemData BRICK_WALL = REGISTRY.register(new ItemData(458, "brick_wall", 64));
+    public static final ItemData BRICK_WALL;
 
-    public static final ItemData PRISMARINE_WALL = REGISTRY.register(new ItemData(459, "prismarine_wall", 64));
+    public static final ItemData PRISMARINE_WALL;
 
-    public static final ItemData RED_SANDSTONE_WALL = REGISTRY.register(new ItemData(460, "red_sandstone_wall", 64));
+    public static final ItemData RED_SANDSTONE_WALL;
 
-    public static final ItemData MOSSY_STONE_BRICK_WALL = REGISTRY.register(new ItemData(461, "mossy_stone_brick_wall", 64));
+    public static final ItemData MOSSY_STONE_BRICK_WALL;
 
-    public static final ItemData GRANITE_WALL = REGISTRY.register(new ItemData(462, "granite_wall", 64));
+    public static final ItemData GRANITE_WALL;
 
-    public static final ItemData STONE_BRICK_WALL = REGISTRY.register(new ItemData(463, "stone_brick_wall", 64));
+    public static final ItemData STONE_BRICK_WALL;
 
-    public static final ItemData MUD_BRICK_WALL = REGISTRY.register(new ItemData(464, "mud_brick_wall", 64));
+    public static final ItemData MUD_BRICK_WALL;
 
-    public static final ItemData NETHER_BRICK_WALL = REGISTRY.register(new ItemData(465, "nether_brick_wall", 64));
+    public static final ItemData NETHER_BRICK_WALL;
 
-    public static final ItemData ANDESITE_WALL = REGISTRY.register(new ItemData(466, "andesite_wall", 64));
+    public static final ItemData ANDESITE_WALL;
 
-    public static final ItemData RED_NETHER_BRICK_WALL = REGISTRY.register(new ItemData(467, "red_nether_brick_wall", 64));
+    public static final ItemData RED_NETHER_BRICK_WALL;
 
-    public static final ItemData SANDSTONE_WALL = REGISTRY.register(new ItemData(468, "sandstone_wall", 64));
+    public static final ItemData SANDSTONE_WALL;
 
-    public static final ItemData END_STONE_BRICK_WALL = REGISTRY.register(new ItemData(469, "end_stone_brick_wall", 64));
+    public static final ItemData END_STONE_BRICK_WALL;
 
-    public static final ItemData DIORITE_WALL = REGISTRY.register(new ItemData(470, "diorite_wall", 64));
+    public static final ItemData DIORITE_WALL;
 
-    public static final ItemData BLACKSTONE_WALL = REGISTRY.register(new ItemData(471, "blackstone_wall", 64));
+    public static final ItemData BLACKSTONE_WALL;
 
-    public static final ItemData POLISHED_BLACKSTONE_WALL = REGISTRY.register(new ItemData(472, "polished_blackstone_wall", 64));
+    public static final ItemData POLISHED_BLACKSTONE_WALL;
 
-    public static final ItemData POLISHED_BLACKSTONE_BRICK_WALL = REGISTRY.register(new ItemData(473, "polished_blackstone_brick_wall", 64));
+    public static final ItemData POLISHED_BLACKSTONE_BRICK_WALL;
 
-    public static final ItemData COBBLED_DEEPSLATE_WALL = REGISTRY.register(new ItemData(474, "cobbled_deepslate_wall", 64));
+    public static final ItemData COBBLED_DEEPSLATE_WALL;
 
-    public static final ItemData POLISHED_DEEPSLATE_WALL = REGISTRY.register(new ItemData(475, "polished_deepslate_wall", 64));
+    public static final ItemData POLISHED_DEEPSLATE_WALL;
 
-    public static final ItemData DEEPSLATE_BRICK_WALL = REGISTRY.register(new ItemData(476, "deepslate_brick_wall", 64));
+    public static final ItemData DEEPSLATE_BRICK_WALL;
 
-    public static final ItemData DEEPSLATE_TILE_WALL = REGISTRY.register(new ItemData(477, "deepslate_tile_wall", 64));
+    public static final ItemData DEEPSLATE_TILE_WALL;
 
-    public static final ItemData ANVIL = REGISTRY.register(new ItemData(478, "anvil", 64));
+    public static final ItemData ANVIL;
 
-    public static final ItemData CHIPPED_ANVIL = REGISTRY.register(new ItemData(479, "chipped_anvil", 64));
+    public static final ItemData CHIPPED_ANVIL;
 
-    public static final ItemData DAMAGED_ANVIL = REGISTRY.register(new ItemData(480, "damaged_anvil", 64));
+    public static final ItemData DAMAGED_ANVIL;
 
-    public static final ItemData CHISELED_QUARTZ_BLOCK = REGISTRY.register(new ItemData(481, "chiseled_quartz_block", 64));
+    public static final ItemData CHISELED_QUARTZ_BLOCK;
 
-    public static final ItemData QUARTZ_BLOCK = REGISTRY.register(new ItemData(482, "quartz_block", 64));
+    public static final ItemData QUARTZ_BLOCK;
 
-    public static final ItemData QUARTZ_BRICKS = REGISTRY.register(new ItemData(483, "quartz_bricks", 64));
+    public static final ItemData QUARTZ_BRICKS;
 
-    public static final ItemData QUARTZ_PILLAR = REGISTRY.register(new ItemData(484, "quartz_pillar", 64));
+    public static final ItemData QUARTZ_PILLAR;
 
-    public static final ItemData QUARTZ_STAIRS = REGISTRY.register(new ItemData(485, "quartz_stairs", 64));
+    public static final ItemData QUARTZ_STAIRS;
 
-    public static final ItemData WHITE_TERRACOTTA = REGISTRY.register(new ItemData(486, "white_terracotta", 64));
+    public static final ItemData WHITE_TERRACOTTA;
 
-    public static final ItemData ORANGE_TERRACOTTA = REGISTRY.register(new ItemData(487, "orange_terracotta", 64));
+    public static final ItemData ORANGE_TERRACOTTA;
 
-    public static final ItemData MAGENTA_TERRACOTTA = REGISTRY.register(new ItemData(488, "magenta_terracotta", 64));
+    public static final ItemData MAGENTA_TERRACOTTA;
 
-    public static final ItemData LIGHT_BLUE_TERRACOTTA = REGISTRY.register(new ItemData(489, "light_blue_terracotta", 64));
+    public static final ItemData LIGHT_BLUE_TERRACOTTA;
 
-    public static final ItemData YELLOW_TERRACOTTA = REGISTRY.register(new ItemData(490, "yellow_terracotta", 64));
+    public static final ItemData YELLOW_TERRACOTTA;
 
-    public static final ItemData LIME_TERRACOTTA = REGISTRY.register(new ItemData(491, "lime_terracotta", 64));
+    public static final ItemData LIME_TERRACOTTA;
 
-    public static final ItemData PINK_TERRACOTTA = REGISTRY.register(new ItemData(492, "pink_terracotta", 64));
+    public static final ItemData PINK_TERRACOTTA;
 
-    public static final ItemData GRAY_TERRACOTTA = REGISTRY.register(new ItemData(493, "gray_terracotta", 64));
+    public static final ItemData GRAY_TERRACOTTA;
 
-    public static final ItemData LIGHT_GRAY_TERRACOTTA = REGISTRY.register(new ItemData(494, "light_gray_terracotta", 64));
+    public static final ItemData LIGHT_GRAY_TERRACOTTA;
 
-    public static final ItemData CYAN_TERRACOTTA = REGISTRY.register(new ItemData(495, "cyan_terracotta", 64));
+    public static final ItemData CYAN_TERRACOTTA;
 
-    public static final ItemData PURPLE_TERRACOTTA = REGISTRY.register(new ItemData(496, "purple_terracotta", 64));
+    public static final ItemData PURPLE_TERRACOTTA;
 
-    public static final ItemData BLUE_TERRACOTTA = REGISTRY.register(new ItemData(497, "blue_terracotta", 64));
+    public static final ItemData BLUE_TERRACOTTA;
 
-    public static final ItemData BROWN_TERRACOTTA = REGISTRY.register(new ItemData(498, "brown_terracotta", 64));
+    public static final ItemData BROWN_TERRACOTTA;
 
-    public static final ItemData GREEN_TERRACOTTA = REGISTRY.register(new ItemData(499, "green_terracotta", 64));
+    public static final ItemData GREEN_TERRACOTTA;
 
-    public static final ItemData RED_TERRACOTTA = REGISTRY.register(new ItemData(500, "red_terracotta", 64));
+    public static final ItemData RED_TERRACOTTA;
 
-    public static final ItemData BLACK_TERRACOTTA = REGISTRY.register(new ItemData(501, "black_terracotta", 64));
+    public static final ItemData BLACK_TERRACOTTA;
 
-    public static final ItemData BARRIER = REGISTRY.register(new ItemData(502, "barrier", 64));
+    public static final ItemData BARRIER;
 
-    public static final ItemData LIGHT = REGISTRY.register(new ItemData(503, "light", 64));
+    public static final ItemData LIGHT;
 
-    public static final ItemData HAY_BLOCK = REGISTRY.register(new ItemData(504, "hay_block", 64));
+    public static final ItemData HAY_BLOCK;
 
-    public static final ItemData WHITE_CARPET = REGISTRY.register(new ItemData(505, "white_carpet", 64));
+    public static final ItemData WHITE_CARPET;
 
-    public static final ItemData ORANGE_CARPET = REGISTRY.register(new ItemData(506, "orange_carpet", 64));
+    public static final ItemData ORANGE_CARPET;
 
-    public static final ItemData MAGENTA_CARPET = REGISTRY.register(new ItemData(507, "magenta_carpet", 64));
+    public static final ItemData MAGENTA_CARPET;
 
-    public static final ItemData LIGHT_BLUE_CARPET = REGISTRY.register(new ItemData(508, "light_blue_carpet", 64));
+    public static final ItemData LIGHT_BLUE_CARPET;
 
-    public static final ItemData YELLOW_CARPET = REGISTRY.register(new ItemData(509, "yellow_carpet", 64));
+    public static final ItemData YELLOW_CARPET;
 
-    public static final ItemData LIME_CARPET = REGISTRY.register(new ItemData(510, "lime_carpet", 64));
+    public static final ItemData LIME_CARPET;
 
-    public static final ItemData PINK_CARPET = REGISTRY.register(new ItemData(511, "pink_carpet", 64));
+    public static final ItemData PINK_CARPET;
 
-    public static final ItemData GRAY_CARPET = REGISTRY.register(new ItemData(512, "gray_carpet", 64));
+    public static final ItemData GRAY_CARPET;
 
-    public static final ItemData LIGHT_GRAY_CARPET = REGISTRY.register(new ItemData(513, "light_gray_carpet", 64));
+    public static final ItemData LIGHT_GRAY_CARPET;
 
-    public static final ItemData CYAN_CARPET = REGISTRY.register(new ItemData(514, "cyan_carpet", 64));
+    public static final ItemData CYAN_CARPET;
 
-    public static final ItemData PURPLE_CARPET = REGISTRY.register(new ItemData(515, "purple_carpet", 64));
+    public static final ItemData PURPLE_CARPET;
 
-    public static final ItemData BLUE_CARPET = REGISTRY.register(new ItemData(516, "blue_carpet", 64));
+    public static final ItemData BLUE_CARPET;
 
-    public static final ItemData BROWN_CARPET = REGISTRY.register(new ItemData(517, "brown_carpet", 64));
+    public static final ItemData BROWN_CARPET;
 
-    public static final ItemData GREEN_CARPET = REGISTRY.register(new ItemData(518, "green_carpet", 64));
+    public static final ItemData GREEN_CARPET;
 
-    public static final ItemData RED_CARPET = REGISTRY.register(new ItemData(519, "red_carpet", 64));
+    public static final ItemData RED_CARPET;
 
-    public static final ItemData BLACK_CARPET = REGISTRY.register(new ItemData(520, "black_carpet", 64));
+    public static final ItemData BLACK_CARPET;
 
-    public static final ItemData TERRACOTTA = REGISTRY.register(new ItemData(521, "terracotta", 64));
+    public static final ItemData TERRACOTTA;
 
-    public static final ItemData PACKED_ICE = REGISTRY.register(new ItemData(522, "packed_ice", 64));
+    public static final ItemData PACKED_ICE;
 
-    public static final ItemData DIRT_PATH = REGISTRY.register(new ItemData(523, "dirt_path", 64));
+    public static final ItemData DIRT_PATH;
 
-    public static final ItemData SUNFLOWER = REGISTRY.register(new ItemData(524, "sunflower", 64));
+    public static final ItemData SUNFLOWER;
 
-    public static final ItemData LILAC = REGISTRY.register(new ItemData(525, "lilac", 64));
+    public static final ItemData LILAC;
 
-    public static final ItemData ROSE_BUSH = REGISTRY.register(new ItemData(526, "rose_bush", 64));
+    public static final ItemData ROSE_BUSH;
 
-    public static final ItemData PEONY = REGISTRY.register(new ItemData(527, "peony", 64));
+    public static final ItemData PEONY;
 
-    public static final ItemData TALL_GRASS = REGISTRY.register(new ItemData(528, "tall_grass", 64));
+    public static final ItemData TALL_GRASS;
 
-    public static final ItemData LARGE_FERN = REGISTRY.register(new ItemData(529, "large_fern", 64));
+    public static final ItemData LARGE_FERN;
 
-    public static final ItemData WHITE_STAINED_GLASS = REGISTRY.register(new ItemData(530, "white_stained_glass", 64));
+    public static final ItemData WHITE_STAINED_GLASS;
 
-    public static final ItemData ORANGE_STAINED_GLASS = REGISTRY.register(new ItemData(531, "orange_stained_glass", 64));
+    public static final ItemData ORANGE_STAINED_GLASS;
 
-    public static final ItemData MAGENTA_STAINED_GLASS = REGISTRY.register(new ItemData(532, "magenta_stained_glass", 64));
+    public static final ItemData MAGENTA_STAINED_GLASS;
 
-    public static final ItemData LIGHT_BLUE_STAINED_GLASS = REGISTRY.register(new ItemData(533, "light_blue_stained_glass", 64));
+    public static final ItemData LIGHT_BLUE_STAINED_GLASS;
 
-    public static final ItemData YELLOW_STAINED_GLASS = REGISTRY.register(new ItemData(534, "yellow_stained_glass", 64));
+    public static final ItemData YELLOW_STAINED_GLASS;
 
-    public static final ItemData LIME_STAINED_GLASS = REGISTRY.register(new ItemData(535, "lime_stained_glass", 64));
+    public static final ItemData LIME_STAINED_GLASS;
 
-    public static final ItemData PINK_STAINED_GLASS = REGISTRY.register(new ItemData(536, "pink_stained_glass", 64));
+    public static final ItemData PINK_STAINED_GLASS;
 
-    public static final ItemData GRAY_STAINED_GLASS = REGISTRY.register(new ItemData(537, "gray_stained_glass", 64));
+    public static final ItemData GRAY_STAINED_GLASS;
 
-    public static final ItemData LIGHT_GRAY_STAINED_GLASS = REGISTRY.register(new ItemData(538, "light_gray_stained_glass", 64));
+    public static final ItemData LIGHT_GRAY_STAINED_GLASS;
 
-    public static final ItemData CYAN_STAINED_GLASS = REGISTRY.register(new ItemData(539, "cyan_stained_glass", 64));
+    public static final ItemData CYAN_STAINED_GLASS;
 
-    public static final ItemData PURPLE_STAINED_GLASS = REGISTRY.register(new ItemData(540, "purple_stained_glass", 64));
+    public static final ItemData PURPLE_STAINED_GLASS;
 
-    public static final ItemData BLUE_STAINED_GLASS = REGISTRY.register(new ItemData(541, "blue_stained_glass", 64));
+    public static final ItemData BLUE_STAINED_GLASS;
 
-    public static final ItemData BROWN_STAINED_GLASS = REGISTRY.register(new ItemData(542, "brown_stained_glass", 64));
+    public static final ItemData BROWN_STAINED_GLASS;
 
-    public static final ItemData GREEN_STAINED_GLASS = REGISTRY.register(new ItemData(543, "green_stained_glass", 64));
+    public static final ItemData GREEN_STAINED_GLASS;
 
-    public static final ItemData RED_STAINED_GLASS = REGISTRY.register(new ItemData(544, "red_stained_glass", 64));
+    public static final ItemData RED_STAINED_GLASS;
 
-    public static final ItemData BLACK_STAINED_GLASS = REGISTRY.register(new ItemData(545, "black_stained_glass", 64));
+    public static final ItemData BLACK_STAINED_GLASS;
 
-    public static final ItemData WHITE_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(546, "white_stained_glass_pane", 64));
+    public static final ItemData WHITE_STAINED_GLASS_PANE;
 
-    public static final ItemData ORANGE_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(547, "orange_stained_glass_pane", 64));
+    public static final ItemData ORANGE_STAINED_GLASS_PANE;
 
-    public static final ItemData MAGENTA_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(548, "magenta_stained_glass_pane", 64));
+    public static final ItemData MAGENTA_STAINED_GLASS_PANE;
 
-    public static final ItemData LIGHT_BLUE_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(549, "light_blue_stained_glass_pane", 64));
+    public static final ItemData LIGHT_BLUE_STAINED_GLASS_PANE;
 
-    public static final ItemData YELLOW_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(550, "yellow_stained_glass_pane", 64));
+    public static final ItemData YELLOW_STAINED_GLASS_PANE;
 
-    public static final ItemData LIME_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(551, "lime_stained_glass_pane", 64));
+    public static final ItemData LIME_STAINED_GLASS_PANE;
 
-    public static final ItemData PINK_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(552, "pink_stained_glass_pane", 64));
+    public static final ItemData PINK_STAINED_GLASS_PANE;
 
-    public static final ItemData GRAY_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(553, "gray_stained_glass_pane", 64));
+    public static final ItemData GRAY_STAINED_GLASS_PANE;
 
-    public static final ItemData LIGHT_GRAY_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(554, "light_gray_stained_glass_pane", 64));
+    public static final ItemData LIGHT_GRAY_STAINED_GLASS_PANE;
 
-    public static final ItemData CYAN_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(555, "cyan_stained_glass_pane", 64));
+    public static final ItemData CYAN_STAINED_GLASS_PANE;
 
-    public static final ItemData PURPLE_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(556, "purple_stained_glass_pane", 64));
+    public static final ItemData PURPLE_STAINED_GLASS_PANE;
 
-    public static final ItemData BLUE_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(557, "blue_stained_glass_pane", 64));
+    public static final ItemData BLUE_STAINED_GLASS_PANE;
 
-    public static final ItemData BROWN_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(558, "brown_stained_glass_pane", 64));
+    public static final ItemData BROWN_STAINED_GLASS_PANE;
 
-    public static final ItemData GREEN_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(559, "green_stained_glass_pane", 64));
+    public static final ItemData GREEN_STAINED_GLASS_PANE;
 
-    public static final ItemData RED_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(560, "red_stained_glass_pane", 64));
+    public static final ItemData RED_STAINED_GLASS_PANE;
 
-    public static final ItemData BLACK_STAINED_GLASS_PANE = REGISTRY.register(new ItemData(561, "black_stained_glass_pane", 64));
+    public static final ItemData BLACK_STAINED_GLASS_PANE;
 
-    public static final ItemData PRISMARINE = REGISTRY.register(new ItemData(562, "prismarine", 64));
+    public static final ItemData PRISMARINE;
 
-    public static final ItemData PRISMARINE_BRICKS = REGISTRY.register(new ItemData(563, "prismarine_bricks", 64));
+    public static final ItemData PRISMARINE_BRICKS;
 
-    public static final ItemData DARK_PRISMARINE = REGISTRY.register(new ItemData(564, "dark_prismarine", 64));
+    public static final ItemData DARK_PRISMARINE;
 
-    public static final ItemData PRISMARINE_STAIRS = REGISTRY.register(new ItemData(565, "prismarine_stairs", 64));
+    public static final ItemData PRISMARINE_STAIRS;
 
-    public static final ItemData PRISMARINE_BRICK_STAIRS = REGISTRY.register(new ItemData(566, "prismarine_brick_stairs", 64));
+    public static final ItemData PRISMARINE_BRICK_STAIRS;
 
-    public static final ItemData DARK_PRISMARINE_STAIRS = REGISTRY.register(new ItemData(567, "dark_prismarine_stairs", 64));
+    public static final ItemData DARK_PRISMARINE_STAIRS;
 
-    public static final ItemData SEA_LANTERN = REGISTRY.register(new ItemData(568, "sea_lantern", 64));
+    public static final ItemData SEA_LANTERN;
 
-    public static final ItemData RED_SANDSTONE = REGISTRY.register(new ItemData(569, "red_sandstone", 64));
+    public static final ItemData RED_SANDSTONE;
 
-    public static final ItemData CHISELED_RED_SANDSTONE = REGISTRY.register(new ItemData(570, "chiseled_red_sandstone", 64));
+    public static final ItemData CHISELED_RED_SANDSTONE;
 
-    public static final ItemData CUT_RED_SANDSTONE = REGISTRY.register(new ItemData(571, "cut_red_sandstone", 64));
+    public static final ItemData CUT_RED_SANDSTONE;
 
-    public static final ItemData RED_SANDSTONE_STAIRS = REGISTRY.register(new ItemData(572, "red_sandstone_stairs", 64));
+    public static final ItemData RED_SANDSTONE_STAIRS;
 
-    public static final ItemData REPEATING_COMMAND_BLOCK = REGISTRY.register(new ItemData(573, "repeating_command_block", 64));
+    public static final ItemData REPEATING_COMMAND_BLOCK;
 
-    public static final ItemData CHAIN_COMMAND_BLOCK = REGISTRY.register(new ItemData(574, "chain_command_block", 64));
+    public static final ItemData CHAIN_COMMAND_BLOCK;
 
-    public static final ItemData MAGMA_BLOCK = REGISTRY.register(new ItemData(575, "magma_block", 64));
+    public static final ItemData MAGMA_BLOCK;
 
-    public static final ItemData NETHER_WART_BLOCK = REGISTRY.register(new ItemData(576, "nether_wart_block", 64));
+    public static final ItemData NETHER_WART_BLOCK;
 
-    public static final ItemData WARPED_WART_BLOCK = REGISTRY.register(new ItemData(577, "warped_wart_block", 64));
+    public static final ItemData WARPED_WART_BLOCK;
 
-    public static final ItemData RED_NETHER_BRICKS = REGISTRY.register(new ItemData(578, "red_nether_bricks", 64));
+    public static final ItemData RED_NETHER_BRICKS;
 
-    public static final ItemData BONE_BLOCK = REGISTRY.register(new ItemData(579, "bone_block", 64));
+    public static final ItemData BONE_BLOCK;
 
-    public static final ItemData STRUCTURE_VOID = REGISTRY.register(new ItemData(580, "structure_void", 64));
+    public static final ItemData STRUCTURE_VOID;
 
-    public static final ItemData SHULKER_BOX = REGISTRY.register(new ItemData(581, "shulker_box", 1));
+    public static final ItemData SHULKER_BOX;
 
-    public static final ItemData WHITE_SHULKER_BOX = REGISTRY.register(new ItemData(582, "white_shulker_box", 1));
+    public static final ItemData WHITE_SHULKER_BOX;
 
-    public static final ItemData ORANGE_SHULKER_BOX = REGISTRY.register(new ItemData(583, "orange_shulker_box", 1));
+    public static final ItemData ORANGE_SHULKER_BOX;
 
-    public static final ItemData MAGENTA_SHULKER_BOX = REGISTRY.register(new ItemData(584, "magenta_shulker_box", 1));
+    public static final ItemData MAGENTA_SHULKER_BOX;
 
-    public static final ItemData LIGHT_BLUE_SHULKER_BOX = REGISTRY.register(new ItemData(585, "light_blue_shulker_box", 1));
+    public static final ItemData LIGHT_BLUE_SHULKER_BOX;
 
-    public static final ItemData YELLOW_SHULKER_BOX = REGISTRY.register(new ItemData(586, "yellow_shulker_box", 1));
+    public static final ItemData YELLOW_SHULKER_BOX;
 
-    public static final ItemData LIME_SHULKER_BOX = REGISTRY.register(new ItemData(587, "lime_shulker_box", 1));
+    public static final ItemData LIME_SHULKER_BOX;
 
-    public static final ItemData PINK_SHULKER_BOX = REGISTRY.register(new ItemData(588, "pink_shulker_box", 1));
+    public static final ItemData PINK_SHULKER_BOX;
 
-    public static final ItemData GRAY_SHULKER_BOX = REGISTRY.register(new ItemData(589, "gray_shulker_box", 1));
+    public static final ItemData GRAY_SHULKER_BOX;
 
-    public static final ItemData LIGHT_GRAY_SHULKER_BOX = REGISTRY.register(new ItemData(590, "light_gray_shulker_box", 1));
+    public static final ItemData LIGHT_GRAY_SHULKER_BOX;
 
-    public static final ItemData CYAN_SHULKER_BOX = REGISTRY.register(new ItemData(591, "cyan_shulker_box", 1));
+    public static final ItemData CYAN_SHULKER_BOX;
 
-    public static final ItemData PURPLE_SHULKER_BOX = REGISTRY.register(new ItemData(592, "purple_shulker_box", 1));
+    public static final ItemData PURPLE_SHULKER_BOX;
 
-    public static final ItemData BLUE_SHULKER_BOX = REGISTRY.register(new ItemData(593, "blue_shulker_box", 1));
+    public static final ItemData BLUE_SHULKER_BOX;
 
-    public static final ItemData BROWN_SHULKER_BOX = REGISTRY.register(new ItemData(594, "brown_shulker_box", 1));
+    public static final ItemData BROWN_SHULKER_BOX;
 
-    public static final ItemData GREEN_SHULKER_BOX = REGISTRY.register(new ItemData(595, "green_shulker_box", 1));
+    public static final ItemData GREEN_SHULKER_BOX;
 
-    public static final ItemData RED_SHULKER_BOX = REGISTRY.register(new ItemData(596, "red_shulker_box", 1));
+    public static final ItemData RED_SHULKER_BOX;
 
-    public static final ItemData BLACK_SHULKER_BOX = REGISTRY.register(new ItemData(597, "black_shulker_box", 1));
+    public static final ItemData BLACK_SHULKER_BOX;
 
-    public static final ItemData WHITE_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(598, "white_glazed_terracotta", 64));
+    public static final ItemData WHITE_GLAZED_TERRACOTTA;
 
-    public static final ItemData ORANGE_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(599, "orange_glazed_terracotta", 64));
+    public static final ItemData ORANGE_GLAZED_TERRACOTTA;
 
-    public static final ItemData MAGENTA_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(600, "magenta_glazed_terracotta", 64));
+    public static final ItemData MAGENTA_GLAZED_TERRACOTTA;
 
-    public static final ItemData LIGHT_BLUE_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(601, "light_blue_glazed_terracotta", 64));
+    public static final ItemData LIGHT_BLUE_GLAZED_TERRACOTTA;
 
-    public static final ItemData YELLOW_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(602, "yellow_glazed_terracotta", 64));
+    public static final ItemData YELLOW_GLAZED_TERRACOTTA;
 
-    public static final ItemData LIME_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(603, "lime_glazed_terracotta", 64));
+    public static final ItemData LIME_GLAZED_TERRACOTTA;
 
-    public static final ItemData PINK_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(604, "pink_glazed_terracotta", 64));
+    public static final ItemData PINK_GLAZED_TERRACOTTA;
 
-    public static final ItemData GRAY_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(605, "gray_glazed_terracotta", 64));
+    public static final ItemData GRAY_GLAZED_TERRACOTTA;
 
-    public static final ItemData LIGHT_GRAY_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(606, "light_gray_glazed_terracotta", 64));
+    public static final ItemData LIGHT_GRAY_GLAZED_TERRACOTTA;
 
-    public static final ItemData CYAN_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(607, "cyan_glazed_terracotta", 64));
+    public static final ItemData CYAN_GLAZED_TERRACOTTA;
 
-    public static final ItemData PURPLE_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(608, "purple_glazed_terracotta", 64));
+    public static final ItemData PURPLE_GLAZED_TERRACOTTA;
 
-    public static final ItemData BLUE_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(609, "blue_glazed_terracotta", 64));
+    public static final ItemData BLUE_GLAZED_TERRACOTTA;
 
-    public static final ItemData BROWN_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(610, "brown_glazed_terracotta", 64));
+    public static final ItemData BROWN_GLAZED_TERRACOTTA;
 
-    public static final ItemData GREEN_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(611, "green_glazed_terracotta", 64));
+    public static final ItemData GREEN_GLAZED_TERRACOTTA;
 
-    public static final ItemData RED_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(612, "red_glazed_terracotta", 64));
+    public static final ItemData RED_GLAZED_TERRACOTTA;
 
-    public static final ItemData BLACK_GLAZED_TERRACOTTA = REGISTRY.register(new ItemData(613, "black_glazed_terracotta", 64));
+    public static final ItemData BLACK_GLAZED_TERRACOTTA;
 
-    public static final ItemData WHITE_CONCRETE = REGISTRY.register(new ItemData(614, "white_concrete", 64));
+    public static final ItemData WHITE_CONCRETE;
 
-    public static final ItemData ORANGE_CONCRETE = REGISTRY.register(new ItemData(615, "orange_concrete", 64));
+    public static final ItemData ORANGE_CONCRETE;
 
-    public static final ItemData MAGENTA_CONCRETE = REGISTRY.register(new ItemData(616, "magenta_concrete", 64));
+    public static final ItemData MAGENTA_CONCRETE;
 
-    public static final ItemData LIGHT_BLUE_CONCRETE = REGISTRY.register(new ItemData(617, "light_blue_concrete", 64));
+    public static final ItemData LIGHT_BLUE_CONCRETE;
 
-    public static final ItemData YELLOW_CONCRETE = REGISTRY.register(new ItemData(618, "yellow_concrete", 64));
+    public static final ItemData YELLOW_CONCRETE;
 
-    public static final ItemData LIME_CONCRETE = REGISTRY.register(new ItemData(619, "lime_concrete", 64));
+    public static final ItemData LIME_CONCRETE;
 
-    public static final ItemData PINK_CONCRETE = REGISTRY.register(new ItemData(620, "pink_concrete", 64));
+    public static final ItemData PINK_CONCRETE;
 
-    public static final ItemData GRAY_CONCRETE = REGISTRY.register(new ItemData(621, "gray_concrete", 64));
+    public static final ItemData GRAY_CONCRETE;
 
-    public static final ItemData LIGHT_GRAY_CONCRETE = REGISTRY.register(new ItemData(622, "light_gray_concrete", 64));
+    public static final ItemData LIGHT_GRAY_CONCRETE;
 
-    public static final ItemData CYAN_CONCRETE = REGISTRY.register(new ItemData(623, "cyan_concrete", 64));
+    public static final ItemData CYAN_CONCRETE;
 
-    public static final ItemData PURPLE_CONCRETE = REGISTRY.register(new ItemData(624, "purple_concrete", 64));
+    public static final ItemData PURPLE_CONCRETE;
 
-    public static final ItemData BLUE_CONCRETE = REGISTRY.register(new ItemData(625, "blue_concrete", 64));
+    public static final ItemData BLUE_CONCRETE;
 
-    public static final ItemData BROWN_CONCRETE = REGISTRY.register(new ItemData(626, "brown_concrete", 64));
+    public static final ItemData BROWN_CONCRETE;
 
-    public static final ItemData GREEN_CONCRETE = REGISTRY.register(new ItemData(627, "green_concrete", 64));
+    public static final ItemData GREEN_CONCRETE;
 
-    public static final ItemData RED_CONCRETE = REGISTRY.register(new ItemData(628, "red_concrete", 64));
+    public static final ItemData RED_CONCRETE;
 
-    public static final ItemData BLACK_CONCRETE = REGISTRY.register(new ItemData(629, "black_concrete", 64));
+    public static final ItemData BLACK_CONCRETE;
 
-    public static final ItemData WHITE_CONCRETE_POWDER = REGISTRY.register(new ItemData(630, "white_concrete_powder", 64));
+    public static final ItemData WHITE_CONCRETE_POWDER;
 
-    public static final ItemData ORANGE_CONCRETE_POWDER = REGISTRY.register(new ItemData(631, "orange_concrete_powder", 64));
+    public static final ItemData ORANGE_CONCRETE_POWDER;
 
-    public static final ItemData MAGENTA_CONCRETE_POWDER = REGISTRY.register(new ItemData(632, "magenta_concrete_powder", 64));
+    public static final ItemData MAGENTA_CONCRETE_POWDER;
 
-    public static final ItemData LIGHT_BLUE_CONCRETE_POWDER = REGISTRY.register(new ItemData(633, "light_blue_concrete_powder", 64));
+    public static final ItemData LIGHT_BLUE_CONCRETE_POWDER;
 
-    public static final ItemData YELLOW_CONCRETE_POWDER = REGISTRY.register(new ItemData(634, "yellow_concrete_powder", 64));
+    public static final ItemData YELLOW_CONCRETE_POWDER;
 
-    public static final ItemData LIME_CONCRETE_POWDER = REGISTRY.register(new ItemData(635, "lime_concrete_powder", 64));
+    public static final ItemData LIME_CONCRETE_POWDER;
 
-    public static final ItemData PINK_CONCRETE_POWDER = REGISTRY.register(new ItemData(636, "pink_concrete_powder", 64));
+    public static final ItemData PINK_CONCRETE_POWDER;
 
-    public static final ItemData GRAY_CONCRETE_POWDER = REGISTRY.register(new ItemData(637, "gray_concrete_powder", 64));
+    public static final ItemData GRAY_CONCRETE_POWDER;
 
-    public static final ItemData LIGHT_GRAY_CONCRETE_POWDER = REGISTRY.register(new ItemData(638, "light_gray_concrete_powder", 64));
+    public static final ItemData LIGHT_GRAY_CONCRETE_POWDER;
 
-    public static final ItemData CYAN_CONCRETE_POWDER = REGISTRY.register(new ItemData(639, "cyan_concrete_powder", 64));
+    public static final ItemData CYAN_CONCRETE_POWDER;
 
-    public static final ItemData PURPLE_CONCRETE_POWDER = REGISTRY.register(new ItemData(640, "purple_concrete_powder", 64));
+    public static final ItemData PURPLE_CONCRETE_POWDER;
 
-    public static final ItemData BLUE_CONCRETE_POWDER = REGISTRY.register(new ItemData(641, "blue_concrete_powder", 64));
+    public static final ItemData BLUE_CONCRETE_POWDER;
 
-    public static final ItemData BROWN_CONCRETE_POWDER = REGISTRY.register(new ItemData(642, "brown_concrete_powder", 64));
+    public static final ItemData BROWN_CONCRETE_POWDER;
 
-    public static final ItemData GREEN_CONCRETE_POWDER = REGISTRY.register(new ItemData(643, "green_concrete_powder", 64));
+    public static final ItemData GREEN_CONCRETE_POWDER;
 
-    public static final ItemData RED_CONCRETE_POWDER = REGISTRY.register(new ItemData(644, "red_concrete_powder", 64));
+    public static final ItemData RED_CONCRETE_POWDER;
 
-    public static final ItemData BLACK_CONCRETE_POWDER = REGISTRY.register(new ItemData(645, "black_concrete_powder", 64));
+    public static final ItemData BLACK_CONCRETE_POWDER;
 
-    public static final ItemData TURTLE_EGG = REGISTRY.register(new ItemData(646, "turtle_egg", 64));
+    public static final ItemData TURTLE_EGG;
 
-    public static final ItemData SNIFFER_EGG = REGISTRY.register(new ItemData(647, "sniffer_egg", 64));
+    public static final ItemData SNIFFER_EGG;
 
-    public static final ItemData DRIED_GHAST = REGISTRY.register(new ItemData(648, "dried_ghast", 64));
+    public static final ItemData DRIED_GHAST;
 
-    public static final ItemData DEAD_TUBE_CORAL_BLOCK = REGISTRY.register(new ItemData(649, "dead_tube_coral_block", 64));
+    public static final ItemData DEAD_TUBE_CORAL_BLOCK;
 
-    public static final ItemData DEAD_BRAIN_CORAL_BLOCK = REGISTRY.register(new ItemData(650, "dead_brain_coral_block", 64));
+    public static final ItemData DEAD_BRAIN_CORAL_BLOCK;
 
-    public static final ItemData DEAD_BUBBLE_CORAL_BLOCK = REGISTRY.register(new ItemData(651, "dead_bubble_coral_block", 64));
+    public static final ItemData DEAD_BUBBLE_CORAL_BLOCK;
 
-    public static final ItemData DEAD_FIRE_CORAL_BLOCK = REGISTRY.register(new ItemData(652, "dead_fire_coral_block", 64));
+    public static final ItemData DEAD_FIRE_CORAL_BLOCK;
 
-    public static final ItemData DEAD_HORN_CORAL_BLOCK = REGISTRY.register(new ItemData(653, "dead_horn_coral_block", 64));
+    public static final ItemData DEAD_HORN_CORAL_BLOCK;
 
-    public static final ItemData TUBE_CORAL_BLOCK = REGISTRY.register(new ItemData(654, "tube_coral_block", 64));
+    public static final ItemData TUBE_CORAL_BLOCK;
 
-    public static final ItemData BRAIN_CORAL_BLOCK = REGISTRY.register(new ItemData(655, "brain_coral_block", 64));
+    public static final ItemData BRAIN_CORAL_BLOCK;
 
-    public static final ItemData BUBBLE_CORAL_BLOCK = REGISTRY.register(new ItemData(656, "bubble_coral_block", 64));
+    public static final ItemData BUBBLE_CORAL_BLOCK;
 
-    public static final ItemData FIRE_CORAL_BLOCK = REGISTRY.register(new ItemData(657, "fire_coral_block", 64));
+    public static final ItemData FIRE_CORAL_BLOCK;
 
-    public static final ItemData HORN_CORAL_BLOCK = REGISTRY.register(new ItemData(658, "horn_coral_block", 64));
+    public static final ItemData HORN_CORAL_BLOCK;
 
-    public static final ItemData TUBE_CORAL = REGISTRY.register(new ItemData(659, "tube_coral", 64));
+    public static final ItemData TUBE_CORAL;
 
-    public static final ItemData BRAIN_CORAL = REGISTRY.register(new ItemData(660, "brain_coral", 64));
+    public static final ItemData BRAIN_CORAL;
 
-    public static final ItemData BUBBLE_CORAL = REGISTRY.register(new ItemData(661, "bubble_coral", 64));
+    public static final ItemData BUBBLE_CORAL;
 
-    public static final ItemData FIRE_CORAL = REGISTRY.register(new ItemData(662, "fire_coral", 64));
+    public static final ItemData FIRE_CORAL;
 
-    public static final ItemData HORN_CORAL = REGISTRY.register(new ItemData(663, "horn_coral", 64));
+    public static final ItemData HORN_CORAL;
 
-    public static final ItemData DEAD_BRAIN_CORAL = REGISTRY.register(new ItemData(664, "dead_brain_coral", 64));
+    public static final ItemData DEAD_BRAIN_CORAL;
 
-    public static final ItemData DEAD_BUBBLE_CORAL = REGISTRY.register(new ItemData(665, "dead_bubble_coral", 64));
+    public static final ItemData DEAD_BUBBLE_CORAL;
 
-    public static final ItemData DEAD_FIRE_CORAL = REGISTRY.register(new ItemData(666, "dead_fire_coral", 64));
+    public static final ItemData DEAD_FIRE_CORAL;
 
-    public static final ItemData DEAD_HORN_CORAL = REGISTRY.register(new ItemData(667, "dead_horn_coral", 64));
+    public static final ItemData DEAD_HORN_CORAL;
 
-    public static final ItemData DEAD_TUBE_CORAL = REGISTRY.register(new ItemData(668, "dead_tube_coral", 64));
+    public static final ItemData DEAD_TUBE_CORAL;
 
-    public static final ItemData TUBE_CORAL_FAN = REGISTRY.register(new ItemData(669, "tube_coral_fan", 64));
+    public static final ItemData TUBE_CORAL_FAN;
 
-    public static final ItemData BRAIN_CORAL_FAN = REGISTRY.register(new ItemData(670, "brain_coral_fan", 64));
+    public static final ItemData BRAIN_CORAL_FAN;
 
-    public static final ItemData BUBBLE_CORAL_FAN = REGISTRY.register(new ItemData(671, "bubble_coral_fan", 64));
+    public static final ItemData BUBBLE_CORAL_FAN;
 
-    public static final ItemData FIRE_CORAL_FAN = REGISTRY.register(new ItemData(672, "fire_coral_fan", 64));
+    public static final ItemData FIRE_CORAL_FAN;
 
-    public static final ItemData HORN_CORAL_FAN = REGISTRY.register(new ItemData(673, "horn_coral_fan", 64));
+    public static final ItemData HORN_CORAL_FAN;
 
-    public static final ItemData DEAD_TUBE_CORAL_FAN = REGISTRY.register(new ItemData(674, "dead_tube_coral_fan", 64));
+    public static final ItemData DEAD_TUBE_CORAL_FAN;
 
-    public static final ItemData DEAD_BRAIN_CORAL_FAN = REGISTRY.register(new ItemData(675, "dead_brain_coral_fan", 64));
+    public static final ItemData DEAD_BRAIN_CORAL_FAN;
 
-    public static final ItemData DEAD_BUBBLE_CORAL_FAN = REGISTRY.register(new ItemData(676, "dead_bubble_coral_fan", 64));
+    public static final ItemData DEAD_BUBBLE_CORAL_FAN;
 
-    public static final ItemData DEAD_FIRE_CORAL_FAN = REGISTRY.register(new ItemData(677, "dead_fire_coral_fan", 64));
+    public static final ItemData DEAD_FIRE_CORAL_FAN;
 
-    public static final ItemData DEAD_HORN_CORAL_FAN = REGISTRY.register(new ItemData(678, "dead_horn_coral_fan", 64));
+    public static final ItemData DEAD_HORN_CORAL_FAN;
 
-    public static final ItemData BLUE_ICE = REGISTRY.register(new ItemData(679, "blue_ice", 64));
+    public static final ItemData BLUE_ICE;
 
-    public static final ItemData CONDUIT = REGISTRY.register(new ItemData(680, "conduit", 64));
+    public static final ItemData CONDUIT;
 
-    public static final ItemData POLISHED_GRANITE_STAIRS = REGISTRY.register(new ItemData(681, "polished_granite_stairs", 64));
+    public static final ItemData POLISHED_GRANITE_STAIRS;
 
-    public static final ItemData SMOOTH_RED_SANDSTONE_STAIRS = REGISTRY.register(new ItemData(682, "smooth_red_sandstone_stairs", 64));
+    public static final ItemData SMOOTH_RED_SANDSTONE_STAIRS;
 
-    public static final ItemData MOSSY_STONE_BRICK_STAIRS = REGISTRY.register(new ItemData(683, "mossy_stone_brick_stairs", 64));
+    public static final ItemData MOSSY_STONE_BRICK_STAIRS;
 
-    public static final ItemData POLISHED_DIORITE_STAIRS = REGISTRY.register(new ItemData(684, "polished_diorite_stairs", 64));
+    public static final ItemData POLISHED_DIORITE_STAIRS;
 
-    public static final ItemData MOSSY_COBBLESTONE_STAIRS = REGISTRY.register(new ItemData(685, "mossy_cobblestone_stairs", 64));
+    public static final ItemData MOSSY_COBBLESTONE_STAIRS;
 
-    public static final ItemData END_STONE_BRICK_STAIRS = REGISTRY.register(new ItemData(686, "end_stone_brick_stairs", 64));
+    public static final ItemData END_STONE_BRICK_STAIRS;
 
-    public static final ItemData STONE_STAIRS = REGISTRY.register(new ItemData(687, "stone_stairs", 64));
+    public static final ItemData STONE_STAIRS;
 
-    public static final ItemData SMOOTH_SANDSTONE_STAIRS = REGISTRY.register(new ItemData(688, "smooth_sandstone_stairs", 64));
+    public static final ItemData SMOOTH_SANDSTONE_STAIRS;
 
-    public static final ItemData SMOOTH_QUARTZ_STAIRS = REGISTRY.register(new ItemData(689, "smooth_quartz_stairs", 64));
+    public static final ItemData SMOOTH_QUARTZ_STAIRS;
 
-    public static final ItemData GRANITE_STAIRS = REGISTRY.register(new ItemData(690, "granite_stairs", 64));
+    public static final ItemData GRANITE_STAIRS;
 
-    public static final ItemData ANDESITE_STAIRS = REGISTRY.register(new ItemData(691, "andesite_stairs", 64));
+    public static final ItemData ANDESITE_STAIRS;
 
-    public static final ItemData RED_NETHER_BRICK_STAIRS = REGISTRY.register(new ItemData(692, "red_nether_brick_stairs", 64));
+    public static final ItemData RED_NETHER_BRICK_STAIRS;
 
-    public static final ItemData POLISHED_ANDESITE_STAIRS = REGISTRY.register(new ItemData(693, "polished_andesite_stairs", 64));
+    public static final ItemData POLISHED_ANDESITE_STAIRS;
 
-    public static final ItemData DIORITE_STAIRS = REGISTRY.register(new ItemData(694, "diorite_stairs", 64));
+    public static final ItemData DIORITE_STAIRS;
 
-    public static final ItemData COBBLED_DEEPSLATE_STAIRS = REGISTRY.register(new ItemData(695, "cobbled_deepslate_stairs", 64));
+    public static final ItemData COBBLED_DEEPSLATE_STAIRS;
 
-    public static final ItemData POLISHED_DEEPSLATE_STAIRS = REGISTRY.register(new ItemData(696, "polished_deepslate_stairs", 64));
+    public static final ItemData POLISHED_DEEPSLATE_STAIRS;
 
-    public static final ItemData DEEPSLATE_BRICK_STAIRS = REGISTRY.register(new ItemData(697, "deepslate_brick_stairs", 64));
+    public static final ItemData DEEPSLATE_BRICK_STAIRS;
 
-    public static final ItemData DEEPSLATE_TILE_STAIRS = REGISTRY.register(new ItemData(698, "deepslate_tile_stairs", 64));
+    public static final ItemData DEEPSLATE_TILE_STAIRS;
 
-    public static final ItemData POLISHED_GRANITE_SLAB = REGISTRY.register(new ItemData(699, "polished_granite_slab", 64));
+    public static final ItemData POLISHED_GRANITE_SLAB;
 
-    public static final ItemData SMOOTH_RED_SANDSTONE_SLAB = REGISTRY.register(new ItemData(700, "smooth_red_sandstone_slab", 64));
+    public static final ItemData SMOOTH_RED_SANDSTONE_SLAB;
 
-    public static final ItemData MOSSY_STONE_BRICK_SLAB = REGISTRY.register(new ItemData(701, "mossy_stone_brick_slab", 64));
+    public static final ItemData MOSSY_STONE_BRICK_SLAB;
 
-    public static final ItemData POLISHED_DIORITE_SLAB = REGISTRY.register(new ItemData(702, "polished_diorite_slab", 64));
+    public static final ItemData POLISHED_DIORITE_SLAB;
 
-    public static final ItemData MOSSY_COBBLESTONE_SLAB = REGISTRY.register(new ItemData(703, "mossy_cobblestone_slab", 64));
+    public static final ItemData MOSSY_COBBLESTONE_SLAB;
 
-    public static final ItemData END_STONE_BRICK_SLAB = REGISTRY.register(new ItemData(704, "end_stone_brick_slab", 64));
+    public static final ItemData END_STONE_BRICK_SLAB;
 
-    public static final ItemData SMOOTH_SANDSTONE_SLAB = REGISTRY.register(new ItemData(705, "smooth_sandstone_slab", 64));
+    public static final ItemData SMOOTH_SANDSTONE_SLAB;
 
-    public static final ItemData SMOOTH_QUARTZ_SLAB = REGISTRY.register(new ItemData(706, "smooth_quartz_slab", 64));
+    public static final ItemData SMOOTH_QUARTZ_SLAB;
 
-    public static final ItemData GRANITE_SLAB = REGISTRY.register(new ItemData(707, "granite_slab", 64));
+    public static final ItemData GRANITE_SLAB;
 
-    public static final ItemData ANDESITE_SLAB = REGISTRY.register(new ItemData(708, "andesite_slab", 64));
+    public static final ItemData ANDESITE_SLAB;
 
-    public static final ItemData RED_NETHER_BRICK_SLAB = REGISTRY.register(new ItemData(709, "red_nether_brick_slab", 64));
+    public static final ItemData RED_NETHER_BRICK_SLAB;
 
-    public static final ItemData POLISHED_ANDESITE_SLAB = REGISTRY.register(new ItemData(710, "polished_andesite_slab", 64));
+    public static final ItemData POLISHED_ANDESITE_SLAB;
 
-    public static final ItemData DIORITE_SLAB = REGISTRY.register(new ItemData(711, "diorite_slab", 64));
+    public static final ItemData DIORITE_SLAB;
 
-    public static final ItemData COBBLED_DEEPSLATE_SLAB = REGISTRY.register(new ItemData(712, "cobbled_deepslate_slab", 64));
+    public static final ItemData COBBLED_DEEPSLATE_SLAB;
 
-    public static final ItemData POLISHED_DEEPSLATE_SLAB = REGISTRY.register(new ItemData(713, "polished_deepslate_slab", 64));
+    public static final ItemData POLISHED_DEEPSLATE_SLAB;
 
-    public static final ItemData DEEPSLATE_BRICK_SLAB = REGISTRY.register(new ItemData(714, "deepslate_brick_slab", 64));
+    public static final ItemData DEEPSLATE_BRICK_SLAB;
 
-    public static final ItemData DEEPSLATE_TILE_SLAB = REGISTRY.register(new ItemData(715, "deepslate_tile_slab", 64));
+    public static final ItemData DEEPSLATE_TILE_SLAB;
 
-    public static final ItemData SCAFFOLDING = REGISTRY.register(new ItemData(716, "scaffolding", 64));
+    public static final ItemData SCAFFOLDING;
 
-    public static final ItemData REDSTONE = REGISTRY.register(new ItemData(717, "redstone", 64));
+    public static final ItemData REDSTONE;
 
-    public static final ItemData REDSTONE_TORCH = REGISTRY.register(new ItemData(718, "redstone_torch", 64));
+    public static final ItemData REDSTONE_TORCH;
 
-    public static final ItemData REDSTONE_BLOCK = REGISTRY.register(new ItemData(719, "redstone_block", 64));
+    public static final ItemData REDSTONE_BLOCK;
 
-    public static final ItemData REPEATER = REGISTRY.register(new ItemData(720, "repeater", 64));
+    public static final ItemData REPEATER;
 
-    public static final ItemData COMPARATOR = REGISTRY.register(new ItemData(721, "comparator", 64));
+    public static final ItemData COMPARATOR;
 
-    public static final ItemData PISTON = REGISTRY.register(new ItemData(722, "piston", 64));
+    public static final ItemData PISTON;
 
-    public static final ItemData STICKY_PISTON = REGISTRY.register(new ItemData(723, "sticky_piston", 64));
+    public static final ItemData STICKY_PISTON;
 
-    public static final ItemData SLIME_BLOCK = REGISTRY.register(new ItemData(724, "slime_block", 64));
+    public static final ItemData SLIME_BLOCK;
 
-    public static final ItemData HONEY_BLOCK = REGISTRY.register(new ItemData(725, "honey_block", 64));
+    public static final ItemData HONEY_BLOCK;
 
-    public static final ItemData OBSERVER = REGISTRY.register(new ItemData(726, "observer", 64));
+    public static final ItemData OBSERVER;
 
-    public static final ItemData HOPPER = REGISTRY.register(new ItemData(727, "hopper", 64));
+    public static final ItemData HOPPER;
 
-    public static final ItemData DISPENSER = REGISTRY.register(new ItemData(728, "dispenser", 64));
+    public static final ItemData DISPENSER;
 
-    public static final ItemData DROPPER = REGISTRY.register(new ItemData(729, "dropper", 64));
+    public static final ItemData DROPPER;
 
-    public static final ItemData LECTERN = REGISTRY.register(new ItemData(730, "lectern", 64));
+    public static final ItemData LECTERN;
 
-    public static final ItemData TARGET = REGISTRY.register(new ItemData(731, "target", 64));
+    public static final ItemData TARGET;
 
-    public static final ItemData LEVER = REGISTRY.register(new ItemData(732, "lever", 64));
+    public static final ItemData LEVER;
 
-    public static final ItemData LIGHTNING_ROD = REGISTRY.register(new ItemData(733, "lightning_rod", 64));
+    public static final ItemData LIGHTNING_ROD;
 
-    public static final ItemData EXPOSED_LIGHTNING_ROD = REGISTRY.register(new ItemData(734, "exposed_lightning_rod", 64));
+    public static final ItemData EXPOSED_LIGHTNING_ROD;
 
-    public static final ItemData WEATHERED_LIGHTNING_ROD = REGISTRY.register(new ItemData(735, "weathered_lightning_rod", 64));
+    public static final ItemData WEATHERED_LIGHTNING_ROD;
 
-    public static final ItemData OXIDIZED_LIGHTNING_ROD = REGISTRY.register(new ItemData(736, "oxidized_lightning_rod", 64));
+    public static final ItemData OXIDIZED_LIGHTNING_ROD;
 
-    public static final ItemData WAXED_LIGHTNING_ROD = REGISTRY.register(new ItemData(737, "waxed_lightning_rod", 64));
+    public static final ItemData WAXED_LIGHTNING_ROD;
 
-    public static final ItemData WAXED_EXPOSED_LIGHTNING_ROD = REGISTRY.register(new ItemData(738, "waxed_exposed_lightning_rod", 64));
+    public static final ItemData WAXED_EXPOSED_LIGHTNING_ROD;
 
-    public static final ItemData WAXED_WEATHERED_LIGHTNING_ROD = REGISTRY.register(new ItemData(739, "waxed_weathered_lightning_rod", 64));
+    public static final ItemData WAXED_WEATHERED_LIGHTNING_ROD;
 
-    public static final ItemData WAXED_OXIDIZED_LIGHTNING_ROD = REGISTRY.register(new ItemData(740, "waxed_oxidized_lightning_rod", 64));
+    public static final ItemData WAXED_OXIDIZED_LIGHTNING_ROD;
 
-    public static final ItemData DAYLIGHT_DETECTOR = REGISTRY.register(new ItemData(741, "daylight_detector", 64));
+    public static final ItemData DAYLIGHT_DETECTOR;
 
-    public static final ItemData SCULK_SENSOR = REGISTRY.register(new ItemData(742, "sculk_sensor", 64));
+    public static final ItemData SCULK_SENSOR;
 
-    public static final ItemData CALIBRATED_SCULK_SENSOR = REGISTRY.register(new ItemData(743, "calibrated_sculk_sensor", 64));
+    public static final ItemData CALIBRATED_SCULK_SENSOR;
 
-    public static final ItemData TRIPWIRE_HOOK = REGISTRY.register(new ItemData(744, "tripwire_hook", 64));
+    public static final ItemData TRIPWIRE_HOOK;
 
-    public static final ItemData TRAPPED_CHEST = REGISTRY.register(new ItemData(745, "trapped_chest", 64));
+    public static final ItemData TRAPPED_CHEST;
 
-    public static final ItemData TNT = REGISTRY.register(new ItemData(746, "tnt", 64));
+    public static final ItemData TNT;
 
-    public static final ItemData REDSTONE_LAMP = REGISTRY.register(new ItemData(747, "redstone_lamp", 64));
+    public static final ItemData REDSTONE_LAMP;
 
-    public static final ItemData NOTE_BLOCK = REGISTRY.register(new ItemData(748, "note_block", 64));
+    public static final ItemData NOTE_BLOCK;
 
-    public static final ItemData STONE_BUTTON = REGISTRY.register(new ItemData(749, "stone_button", 64));
+    public static final ItemData STONE_BUTTON;
 
-    public static final ItemData POLISHED_BLACKSTONE_BUTTON = REGISTRY.register(new ItemData(750, "polished_blackstone_button", 64));
+    public static final ItemData POLISHED_BLACKSTONE_BUTTON;
 
-    public static final ItemData OAK_BUTTON = REGISTRY.register(new ItemData(751, "oak_button", 64));
+    public static final ItemData OAK_BUTTON;
 
-    public static final ItemData SPRUCE_BUTTON = REGISTRY.register(new ItemData(752, "spruce_button", 64));
+    public static final ItemData SPRUCE_BUTTON;
 
-    public static final ItemData BIRCH_BUTTON = REGISTRY.register(new ItemData(753, "birch_button", 64));
+    public static final ItemData BIRCH_BUTTON;
 
-    public static final ItemData JUNGLE_BUTTON = REGISTRY.register(new ItemData(754, "jungle_button", 64));
+    public static final ItemData JUNGLE_BUTTON;
 
-    public static final ItemData ACACIA_BUTTON = REGISTRY.register(new ItemData(755, "acacia_button", 64));
+    public static final ItemData ACACIA_BUTTON;
 
-    public static final ItemData CHERRY_BUTTON = REGISTRY.register(new ItemData(756, "cherry_button", 64));
+    public static final ItemData CHERRY_BUTTON;
 
-    public static final ItemData DARK_OAK_BUTTON = REGISTRY.register(new ItemData(757, "dark_oak_button", 64));
+    public static final ItemData DARK_OAK_BUTTON;
 
-    public static final ItemData PALE_OAK_BUTTON = REGISTRY.register(new ItemData(758, "pale_oak_button", 64));
+    public static final ItemData PALE_OAK_BUTTON;
 
-    public static final ItemData MANGROVE_BUTTON = REGISTRY.register(new ItemData(759, "mangrove_button", 64));
+    public static final ItemData MANGROVE_BUTTON;
 
-    public static final ItemData BAMBOO_BUTTON = REGISTRY.register(new ItemData(760, "bamboo_button", 64));
+    public static final ItemData BAMBOO_BUTTON;
 
-    public static final ItemData CRIMSON_BUTTON = REGISTRY.register(new ItemData(761, "crimson_button", 64));
+    public static final ItemData CRIMSON_BUTTON;
 
-    public static final ItemData WARPED_BUTTON = REGISTRY.register(new ItemData(762, "warped_button", 64));
+    public static final ItemData WARPED_BUTTON;
 
-    public static final ItemData STONE_PRESSURE_PLATE = REGISTRY.register(new ItemData(763, "stone_pressure_plate", 64));
+    public static final ItemData STONE_PRESSURE_PLATE;
 
-    public static final ItemData POLISHED_BLACKSTONE_PRESSURE_PLATE = REGISTRY.register(new ItemData(764, "polished_blackstone_pressure_plate", 64));
+    public static final ItemData POLISHED_BLACKSTONE_PRESSURE_PLATE;
 
-    public static final ItemData LIGHT_WEIGHTED_PRESSURE_PLATE = REGISTRY.register(new ItemData(765, "light_weighted_pressure_plate", 64));
+    public static final ItemData LIGHT_WEIGHTED_PRESSURE_PLATE;
 
-    public static final ItemData HEAVY_WEIGHTED_PRESSURE_PLATE = REGISTRY.register(new ItemData(766, "heavy_weighted_pressure_plate", 64));
+    public static final ItemData HEAVY_WEIGHTED_PRESSURE_PLATE;
 
-    public static final ItemData OAK_PRESSURE_PLATE = REGISTRY.register(new ItemData(767, "oak_pressure_plate", 64));
+    public static final ItemData OAK_PRESSURE_PLATE;
 
-    public static final ItemData SPRUCE_PRESSURE_PLATE = REGISTRY.register(new ItemData(768, "spruce_pressure_plate", 64));
+    public static final ItemData SPRUCE_PRESSURE_PLATE;
 
-    public static final ItemData BIRCH_PRESSURE_PLATE = REGISTRY.register(new ItemData(769, "birch_pressure_plate", 64));
+    public static final ItemData BIRCH_PRESSURE_PLATE;
 
-    public static final ItemData JUNGLE_PRESSURE_PLATE = REGISTRY.register(new ItemData(770, "jungle_pressure_plate", 64));
+    public static final ItemData JUNGLE_PRESSURE_PLATE;
 
-    public static final ItemData ACACIA_PRESSURE_PLATE = REGISTRY.register(new ItemData(771, "acacia_pressure_plate", 64));
+    public static final ItemData ACACIA_PRESSURE_PLATE;
 
-    public static final ItemData CHERRY_PRESSURE_PLATE = REGISTRY.register(new ItemData(772, "cherry_pressure_plate", 64));
+    public static final ItemData CHERRY_PRESSURE_PLATE;
 
-    public static final ItemData DARK_OAK_PRESSURE_PLATE = REGISTRY.register(new ItemData(773, "dark_oak_pressure_plate", 64));
+    public static final ItemData DARK_OAK_PRESSURE_PLATE;
 
-    public static final ItemData PALE_OAK_PRESSURE_PLATE = REGISTRY.register(new ItemData(774, "pale_oak_pressure_plate", 64));
+    public static final ItemData PALE_OAK_PRESSURE_PLATE;
 
-    public static final ItemData MANGROVE_PRESSURE_PLATE = REGISTRY.register(new ItemData(775, "mangrove_pressure_plate", 64));
+    public static final ItemData MANGROVE_PRESSURE_PLATE;
 
-    public static final ItemData BAMBOO_PRESSURE_PLATE = REGISTRY.register(new ItemData(776, "bamboo_pressure_plate", 64));
+    public static final ItemData BAMBOO_PRESSURE_PLATE;
 
-    public static final ItemData CRIMSON_PRESSURE_PLATE = REGISTRY.register(new ItemData(777, "crimson_pressure_plate", 64));
+    public static final ItemData CRIMSON_PRESSURE_PLATE;
 
-    public static final ItemData WARPED_PRESSURE_PLATE = REGISTRY.register(new ItemData(778, "warped_pressure_plate", 64));
+    public static final ItemData WARPED_PRESSURE_PLATE;
 
-    public static final ItemData IRON_DOOR = REGISTRY.register(new ItemData(779, "iron_door", 64));
+    public static final ItemData IRON_DOOR;
 
-    public static final ItemData OAK_DOOR = REGISTRY.register(new ItemData(780, "oak_door", 64));
+    public static final ItemData OAK_DOOR;
 
-    public static final ItemData SPRUCE_DOOR = REGISTRY.register(new ItemData(781, "spruce_door", 64));
+    public static final ItemData SPRUCE_DOOR;
 
-    public static final ItemData BIRCH_DOOR = REGISTRY.register(new ItemData(782, "birch_door", 64));
+    public static final ItemData BIRCH_DOOR;
 
-    public static final ItemData JUNGLE_DOOR = REGISTRY.register(new ItemData(783, "jungle_door", 64));
+    public static final ItemData JUNGLE_DOOR;
 
-    public static final ItemData ACACIA_DOOR = REGISTRY.register(new ItemData(784, "acacia_door", 64));
+    public static final ItemData ACACIA_DOOR;
 
-    public static final ItemData CHERRY_DOOR = REGISTRY.register(new ItemData(785, "cherry_door", 64));
+    public static final ItemData CHERRY_DOOR;
 
-    public static final ItemData DARK_OAK_DOOR = REGISTRY.register(new ItemData(786, "dark_oak_door", 64));
+    public static final ItemData DARK_OAK_DOOR;
 
-    public static final ItemData PALE_OAK_DOOR = REGISTRY.register(new ItemData(787, "pale_oak_door", 64));
+    public static final ItemData PALE_OAK_DOOR;
 
-    public static final ItemData MANGROVE_DOOR = REGISTRY.register(new ItemData(788, "mangrove_door", 64));
+    public static final ItemData MANGROVE_DOOR;
 
-    public static final ItemData BAMBOO_DOOR = REGISTRY.register(new ItemData(789, "bamboo_door", 64));
+    public static final ItemData BAMBOO_DOOR;
 
-    public static final ItemData CRIMSON_DOOR = REGISTRY.register(new ItemData(790, "crimson_door", 64));
+    public static final ItemData CRIMSON_DOOR;
 
-    public static final ItemData WARPED_DOOR = REGISTRY.register(new ItemData(791, "warped_door", 64));
+    public static final ItemData WARPED_DOOR;
 
-    public static final ItemData COPPER_DOOR = REGISTRY.register(new ItemData(792, "copper_door", 64));
+    public static final ItemData COPPER_DOOR;
 
-    public static final ItemData EXPOSED_COPPER_DOOR = REGISTRY.register(new ItemData(793, "exposed_copper_door", 64));
+    public static final ItemData EXPOSED_COPPER_DOOR;
 
-    public static final ItemData WEATHERED_COPPER_DOOR = REGISTRY.register(new ItemData(794, "weathered_copper_door", 64));
+    public static final ItemData WEATHERED_COPPER_DOOR;
 
-    public static final ItemData OXIDIZED_COPPER_DOOR = REGISTRY.register(new ItemData(795, "oxidized_copper_door", 64));
+    public static final ItemData OXIDIZED_COPPER_DOOR;
 
-    public static final ItemData WAXED_COPPER_DOOR = REGISTRY.register(new ItemData(796, "waxed_copper_door", 64));
+    public static final ItemData WAXED_COPPER_DOOR;
 
-    public static final ItemData WAXED_EXPOSED_COPPER_DOOR = REGISTRY.register(new ItemData(797, "waxed_exposed_copper_door", 64));
+    public static final ItemData WAXED_EXPOSED_COPPER_DOOR;
 
-    public static final ItemData WAXED_WEATHERED_COPPER_DOOR = REGISTRY.register(new ItemData(798, "waxed_weathered_copper_door", 64));
+    public static final ItemData WAXED_WEATHERED_COPPER_DOOR;
 
-    public static final ItemData WAXED_OXIDIZED_COPPER_DOOR = REGISTRY.register(new ItemData(799, "waxed_oxidized_copper_door", 64));
+    public static final ItemData WAXED_OXIDIZED_COPPER_DOOR;
 
-    public static final ItemData IRON_TRAPDOOR = REGISTRY.register(new ItemData(800, "iron_trapdoor", 64));
+    public static final ItemData IRON_TRAPDOOR;
 
-    public static final ItemData OAK_TRAPDOOR = REGISTRY.register(new ItemData(801, "oak_trapdoor", 64));
+    public static final ItemData OAK_TRAPDOOR;
 
-    public static final ItemData SPRUCE_TRAPDOOR = REGISTRY.register(new ItemData(802, "spruce_trapdoor", 64));
+    public static final ItemData SPRUCE_TRAPDOOR;
 
-    public static final ItemData BIRCH_TRAPDOOR = REGISTRY.register(new ItemData(803, "birch_trapdoor", 64));
+    public static final ItemData BIRCH_TRAPDOOR;
 
-    public static final ItemData JUNGLE_TRAPDOOR = REGISTRY.register(new ItemData(804, "jungle_trapdoor", 64));
+    public static final ItemData JUNGLE_TRAPDOOR;
 
-    public static final ItemData ACACIA_TRAPDOOR = REGISTRY.register(new ItemData(805, "acacia_trapdoor", 64));
+    public static final ItemData ACACIA_TRAPDOOR;
 
-    public static final ItemData CHERRY_TRAPDOOR = REGISTRY.register(new ItemData(806, "cherry_trapdoor", 64));
+    public static final ItemData CHERRY_TRAPDOOR;
 
-    public static final ItemData DARK_OAK_TRAPDOOR = REGISTRY.register(new ItemData(807, "dark_oak_trapdoor", 64));
+    public static final ItemData DARK_OAK_TRAPDOOR;
 
-    public static final ItemData PALE_OAK_TRAPDOOR = REGISTRY.register(new ItemData(808, "pale_oak_trapdoor", 64));
+    public static final ItemData PALE_OAK_TRAPDOOR;
 
-    public static final ItemData MANGROVE_TRAPDOOR = REGISTRY.register(new ItemData(809, "mangrove_trapdoor", 64));
+    public static final ItemData MANGROVE_TRAPDOOR;
 
-    public static final ItemData BAMBOO_TRAPDOOR = REGISTRY.register(new ItemData(810, "bamboo_trapdoor", 64));
+    public static final ItemData BAMBOO_TRAPDOOR;
 
-    public static final ItemData CRIMSON_TRAPDOOR = REGISTRY.register(new ItemData(811, "crimson_trapdoor", 64));
+    public static final ItemData CRIMSON_TRAPDOOR;
 
-    public static final ItemData WARPED_TRAPDOOR = REGISTRY.register(new ItemData(812, "warped_trapdoor", 64));
+    public static final ItemData WARPED_TRAPDOOR;
 
-    public static final ItemData COPPER_TRAPDOOR = REGISTRY.register(new ItemData(813, "copper_trapdoor", 64));
+    public static final ItemData COPPER_TRAPDOOR;
 
-    public static final ItemData EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(new ItemData(814, "exposed_copper_trapdoor", 64));
+    public static final ItemData EXPOSED_COPPER_TRAPDOOR;
 
-    public static final ItemData WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(new ItemData(815, "weathered_copper_trapdoor", 64));
+    public static final ItemData WEATHERED_COPPER_TRAPDOOR;
 
-    public static final ItemData OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(new ItemData(816, "oxidized_copper_trapdoor", 64));
+    public static final ItemData OXIDIZED_COPPER_TRAPDOOR;
 
-    public static final ItemData WAXED_COPPER_TRAPDOOR = REGISTRY.register(new ItemData(817, "waxed_copper_trapdoor", 64));
+    public static final ItemData WAXED_COPPER_TRAPDOOR;
 
-    public static final ItemData WAXED_EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(new ItemData(818, "waxed_exposed_copper_trapdoor", 64));
+    public static final ItemData WAXED_EXPOSED_COPPER_TRAPDOOR;
 
-    public static final ItemData WAXED_WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(new ItemData(819, "waxed_weathered_copper_trapdoor", 64));
+    public static final ItemData WAXED_WEATHERED_COPPER_TRAPDOOR;
 
-    public static final ItemData WAXED_OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(new ItemData(820, "waxed_oxidized_copper_trapdoor", 64));
+    public static final ItemData WAXED_OXIDIZED_COPPER_TRAPDOOR;
 
-    public static final ItemData OAK_FENCE_GATE = REGISTRY.register(new ItemData(821, "oak_fence_gate", 64));
+    public static final ItemData OAK_FENCE_GATE;
 
-    public static final ItemData SPRUCE_FENCE_GATE = REGISTRY.register(new ItemData(822, "spruce_fence_gate", 64));
+    public static final ItemData SPRUCE_FENCE_GATE;
 
-    public static final ItemData BIRCH_FENCE_GATE = REGISTRY.register(new ItemData(823, "birch_fence_gate", 64));
+    public static final ItemData BIRCH_FENCE_GATE;
 
-    public static final ItemData JUNGLE_FENCE_GATE = REGISTRY.register(new ItemData(824, "jungle_fence_gate", 64));
+    public static final ItemData JUNGLE_FENCE_GATE;
 
-    public static final ItemData ACACIA_FENCE_GATE = REGISTRY.register(new ItemData(825, "acacia_fence_gate", 64));
+    public static final ItemData ACACIA_FENCE_GATE;
 
-    public static final ItemData CHERRY_FENCE_GATE = REGISTRY.register(new ItemData(826, "cherry_fence_gate", 64));
+    public static final ItemData CHERRY_FENCE_GATE;
 
-    public static final ItemData DARK_OAK_FENCE_GATE = REGISTRY.register(new ItemData(827, "dark_oak_fence_gate", 64));
+    public static final ItemData DARK_OAK_FENCE_GATE;
 
-    public static final ItemData PALE_OAK_FENCE_GATE = REGISTRY.register(new ItemData(828, "pale_oak_fence_gate", 64));
+    public static final ItemData PALE_OAK_FENCE_GATE;
 
-    public static final ItemData MANGROVE_FENCE_GATE = REGISTRY.register(new ItemData(829, "mangrove_fence_gate", 64));
+    public static final ItemData MANGROVE_FENCE_GATE;
 
-    public static final ItemData BAMBOO_FENCE_GATE = REGISTRY.register(new ItemData(830, "bamboo_fence_gate", 64));
+    public static final ItemData BAMBOO_FENCE_GATE;
 
-    public static final ItemData CRIMSON_FENCE_GATE = REGISTRY.register(new ItemData(831, "crimson_fence_gate", 64));
+    public static final ItemData CRIMSON_FENCE_GATE;
 
-    public static final ItemData WARPED_FENCE_GATE = REGISTRY.register(new ItemData(832, "warped_fence_gate", 64));
+    public static final ItemData WARPED_FENCE_GATE;
 
-    public static final ItemData POWERED_RAIL = REGISTRY.register(new ItemData(833, "powered_rail", 64));
+    public static final ItemData POWERED_RAIL;
 
-    public static final ItemData DETECTOR_RAIL = REGISTRY.register(new ItemData(834, "detector_rail", 64));
+    public static final ItemData DETECTOR_RAIL;
 
-    public static final ItemData RAIL = REGISTRY.register(new ItemData(835, "rail", 64));
+    public static final ItemData RAIL;
 
-    public static final ItemData ACTIVATOR_RAIL = REGISTRY.register(new ItemData(836, "activator_rail", 64));
+    public static final ItemData ACTIVATOR_RAIL;
 
-    public static final ItemData SADDLE = REGISTRY.register(new ItemData(837, "saddle", 1));
+    public static final ItemData SADDLE;
 
-    public static final ItemData WHITE_HARNESS = REGISTRY.register(new ItemData(838, "white_harness", 1));
+    public static final ItemData WHITE_HARNESS;
 
-    public static final ItemData ORANGE_HARNESS = REGISTRY.register(new ItemData(839, "orange_harness", 1));
+    public static final ItemData ORANGE_HARNESS;
 
-    public static final ItemData MAGENTA_HARNESS = REGISTRY.register(new ItemData(840, "magenta_harness", 1));
+    public static final ItemData MAGENTA_HARNESS;
 
-    public static final ItemData LIGHT_BLUE_HARNESS = REGISTRY.register(new ItemData(841, "light_blue_harness", 1));
+    public static final ItemData LIGHT_BLUE_HARNESS;
 
-    public static final ItemData YELLOW_HARNESS = REGISTRY.register(new ItemData(842, "yellow_harness", 1));
+    public static final ItemData YELLOW_HARNESS;
 
-    public static final ItemData LIME_HARNESS = REGISTRY.register(new ItemData(843, "lime_harness", 1));
+    public static final ItemData LIME_HARNESS;
 
-    public static final ItemData PINK_HARNESS = REGISTRY.register(new ItemData(844, "pink_harness", 1));
+    public static final ItemData PINK_HARNESS;
 
-    public static final ItemData GRAY_HARNESS = REGISTRY.register(new ItemData(845, "gray_harness", 1));
+    public static final ItemData GRAY_HARNESS;
 
-    public static final ItemData LIGHT_GRAY_HARNESS = REGISTRY.register(new ItemData(846, "light_gray_harness", 1));
+    public static final ItemData LIGHT_GRAY_HARNESS;
 
-    public static final ItemData CYAN_HARNESS = REGISTRY.register(new ItemData(847, "cyan_harness", 1));
+    public static final ItemData CYAN_HARNESS;
 
-    public static final ItemData PURPLE_HARNESS = REGISTRY.register(new ItemData(848, "purple_harness", 1));
+    public static final ItemData PURPLE_HARNESS;
 
-    public static final ItemData BLUE_HARNESS = REGISTRY.register(new ItemData(849, "blue_harness", 1));
+    public static final ItemData BLUE_HARNESS;
 
-    public static final ItemData BROWN_HARNESS = REGISTRY.register(new ItemData(850, "brown_harness", 1));
+    public static final ItemData BROWN_HARNESS;
 
-    public static final ItemData GREEN_HARNESS = REGISTRY.register(new ItemData(851, "green_harness", 1));
+    public static final ItemData GREEN_HARNESS;
 
-    public static final ItemData RED_HARNESS = REGISTRY.register(new ItemData(852, "red_harness", 1));
+    public static final ItemData RED_HARNESS;
 
-    public static final ItemData BLACK_HARNESS = REGISTRY.register(new ItemData(853, "black_harness", 1));
+    public static final ItemData BLACK_HARNESS;
 
-    public static final ItemData MINECART = REGISTRY.register(new ItemData(854, "minecart", 1));
+    public static final ItemData MINECART;
 
-    public static final ItemData CHEST_MINECART = REGISTRY.register(new ItemData(855, "chest_minecart", 1));
+    public static final ItemData CHEST_MINECART;
 
-    public static final ItemData FURNACE_MINECART = REGISTRY.register(new ItemData(856, "furnace_minecart", 1));
+    public static final ItemData FURNACE_MINECART;
 
-    public static final ItemData TNT_MINECART = REGISTRY.register(new ItemData(857, "tnt_minecart", 1));
+    public static final ItemData TNT_MINECART;
 
-    public static final ItemData HOPPER_MINECART = REGISTRY.register(new ItemData(858, "hopper_minecart", 1));
+    public static final ItemData HOPPER_MINECART;
 
-    public static final ItemData CARROT_ON_A_STICK = REGISTRY.register(new ItemData(859, "carrot_on_a_stick", 1));
+    public static final ItemData CARROT_ON_A_STICK;
 
-    public static final ItemData WARPED_FUNGUS_ON_A_STICK = REGISTRY.register(new ItemData(860, "warped_fungus_on_a_stick", 1));
+    public static final ItemData WARPED_FUNGUS_ON_A_STICK;
 
-    public static final ItemData PHANTOM_MEMBRANE = REGISTRY.register(new ItemData(861, "phantom_membrane", 64));
+    public static final ItemData PHANTOM_MEMBRANE;
 
-    public static final ItemData ELYTRA = REGISTRY.register(new ItemData(862, "elytra", 1));
+    public static final ItemData ELYTRA;
 
-    public static final ItemData OAK_BOAT = REGISTRY.register(new ItemData(863, "oak_boat", 1));
+    public static final ItemData OAK_BOAT;
 
-    public static final ItemData OAK_CHEST_BOAT = REGISTRY.register(new ItemData(864, "oak_chest_boat", 1));
+    public static final ItemData OAK_CHEST_BOAT;
 
-    public static final ItemData SPRUCE_BOAT = REGISTRY.register(new ItemData(865, "spruce_boat", 1));
+    public static final ItemData SPRUCE_BOAT;
 
-    public static final ItemData SPRUCE_CHEST_BOAT = REGISTRY.register(new ItemData(866, "spruce_chest_boat", 1));
+    public static final ItemData SPRUCE_CHEST_BOAT;
 
-    public static final ItemData BIRCH_BOAT = REGISTRY.register(new ItemData(867, "birch_boat", 1));
+    public static final ItemData BIRCH_BOAT;
 
-    public static final ItemData BIRCH_CHEST_BOAT = REGISTRY.register(new ItemData(868, "birch_chest_boat", 1));
+    public static final ItemData BIRCH_CHEST_BOAT;
 
-    public static final ItemData JUNGLE_BOAT = REGISTRY.register(new ItemData(869, "jungle_boat", 1));
+    public static final ItemData JUNGLE_BOAT;
 
-    public static final ItemData JUNGLE_CHEST_BOAT = REGISTRY.register(new ItemData(870, "jungle_chest_boat", 1));
+    public static final ItemData JUNGLE_CHEST_BOAT;
 
-    public static final ItemData ACACIA_BOAT = REGISTRY.register(new ItemData(871, "acacia_boat", 1));
+    public static final ItemData ACACIA_BOAT;
 
-    public static final ItemData ACACIA_CHEST_BOAT = REGISTRY.register(new ItemData(872, "acacia_chest_boat", 1));
+    public static final ItemData ACACIA_CHEST_BOAT;
 
-    public static final ItemData CHERRY_BOAT = REGISTRY.register(new ItemData(873, "cherry_boat", 1));
+    public static final ItemData CHERRY_BOAT;
 
-    public static final ItemData CHERRY_CHEST_BOAT = REGISTRY.register(new ItemData(874, "cherry_chest_boat", 1));
+    public static final ItemData CHERRY_CHEST_BOAT;
 
-    public static final ItemData DARK_OAK_BOAT = REGISTRY.register(new ItemData(875, "dark_oak_boat", 1));
+    public static final ItemData DARK_OAK_BOAT;
 
-    public static final ItemData DARK_OAK_CHEST_BOAT = REGISTRY.register(new ItemData(876, "dark_oak_chest_boat", 1));
+    public static final ItemData DARK_OAK_CHEST_BOAT;
 
-    public static final ItemData PALE_OAK_BOAT = REGISTRY.register(new ItemData(877, "pale_oak_boat", 1));
+    public static final ItemData PALE_OAK_BOAT;
 
-    public static final ItemData PALE_OAK_CHEST_BOAT = REGISTRY.register(new ItemData(878, "pale_oak_chest_boat", 1));
+    public static final ItemData PALE_OAK_CHEST_BOAT;
 
-    public static final ItemData MANGROVE_BOAT = REGISTRY.register(new ItemData(879, "mangrove_boat", 1));
+    public static final ItemData MANGROVE_BOAT;
 
-    public static final ItemData MANGROVE_CHEST_BOAT = REGISTRY.register(new ItemData(880, "mangrove_chest_boat", 1));
+    public static final ItemData MANGROVE_CHEST_BOAT;
 
-    public static final ItemData BAMBOO_RAFT = REGISTRY.register(new ItemData(881, "bamboo_raft", 1));
+    public static final ItemData BAMBOO_RAFT;
 
-    public static final ItemData BAMBOO_CHEST_RAFT = REGISTRY.register(new ItemData(882, "bamboo_chest_raft", 1));
+    public static final ItemData BAMBOO_CHEST_RAFT;
 
-    public static final ItemData STRUCTURE_BLOCK = REGISTRY.register(new ItemData(883, "structure_block", 64));
+    public static final ItemData STRUCTURE_BLOCK;
 
-    public static final ItemData JIGSAW = REGISTRY.register(new ItemData(884, "jigsaw", 64));
+    public static final ItemData JIGSAW;
 
-    public static final ItemData TEST_BLOCK = REGISTRY.register(new ItemData(885, "test_block", 64));
+    public static final ItemData TEST_BLOCK;
 
-    public static final ItemData TEST_INSTANCE_BLOCK = REGISTRY.register(new ItemData(886, "test_instance_block", 64));
+    public static final ItemData TEST_INSTANCE_BLOCK;
 
-    public static final ItemData TURTLE_HELMET = REGISTRY.register(new ItemData(887, "turtle_helmet", 1));
+    public static final ItemData TURTLE_HELMET;
 
-    public static final ItemData TURTLE_SCUTE = REGISTRY.register(new ItemData(888, "turtle_scute", 64));
+    public static final ItemData TURTLE_SCUTE;
 
-    public static final ItemData ARMADILLO_SCUTE = REGISTRY.register(new ItemData(889, "armadillo_scute", 64));
+    public static final ItemData ARMADILLO_SCUTE;
 
-    public static final ItemData WOLF_ARMOR = REGISTRY.register(new ItemData(890, "wolf_armor", 1));
+    public static final ItemData WOLF_ARMOR;
 
-    public static final ItemData FLINT_AND_STEEL = REGISTRY.register(new ItemData(891, "flint_and_steel", 1));
+    public static final ItemData FLINT_AND_STEEL;
 
-    public static final ItemData BOWL = REGISTRY.register(new ItemData(892, "bowl", 64));
+    public static final ItemData BOWL;
 
-    public static final ItemData APPLE = REGISTRY.register(new ItemData(893, "apple", 64));
+    public static final ItemData APPLE;
 
-    public static final ItemData BOW = REGISTRY.register(new ItemData(894, "bow", 1));
+    public static final ItemData BOW;
 
-    public static final ItemData ARROW = REGISTRY.register(new ItemData(895, "arrow", 64));
+    public static final ItemData ARROW;
 
-    public static final ItemData COAL = REGISTRY.register(new ItemData(896, "coal", 64));
+    public static final ItemData COAL;
 
-    public static final ItemData CHARCOAL = REGISTRY.register(new ItemData(897, "charcoal", 64));
+    public static final ItemData CHARCOAL;
 
-    public static final ItemData DIAMOND = REGISTRY.register(new ItemData(898, "diamond", 64));
+    public static final ItemData DIAMOND;
 
-    public static final ItemData EMERALD = REGISTRY.register(new ItemData(899, "emerald", 64));
+    public static final ItemData EMERALD;
 
-    public static final ItemData LAPIS_LAZULI = REGISTRY.register(new ItemData(900, "lapis_lazuli", 64));
+    public static final ItemData LAPIS_LAZULI;
 
-    public static final ItemData QUARTZ = REGISTRY.register(new ItemData(901, "quartz", 64));
+    public static final ItemData QUARTZ;
 
-    public static final ItemData AMETHYST_SHARD = REGISTRY.register(new ItemData(902, "amethyst_shard", 64));
+    public static final ItemData AMETHYST_SHARD;
 
-    public static final ItemData RAW_IRON = REGISTRY.register(new ItemData(903, "raw_iron", 64));
+    public static final ItemData RAW_IRON;
 
-    public static final ItemData IRON_INGOT = REGISTRY.register(new ItemData(904, "iron_ingot", 64));
+    public static final ItemData IRON_INGOT;
 
-    public static final ItemData RAW_COPPER = REGISTRY.register(new ItemData(905, "raw_copper", 64));
+    public static final ItemData RAW_COPPER;
 
-    public static final ItemData COPPER_INGOT = REGISTRY.register(new ItemData(906, "copper_ingot", 64));
+    public static final ItemData COPPER_INGOT;
 
-    public static final ItemData RAW_GOLD = REGISTRY.register(new ItemData(907, "raw_gold", 64));
+    public static final ItemData RAW_GOLD;
 
-    public static final ItemData GOLD_INGOT = REGISTRY.register(new ItemData(908, "gold_ingot", 64));
+    public static final ItemData GOLD_INGOT;
 
-    public static final ItemData NETHERITE_INGOT = REGISTRY.register(new ItemData(909, "netherite_ingot", 64));
+    public static final ItemData NETHERITE_INGOT;
 
-    public static final ItemData NETHERITE_SCRAP = REGISTRY.register(new ItemData(910, "netherite_scrap", 64));
+    public static final ItemData NETHERITE_SCRAP;
 
-    public static final ItemData WOODEN_SWORD = REGISTRY.register(new ItemData(911, "wooden_sword", 1, new ToolTag(ToolTier.WOOD, ToolType.SWORD)));
+    public static final ItemData WOODEN_SWORD;
 
-    public static final ItemData WOODEN_SHOVEL = REGISTRY.register(new ItemData(912, "wooden_shovel", 1, new ToolTag(ToolTier.WOOD, ToolType.SHOVEL)));
+    public static final ItemData WOODEN_SHOVEL;
 
-    public static final ItemData WOODEN_PICKAXE = REGISTRY.register(new ItemData(913, "wooden_pickaxe", 1, new ToolTag(ToolTier.WOOD, ToolType.PICKAXE)));
+    public static final ItemData WOODEN_PICKAXE;
 
-    public static final ItemData WOODEN_AXE = REGISTRY.register(new ItemData(914, "wooden_axe", 1, new ToolTag(ToolTier.WOOD, ToolType.AXE)));
+    public static final ItemData WOODEN_AXE;
 
-    public static final ItemData WOODEN_HOE = REGISTRY.register(new ItemData(915, "wooden_hoe", 1, new ToolTag(ToolTier.WOOD, ToolType.HOE)));
+    public static final ItemData WOODEN_HOE;
 
-    public static final ItemData COPPER_SWORD = REGISTRY.register(new ItemData(916, "copper_sword", 1));
+    public static final ItemData COPPER_SWORD;
 
-    public static final ItemData COPPER_SHOVEL = REGISTRY.register(new ItemData(917, "copper_shovel", 1));
+    public static final ItemData COPPER_SHOVEL;
 
-    public static final ItemData COPPER_PICKAXE = REGISTRY.register(new ItemData(918, "copper_pickaxe", 1));
+    public static final ItemData COPPER_PICKAXE;
 
-    public static final ItemData COPPER_AXE = REGISTRY.register(new ItemData(919, "copper_axe", 1));
+    public static final ItemData COPPER_AXE;
 
-    public static final ItemData COPPER_HOE = REGISTRY.register(new ItemData(920, "copper_hoe", 1));
+    public static final ItemData COPPER_HOE;
 
-    public static final ItemData STONE_SWORD = REGISTRY.register(new ItemData(921, "stone_sword", 1, new ToolTag(ToolTier.STONE, ToolType.SWORD)));
+    public static final ItemData STONE_SWORD;
 
-    public static final ItemData STONE_SHOVEL = REGISTRY.register(new ItemData(922, "stone_shovel", 1, new ToolTag(ToolTier.STONE, ToolType.SHOVEL)));
+    public static final ItemData STONE_SHOVEL;
 
-    public static final ItemData STONE_PICKAXE = REGISTRY.register(new ItemData(923, "stone_pickaxe", 1, new ToolTag(ToolTier.STONE, ToolType.PICKAXE)));
+    public static final ItemData STONE_PICKAXE;
 
-    public static final ItemData STONE_AXE = REGISTRY.register(new ItemData(924, "stone_axe", 1, new ToolTag(ToolTier.STONE, ToolType.AXE)));
+    public static final ItemData STONE_AXE;
 
-    public static final ItemData STONE_HOE = REGISTRY.register(new ItemData(925, "stone_hoe", 1, new ToolTag(ToolTier.STONE, ToolType.HOE)));
+    public static final ItemData STONE_HOE;
 
-    public static final ItemData GOLDEN_SWORD = REGISTRY.register(new ItemData(926, "golden_sword", 1, new ToolTag(ToolTier.GOLD, ToolType.SWORD)));
+    public static final ItemData GOLDEN_SWORD;
 
-    public static final ItemData GOLDEN_SHOVEL = REGISTRY.register(new ItemData(927, "golden_shovel", 1, new ToolTag(ToolTier.GOLD, ToolType.SHOVEL)));
+    public static final ItemData GOLDEN_SHOVEL;
 
-    public static final ItemData GOLDEN_PICKAXE = REGISTRY.register(new ItemData(928, "golden_pickaxe", 1, new ToolTag(ToolTier.GOLD, ToolType.PICKAXE)));
+    public static final ItemData GOLDEN_PICKAXE;
 
-    public static final ItemData GOLDEN_AXE = REGISTRY.register(new ItemData(929, "golden_axe", 1, new ToolTag(ToolTier.GOLD, ToolType.AXE)));
+    public static final ItemData GOLDEN_AXE;
 
-    public static final ItemData GOLDEN_HOE = REGISTRY.register(new ItemData(930, "golden_hoe", 1, new ToolTag(ToolTier.GOLD, ToolType.HOE)));
+    public static final ItemData GOLDEN_HOE;
 
-    public static final ItemData IRON_SWORD = REGISTRY.register(new ItemData(931, "iron_sword", 1, new ToolTag(ToolTier.IRON, ToolType.SWORD)));
+    public static final ItemData IRON_SWORD;
 
-    public static final ItemData IRON_SHOVEL = REGISTRY.register(new ItemData(932, "iron_shovel", 1, new ToolTag(ToolTier.IRON, ToolType.SHOVEL)));
+    public static final ItemData IRON_SHOVEL;
 
-    public static final ItemData IRON_PICKAXE = REGISTRY.register(new ItemData(933, "iron_pickaxe", 1, new ToolTag(ToolTier.IRON, ToolType.PICKAXE)));
+    public static final ItemData IRON_PICKAXE;
 
-    public static final ItemData IRON_AXE = REGISTRY.register(new ItemData(934, "iron_axe", 1, new ToolTag(ToolTier.IRON, ToolType.AXE)));
+    public static final ItemData IRON_AXE;
 
-    public static final ItemData IRON_HOE = REGISTRY.register(new ItemData(935, "iron_hoe", 1, new ToolTag(ToolTier.IRON, ToolType.HOE)));
+    public static final ItemData IRON_HOE;
 
-    public static final ItemData DIAMOND_SWORD = REGISTRY.register(new ItemData(936, "diamond_sword", 1, new ToolTag(ToolTier.DIAMOND, ToolType.SWORD)));
+    public static final ItemData DIAMOND_SWORD;
 
-    public static final ItemData DIAMOND_SHOVEL = REGISTRY.register(new ItemData(937, "diamond_shovel", 1, new ToolTag(ToolTier.DIAMOND, ToolType.SHOVEL)));
+    public static final ItemData DIAMOND_SHOVEL;
 
-    public static final ItemData DIAMOND_PICKAXE = REGISTRY.register(new ItemData(938, "diamond_pickaxe", 1, new ToolTag(ToolTier.DIAMOND, ToolType.PICKAXE)));
+    public static final ItemData DIAMOND_PICKAXE;
 
-    public static final ItemData DIAMOND_AXE = REGISTRY.register(new ItemData(939, "diamond_axe", 1, new ToolTag(ToolTier.DIAMOND, ToolType.AXE)));
+    public static final ItemData DIAMOND_AXE;
 
-    public static final ItemData DIAMOND_HOE = REGISTRY.register(new ItemData(940, "diamond_hoe", 1, new ToolTag(ToolTier.DIAMOND, ToolType.HOE)));
+    public static final ItemData DIAMOND_HOE;
 
-    public static final ItemData NETHERITE_SWORD = REGISTRY.register(new ItemData(941, "netherite_sword", 1, new ToolTag(ToolTier.NETHERITE, ToolType.SWORD)));
+    public static final ItemData NETHERITE_SWORD;
 
-    public static final ItemData NETHERITE_SHOVEL = REGISTRY.register(new ItemData(942, "netherite_shovel", 1, new ToolTag(ToolTier.NETHERITE, ToolType.SHOVEL)));
+    public static final ItemData NETHERITE_SHOVEL;
 
-    public static final ItemData NETHERITE_PICKAXE = REGISTRY.register(new ItemData(943, "netherite_pickaxe", 1, new ToolTag(ToolTier.NETHERITE, ToolType.PICKAXE)));
+    public static final ItemData NETHERITE_PICKAXE;
 
-    public static final ItemData NETHERITE_AXE = REGISTRY.register(new ItemData(944, "netherite_axe", 1, new ToolTag(ToolTier.NETHERITE, ToolType.AXE)));
+    public static final ItemData NETHERITE_AXE;
 
-    public static final ItemData NETHERITE_HOE = REGISTRY.register(new ItemData(945, "netherite_hoe", 1, new ToolTag(ToolTier.NETHERITE, ToolType.HOE)));
+    public static final ItemData NETHERITE_HOE;
 
-    public static final ItemData STICK = REGISTRY.register(new ItemData(946, "stick", 64));
+    public static final ItemData STICK;
 
-    public static final ItemData MUSHROOM_STEW = REGISTRY.register(new ItemData(947, "mushroom_stew", 1));
+    public static final ItemData MUSHROOM_STEW;
 
-    public static final ItemData STRING = REGISTRY.register(new ItemData(948, "string", 64));
+    public static final ItemData STRING;
 
-    public static final ItemData FEATHER = REGISTRY.register(new ItemData(949, "feather", 64));
+    public static final ItemData FEATHER;
 
-    public static final ItemData GUNPOWDER = REGISTRY.register(new ItemData(950, "gunpowder", 64));
+    public static final ItemData GUNPOWDER;
 
-    public static final ItemData WHEAT_SEEDS = REGISTRY.register(new ItemData(951, "wheat_seeds", 64));
+    public static final ItemData WHEAT_SEEDS;
 
-    public static final ItemData WHEAT = REGISTRY.register(new ItemData(952, "wheat", 64));
+    public static final ItemData WHEAT;
 
-    public static final ItemData BREAD = REGISTRY.register(new ItemData(953, "bread", 64));
+    public static final ItemData BREAD;
 
-    public static final ItemData LEATHER_HELMET = REGISTRY.register(new ItemData(954, "leather_helmet", 1));
+    public static final ItemData LEATHER_HELMET;
 
-    public static final ItemData LEATHER_CHESTPLATE = REGISTRY.register(new ItemData(955, "leather_chestplate", 1));
+    public static final ItemData LEATHER_CHESTPLATE;
 
-    public static final ItemData LEATHER_LEGGINGS = REGISTRY.register(new ItemData(956, "leather_leggings", 1));
+    public static final ItemData LEATHER_LEGGINGS;
 
-    public static final ItemData LEATHER_BOOTS = REGISTRY.register(new ItemData(957, "leather_boots", 1));
+    public static final ItemData LEATHER_BOOTS;
 
-    public static final ItemData COPPER_HELMET = REGISTRY.register(new ItemData(958, "copper_helmet", 1));
+    public static final ItemData COPPER_HELMET;
 
-    public static final ItemData COPPER_CHESTPLATE = REGISTRY.register(new ItemData(959, "copper_chestplate", 1));
+    public static final ItemData COPPER_CHESTPLATE;
 
-    public static final ItemData COPPER_LEGGINGS = REGISTRY.register(new ItemData(960, "copper_leggings", 1));
+    public static final ItemData COPPER_LEGGINGS;
 
-    public static final ItemData COPPER_BOOTS = REGISTRY.register(new ItemData(961, "copper_boots", 1));
+    public static final ItemData COPPER_BOOTS;
 
-    public static final ItemData CHAINMAIL_HELMET = REGISTRY.register(new ItemData(962, "chainmail_helmet", 1));
+    public static final ItemData CHAINMAIL_HELMET;
 
-    public static final ItemData CHAINMAIL_CHESTPLATE = REGISTRY.register(new ItemData(963, "chainmail_chestplate", 1));
+    public static final ItemData CHAINMAIL_CHESTPLATE;
 
-    public static final ItemData CHAINMAIL_LEGGINGS = REGISTRY.register(new ItemData(964, "chainmail_leggings", 1));
+    public static final ItemData CHAINMAIL_LEGGINGS;
 
-    public static final ItemData CHAINMAIL_BOOTS = REGISTRY.register(new ItemData(965, "chainmail_boots", 1));
+    public static final ItemData CHAINMAIL_BOOTS;
 
-    public static final ItemData IRON_HELMET = REGISTRY.register(new ItemData(966, "iron_helmet", 1));
+    public static final ItemData IRON_HELMET;
 
-    public static final ItemData IRON_CHESTPLATE = REGISTRY.register(new ItemData(967, "iron_chestplate", 1));
+    public static final ItemData IRON_CHESTPLATE;
 
-    public static final ItemData IRON_LEGGINGS = REGISTRY.register(new ItemData(968, "iron_leggings", 1));
+    public static final ItemData IRON_LEGGINGS;
 
-    public static final ItemData IRON_BOOTS = REGISTRY.register(new ItemData(969, "iron_boots", 1));
+    public static final ItemData IRON_BOOTS;
 
-    public static final ItemData DIAMOND_HELMET = REGISTRY.register(new ItemData(970, "diamond_helmet", 1));
+    public static final ItemData DIAMOND_HELMET;
 
-    public static final ItemData DIAMOND_CHESTPLATE = REGISTRY.register(new ItemData(971, "diamond_chestplate", 1));
+    public static final ItemData DIAMOND_CHESTPLATE;
 
-    public static final ItemData DIAMOND_LEGGINGS = REGISTRY.register(new ItemData(972, "diamond_leggings", 1));
+    public static final ItemData DIAMOND_LEGGINGS;
 
-    public static final ItemData DIAMOND_BOOTS = REGISTRY.register(new ItemData(973, "diamond_boots", 1));
+    public static final ItemData DIAMOND_BOOTS;
 
-    public static final ItemData GOLDEN_HELMET = REGISTRY.register(new ItemData(974, "golden_helmet", 1));
+    public static final ItemData GOLDEN_HELMET;
 
-    public static final ItemData GOLDEN_CHESTPLATE = REGISTRY.register(new ItemData(975, "golden_chestplate", 1));
+    public static final ItemData GOLDEN_CHESTPLATE;
 
-    public static final ItemData GOLDEN_LEGGINGS = REGISTRY.register(new ItemData(976, "golden_leggings", 1));
+    public static final ItemData GOLDEN_LEGGINGS;
 
-    public static final ItemData GOLDEN_BOOTS = REGISTRY.register(new ItemData(977, "golden_boots", 1));
+    public static final ItemData GOLDEN_BOOTS;
 
-    public static final ItemData NETHERITE_HELMET = REGISTRY.register(new ItemData(978, "netherite_helmet", 1));
+    public static final ItemData NETHERITE_HELMET;
 
-    public static final ItemData NETHERITE_CHESTPLATE = REGISTRY.register(new ItemData(979, "netherite_chestplate", 1));
+    public static final ItemData NETHERITE_CHESTPLATE;
 
-    public static final ItemData NETHERITE_LEGGINGS = REGISTRY.register(new ItemData(980, "netherite_leggings", 1));
+    public static final ItemData NETHERITE_LEGGINGS;
 
-    public static final ItemData NETHERITE_BOOTS = REGISTRY.register(new ItemData(981, "netherite_boots", 1));
+    public static final ItemData NETHERITE_BOOTS;
 
-    public static final ItemData FLINT = REGISTRY.register(new ItemData(982, "flint", 64));
+    public static final ItemData FLINT;
 
-    public static final ItemData PORKCHOP = REGISTRY.register(new ItemData(983, "porkchop", 64));
+    public static final ItemData PORKCHOP;
 
-    public static final ItemData COOKED_PORKCHOP = REGISTRY.register(new ItemData(984, "cooked_porkchop", 64));
+    public static final ItemData COOKED_PORKCHOP;
 
-    public static final ItemData PAINTING = REGISTRY.register(new ItemData(985, "painting", 64));
+    public static final ItemData PAINTING;
 
-    public static final ItemData GOLDEN_APPLE = REGISTRY.register(new ItemData(986, "golden_apple", 64));
+    public static final ItemData GOLDEN_APPLE;
 
-    public static final ItemData ENCHANTED_GOLDEN_APPLE = REGISTRY.register(new ItemData(987, "enchanted_golden_apple", 64));
+    public static final ItemData ENCHANTED_GOLDEN_APPLE;
 
-    public static final ItemData OAK_SIGN = REGISTRY.register(new ItemData(988, "oak_sign", 16));
+    public static final ItemData OAK_SIGN;
 
-    public static final ItemData SPRUCE_SIGN = REGISTRY.register(new ItemData(989, "spruce_sign", 16));
+    public static final ItemData SPRUCE_SIGN;
 
-    public static final ItemData BIRCH_SIGN = REGISTRY.register(new ItemData(990, "birch_sign", 16));
+    public static final ItemData BIRCH_SIGN;
 
-    public static final ItemData JUNGLE_SIGN = REGISTRY.register(new ItemData(991, "jungle_sign", 16));
+    public static final ItemData JUNGLE_SIGN;
 
-    public static final ItemData ACACIA_SIGN = REGISTRY.register(new ItemData(992, "acacia_sign", 16));
+    public static final ItemData ACACIA_SIGN;
 
-    public static final ItemData CHERRY_SIGN = REGISTRY.register(new ItemData(993, "cherry_sign", 16));
+    public static final ItemData CHERRY_SIGN;
 
-    public static final ItemData DARK_OAK_SIGN = REGISTRY.register(new ItemData(994, "dark_oak_sign", 16));
+    public static final ItemData DARK_OAK_SIGN;
 
-    public static final ItemData PALE_OAK_SIGN = REGISTRY.register(new ItemData(995, "pale_oak_sign", 16));
+    public static final ItemData PALE_OAK_SIGN;
 
-    public static final ItemData MANGROVE_SIGN = REGISTRY.register(new ItemData(996, "mangrove_sign", 16));
+    public static final ItemData MANGROVE_SIGN;
 
-    public static final ItemData BAMBOO_SIGN = REGISTRY.register(new ItemData(997, "bamboo_sign", 16));
+    public static final ItemData BAMBOO_SIGN;
 
-    public static final ItemData CRIMSON_SIGN = REGISTRY.register(new ItemData(998, "crimson_sign", 16));
+    public static final ItemData CRIMSON_SIGN;
 
-    public static final ItemData WARPED_SIGN = REGISTRY.register(new ItemData(999, "warped_sign", 16));
+    public static final ItemData WARPED_SIGN;
 
-    public static final ItemData OAK_HANGING_SIGN = REGISTRY.register(new ItemData(1000, "oak_hanging_sign", 16));
+    public static final ItemData OAK_HANGING_SIGN;
 
-    public static final ItemData SPRUCE_HANGING_SIGN = REGISTRY.register(new ItemData(1001, "spruce_hanging_sign", 16));
+    public static final ItemData SPRUCE_HANGING_SIGN;
 
-    public static final ItemData BIRCH_HANGING_SIGN = REGISTRY.register(new ItemData(1002, "birch_hanging_sign", 16));
+    public static final ItemData BIRCH_HANGING_SIGN;
 
-    public static final ItemData JUNGLE_HANGING_SIGN = REGISTRY.register(new ItemData(1003, "jungle_hanging_sign", 16));
+    public static final ItemData JUNGLE_HANGING_SIGN;
 
-    public static final ItemData ACACIA_HANGING_SIGN = REGISTRY.register(new ItemData(1004, "acacia_hanging_sign", 16));
+    public static final ItemData ACACIA_HANGING_SIGN;
 
-    public static final ItemData CHERRY_HANGING_SIGN = REGISTRY.register(new ItemData(1005, "cherry_hanging_sign", 16));
+    public static final ItemData CHERRY_HANGING_SIGN;
 
-    public static final ItemData DARK_OAK_HANGING_SIGN = REGISTRY.register(new ItemData(1006, "dark_oak_hanging_sign", 16));
+    public static final ItemData DARK_OAK_HANGING_SIGN;
 
-    public static final ItemData PALE_OAK_HANGING_SIGN = REGISTRY.register(new ItemData(1007, "pale_oak_hanging_sign", 16));
+    public static final ItemData PALE_OAK_HANGING_SIGN;
 
-    public static final ItemData MANGROVE_HANGING_SIGN = REGISTRY.register(new ItemData(1008, "mangrove_hanging_sign", 16));
+    public static final ItemData MANGROVE_HANGING_SIGN;
 
-    public static final ItemData BAMBOO_HANGING_SIGN = REGISTRY.register(new ItemData(1009, "bamboo_hanging_sign", 16));
+    public static final ItemData BAMBOO_HANGING_SIGN;
 
-    public static final ItemData CRIMSON_HANGING_SIGN = REGISTRY.register(new ItemData(1010, "crimson_hanging_sign", 16));
+    public static final ItemData CRIMSON_HANGING_SIGN;
 
-    public static final ItemData WARPED_HANGING_SIGN = REGISTRY.register(new ItemData(1011, "warped_hanging_sign", 16));
+    public static final ItemData WARPED_HANGING_SIGN;
 
-    public static final ItemData BUCKET = REGISTRY.register(new ItemData(1012, "bucket", 16));
+    public static final ItemData BUCKET;
 
-    public static final ItemData WATER_BUCKET = REGISTRY.register(new ItemData(1013, "water_bucket", 1));
+    public static final ItemData WATER_BUCKET;
 
-    public static final ItemData LAVA_BUCKET = REGISTRY.register(new ItemData(1014, "lava_bucket", 1));
+    public static final ItemData LAVA_BUCKET;
 
-    public static final ItemData POWDER_SNOW_BUCKET = REGISTRY.register(new ItemData(1015, "powder_snow_bucket", 1));
+    public static final ItemData POWDER_SNOW_BUCKET;
 
-    public static final ItemData SNOWBALL = REGISTRY.register(new ItemData(1016, "snowball", 16));
+    public static final ItemData SNOWBALL;
 
-    public static final ItemData LEATHER = REGISTRY.register(new ItemData(1017, "leather", 64));
+    public static final ItemData LEATHER;
 
-    public static final ItemData MILK_BUCKET = REGISTRY.register(new ItemData(1018, "milk_bucket", 1));
+    public static final ItemData MILK_BUCKET;
 
-    public static final ItemData PUFFERFISH_BUCKET = REGISTRY.register(new ItemData(1019, "pufferfish_bucket", 1));
+    public static final ItemData PUFFERFISH_BUCKET;
 
-    public static final ItemData SALMON_BUCKET = REGISTRY.register(new ItemData(1020, "salmon_bucket", 1));
+    public static final ItemData SALMON_BUCKET;
 
-    public static final ItemData COD_BUCKET = REGISTRY.register(new ItemData(1021, "cod_bucket", 1));
+    public static final ItemData COD_BUCKET;
 
-    public static final ItemData TROPICAL_FISH_BUCKET = REGISTRY.register(new ItemData(1022, "tropical_fish_bucket", 1));
+    public static final ItemData TROPICAL_FISH_BUCKET;
 
-    public static final ItemData AXOLOTL_BUCKET = REGISTRY.register(new ItemData(1023, "axolotl_bucket", 1));
+    public static final ItemData AXOLOTL_BUCKET;
 
-    public static final ItemData TADPOLE_BUCKET = REGISTRY.register(new ItemData(1024, "tadpole_bucket", 1));
+    public static final ItemData TADPOLE_BUCKET;
 
-    public static final ItemData BRICK = REGISTRY.register(new ItemData(1025, "brick", 64));
+    public static final ItemData BRICK;
 
-    public static final ItemData CLAY_BALL = REGISTRY.register(new ItemData(1026, "clay_ball", 64));
+    public static final ItemData CLAY_BALL;
 
-    public static final ItemData DRIED_KELP_BLOCK = REGISTRY.register(new ItemData(1027, "dried_kelp_block", 64));
+    public static final ItemData DRIED_KELP_BLOCK;
 
-    public static final ItemData PAPER = REGISTRY.register(new ItemData(1028, "paper", 64));
+    public static final ItemData PAPER;
 
-    public static final ItemData BOOK = REGISTRY.register(new ItemData(1029, "book", 64));
+    public static final ItemData BOOK;
 
-    public static final ItemData SLIME_BALL = REGISTRY.register(new ItemData(1030, "slime_ball", 64));
+    public static final ItemData SLIME_BALL;
 
-    public static final ItemData EGG = REGISTRY.register(new ItemData(1031, "egg", 16));
+    public static final ItemData EGG;
 
-    public static final ItemData BLUE_EGG = REGISTRY.register(new ItemData(1032, "blue_egg", 16));
+    public static final ItemData BLUE_EGG;
 
-    public static final ItemData BROWN_EGG = REGISTRY.register(new ItemData(1033, "brown_egg", 16));
+    public static final ItemData BROWN_EGG;
 
-    public static final ItemData COMPASS = REGISTRY.register(new ItemData(1034, "compass", 64));
+    public static final ItemData COMPASS;
 
-    public static final ItemData RECOVERY_COMPASS = REGISTRY.register(new ItemData(1035, "recovery_compass", 64));
+    public static final ItemData RECOVERY_COMPASS;
 
-    public static final ItemData BUNDLE = REGISTRY.register(new ItemData(1036, "bundle", 1));
+    public static final ItemData BUNDLE;
 
-    public static final ItemData WHITE_BUNDLE = REGISTRY.register(new ItemData(1037, "white_bundle", 1));
+    public static final ItemData WHITE_BUNDLE;
 
-    public static final ItemData ORANGE_BUNDLE = REGISTRY.register(new ItemData(1038, "orange_bundle", 1));
+    public static final ItemData ORANGE_BUNDLE;
 
-    public static final ItemData MAGENTA_BUNDLE = REGISTRY.register(new ItemData(1039, "magenta_bundle", 1));
+    public static final ItemData MAGENTA_BUNDLE;
 
-    public static final ItemData LIGHT_BLUE_BUNDLE = REGISTRY.register(new ItemData(1040, "light_blue_bundle", 1));
+    public static final ItemData LIGHT_BLUE_BUNDLE;
 
-    public static final ItemData YELLOW_BUNDLE = REGISTRY.register(new ItemData(1041, "yellow_bundle", 1));
+    public static final ItemData YELLOW_BUNDLE;
 
-    public static final ItemData LIME_BUNDLE = REGISTRY.register(new ItemData(1042, "lime_bundle", 1));
+    public static final ItemData LIME_BUNDLE;
 
-    public static final ItemData PINK_BUNDLE = REGISTRY.register(new ItemData(1043, "pink_bundle", 1));
+    public static final ItemData PINK_BUNDLE;
 
-    public static final ItemData GRAY_BUNDLE = REGISTRY.register(new ItemData(1044, "gray_bundle", 1));
+    public static final ItemData GRAY_BUNDLE;
 
-    public static final ItemData LIGHT_GRAY_BUNDLE = REGISTRY.register(new ItemData(1045, "light_gray_bundle", 1));
+    public static final ItemData LIGHT_GRAY_BUNDLE;
 
-    public static final ItemData CYAN_BUNDLE = REGISTRY.register(new ItemData(1046, "cyan_bundle", 1));
+    public static final ItemData CYAN_BUNDLE;
 
-    public static final ItemData PURPLE_BUNDLE = REGISTRY.register(new ItemData(1047, "purple_bundle", 1));
+    public static final ItemData PURPLE_BUNDLE;
 
-    public static final ItemData BLUE_BUNDLE = REGISTRY.register(new ItemData(1048, "blue_bundle", 1));
+    public static final ItemData BLUE_BUNDLE;
 
-    public static final ItemData BROWN_BUNDLE = REGISTRY.register(new ItemData(1049, "brown_bundle", 1));
+    public static final ItemData BROWN_BUNDLE;
 
-    public static final ItemData GREEN_BUNDLE = REGISTRY.register(new ItemData(1050, "green_bundle", 1));
+    public static final ItemData GREEN_BUNDLE;
 
-    public static final ItemData RED_BUNDLE = REGISTRY.register(new ItemData(1051, "red_bundle", 1));
+    public static final ItemData RED_BUNDLE;
 
-    public static final ItemData BLACK_BUNDLE = REGISTRY.register(new ItemData(1052, "black_bundle", 1));
+    public static final ItemData BLACK_BUNDLE;
 
-    public static final ItemData FISHING_ROD = REGISTRY.register(new ItemData(1053, "fishing_rod", 1));
+    public static final ItemData FISHING_ROD;
 
-    public static final ItemData CLOCK = REGISTRY.register(new ItemData(1054, "clock", 64));
+    public static final ItemData CLOCK;
 
-    public static final ItemData SPYGLASS = REGISTRY.register(new ItemData(1055, "spyglass", 1));
+    public static final ItemData SPYGLASS;
 
-    public static final ItemData GLOWSTONE_DUST = REGISTRY.register(new ItemData(1056, "glowstone_dust", 64));
+    public static final ItemData GLOWSTONE_DUST;
 
-    public static final ItemData COD = REGISTRY.register(new ItemData(1057, "cod", 64));
+    public static final ItemData COD;
 
-    public static final ItemData SALMON = REGISTRY.register(new ItemData(1058, "salmon", 64));
+    public static final ItemData SALMON;
 
-    public static final ItemData TROPICAL_FISH = REGISTRY.register(new ItemData(1059, "tropical_fish", 64));
+    public static final ItemData TROPICAL_FISH;
 
-    public static final ItemData PUFFERFISH = REGISTRY.register(new ItemData(1060, "pufferfish", 64));
+    public static final ItemData PUFFERFISH;
 
-    public static final ItemData COOKED_COD = REGISTRY.register(new ItemData(1061, "cooked_cod", 64));
+    public static final ItemData COOKED_COD;
 
-    public static final ItemData COOKED_SALMON = REGISTRY.register(new ItemData(1062, "cooked_salmon", 64));
+    public static final ItemData COOKED_SALMON;
 
-    public static final ItemData INK_SAC = REGISTRY.register(new ItemData(1063, "ink_sac", 64));
+    public static final ItemData INK_SAC;
 
-    public static final ItemData GLOW_INK_SAC = REGISTRY.register(new ItemData(1064, "glow_ink_sac", 64));
+    public static final ItemData GLOW_INK_SAC;
 
-    public static final ItemData COCOA_BEANS = REGISTRY.register(new ItemData(1065, "cocoa_beans", 64));
+    public static final ItemData COCOA_BEANS;
 
-    public static final ItemData WHITE_DYE = REGISTRY.register(new ItemData(1066, "white_dye", 64));
+    public static final ItemData WHITE_DYE;
 
-    public static final ItemData ORANGE_DYE = REGISTRY.register(new ItemData(1067, "orange_dye", 64));
+    public static final ItemData ORANGE_DYE;
 
-    public static final ItemData MAGENTA_DYE = REGISTRY.register(new ItemData(1068, "magenta_dye", 64));
+    public static final ItemData MAGENTA_DYE;
 
-    public static final ItemData LIGHT_BLUE_DYE = REGISTRY.register(new ItemData(1069, "light_blue_dye", 64));
+    public static final ItemData LIGHT_BLUE_DYE;
 
-    public static final ItemData YELLOW_DYE = REGISTRY.register(new ItemData(1070, "yellow_dye", 64));
+    public static final ItemData YELLOW_DYE;
 
-    public static final ItemData LIME_DYE = REGISTRY.register(new ItemData(1071, "lime_dye", 64));
+    public static final ItemData LIME_DYE;
 
-    public static final ItemData PINK_DYE = REGISTRY.register(new ItemData(1072, "pink_dye", 64));
+    public static final ItemData PINK_DYE;
 
-    public static final ItemData GRAY_DYE = REGISTRY.register(new ItemData(1073, "gray_dye", 64));
+    public static final ItemData GRAY_DYE;
 
-    public static final ItemData LIGHT_GRAY_DYE = REGISTRY.register(new ItemData(1074, "light_gray_dye", 64));
+    public static final ItemData LIGHT_GRAY_DYE;
 
-    public static final ItemData CYAN_DYE = REGISTRY.register(new ItemData(1075, "cyan_dye", 64));
+    public static final ItemData CYAN_DYE;
 
-    public static final ItemData PURPLE_DYE = REGISTRY.register(new ItemData(1076, "purple_dye", 64));
+    public static final ItemData PURPLE_DYE;
 
-    public static final ItemData BLUE_DYE = REGISTRY.register(new ItemData(1077, "blue_dye", 64));
+    public static final ItemData BLUE_DYE;
 
-    public static final ItemData BROWN_DYE = REGISTRY.register(new ItemData(1078, "brown_dye", 64));
+    public static final ItemData BROWN_DYE;
 
-    public static final ItemData GREEN_DYE = REGISTRY.register(new ItemData(1079, "green_dye", 64));
+    public static final ItemData GREEN_DYE;
 
-    public static final ItemData RED_DYE = REGISTRY.register(new ItemData(1080, "red_dye", 64));
+    public static final ItemData RED_DYE;
 
-    public static final ItemData BLACK_DYE = REGISTRY.register(new ItemData(1081, "black_dye", 64));
+    public static final ItemData BLACK_DYE;
 
-    public static final ItemData BONE_MEAL = REGISTRY.register(new ItemData(1082, "bone_meal", 64));
+    public static final ItemData BONE_MEAL;
 
-    public static final ItemData BONE = REGISTRY.register(new ItemData(1083, "bone", 64));
+    public static final ItemData BONE;
 
-    public static final ItemData SUGAR = REGISTRY.register(new ItemData(1084, "sugar", 64));
+    public static final ItemData SUGAR;
 
-    public static final ItemData CAKE = REGISTRY.register(new ItemData(1085, "cake", 1));
+    public static final ItemData CAKE;
 
-    public static final ItemData WHITE_BED = REGISTRY.register(new ItemData(1086, "white_bed", 1));
+    public static final ItemData WHITE_BED;
 
-    public static final ItemData ORANGE_BED = REGISTRY.register(new ItemData(1087, "orange_bed", 1));
+    public static final ItemData ORANGE_BED;
 
-    public static final ItemData MAGENTA_BED = REGISTRY.register(new ItemData(1088, "magenta_bed", 1));
+    public static final ItemData MAGENTA_BED;
 
-    public static final ItemData LIGHT_BLUE_BED = REGISTRY.register(new ItemData(1089, "light_blue_bed", 1));
+    public static final ItemData LIGHT_BLUE_BED;
 
-    public static final ItemData YELLOW_BED = REGISTRY.register(new ItemData(1090, "yellow_bed", 1));
+    public static final ItemData YELLOW_BED;
 
-    public static final ItemData LIME_BED = REGISTRY.register(new ItemData(1091, "lime_bed", 1));
+    public static final ItemData LIME_BED;
 
-    public static final ItemData PINK_BED = REGISTRY.register(new ItemData(1092, "pink_bed", 1));
+    public static final ItemData PINK_BED;
 
-    public static final ItemData GRAY_BED = REGISTRY.register(new ItemData(1093, "gray_bed", 1));
+    public static final ItemData GRAY_BED;
 
-    public static final ItemData LIGHT_GRAY_BED = REGISTRY.register(new ItemData(1094, "light_gray_bed", 1));
+    public static final ItemData LIGHT_GRAY_BED;
 
-    public static final ItemData CYAN_BED = REGISTRY.register(new ItemData(1095, "cyan_bed", 1));
+    public static final ItemData CYAN_BED;
 
-    public static final ItemData PURPLE_BED = REGISTRY.register(new ItemData(1096, "purple_bed", 1));
+    public static final ItemData PURPLE_BED;
 
-    public static final ItemData BLUE_BED = REGISTRY.register(new ItemData(1097, "blue_bed", 1));
+    public static final ItemData BLUE_BED;
 
-    public static final ItemData BROWN_BED = REGISTRY.register(new ItemData(1098, "brown_bed", 1));
+    public static final ItemData BROWN_BED;
 
-    public static final ItemData GREEN_BED = REGISTRY.register(new ItemData(1099, "green_bed", 1));
+    public static final ItemData GREEN_BED;
 
-    public static final ItemData RED_BED = REGISTRY.register(new ItemData(1100, "red_bed", 1));
+    public static final ItemData RED_BED;
 
-    public static final ItemData BLACK_BED = REGISTRY.register(new ItemData(1101, "black_bed", 1));
+    public static final ItemData BLACK_BED;
 
-    public static final ItemData COOKIE = REGISTRY.register(new ItemData(1102, "cookie", 64));
+    public static final ItemData COOKIE;
 
-    public static final ItemData CRAFTER = REGISTRY.register(new ItemData(1103, "crafter", 64));
+    public static final ItemData CRAFTER;
 
-    public static final ItemData FILLED_MAP = REGISTRY.register(new ItemData(1104, "filled_map", 64));
+    public static final ItemData FILLED_MAP;
 
-    public static final ItemData SHEARS = REGISTRY.register(new ItemData(1105, "shears", 1));
+    public static final ItemData SHEARS;
 
-    public static final ItemData MELON_SLICE = REGISTRY.register(new ItemData(1106, "melon_slice", 64));
+    public static final ItemData MELON_SLICE;
 
-    public static final ItemData DRIED_KELP = REGISTRY.register(new ItemData(1107, "dried_kelp", 64));
+    public static final ItemData DRIED_KELP;
 
-    public static final ItemData PUMPKIN_SEEDS = REGISTRY.register(new ItemData(1108, "pumpkin_seeds", 64));
+    public static final ItemData PUMPKIN_SEEDS;
 
-    public static final ItemData MELON_SEEDS = REGISTRY.register(new ItemData(1109, "melon_seeds", 64));
+    public static final ItemData MELON_SEEDS;
 
-    public static final ItemData BEEF = REGISTRY.register(new ItemData(1110, "beef", 64));
+    public static final ItemData BEEF;
 
-    public static final ItemData COOKED_BEEF = REGISTRY.register(new ItemData(1111, "cooked_beef", 64));
+    public static final ItemData COOKED_BEEF;
 
-    public static final ItemData CHICKEN = REGISTRY.register(new ItemData(1112, "chicken", 64));
+    public static final ItemData CHICKEN;
 
-    public static final ItemData COOKED_CHICKEN = REGISTRY.register(new ItemData(1113, "cooked_chicken", 64));
+    public static final ItemData COOKED_CHICKEN;
 
-    public static final ItemData ROTTEN_FLESH = REGISTRY.register(new ItemData(1114, "rotten_flesh", 64));
+    public static final ItemData ROTTEN_FLESH;
 
-    public static final ItemData ENDER_PEARL = REGISTRY.register(new ItemData(1115, "ender_pearl", 16));
+    public static final ItemData ENDER_PEARL;
 
-    public static final ItemData BLAZE_ROD = REGISTRY.register(new ItemData(1116, "blaze_rod", 64));
+    public static final ItemData BLAZE_ROD;
 
-    public static final ItemData GHAST_TEAR = REGISTRY.register(new ItemData(1117, "ghast_tear", 64));
+    public static final ItemData GHAST_TEAR;
 
-    public static final ItemData GOLD_NUGGET = REGISTRY.register(new ItemData(1118, "gold_nugget", 64));
+    public static final ItemData GOLD_NUGGET;
 
-    public static final ItemData NETHER_WART = REGISTRY.register(new ItemData(1119, "nether_wart", 64));
+    public static final ItemData NETHER_WART;
 
-    public static final ItemData GLASS_BOTTLE = REGISTRY.register(new ItemData(1120, "glass_bottle", 64));
+    public static final ItemData GLASS_BOTTLE;
 
-    public static final ItemData POTION = REGISTRY.register(new ItemData(1121, "potion", 1));
+    public static final ItemData POTION;
 
-    public static final ItemData SPIDER_EYE = REGISTRY.register(new ItemData(1122, "spider_eye", 64));
+    public static final ItemData SPIDER_EYE;
 
-    public static final ItemData FERMENTED_SPIDER_EYE = REGISTRY.register(new ItemData(1123, "fermented_spider_eye", 64));
+    public static final ItemData FERMENTED_SPIDER_EYE;
 
-    public static final ItemData BLAZE_POWDER = REGISTRY.register(new ItemData(1124, "blaze_powder", 64));
+    public static final ItemData BLAZE_POWDER;
 
-    public static final ItemData MAGMA_CREAM = REGISTRY.register(new ItemData(1125, "magma_cream", 64));
+    public static final ItemData MAGMA_CREAM;
 
-    public static final ItemData BREWING_STAND = REGISTRY.register(new ItemData(1126, "brewing_stand", 64));
+    public static final ItemData BREWING_STAND;
 
-    public static final ItemData CAULDRON = REGISTRY.register(new ItemData(1127, "cauldron", 64));
+    public static final ItemData CAULDRON;
 
-    public static final ItemData ENDER_EYE = REGISTRY.register(new ItemData(1128, "ender_eye", 64));
+    public static final ItemData ENDER_EYE;
 
-    public static final ItemData GLISTERING_MELON_SLICE = REGISTRY.register(new ItemData(1129, "glistering_melon_slice", 64));
+    public static final ItemData GLISTERING_MELON_SLICE;
 
-    public static final ItemData CHICKEN_SPAWN_EGG = REGISTRY.register(new ItemData(1130, "chicken_spawn_egg", 64));
+    public static final ItemData CHICKEN_SPAWN_EGG;
 
-    public static final ItemData COW_SPAWN_EGG = REGISTRY.register(new ItemData(1131, "cow_spawn_egg", 64));
+    public static final ItemData COW_SPAWN_EGG;
 
-    public static final ItemData PIG_SPAWN_EGG = REGISTRY.register(new ItemData(1132, "pig_spawn_egg", 64));
+    public static final ItemData PIG_SPAWN_EGG;
 
-    public static final ItemData SHEEP_SPAWN_EGG = REGISTRY.register(new ItemData(1133, "sheep_spawn_egg", 64));
+    public static final ItemData SHEEP_SPAWN_EGG;
 
-    public static final ItemData CAMEL_SPAWN_EGG = REGISTRY.register(new ItemData(1134, "camel_spawn_egg", 64));
+    public static final ItemData CAMEL_SPAWN_EGG;
 
-    public static final ItemData DONKEY_SPAWN_EGG = REGISTRY.register(new ItemData(1135, "donkey_spawn_egg", 64));
+    public static final ItemData DONKEY_SPAWN_EGG;
 
-    public static final ItemData HORSE_SPAWN_EGG = REGISTRY.register(new ItemData(1136, "horse_spawn_egg", 64));
+    public static final ItemData HORSE_SPAWN_EGG;
 
-    public static final ItemData MULE_SPAWN_EGG = REGISTRY.register(new ItemData(1137, "mule_spawn_egg", 64));
+    public static final ItemData MULE_SPAWN_EGG;
 
-    public static final ItemData CAT_SPAWN_EGG = REGISTRY.register(new ItemData(1138, "cat_spawn_egg", 64));
+    public static final ItemData CAT_SPAWN_EGG;
 
-    public static final ItemData PARROT_SPAWN_EGG = REGISTRY.register(new ItemData(1139, "parrot_spawn_egg", 64));
+    public static final ItemData PARROT_SPAWN_EGG;
 
-    public static final ItemData WOLF_SPAWN_EGG = REGISTRY.register(new ItemData(1140, "wolf_spawn_egg", 64));
+    public static final ItemData WOLF_SPAWN_EGG;
 
-    public static final ItemData ARMADILLO_SPAWN_EGG = REGISTRY.register(new ItemData(1141, "armadillo_spawn_egg", 64));
+    public static final ItemData ARMADILLO_SPAWN_EGG;
 
-    public static final ItemData BAT_SPAWN_EGG = REGISTRY.register(new ItemData(1142, "bat_spawn_egg", 64));
+    public static final ItemData BAT_SPAWN_EGG;
 
-    public static final ItemData BEE_SPAWN_EGG = REGISTRY.register(new ItemData(1143, "bee_spawn_egg", 64));
+    public static final ItemData BEE_SPAWN_EGG;
 
-    public static final ItemData FOX_SPAWN_EGG = REGISTRY.register(new ItemData(1144, "fox_spawn_egg", 64));
+    public static final ItemData FOX_SPAWN_EGG;
 
-    public static final ItemData GOAT_SPAWN_EGG = REGISTRY.register(new ItemData(1145, "goat_spawn_egg", 64));
+    public static final ItemData GOAT_SPAWN_EGG;
 
-    public static final ItemData LLAMA_SPAWN_EGG = REGISTRY.register(new ItemData(1146, "llama_spawn_egg", 64));
+    public static final ItemData LLAMA_SPAWN_EGG;
 
-    public static final ItemData OCELOT_SPAWN_EGG = REGISTRY.register(new ItemData(1147, "ocelot_spawn_egg", 64));
+    public static final ItemData OCELOT_SPAWN_EGG;
 
-    public static final ItemData PANDA_SPAWN_EGG = REGISTRY.register(new ItemData(1148, "panda_spawn_egg", 64));
+    public static final ItemData PANDA_SPAWN_EGG;
 
-    public static final ItemData POLAR_BEAR_SPAWN_EGG = REGISTRY.register(new ItemData(1149, "polar_bear_spawn_egg", 64));
+    public static final ItemData POLAR_BEAR_SPAWN_EGG;
 
-    public static final ItemData RABBIT_SPAWN_EGG = REGISTRY.register(new ItemData(1150, "rabbit_spawn_egg", 64));
+    public static final ItemData RABBIT_SPAWN_EGG;
 
-    public static final ItemData AXOLOTL_SPAWN_EGG = REGISTRY.register(new ItemData(1151, "axolotl_spawn_egg", 64));
+    public static final ItemData AXOLOTL_SPAWN_EGG;
 
-    public static final ItemData COD_SPAWN_EGG = REGISTRY.register(new ItemData(1152, "cod_spawn_egg", 64));
+    public static final ItemData COD_SPAWN_EGG;
 
-    public static final ItemData DOLPHIN_SPAWN_EGG = REGISTRY.register(new ItemData(1153, "dolphin_spawn_egg", 64));
+    public static final ItemData DOLPHIN_SPAWN_EGG;
 
-    public static final ItemData FROG_SPAWN_EGG = REGISTRY.register(new ItemData(1154, "frog_spawn_egg", 64));
+    public static final ItemData FROG_SPAWN_EGG;
 
-    public static final ItemData GLOW_SQUID_SPAWN_EGG = REGISTRY.register(new ItemData(1155, "glow_squid_spawn_egg", 64));
+    public static final ItemData GLOW_SQUID_SPAWN_EGG;
 
-    public static final ItemData NAUTILUS_SPAWN_EGG = REGISTRY.register(new ItemData(1156, "nautilus_spawn_egg", 64));
+    public static final ItemData NAUTILUS_SPAWN_EGG;
 
-    public static final ItemData PUFFERFISH_SPAWN_EGG = REGISTRY.register(new ItemData(1157, "pufferfish_spawn_egg", 64));
+    public static final ItemData PUFFERFISH_SPAWN_EGG;
 
-    public static final ItemData SALMON_SPAWN_EGG = REGISTRY.register(new ItemData(1158, "salmon_spawn_egg", 64));
+    public static final ItemData SALMON_SPAWN_EGG;
 
-    public static final ItemData SQUID_SPAWN_EGG = REGISTRY.register(new ItemData(1159, "squid_spawn_egg", 64));
+    public static final ItemData SQUID_SPAWN_EGG;
 
-    public static final ItemData TADPOLE_SPAWN_EGG = REGISTRY.register(new ItemData(1160, "tadpole_spawn_egg", 64));
+    public static final ItemData TADPOLE_SPAWN_EGG;
 
-    public static final ItemData TROPICAL_FISH_SPAWN_EGG = REGISTRY.register(new ItemData(1161, "tropical_fish_spawn_egg", 64));
+    public static final ItemData TROPICAL_FISH_SPAWN_EGG;
 
-    public static final ItemData TURTLE_SPAWN_EGG = REGISTRY.register(new ItemData(1162, "turtle_spawn_egg", 64));
+    public static final ItemData TURTLE_SPAWN_EGG;
 
-    public static final ItemData ALLAY_SPAWN_EGG = REGISTRY.register(new ItemData(1163, "allay_spawn_egg", 64));
+    public static final ItemData ALLAY_SPAWN_EGG;
 
-    public static final ItemData MOOSHROOM_SPAWN_EGG = REGISTRY.register(new ItemData(1164, "mooshroom_spawn_egg", 64));
+    public static final ItemData MOOSHROOM_SPAWN_EGG;
 
-    public static final ItemData SNIFFER_SPAWN_EGG = REGISTRY.register(new ItemData(1165, "sniffer_spawn_egg", 64));
+    public static final ItemData SNIFFER_SPAWN_EGG;
 
-    public static final ItemData COPPER_GOLEM_SPAWN_EGG = REGISTRY.register(new ItemData(1166, "copper_golem_spawn_egg", 64));
+    public static final ItemData COPPER_GOLEM_SPAWN_EGG;
 
-    public static final ItemData IRON_GOLEM_SPAWN_EGG = REGISTRY.register(new ItemData(1167, "iron_golem_spawn_egg", 64));
+    public static final ItemData IRON_GOLEM_SPAWN_EGG;
 
-    public static final ItemData SNOW_GOLEM_SPAWN_EGG = REGISTRY.register(new ItemData(1168, "snow_golem_spawn_egg", 64));
+    public static final ItemData SNOW_GOLEM_SPAWN_EGG;
 
-    public static final ItemData TRADER_LLAMA_SPAWN_EGG = REGISTRY.register(new ItemData(1169, "trader_llama_spawn_egg", 64));
+    public static final ItemData TRADER_LLAMA_SPAWN_EGG;
 
-    public static final ItemData VILLAGER_SPAWN_EGG = REGISTRY.register(new ItemData(1170, "villager_spawn_egg", 64));
+    public static final ItemData VILLAGER_SPAWN_EGG;
 
-    public static final ItemData WANDERING_TRADER_SPAWN_EGG = REGISTRY.register(new ItemData(1171, "wandering_trader_spawn_egg", 64));
+    public static final ItemData WANDERING_TRADER_SPAWN_EGG;
 
-    public static final ItemData BOGGED_SPAWN_EGG = REGISTRY.register(new ItemData(1172, "bogged_spawn_egg", 64));
+    public static final ItemData BOGGED_SPAWN_EGG;
 
-    public static final ItemData CAMEL_HUSK_SPAWN_EGG = REGISTRY.register(new ItemData(1173, "camel_husk_spawn_egg", 64));
+    public static final ItemData CAMEL_HUSK_SPAWN_EGG;
 
-    public static final ItemData DROWNED_SPAWN_EGG = REGISTRY.register(new ItemData(1174, "drowned_spawn_egg", 64));
+    public static final ItemData DROWNED_SPAWN_EGG;
 
-    public static final ItemData HUSK_SPAWN_EGG = REGISTRY.register(new ItemData(1175, "husk_spawn_egg", 64));
+    public static final ItemData HUSK_SPAWN_EGG;
 
-    public static final ItemData PARCHED_SPAWN_EGG = REGISTRY.register(new ItemData(1176, "parched_spawn_egg", 64));
+    public static final ItemData PARCHED_SPAWN_EGG;
 
-    public static final ItemData SKELETON_SPAWN_EGG = REGISTRY.register(new ItemData(1177, "skeleton_spawn_egg", 64));
+    public static final ItemData SKELETON_SPAWN_EGG;
 
-    public static final ItemData SKELETON_HORSE_SPAWN_EGG = REGISTRY.register(new ItemData(1178, "skeleton_horse_spawn_egg", 64));
+    public static final ItemData SKELETON_HORSE_SPAWN_EGG;
 
-    public static final ItemData STRAY_SPAWN_EGG = REGISTRY.register(new ItemData(1179, "stray_spawn_egg", 64));
+    public static final ItemData STRAY_SPAWN_EGG;
 
-    public static final ItemData WITHER_SPAWN_EGG = REGISTRY.register(new ItemData(1180, "wither_spawn_egg", 64));
+    public static final ItemData WITHER_SPAWN_EGG;
 
-    public static final ItemData WITHER_SKELETON_SPAWN_EGG = REGISTRY.register(new ItemData(1181, "wither_skeleton_spawn_egg", 64));
+    public static final ItemData WITHER_SKELETON_SPAWN_EGG;
 
-    public static final ItemData ZOMBIE_SPAWN_EGG = REGISTRY.register(new ItemData(1182, "zombie_spawn_egg", 64));
+    public static final ItemData ZOMBIE_SPAWN_EGG;
 
-    public static final ItemData ZOMBIE_HORSE_SPAWN_EGG = REGISTRY.register(new ItemData(1183, "zombie_horse_spawn_egg", 64));
+    public static final ItemData ZOMBIE_HORSE_SPAWN_EGG;
 
-    public static final ItemData ZOMBIE_NAUTILUS_SPAWN_EGG = REGISTRY.register(new ItemData(1184, "zombie_nautilus_spawn_egg", 64));
+    public static final ItemData ZOMBIE_NAUTILUS_SPAWN_EGG;
 
-    public static final ItemData ZOMBIE_VILLAGER_SPAWN_EGG = REGISTRY.register(new ItemData(1185, "zombie_villager_spawn_egg", 64));
+    public static final ItemData ZOMBIE_VILLAGER_SPAWN_EGG;
 
-    public static final ItemData CAVE_SPIDER_SPAWN_EGG = REGISTRY.register(new ItemData(1186, "cave_spider_spawn_egg", 64));
+    public static final ItemData CAVE_SPIDER_SPAWN_EGG;
 
-    public static final ItemData SPIDER_SPAWN_EGG = REGISTRY.register(new ItemData(1187, "spider_spawn_egg", 64));
+    public static final ItemData SPIDER_SPAWN_EGG;
 
-    public static final ItemData BREEZE_SPAWN_EGG = REGISTRY.register(new ItemData(1188, "breeze_spawn_egg", 64));
+    public static final ItemData BREEZE_SPAWN_EGG;
 
-    public static final ItemData CREAKING_SPAWN_EGG = REGISTRY.register(new ItemData(1189, "creaking_spawn_egg", 64));
+    public static final ItemData CREAKING_SPAWN_EGG;
 
-    public static final ItemData CREEPER_SPAWN_EGG = REGISTRY.register(new ItemData(1190, "creeper_spawn_egg", 64));
+    public static final ItemData CREEPER_SPAWN_EGG;
 
-    public static final ItemData ELDER_GUARDIAN_SPAWN_EGG = REGISTRY.register(new ItemData(1191, "elder_guardian_spawn_egg", 64));
+    public static final ItemData ELDER_GUARDIAN_SPAWN_EGG;
 
-    public static final ItemData GUARDIAN_SPAWN_EGG = REGISTRY.register(new ItemData(1192, "guardian_spawn_egg", 64));
+    public static final ItemData GUARDIAN_SPAWN_EGG;
 
-    public static final ItemData PHANTOM_SPAWN_EGG = REGISTRY.register(new ItemData(1193, "phantom_spawn_egg", 64));
+    public static final ItemData PHANTOM_SPAWN_EGG;
 
-    public static final ItemData SILVERFISH_SPAWN_EGG = REGISTRY.register(new ItemData(1194, "silverfish_spawn_egg", 64));
+    public static final ItemData SILVERFISH_SPAWN_EGG;
 
-    public static final ItemData SLIME_SPAWN_EGG = REGISTRY.register(new ItemData(1195, "slime_spawn_egg", 64));
+    public static final ItemData SLIME_SPAWN_EGG;
 
-    public static final ItemData WARDEN_SPAWN_EGG = REGISTRY.register(new ItemData(1196, "warden_spawn_egg", 64));
+    public static final ItemData WARDEN_SPAWN_EGG;
 
-    public static final ItemData WITCH_SPAWN_EGG = REGISTRY.register(new ItemData(1197, "witch_spawn_egg", 64));
+    public static final ItemData WITCH_SPAWN_EGG;
 
-    public static final ItemData EVOKER_SPAWN_EGG = REGISTRY.register(new ItemData(1198, "evoker_spawn_egg", 64));
+    public static final ItemData EVOKER_SPAWN_EGG;
 
-    public static final ItemData PILLAGER_SPAWN_EGG = REGISTRY.register(new ItemData(1199, "pillager_spawn_egg", 64));
+    public static final ItemData PILLAGER_SPAWN_EGG;
 
-    public static final ItemData RAVAGER_SPAWN_EGG = REGISTRY.register(new ItemData(1200, "ravager_spawn_egg", 64));
+    public static final ItemData RAVAGER_SPAWN_EGG;
 
-    public static final ItemData VINDICATOR_SPAWN_EGG = REGISTRY.register(new ItemData(1201, "vindicator_spawn_egg", 64));
+    public static final ItemData VINDICATOR_SPAWN_EGG;
 
-    public static final ItemData VEX_SPAWN_EGG = REGISTRY.register(new ItemData(1202, "vex_spawn_egg", 64));
+    public static final ItemData VEX_SPAWN_EGG;
 
-    public static final ItemData BLAZE_SPAWN_EGG = REGISTRY.register(new ItemData(1203, "blaze_spawn_egg", 64));
+    public static final ItemData BLAZE_SPAWN_EGG;
 
-    public static final ItemData GHAST_SPAWN_EGG = REGISTRY.register(new ItemData(1204, "ghast_spawn_egg", 64));
+    public static final ItemData GHAST_SPAWN_EGG;
 
-    public static final ItemData HAPPY_GHAST_SPAWN_EGG = REGISTRY.register(new ItemData(1205, "happy_ghast_spawn_egg", 64));
+    public static final ItemData HAPPY_GHAST_SPAWN_EGG;
 
-    public static final ItemData HOGLIN_SPAWN_EGG = REGISTRY.register(new ItemData(1206, "hoglin_spawn_egg", 64));
+    public static final ItemData HOGLIN_SPAWN_EGG;
 
-    public static final ItemData MAGMA_CUBE_SPAWN_EGG = REGISTRY.register(new ItemData(1207, "magma_cube_spawn_egg", 64));
+    public static final ItemData MAGMA_CUBE_SPAWN_EGG;
 
-    public static final ItemData PIGLIN_SPAWN_EGG = REGISTRY.register(new ItemData(1208, "piglin_spawn_egg", 64));
+    public static final ItemData PIGLIN_SPAWN_EGG;
 
-    public static final ItemData PIGLIN_BRUTE_SPAWN_EGG = REGISTRY.register(new ItemData(1209, "piglin_brute_spawn_egg", 64));
+    public static final ItemData PIGLIN_BRUTE_SPAWN_EGG;
 
-    public static final ItemData STRIDER_SPAWN_EGG = REGISTRY.register(new ItemData(1210, "strider_spawn_egg", 64));
+    public static final ItemData STRIDER_SPAWN_EGG;
 
-    public static final ItemData ZOGLIN_SPAWN_EGG = REGISTRY.register(new ItemData(1211, "zoglin_spawn_egg", 64));
+    public static final ItemData ZOGLIN_SPAWN_EGG;
 
-    public static final ItemData ZOMBIFIED_PIGLIN_SPAWN_EGG = REGISTRY.register(new ItemData(1212, "zombified_piglin_spawn_egg", 64));
+    public static final ItemData ZOMBIFIED_PIGLIN_SPAWN_EGG;
 
-    public static final ItemData ENDER_DRAGON_SPAWN_EGG = REGISTRY.register(new ItemData(1213, "ender_dragon_spawn_egg", 64));
+    public static final ItemData ENDER_DRAGON_SPAWN_EGG;
 
-    public static final ItemData ENDERMAN_SPAWN_EGG = REGISTRY.register(new ItemData(1214, "enderman_spawn_egg", 64));
+    public static final ItemData ENDERMAN_SPAWN_EGG;
 
-    public static final ItemData ENDERMITE_SPAWN_EGG = REGISTRY.register(new ItemData(1215, "endermite_spawn_egg", 64));
+    public static final ItemData ENDERMITE_SPAWN_EGG;
 
-    public static final ItemData SHULKER_SPAWN_EGG = REGISTRY.register(new ItemData(1216, "shulker_spawn_egg", 64));
+    public static final ItemData SHULKER_SPAWN_EGG;
 
-    public static final ItemData EXPERIENCE_BOTTLE = REGISTRY.register(new ItemData(1217, "experience_bottle", 64));
+    public static final ItemData EXPERIENCE_BOTTLE;
 
-    public static final ItemData FIRE_CHARGE = REGISTRY.register(new ItemData(1218, "fire_charge", 64));
+    public static final ItemData FIRE_CHARGE;
 
-    public static final ItemData WIND_CHARGE = REGISTRY.register(new ItemData(1219, "wind_charge", 64));
+    public static final ItemData WIND_CHARGE;
 
-    public static final ItemData WRITABLE_BOOK = REGISTRY.register(new ItemData(1220, "writable_book", 1));
+    public static final ItemData WRITABLE_BOOK;
 
-    public static final ItemData WRITTEN_BOOK = REGISTRY.register(new ItemData(1221, "written_book", 16));
+    public static final ItemData WRITTEN_BOOK;
 
-    public static final ItemData BREEZE_ROD = REGISTRY.register(new ItemData(1222, "breeze_rod", 64));
+    public static final ItemData BREEZE_ROD;
 
-    public static final ItemData MACE = REGISTRY.register(new ItemData(1223, "mace", 1));
+    public static final ItemData MACE;
 
-    public static final ItemData ITEM_FRAME = REGISTRY.register(new ItemData(1224, "item_frame", 64));
+    public static final ItemData ITEM_FRAME;
 
-    public static final ItemData GLOW_ITEM_FRAME = REGISTRY.register(new ItemData(1225, "glow_item_frame", 64));
+    public static final ItemData GLOW_ITEM_FRAME;
 
-    public static final ItemData FLOWER_POT = REGISTRY.register(new ItemData(1226, "flower_pot", 64));
+    public static final ItemData FLOWER_POT;
 
-    public static final ItemData CARROT = REGISTRY.register(new ItemData(1227, "carrot", 64));
+    public static final ItemData CARROT;
 
-    public static final ItemData POTATO = REGISTRY.register(new ItemData(1228, "potato", 64));
+    public static final ItemData POTATO;
 
-    public static final ItemData BAKED_POTATO = REGISTRY.register(new ItemData(1229, "baked_potato", 64));
+    public static final ItemData BAKED_POTATO;
 
-    public static final ItemData POISONOUS_POTATO = REGISTRY.register(new ItemData(1230, "poisonous_potato", 64));
+    public static final ItemData POISONOUS_POTATO;
 
-    public static final ItemData MAP = REGISTRY.register(new ItemData(1231, "map", 64));
+    public static final ItemData MAP;
 
-    public static final ItemData GOLDEN_CARROT = REGISTRY.register(new ItemData(1232, "golden_carrot", 64));
+    public static final ItemData GOLDEN_CARROT;
 
-    public static final ItemData SKELETON_SKULL = REGISTRY.register(new ItemData(1233, "skeleton_skull", 64));
+    public static final ItemData SKELETON_SKULL;
 
-    public static final ItemData WITHER_SKELETON_SKULL = REGISTRY.register(new ItemData(1234, "wither_skeleton_skull", 64));
+    public static final ItemData WITHER_SKELETON_SKULL;
 
-    public static final ItemData PLAYER_HEAD = REGISTRY.register(new ItemData(1235, "player_head", 64));
+    public static final ItemData PLAYER_HEAD;
 
-    public static final ItemData ZOMBIE_HEAD = REGISTRY.register(new ItemData(1236, "zombie_head", 64));
+    public static final ItemData ZOMBIE_HEAD;
 
-    public static final ItemData CREEPER_HEAD = REGISTRY.register(new ItemData(1237, "creeper_head", 64));
+    public static final ItemData CREEPER_HEAD;
 
-    public static final ItemData DRAGON_HEAD = REGISTRY.register(new ItemData(1238, "dragon_head", 64));
+    public static final ItemData DRAGON_HEAD;
 
-    public static final ItemData PIGLIN_HEAD = REGISTRY.register(new ItemData(1239, "piglin_head", 64));
+    public static final ItemData PIGLIN_HEAD;
 
-    public static final ItemData NETHER_STAR = REGISTRY.register(new ItemData(1240, "nether_star", 64));
+    public static final ItemData NETHER_STAR;
 
-    public static final ItemData PUMPKIN_PIE = REGISTRY.register(new ItemData(1241, "pumpkin_pie", 64));
+    public static final ItemData PUMPKIN_PIE;
 
-    public static final ItemData FIREWORK_ROCKET = REGISTRY.register(new ItemData(1242, "firework_rocket", 64));
+    public static final ItemData FIREWORK_ROCKET;
 
-    public static final ItemData FIREWORK_STAR = REGISTRY.register(new ItemData(1243, "firework_star", 64));
+    public static final ItemData FIREWORK_STAR;
 
-    public static final ItemData ENCHANTED_BOOK = REGISTRY.register(new ItemData(1244, "enchanted_book", 1));
+    public static final ItemData ENCHANTED_BOOK;
 
-    public static final ItemData NETHER_BRICK = REGISTRY.register(new ItemData(1245, "nether_brick", 64));
+    public static final ItemData NETHER_BRICK;
 
-    public static final ItemData RESIN_BRICK = REGISTRY.register(new ItemData(1246, "resin_brick", 64));
+    public static final ItemData RESIN_BRICK;
 
-    public static final ItemData PRISMARINE_SHARD = REGISTRY.register(new ItemData(1247, "prismarine_shard", 64));
+    public static final ItemData PRISMARINE_SHARD;
 
-    public static final ItemData PRISMARINE_CRYSTALS = REGISTRY.register(new ItemData(1248, "prismarine_crystals", 64));
+    public static final ItemData PRISMARINE_CRYSTALS;
 
-    public static final ItemData RABBIT = REGISTRY.register(new ItemData(1249, "rabbit", 64));
+    public static final ItemData RABBIT;
 
-    public static final ItemData COOKED_RABBIT = REGISTRY.register(new ItemData(1250, "cooked_rabbit", 64));
+    public static final ItemData COOKED_RABBIT;
 
-    public static final ItemData RABBIT_STEW = REGISTRY.register(new ItemData(1251, "rabbit_stew", 1));
+    public static final ItemData RABBIT_STEW;
 
-    public static final ItemData RABBIT_FOOT = REGISTRY.register(new ItemData(1252, "rabbit_foot", 64));
+    public static final ItemData RABBIT_FOOT;
 
-    public static final ItemData RABBIT_HIDE = REGISTRY.register(new ItemData(1253, "rabbit_hide", 64));
+    public static final ItemData RABBIT_HIDE;
 
-    public static final ItemData ARMOR_STAND = REGISTRY.register(new ItemData(1254, "armor_stand", 16));
+    public static final ItemData ARMOR_STAND;
 
-    public static final ItemData COPPER_HORSE_ARMOR = REGISTRY.register(new ItemData(1255, "copper_horse_armor", 1));
+    public static final ItemData COPPER_HORSE_ARMOR;
 
-    public static final ItemData IRON_HORSE_ARMOR = REGISTRY.register(new ItemData(1256, "iron_horse_armor", 1));
+    public static final ItemData IRON_HORSE_ARMOR;
 
-    public static final ItemData GOLDEN_HORSE_ARMOR = REGISTRY.register(new ItemData(1257, "golden_horse_armor", 1));
+    public static final ItemData GOLDEN_HORSE_ARMOR;
 
-    public static final ItemData DIAMOND_HORSE_ARMOR = REGISTRY.register(new ItemData(1258, "diamond_horse_armor", 1));
+    public static final ItemData DIAMOND_HORSE_ARMOR;
 
-    public static final ItemData NETHERITE_HORSE_ARMOR = REGISTRY.register(new ItemData(1259, "netherite_horse_armor", 1));
+    public static final ItemData NETHERITE_HORSE_ARMOR;
 
-    public static final ItemData LEATHER_HORSE_ARMOR = REGISTRY.register(new ItemData(1260, "leather_horse_armor", 1));
+    public static final ItemData LEATHER_HORSE_ARMOR;
 
-    public static final ItemData LEAD = REGISTRY.register(new ItemData(1261, "lead", 64));
+    public static final ItemData LEAD;
 
-    public static final ItemData NAME_TAG = REGISTRY.register(new ItemData(1262, "name_tag", 64));
+    public static final ItemData NAME_TAG;
 
-    public static final ItemData COMMAND_BLOCK_MINECART = REGISTRY.register(new ItemData(1263, "command_block_minecart", 1));
+    public static final ItemData COMMAND_BLOCK_MINECART;
 
-    public static final ItemData MUTTON = REGISTRY.register(new ItemData(1264, "mutton", 64));
+    public static final ItemData MUTTON;
 
-    public static final ItemData COOKED_MUTTON = REGISTRY.register(new ItemData(1265, "cooked_mutton", 64));
+    public static final ItemData COOKED_MUTTON;
 
-    public static final ItemData WHITE_BANNER = REGISTRY.register(new ItemData(1266, "white_banner", 16));
+    public static final ItemData WHITE_BANNER;
 
-    public static final ItemData ORANGE_BANNER = REGISTRY.register(new ItemData(1267, "orange_banner", 16));
+    public static final ItemData ORANGE_BANNER;
 
-    public static final ItemData MAGENTA_BANNER = REGISTRY.register(new ItemData(1268, "magenta_banner", 16));
+    public static final ItemData MAGENTA_BANNER;
 
-    public static final ItemData LIGHT_BLUE_BANNER = REGISTRY.register(new ItemData(1269, "light_blue_banner", 16));
+    public static final ItemData LIGHT_BLUE_BANNER;
 
-    public static final ItemData YELLOW_BANNER = REGISTRY.register(new ItemData(1270, "yellow_banner", 16));
+    public static final ItemData YELLOW_BANNER;
 
-    public static final ItemData LIME_BANNER = REGISTRY.register(new ItemData(1271, "lime_banner", 16));
+    public static final ItemData LIME_BANNER;
 
-    public static final ItemData PINK_BANNER = REGISTRY.register(new ItemData(1272, "pink_banner", 16));
+    public static final ItemData PINK_BANNER;
 
-    public static final ItemData GRAY_BANNER = REGISTRY.register(new ItemData(1273, "gray_banner", 16));
+    public static final ItemData GRAY_BANNER;
 
-    public static final ItemData LIGHT_GRAY_BANNER = REGISTRY.register(new ItemData(1274, "light_gray_banner", 16));
+    public static final ItemData LIGHT_GRAY_BANNER;
 
-    public static final ItemData CYAN_BANNER = REGISTRY.register(new ItemData(1275, "cyan_banner", 16));
+    public static final ItemData CYAN_BANNER;
 
-    public static final ItemData PURPLE_BANNER = REGISTRY.register(new ItemData(1276, "purple_banner", 16));
+    public static final ItemData PURPLE_BANNER;
 
-    public static final ItemData BLUE_BANNER = REGISTRY.register(new ItemData(1277, "blue_banner", 16));
+    public static final ItemData BLUE_BANNER;
 
-    public static final ItemData BROWN_BANNER = REGISTRY.register(new ItemData(1278, "brown_banner", 16));
+    public static final ItemData BROWN_BANNER;
 
-    public static final ItemData GREEN_BANNER = REGISTRY.register(new ItemData(1279, "green_banner", 16));
+    public static final ItemData GREEN_BANNER;
 
-    public static final ItemData RED_BANNER = REGISTRY.register(new ItemData(1280, "red_banner", 16));
+    public static final ItemData RED_BANNER;
 
-    public static final ItemData BLACK_BANNER = REGISTRY.register(new ItemData(1281, "black_banner", 16));
+    public static final ItemData BLACK_BANNER;
 
-    public static final ItemData END_CRYSTAL = REGISTRY.register(new ItemData(1282, "end_crystal", 64));
+    public static final ItemData END_CRYSTAL;
 
-    public static final ItemData CHORUS_FRUIT = REGISTRY.register(new ItemData(1283, "chorus_fruit", 64));
+    public static final ItemData CHORUS_FRUIT;
 
-    public static final ItemData POPPED_CHORUS_FRUIT = REGISTRY.register(new ItemData(1284, "popped_chorus_fruit", 64));
+    public static final ItemData POPPED_CHORUS_FRUIT;
 
-    public static final ItemData TORCHFLOWER_SEEDS = REGISTRY.register(new ItemData(1285, "torchflower_seeds", 64));
+    public static final ItemData TORCHFLOWER_SEEDS;
 
-    public static final ItemData PITCHER_POD = REGISTRY.register(new ItemData(1286, "pitcher_pod", 64));
+    public static final ItemData PITCHER_POD;
 
-    public static final ItemData BEETROOT = REGISTRY.register(new ItemData(1287, "beetroot", 64));
+    public static final ItemData BEETROOT;
 
-    public static final ItemData BEETROOT_SEEDS = REGISTRY.register(new ItemData(1288, "beetroot_seeds", 64));
+    public static final ItemData BEETROOT_SEEDS;
 
-    public static final ItemData BEETROOT_SOUP = REGISTRY.register(new ItemData(1289, "beetroot_soup", 1));
+    public static final ItemData BEETROOT_SOUP;
 
-    public static final ItemData DRAGON_BREATH = REGISTRY.register(new ItemData(1290, "dragon_breath", 64));
+    public static final ItemData DRAGON_BREATH;
 
-    public static final ItemData SPLASH_POTION = REGISTRY.register(new ItemData(1291, "splash_potion", 1));
+    public static final ItemData SPLASH_POTION;
 
-    public static final ItemData SPECTRAL_ARROW = REGISTRY.register(new ItemData(1292, "spectral_arrow", 64));
+    public static final ItemData SPECTRAL_ARROW;
 
-    public static final ItemData TIPPED_ARROW = REGISTRY.register(new ItemData(1293, "tipped_arrow", 64));
+    public static final ItemData TIPPED_ARROW;
 
-    public static final ItemData LINGERING_POTION = REGISTRY.register(new ItemData(1294, "lingering_potion", 1));
+    public static final ItemData LINGERING_POTION;
 
-    public static final ItemData SHIELD = REGISTRY.register(new ItemData(1295, "shield", 1));
+    public static final ItemData SHIELD;
 
-    public static final ItemData WOODEN_SPEAR = REGISTRY.register(new ItemData(1296, "wooden_spear", 1));
+    public static final ItemData WOODEN_SPEAR;
 
-    public static final ItemData STONE_SPEAR = REGISTRY.register(new ItemData(1297, "stone_spear", 1));
+    public static final ItemData STONE_SPEAR;
 
-    public static final ItemData COPPER_SPEAR = REGISTRY.register(new ItemData(1298, "copper_spear", 1));
+    public static final ItemData COPPER_SPEAR;
 
-    public static final ItemData IRON_SPEAR = REGISTRY.register(new ItemData(1299, "iron_spear", 1));
+    public static final ItemData IRON_SPEAR;
 
-    public static final ItemData GOLDEN_SPEAR = REGISTRY.register(new ItemData(1300, "golden_spear", 1));
+    public static final ItemData GOLDEN_SPEAR;
 
-    public static final ItemData DIAMOND_SPEAR = REGISTRY.register(new ItemData(1301, "diamond_spear", 1));
+    public static final ItemData DIAMOND_SPEAR;
 
-    public static final ItemData NETHERITE_SPEAR = REGISTRY.register(new ItemData(1302, "netherite_spear", 1));
+    public static final ItemData NETHERITE_SPEAR;
 
-    public static final ItemData TOTEM_OF_UNDYING = REGISTRY.register(new ItemData(1303, "totem_of_undying", 1));
+    public static final ItemData TOTEM_OF_UNDYING;
 
-    public static final ItemData SHULKER_SHELL = REGISTRY.register(new ItemData(1304, "shulker_shell", 64));
+    public static final ItemData SHULKER_SHELL;
 
-    public static final ItemData IRON_NUGGET = REGISTRY.register(new ItemData(1305, "iron_nugget", 64));
+    public static final ItemData IRON_NUGGET;
 
-    public static final ItemData COPPER_NUGGET = REGISTRY.register(new ItemData(1306, "copper_nugget", 64));
+    public static final ItemData COPPER_NUGGET;
 
-    public static final ItemData KNOWLEDGE_BOOK = REGISTRY.register(new ItemData(1307, "knowledge_book", 1));
+    public static final ItemData KNOWLEDGE_BOOK;
 
-    public static final ItemData DEBUG_STICK = REGISTRY.register(new ItemData(1308, "debug_stick", 1));
+    public static final ItemData DEBUG_STICK;
 
-    public static final ItemData MUSIC_DISC_13 = REGISTRY.register(new ItemData(1309, "music_disc_13", 1));
+    public static final ItemData MUSIC_DISC_13;
 
-    public static final ItemData MUSIC_DISC_CAT = REGISTRY.register(new ItemData(1310, "music_disc_cat", 1));
+    public static final ItemData MUSIC_DISC_CAT;
 
-    public static final ItemData MUSIC_DISC_BLOCKS = REGISTRY.register(new ItemData(1311, "music_disc_blocks", 1));
+    public static final ItemData MUSIC_DISC_BLOCKS;
 
-    public static final ItemData MUSIC_DISC_CHIRP = REGISTRY.register(new ItemData(1312, "music_disc_chirp", 1));
+    public static final ItemData MUSIC_DISC_CHIRP;
 
-    public static final ItemData MUSIC_DISC_CREATOR = REGISTRY.register(new ItemData(1313, "music_disc_creator", 1));
+    public static final ItemData MUSIC_DISC_CREATOR;
 
-    public static final ItemData MUSIC_DISC_CREATOR_MUSIC_BOX = REGISTRY.register(new ItemData(1314, "music_disc_creator_music_box", 1));
+    public static final ItemData MUSIC_DISC_CREATOR_MUSIC_BOX;
 
-    public static final ItemData MUSIC_DISC_FAR = REGISTRY.register(new ItemData(1315, "music_disc_far", 1));
+    public static final ItemData MUSIC_DISC_FAR;
 
-    public static final ItemData MUSIC_DISC_LAVA_CHICKEN = REGISTRY.register(new ItemData(1316, "music_disc_lava_chicken", 1));
+    public static final ItemData MUSIC_DISC_LAVA_CHICKEN;
 
-    public static final ItemData MUSIC_DISC_MALL = REGISTRY.register(new ItemData(1317, "music_disc_mall", 1));
+    public static final ItemData MUSIC_DISC_MALL;
 
-    public static final ItemData MUSIC_DISC_MELLOHI = REGISTRY.register(new ItemData(1318, "music_disc_mellohi", 1));
+    public static final ItemData MUSIC_DISC_MELLOHI;
 
-    public static final ItemData MUSIC_DISC_STAL = REGISTRY.register(new ItemData(1319, "music_disc_stal", 1));
+    public static final ItemData MUSIC_DISC_STAL;
 
-    public static final ItemData MUSIC_DISC_STRAD = REGISTRY.register(new ItemData(1320, "music_disc_strad", 1));
+    public static final ItemData MUSIC_DISC_STRAD;
 
-    public static final ItemData MUSIC_DISC_WARD = REGISTRY.register(new ItemData(1321, "music_disc_ward", 1));
+    public static final ItemData MUSIC_DISC_WARD;
 
-    public static final ItemData MUSIC_DISC_11 = REGISTRY.register(new ItemData(1322, "music_disc_11", 1));
+    public static final ItemData MUSIC_DISC_11;
 
-    public static final ItemData MUSIC_DISC_WAIT = REGISTRY.register(new ItemData(1323, "music_disc_wait", 1));
+    public static final ItemData MUSIC_DISC_WAIT;
 
-    public static final ItemData MUSIC_DISC_OTHERSIDE = REGISTRY.register(new ItemData(1324, "music_disc_otherside", 1));
+    public static final ItemData MUSIC_DISC_OTHERSIDE;
 
-    public static final ItemData MUSIC_DISC_RELIC = REGISTRY.register(new ItemData(1325, "music_disc_relic", 1));
+    public static final ItemData MUSIC_DISC_RELIC;
 
-    public static final ItemData MUSIC_DISC_5 = REGISTRY.register(new ItemData(1326, "music_disc_5", 1));
+    public static final ItemData MUSIC_DISC_5;
 
-    public static final ItemData MUSIC_DISC_PIGSTEP = REGISTRY.register(new ItemData(1327, "music_disc_pigstep", 1));
+    public static final ItemData MUSIC_DISC_PIGSTEP;
 
-    public static final ItemData MUSIC_DISC_PRECIPICE = REGISTRY.register(new ItemData(1328, "music_disc_precipice", 1));
+    public static final ItemData MUSIC_DISC_PRECIPICE;
 
-    public static final ItemData MUSIC_DISC_TEARS = REGISTRY.register(new ItemData(1329, "music_disc_tears", 1));
+    public static final ItemData MUSIC_DISC_TEARS;
 
-    public static final ItemData DISC_FRAGMENT_5 = REGISTRY.register(new ItemData(1330, "disc_fragment_5", 64));
+    public static final ItemData DISC_FRAGMENT_5;
 
-    public static final ItemData TRIDENT = REGISTRY.register(new ItemData(1331, "trident", 1));
+    public static final ItemData TRIDENT;
 
-    public static final ItemData NAUTILUS_SHELL = REGISTRY.register(new ItemData(1332, "nautilus_shell", 64));
+    public static final ItemData NAUTILUS_SHELL;
 
-    public static final ItemData IRON_NAUTILUS_ARMOR = REGISTRY.register(new ItemData(1333, "iron_nautilus_armor", 1));
+    public static final ItemData IRON_NAUTILUS_ARMOR;
 
-    public static final ItemData GOLDEN_NAUTILUS_ARMOR = REGISTRY.register(new ItemData(1334, "golden_nautilus_armor", 1));
+    public static final ItemData GOLDEN_NAUTILUS_ARMOR;
 
-    public static final ItemData DIAMOND_NAUTILUS_ARMOR = REGISTRY.register(new ItemData(1335, "diamond_nautilus_armor", 1));
+    public static final ItemData DIAMOND_NAUTILUS_ARMOR;
 
-    public static final ItemData NETHERITE_NAUTILUS_ARMOR = REGISTRY.register(new ItemData(1336, "netherite_nautilus_armor", 1));
+    public static final ItemData NETHERITE_NAUTILUS_ARMOR;
 
-    public static final ItemData COPPER_NAUTILUS_ARMOR = REGISTRY.register(new ItemData(1337, "copper_nautilus_armor", 1));
+    public static final ItemData COPPER_NAUTILUS_ARMOR;
 
-    public static final ItemData HEART_OF_THE_SEA = REGISTRY.register(new ItemData(1338, "heart_of_the_sea", 64));
+    public static final ItemData HEART_OF_THE_SEA;
 
-    public static final ItemData CROSSBOW = REGISTRY.register(new ItemData(1339, "crossbow", 1));
+    public static final ItemData CROSSBOW;
 
-    public static final ItemData SUSPICIOUS_STEW = REGISTRY.register(new ItemData(1340, "suspicious_stew", 1));
+    public static final ItemData SUSPICIOUS_STEW;
 
-    public static final ItemData LOOM = REGISTRY.register(new ItemData(1341, "loom", 64));
+    public static final ItemData LOOM;
 
-    public static final ItemData FLOWER_BANNER_PATTERN = REGISTRY.register(new ItemData(1342, "flower_banner_pattern", 1));
+    public static final ItemData FLOWER_BANNER_PATTERN;
 
-    public static final ItemData CREEPER_BANNER_PATTERN = REGISTRY.register(new ItemData(1343, "creeper_banner_pattern", 1));
+    public static final ItemData CREEPER_BANNER_PATTERN;
 
-    public static final ItemData SKULL_BANNER_PATTERN = REGISTRY.register(new ItemData(1344, "skull_banner_pattern", 1));
+    public static final ItemData SKULL_BANNER_PATTERN;
 
-    public static final ItemData MOJANG_BANNER_PATTERN = REGISTRY.register(new ItemData(1345, "mojang_banner_pattern", 1));
+    public static final ItemData MOJANG_BANNER_PATTERN;
 
-    public static final ItemData GLOBE_BANNER_PATTERN = REGISTRY.register(new ItemData(1346, "globe_banner_pattern", 1));
+    public static final ItemData GLOBE_BANNER_PATTERN;
 
-    public static final ItemData PIGLIN_BANNER_PATTERN = REGISTRY.register(new ItemData(1347, "piglin_banner_pattern", 1));
+    public static final ItemData PIGLIN_BANNER_PATTERN;
 
-    public static final ItemData FLOW_BANNER_PATTERN = REGISTRY.register(new ItemData(1348, "flow_banner_pattern", 1));
+    public static final ItemData FLOW_BANNER_PATTERN;
 
-    public static final ItemData GUSTER_BANNER_PATTERN = REGISTRY.register(new ItemData(1349, "guster_banner_pattern", 1));
+    public static final ItemData GUSTER_BANNER_PATTERN;
 
-    public static final ItemData FIELD_MASONED_BANNER_PATTERN = REGISTRY.register(new ItemData(1350, "field_masoned_banner_pattern", 1));
+    public static final ItemData FIELD_MASONED_BANNER_PATTERN;
 
-    public static final ItemData BORDURE_INDENTED_BANNER_PATTERN = REGISTRY.register(new ItemData(1351, "bordure_indented_banner_pattern", 1));
+    public static final ItemData BORDURE_INDENTED_BANNER_PATTERN;
 
-    public static final ItemData GOAT_HORN = REGISTRY.register(new ItemData(1352, "goat_horn", 1));
+    public static final ItemData GOAT_HORN;
 
-    public static final ItemData COMPOSTER = REGISTRY.register(new ItemData(1353, "composter", 64));
+    public static final ItemData COMPOSTER;
 
-    public static final ItemData BARREL = REGISTRY.register(new ItemData(1354, "barrel", 64));
+    public static final ItemData BARREL;
 
-    public static final ItemData SMOKER = REGISTRY.register(new ItemData(1355, "smoker", 64));
+    public static final ItemData SMOKER;
 
-    public static final ItemData BLAST_FURNACE = REGISTRY.register(new ItemData(1356, "blast_furnace", 64));
+    public static final ItemData BLAST_FURNACE;
 
-    public static final ItemData CARTOGRAPHY_TABLE = REGISTRY.register(new ItemData(1357, "cartography_table", 64));
+    public static final ItemData CARTOGRAPHY_TABLE;
 
-    public static final ItemData FLETCHING_TABLE = REGISTRY.register(new ItemData(1358, "fletching_table", 64));
+    public static final ItemData FLETCHING_TABLE;
 
-    public static final ItemData GRINDSTONE = REGISTRY.register(new ItemData(1359, "grindstone", 64));
+    public static final ItemData GRINDSTONE;
 
-    public static final ItemData SMITHING_TABLE = REGISTRY.register(new ItemData(1360, "smithing_table", 64));
+    public static final ItemData SMITHING_TABLE;
 
-    public static final ItemData STONECUTTER = REGISTRY.register(new ItemData(1361, "stonecutter", 64));
+    public static final ItemData STONECUTTER;
 
-    public static final ItemData BELL = REGISTRY.register(new ItemData(1362, "bell", 64));
+    public static final ItemData BELL;
 
-    public static final ItemData LANTERN = REGISTRY.register(new ItemData(1363, "lantern", 64));
+    public static final ItemData LANTERN;
 
-    public static final ItemData SOUL_LANTERN = REGISTRY.register(new ItemData(1364, "soul_lantern", 64));
+    public static final ItemData SOUL_LANTERN;
 
-    public static final ItemData COPPER_LANTERN = REGISTRY.register(new ItemData(1365, "copper_lantern", 64));
+    public static final ItemData COPPER_LANTERN;
 
-    public static final ItemData EXPOSED_COPPER_LANTERN = REGISTRY.register(new ItemData(1366, "exposed_copper_lantern", 64));
+    public static final ItemData EXPOSED_COPPER_LANTERN;
 
-    public static final ItemData WEATHERED_COPPER_LANTERN = REGISTRY.register(new ItemData(1367, "weathered_copper_lantern", 64));
+    public static final ItemData WEATHERED_COPPER_LANTERN;
 
-    public static final ItemData OXIDIZED_COPPER_LANTERN = REGISTRY.register(new ItemData(1368, "oxidized_copper_lantern", 64));
+    public static final ItemData OXIDIZED_COPPER_LANTERN;
 
-    public static final ItemData WAXED_COPPER_LANTERN = REGISTRY.register(new ItemData(1369, "waxed_copper_lantern", 64));
+    public static final ItemData WAXED_COPPER_LANTERN;
 
-    public static final ItemData WAXED_EXPOSED_COPPER_LANTERN = REGISTRY.register(new ItemData(1370, "waxed_exposed_copper_lantern", 64));
+    public static final ItemData WAXED_EXPOSED_COPPER_LANTERN;
 
-    public static final ItemData WAXED_WEATHERED_COPPER_LANTERN = REGISTRY.register(new ItemData(1371, "waxed_weathered_copper_lantern", 64));
+    public static final ItemData WAXED_WEATHERED_COPPER_LANTERN;
 
-    public static final ItemData WAXED_OXIDIZED_COPPER_LANTERN = REGISTRY.register(new ItemData(1372, "waxed_oxidized_copper_lantern", 64));
+    public static final ItemData WAXED_OXIDIZED_COPPER_LANTERN;
 
-    public static final ItemData SWEET_BERRIES = REGISTRY.register(new ItemData(1373, "sweet_berries", 64));
+    public static final ItemData SWEET_BERRIES;
 
-    public static final ItemData GLOW_BERRIES = REGISTRY.register(new ItemData(1374, "glow_berries", 64));
+    public static final ItemData GLOW_BERRIES;
 
-    public static final ItemData CAMPFIRE = REGISTRY.register(new ItemData(1375, "campfire", 64));
+    public static final ItemData CAMPFIRE;
 
-    public static final ItemData SOUL_CAMPFIRE = REGISTRY.register(new ItemData(1376, "soul_campfire", 64));
+    public static final ItemData SOUL_CAMPFIRE;
 
-    public static final ItemData SHROOMLIGHT = REGISTRY.register(new ItemData(1377, "shroomlight", 64));
+    public static final ItemData SHROOMLIGHT;
 
-    public static final ItemData HONEYCOMB = REGISTRY.register(new ItemData(1378, "honeycomb", 64));
+    public static final ItemData HONEYCOMB;
 
-    public static final ItemData BEE_NEST = REGISTRY.register(new ItemData(1379, "bee_nest", 64));
+    public static final ItemData BEE_NEST;
 
-    public static final ItemData BEEHIVE = REGISTRY.register(new ItemData(1380, "beehive", 64));
+    public static final ItemData BEEHIVE;
 
-    public static final ItemData HONEY_BOTTLE = REGISTRY.register(new ItemData(1381, "honey_bottle", 16));
+    public static final ItemData HONEY_BOTTLE;
 
-    public static final ItemData HONEYCOMB_BLOCK = REGISTRY.register(new ItemData(1382, "honeycomb_block", 64));
+    public static final ItemData HONEYCOMB_BLOCK;
 
-    public static final ItemData LODESTONE = REGISTRY.register(new ItemData(1383, "lodestone", 64));
+    public static final ItemData LODESTONE;
 
-    public static final ItemData CRYING_OBSIDIAN = REGISTRY.register(new ItemData(1384, "crying_obsidian", 64));
+    public static final ItemData CRYING_OBSIDIAN;
 
-    public static final ItemData BLACKSTONE = REGISTRY.register(new ItemData(1385, "blackstone", 64));
+    public static final ItemData BLACKSTONE;
 
-    public static final ItemData BLACKSTONE_SLAB = REGISTRY.register(new ItemData(1386, "blackstone_slab", 64));
+    public static final ItemData BLACKSTONE_SLAB;
 
-    public static final ItemData BLACKSTONE_STAIRS = REGISTRY.register(new ItemData(1387, "blackstone_stairs", 64));
+    public static final ItemData BLACKSTONE_STAIRS;
 
-    public static final ItemData GILDED_BLACKSTONE = REGISTRY.register(new ItemData(1388, "gilded_blackstone", 64));
+    public static final ItemData GILDED_BLACKSTONE;
 
-    public static final ItemData POLISHED_BLACKSTONE = REGISTRY.register(new ItemData(1389, "polished_blackstone", 64));
+    public static final ItemData POLISHED_BLACKSTONE;
 
-    public static final ItemData POLISHED_BLACKSTONE_SLAB = REGISTRY.register(new ItemData(1390, "polished_blackstone_slab", 64));
+    public static final ItemData POLISHED_BLACKSTONE_SLAB;
 
-    public static final ItemData POLISHED_BLACKSTONE_STAIRS = REGISTRY.register(new ItemData(1391, "polished_blackstone_stairs", 64));
+    public static final ItemData POLISHED_BLACKSTONE_STAIRS;
 
-    public static final ItemData CHISELED_POLISHED_BLACKSTONE = REGISTRY.register(new ItemData(1392, "chiseled_polished_blackstone", 64));
+    public static final ItemData CHISELED_POLISHED_BLACKSTONE;
 
-    public static final ItemData POLISHED_BLACKSTONE_BRICKS = REGISTRY.register(new ItemData(1393, "polished_blackstone_bricks", 64));
+    public static final ItemData POLISHED_BLACKSTONE_BRICKS;
 
-    public static final ItemData POLISHED_BLACKSTONE_BRICK_SLAB = REGISTRY.register(new ItemData(1394, "polished_blackstone_brick_slab", 64));
+    public static final ItemData POLISHED_BLACKSTONE_BRICK_SLAB;
 
-    public static final ItemData POLISHED_BLACKSTONE_BRICK_STAIRS = REGISTRY.register(new ItemData(1395, "polished_blackstone_brick_stairs", 64));
+    public static final ItemData POLISHED_BLACKSTONE_BRICK_STAIRS;
 
-    public static final ItemData CRACKED_POLISHED_BLACKSTONE_BRICKS = REGISTRY.register(new ItemData(1396, "cracked_polished_blackstone_bricks", 64));
+    public static final ItemData CRACKED_POLISHED_BLACKSTONE_BRICKS;
 
-    public static final ItemData RESPAWN_ANCHOR = REGISTRY.register(new ItemData(1397, "respawn_anchor", 64));
+    public static final ItemData RESPAWN_ANCHOR;
 
-    public static final ItemData CANDLE = REGISTRY.register(new ItemData(1398, "candle", 64));
+    public static final ItemData CANDLE;
 
-    public static final ItemData WHITE_CANDLE = REGISTRY.register(new ItemData(1399, "white_candle", 64));
+    public static final ItemData WHITE_CANDLE;
 
-    public static final ItemData ORANGE_CANDLE = REGISTRY.register(new ItemData(1400, "orange_candle", 64));
+    public static final ItemData ORANGE_CANDLE;
 
-    public static final ItemData MAGENTA_CANDLE = REGISTRY.register(new ItemData(1401, "magenta_candle", 64));
+    public static final ItemData MAGENTA_CANDLE;
 
-    public static final ItemData LIGHT_BLUE_CANDLE = REGISTRY.register(new ItemData(1402, "light_blue_candle", 64));
+    public static final ItemData LIGHT_BLUE_CANDLE;
 
-    public static final ItemData YELLOW_CANDLE = REGISTRY.register(new ItemData(1403, "yellow_candle", 64));
+    public static final ItemData YELLOW_CANDLE;
 
-    public static final ItemData LIME_CANDLE = REGISTRY.register(new ItemData(1404, "lime_candle", 64));
+    public static final ItemData LIME_CANDLE;
 
-    public static final ItemData PINK_CANDLE = REGISTRY.register(new ItemData(1405, "pink_candle", 64));
+    public static final ItemData PINK_CANDLE;
 
-    public static final ItemData GRAY_CANDLE = REGISTRY.register(new ItemData(1406, "gray_candle", 64));
+    public static final ItemData GRAY_CANDLE;
 
-    public static final ItemData LIGHT_GRAY_CANDLE = REGISTRY.register(new ItemData(1407, "light_gray_candle", 64));
+    public static final ItemData LIGHT_GRAY_CANDLE;
 
-    public static final ItemData CYAN_CANDLE = REGISTRY.register(new ItemData(1408, "cyan_candle", 64));
+    public static final ItemData CYAN_CANDLE;
 
-    public static final ItemData PURPLE_CANDLE = REGISTRY.register(new ItemData(1409, "purple_candle", 64));
+    public static final ItemData PURPLE_CANDLE;
 
-    public static final ItemData BLUE_CANDLE = REGISTRY.register(new ItemData(1410, "blue_candle", 64));
+    public static final ItemData BLUE_CANDLE;
 
-    public static final ItemData BROWN_CANDLE = REGISTRY.register(new ItemData(1411, "brown_candle", 64));
+    public static final ItemData BROWN_CANDLE;
 
-    public static final ItemData GREEN_CANDLE = REGISTRY.register(new ItemData(1412, "green_candle", 64));
+    public static final ItemData GREEN_CANDLE;
 
-    public static final ItemData RED_CANDLE = REGISTRY.register(new ItemData(1413, "red_candle", 64));
+    public static final ItemData RED_CANDLE;
 
-    public static final ItemData BLACK_CANDLE = REGISTRY.register(new ItemData(1414, "black_candle", 64));
+    public static final ItemData BLACK_CANDLE;
 
-    public static final ItemData SMALL_AMETHYST_BUD = REGISTRY.register(new ItemData(1415, "small_amethyst_bud", 64));
+    public static final ItemData SMALL_AMETHYST_BUD;
 
-    public static final ItemData MEDIUM_AMETHYST_BUD = REGISTRY.register(new ItemData(1416, "medium_amethyst_bud", 64));
+    public static final ItemData MEDIUM_AMETHYST_BUD;
 
-    public static final ItemData LARGE_AMETHYST_BUD = REGISTRY.register(new ItemData(1417, "large_amethyst_bud", 64));
+    public static final ItemData LARGE_AMETHYST_BUD;
 
-    public static final ItemData AMETHYST_CLUSTER = REGISTRY.register(new ItemData(1418, "amethyst_cluster", 64));
+    public static final ItemData AMETHYST_CLUSTER;
 
-    public static final ItemData POINTED_DRIPSTONE = REGISTRY.register(new ItemData(1419, "pointed_dripstone", 64));
+    public static final ItemData POINTED_DRIPSTONE;
 
-    public static final ItemData OCHRE_FROGLIGHT = REGISTRY.register(new ItemData(1420, "ochre_froglight", 64));
+    public static final ItemData OCHRE_FROGLIGHT;
 
-    public static final ItemData VERDANT_FROGLIGHT = REGISTRY.register(new ItemData(1421, "verdant_froglight", 64));
+    public static final ItemData VERDANT_FROGLIGHT;
 
-    public static final ItemData PEARLESCENT_FROGLIGHT = REGISTRY.register(new ItemData(1422, "pearlescent_froglight", 64));
+    public static final ItemData PEARLESCENT_FROGLIGHT;
 
-    public static final ItemData FROGSPAWN = REGISTRY.register(new ItemData(1423, "frogspawn", 64));
+    public static final ItemData FROGSPAWN;
 
-    public static final ItemData ECHO_SHARD = REGISTRY.register(new ItemData(1424, "echo_shard", 64));
+    public static final ItemData ECHO_SHARD;
 
-    public static final ItemData BRUSH = REGISTRY.register(new ItemData(1425, "brush", 1));
+    public static final ItemData BRUSH;
 
-    public static final ItemData NETHERITE_UPGRADE_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1426, "netherite_upgrade_smithing_template", 64));
+    public static final ItemData NETHERITE_UPGRADE_SMITHING_TEMPLATE;
 
-    public static final ItemData SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1427, "sentry_armor_trim_smithing_template", 64));
+    public static final ItemData SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData DUNE_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1428, "dune_armor_trim_smithing_template", 64));
+    public static final ItemData DUNE_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData COAST_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1429, "coast_armor_trim_smithing_template", 64));
+    public static final ItemData COAST_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData WILD_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1430, "wild_armor_trim_smithing_template", 64));
+    public static final ItemData WILD_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData WARD_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1431, "ward_armor_trim_smithing_template", 64));
+    public static final ItemData WARD_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData EYE_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1432, "eye_armor_trim_smithing_template", 64));
+    public static final ItemData EYE_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData VEX_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1433, "vex_armor_trim_smithing_template", 64));
+    public static final ItemData VEX_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData TIDE_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1434, "tide_armor_trim_smithing_template", 64));
+    public static final ItemData TIDE_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1435, "snout_armor_trim_smithing_template", 64));
+    public static final ItemData SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData RIB_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1436, "rib_armor_trim_smithing_template", 64));
+    public static final ItemData RIB_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1437, "spire_armor_trim_smithing_template", 64));
+    public static final ItemData SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1438, "wayfinder_armor_trim_smithing_template", 64));
+    public static final ItemData WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1439, "shaper_armor_trim_smithing_template", 64));
+    public static final ItemData SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1440, "silence_armor_trim_smithing_template", 64));
+    public static final ItemData SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData RAISER_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1441, "raiser_armor_trim_smithing_template", 64));
+    public static final ItemData RAISER_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData HOST_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1442, "host_armor_trim_smithing_template", 64));
+    public static final ItemData HOST_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData FLOW_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1443, "flow_armor_trim_smithing_template", 64));
+    public static final ItemData FLOW_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData BOLT_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(new ItemData(1444, "bolt_armor_trim_smithing_template", 64));
+    public static final ItemData BOLT_ARMOR_TRIM_SMITHING_TEMPLATE;
 
-    public static final ItemData ANGLER_POTTERY_SHERD = REGISTRY.register(new ItemData(1445, "angler_pottery_sherd", 64));
+    public static final ItemData ANGLER_POTTERY_SHERD;
 
-    public static final ItemData ARCHER_POTTERY_SHERD = REGISTRY.register(new ItemData(1446, "archer_pottery_sherd", 64));
+    public static final ItemData ARCHER_POTTERY_SHERD;
 
-    public static final ItemData ARMS_UP_POTTERY_SHERD = REGISTRY.register(new ItemData(1447, "arms_up_pottery_sherd", 64));
+    public static final ItemData ARMS_UP_POTTERY_SHERD;
 
-    public static final ItemData BLADE_POTTERY_SHERD = REGISTRY.register(new ItemData(1448, "blade_pottery_sherd", 64));
+    public static final ItemData BLADE_POTTERY_SHERD;
 
-    public static final ItemData BREWER_POTTERY_SHERD = REGISTRY.register(new ItemData(1449, "brewer_pottery_sherd", 64));
+    public static final ItemData BREWER_POTTERY_SHERD;
 
-    public static final ItemData BURN_POTTERY_SHERD = REGISTRY.register(new ItemData(1450, "burn_pottery_sherd", 64));
+    public static final ItemData BURN_POTTERY_SHERD;
 
-    public static final ItemData DANGER_POTTERY_SHERD = REGISTRY.register(new ItemData(1451, "danger_pottery_sherd", 64));
+    public static final ItemData DANGER_POTTERY_SHERD;
 
-    public static final ItemData EXPLORER_POTTERY_SHERD = REGISTRY.register(new ItemData(1452, "explorer_pottery_sherd", 64));
+    public static final ItemData EXPLORER_POTTERY_SHERD;
 
-    public static final ItemData FLOW_POTTERY_SHERD = REGISTRY.register(new ItemData(1453, "flow_pottery_sherd", 64));
+    public static final ItemData FLOW_POTTERY_SHERD;
 
-    public static final ItemData FRIEND_POTTERY_SHERD = REGISTRY.register(new ItemData(1454, "friend_pottery_sherd", 64));
+    public static final ItemData FRIEND_POTTERY_SHERD;
 
-    public static final ItemData GUSTER_POTTERY_SHERD = REGISTRY.register(new ItemData(1455, "guster_pottery_sherd", 64));
+    public static final ItemData GUSTER_POTTERY_SHERD;
 
-    public static final ItemData HEART_POTTERY_SHERD = REGISTRY.register(new ItemData(1456, "heart_pottery_sherd", 64));
+    public static final ItemData HEART_POTTERY_SHERD;
 
-    public static final ItemData HEARTBREAK_POTTERY_SHERD = REGISTRY.register(new ItemData(1457, "heartbreak_pottery_sherd", 64));
+    public static final ItemData HEARTBREAK_POTTERY_SHERD;
 
-    public static final ItemData HOWL_POTTERY_SHERD = REGISTRY.register(new ItemData(1458, "howl_pottery_sherd", 64));
+    public static final ItemData HOWL_POTTERY_SHERD;
 
-    public static final ItemData MINER_POTTERY_SHERD = REGISTRY.register(new ItemData(1459, "miner_pottery_sherd", 64));
+    public static final ItemData MINER_POTTERY_SHERD;
 
-    public static final ItemData MOURNER_POTTERY_SHERD = REGISTRY.register(new ItemData(1460, "mourner_pottery_sherd", 64));
+    public static final ItemData MOURNER_POTTERY_SHERD;
 
-    public static final ItemData PLENTY_POTTERY_SHERD = REGISTRY.register(new ItemData(1461, "plenty_pottery_sherd", 64));
+    public static final ItemData PLENTY_POTTERY_SHERD;
 
-    public static final ItemData PRIZE_POTTERY_SHERD = REGISTRY.register(new ItemData(1462, "prize_pottery_sherd", 64));
+    public static final ItemData PRIZE_POTTERY_SHERD;
 
-    public static final ItemData SCRAPE_POTTERY_SHERD = REGISTRY.register(new ItemData(1463, "scrape_pottery_sherd", 64));
+    public static final ItemData SCRAPE_POTTERY_SHERD;
 
-    public static final ItemData SHEAF_POTTERY_SHERD = REGISTRY.register(new ItemData(1464, "sheaf_pottery_sherd", 64));
+    public static final ItemData SHEAF_POTTERY_SHERD;
 
-    public static final ItemData SHELTER_POTTERY_SHERD = REGISTRY.register(new ItemData(1465, "shelter_pottery_sherd", 64));
+    public static final ItemData SHELTER_POTTERY_SHERD;
 
-    public static final ItemData SKULL_POTTERY_SHERD = REGISTRY.register(new ItemData(1466, "skull_pottery_sherd", 64));
+    public static final ItemData SKULL_POTTERY_SHERD;
 
-    public static final ItemData SNORT_POTTERY_SHERD = REGISTRY.register(new ItemData(1467, "snort_pottery_sherd", 64));
+    public static final ItemData SNORT_POTTERY_SHERD;
 
-    public static final ItemData COPPER_GRATE = REGISTRY.register(new ItemData(1468, "copper_grate", 64));
+    public static final ItemData COPPER_GRATE;
 
-    public static final ItemData EXPOSED_COPPER_GRATE = REGISTRY.register(new ItemData(1469, "exposed_copper_grate", 64));
+    public static final ItemData EXPOSED_COPPER_GRATE;
 
-    public static final ItemData WEATHERED_COPPER_GRATE = REGISTRY.register(new ItemData(1470, "weathered_copper_grate", 64));
+    public static final ItemData WEATHERED_COPPER_GRATE;
 
-    public static final ItemData OXIDIZED_COPPER_GRATE = REGISTRY.register(new ItemData(1471, "oxidized_copper_grate", 64));
+    public static final ItemData OXIDIZED_COPPER_GRATE;
 
-    public static final ItemData WAXED_COPPER_GRATE = REGISTRY.register(new ItemData(1472, "waxed_copper_grate", 64));
+    public static final ItemData WAXED_COPPER_GRATE;
 
-    public static final ItemData WAXED_EXPOSED_COPPER_GRATE = REGISTRY.register(new ItemData(1473, "waxed_exposed_copper_grate", 64));
+    public static final ItemData WAXED_EXPOSED_COPPER_GRATE;
 
-    public static final ItemData WAXED_WEATHERED_COPPER_GRATE = REGISTRY.register(new ItemData(1474, "waxed_weathered_copper_grate", 64));
+    public static final ItemData WAXED_WEATHERED_COPPER_GRATE;
 
-    public static final ItemData WAXED_OXIDIZED_COPPER_GRATE = REGISTRY.register(new ItemData(1475, "waxed_oxidized_copper_grate", 64));
+    public static final ItemData WAXED_OXIDIZED_COPPER_GRATE;
 
-    public static final ItemData COPPER_BULB = REGISTRY.register(new ItemData(1476, "copper_bulb", 64));
+    public static final ItemData COPPER_BULB;
 
-    public static final ItemData EXPOSED_COPPER_BULB = REGISTRY.register(new ItemData(1477, "exposed_copper_bulb", 64));
+    public static final ItemData EXPOSED_COPPER_BULB;
 
-    public static final ItemData WEATHERED_COPPER_BULB = REGISTRY.register(new ItemData(1478, "weathered_copper_bulb", 64));
+    public static final ItemData WEATHERED_COPPER_BULB;
 
-    public static final ItemData OXIDIZED_COPPER_BULB = REGISTRY.register(new ItemData(1479, "oxidized_copper_bulb", 64));
+    public static final ItemData OXIDIZED_COPPER_BULB;
 
-    public static final ItemData WAXED_COPPER_BULB = REGISTRY.register(new ItemData(1480, "waxed_copper_bulb", 64));
+    public static final ItemData WAXED_COPPER_BULB;
 
-    public static final ItemData WAXED_EXPOSED_COPPER_BULB = REGISTRY.register(new ItemData(1481, "waxed_exposed_copper_bulb", 64));
+    public static final ItemData WAXED_EXPOSED_COPPER_BULB;
 
-    public static final ItemData WAXED_WEATHERED_COPPER_BULB = REGISTRY.register(new ItemData(1482, "waxed_weathered_copper_bulb", 64));
+    public static final ItemData WAXED_WEATHERED_COPPER_BULB;
 
-    public static final ItemData WAXED_OXIDIZED_COPPER_BULB = REGISTRY.register(new ItemData(1483, "waxed_oxidized_copper_bulb", 64));
+    public static final ItemData WAXED_OXIDIZED_COPPER_BULB;
 
-    public static final ItemData COPPER_CHEST = REGISTRY.register(new ItemData(1484, "copper_chest", 64));
+    public static final ItemData COPPER_CHEST;
 
-    public static final ItemData EXPOSED_COPPER_CHEST = REGISTRY.register(new ItemData(1485, "exposed_copper_chest", 64));
+    public static final ItemData EXPOSED_COPPER_CHEST;
 
-    public static final ItemData WEATHERED_COPPER_CHEST = REGISTRY.register(new ItemData(1486, "weathered_copper_chest", 64));
+    public static final ItemData WEATHERED_COPPER_CHEST;
 
-    public static final ItemData OXIDIZED_COPPER_CHEST = REGISTRY.register(new ItemData(1487, "oxidized_copper_chest", 64));
+    public static final ItemData OXIDIZED_COPPER_CHEST;
 
-    public static final ItemData WAXED_COPPER_CHEST = REGISTRY.register(new ItemData(1488, "waxed_copper_chest", 64));
+    public static final ItemData WAXED_COPPER_CHEST;
 
-    public static final ItemData WAXED_EXPOSED_COPPER_CHEST = REGISTRY.register(new ItemData(1489, "waxed_exposed_copper_chest", 64));
+    public static final ItemData WAXED_EXPOSED_COPPER_CHEST;
 
-    public static final ItemData WAXED_WEATHERED_COPPER_CHEST = REGISTRY.register(new ItemData(1490, "waxed_weathered_copper_chest", 64));
+    public static final ItemData WAXED_WEATHERED_COPPER_CHEST;
 
-    public static final ItemData WAXED_OXIDIZED_COPPER_CHEST = REGISTRY.register(new ItemData(1491, "waxed_oxidized_copper_chest", 64));
+    public static final ItemData WAXED_OXIDIZED_COPPER_CHEST;
 
-    public static final ItemData COPPER_GOLEM_STATUE = REGISTRY.register(new ItemData(1492, "copper_golem_statue", 64));
+    public static final ItemData COPPER_GOLEM_STATUE;
 
-    public static final ItemData EXPOSED_COPPER_GOLEM_STATUE = REGISTRY.register(new ItemData(1493, "exposed_copper_golem_statue", 64));
+    public static final ItemData EXPOSED_COPPER_GOLEM_STATUE;
 
-    public static final ItemData WEATHERED_COPPER_GOLEM_STATUE = REGISTRY.register(new ItemData(1494, "weathered_copper_golem_statue", 64));
+    public static final ItemData WEATHERED_COPPER_GOLEM_STATUE;
 
-    public static final ItemData OXIDIZED_COPPER_GOLEM_STATUE = REGISTRY.register(new ItemData(1495, "oxidized_copper_golem_statue", 64));
+    public static final ItemData OXIDIZED_COPPER_GOLEM_STATUE;
 
-    public static final ItemData WAXED_COPPER_GOLEM_STATUE = REGISTRY.register(new ItemData(1496, "waxed_copper_golem_statue", 64));
+    public static final ItemData WAXED_COPPER_GOLEM_STATUE;
 
-    public static final ItemData WAXED_EXPOSED_COPPER_GOLEM_STATUE = REGISTRY.register(new ItemData(1497, "waxed_exposed_copper_golem_statue", 64));
+    public static final ItemData WAXED_EXPOSED_COPPER_GOLEM_STATUE;
 
-    public static final ItemData WAXED_WEATHERED_COPPER_GOLEM_STATUE = REGISTRY.register(new ItemData(1498, "waxed_weathered_copper_golem_statue", 64));
+    public static final ItemData WAXED_WEATHERED_COPPER_GOLEM_STATUE;
 
-    public static final ItemData WAXED_OXIDIZED_COPPER_GOLEM_STATUE = REGISTRY.register(new ItemData(1499, "waxed_oxidized_copper_golem_statue", 64));
+    public static final ItemData WAXED_OXIDIZED_COPPER_GOLEM_STATUE;
 
-    public static final ItemData TRIAL_SPAWNER = REGISTRY.register(new ItemData(1500, "trial_spawner", 64));
+    public static final ItemData TRIAL_SPAWNER;
 
-    public static final ItemData TRIAL_KEY = REGISTRY.register(new ItemData(1501, "trial_key", 64));
+    public static final ItemData TRIAL_KEY;
 
-    public static final ItemData OMINOUS_TRIAL_KEY = REGISTRY.register(new ItemData(1502, "ominous_trial_key", 64));
+    public static final ItemData OMINOUS_TRIAL_KEY;
 
-    public static final ItemData VAULT = REGISTRY.register(new ItemData(1503, "vault", 64));
+    public static final ItemData VAULT;
 
-    public static final ItemData OMINOUS_BOTTLE = REGISTRY.register(new ItemData(1504, "ominous_bottle", 64));
+    public static final ItemData OMINOUS_BOTTLE;
+
+    static {
+        var jsonRegistrySpec = new ItemRegistrySpec();
+        var data = jsonRegistrySpec.read();
+        AIR = REGISTRY.register(data.get(0));
+        STONE = REGISTRY.register(data.get(1));
+        GRANITE = REGISTRY.register(data.get(2));
+        POLISHED_GRANITE = REGISTRY.register(data.get(3));
+        DIORITE = REGISTRY.register(data.get(4));
+        POLISHED_DIORITE = REGISTRY.register(data.get(5));
+        ANDESITE = REGISTRY.register(data.get(6));
+        POLISHED_ANDESITE = REGISTRY.register(data.get(7));
+        DEEPSLATE = REGISTRY.register(data.get(8));
+        COBBLED_DEEPSLATE = REGISTRY.register(data.get(9));
+        POLISHED_DEEPSLATE = REGISTRY.register(data.get(10));
+        CALCITE = REGISTRY.register(data.get(11));
+        TUFF = REGISTRY.register(data.get(12));
+        TUFF_SLAB = REGISTRY.register(data.get(13));
+        TUFF_STAIRS = REGISTRY.register(data.get(14));
+        TUFF_WALL = REGISTRY.register(data.get(15));
+        CHISELED_TUFF = REGISTRY.register(data.get(16));
+        POLISHED_TUFF = REGISTRY.register(data.get(17));
+        POLISHED_TUFF_SLAB = REGISTRY.register(data.get(18));
+        POLISHED_TUFF_STAIRS = REGISTRY.register(data.get(19));
+        POLISHED_TUFF_WALL = REGISTRY.register(data.get(20));
+        TUFF_BRICKS = REGISTRY.register(data.get(21));
+        TUFF_BRICK_SLAB = REGISTRY.register(data.get(22));
+        TUFF_BRICK_STAIRS = REGISTRY.register(data.get(23));
+        TUFF_BRICK_WALL = REGISTRY.register(data.get(24));
+        CHISELED_TUFF_BRICKS = REGISTRY.register(data.get(25));
+        DRIPSTONE_BLOCK = REGISTRY.register(data.get(26));
+        GRASS_BLOCK = REGISTRY.register(data.get(27));
+        DIRT = REGISTRY.register(data.get(28));
+        COARSE_DIRT = REGISTRY.register(data.get(29));
+        PODZOL = REGISTRY.register(data.get(30));
+        ROOTED_DIRT = REGISTRY.register(data.get(31));
+        MUD = REGISTRY.register(data.get(32));
+        CRIMSON_NYLIUM = REGISTRY.register(data.get(33));
+        WARPED_NYLIUM = REGISTRY.register(data.get(34));
+        COBBLESTONE = REGISTRY.register(data.get(35));
+        OAK_PLANKS = REGISTRY.register(data.get(36));
+        SPRUCE_PLANKS = REGISTRY.register(data.get(37));
+        BIRCH_PLANKS = REGISTRY.register(data.get(38));
+        JUNGLE_PLANKS = REGISTRY.register(data.get(39));
+        ACACIA_PLANKS = REGISTRY.register(data.get(40));
+        CHERRY_PLANKS = REGISTRY.register(data.get(41));
+        DARK_OAK_PLANKS = REGISTRY.register(data.get(42));
+        PALE_OAK_PLANKS = REGISTRY.register(data.get(43));
+        MANGROVE_PLANKS = REGISTRY.register(data.get(44));
+        BAMBOO_PLANKS = REGISTRY.register(data.get(45));
+        CRIMSON_PLANKS = REGISTRY.register(data.get(46));
+        WARPED_PLANKS = REGISTRY.register(data.get(47));
+        BAMBOO_MOSAIC = REGISTRY.register(data.get(48));
+        OAK_SAPLING = REGISTRY.register(data.get(49));
+        SPRUCE_SAPLING = REGISTRY.register(data.get(50));
+        BIRCH_SAPLING = REGISTRY.register(data.get(51));
+        JUNGLE_SAPLING = REGISTRY.register(data.get(52));
+        ACACIA_SAPLING = REGISTRY.register(data.get(53));
+        CHERRY_SAPLING = REGISTRY.register(data.get(54));
+        DARK_OAK_SAPLING = REGISTRY.register(data.get(55));
+        PALE_OAK_SAPLING = REGISTRY.register(data.get(56));
+        MANGROVE_PROPAGULE = REGISTRY.register(data.get(57));
+        BEDROCK = REGISTRY.register(data.get(58));
+        SAND = REGISTRY.register(data.get(59));
+        SUSPICIOUS_SAND = REGISTRY.register(data.get(60));
+        SUSPICIOUS_GRAVEL = REGISTRY.register(data.get(61));
+        RED_SAND = REGISTRY.register(data.get(62));
+        GRAVEL = REGISTRY.register(data.get(63));
+        COAL_ORE = REGISTRY.register(data.get(64));
+        DEEPSLATE_COAL_ORE = REGISTRY.register(data.get(65));
+        IRON_ORE = REGISTRY.register(data.get(66));
+        DEEPSLATE_IRON_ORE = REGISTRY.register(data.get(67));
+        COPPER_ORE = REGISTRY.register(data.get(68));
+        DEEPSLATE_COPPER_ORE = REGISTRY.register(data.get(69));
+        GOLD_ORE = REGISTRY.register(data.get(70));
+        DEEPSLATE_GOLD_ORE = REGISTRY.register(data.get(71));
+        REDSTONE_ORE = REGISTRY.register(data.get(72));
+        DEEPSLATE_REDSTONE_ORE = REGISTRY.register(data.get(73));
+        EMERALD_ORE = REGISTRY.register(data.get(74));
+        DEEPSLATE_EMERALD_ORE = REGISTRY.register(data.get(75));
+        LAPIS_ORE = REGISTRY.register(data.get(76));
+        DEEPSLATE_LAPIS_ORE = REGISTRY.register(data.get(77));
+        DIAMOND_ORE = REGISTRY.register(data.get(78));
+        DEEPSLATE_DIAMOND_ORE = REGISTRY.register(data.get(79));
+        NETHER_GOLD_ORE = REGISTRY.register(data.get(80));
+        NETHER_QUARTZ_ORE = REGISTRY.register(data.get(81));
+        ANCIENT_DEBRIS = REGISTRY.register(data.get(82));
+        COAL_BLOCK = REGISTRY.register(data.get(83));
+        RAW_IRON_BLOCK = REGISTRY.register(data.get(84));
+        RAW_COPPER_BLOCK = REGISTRY.register(data.get(85));
+        RAW_GOLD_BLOCK = REGISTRY.register(data.get(86));
+        HEAVY_CORE = REGISTRY.register(data.get(87));
+        AMETHYST_BLOCK = REGISTRY.register(data.get(88));
+        BUDDING_AMETHYST = REGISTRY.register(data.get(89));
+        IRON_BLOCK = REGISTRY.register(data.get(90));
+        COPPER_BLOCK = REGISTRY.register(data.get(91));
+        GOLD_BLOCK = REGISTRY.register(data.get(92));
+        DIAMOND_BLOCK = REGISTRY.register(data.get(93));
+        NETHERITE_BLOCK = REGISTRY.register(data.get(94));
+        EXPOSED_COPPER = REGISTRY.register(data.get(95));
+        WEATHERED_COPPER = REGISTRY.register(data.get(96));
+        OXIDIZED_COPPER = REGISTRY.register(data.get(97));
+        CHISELED_COPPER = REGISTRY.register(data.get(98));
+        EXPOSED_CHISELED_COPPER = REGISTRY.register(data.get(99));
+        WEATHERED_CHISELED_COPPER = REGISTRY.register(data.get(100));
+        OXIDIZED_CHISELED_COPPER = REGISTRY.register(data.get(101));
+        CUT_COPPER = REGISTRY.register(data.get(102));
+        EXPOSED_CUT_COPPER = REGISTRY.register(data.get(103));
+        WEATHERED_CUT_COPPER = REGISTRY.register(data.get(104));
+        OXIDIZED_CUT_COPPER = REGISTRY.register(data.get(105));
+        CUT_COPPER_STAIRS = REGISTRY.register(data.get(106));
+        EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(107));
+        WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(108));
+        OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(109));
+        CUT_COPPER_SLAB = REGISTRY.register(data.get(110));
+        EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(data.get(111));
+        WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(data.get(112));
+        OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(data.get(113));
+        WAXED_COPPER_BLOCK = REGISTRY.register(data.get(114));
+        WAXED_EXPOSED_COPPER = REGISTRY.register(data.get(115));
+        WAXED_WEATHERED_COPPER = REGISTRY.register(data.get(116));
+        WAXED_OXIDIZED_COPPER = REGISTRY.register(data.get(117));
+        WAXED_CHISELED_COPPER = REGISTRY.register(data.get(118));
+        WAXED_EXPOSED_CHISELED_COPPER = REGISTRY.register(data.get(119));
+        WAXED_WEATHERED_CHISELED_COPPER = REGISTRY.register(data.get(120));
+        WAXED_OXIDIZED_CHISELED_COPPER = REGISTRY.register(data.get(121));
+        WAXED_CUT_COPPER = REGISTRY.register(data.get(122));
+        WAXED_EXPOSED_CUT_COPPER = REGISTRY.register(data.get(123));
+        WAXED_WEATHERED_CUT_COPPER = REGISTRY.register(data.get(124));
+        WAXED_OXIDIZED_CUT_COPPER = REGISTRY.register(data.get(125));
+        WAXED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(126));
+        WAXED_EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(127));
+        WAXED_WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(128));
+        WAXED_OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(129));
+        WAXED_CUT_COPPER_SLAB = REGISTRY.register(data.get(130));
+        WAXED_EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(data.get(131));
+        WAXED_WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(data.get(132));
+        WAXED_OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(data.get(133));
+        OAK_LOG = REGISTRY.register(data.get(134));
+        SPRUCE_LOG = REGISTRY.register(data.get(135));
+        BIRCH_LOG = REGISTRY.register(data.get(136));
+        JUNGLE_LOG = REGISTRY.register(data.get(137));
+        ACACIA_LOG = REGISTRY.register(data.get(138));
+        CHERRY_LOG = REGISTRY.register(data.get(139));
+        PALE_OAK_LOG = REGISTRY.register(data.get(140));
+        DARK_OAK_LOG = REGISTRY.register(data.get(141));
+        MANGROVE_LOG = REGISTRY.register(data.get(142));
+        MANGROVE_ROOTS = REGISTRY.register(data.get(143));
+        MUDDY_MANGROVE_ROOTS = REGISTRY.register(data.get(144));
+        CRIMSON_STEM = REGISTRY.register(data.get(145));
+        WARPED_STEM = REGISTRY.register(data.get(146));
+        BAMBOO_BLOCK = REGISTRY.register(data.get(147));
+        STRIPPED_OAK_LOG = REGISTRY.register(data.get(148));
+        STRIPPED_SPRUCE_LOG = REGISTRY.register(data.get(149));
+        STRIPPED_BIRCH_LOG = REGISTRY.register(data.get(150));
+        STRIPPED_JUNGLE_LOG = REGISTRY.register(data.get(151));
+        STRIPPED_ACACIA_LOG = REGISTRY.register(data.get(152));
+        STRIPPED_CHERRY_LOG = REGISTRY.register(data.get(153));
+        STRIPPED_DARK_OAK_LOG = REGISTRY.register(data.get(154));
+        STRIPPED_PALE_OAK_LOG = REGISTRY.register(data.get(155));
+        STRIPPED_MANGROVE_LOG = REGISTRY.register(data.get(156));
+        STRIPPED_CRIMSON_STEM = REGISTRY.register(data.get(157));
+        STRIPPED_WARPED_STEM = REGISTRY.register(data.get(158));
+        STRIPPED_OAK_WOOD = REGISTRY.register(data.get(159));
+        STRIPPED_SPRUCE_WOOD = REGISTRY.register(data.get(160));
+        STRIPPED_BIRCH_WOOD = REGISTRY.register(data.get(161));
+        STRIPPED_JUNGLE_WOOD = REGISTRY.register(data.get(162));
+        STRIPPED_ACACIA_WOOD = REGISTRY.register(data.get(163));
+        STRIPPED_CHERRY_WOOD = REGISTRY.register(data.get(164));
+        STRIPPED_DARK_OAK_WOOD = REGISTRY.register(data.get(165));
+        STRIPPED_PALE_OAK_WOOD = REGISTRY.register(data.get(166));
+        STRIPPED_MANGROVE_WOOD = REGISTRY.register(data.get(167));
+        STRIPPED_CRIMSON_HYPHAE = REGISTRY.register(data.get(168));
+        STRIPPED_WARPED_HYPHAE = REGISTRY.register(data.get(169));
+        STRIPPED_BAMBOO_BLOCK = REGISTRY.register(data.get(170));
+        OAK_WOOD = REGISTRY.register(data.get(171));
+        SPRUCE_WOOD = REGISTRY.register(data.get(172));
+        BIRCH_WOOD = REGISTRY.register(data.get(173));
+        JUNGLE_WOOD = REGISTRY.register(data.get(174));
+        ACACIA_WOOD = REGISTRY.register(data.get(175));
+        CHERRY_WOOD = REGISTRY.register(data.get(176));
+        PALE_OAK_WOOD = REGISTRY.register(data.get(177));
+        DARK_OAK_WOOD = REGISTRY.register(data.get(178));
+        MANGROVE_WOOD = REGISTRY.register(data.get(179));
+        CRIMSON_HYPHAE = REGISTRY.register(data.get(180));
+        WARPED_HYPHAE = REGISTRY.register(data.get(181));
+        OAK_LEAVES = REGISTRY.register(data.get(182));
+        SPRUCE_LEAVES = REGISTRY.register(data.get(183));
+        BIRCH_LEAVES = REGISTRY.register(data.get(184));
+        JUNGLE_LEAVES = REGISTRY.register(data.get(185));
+        ACACIA_LEAVES = REGISTRY.register(data.get(186));
+        CHERRY_LEAVES = REGISTRY.register(data.get(187));
+        DARK_OAK_LEAVES = REGISTRY.register(data.get(188));
+        PALE_OAK_LEAVES = REGISTRY.register(data.get(189));
+        MANGROVE_LEAVES = REGISTRY.register(data.get(190));
+        AZALEA_LEAVES = REGISTRY.register(data.get(191));
+        FLOWERING_AZALEA_LEAVES = REGISTRY.register(data.get(192));
+        SPONGE = REGISTRY.register(data.get(193));
+        WET_SPONGE = REGISTRY.register(data.get(194));
+        GLASS = REGISTRY.register(data.get(195));
+        TINTED_GLASS = REGISTRY.register(data.get(196));
+        LAPIS_BLOCK = REGISTRY.register(data.get(197));
+        SANDSTONE = REGISTRY.register(data.get(198));
+        CHISELED_SANDSTONE = REGISTRY.register(data.get(199));
+        CUT_SANDSTONE = REGISTRY.register(data.get(200));
+        COBWEB = REGISTRY.register(data.get(201));
+        SHORT_GRASS = REGISTRY.register(data.get(202));
+        FERN = REGISTRY.register(data.get(203));
+        BUSH = REGISTRY.register(data.get(204));
+        AZALEA = REGISTRY.register(data.get(205));
+        FLOWERING_AZALEA = REGISTRY.register(data.get(206));
+        DEAD_BUSH = REGISTRY.register(data.get(207));
+        FIREFLY_BUSH = REGISTRY.register(data.get(208));
+        SHORT_DRY_GRASS = REGISTRY.register(data.get(209));
+        TALL_DRY_GRASS = REGISTRY.register(data.get(210));
+        SEAGRASS = REGISTRY.register(data.get(211));
+        SEA_PICKLE = REGISTRY.register(data.get(212));
+        WHITE_WOOL = REGISTRY.register(data.get(213));
+        ORANGE_WOOL = REGISTRY.register(data.get(214));
+        MAGENTA_WOOL = REGISTRY.register(data.get(215));
+        LIGHT_BLUE_WOOL = REGISTRY.register(data.get(216));
+        YELLOW_WOOL = REGISTRY.register(data.get(217));
+        LIME_WOOL = REGISTRY.register(data.get(218));
+        PINK_WOOL = REGISTRY.register(data.get(219));
+        GRAY_WOOL = REGISTRY.register(data.get(220));
+        LIGHT_GRAY_WOOL = REGISTRY.register(data.get(221));
+        CYAN_WOOL = REGISTRY.register(data.get(222));
+        PURPLE_WOOL = REGISTRY.register(data.get(223));
+        BLUE_WOOL = REGISTRY.register(data.get(224));
+        BROWN_WOOL = REGISTRY.register(data.get(225));
+        GREEN_WOOL = REGISTRY.register(data.get(226));
+        RED_WOOL = REGISTRY.register(data.get(227));
+        BLACK_WOOL = REGISTRY.register(data.get(228));
+        DANDELION = REGISTRY.register(data.get(229));
+        OPEN_EYEBLOSSOM = REGISTRY.register(data.get(230));
+        CLOSED_EYEBLOSSOM = REGISTRY.register(data.get(231));
+        POPPY = REGISTRY.register(data.get(232));
+        BLUE_ORCHID = REGISTRY.register(data.get(233));
+        ALLIUM = REGISTRY.register(data.get(234));
+        AZURE_BLUET = REGISTRY.register(data.get(235));
+        RED_TULIP = REGISTRY.register(data.get(236));
+        ORANGE_TULIP = REGISTRY.register(data.get(237));
+        WHITE_TULIP = REGISTRY.register(data.get(238));
+        PINK_TULIP = REGISTRY.register(data.get(239));
+        OXEYE_DAISY = REGISTRY.register(data.get(240));
+        CORNFLOWER = REGISTRY.register(data.get(241));
+        LILY_OF_THE_VALLEY = REGISTRY.register(data.get(242));
+        WITHER_ROSE = REGISTRY.register(data.get(243));
+        TORCHFLOWER = REGISTRY.register(data.get(244));
+        PITCHER_PLANT = REGISTRY.register(data.get(245));
+        SPORE_BLOSSOM = REGISTRY.register(data.get(246));
+        BROWN_MUSHROOM = REGISTRY.register(data.get(247));
+        RED_MUSHROOM = REGISTRY.register(data.get(248));
+        CRIMSON_FUNGUS = REGISTRY.register(data.get(249));
+        WARPED_FUNGUS = REGISTRY.register(data.get(250));
+        CRIMSON_ROOTS = REGISTRY.register(data.get(251));
+        WARPED_ROOTS = REGISTRY.register(data.get(252));
+        NETHER_SPROUTS = REGISTRY.register(data.get(253));
+        WEEPING_VINES = REGISTRY.register(data.get(254));
+        TWISTING_VINES = REGISTRY.register(data.get(255));
+        SUGAR_CANE = REGISTRY.register(data.get(256));
+        KELP = REGISTRY.register(data.get(257));
+        PINK_PETALS = REGISTRY.register(data.get(258));
+        WILDFLOWERS = REGISTRY.register(data.get(259));
+        LEAF_LITTER = REGISTRY.register(data.get(260));
+        MOSS_CARPET = REGISTRY.register(data.get(261));
+        MOSS_BLOCK = REGISTRY.register(data.get(262));
+        PALE_MOSS_CARPET = REGISTRY.register(data.get(263));
+        PALE_HANGING_MOSS = REGISTRY.register(data.get(264));
+        PALE_MOSS_BLOCK = REGISTRY.register(data.get(265));
+        HANGING_ROOTS = REGISTRY.register(data.get(266));
+        BIG_DRIPLEAF = REGISTRY.register(data.get(267));
+        SMALL_DRIPLEAF = REGISTRY.register(data.get(268));
+        BAMBOO = REGISTRY.register(data.get(269));
+        OAK_SLAB = REGISTRY.register(data.get(270));
+        SPRUCE_SLAB = REGISTRY.register(data.get(271));
+        BIRCH_SLAB = REGISTRY.register(data.get(272));
+        JUNGLE_SLAB = REGISTRY.register(data.get(273));
+        ACACIA_SLAB = REGISTRY.register(data.get(274));
+        CHERRY_SLAB = REGISTRY.register(data.get(275));
+        DARK_OAK_SLAB = REGISTRY.register(data.get(276));
+        PALE_OAK_SLAB = REGISTRY.register(data.get(277));
+        MANGROVE_SLAB = REGISTRY.register(data.get(278));
+        BAMBOO_SLAB = REGISTRY.register(data.get(279));
+        BAMBOO_MOSAIC_SLAB = REGISTRY.register(data.get(280));
+        CRIMSON_SLAB = REGISTRY.register(data.get(281));
+        WARPED_SLAB = REGISTRY.register(data.get(282));
+        STONE_SLAB = REGISTRY.register(data.get(283));
+        SMOOTH_STONE_SLAB = REGISTRY.register(data.get(284));
+        SANDSTONE_SLAB = REGISTRY.register(data.get(285));
+        CUT_SANDSTONE_SLAB = REGISTRY.register(data.get(286));
+        PETRIFIED_OAK_SLAB = REGISTRY.register(data.get(287));
+        COBBLESTONE_SLAB = REGISTRY.register(data.get(288));
+        BRICK_SLAB = REGISTRY.register(data.get(289));
+        STONE_BRICK_SLAB = REGISTRY.register(data.get(290));
+        MUD_BRICK_SLAB = REGISTRY.register(data.get(291));
+        NETHER_BRICK_SLAB = REGISTRY.register(data.get(292));
+        QUARTZ_SLAB = REGISTRY.register(data.get(293));
+        RED_SANDSTONE_SLAB = REGISTRY.register(data.get(294));
+        CUT_RED_SANDSTONE_SLAB = REGISTRY.register(data.get(295));
+        PURPUR_SLAB = REGISTRY.register(data.get(296));
+        PRISMARINE_SLAB = REGISTRY.register(data.get(297));
+        PRISMARINE_BRICK_SLAB = REGISTRY.register(data.get(298));
+        DARK_PRISMARINE_SLAB = REGISTRY.register(data.get(299));
+        SMOOTH_QUARTZ = REGISTRY.register(data.get(300));
+        SMOOTH_RED_SANDSTONE = REGISTRY.register(data.get(301));
+        SMOOTH_SANDSTONE = REGISTRY.register(data.get(302));
+        SMOOTH_STONE = REGISTRY.register(data.get(303));
+        BRICKS = REGISTRY.register(data.get(304));
+        ACACIA_SHELF = REGISTRY.register(data.get(305));
+        BAMBOO_SHELF = REGISTRY.register(data.get(306));
+        BIRCH_SHELF = REGISTRY.register(data.get(307));
+        CHERRY_SHELF = REGISTRY.register(data.get(308));
+        CRIMSON_SHELF = REGISTRY.register(data.get(309));
+        DARK_OAK_SHELF = REGISTRY.register(data.get(310));
+        JUNGLE_SHELF = REGISTRY.register(data.get(311));
+        MANGROVE_SHELF = REGISTRY.register(data.get(312));
+        OAK_SHELF = REGISTRY.register(data.get(313));
+        PALE_OAK_SHELF = REGISTRY.register(data.get(314));
+        SPRUCE_SHELF = REGISTRY.register(data.get(315));
+        WARPED_SHELF = REGISTRY.register(data.get(316));
+        BOOKSHELF = REGISTRY.register(data.get(317));
+        CHISELED_BOOKSHELF = REGISTRY.register(data.get(318));
+        DECORATED_POT = REGISTRY.register(data.get(319));
+        MOSSY_COBBLESTONE = REGISTRY.register(data.get(320));
+        OBSIDIAN = REGISTRY.register(data.get(321));
+        TORCH = REGISTRY.register(data.get(322));
+        END_ROD = REGISTRY.register(data.get(323));
+        CHORUS_PLANT = REGISTRY.register(data.get(324));
+        CHORUS_FLOWER = REGISTRY.register(data.get(325));
+        PURPUR_BLOCK = REGISTRY.register(data.get(326));
+        PURPUR_PILLAR = REGISTRY.register(data.get(327));
+        PURPUR_STAIRS = REGISTRY.register(data.get(328));
+        SPAWNER = REGISTRY.register(data.get(329));
+        CREAKING_HEART = REGISTRY.register(data.get(330));
+        CHEST = REGISTRY.register(data.get(331));
+        CRAFTING_TABLE = REGISTRY.register(data.get(332));
+        FARMLAND = REGISTRY.register(data.get(333));
+        FURNACE = REGISTRY.register(data.get(334));
+        LADDER = REGISTRY.register(data.get(335));
+        COBBLESTONE_STAIRS = REGISTRY.register(data.get(336));
+        SNOW = REGISTRY.register(data.get(337));
+        ICE = REGISTRY.register(data.get(338));
+        SNOW_BLOCK = REGISTRY.register(data.get(339));
+        CACTUS = REGISTRY.register(data.get(340));
+        CACTUS_FLOWER = REGISTRY.register(data.get(341));
+        CLAY = REGISTRY.register(data.get(342));
+        JUKEBOX = REGISTRY.register(data.get(343));
+        OAK_FENCE = REGISTRY.register(data.get(344));
+        SPRUCE_FENCE = REGISTRY.register(data.get(345));
+        BIRCH_FENCE = REGISTRY.register(data.get(346));
+        JUNGLE_FENCE = REGISTRY.register(data.get(347));
+        ACACIA_FENCE = REGISTRY.register(data.get(348));
+        CHERRY_FENCE = REGISTRY.register(data.get(349));
+        DARK_OAK_FENCE = REGISTRY.register(data.get(350));
+        PALE_OAK_FENCE = REGISTRY.register(data.get(351));
+        MANGROVE_FENCE = REGISTRY.register(data.get(352));
+        BAMBOO_FENCE = REGISTRY.register(data.get(353));
+        CRIMSON_FENCE = REGISTRY.register(data.get(354));
+        WARPED_FENCE = REGISTRY.register(data.get(355));
+        PUMPKIN = REGISTRY.register(data.get(356));
+        CARVED_PUMPKIN = REGISTRY.register(data.get(357));
+        JACK_O_LANTERN = REGISTRY.register(data.get(358));
+        NETHERRACK = REGISTRY.register(data.get(359));
+        SOUL_SAND = REGISTRY.register(data.get(360));
+        SOUL_SOIL = REGISTRY.register(data.get(361));
+        BASALT = REGISTRY.register(data.get(362));
+        POLISHED_BASALT = REGISTRY.register(data.get(363));
+        SMOOTH_BASALT = REGISTRY.register(data.get(364));
+        SOUL_TORCH = REGISTRY.register(data.get(365));
+        COPPER_TORCH = REGISTRY.register(data.get(366));
+        GLOWSTONE = REGISTRY.register(data.get(367));
+        INFESTED_STONE = REGISTRY.register(data.get(368));
+        INFESTED_COBBLESTONE = REGISTRY.register(data.get(369));
+        INFESTED_STONE_BRICKS = REGISTRY.register(data.get(370));
+        INFESTED_MOSSY_STONE_BRICKS = REGISTRY.register(data.get(371));
+        INFESTED_CRACKED_STONE_BRICKS = REGISTRY.register(data.get(372));
+        INFESTED_CHISELED_STONE_BRICKS = REGISTRY.register(data.get(373));
+        INFESTED_DEEPSLATE = REGISTRY.register(data.get(374));
+        STONE_BRICKS = REGISTRY.register(data.get(375));
+        MOSSY_STONE_BRICKS = REGISTRY.register(data.get(376));
+        CRACKED_STONE_BRICKS = REGISTRY.register(data.get(377));
+        CHISELED_STONE_BRICKS = REGISTRY.register(data.get(378));
+        PACKED_MUD = REGISTRY.register(data.get(379));
+        MUD_BRICKS = REGISTRY.register(data.get(380));
+        DEEPSLATE_BRICKS = REGISTRY.register(data.get(381));
+        CRACKED_DEEPSLATE_BRICKS = REGISTRY.register(data.get(382));
+        DEEPSLATE_TILES = REGISTRY.register(data.get(383));
+        CRACKED_DEEPSLATE_TILES = REGISTRY.register(data.get(384));
+        CHISELED_DEEPSLATE = REGISTRY.register(data.get(385));
+        REINFORCED_DEEPSLATE = REGISTRY.register(data.get(386));
+        BROWN_MUSHROOM_BLOCK = REGISTRY.register(data.get(387));
+        RED_MUSHROOM_BLOCK = REGISTRY.register(data.get(388));
+        MUSHROOM_STEM = REGISTRY.register(data.get(389));
+        IRON_BARS = REGISTRY.register(data.get(390));
+        COPPER_BARS = REGISTRY.register(data.get(391));
+        EXPOSED_COPPER_BARS = REGISTRY.register(data.get(392));
+        WEATHERED_COPPER_BARS = REGISTRY.register(data.get(393));
+        OXIDIZED_COPPER_BARS = REGISTRY.register(data.get(394));
+        WAXED_COPPER_BARS = REGISTRY.register(data.get(395));
+        WAXED_EXPOSED_COPPER_BARS = REGISTRY.register(data.get(396));
+        WAXED_WEATHERED_COPPER_BARS = REGISTRY.register(data.get(397));
+        WAXED_OXIDIZED_COPPER_BARS = REGISTRY.register(data.get(398));
+        IRON_CHAIN = REGISTRY.register(data.get(399));
+        COPPER_CHAIN = REGISTRY.register(data.get(400));
+        EXPOSED_COPPER_CHAIN = REGISTRY.register(data.get(401));
+        WEATHERED_COPPER_CHAIN = REGISTRY.register(data.get(402));
+        OXIDIZED_COPPER_CHAIN = REGISTRY.register(data.get(403));
+        WAXED_COPPER_CHAIN = REGISTRY.register(data.get(404));
+        WAXED_EXPOSED_COPPER_CHAIN = REGISTRY.register(data.get(405));
+        WAXED_WEATHERED_COPPER_CHAIN = REGISTRY.register(data.get(406));
+        WAXED_OXIDIZED_COPPER_CHAIN = REGISTRY.register(data.get(407));
+        GLASS_PANE = REGISTRY.register(data.get(408));
+        MELON = REGISTRY.register(data.get(409));
+        VINE = REGISTRY.register(data.get(410));
+        GLOW_LICHEN = REGISTRY.register(data.get(411));
+        RESIN_CLUMP = REGISTRY.register(data.get(412));
+        RESIN_BLOCK = REGISTRY.register(data.get(413));
+        RESIN_BRICKS = REGISTRY.register(data.get(414));
+        RESIN_BRICK_STAIRS = REGISTRY.register(data.get(415));
+        RESIN_BRICK_SLAB = REGISTRY.register(data.get(416));
+        RESIN_BRICK_WALL = REGISTRY.register(data.get(417));
+        CHISELED_RESIN_BRICKS = REGISTRY.register(data.get(418));
+        BRICK_STAIRS = REGISTRY.register(data.get(419));
+        STONE_BRICK_STAIRS = REGISTRY.register(data.get(420));
+        MUD_BRICK_STAIRS = REGISTRY.register(data.get(421));
+        MYCELIUM = REGISTRY.register(data.get(422));
+        LILY_PAD = REGISTRY.register(data.get(423));
+        NETHER_BRICKS = REGISTRY.register(data.get(424));
+        CRACKED_NETHER_BRICKS = REGISTRY.register(data.get(425));
+        CHISELED_NETHER_BRICKS = REGISTRY.register(data.get(426));
+        NETHER_BRICK_FENCE = REGISTRY.register(data.get(427));
+        NETHER_BRICK_STAIRS = REGISTRY.register(data.get(428));
+        SCULK = REGISTRY.register(data.get(429));
+        SCULK_VEIN = REGISTRY.register(data.get(430));
+        SCULK_CATALYST = REGISTRY.register(data.get(431));
+        SCULK_SHRIEKER = REGISTRY.register(data.get(432));
+        ENCHANTING_TABLE = REGISTRY.register(data.get(433));
+        END_PORTAL_FRAME = REGISTRY.register(data.get(434));
+        END_STONE = REGISTRY.register(data.get(435));
+        END_STONE_BRICKS = REGISTRY.register(data.get(436));
+        DRAGON_EGG = REGISTRY.register(data.get(437));
+        SANDSTONE_STAIRS = REGISTRY.register(data.get(438));
+        ENDER_CHEST = REGISTRY.register(data.get(439));
+        EMERALD_BLOCK = REGISTRY.register(data.get(440));
+        OAK_STAIRS = REGISTRY.register(data.get(441));
+        SPRUCE_STAIRS = REGISTRY.register(data.get(442));
+        BIRCH_STAIRS = REGISTRY.register(data.get(443));
+        JUNGLE_STAIRS = REGISTRY.register(data.get(444));
+        ACACIA_STAIRS = REGISTRY.register(data.get(445));
+        CHERRY_STAIRS = REGISTRY.register(data.get(446));
+        DARK_OAK_STAIRS = REGISTRY.register(data.get(447));
+        PALE_OAK_STAIRS = REGISTRY.register(data.get(448));
+        MANGROVE_STAIRS = REGISTRY.register(data.get(449));
+        BAMBOO_STAIRS = REGISTRY.register(data.get(450));
+        BAMBOO_MOSAIC_STAIRS = REGISTRY.register(data.get(451));
+        CRIMSON_STAIRS = REGISTRY.register(data.get(452));
+        WARPED_STAIRS = REGISTRY.register(data.get(453));
+        COMMAND_BLOCK = REGISTRY.register(data.get(454));
+        BEACON = REGISTRY.register(data.get(455));
+        COBBLESTONE_WALL = REGISTRY.register(data.get(456));
+        MOSSY_COBBLESTONE_WALL = REGISTRY.register(data.get(457));
+        BRICK_WALL = REGISTRY.register(data.get(458));
+        PRISMARINE_WALL = REGISTRY.register(data.get(459));
+        RED_SANDSTONE_WALL = REGISTRY.register(data.get(460));
+        MOSSY_STONE_BRICK_WALL = REGISTRY.register(data.get(461));
+        GRANITE_WALL = REGISTRY.register(data.get(462));
+        STONE_BRICK_WALL = REGISTRY.register(data.get(463));
+        MUD_BRICK_WALL = REGISTRY.register(data.get(464));
+        NETHER_BRICK_WALL = REGISTRY.register(data.get(465));
+        ANDESITE_WALL = REGISTRY.register(data.get(466));
+        RED_NETHER_BRICK_WALL = REGISTRY.register(data.get(467));
+        SANDSTONE_WALL = REGISTRY.register(data.get(468));
+        END_STONE_BRICK_WALL = REGISTRY.register(data.get(469));
+        DIORITE_WALL = REGISTRY.register(data.get(470));
+        BLACKSTONE_WALL = REGISTRY.register(data.get(471));
+        POLISHED_BLACKSTONE_WALL = REGISTRY.register(data.get(472));
+        POLISHED_BLACKSTONE_BRICK_WALL = REGISTRY.register(data.get(473));
+        COBBLED_DEEPSLATE_WALL = REGISTRY.register(data.get(474));
+        POLISHED_DEEPSLATE_WALL = REGISTRY.register(data.get(475));
+        DEEPSLATE_BRICK_WALL = REGISTRY.register(data.get(476));
+        DEEPSLATE_TILE_WALL = REGISTRY.register(data.get(477));
+        ANVIL = REGISTRY.register(data.get(478));
+        CHIPPED_ANVIL = REGISTRY.register(data.get(479));
+        DAMAGED_ANVIL = REGISTRY.register(data.get(480));
+        CHISELED_QUARTZ_BLOCK = REGISTRY.register(data.get(481));
+        QUARTZ_BLOCK = REGISTRY.register(data.get(482));
+        QUARTZ_BRICKS = REGISTRY.register(data.get(483));
+        QUARTZ_PILLAR = REGISTRY.register(data.get(484));
+        QUARTZ_STAIRS = REGISTRY.register(data.get(485));
+        WHITE_TERRACOTTA = REGISTRY.register(data.get(486));
+        ORANGE_TERRACOTTA = REGISTRY.register(data.get(487));
+        MAGENTA_TERRACOTTA = REGISTRY.register(data.get(488));
+        LIGHT_BLUE_TERRACOTTA = REGISTRY.register(data.get(489));
+        YELLOW_TERRACOTTA = REGISTRY.register(data.get(490));
+        LIME_TERRACOTTA = REGISTRY.register(data.get(491));
+        PINK_TERRACOTTA = REGISTRY.register(data.get(492));
+        GRAY_TERRACOTTA = REGISTRY.register(data.get(493));
+        LIGHT_GRAY_TERRACOTTA = REGISTRY.register(data.get(494));
+        CYAN_TERRACOTTA = REGISTRY.register(data.get(495));
+        PURPLE_TERRACOTTA = REGISTRY.register(data.get(496));
+        BLUE_TERRACOTTA = REGISTRY.register(data.get(497));
+        BROWN_TERRACOTTA = REGISTRY.register(data.get(498));
+        GREEN_TERRACOTTA = REGISTRY.register(data.get(499));
+        RED_TERRACOTTA = REGISTRY.register(data.get(500));
+        BLACK_TERRACOTTA = REGISTRY.register(data.get(501));
+        BARRIER = REGISTRY.register(data.get(502));
+        LIGHT = REGISTRY.register(data.get(503));
+        HAY_BLOCK = REGISTRY.register(data.get(504));
+        WHITE_CARPET = REGISTRY.register(data.get(505));
+        ORANGE_CARPET = REGISTRY.register(data.get(506));
+        MAGENTA_CARPET = REGISTRY.register(data.get(507));
+        LIGHT_BLUE_CARPET = REGISTRY.register(data.get(508));
+        YELLOW_CARPET = REGISTRY.register(data.get(509));
+        LIME_CARPET = REGISTRY.register(data.get(510));
+        PINK_CARPET = REGISTRY.register(data.get(511));
+        GRAY_CARPET = REGISTRY.register(data.get(512));
+        LIGHT_GRAY_CARPET = REGISTRY.register(data.get(513));
+        CYAN_CARPET = REGISTRY.register(data.get(514));
+        PURPLE_CARPET = REGISTRY.register(data.get(515));
+        BLUE_CARPET = REGISTRY.register(data.get(516));
+        BROWN_CARPET = REGISTRY.register(data.get(517));
+        GREEN_CARPET = REGISTRY.register(data.get(518));
+        RED_CARPET = REGISTRY.register(data.get(519));
+        BLACK_CARPET = REGISTRY.register(data.get(520));
+        TERRACOTTA = REGISTRY.register(data.get(521));
+        PACKED_ICE = REGISTRY.register(data.get(522));
+        DIRT_PATH = REGISTRY.register(data.get(523));
+        SUNFLOWER = REGISTRY.register(data.get(524));
+        LILAC = REGISTRY.register(data.get(525));
+        ROSE_BUSH = REGISTRY.register(data.get(526));
+        PEONY = REGISTRY.register(data.get(527));
+        TALL_GRASS = REGISTRY.register(data.get(528));
+        LARGE_FERN = REGISTRY.register(data.get(529));
+        WHITE_STAINED_GLASS = REGISTRY.register(data.get(530));
+        ORANGE_STAINED_GLASS = REGISTRY.register(data.get(531));
+        MAGENTA_STAINED_GLASS = REGISTRY.register(data.get(532));
+        LIGHT_BLUE_STAINED_GLASS = REGISTRY.register(data.get(533));
+        YELLOW_STAINED_GLASS = REGISTRY.register(data.get(534));
+        LIME_STAINED_GLASS = REGISTRY.register(data.get(535));
+        PINK_STAINED_GLASS = REGISTRY.register(data.get(536));
+        GRAY_STAINED_GLASS = REGISTRY.register(data.get(537));
+        LIGHT_GRAY_STAINED_GLASS = REGISTRY.register(data.get(538));
+        CYAN_STAINED_GLASS = REGISTRY.register(data.get(539));
+        PURPLE_STAINED_GLASS = REGISTRY.register(data.get(540));
+        BLUE_STAINED_GLASS = REGISTRY.register(data.get(541));
+        BROWN_STAINED_GLASS = REGISTRY.register(data.get(542));
+        GREEN_STAINED_GLASS = REGISTRY.register(data.get(543));
+        RED_STAINED_GLASS = REGISTRY.register(data.get(544));
+        BLACK_STAINED_GLASS = REGISTRY.register(data.get(545));
+        WHITE_STAINED_GLASS_PANE = REGISTRY.register(data.get(546));
+        ORANGE_STAINED_GLASS_PANE = REGISTRY.register(data.get(547));
+        MAGENTA_STAINED_GLASS_PANE = REGISTRY.register(data.get(548));
+        LIGHT_BLUE_STAINED_GLASS_PANE = REGISTRY.register(data.get(549));
+        YELLOW_STAINED_GLASS_PANE = REGISTRY.register(data.get(550));
+        LIME_STAINED_GLASS_PANE = REGISTRY.register(data.get(551));
+        PINK_STAINED_GLASS_PANE = REGISTRY.register(data.get(552));
+        GRAY_STAINED_GLASS_PANE = REGISTRY.register(data.get(553));
+        LIGHT_GRAY_STAINED_GLASS_PANE = REGISTRY.register(data.get(554));
+        CYAN_STAINED_GLASS_PANE = REGISTRY.register(data.get(555));
+        PURPLE_STAINED_GLASS_PANE = REGISTRY.register(data.get(556));
+        BLUE_STAINED_GLASS_PANE = REGISTRY.register(data.get(557));
+        BROWN_STAINED_GLASS_PANE = REGISTRY.register(data.get(558));
+        GREEN_STAINED_GLASS_PANE = REGISTRY.register(data.get(559));
+        RED_STAINED_GLASS_PANE = REGISTRY.register(data.get(560));
+        BLACK_STAINED_GLASS_PANE = REGISTRY.register(data.get(561));
+        PRISMARINE = REGISTRY.register(data.get(562));
+        PRISMARINE_BRICKS = REGISTRY.register(data.get(563));
+        DARK_PRISMARINE = REGISTRY.register(data.get(564));
+        PRISMARINE_STAIRS = REGISTRY.register(data.get(565));
+        PRISMARINE_BRICK_STAIRS = REGISTRY.register(data.get(566));
+        DARK_PRISMARINE_STAIRS = REGISTRY.register(data.get(567));
+        SEA_LANTERN = REGISTRY.register(data.get(568));
+        RED_SANDSTONE = REGISTRY.register(data.get(569));
+        CHISELED_RED_SANDSTONE = REGISTRY.register(data.get(570));
+        CUT_RED_SANDSTONE = REGISTRY.register(data.get(571));
+        RED_SANDSTONE_STAIRS = REGISTRY.register(data.get(572));
+        REPEATING_COMMAND_BLOCK = REGISTRY.register(data.get(573));
+        CHAIN_COMMAND_BLOCK = REGISTRY.register(data.get(574));
+        MAGMA_BLOCK = REGISTRY.register(data.get(575));
+        NETHER_WART_BLOCK = REGISTRY.register(data.get(576));
+        WARPED_WART_BLOCK = REGISTRY.register(data.get(577));
+        RED_NETHER_BRICKS = REGISTRY.register(data.get(578));
+        BONE_BLOCK = REGISTRY.register(data.get(579));
+        STRUCTURE_VOID = REGISTRY.register(data.get(580));
+        SHULKER_BOX = REGISTRY.register(data.get(581));
+        WHITE_SHULKER_BOX = REGISTRY.register(data.get(582));
+        ORANGE_SHULKER_BOX = REGISTRY.register(data.get(583));
+        MAGENTA_SHULKER_BOX = REGISTRY.register(data.get(584));
+        LIGHT_BLUE_SHULKER_BOX = REGISTRY.register(data.get(585));
+        YELLOW_SHULKER_BOX = REGISTRY.register(data.get(586));
+        LIME_SHULKER_BOX = REGISTRY.register(data.get(587));
+        PINK_SHULKER_BOX = REGISTRY.register(data.get(588));
+        GRAY_SHULKER_BOX = REGISTRY.register(data.get(589));
+        LIGHT_GRAY_SHULKER_BOX = REGISTRY.register(data.get(590));
+        CYAN_SHULKER_BOX = REGISTRY.register(data.get(591));
+        PURPLE_SHULKER_BOX = REGISTRY.register(data.get(592));
+        BLUE_SHULKER_BOX = REGISTRY.register(data.get(593));
+        BROWN_SHULKER_BOX = REGISTRY.register(data.get(594));
+        GREEN_SHULKER_BOX = REGISTRY.register(data.get(595));
+        RED_SHULKER_BOX = REGISTRY.register(data.get(596));
+        BLACK_SHULKER_BOX = REGISTRY.register(data.get(597));
+        WHITE_GLAZED_TERRACOTTA = REGISTRY.register(data.get(598));
+        ORANGE_GLAZED_TERRACOTTA = REGISTRY.register(data.get(599));
+        MAGENTA_GLAZED_TERRACOTTA = REGISTRY.register(data.get(600));
+        LIGHT_BLUE_GLAZED_TERRACOTTA = REGISTRY.register(data.get(601));
+        YELLOW_GLAZED_TERRACOTTA = REGISTRY.register(data.get(602));
+        LIME_GLAZED_TERRACOTTA = REGISTRY.register(data.get(603));
+        PINK_GLAZED_TERRACOTTA = REGISTRY.register(data.get(604));
+        GRAY_GLAZED_TERRACOTTA = REGISTRY.register(data.get(605));
+        LIGHT_GRAY_GLAZED_TERRACOTTA = REGISTRY.register(data.get(606));
+        CYAN_GLAZED_TERRACOTTA = REGISTRY.register(data.get(607));
+        PURPLE_GLAZED_TERRACOTTA = REGISTRY.register(data.get(608));
+        BLUE_GLAZED_TERRACOTTA = REGISTRY.register(data.get(609));
+        BROWN_GLAZED_TERRACOTTA = REGISTRY.register(data.get(610));
+        GREEN_GLAZED_TERRACOTTA = REGISTRY.register(data.get(611));
+        RED_GLAZED_TERRACOTTA = REGISTRY.register(data.get(612));
+        BLACK_GLAZED_TERRACOTTA = REGISTRY.register(data.get(613));
+        WHITE_CONCRETE = REGISTRY.register(data.get(614));
+        ORANGE_CONCRETE = REGISTRY.register(data.get(615));
+        MAGENTA_CONCRETE = REGISTRY.register(data.get(616));
+        LIGHT_BLUE_CONCRETE = REGISTRY.register(data.get(617));
+        YELLOW_CONCRETE = REGISTRY.register(data.get(618));
+        LIME_CONCRETE = REGISTRY.register(data.get(619));
+        PINK_CONCRETE = REGISTRY.register(data.get(620));
+        GRAY_CONCRETE = REGISTRY.register(data.get(621));
+        LIGHT_GRAY_CONCRETE = REGISTRY.register(data.get(622));
+        CYAN_CONCRETE = REGISTRY.register(data.get(623));
+        PURPLE_CONCRETE = REGISTRY.register(data.get(624));
+        BLUE_CONCRETE = REGISTRY.register(data.get(625));
+        BROWN_CONCRETE = REGISTRY.register(data.get(626));
+        GREEN_CONCRETE = REGISTRY.register(data.get(627));
+        RED_CONCRETE = REGISTRY.register(data.get(628));
+        BLACK_CONCRETE = REGISTRY.register(data.get(629));
+        WHITE_CONCRETE_POWDER = REGISTRY.register(data.get(630));
+        ORANGE_CONCRETE_POWDER = REGISTRY.register(data.get(631));
+        MAGENTA_CONCRETE_POWDER = REGISTRY.register(data.get(632));
+        LIGHT_BLUE_CONCRETE_POWDER = REGISTRY.register(data.get(633));
+        YELLOW_CONCRETE_POWDER = REGISTRY.register(data.get(634));
+        LIME_CONCRETE_POWDER = REGISTRY.register(data.get(635));
+        PINK_CONCRETE_POWDER = REGISTRY.register(data.get(636));
+        GRAY_CONCRETE_POWDER = REGISTRY.register(data.get(637));
+        LIGHT_GRAY_CONCRETE_POWDER = REGISTRY.register(data.get(638));
+        CYAN_CONCRETE_POWDER = REGISTRY.register(data.get(639));
+        PURPLE_CONCRETE_POWDER = REGISTRY.register(data.get(640));
+        BLUE_CONCRETE_POWDER = REGISTRY.register(data.get(641));
+        BROWN_CONCRETE_POWDER = REGISTRY.register(data.get(642));
+        GREEN_CONCRETE_POWDER = REGISTRY.register(data.get(643));
+        RED_CONCRETE_POWDER = REGISTRY.register(data.get(644));
+        BLACK_CONCRETE_POWDER = REGISTRY.register(data.get(645));
+        TURTLE_EGG = REGISTRY.register(data.get(646));
+        SNIFFER_EGG = REGISTRY.register(data.get(647));
+        DRIED_GHAST = REGISTRY.register(data.get(648));
+        DEAD_TUBE_CORAL_BLOCK = REGISTRY.register(data.get(649));
+        DEAD_BRAIN_CORAL_BLOCK = REGISTRY.register(data.get(650));
+        DEAD_BUBBLE_CORAL_BLOCK = REGISTRY.register(data.get(651));
+        DEAD_FIRE_CORAL_BLOCK = REGISTRY.register(data.get(652));
+        DEAD_HORN_CORAL_BLOCK = REGISTRY.register(data.get(653));
+        TUBE_CORAL_BLOCK = REGISTRY.register(data.get(654));
+        BRAIN_CORAL_BLOCK = REGISTRY.register(data.get(655));
+        BUBBLE_CORAL_BLOCK = REGISTRY.register(data.get(656));
+        FIRE_CORAL_BLOCK = REGISTRY.register(data.get(657));
+        HORN_CORAL_BLOCK = REGISTRY.register(data.get(658));
+        TUBE_CORAL = REGISTRY.register(data.get(659));
+        BRAIN_CORAL = REGISTRY.register(data.get(660));
+        BUBBLE_CORAL = REGISTRY.register(data.get(661));
+        FIRE_CORAL = REGISTRY.register(data.get(662));
+        HORN_CORAL = REGISTRY.register(data.get(663));
+        DEAD_BRAIN_CORAL = REGISTRY.register(data.get(664));
+        DEAD_BUBBLE_CORAL = REGISTRY.register(data.get(665));
+        DEAD_FIRE_CORAL = REGISTRY.register(data.get(666));
+        DEAD_HORN_CORAL = REGISTRY.register(data.get(667));
+        DEAD_TUBE_CORAL = REGISTRY.register(data.get(668));
+        TUBE_CORAL_FAN = REGISTRY.register(data.get(669));
+        BRAIN_CORAL_FAN = REGISTRY.register(data.get(670));
+        BUBBLE_CORAL_FAN = REGISTRY.register(data.get(671));
+        FIRE_CORAL_FAN = REGISTRY.register(data.get(672));
+        HORN_CORAL_FAN = REGISTRY.register(data.get(673));
+        DEAD_TUBE_CORAL_FAN = REGISTRY.register(data.get(674));
+        DEAD_BRAIN_CORAL_FAN = REGISTRY.register(data.get(675));
+        DEAD_BUBBLE_CORAL_FAN = REGISTRY.register(data.get(676));
+        DEAD_FIRE_CORAL_FAN = REGISTRY.register(data.get(677));
+        DEAD_HORN_CORAL_FAN = REGISTRY.register(data.get(678));
+        BLUE_ICE = REGISTRY.register(data.get(679));
+        CONDUIT = REGISTRY.register(data.get(680));
+        POLISHED_GRANITE_STAIRS = REGISTRY.register(data.get(681));
+        SMOOTH_RED_SANDSTONE_STAIRS = REGISTRY.register(data.get(682));
+        MOSSY_STONE_BRICK_STAIRS = REGISTRY.register(data.get(683));
+        POLISHED_DIORITE_STAIRS = REGISTRY.register(data.get(684));
+        MOSSY_COBBLESTONE_STAIRS = REGISTRY.register(data.get(685));
+        END_STONE_BRICK_STAIRS = REGISTRY.register(data.get(686));
+        STONE_STAIRS = REGISTRY.register(data.get(687));
+        SMOOTH_SANDSTONE_STAIRS = REGISTRY.register(data.get(688));
+        SMOOTH_QUARTZ_STAIRS = REGISTRY.register(data.get(689));
+        GRANITE_STAIRS = REGISTRY.register(data.get(690));
+        ANDESITE_STAIRS = REGISTRY.register(data.get(691));
+        RED_NETHER_BRICK_STAIRS = REGISTRY.register(data.get(692));
+        POLISHED_ANDESITE_STAIRS = REGISTRY.register(data.get(693));
+        DIORITE_STAIRS = REGISTRY.register(data.get(694));
+        COBBLED_DEEPSLATE_STAIRS = REGISTRY.register(data.get(695));
+        POLISHED_DEEPSLATE_STAIRS = REGISTRY.register(data.get(696));
+        DEEPSLATE_BRICK_STAIRS = REGISTRY.register(data.get(697));
+        DEEPSLATE_TILE_STAIRS = REGISTRY.register(data.get(698));
+        POLISHED_GRANITE_SLAB = REGISTRY.register(data.get(699));
+        SMOOTH_RED_SANDSTONE_SLAB = REGISTRY.register(data.get(700));
+        MOSSY_STONE_BRICK_SLAB = REGISTRY.register(data.get(701));
+        POLISHED_DIORITE_SLAB = REGISTRY.register(data.get(702));
+        MOSSY_COBBLESTONE_SLAB = REGISTRY.register(data.get(703));
+        END_STONE_BRICK_SLAB = REGISTRY.register(data.get(704));
+        SMOOTH_SANDSTONE_SLAB = REGISTRY.register(data.get(705));
+        SMOOTH_QUARTZ_SLAB = REGISTRY.register(data.get(706));
+        GRANITE_SLAB = REGISTRY.register(data.get(707));
+        ANDESITE_SLAB = REGISTRY.register(data.get(708));
+        RED_NETHER_BRICK_SLAB = REGISTRY.register(data.get(709));
+        POLISHED_ANDESITE_SLAB = REGISTRY.register(data.get(710));
+        DIORITE_SLAB = REGISTRY.register(data.get(711));
+        COBBLED_DEEPSLATE_SLAB = REGISTRY.register(data.get(712));
+        POLISHED_DEEPSLATE_SLAB = REGISTRY.register(data.get(713));
+        DEEPSLATE_BRICK_SLAB = REGISTRY.register(data.get(714));
+        DEEPSLATE_TILE_SLAB = REGISTRY.register(data.get(715));
+        SCAFFOLDING = REGISTRY.register(data.get(716));
+        REDSTONE = REGISTRY.register(data.get(717));
+        REDSTONE_TORCH = REGISTRY.register(data.get(718));
+        REDSTONE_BLOCK = REGISTRY.register(data.get(719));
+        REPEATER = REGISTRY.register(data.get(720));
+        COMPARATOR = REGISTRY.register(data.get(721));
+        PISTON = REGISTRY.register(data.get(722));
+        STICKY_PISTON = REGISTRY.register(data.get(723));
+        SLIME_BLOCK = REGISTRY.register(data.get(724));
+        HONEY_BLOCK = REGISTRY.register(data.get(725));
+        OBSERVER = REGISTRY.register(data.get(726));
+        HOPPER = REGISTRY.register(data.get(727));
+        DISPENSER = REGISTRY.register(data.get(728));
+        DROPPER = REGISTRY.register(data.get(729));
+        LECTERN = REGISTRY.register(data.get(730));
+        TARGET = REGISTRY.register(data.get(731));
+        LEVER = REGISTRY.register(data.get(732));
+        LIGHTNING_ROD = REGISTRY.register(data.get(733));
+        EXPOSED_LIGHTNING_ROD = REGISTRY.register(data.get(734));
+        WEATHERED_LIGHTNING_ROD = REGISTRY.register(data.get(735));
+        OXIDIZED_LIGHTNING_ROD = REGISTRY.register(data.get(736));
+        WAXED_LIGHTNING_ROD = REGISTRY.register(data.get(737));
+        WAXED_EXPOSED_LIGHTNING_ROD = REGISTRY.register(data.get(738));
+        WAXED_WEATHERED_LIGHTNING_ROD = REGISTRY.register(data.get(739));
+        WAXED_OXIDIZED_LIGHTNING_ROD = REGISTRY.register(data.get(740));
+        DAYLIGHT_DETECTOR = REGISTRY.register(data.get(741));
+        SCULK_SENSOR = REGISTRY.register(data.get(742));
+        CALIBRATED_SCULK_SENSOR = REGISTRY.register(data.get(743));
+        TRIPWIRE_HOOK = REGISTRY.register(data.get(744));
+        TRAPPED_CHEST = REGISTRY.register(data.get(745));
+        TNT = REGISTRY.register(data.get(746));
+        REDSTONE_LAMP = REGISTRY.register(data.get(747));
+        NOTE_BLOCK = REGISTRY.register(data.get(748));
+        STONE_BUTTON = REGISTRY.register(data.get(749));
+        POLISHED_BLACKSTONE_BUTTON = REGISTRY.register(data.get(750));
+        OAK_BUTTON = REGISTRY.register(data.get(751));
+        SPRUCE_BUTTON = REGISTRY.register(data.get(752));
+        BIRCH_BUTTON = REGISTRY.register(data.get(753));
+        JUNGLE_BUTTON = REGISTRY.register(data.get(754));
+        ACACIA_BUTTON = REGISTRY.register(data.get(755));
+        CHERRY_BUTTON = REGISTRY.register(data.get(756));
+        DARK_OAK_BUTTON = REGISTRY.register(data.get(757));
+        PALE_OAK_BUTTON = REGISTRY.register(data.get(758));
+        MANGROVE_BUTTON = REGISTRY.register(data.get(759));
+        BAMBOO_BUTTON = REGISTRY.register(data.get(760));
+        CRIMSON_BUTTON = REGISTRY.register(data.get(761));
+        WARPED_BUTTON = REGISTRY.register(data.get(762));
+        STONE_PRESSURE_PLATE = REGISTRY.register(data.get(763));
+        POLISHED_BLACKSTONE_PRESSURE_PLATE = REGISTRY.register(data.get(764));
+        LIGHT_WEIGHTED_PRESSURE_PLATE = REGISTRY.register(data.get(765));
+        HEAVY_WEIGHTED_PRESSURE_PLATE = REGISTRY.register(data.get(766));
+        OAK_PRESSURE_PLATE = REGISTRY.register(data.get(767));
+        SPRUCE_PRESSURE_PLATE = REGISTRY.register(data.get(768));
+        BIRCH_PRESSURE_PLATE = REGISTRY.register(data.get(769));
+        JUNGLE_PRESSURE_PLATE = REGISTRY.register(data.get(770));
+        ACACIA_PRESSURE_PLATE = REGISTRY.register(data.get(771));
+        CHERRY_PRESSURE_PLATE = REGISTRY.register(data.get(772));
+        DARK_OAK_PRESSURE_PLATE = REGISTRY.register(data.get(773));
+        PALE_OAK_PRESSURE_PLATE = REGISTRY.register(data.get(774));
+        MANGROVE_PRESSURE_PLATE = REGISTRY.register(data.get(775));
+        BAMBOO_PRESSURE_PLATE = REGISTRY.register(data.get(776));
+        CRIMSON_PRESSURE_PLATE = REGISTRY.register(data.get(777));
+        WARPED_PRESSURE_PLATE = REGISTRY.register(data.get(778));
+        IRON_DOOR = REGISTRY.register(data.get(779));
+        OAK_DOOR = REGISTRY.register(data.get(780));
+        SPRUCE_DOOR = REGISTRY.register(data.get(781));
+        BIRCH_DOOR = REGISTRY.register(data.get(782));
+        JUNGLE_DOOR = REGISTRY.register(data.get(783));
+        ACACIA_DOOR = REGISTRY.register(data.get(784));
+        CHERRY_DOOR = REGISTRY.register(data.get(785));
+        DARK_OAK_DOOR = REGISTRY.register(data.get(786));
+        PALE_OAK_DOOR = REGISTRY.register(data.get(787));
+        MANGROVE_DOOR = REGISTRY.register(data.get(788));
+        BAMBOO_DOOR = REGISTRY.register(data.get(789));
+        CRIMSON_DOOR = REGISTRY.register(data.get(790));
+        WARPED_DOOR = REGISTRY.register(data.get(791));
+        COPPER_DOOR = REGISTRY.register(data.get(792));
+        EXPOSED_COPPER_DOOR = REGISTRY.register(data.get(793));
+        WEATHERED_COPPER_DOOR = REGISTRY.register(data.get(794));
+        OXIDIZED_COPPER_DOOR = REGISTRY.register(data.get(795));
+        WAXED_COPPER_DOOR = REGISTRY.register(data.get(796));
+        WAXED_EXPOSED_COPPER_DOOR = REGISTRY.register(data.get(797));
+        WAXED_WEATHERED_COPPER_DOOR = REGISTRY.register(data.get(798));
+        WAXED_OXIDIZED_COPPER_DOOR = REGISTRY.register(data.get(799));
+        IRON_TRAPDOOR = REGISTRY.register(data.get(800));
+        OAK_TRAPDOOR = REGISTRY.register(data.get(801));
+        SPRUCE_TRAPDOOR = REGISTRY.register(data.get(802));
+        BIRCH_TRAPDOOR = REGISTRY.register(data.get(803));
+        JUNGLE_TRAPDOOR = REGISTRY.register(data.get(804));
+        ACACIA_TRAPDOOR = REGISTRY.register(data.get(805));
+        CHERRY_TRAPDOOR = REGISTRY.register(data.get(806));
+        DARK_OAK_TRAPDOOR = REGISTRY.register(data.get(807));
+        PALE_OAK_TRAPDOOR = REGISTRY.register(data.get(808));
+        MANGROVE_TRAPDOOR = REGISTRY.register(data.get(809));
+        BAMBOO_TRAPDOOR = REGISTRY.register(data.get(810));
+        CRIMSON_TRAPDOOR = REGISTRY.register(data.get(811));
+        WARPED_TRAPDOOR = REGISTRY.register(data.get(812));
+        COPPER_TRAPDOOR = REGISTRY.register(data.get(813));
+        EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(data.get(814));
+        WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(data.get(815));
+        OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(data.get(816));
+        WAXED_COPPER_TRAPDOOR = REGISTRY.register(data.get(817));
+        WAXED_EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(data.get(818));
+        WAXED_WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(data.get(819));
+        WAXED_OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(data.get(820));
+        OAK_FENCE_GATE = REGISTRY.register(data.get(821));
+        SPRUCE_FENCE_GATE = REGISTRY.register(data.get(822));
+        BIRCH_FENCE_GATE = REGISTRY.register(data.get(823));
+        JUNGLE_FENCE_GATE = REGISTRY.register(data.get(824));
+        ACACIA_FENCE_GATE = REGISTRY.register(data.get(825));
+        CHERRY_FENCE_GATE = REGISTRY.register(data.get(826));
+        DARK_OAK_FENCE_GATE = REGISTRY.register(data.get(827));
+        PALE_OAK_FENCE_GATE = REGISTRY.register(data.get(828));
+        MANGROVE_FENCE_GATE = REGISTRY.register(data.get(829));
+        BAMBOO_FENCE_GATE = REGISTRY.register(data.get(830));
+        CRIMSON_FENCE_GATE = REGISTRY.register(data.get(831));
+        WARPED_FENCE_GATE = REGISTRY.register(data.get(832));
+        POWERED_RAIL = REGISTRY.register(data.get(833));
+        DETECTOR_RAIL = REGISTRY.register(data.get(834));
+        RAIL = REGISTRY.register(data.get(835));
+        ACTIVATOR_RAIL = REGISTRY.register(data.get(836));
+        SADDLE = REGISTRY.register(data.get(837));
+        WHITE_HARNESS = REGISTRY.register(data.get(838));
+        ORANGE_HARNESS = REGISTRY.register(data.get(839));
+        MAGENTA_HARNESS = REGISTRY.register(data.get(840));
+        LIGHT_BLUE_HARNESS = REGISTRY.register(data.get(841));
+        YELLOW_HARNESS = REGISTRY.register(data.get(842));
+        LIME_HARNESS = REGISTRY.register(data.get(843));
+        PINK_HARNESS = REGISTRY.register(data.get(844));
+        GRAY_HARNESS = REGISTRY.register(data.get(845));
+        LIGHT_GRAY_HARNESS = REGISTRY.register(data.get(846));
+        CYAN_HARNESS = REGISTRY.register(data.get(847));
+        PURPLE_HARNESS = REGISTRY.register(data.get(848));
+        BLUE_HARNESS = REGISTRY.register(data.get(849));
+        BROWN_HARNESS = REGISTRY.register(data.get(850));
+        GREEN_HARNESS = REGISTRY.register(data.get(851));
+        RED_HARNESS = REGISTRY.register(data.get(852));
+        BLACK_HARNESS = REGISTRY.register(data.get(853));
+        MINECART = REGISTRY.register(data.get(854));
+        CHEST_MINECART = REGISTRY.register(data.get(855));
+        FURNACE_MINECART = REGISTRY.register(data.get(856));
+        TNT_MINECART = REGISTRY.register(data.get(857));
+        HOPPER_MINECART = REGISTRY.register(data.get(858));
+        CARROT_ON_A_STICK = REGISTRY.register(data.get(859));
+        WARPED_FUNGUS_ON_A_STICK = REGISTRY.register(data.get(860));
+        PHANTOM_MEMBRANE = REGISTRY.register(data.get(861));
+        ELYTRA = REGISTRY.register(data.get(862));
+        OAK_BOAT = REGISTRY.register(data.get(863));
+        OAK_CHEST_BOAT = REGISTRY.register(data.get(864));
+        SPRUCE_BOAT = REGISTRY.register(data.get(865));
+        SPRUCE_CHEST_BOAT = REGISTRY.register(data.get(866));
+        BIRCH_BOAT = REGISTRY.register(data.get(867));
+        BIRCH_CHEST_BOAT = REGISTRY.register(data.get(868));
+        JUNGLE_BOAT = REGISTRY.register(data.get(869));
+        JUNGLE_CHEST_BOAT = REGISTRY.register(data.get(870));
+        ACACIA_BOAT = REGISTRY.register(data.get(871));
+        ACACIA_CHEST_BOAT = REGISTRY.register(data.get(872));
+        CHERRY_BOAT = REGISTRY.register(data.get(873));
+        CHERRY_CHEST_BOAT = REGISTRY.register(data.get(874));
+        DARK_OAK_BOAT = REGISTRY.register(data.get(875));
+        DARK_OAK_CHEST_BOAT = REGISTRY.register(data.get(876));
+        PALE_OAK_BOAT = REGISTRY.register(data.get(877));
+        PALE_OAK_CHEST_BOAT = REGISTRY.register(data.get(878));
+        MANGROVE_BOAT = REGISTRY.register(data.get(879));
+        MANGROVE_CHEST_BOAT = REGISTRY.register(data.get(880));
+        BAMBOO_RAFT = REGISTRY.register(data.get(881));
+        BAMBOO_CHEST_RAFT = REGISTRY.register(data.get(882));
+        STRUCTURE_BLOCK = REGISTRY.register(data.get(883));
+        JIGSAW = REGISTRY.register(data.get(884));
+        TEST_BLOCK = REGISTRY.register(data.get(885));
+        TEST_INSTANCE_BLOCK = REGISTRY.register(data.get(886));
+        TURTLE_HELMET = REGISTRY.register(data.get(887));
+        TURTLE_SCUTE = REGISTRY.register(data.get(888));
+        ARMADILLO_SCUTE = REGISTRY.register(data.get(889));
+        WOLF_ARMOR = REGISTRY.register(data.get(890));
+        FLINT_AND_STEEL = REGISTRY.register(data.get(891));
+        BOWL = REGISTRY.register(data.get(892));
+        APPLE = REGISTRY.register(data.get(893));
+        BOW = REGISTRY.register(data.get(894));
+        ARROW = REGISTRY.register(data.get(895));
+        COAL = REGISTRY.register(data.get(896));
+        CHARCOAL = REGISTRY.register(data.get(897));
+        DIAMOND = REGISTRY.register(data.get(898));
+        EMERALD = REGISTRY.register(data.get(899));
+        LAPIS_LAZULI = REGISTRY.register(data.get(900));
+        QUARTZ = REGISTRY.register(data.get(901));
+        AMETHYST_SHARD = REGISTRY.register(data.get(902));
+        RAW_IRON = REGISTRY.register(data.get(903));
+        IRON_INGOT = REGISTRY.register(data.get(904));
+        RAW_COPPER = REGISTRY.register(data.get(905));
+        COPPER_INGOT = REGISTRY.register(data.get(906));
+        RAW_GOLD = REGISTRY.register(data.get(907));
+        GOLD_INGOT = REGISTRY.register(data.get(908));
+        NETHERITE_INGOT = REGISTRY.register(data.get(909));
+        NETHERITE_SCRAP = REGISTRY.register(data.get(910));
+        WOODEN_SWORD = REGISTRY.register(data.get(911));
+        WOODEN_SHOVEL = REGISTRY.register(data.get(912));
+        WOODEN_PICKAXE = REGISTRY.register(data.get(913));
+        WOODEN_AXE = REGISTRY.register(data.get(914));
+        WOODEN_HOE = REGISTRY.register(data.get(915));
+        COPPER_SWORD = REGISTRY.register(data.get(916));
+        COPPER_SHOVEL = REGISTRY.register(data.get(917));
+        COPPER_PICKAXE = REGISTRY.register(data.get(918));
+        COPPER_AXE = REGISTRY.register(data.get(919));
+        COPPER_HOE = REGISTRY.register(data.get(920));
+        STONE_SWORD = REGISTRY.register(data.get(921));
+        STONE_SHOVEL = REGISTRY.register(data.get(922));
+        STONE_PICKAXE = REGISTRY.register(data.get(923));
+        STONE_AXE = REGISTRY.register(data.get(924));
+        STONE_HOE = REGISTRY.register(data.get(925));
+        GOLDEN_SWORD = REGISTRY.register(data.get(926));
+        GOLDEN_SHOVEL = REGISTRY.register(data.get(927));
+        GOLDEN_PICKAXE = REGISTRY.register(data.get(928));
+        GOLDEN_AXE = REGISTRY.register(data.get(929));
+        GOLDEN_HOE = REGISTRY.register(data.get(930));
+        IRON_SWORD = REGISTRY.register(data.get(931));
+        IRON_SHOVEL = REGISTRY.register(data.get(932));
+        IRON_PICKAXE = REGISTRY.register(data.get(933));
+        IRON_AXE = REGISTRY.register(data.get(934));
+        IRON_HOE = REGISTRY.register(data.get(935));
+        DIAMOND_SWORD = REGISTRY.register(data.get(936));
+        DIAMOND_SHOVEL = REGISTRY.register(data.get(937));
+        DIAMOND_PICKAXE = REGISTRY.register(data.get(938));
+        DIAMOND_AXE = REGISTRY.register(data.get(939));
+        DIAMOND_HOE = REGISTRY.register(data.get(940));
+        NETHERITE_SWORD = REGISTRY.register(data.get(941));
+        NETHERITE_SHOVEL = REGISTRY.register(data.get(942));
+        NETHERITE_PICKAXE = REGISTRY.register(data.get(943));
+        NETHERITE_AXE = REGISTRY.register(data.get(944));
+        NETHERITE_HOE = REGISTRY.register(data.get(945));
+        STICK = REGISTRY.register(data.get(946));
+        MUSHROOM_STEW = REGISTRY.register(data.get(947));
+        STRING = REGISTRY.register(data.get(948));
+        FEATHER = REGISTRY.register(data.get(949));
+        GUNPOWDER = REGISTRY.register(data.get(950));
+        WHEAT_SEEDS = REGISTRY.register(data.get(951));
+        WHEAT = REGISTRY.register(data.get(952));
+        BREAD = REGISTRY.register(data.get(953));
+        LEATHER_HELMET = REGISTRY.register(data.get(954));
+        LEATHER_CHESTPLATE = REGISTRY.register(data.get(955));
+        LEATHER_LEGGINGS = REGISTRY.register(data.get(956));
+        LEATHER_BOOTS = REGISTRY.register(data.get(957));
+        COPPER_HELMET = REGISTRY.register(data.get(958));
+        COPPER_CHESTPLATE = REGISTRY.register(data.get(959));
+        COPPER_LEGGINGS = REGISTRY.register(data.get(960));
+        COPPER_BOOTS = REGISTRY.register(data.get(961));
+        CHAINMAIL_HELMET = REGISTRY.register(data.get(962));
+        CHAINMAIL_CHESTPLATE = REGISTRY.register(data.get(963));
+        CHAINMAIL_LEGGINGS = REGISTRY.register(data.get(964));
+        CHAINMAIL_BOOTS = REGISTRY.register(data.get(965));
+        IRON_HELMET = REGISTRY.register(data.get(966));
+        IRON_CHESTPLATE = REGISTRY.register(data.get(967));
+        IRON_LEGGINGS = REGISTRY.register(data.get(968));
+        IRON_BOOTS = REGISTRY.register(data.get(969));
+        DIAMOND_HELMET = REGISTRY.register(data.get(970));
+        DIAMOND_CHESTPLATE = REGISTRY.register(data.get(971));
+        DIAMOND_LEGGINGS = REGISTRY.register(data.get(972));
+        DIAMOND_BOOTS = REGISTRY.register(data.get(973));
+        GOLDEN_HELMET = REGISTRY.register(data.get(974));
+        GOLDEN_CHESTPLATE = REGISTRY.register(data.get(975));
+        GOLDEN_LEGGINGS = REGISTRY.register(data.get(976));
+        GOLDEN_BOOTS = REGISTRY.register(data.get(977));
+        NETHERITE_HELMET = REGISTRY.register(data.get(978));
+        NETHERITE_CHESTPLATE = REGISTRY.register(data.get(979));
+        NETHERITE_LEGGINGS = REGISTRY.register(data.get(980));
+        NETHERITE_BOOTS = REGISTRY.register(data.get(981));
+        FLINT = REGISTRY.register(data.get(982));
+        PORKCHOP = REGISTRY.register(data.get(983));
+        COOKED_PORKCHOP = REGISTRY.register(data.get(984));
+        PAINTING = REGISTRY.register(data.get(985));
+        GOLDEN_APPLE = REGISTRY.register(data.get(986));
+        ENCHANTED_GOLDEN_APPLE = REGISTRY.register(data.get(987));
+        OAK_SIGN = REGISTRY.register(data.get(988));
+        SPRUCE_SIGN = REGISTRY.register(data.get(989));
+        BIRCH_SIGN = REGISTRY.register(data.get(990));
+        JUNGLE_SIGN = REGISTRY.register(data.get(991));
+        ACACIA_SIGN = REGISTRY.register(data.get(992));
+        CHERRY_SIGN = REGISTRY.register(data.get(993));
+        DARK_OAK_SIGN = REGISTRY.register(data.get(994));
+        PALE_OAK_SIGN = REGISTRY.register(data.get(995));
+        MANGROVE_SIGN = REGISTRY.register(data.get(996));
+        BAMBOO_SIGN = REGISTRY.register(data.get(997));
+        CRIMSON_SIGN = REGISTRY.register(data.get(998));
+        WARPED_SIGN = REGISTRY.register(data.get(999));
+        OAK_HANGING_SIGN = REGISTRY.register(data.get(1000));
+        SPRUCE_HANGING_SIGN = REGISTRY.register(data.get(1001));
+        BIRCH_HANGING_SIGN = REGISTRY.register(data.get(1002));
+        JUNGLE_HANGING_SIGN = REGISTRY.register(data.get(1003));
+        ACACIA_HANGING_SIGN = REGISTRY.register(data.get(1004));
+        CHERRY_HANGING_SIGN = REGISTRY.register(data.get(1005));
+        DARK_OAK_HANGING_SIGN = REGISTRY.register(data.get(1006));
+        PALE_OAK_HANGING_SIGN = REGISTRY.register(data.get(1007));
+        MANGROVE_HANGING_SIGN = REGISTRY.register(data.get(1008));
+        BAMBOO_HANGING_SIGN = REGISTRY.register(data.get(1009));
+        CRIMSON_HANGING_SIGN = REGISTRY.register(data.get(1010));
+        WARPED_HANGING_SIGN = REGISTRY.register(data.get(1011));
+        BUCKET = REGISTRY.register(data.get(1012));
+        WATER_BUCKET = REGISTRY.register(data.get(1013));
+        LAVA_BUCKET = REGISTRY.register(data.get(1014));
+        POWDER_SNOW_BUCKET = REGISTRY.register(data.get(1015));
+        SNOWBALL = REGISTRY.register(data.get(1016));
+        LEATHER = REGISTRY.register(data.get(1017));
+        MILK_BUCKET = REGISTRY.register(data.get(1018));
+        PUFFERFISH_BUCKET = REGISTRY.register(data.get(1019));
+        SALMON_BUCKET = REGISTRY.register(data.get(1020));
+        COD_BUCKET = REGISTRY.register(data.get(1021));
+        TROPICAL_FISH_BUCKET = REGISTRY.register(data.get(1022));
+        AXOLOTL_BUCKET = REGISTRY.register(data.get(1023));
+        TADPOLE_BUCKET = REGISTRY.register(data.get(1024));
+        BRICK = REGISTRY.register(data.get(1025));
+        CLAY_BALL = REGISTRY.register(data.get(1026));
+        DRIED_KELP_BLOCK = REGISTRY.register(data.get(1027));
+        PAPER = REGISTRY.register(data.get(1028));
+        BOOK = REGISTRY.register(data.get(1029));
+        SLIME_BALL = REGISTRY.register(data.get(1030));
+        EGG = REGISTRY.register(data.get(1031));
+        BLUE_EGG = REGISTRY.register(data.get(1032));
+        BROWN_EGG = REGISTRY.register(data.get(1033));
+        COMPASS = REGISTRY.register(data.get(1034));
+        RECOVERY_COMPASS = REGISTRY.register(data.get(1035));
+        BUNDLE = REGISTRY.register(data.get(1036));
+        WHITE_BUNDLE = REGISTRY.register(data.get(1037));
+        ORANGE_BUNDLE = REGISTRY.register(data.get(1038));
+        MAGENTA_BUNDLE = REGISTRY.register(data.get(1039));
+        LIGHT_BLUE_BUNDLE = REGISTRY.register(data.get(1040));
+        YELLOW_BUNDLE = REGISTRY.register(data.get(1041));
+        LIME_BUNDLE = REGISTRY.register(data.get(1042));
+        PINK_BUNDLE = REGISTRY.register(data.get(1043));
+        GRAY_BUNDLE = REGISTRY.register(data.get(1044));
+        LIGHT_GRAY_BUNDLE = REGISTRY.register(data.get(1045));
+        CYAN_BUNDLE = REGISTRY.register(data.get(1046));
+        PURPLE_BUNDLE = REGISTRY.register(data.get(1047));
+        BLUE_BUNDLE = REGISTRY.register(data.get(1048));
+        BROWN_BUNDLE = REGISTRY.register(data.get(1049));
+        GREEN_BUNDLE = REGISTRY.register(data.get(1050));
+        RED_BUNDLE = REGISTRY.register(data.get(1051));
+        BLACK_BUNDLE = REGISTRY.register(data.get(1052));
+        FISHING_ROD = REGISTRY.register(data.get(1053));
+        CLOCK = REGISTRY.register(data.get(1054));
+        SPYGLASS = REGISTRY.register(data.get(1055));
+        GLOWSTONE_DUST = REGISTRY.register(data.get(1056));
+        COD = REGISTRY.register(data.get(1057));
+        SALMON = REGISTRY.register(data.get(1058));
+        TROPICAL_FISH = REGISTRY.register(data.get(1059));
+        PUFFERFISH = REGISTRY.register(data.get(1060));
+        COOKED_COD = REGISTRY.register(data.get(1061));
+        COOKED_SALMON = REGISTRY.register(data.get(1062));
+        INK_SAC = REGISTRY.register(data.get(1063));
+        GLOW_INK_SAC = REGISTRY.register(data.get(1064));
+        COCOA_BEANS = REGISTRY.register(data.get(1065));
+        WHITE_DYE = REGISTRY.register(data.get(1066));
+        ORANGE_DYE = REGISTRY.register(data.get(1067));
+        MAGENTA_DYE = REGISTRY.register(data.get(1068));
+        LIGHT_BLUE_DYE = REGISTRY.register(data.get(1069));
+        YELLOW_DYE = REGISTRY.register(data.get(1070));
+        LIME_DYE = REGISTRY.register(data.get(1071));
+        PINK_DYE = REGISTRY.register(data.get(1072));
+        GRAY_DYE = REGISTRY.register(data.get(1073));
+        LIGHT_GRAY_DYE = REGISTRY.register(data.get(1074));
+        CYAN_DYE = REGISTRY.register(data.get(1075));
+        PURPLE_DYE = REGISTRY.register(data.get(1076));
+        BLUE_DYE = REGISTRY.register(data.get(1077));
+        BROWN_DYE = REGISTRY.register(data.get(1078));
+        GREEN_DYE = REGISTRY.register(data.get(1079));
+        RED_DYE = REGISTRY.register(data.get(1080));
+        BLACK_DYE = REGISTRY.register(data.get(1081));
+        BONE_MEAL = REGISTRY.register(data.get(1082));
+        BONE = REGISTRY.register(data.get(1083));
+        SUGAR = REGISTRY.register(data.get(1084));
+        CAKE = REGISTRY.register(data.get(1085));
+        WHITE_BED = REGISTRY.register(data.get(1086));
+        ORANGE_BED = REGISTRY.register(data.get(1087));
+        MAGENTA_BED = REGISTRY.register(data.get(1088));
+        LIGHT_BLUE_BED = REGISTRY.register(data.get(1089));
+        YELLOW_BED = REGISTRY.register(data.get(1090));
+        LIME_BED = REGISTRY.register(data.get(1091));
+        PINK_BED = REGISTRY.register(data.get(1092));
+        GRAY_BED = REGISTRY.register(data.get(1093));
+        LIGHT_GRAY_BED = REGISTRY.register(data.get(1094));
+        CYAN_BED = REGISTRY.register(data.get(1095));
+        PURPLE_BED = REGISTRY.register(data.get(1096));
+        BLUE_BED = REGISTRY.register(data.get(1097));
+        BROWN_BED = REGISTRY.register(data.get(1098));
+        GREEN_BED = REGISTRY.register(data.get(1099));
+        RED_BED = REGISTRY.register(data.get(1100));
+        BLACK_BED = REGISTRY.register(data.get(1101));
+        COOKIE = REGISTRY.register(data.get(1102));
+        CRAFTER = REGISTRY.register(data.get(1103));
+        FILLED_MAP = REGISTRY.register(data.get(1104));
+        SHEARS = REGISTRY.register(data.get(1105));
+        MELON_SLICE = REGISTRY.register(data.get(1106));
+        DRIED_KELP = REGISTRY.register(data.get(1107));
+        PUMPKIN_SEEDS = REGISTRY.register(data.get(1108));
+        MELON_SEEDS = REGISTRY.register(data.get(1109));
+        BEEF = REGISTRY.register(data.get(1110));
+        COOKED_BEEF = REGISTRY.register(data.get(1111));
+        CHICKEN = REGISTRY.register(data.get(1112));
+        COOKED_CHICKEN = REGISTRY.register(data.get(1113));
+        ROTTEN_FLESH = REGISTRY.register(data.get(1114));
+        ENDER_PEARL = REGISTRY.register(data.get(1115));
+        BLAZE_ROD = REGISTRY.register(data.get(1116));
+        GHAST_TEAR = REGISTRY.register(data.get(1117));
+        GOLD_NUGGET = REGISTRY.register(data.get(1118));
+        NETHER_WART = REGISTRY.register(data.get(1119));
+        GLASS_BOTTLE = REGISTRY.register(data.get(1120));
+        POTION = REGISTRY.register(data.get(1121));
+        SPIDER_EYE = REGISTRY.register(data.get(1122));
+        FERMENTED_SPIDER_EYE = REGISTRY.register(data.get(1123));
+        BLAZE_POWDER = REGISTRY.register(data.get(1124));
+        MAGMA_CREAM = REGISTRY.register(data.get(1125));
+        BREWING_STAND = REGISTRY.register(data.get(1126));
+        CAULDRON = REGISTRY.register(data.get(1127));
+        ENDER_EYE = REGISTRY.register(data.get(1128));
+        GLISTERING_MELON_SLICE = REGISTRY.register(data.get(1129));
+        CHICKEN_SPAWN_EGG = REGISTRY.register(data.get(1130));
+        COW_SPAWN_EGG = REGISTRY.register(data.get(1131));
+        PIG_SPAWN_EGG = REGISTRY.register(data.get(1132));
+        SHEEP_SPAWN_EGG = REGISTRY.register(data.get(1133));
+        CAMEL_SPAWN_EGG = REGISTRY.register(data.get(1134));
+        DONKEY_SPAWN_EGG = REGISTRY.register(data.get(1135));
+        HORSE_SPAWN_EGG = REGISTRY.register(data.get(1136));
+        MULE_SPAWN_EGG = REGISTRY.register(data.get(1137));
+        CAT_SPAWN_EGG = REGISTRY.register(data.get(1138));
+        PARROT_SPAWN_EGG = REGISTRY.register(data.get(1139));
+        WOLF_SPAWN_EGG = REGISTRY.register(data.get(1140));
+        ARMADILLO_SPAWN_EGG = REGISTRY.register(data.get(1141));
+        BAT_SPAWN_EGG = REGISTRY.register(data.get(1142));
+        BEE_SPAWN_EGG = REGISTRY.register(data.get(1143));
+        FOX_SPAWN_EGG = REGISTRY.register(data.get(1144));
+        GOAT_SPAWN_EGG = REGISTRY.register(data.get(1145));
+        LLAMA_SPAWN_EGG = REGISTRY.register(data.get(1146));
+        OCELOT_SPAWN_EGG = REGISTRY.register(data.get(1147));
+        PANDA_SPAWN_EGG = REGISTRY.register(data.get(1148));
+        POLAR_BEAR_SPAWN_EGG = REGISTRY.register(data.get(1149));
+        RABBIT_SPAWN_EGG = REGISTRY.register(data.get(1150));
+        AXOLOTL_SPAWN_EGG = REGISTRY.register(data.get(1151));
+        COD_SPAWN_EGG = REGISTRY.register(data.get(1152));
+        DOLPHIN_SPAWN_EGG = REGISTRY.register(data.get(1153));
+        FROG_SPAWN_EGG = REGISTRY.register(data.get(1154));
+        GLOW_SQUID_SPAWN_EGG = REGISTRY.register(data.get(1155));
+        NAUTILUS_SPAWN_EGG = REGISTRY.register(data.get(1156));
+        PUFFERFISH_SPAWN_EGG = REGISTRY.register(data.get(1157));
+        SALMON_SPAWN_EGG = REGISTRY.register(data.get(1158));
+        SQUID_SPAWN_EGG = REGISTRY.register(data.get(1159));
+        TADPOLE_SPAWN_EGG = REGISTRY.register(data.get(1160));
+        TROPICAL_FISH_SPAWN_EGG = REGISTRY.register(data.get(1161));
+        TURTLE_SPAWN_EGG = REGISTRY.register(data.get(1162));
+        ALLAY_SPAWN_EGG = REGISTRY.register(data.get(1163));
+        MOOSHROOM_SPAWN_EGG = REGISTRY.register(data.get(1164));
+        SNIFFER_SPAWN_EGG = REGISTRY.register(data.get(1165));
+        COPPER_GOLEM_SPAWN_EGG = REGISTRY.register(data.get(1166));
+        IRON_GOLEM_SPAWN_EGG = REGISTRY.register(data.get(1167));
+        SNOW_GOLEM_SPAWN_EGG = REGISTRY.register(data.get(1168));
+        TRADER_LLAMA_SPAWN_EGG = REGISTRY.register(data.get(1169));
+        VILLAGER_SPAWN_EGG = REGISTRY.register(data.get(1170));
+        WANDERING_TRADER_SPAWN_EGG = REGISTRY.register(data.get(1171));
+        BOGGED_SPAWN_EGG = REGISTRY.register(data.get(1172));
+        CAMEL_HUSK_SPAWN_EGG = REGISTRY.register(data.get(1173));
+        DROWNED_SPAWN_EGG = REGISTRY.register(data.get(1174));
+        HUSK_SPAWN_EGG = REGISTRY.register(data.get(1175));
+        PARCHED_SPAWN_EGG = REGISTRY.register(data.get(1176));
+        SKELETON_SPAWN_EGG = REGISTRY.register(data.get(1177));
+        SKELETON_HORSE_SPAWN_EGG = REGISTRY.register(data.get(1178));
+        STRAY_SPAWN_EGG = REGISTRY.register(data.get(1179));
+        WITHER_SPAWN_EGG = REGISTRY.register(data.get(1180));
+        WITHER_SKELETON_SPAWN_EGG = REGISTRY.register(data.get(1181));
+        ZOMBIE_SPAWN_EGG = REGISTRY.register(data.get(1182));
+        ZOMBIE_HORSE_SPAWN_EGG = REGISTRY.register(data.get(1183));
+        ZOMBIE_NAUTILUS_SPAWN_EGG = REGISTRY.register(data.get(1184));
+        ZOMBIE_VILLAGER_SPAWN_EGG = REGISTRY.register(data.get(1185));
+        CAVE_SPIDER_SPAWN_EGG = REGISTRY.register(data.get(1186));
+        SPIDER_SPAWN_EGG = REGISTRY.register(data.get(1187));
+        BREEZE_SPAWN_EGG = REGISTRY.register(data.get(1188));
+        CREAKING_SPAWN_EGG = REGISTRY.register(data.get(1189));
+        CREEPER_SPAWN_EGG = REGISTRY.register(data.get(1190));
+        ELDER_GUARDIAN_SPAWN_EGG = REGISTRY.register(data.get(1191));
+        GUARDIAN_SPAWN_EGG = REGISTRY.register(data.get(1192));
+        PHANTOM_SPAWN_EGG = REGISTRY.register(data.get(1193));
+        SILVERFISH_SPAWN_EGG = REGISTRY.register(data.get(1194));
+        SLIME_SPAWN_EGG = REGISTRY.register(data.get(1195));
+        WARDEN_SPAWN_EGG = REGISTRY.register(data.get(1196));
+        WITCH_SPAWN_EGG = REGISTRY.register(data.get(1197));
+        EVOKER_SPAWN_EGG = REGISTRY.register(data.get(1198));
+        PILLAGER_SPAWN_EGG = REGISTRY.register(data.get(1199));
+        RAVAGER_SPAWN_EGG = REGISTRY.register(data.get(1200));
+        VINDICATOR_SPAWN_EGG = REGISTRY.register(data.get(1201));
+        VEX_SPAWN_EGG = REGISTRY.register(data.get(1202));
+        BLAZE_SPAWN_EGG = REGISTRY.register(data.get(1203));
+        GHAST_SPAWN_EGG = REGISTRY.register(data.get(1204));
+        HAPPY_GHAST_SPAWN_EGG = REGISTRY.register(data.get(1205));
+        HOGLIN_SPAWN_EGG = REGISTRY.register(data.get(1206));
+        MAGMA_CUBE_SPAWN_EGG = REGISTRY.register(data.get(1207));
+        PIGLIN_SPAWN_EGG = REGISTRY.register(data.get(1208));
+        PIGLIN_BRUTE_SPAWN_EGG = REGISTRY.register(data.get(1209));
+        STRIDER_SPAWN_EGG = REGISTRY.register(data.get(1210));
+        ZOGLIN_SPAWN_EGG = REGISTRY.register(data.get(1211));
+        ZOMBIFIED_PIGLIN_SPAWN_EGG = REGISTRY.register(data.get(1212));
+        ENDER_DRAGON_SPAWN_EGG = REGISTRY.register(data.get(1213));
+        ENDERMAN_SPAWN_EGG = REGISTRY.register(data.get(1214));
+        ENDERMITE_SPAWN_EGG = REGISTRY.register(data.get(1215));
+        SHULKER_SPAWN_EGG = REGISTRY.register(data.get(1216));
+        EXPERIENCE_BOTTLE = REGISTRY.register(data.get(1217));
+        FIRE_CHARGE = REGISTRY.register(data.get(1218));
+        WIND_CHARGE = REGISTRY.register(data.get(1219));
+        WRITABLE_BOOK = REGISTRY.register(data.get(1220));
+        WRITTEN_BOOK = REGISTRY.register(data.get(1221));
+        BREEZE_ROD = REGISTRY.register(data.get(1222));
+        MACE = REGISTRY.register(data.get(1223));
+        ITEM_FRAME = REGISTRY.register(data.get(1224));
+        GLOW_ITEM_FRAME = REGISTRY.register(data.get(1225));
+        FLOWER_POT = REGISTRY.register(data.get(1226));
+        CARROT = REGISTRY.register(data.get(1227));
+        POTATO = REGISTRY.register(data.get(1228));
+        BAKED_POTATO = REGISTRY.register(data.get(1229));
+        POISONOUS_POTATO = REGISTRY.register(data.get(1230));
+        MAP = REGISTRY.register(data.get(1231));
+        GOLDEN_CARROT = REGISTRY.register(data.get(1232));
+        SKELETON_SKULL = REGISTRY.register(data.get(1233));
+        WITHER_SKELETON_SKULL = REGISTRY.register(data.get(1234));
+        PLAYER_HEAD = REGISTRY.register(data.get(1235));
+        ZOMBIE_HEAD = REGISTRY.register(data.get(1236));
+        CREEPER_HEAD = REGISTRY.register(data.get(1237));
+        DRAGON_HEAD = REGISTRY.register(data.get(1238));
+        PIGLIN_HEAD = REGISTRY.register(data.get(1239));
+        NETHER_STAR = REGISTRY.register(data.get(1240));
+        PUMPKIN_PIE = REGISTRY.register(data.get(1241));
+        FIREWORK_ROCKET = REGISTRY.register(data.get(1242));
+        FIREWORK_STAR = REGISTRY.register(data.get(1243));
+        ENCHANTED_BOOK = REGISTRY.register(data.get(1244));
+        NETHER_BRICK = REGISTRY.register(data.get(1245));
+        RESIN_BRICK = REGISTRY.register(data.get(1246));
+        PRISMARINE_SHARD = REGISTRY.register(data.get(1247));
+        PRISMARINE_CRYSTALS = REGISTRY.register(data.get(1248));
+        RABBIT = REGISTRY.register(data.get(1249));
+        COOKED_RABBIT = REGISTRY.register(data.get(1250));
+        RABBIT_STEW = REGISTRY.register(data.get(1251));
+        RABBIT_FOOT = REGISTRY.register(data.get(1252));
+        RABBIT_HIDE = REGISTRY.register(data.get(1253));
+        ARMOR_STAND = REGISTRY.register(data.get(1254));
+        COPPER_HORSE_ARMOR = REGISTRY.register(data.get(1255));
+        IRON_HORSE_ARMOR = REGISTRY.register(data.get(1256));
+        GOLDEN_HORSE_ARMOR = REGISTRY.register(data.get(1257));
+        DIAMOND_HORSE_ARMOR = REGISTRY.register(data.get(1258));
+        NETHERITE_HORSE_ARMOR = REGISTRY.register(data.get(1259));
+        LEATHER_HORSE_ARMOR = REGISTRY.register(data.get(1260));
+        LEAD = REGISTRY.register(data.get(1261));
+        NAME_TAG = REGISTRY.register(data.get(1262));
+        COMMAND_BLOCK_MINECART = REGISTRY.register(data.get(1263));
+        MUTTON = REGISTRY.register(data.get(1264));
+        COOKED_MUTTON = REGISTRY.register(data.get(1265));
+        WHITE_BANNER = REGISTRY.register(data.get(1266));
+        ORANGE_BANNER = REGISTRY.register(data.get(1267));
+        MAGENTA_BANNER = REGISTRY.register(data.get(1268));
+        LIGHT_BLUE_BANNER = REGISTRY.register(data.get(1269));
+        YELLOW_BANNER = REGISTRY.register(data.get(1270));
+        LIME_BANNER = REGISTRY.register(data.get(1271));
+        PINK_BANNER = REGISTRY.register(data.get(1272));
+        GRAY_BANNER = REGISTRY.register(data.get(1273));
+        LIGHT_GRAY_BANNER = REGISTRY.register(data.get(1274));
+        CYAN_BANNER = REGISTRY.register(data.get(1275));
+        PURPLE_BANNER = REGISTRY.register(data.get(1276));
+        BLUE_BANNER = REGISTRY.register(data.get(1277));
+        BROWN_BANNER = REGISTRY.register(data.get(1278));
+        GREEN_BANNER = REGISTRY.register(data.get(1279));
+        RED_BANNER = REGISTRY.register(data.get(1280));
+        BLACK_BANNER = REGISTRY.register(data.get(1281));
+        END_CRYSTAL = REGISTRY.register(data.get(1282));
+        CHORUS_FRUIT = REGISTRY.register(data.get(1283));
+        POPPED_CHORUS_FRUIT = REGISTRY.register(data.get(1284));
+        TORCHFLOWER_SEEDS = REGISTRY.register(data.get(1285));
+        PITCHER_POD = REGISTRY.register(data.get(1286));
+        BEETROOT = REGISTRY.register(data.get(1287));
+        BEETROOT_SEEDS = REGISTRY.register(data.get(1288));
+        BEETROOT_SOUP = REGISTRY.register(data.get(1289));
+        DRAGON_BREATH = REGISTRY.register(data.get(1290));
+        SPLASH_POTION = REGISTRY.register(data.get(1291));
+        SPECTRAL_ARROW = REGISTRY.register(data.get(1292));
+        TIPPED_ARROW = REGISTRY.register(data.get(1293));
+        LINGERING_POTION = REGISTRY.register(data.get(1294));
+        SHIELD = REGISTRY.register(data.get(1295));
+        WOODEN_SPEAR = REGISTRY.register(data.get(1296));
+        STONE_SPEAR = REGISTRY.register(data.get(1297));
+        COPPER_SPEAR = REGISTRY.register(data.get(1298));
+        IRON_SPEAR = REGISTRY.register(data.get(1299));
+        GOLDEN_SPEAR = REGISTRY.register(data.get(1300));
+        DIAMOND_SPEAR = REGISTRY.register(data.get(1301));
+        NETHERITE_SPEAR = REGISTRY.register(data.get(1302));
+        TOTEM_OF_UNDYING = REGISTRY.register(data.get(1303));
+        SHULKER_SHELL = REGISTRY.register(data.get(1304));
+        IRON_NUGGET = REGISTRY.register(data.get(1305));
+        COPPER_NUGGET = REGISTRY.register(data.get(1306));
+        KNOWLEDGE_BOOK = REGISTRY.register(data.get(1307));
+        DEBUG_STICK = REGISTRY.register(data.get(1308));
+        MUSIC_DISC_13 = REGISTRY.register(data.get(1309));
+        MUSIC_DISC_CAT = REGISTRY.register(data.get(1310));
+        MUSIC_DISC_BLOCKS = REGISTRY.register(data.get(1311));
+        MUSIC_DISC_CHIRP = REGISTRY.register(data.get(1312));
+        MUSIC_DISC_CREATOR = REGISTRY.register(data.get(1313));
+        MUSIC_DISC_CREATOR_MUSIC_BOX = REGISTRY.register(data.get(1314));
+        MUSIC_DISC_FAR = REGISTRY.register(data.get(1315));
+        MUSIC_DISC_LAVA_CHICKEN = REGISTRY.register(data.get(1316));
+        MUSIC_DISC_MALL = REGISTRY.register(data.get(1317));
+        MUSIC_DISC_MELLOHI = REGISTRY.register(data.get(1318));
+        MUSIC_DISC_STAL = REGISTRY.register(data.get(1319));
+        MUSIC_DISC_STRAD = REGISTRY.register(data.get(1320));
+        MUSIC_DISC_WARD = REGISTRY.register(data.get(1321));
+        MUSIC_DISC_11 = REGISTRY.register(data.get(1322));
+        MUSIC_DISC_WAIT = REGISTRY.register(data.get(1323));
+        MUSIC_DISC_OTHERSIDE = REGISTRY.register(data.get(1324));
+        MUSIC_DISC_RELIC = REGISTRY.register(data.get(1325));
+        MUSIC_DISC_5 = REGISTRY.register(data.get(1326));
+        MUSIC_DISC_PIGSTEP = REGISTRY.register(data.get(1327));
+        MUSIC_DISC_PRECIPICE = REGISTRY.register(data.get(1328));
+        MUSIC_DISC_TEARS = REGISTRY.register(data.get(1329));
+        DISC_FRAGMENT_5 = REGISTRY.register(data.get(1330));
+        TRIDENT = REGISTRY.register(data.get(1331));
+        NAUTILUS_SHELL = REGISTRY.register(data.get(1332));
+        IRON_NAUTILUS_ARMOR = REGISTRY.register(data.get(1333));
+        GOLDEN_NAUTILUS_ARMOR = REGISTRY.register(data.get(1334));
+        DIAMOND_NAUTILUS_ARMOR = REGISTRY.register(data.get(1335));
+        NETHERITE_NAUTILUS_ARMOR = REGISTRY.register(data.get(1336));
+        COPPER_NAUTILUS_ARMOR = REGISTRY.register(data.get(1337));
+        HEART_OF_THE_SEA = REGISTRY.register(data.get(1338));
+        CROSSBOW = REGISTRY.register(data.get(1339));
+        SUSPICIOUS_STEW = REGISTRY.register(data.get(1340));
+        LOOM = REGISTRY.register(data.get(1341));
+        FLOWER_BANNER_PATTERN = REGISTRY.register(data.get(1342));
+        CREEPER_BANNER_PATTERN = REGISTRY.register(data.get(1343));
+        SKULL_BANNER_PATTERN = REGISTRY.register(data.get(1344));
+        MOJANG_BANNER_PATTERN = REGISTRY.register(data.get(1345));
+        GLOBE_BANNER_PATTERN = REGISTRY.register(data.get(1346));
+        PIGLIN_BANNER_PATTERN = REGISTRY.register(data.get(1347));
+        FLOW_BANNER_PATTERN = REGISTRY.register(data.get(1348));
+        GUSTER_BANNER_PATTERN = REGISTRY.register(data.get(1349));
+        FIELD_MASONED_BANNER_PATTERN = REGISTRY.register(data.get(1350));
+        BORDURE_INDENTED_BANNER_PATTERN = REGISTRY.register(data.get(1351));
+        GOAT_HORN = REGISTRY.register(data.get(1352));
+        COMPOSTER = REGISTRY.register(data.get(1353));
+        BARREL = REGISTRY.register(data.get(1354));
+        SMOKER = REGISTRY.register(data.get(1355));
+        BLAST_FURNACE = REGISTRY.register(data.get(1356));
+        CARTOGRAPHY_TABLE = REGISTRY.register(data.get(1357));
+        FLETCHING_TABLE = REGISTRY.register(data.get(1358));
+        GRINDSTONE = REGISTRY.register(data.get(1359));
+        SMITHING_TABLE = REGISTRY.register(data.get(1360));
+        STONECUTTER = REGISTRY.register(data.get(1361));
+        BELL = REGISTRY.register(data.get(1362));
+        LANTERN = REGISTRY.register(data.get(1363));
+        SOUL_LANTERN = REGISTRY.register(data.get(1364));
+        COPPER_LANTERN = REGISTRY.register(data.get(1365));
+        EXPOSED_COPPER_LANTERN = REGISTRY.register(data.get(1366));
+        WEATHERED_COPPER_LANTERN = REGISTRY.register(data.get(1367));
+        OXIDIZED_COPPER_LANTERN = REGISTRY.register(data.get(1368));
+        WAXED_COPPER_LANTERN = REGISTRY.register(data.get(1369));
+        WAXED_EXPOSED_COPPER_LANTERN = REGISTRY.register(data.get(1370));
+        WAXED_WEATHERED_COPPER_LANTERN = REGISTRY.register(data.get(1371));
+        WAXED_OXIDIZED_COPPER_LANTERN = REGISTRY.register(data.get(1372));
+        SWEET_BERRIES = REGISTRY.register(data.get(1373));
+        GLOW_BERRIES = REGISTRY.register(data.get(1374));
+        CAMPFIRE = REGISTRY.register(data.get(1375));
+        SOUL_CAMPFIRE = REGISTRY.register(data.get(1376));
+        SHROOMLIGHT = REGISTRY.register(data.get(1377));
+        HONEYCOMB = REGISTRY.register(data.get(1378));
+        BEE_NEST = REGISTRY.register(data.get(1379));
+        BEEHIVE = REGISTRY.register(data.get(1380));
+        HONEY_BOTTLE = REGISTRY.register(data.get(1381));
+        HONEYCOMB_BLOCK = REGISTRY.register(data.get(1382));
+        LODESTONE = REGISTRY.register(data.get(1383));
+        CRYING_OBSIDIAN = REGISTRY.register(data.get(1384));
+        BLACKSTONE = REGISTRY.register(data.get(1385));
+        BLACKSTONE_SLAB = REGISTRY.register(data.get(1386));
+        BLACKSTONE_STAIRS = REGISTRY.register(data.get(1387));
+        GILDED_BLACKSTONE = REGISTRY.register(data.get(1388));
+        POLISHED_BLACKSTONE = REGISTRY.register(data.get(1389));
+        POLISHED_BLACKSTONE_SLAB = REGISTRY.register(data.get(1390));
+        POLISHED_BLACKSTONE_STAIRS = REGISTRY.register(data.get(1391));
+        CHISELED_POLISHED_BLACKSTONE = REGISTRY.register(data.get(1392));
+        POLISHED_BLACKSTONE_BRICKS = REGISTRY.register(data.get(1393));
+        POLISHED_BLACKSTONE_BRICK_SLAB = REGISTRY.register(data.get(1394));
+        POLISHED_BLACKSTONE_BRICK_STAIRS = REGISTRY.register(data.get(1395));
+        CRACKED_POLISHED_BLACKSTONE_BRICKS = REGISTRY.register(data.get(1396));
+        RESPAWN_ANCHOR = REGISTRY.register(data.get(1397));
+        CANDLE = REGISTRY.register(data.get(1398));
+        WHITE_CANDLE = REGISTRY.register(data.get(1399));
+        ORANGE_CANDLE = REGISTRY.register(data.get(1400));
+        MAGENTA_CANDLE = REGISTRY.register(data.get(1401));
+        LIGHT_BLUE_CANDLE = REGISTRY.register(data.get(1402));
+        YELLOW_CANDLE = REGISTRY.register(data.get(1403));
+        LIME_CANDLE = REGISTRY.register(data.get(1404));
+        PINK_CANDLE = REGISTRY.register(data.get(1405));
+        GRAY_CANDLE = REGISTRY.register(data.get(1406));
+        LIGHT_GRAY_CANDLE = REGISTRY.register(data.get(1407));
+        CYAN_CANDLE = REGISTRY.register(data.get(1408));
+        PURPLE_CANDLE = REGISTRY.register(data.get(1409));
+        BLUE_CANDLE = REGISTRY.register(data.get(1410));
+        BROWN_CANDLE = REGISTRY.register(data.get(1411));
+        GREEN_CANDLE = REGISTRY.register(data.get(1412));
+        RED_CANDLE = REGISTRY.register(data.get(1413));
+        BLACK_CANDLE = REGISTRY.register(data.get(1414));
+        SMALL_AMETHYST_BUD = REGISTRY.register(data.get(1415));
+        MEDIUM_AMETHYST_BUD = REGISTRY.register(data.get(1416));
+        LARGE_AMETHYST_BUD = REGISTRY.register(data.get(1417));
+        AMETHYST_CLUSTER = REGISTRY.register(data.get(1418));
+        POINTED_DRIPSTONE = REGISTRY.register(data.get(1419));
+        OCHRE_FROGLIGHT = REGISTRY.register(data.get(1420));
+        VERDANT_FROGLIGHT = REGISTRY.register(data.get(1421));
+        PEARLESCENT_FROGLIGHT = REGISTRY.register(data.get(1422));
+        FROGSPAWN = REGISTRY.register(data.get(1423));
+        ECHO_SHARD = REGISTRY.register(data.get(1424));
+        BRUSH = REGISTRY.register(data.get(1425));
+        NETHERITE_UPGRADE_SMITHING_TEMPLATE = REGISTRY.register(data.get(1426));
+        SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1427));
+        DUNE_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1428));
+        COAST_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1429));
+        WILD_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1430));
+        WARD_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1431));
+        EYE_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1432));
+        VEX_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1433));
+        TIDE_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1434));
+        SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1435));
+        RIB_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1436));
+        SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1437));
+        WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1438));
+        SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1439));
+        SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1440));
+        RAISER_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1441));
+        HOST_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1442));
+        FLOW_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1443));
+        BOLT_ARMOR_TRIM_SMITHING_TEMPLATE = REGISTRY.register(data.get(1444));
+        ANGLER_POTTERY_SHERD = REGISTRY.register(data.get(1445));
+        ARCHER_POTTERY_SHERD = REGISTRY.register(data.get(1446));
+        ARMS_UP_POTTERY_SHERD = REGISTRY.register(data.get(1447));
+        BLADE_POTTERY_SHERD = REGISTRY.register(data.get(1448));
+        BREWER_POTTERY_SHERD = REGISTRY.register(data.get(1449));
+        BURN_POTTERY_SHERD = REGISTRY.register(data.get(1450));
+        DANGER_POTTERY_SHERD = REGISTRY.register(data.get(1451));
+        EXPLORER_POTTERY_SHERD = REGISTRY.register(data.get(1452));
+        FLOW_POTTERY_SHERD = REGISTRY.register(data.get(1453));
+        FRIEND_POTTERY_SHERD = REGISTRY.register(data.get(1454));
+        GUSTER_POTTERY_SHERD = REGISTRY.register(data.get(1455));
+        HEART_POTTERY_SHERD = REGISTRY.register(data.get(1456));
+        HEARTBREAK_POTTERY_SHERD = REGISTRY.register(data.get(1457));
+        HOWL_POTTERY_SHERD = REGISTRY.register(data.get(1458));
+        MINER_POTTERY_SHERD = REGISTRY.register(data.get(1459));
+        MOURNER_POTTERY_SHERD = REGISTRY.register(data.get(1460));
+        PLENTY_POTTERY_SHERD = REGISTRY.register(data.get(1461));
+        PRIZE_POTTERY_SHERD = REGISTRY.register(data.get(1462));
+        SCRAPE_POTTERY_SHERD = REGISTRY.register(data.get(1463));
+        SHEAF_POTTERY_SHERD = REGISTRY.register(data.get(1464));
+        SHELTER_POTTERY_SHERD = REGISTRY.register(data.get(1465));
+        SKULL_POTTERY_SHERD = REGISTRY.register(data.get(1466));
+        SNORT_POTTERY_SHERD = REGISTRY.register(data.get(1467));
+        COPPER_GRATE = REGISTRY.register(data.get(1468));
+        EXPOSED_COPPER_GRATE = REGISTRY.register(data.get(1469));
+        WEATHERED_COPPER_GRATE = REGISTRY.register(data.get(1470));
+        OXIDIZED_COPPER_GRATE = REGISTRY.register(data.get(1471));
+        WAXED_COPPER_GRATE = REGISTRY.register(data.get(1472));
+        WAXED_EXPOSED_COPPER_GRATE = REGISTRY.register(data.get(1473));
+        WAXED_WEATHERED_COPPER_GRATE = REGISTRY.register(data.get(1474));
+        WAXED_OXIDIZED_COPPER_GRATE = REGISTRY.register(data.get(1475));
+        COPPER_BULB = REGISTRY.register(data.get(1476));
+        EXPOSED_COPPER_BULB = REGISTRY.register(data.get(1477));
+        WEATHERED_COPPER_BULB = REGISTRY.register(data.get(1478));
+        OXIDIZED_COPPER_BULB = REGISTRY.register(data.get(1479));
+        WAXED_COPPER_BULB = REGISTRY.register(data.get(1480));
+        WAXED_EXPOSED_COPPER_BULB = REGISTRY.register(data.get(1481));
+        WAXED_WEATHERED_COPPER_BULB = REGISTRY.register(data.get(1482));
+        WAXED_OXIDIZED_COPPER_BULB = REGISTRY.register(data.get(1483));
+        COPPER_CHEST = REGISTRY.register(data.get(1484));
+        EXPOSED_COPPER_CHEST = REGISTRY.register(data.get(1485));
+        WEATHERED_COPPER_CHEST = REGISTRY.register(data.get(1486));
+        OXIDIZED_COPPER_CHEST = REGISTRY.register(data.get(1487));
+        WAXED_COPPER_CHEST = REGISTRY.register(data.get(1488));
+        WAXED_EXPOSED_COPPER_CHEST = REGISTRY.register(data.get(1489));
+        WAXED_WEATHERED_COPPER_CHEST = REGISTRY.register(data.get(1490));
+        WAXED_OXIDIZED_COPPER_CHEST = REGISTRY.register(data.get(1491));
+        COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1492));
+        EXPOSED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1493));
+        WEATHERED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1494));
+        OXIDIZED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1495));
+        WAXED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1496));
+        WAXED_EXPOSED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1497));
+        WAXED_WEATHERED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1498));
+        WAXED_OXIDIZED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1499));
+        TRIAL_SPAWNER = REGISTRY.register(data.get(1500));
+        TRIAL_KEY = REGISTRY.register(data.get(1501));
+        OMINOUS_TRIAL_KEY = REGISTRY.register(data.get(1502));
+        VAULT = REGISTRY.register(data.get(1503));
+        OMINOUS_BOTTLE = REGISTRY.register(data.get(1504));
+    }
 }

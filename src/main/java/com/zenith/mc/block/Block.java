@@ -19,16 +19,22 @@ public record Block(
     float destroySpeed,
     boolean requiresCorrectToolForDrops,
     EnumSet<BlockTags> blockTags,
-    boolean replaceable,
     float friction,
     float speedFactor,
     float jumpFactor,
-    boolean isAir,
     boolean fallingBlock,
     @Nullable BlockEntityType blockEntityType
 ) implements RegistryData {
     @Override
     public String toString() {
         return "Block[name=" + name + ", id=" + id + "]";
+    }
+
+    public boolean isAir() {
+        return blockTags().contains(BlockTags.AIR);
+    }
+
+    public boolean replaceable() {
+        return blockTags().contains(BlockTags.REPLACEABLE);
     }
 }

@@ -14,6 +14,7 @@ import com.zenith.feature.player.World;
 import com.zenith.mc.block.Block;
 import com.zenith.mc.block.BlockPos;
 import com.zenith.mc.block.BlockRegistry;
+import com.zenith.mc.block.BlockTags;
 import com.zenith.mc.block.properties.api.BlockStateProperties;
 import org.jspecify.annotations.Nullable;
 
@@ -252,7 +253,7 @@ public final class GetToBlockProcess extends BaritoneProcessHelper {
         if (!clickableContainersSupplier.get().contains(containerBlock)) {
             return pos;
         }
-        if (containerBlock.name().contains("shulker")) {
+        if (containerBlock.blockTags().contains(BlockTags.SHULKER_BOXES)) {
             var facingProperty = World.getBlockStateProperty(World.getBlockStateId(pos), BlockStateProperties.FACING);
             if (facingProperty != null) {
                 return pos.relative(facingProperty);

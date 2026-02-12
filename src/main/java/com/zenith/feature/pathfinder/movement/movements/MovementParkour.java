@@ -70,7 +70,7 @@ public class MovementParkour extends Movement {
         }
         int standingOn = context.getId(x, y - 1, z);
         Block standingOnBlock = BlockStateInterface.getBlock(standingOn);
-        if (standingOnBlock.blockTags().contains(BlockTags.CLIMBABLE) || standingOnBlock.name().endsWith("_stairs") || BlockStateInterface.isBottomSlab(standingOn)) {
+        if (standingOnBlock.blockTags().contains(BlockTags.CLIMBABLE) || standingOnBlock.blockTags().contains(BlockTags.STAIRS) || BlockStateInterface.isBottomSlab(standingOn)) {
             return;
         }
         if (World.isFluid(context.getBlock(x, y, z))) {

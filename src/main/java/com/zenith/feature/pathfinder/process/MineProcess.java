@@ -450,9 +450,16 @@ public final class MineProcess extends BaritoneProcessHelper implements IBariton
             return null;
         }
         if (!CONFIG.client.extra.pathfinder.allowBreak) {
-            // todo: discord noti?
-            error("Unable to mine when allowBreak is off!");
-            return null;
+            var allowBreakAnyway = this.filter.getBlockSet().stream()
+                .filter(block -> CONFIG.client.extra.pathfinder.allowBreakAnyway.contains(block.name()))
+                .collect(Collectors.toSet());
+            if (allowBreakAnyway.isEmpty()) {
+                // todo: discord noti?
+                error("Unable to mine when allowBreak is off and target block is not in allowBreakAnyway!");
+                return null;
+            } else {
+                return new BlockOptionalMetaLookup(allowBreakAnyway);
+            }
         }
         return filter;
     }

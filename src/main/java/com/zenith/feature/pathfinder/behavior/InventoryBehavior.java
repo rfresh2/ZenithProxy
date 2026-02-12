@@ -10,8 +10,6 @@ import com.zenith.mc.block.BlockRegistry;
 import com.zenith.mc.item.ItemData;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.mc.item.ToolType;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.MoveToHotbarAction;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
@@ -20,7 +18,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static com.zenith.Globals.*;
-import static java.util.Arrays.asList;
 
 public class InventoryBehavior extends Behavior {
 
@@ -105,29 +102,14 @@ public class InventoryBehavior extends Behavior {
         return true;
     }
 
-    private static final IntSet ACCEPTABLE_THROWAWAY_ITEMS = new IntOpenHashSet(asList(
-        ItemRegistry.DIRT.id(),
-        ItemRegistry.COBBLESTONE.id(),
-        ItemRegistry.NETHERRACK.id(),
-        ItemRegistry.STONE.id(),
-        ItemRegistry.OBSIDIAN.id(),
-        ItemRegistry.CRYING_OBSIDIAN.id(),
-        ItemRegistry.BIRCH_PLANKS.id(),
-        ItemRegistry.JUNGLE_PLANKS.id(),
-        ItemRegistry.SPRUCE_PLANKS.id(),
-        ItemRegistry.DARK_OAK_PLANKS.id(),
-        ItemRegistry.ACACIA_PLANKS.id(),
-        ItemRegistry.WARPED_PLANKS.id(),
-        ItemRegistry.CHERRY_PLANKS.id(),
-        ItemRegistry.OAK_PLANKS.id()
-    ));
-
     private int firstValidThrowaway() { // TODO offhand idk
         List<ItemStack> playerInventory = CACHE.getPlayerCache().getPlayerInventory();
         for (int i = 44; i >= 9; i--) {
             ItemStack itemStack = playerInventory.get(i);
             if (itemStack == Container.EMPTY_STACK) continue;
-            if (ACCEPTABLE_THROWAWAY_ITEMS.contains(itemStack.getId())) {
+            var itemData = ItemRegistry.REGISTRY.get(itemStack.getId());
+            if (itemData == null) continue;
+            if (CONFIG.client.extra.pathfinder.acceptableThrowawayItems.contains(itemData.name())) {
                 return i;
             }
         }
@@ -150,8 +132,13 @@ public class InventoryBehavior extends Behavior {
 //        if (maybe != null && throwaway(select, stack -> stack.getItem() instanceof BlockItem && ((BlockItem) stack.getItem()).getBlock().equals(maybe.getBlock()))) {
 //            return true;
 //        }
-        for (int itemId : ACCEPTABLE_THROWAWAY_ITEMS) {
-            if (throwaway(select, stack -> stack.getId() == itemId)) {
+        for (var itemName : CONFIG.client.extra.pathfinder.acceptableThrowawayItems) {
+            if (throwaway(select, stack -> {
+                if (stack == Container.EMPTY_STACK) return false;
+                var itemData = ItemRegistry.REGISTRY.get(stack.getId());
+                if (itemData == null) return false;
+                return itemName.equals(itemData.name());
+            })) {
                 return true;
             }
         }

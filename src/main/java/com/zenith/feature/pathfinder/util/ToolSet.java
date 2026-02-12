@@ -6,6 +6,7 @@ import com.zenith.mc.enchantment.EnchantmentRegistry;
 import com.zenith.mc.item.ItemData;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.mc.item.ToolTag;
+import com.zenith.util.ItemUtil;
 import it.unimi.dsi.fastutil.ints.Int2DoubleMap;
 import it.unimi.dsi.fastutil.ints.Int2DoubleOpenHashMap;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
@@ -15,8 +16,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.item.component.ItemEnchantm
 
 import java.util.List;
 
-import static com.zenith.Globals.BOT;
-import static com.zenith.Globals.CACHE;
+import static com.zenith.Globals.*;
 
 public class ToolSet {
     private final Int2DoubleMap blockBreakSpeedCache = new Int2DoubleOpenHashMap();
@@ -52,9 +52,9 @@ public class ToolSet {
         If we actually want know what efficiency our held item has instead of the best one
         possible, this lets us make pathing depend on the actual tool to be used (if auto tool is disabled)
         */
-//        if (!Baritone.settings().autoTool.value && pathingCalculation) {
-//            return player.getInventory().selected;
-//        }
+        if (!CONFIG.client.extra.pathfinder.autoTool && pathingCalculation) {
+            return CACHE.getPlayerCache().getHeldItemSlot();
+        }
 
         int best = 0;
         double highestSpeed = Double.NEGATIVE_INFINITY;
@@ -67,9 +67,9 @@ public class ToolSet {
 //                continue;
 //            }
 
-//            if (Baritone.settings().itemSaver.value && (itemStack.getDamageValue() + Baritone.settings().itemSaverThreshold.value) >= itemStack.getMaxDamage() && itemStack.getMaxDamage() > 1) {
-//                continue;
-//            }
+            if (CONFIG.client.extra.pathfinder.itemSaver && ItemUtil.getMaxDamage(itemStack) > 1 && ItemUtil.getDamageUntilBreak(itemStack) <= CONFIG.client.extra.pathfinder.itemSaverThreshold) {
+                continue;
+            }
             double speed = BOT.getInteractions().blockBreakSpeed(b, itemStack);
             boolean silkTouch = hasSilkTouch(itemStack);
             if (speed > highestSpeed) {
@@ -93,7 +93,7 @@ public class ToolSet {
 
     // wood = least expensive
     // netherite = most expensive
-    private int getMaterialCost(final ItemStack itemStack) {
+    public int getMaterialCost(final ItemStack itemStack) {
         if (itemStack == Container.EMPTY_STACK) return -1;
         ItemData itemData = ItemRegistry.REGISTRY.get(itemStack.getId());
         if (itemData == null) return -1;
@@ -102,7 +102,7 @@ public class ToolSet {
         return toolTag.tier().ordinal();
     }
 
-    private boolean hasSilkTouch(final ItemStack itemStack) {
+    public boolean hasSilkTouch(final ItemStack itemStack) {
         if (itemStack == Container.EMPTY_STACK) return false;
         DataComponents dataComponents = itemStack.getDataComponents();
         if (dataComponents == null) return false;
