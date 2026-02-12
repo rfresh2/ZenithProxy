@@ -2287,17 +2287,25 @@
       ]
     },
     {
-      "type": "com.zenith.mc.item.SerializedItemData",
+      "type": "com.zenith.mc.item.ItemData",
       "methods": [
         {
           "name": "<init>",
           "parameterTypes": [
             "int",
             "java.lang.String",
-            "int",
-            "it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap",
+            "org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponents",
             "com.zenith.mc.item.ToolTag"
           ]
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.mc.item.ItemDataComponentsDeserializer",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
         }
       ]
     },
