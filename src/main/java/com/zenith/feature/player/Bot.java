@@ -1397,7 +1397,7 @@ public final class Bot extends ModuleUtils {
         var inBlock = World.getBlock(MathHelper.floorI(x), MathHelper.floorI(y), MathHelper.floorI(z));
         if (inBlock.blockTags().contains(BlockTags.CLIMBABLE)) {
             return true;
-        } else if (inBlock.name().endsWith("_trapdoor")) {
+        } else if (inBlock.blockTags().contains(BlockTags.TRAPDOORS)) {
             int blockStateId = World.getBlockStateId(MathHelper.floorI(x), MathHelper.floorI(y), MathHelper.floorI(z));
             var openProperty = World.getBlockStateProperty(blockStateId, BlockStateProperties.OPEN);
             if (openProperty != null && openProperty) {
