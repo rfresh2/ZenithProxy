@@ -2238,34 +2238,9 @@
             "float",
             "boolean",
             "java.util.EnumSet",
-            "boolean",
             "float",
             "float",
             "float",
-            "boolean",
-            "org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType"
-          ]
-        },
-        {
-          "name": "<init>",
-          "parameterTypes": [
-            "int",
-            "java.lang.String",
-            "int",
-            "int",
-            "int",
-            "com.zenith.mc.block.BlockOffsetType",
-            "float",
-            "float",
-            "boolean",
-            "float",
-            "boolean",
-            "java.util.EnumSet",
-            "boolean",
-            "float",
-            "float",
-            "float",
-            "boolean",
             "boolean",
             "org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType"
           ]
@@ -4866,6 +4841,24 @@
         {
           "name": "alignedSlice",
           "parameterTypes": [
+            "int"
+          ]
+        },
+        {
+          "name": "put",
+          "parameterTypes": [
+            "int",
+            "java.nio.ByteBuffer",
+            "int",
+            "int"
+          ]
+        },
+        {
+          "name": "put",
+          "parameterTypes": [
+            "int",
+            "byte[]",
+            "int",
             "int"
           ]
         },
