@@ -6,11 +6,14 @@ import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponen
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.annotation.JsonDeserialize;
 
+import java.util.EnumSet;
+
 public record ItemData(
     int id,
     String name,
     @JsonDeserialize(using = ItemDataComponentsDeserializer.class)
     DataComponents components,
+    EnumSet<ItemTags> itemTags,
     @Nullable ToolTag toolTag
 ) implements RegistryData {
 

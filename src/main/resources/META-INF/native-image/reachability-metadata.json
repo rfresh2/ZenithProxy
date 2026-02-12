@@ -2295,6 +2295,7 @@
             "int",
             "java.lang.String",
             "org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponents",
+            "java.util.EnumSet",
             "com.zenith.mc.item.ToolTag"
           ]
         }
@@ -2308,6 +2309,9 @@
           "parameterTypes": []
         }
       ]
+    },
+    {
+      "type": "com.zenith.mc.item.ItemTags"
     },
     {
       "type": "com.zenith.mc.item.ToolTag",
