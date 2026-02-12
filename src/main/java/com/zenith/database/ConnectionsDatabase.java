@@ -5,6 +5,7 @@ import com.zenith.database.dto.enums.Connectiontype;
 import com.zenith.database.dto.records.ConnectionsRecord;
 import com.zenith.event.client.ClientDisconnectEvent;
 import com.zenith.event.client.ClientOnlineEvent;
+import com.zenith.event.queue.QueueStartEvent;
 import com.zenith.event.server.ServerPlayerConnectedEvent;
 import com.zenith.event.server.ServerPlayerDisconnectedEvent;
 
@@ -28,6 +29,7 @@ public class ConnectionsDatabase extends LiveDatabase {
         EVENT_BUS.subscribe(
             this,
             of(ClientOnlineEvent.class, this::handleClientOnlineEvent),
+            of(QueueStartEvent.class, this::handleQueueStartEvent),
             of(ServerPlayerConnectedEvent.class, this::handleServerPlayerConnectedEvent),
             of(ServerPlayerDisconnectedEvent.class, this::handleServerPlayerDisconnectedEvent),
             of(ClientDisconnectEvent.class, DISCONNECT_PRIORITY, this::handleDisconnectEvent) // higher priority before cache is reset
@@ -79,6 +81,14 @@ public class ConnectionsDatabase extends LiveDatabase {
         if (!Proxy.getInstance().isOn2b2t()
             || event.wasInQueue()
             || event.onlineDuration().getSeconds() < 1) return;
+        var profile = CACHE.getProfileCache().getProfile();
+        if (profile == null || profile.getName() == null || profile.getId() == null) return;
+        writeConnection(Connectiontype.LEAVE, profile.getName(), profile.getId(), Instant.now().atOffset(ZoneOffset.UTC));
+    }
+
+    private void handleQueueStartEvent(QueueStartEvent event) {
+        if (!Proxy.getInstance().isOn2b2t()) return;
+        if (!event.wasOnline()) return;
         var profile = CACHE.getProfileCache().getProfile();
         if (profile == null || profile.getName() == null || profile.getId() == null) return;
         writeConnection(Connectiontype.LEAVE, profile.getName(), profile.getId(), Instant.now().atOffset(ZoneOffset.UTC));
