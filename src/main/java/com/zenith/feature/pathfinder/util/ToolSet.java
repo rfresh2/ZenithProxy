@@ -104,8 +104,7 @@ public class ToolSet {
 
     public boolean hasSilkTouch(final ItemStack itemStack) {
         if (itemStack == Container.EMPTY_STACK) return false;
-        DataComponents dataComponents = itemStack.getDataComponents();
-        if (dataComponents == null) return false;
+        DataComponents dataComponents = itemStack.getDataComponentsOrEmpty();
         ItemEnchantments itemEnchantments = dataComponents.get(DataComponentTypes.ENCHANTMENTS);
         if (itemEnchantments == null) return false;
         return itemEnchantments.getEnchantments().containsKey(EnchantmentRegistry.SILK_TOUCH.get().id());

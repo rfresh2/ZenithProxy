@@ -10,8 +10,7 @@ public class ItemUtil {
     public static int getDamageValue(ItemStack itemStack) {
         int defaultDamage = 0;
         if (itemStack == null) return defaultDamage;
-        var dataComponents = itemStack.getDataComponents();
-        if (dataComponents == null) return defaultDamage;
+        var dataComponents = itemStack.getDataComponentsOrEmpty();
         var damageComponent = dataComponents.get(DataComponentTypes.DAMAGE);
         if (damageComponent == null) return defaultDamage;
         return damageComponent;

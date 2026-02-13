@@ -1626,8 +1626,7 @@ public final class Bot extends ModuleUtils {
             var itemData = ItemRegistry.REGISTRY.get(chestItemStack.getId());
             if (itemData == null) return false;
             if (itemData != ItemRegistry.ELYTRA) return false;
-            var components = chestItemStack.getDataComponents();
-            if (components == null) return true;
+            var components = chestItemStack.getDataComponentsOrEmpty();
             var damageComponent = components.get(DataComponentTypes.DAMAGE);
             if (damageComponent == null) return true;
             var maxDamage = itemData.components().get(DataComponentTypes.MAX_DAMAGE);

@@ -223,8 +223,7 @@ public class PlayerInteractionManager {
 
     public int getEnchantmentLevel(ItemStack item, EnchantmentData enchantmentData) {
         if (item == Container.EMPTY_STACK) return 0;
-        DataComponents dataComponents = item.getDataComponents();
-        if (dataComponents == null) return 0;
+        DataComponents dataComponents = item.getDataComponentsOrEmpty();
         ItemEnchantments itemEnchantments = dataComponents.get(DataComponentTypes.ENCHANTMENTS);
         if (itemEnchantments == null) return 0;
         if (!itemEnchantments.getEnchantments().containsKey(enchantmentData.id())) return 0;

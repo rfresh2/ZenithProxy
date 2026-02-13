@@ -54,8 +54,7 @@ public class AutoMend extends AbstractInventoryModule {
 
     @Override
     public boolean itemPredicate(final ItemStack itemStack) {
-        var dataComponents = itemStack.getDataComponents();
-        if (dataComponents == null) return false;
+        var dataComponents = itemStack.getDataComponentsOrEmpty();
         var enchantmentComponents = dataComponents.get(DataComponentTypes.ENCHANTMENTS);
         if (enchantmentComponents == null) return false;
         if (!enchantmentComponents.getEnchantments().containsKey(EnchantmentRegistry.MENDING.get().id())) return false;
