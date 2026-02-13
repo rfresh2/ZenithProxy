@@ -48,8 +48,7 @@ public class ClickItem implements InventoryAction {
 
         switch (clickItemAction) {
             case LEFT_CLICK -> {
-                var mouseItemData = ItemRegistry.REGISTRY.get(mouseStack.getId());
-                if (mouseItemData != null && mouseItemData.itemTags().contains(ItemTags.BUNDLES)) {
+                if (!isStackEmpty(mouseStack) && ItemRegistry.REGISTRY.get(mouseStack.getId()).itemTags().contains(ItemTags.BUNDLES)) {
                     var mouseStackComponents = mouseStack.getDataComponentsOrEmpty();
                     var items = new ArrayList<>(mouseStackComponents.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, Collections.emptyList()));
                     var bundleContents = new BundleContents(items);
@@ -78,9 +77,8 @@ public class ClickItem implements InventoryAction {
                     predictedMouseStack = new ItemStack(clickStack.getId(), halfStackSize, clickStack.getDataComponents());
                     changedSlots.put(slotId, new ItemStack(clickStack.getId(), clickStack.getAmount() - halfStackSize, clickStack.getDataComponents()));
                 } else {
-                    var mouseItemData = ItemRegistry.REGISTRY.get(mouseStack.getId());
-                    if (mouseItemData != null && mouseItemData.itemTags().contains(ItemTags.BUNDLES)) {
-                        if (clickStack == Container.EMPTY_STACK) {
+                    if (!isStackEmpty(mouseStack) && ItemRegistry.REGISTRY.get(mouseStack.getId()).itemTags().contains(ItemTags.BUNDLES)) {
+                        if (isStackEmpty(clickStack)) {
                             var mouseStackComponents = mouseStack.getDataComponentsOrEmpty();
                             var items = new ArrayList<>(mouseStackComponents.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, Collections.emptyList()));
                             var bundleContents = new BundleContents(items);
@@ -94,10 +92,9 @@ public class ClickItem implements InventoryAction {
                             predictedMouseStack = clickStack;
                             changedSlots.put(slotId, mouseStack);
                         }
-                    } else if (clickStack == Container.EMPTY_STACK) {
+                    } else if (isStackEmpty(clickStack)) {
                         // place one item from mouse stack into click stack
-                        if (mouseStack.getAmount() == 1) {
-                            predictedMouseStack = Container.EMPTY_STACK;
+                        if (!isStackEmpty(mouseStack) && mouseStack.getAmount() == 1) {
                             changedSlots.put(slotId, new ItemStack(mouseStack.getId(), mouseStack.getAmount(), mouseStack.getDataComponents()));
                         } else {
                             var newMouseStackAmount = mouseStack.getAmount() - 1;
@@ -109,7 +106,7 @@ public class ClickItem implements InventoryAction {
                     } else {
                         // if both stacks are the same item, place one item from the mouse stack into clickStack
                         //   if clickStack is full, return null
-                        if (mouseStack.getId() == clickStack.getId()) {
+                        if (!isStackEmpty(mouseStack) && mouseStack.getId() == clickStack.getId()) {
                             if (clickStack.getAmount() == ItemRegistry.REGISTRY.get(clickStack.getId()).stackSize()) return null;
                             var newMouseStackAmount = mouseStack.getAmount() - 1;
                             predictedMouseStack = newMouseStackAmount == 0
