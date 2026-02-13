@@ -1,7 +1,9 @@
 package com.zenith.feature.inventory.actions;
 
 import com.zenith.cache.data.inventory.Container;
+import com.zenith.mc.item.BundleContents;
 import com.zenith.mc.item.ItemRegistry;
+import com.zenith.mc.item.ItemTags;
 import com.zenith.mc.item.hashing.ItemStackHasher;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -12,8 +14,14 @@ import org.geysermc.mcprotocollib.protocol.data.game.inventory.ClickItemAction;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerActionType;
 import org.geysermc.mcprotocollib.protocol.data.game.item.HashedStack;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
+import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentTypes;
+import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponents;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
 import org.jspecify.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 import static com.zenith.Globals.*;
 
@@ -43,9 +51,27 @@ public class ClickItem implements InventoryAction {
 
         switch (clickItemAction) {
             case LEFT_CLICK -> {
-                // swap the mouse stack with the item in slotId
-                predictedMouseStack = clickStack;
+                var mouseItemData = ItemRegistry.REGISTRY.get(mouseStack.getId());
+                if (mouseItemData != null && mouseItemData.itemTags().contains(ItemTags.BUNDLES)) {
+                    var mouseStackComponents = mouseStack.getDataComponentsOrEmpty();
+                    var items = new ArrayList<>(mouseStackComponents.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, Collections.emptyList()));
+                    var bundleContents = new BundleContents(items);
+                    var clickStackCopy = clickStack.clone();
+                    var result = bundleContents.tryInsert(clickStackCopy);
+                    if (result != 0) {
+                        var mouseStackCopy = mouseStack.clone();
+                        if (mouseStackCopy.getDataComponents() == null) {
+                            mouseStackCopy = new ItemStack(mouseStack.getId(), mouseStack.getAmount(), new DataComponents(new HashMap<>()));
+                        }
+                        mouseStackCopy.getDataComponents().put(DataComponentTypes.BUNDLE_CONTENTS, items);
+                        predictedMouseStack = mouseStackCopy;
+                        changedSlots.put(slotId, ItemStackHasher.hash(clickStackCopy.getAmount() == 0 ? Container.EMPTY_STACK : clickStackCopy));
+                    }
+                } else {
+                    // swap the mouse stack with the item in slotId
+                    predictedMouseStack = clickStack;
                 changedSlots.put(slotId, ItemStackHasher.hash(mouseStack));
+                }
             }
             case RIGHT_CLICK -> {
                 // if mouse stack is empty, pick up half the clickStack
@@ -55,7 +81,23 @@ public class ClickItem implements InventoryAction {
                     predictedMouseStack = new ItemStack(clickStack.getId(), halfStackSize, clickStack.getDataComponents());
                     changedSlots.put(slotId, ItemStackHasher.hash(new ItemStack(clickStack.getId(), clickStack.getAmount() - halfStackSize, clickStack.getDataComponents())));
                 } else {
-                    if (clickStack == Container.EMPTY_STACK) {
+                    var mouseItemData = ItemRegistry.REGISTRY.get(mouseStack.getId());
+                    if (mouseItemData != null && mouseItemData.itemTags().contains(ItemTags.BUNDLES)) {
+                        if (clickStack == Container.EMPTY_STACK) {
+                            var mouseStackComponents = mouseStack.getDataComponentsOrEmpty();
+                            var items = new ArrayList<>(mouseStackComponents.getOrDefault(DataComponentTypes.BUNDLE_CONTENTS, Collections.emptyList()));
+                            var bundleContents = new BundleContents(items);
+                            var itemToPlace = bundleContents.removeOne();
+                            var newMouseComponents = mouseStackComponents.clone();
+                            newMouseComponents.put(DataComponentTypes.BUNDLE_CONTENTS, items);
+                            predictedMouseStack = new ItemStack(mouseStack.getId(), mouseStack.getAmount(), newMouseComponents);
+                            changedSlots.put(slotId, ItemStackHasher.hash(itemToPlace));
+                        } else {
+                            // swap the mouse stack with the item in slotId
+                            predictedMouseStack = clickStack;
+                            changedSlots.put(slotId, ItemStackHasher.hash(mouseStack));
+                        }
+                    } else if (clickStack == Container.EMPTY_STACK) {
                         // place one item from mouse stack into click stack
                         if (mouseStack.getAmount() == 1) {
                             predictedMouseStack = Container.EMPTY_STACK;
