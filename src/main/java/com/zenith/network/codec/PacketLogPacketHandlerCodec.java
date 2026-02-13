@@ -4,10 +4,6 @@ import com.zenith.util.config.Config.Debug.PacketLog.PacketLogConfig;
 import org.geysermc.mcprotocollib.network.Session;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.player.ClientboundSetHeldSlotPacket;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.inventory.*;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.*;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
@@ -78,19 +74,7 @@ public class PacketLogPacketHandlerCodec extends PacketHandlerCodec {
     }
 
     private boolean shouldLog(Packet packet) {
-        return packet instanceof ServerboundSelectBundleItemPacket
-            || packet instanceof ServerboundContainerClickPacket
-            || packet instanceof ServerboundContainerClosePacket
-            || packet instanceof ServerboundContainerButtonClickPacket
-            || packet instanceof ServerboundContainerSlotStateChangedPacket
-            || packet instanceof ServerboundSetCarriedItemPacket
-            || packet instanceof ClientboundContainerClosePacket
-            || packet instanceof ClientboundContainerSetContentPacket
-            || packet instanceof ClientboundContainerSetDataPacket
-            || packet instanceof ClientboundContainerSetSlotPacket
-            || packet instanceof ClientboundSetCursorItemPacket
-            || packet instanceof ClientboundSetHeldSlotPacket;
-//        return CONFIG.debug.packetLog.packetFilter.isEmpty()
-//            || packet.getClass().getSimpleName().toLowerCase().contains(CONFIG.debug.packetLog.packetFilter.toLowerCase());
+        return CONFIG.debug.packetLog.packetFilter.isEmpty()
+            || packet.getClass().getSimpleName().toLowerCase().contains(CONFIG.debug.packetLog.packetFilter.toLowerCase());
     }
 }
