@@ -50,6 +50,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -476,9 +477,36 @@ public final class Bot extends ModuleUtils {
         if (currentPose != pose) {
             SpectatorSync.sendPlayerPose();
         }
+        tickEntities();
         this.wasJumpPressed = movementInput.jumping;
         this.wasSneakPressed = movementInput.sneaking;
         this.movementInput.reset();
+    }
+
+    void postTick(ClientBotTick event) {
+        this.inputRequestFuture.notifyListeners();
+        this.inputRequestFuture = InputRequestFuture.rejected;
+        sendClientPacket(ServerboundClientTickEndPacket.INSTANCE);
+    }
+
+    private void tickEntities() {
+        for (var entity : CACHE.getEntityCache().getEntities().values()) {
+            if (entity == CACHE.getPlayerCache().getThePlayer()) continue;
+            switch (entity.getEntityType()) {
+                case FIREWORK_ROCKET -> {
+                    var attachedEntityId = entity.getMetadataValue(9, MetadataTypes.OPTIONAL_VARINT, OptionalInt.class);
+                    if (attachedEntityId == null) continue;
+                    if (attachedEntityId.getAsInt() != CACHE.getPlayerCache().getEntityId()) continue;
+                    if (!isFallFlying) continue;
+                    var lookVector = MathHelper.calculateViewVector(yaw, pitch);
+                    velocity.add(
+                        lookVector.getX() * 0.1 + (lookVector.getX() * 1.5 - this.velocity.getX()) * 0.5,
+                        lookVector.getY() * 0.1 + (lookVector.getY() * 1.5 - velocity.getY()) * 0.5,
+                        lookVector.getZ() * 0.1 + (lookVector.getZ() * 1.5 - this.velocity.getZ()) * 0.5
+                    );
+                }
+            }
+        }
     }
 
     private void updateFallFlying() {
@@ -519,12 +547,6 @@ public final class Bot extends ModuleUtils {
             }
         }
         return isContainerOpen;
-    }
-
-    private void postTick(ClientBotTick event) {
-        this.inputRequestFuture.notifyListeners();
-        this.inputRequestFuture = InputRequestFuture.rejected;
-        sendClientPacket(ServerboundClientTickEndPacket.INSTANCE);
     }
 
     public CollisionBox getCollisionBox(Pose pose) {
@@ -1634,7 +1656,6 @@ public final class Bot extends ModuleUtils {
             return damageComponent < maxDamage;
         }
         return false;
-
     }
 
     public double getBlockReachDistance() {
