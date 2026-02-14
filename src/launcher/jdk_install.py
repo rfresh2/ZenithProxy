@@ -20,7 +20,7 @@ class JavaInstallType(Enum):
     NO_INSTALL = 3
 
 
-def get_java_executable(min_version=21, install_type=JavaInstallType.AUTO_INSTALL) -> Optional[str]:
+def get_java_executable(min_version, install_type=JavaInstallType.AUTO_INSTALL) -> Optional[str]:
     java_path = _locate_java(min_version)
     if not java_path:
         if install_type == JavaInstallType.USER_PROMPT:

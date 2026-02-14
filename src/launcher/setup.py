@@ -401,7 +401,7 @@ def setup_unattended(config):
                 if not validate_linux_system(config):
                     critical_error("Cannot use linux on current system")
             elif platform == "java":
-                java_exec = get_java_executable(install_type=JavaInstallType.AUTO_INSTALL)
+                java_exec = get_java_executable(min_java_version(config), install_type=JavaInstallType.AUTO_INSTALL)
                 if java_exec is None:
                     critical_error("Java not found and auto install failed")
             else:

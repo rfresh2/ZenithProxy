@@ -4,6 +4,7 @@ import subprocess
 import time
 from collections import deque
 
+import launch_platform
 from jdk_install import get_java_executable, get_java_version_from_subprocess
 from log import info, warn, critical_error, critical_exception
 
@@ -63,7 +64,7 @@ def launch_linux(config):
 
 
 def launch_java(config):
-    java_executable = get_java_executable()
+    java_executable = get_java_executable(launch_platform.min_java_version(config))
     info(f"Using Java installation: {java_executable}")
     java_version = int(get_java_version_from_subprocess(java_executable))
     if platform.system() == "Windows":
