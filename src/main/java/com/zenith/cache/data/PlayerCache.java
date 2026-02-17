@@ -79,7 +79,6 @@ public class PlayerCache implements CachedData {
     protected boolean isSprinting = false;
     protected EntityEvent opLevel = EntityEvent.PLAYER_OP_PERMISSION_LEVEL_0;
     protected AtomicInteger actionId = new AtomicInteger(0);
-    protected AtomicInteger seqId = new AtomicInteger(0);
     private static final MutableVec3i DEFAULT_SPAWN_POSITION = new MutableVec3i(0, 0, 0);
     protected MutableVec3i spawnPosition = DEFAULT_SPAWN_POSITION;
     protected Queue<ClientboundPlayerPositionPacket> teleportQueue = new LinkedBlockingQueue<>();
@@ -133,7 +132,6 @@ public class PlayerCache implements CachedData {
             this.keepAliveQueue.clear();
             this.pingQueue.clear();
             this.actionId.set(0);
-            this.seqId.set(0);
         }
         if (type == CacheResetType.LOGIN) {
             this.teleportQueue.clear();

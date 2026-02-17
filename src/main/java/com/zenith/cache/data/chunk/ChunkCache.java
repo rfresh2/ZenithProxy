@@ -68,6 +68,7 @@ public class ChunkCache implements CachedData {
     protected boolean debug;
     protected boolean flat;
     protected int seaLevel;
+    protected BlockStatePredictionHandler blockStatePredictionHandler = new BlockStatePredictionHandler();
 
     // todo: also cache world border size changes
     //  doesn't particularly matter on 2b2t tho
@@ -121,6 +122,34 @@ public class ChunkCache implements CachedData {
         return cache.containsKey(chunkPosToLong(x, z));
     }
 
+    public boolean updateBlock(final int x, final int y, final int z, final int blockStateId) {
+        final var chunk = get(x >> 4, z >> 4);
+        if (chunk != null) {
+            var chunkSection = chunk.getChunkSection(y);
+            if (chunkSection == null) {
+                var palettedWorldState = Proxy.getInstance().getClient().getPalettedWorldState();
+                chunkSection = new ChunkSection(0,
+                    DataPalette.createForChunk(palettedWorldState),
+                    DataPalette.createForBiome(palettedWorldState)
+                );
+            }
+            // relative positions in the chunk
+            int relativeX = x & 15;
+            int relativeY = y & 15;
+            int relativeZ = z & 15;
+            int currentBlockId = chunkSection.getBlock(relativeX, relativeY, relativeZ);
+            chunkSection.setBlock(relativeX, relativeY, relativeZ, blockStateId);
+            handleBlockUpdateBlockEntity(blockStateId, relativeX, y, relativeZ, chunk);
+            if (blockStatePredictionHandler.isPredicting()) {
+                blockStatePredictionHandler.retainKnownServerState(x, y, z, currentBlockId, CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY(), CACHE.getPlayerCache().getZ());
+            }
+        } else {
+            CLIENT_LOG.debug("Block update packet in unknown chunk: {} {}", x >> 4, z >> 4);
+            return false;
+        }
+        return true;
+    }
+
     public boolean updateBlock(final @NonNull BlockChangeEntry record) {
         try {
             if (record.getY() < currentDimension.minY() || record.getY() >= currentDimension.minY() + currentDimension.height()) {
@@ -128,40 +157,22 @@ public class ChunkCache implements CachedData {
                 // instead of causing a retry of the block update, just return true and ignore it
                 return true;
             }
-
-            final var chunk = get(record.getX() >> 4, record.getZ() >> 4);
-            if (chunk != null) {
-                var chunkSection = chunk.getChunkSection(record.getY());
-                if (chunkSection == null) {
-                    var palettedWorldState = Proxy.getInstance().getClient().getPalettedWorldState();
-                    chunkSection = new ChunkSection(0,
-                        DataPalette.createForChunk(palettedWorldState),
-                        DataPalette.createForBiome(palettedWorldState)
-                    );
-                }
-                // relative positions in the chunk
-                int relativeX = record.getX() & 15;
-                int relativeY = record.getY() & 15;
-                int relativeZ = record.getZ() & 15;
-                chunkSection.setBlock(relativeX, relativeY, relativeZ, record.getBlock());
-                handleBlockUpdateBlockEntity(record, relativeX, record.getY(), relativeZ, chunk);
-            } else {
-                CLIENT_LOG.debug("Received block update packet for unknown chunk: {} {}", record.getX() >> 4, record.getZ() >> 4);
-                return false;
+            if (blockStatePredictionHandler.updateKnownServerState(record.getX(), record.getY(), record.getZ(), record.getBlock())) {
+                return true;
             }
+            return updateBlock(record.getX(), record.getY(), record.getZ(), record.getBlock());
         } catch (final Exception e) {
             CLIENT_LOG.debug("Error updating block", e);
             return false;
         }
-        return true;
     }
 
     // update any block entities implicitly affected by this block update
     // server doesn't send us tile entity update packets and relies on logic in client
-    private void handleBlockUpdateBlockEntity(BlockChangeEntry record, int relativeX, int y, int relativeZ, Chunk chunk) {
-        var block = BLOCK_DATA.getBlockDataFromBlockStateId(record.getBlock());
+    private void handleBlockUpdateBlockEntity(int blockStateId, int relativeX, int y, int relativeZ, Chunk chunk) {
+        var block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
         if (block == null) {
-            CLIENT_LOG.debug("Received block update packet for unknown block id: {}", record.getBlock());
+            CLIENT_LOG.debug("Received block update packet for unknown block id: {}", blockStateId);
             return;
         }
         if (block.isAir()) {
@@ -372,6 +383,7 @@ public class ChunkCache implements CachedData {
         this.isRaining = false;
         this.thunderStrength = 0.0f;
         this.rainStrength = 0.0f;
+        this.blockStatePredictionHandler = new BlockStatePredictionHandler();
         if (type == CacheResetType.FULL) {
             this.dimensionType = 0;
             worldNames = asList(Key.key("minecraft:overworld"), Key.key("minecraft:the_nether"), Key.key("minecraft:the_end"));

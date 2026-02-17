@@ -184,6 +184,7 @@ public final class PacketCodecRegistries {
                 .inbound(ClientboundRecipeBookSettingsPacket.class, new RecipeBookSettingsHandler())
                 .inbound(ClientboundUpdateRecipesPacket.class, new UpdateRecipesHandler())
                 .inbound(ClientboundUpdateTagsPacket.class, UpdateTagsHandler.INSTANCE)
+                .inbound(ClientboundBlockChangedAckPacket.class, new BlockChangedAckHandler())
                 .inbound(ClientboundInitializeBorderPacket.class, new WorldBorderInitializeHandler())
                 .inbound(ClientboundBlockEntityDataPacket.class, new BlockEntityDataHandler())
                 .inbound(ClientboundSetTimePacket.class, new SetTimeHandler())

@@ -1658,6 +1658,15 @@ public final class Bot extends ModuleUtils {
         return false;
     }
 
+    public void absMoveTo(double x, double y, double z) {
+        double d = MathHelper.clamp(x, -3.0E7, 3.0E7);
+        double e = MathHelper.clamp(z, -3.0E7, 3.0E7);
+        this.x = d;
+        this.y = y;
+        this.z = e;
+        syncPlayerCollisionBox();
+    }
+
     public double getBlockReachDistance() {
         return MathHelper.clamp(getAttributeValue(AttributeType.Builtin.BLOCK_INTERACTION_RANGE, 4.5f) + CONFIG.client.extra.click.additionalBlockReach, 0, Float.MAX_VALUE);
     }
