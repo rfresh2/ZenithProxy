@@ -195,7 +195,9 @@ public class ServerSession extends TcpServerSession {
 
     @Override
     public boolean callPacketError(Throwable throwable) {
-        SERVER_LOG.debug("Packet Error", throwable);
+        if (this.isPlayer) {
+            SERVER_LOG.debug("{} : Packet Error", getUsername(), throwable);
+        }
         return isLoggedIn;
     }
 
@@ -210,49 +212,50 @@ public class ServerSession extends TcpServerSession {
     }
 
     @Override
-    public void callDisconnected(Component reason, Throwable cause) {
+    public void callDisconnected(Component reason, @Nullable Throwable cause) {
         Proxy.getInstance().getCurrentPlayer().compareAndSet(this, null);
         Proxy.getInstance().getActiveConnections().remove(this);
         EVENT_BUS.post(new PlayerConnectionRemovedEvent(this));
-        if (!this.isPlayer && cause != null && !(cause instanceof DecoderException || cause instanceof IOException || cause instanceof ChannelException)) {
-            // any scanners or TCP connections established result in a lot of these coming in even when they are not actually speaking mc protocol
-            SERVER_LOG.debug("Connection disconnected: {}", getRemoteAddress(), cause);
+        var reasonStr = ComponentSerializer.serializePlain(reason);
+        if (!this.isPlayer) {
+            if (getPacketProtocol().getOutboundState() == ProtocolState.STATUS || cause instanceof DecoderException || cause instanceof IOException || cause instanceof ChannelException) {
+                // any scanners or TCP connections established result in a lot of these coming in even when they are not speaking mc protocol
+                return;
+            }
+            SERVER_LOG.info("Connection disconnected: {} : {}", getRemoteAddress(), reasonStr, cause);
             return;
         }
-        if (this.isPlayer) {
-            final String reasonStr = ComponentSerializer.serializePlain(reason);
-            if (!isSpectator()) {
-                SERVER_LOG.info("Player disconnected: UUID: {}, Username: {}, Address: {}, Reason {}",
-                                getUUID(),
-                                getName(),
-                                getRemoteAddress(),
-                                reasonStr,
-                                cause);
-                try {
-                    EVENT_BUS.post(new PlayerDisconnectedEvent(reasonStr, this, profileCache.getProfile()));
-                } catch (final Throwable e) {
-                    SERVER_LOG.info("Could not get game profile of disconnecting player");
-                    EVENT_BUS.post(new PlayerDisconnectedEvent(reasonStr, this));
-                }
-                Proxy.getInstance().getSpectatorConnections().forEach(s -> {
-                    s.sendAsyncAlert("<red>" + getName() + " disconnected from controlling player");
-                });
-                Proxy.getInstance().getClient().sendAsync(CACHE.getClientInfoCache().getClientInfoPacket());
-            } else {
-                SERVER_LOG.info("Spectator disconnected: UUID: {}, Username: {}, Address: {}, Reason {}",
-                                getUUID(),
-                                getName(),
-                                getRemoteAddress(),
-                                reasonStr,
-                                cause);
-                var connections = Proxy.getInstance().getActiveConnections().getArray();
-                for (int i = 0; i < connections.length; i++) {
-                    var connection = connections[i];
-                    connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.spectatorEntityId}));
-                    connection.sendAsyncAlert("<red>" + getName() + " disconnected from spectator");
-                }
-                EVENT_BUS.postAsync(new SpectatorDisconnectedEvent(this, profileCache.getProfile()));
+        if (!isSpectator()) {
+            SERVER_LOG.info("Player disconnected: UUID: {}, Username: {}, Address: {}, Reason {}",
+                getUUID(),
+                getName(),
+                getRemoteAddress(),
+                reasonStr,
+                cause);
+            try {
+                EVENT_BUS.post(new PlayerDisconnectedEvent(reasonStr, this, profileCache.getProfile()));
+            } catch (final Throwable e) {
+                SERVER_LOG.info("Could not get game profile of disconnecting player");
+                EVENT_BUS.post(new PlayerDisconnectedEvent(reasonStr, this));
             }
+            Proxy.getInstance().getSpectatorConnections().forEach(s -> {
+                s.sendAsyncAlert("<red>" + getName() + " disconnected from controlling player");
+            });
+            Proxy.getInstance().getClient().sendAsync(CACHE.getClientInfoCache().getClientInfoPacket());
+        } else {
+            SERVER_LOG.info("Spectator disconnected: UUID: {}, Username: {}, Address: {}, Reason {}",
+                getUUID(),
+                getName(),
+                getRemoteAddress(),
+                reasonStr,
+                cause);
+            var connections = Proxy.getInstance().getActiveConnections().getArray();
+            for (int i = 0; i < connections.length; i++) {
+                var connection = connections[i];
+                connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.spectatorEntityId}));
+                connection.sendAsyncAlert("<red>" + getName() + " disconnected from spectator");
+            }
+            EVENT_BUS.postAsync(new SpectatorDisconnectedEvent(this, profileCache.getProfile()));
         }
         ServerSession serverConnection = Proxy.getInstance().getCurrentPlayer().get();
         if (serverConnection != null) {

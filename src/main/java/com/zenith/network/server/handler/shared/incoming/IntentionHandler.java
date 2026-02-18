@@ -58,14 +58,12 @@ public class IntentionHandler implements PacketHandler<ClientIntentionPacket, Se
             portMatch = portMatch || 25565 == packet.getPort();
         }
         if (!hostnameMatch || !portMatch) {
-            SERVER_LOG.info(
-                "Disconnecting {} [{}] with intent: {} due to mismatched connecting server address. Expected: {} Actual: {}",
+            session.disconnect(String.format("Disconnecting %s [%s] with intent: %s due to mismatched connecting server address. Expected: %s Actual: %s",
                 session.getRemoteAddress(),
                 session.getMCVersion(),
                 packet.getIntent(),
                 CONFIG.server.getProxyAddressForTransfer() + ":" + CONFIG.server.getProxyPortForTransfer(),
-                hostname + ":" + packet.getPort());
-            session.disconnect("bye");
+                hostname + ":" + packet.getPort()));
             return true;
         }
         return false;
