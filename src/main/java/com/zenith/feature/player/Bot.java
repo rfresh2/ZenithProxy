@@ -272,15 +272,27 @@ public final class Bot extends ModuleUtils {
         }
     }
 
+    void onInteractionTickSkipped() {
+        interactions.stopDestroyBlock();
+        wasLeftClicking = false;
+    }
+
     private void tick(final ClientBotTick event) {
         if (this.jumpTriggerTime > 0) --this.jumpTriggerTime;
-        if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) return;
+        if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) {
+            onInteractionTickSkipped();
+            return;
+        }
 
-        if (resyncTeleport()) return;
+        if (resyncTeleport()) {
+            onInteractionTickSkipped();
+            return;
+        }
 
         if (CACHE.getPlayerCache().getThePlayer().isSleeping()) {
             debug("Player sleeping, sending leave bed packet");
             sendClientPacketAwait(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.LEAVE_BED));
+            onInteractionTickSkipped();
             return;
         }
 
