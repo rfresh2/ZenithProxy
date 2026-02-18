@@ -206,7 +206,6 @@ public final class Bot extends ModuleUtils {
                     int blockY = raycast.block().y();
                     int blockZ = raycast.block().z();
                     if (!wasLeftClicking && !interactions.isDestroying()) {
-                        debug("Starting destroy block at: [{}, {}, {}]", blockX, blockY, blockZ);
                         interactions.startDestroyBlock(
                             MathHelper.floorI(blockX),
                             MathHelper.floorI(blockY),

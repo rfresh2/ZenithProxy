@@ -9,6 +9,7 @@ import com.zenith.mc.block.BlockRegistry;
 import com.zenith.mc.block.BlockTags;
 import com.zenith.mc.block.Direction;
 import com.zenith.mc.enchantment.EnchantmentData;
+import com.zenith.mc.enchantment.EnchantmentRegistry;
 import com.zenith.mc.item.ItemData;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.mc.item.ToolTag;
@@ -47,7 +48,7 @@ public class PlayerInteractionManager {
     private double destroyProgress;
     private double destroyTicks;
     private int destroyDelay;
-    private final int destroyDelayInterval = 6;
+    private final int destroyDelayInterval = 5;
     private boolean isDestroying;
 
     private boolean sameDestroyTarget(final int x, final int y, final int z) {
@@ -106,6 +107,11 @@ public class PlayerInteractionManager {
                     destroyBlock(x, y, z);
                     BOT.debug("[{}] [{}, {}, {}] StartDestroyBlock START: Instant break", System.currentTimeMillis(), x, y, z);
                 } else {
+                    if (this.destroyDelay > 0) {
+                        // non-vanilla logic here, but grimac will flag otherwise
+                        --this.destroyDelay;
+                        return null;
+                    }
                     this.isDestroying = true;
                     this.destroyBlockPosX = x;
                     this.destroyBlockPosY = y;
