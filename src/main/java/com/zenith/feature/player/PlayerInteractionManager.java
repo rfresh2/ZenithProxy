@@ -212,7 +212,7 @@ public class PlayerInteractionManager {
     public double blockBreakSpeed(Block block, ItemStack item) {
         double destroySpeed = block.destroySpeed();
         double toolFactor = hasCorrectToolForDrops(block, item) ? 30.0 : 100.0;
-        double playerDestroySpeed = getPlayerDestroySpeed(block);
+        double playerDestroySpeed = getPlayerDestroySpeed(block, item);
         return playerDestroySpeed / destroySpeed / toolFactor;
     }
 
@@ -255,20 +255,29 @@ public class PlayerInteractionManager {
     }
 
     public double getPlayerDestroySpeed(Block block) {
+        return getPlayerDestroySpeed(block, CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND));
+    }
+
+    public double getPlayerDestroySpeed(Block block, ItemStack item) {
         double speed = 1.0;
-        var mainHandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND);
-        if (mainHandStack != Container.EMPTY_STACK) {
-            if (matchingTool(mainHandStack, block)) {
-                ItemData itemData = ItemRegistry.REGISTRY.get(mainHandStack.getId());
+        if (item != Container.EMPTY_STACK) {
+            if (matchingTool(item, block)) {
+                ItemData itemData = ItemRegistry.REGISTRY.get(item.getId());
                 ToolTag toolTag = itemData.toolTag();
                 speed = toolTag.tier().getSpeed();
             }
         }
 
         if (speed > 1.0) {
-            float miningEfficiencyAttribute = BOT
-                .getAttributeValue(AttributeType.Builtin.MINING_EFFICIENCY, 0);
-            speed += miningEfficiencyAttribute;
+            var effLevel = getEnchantmentLevel(item, EnchantmentRegistry.EFFICIENCY.get());
+            if (effLevel > 0) {
+                speed += (effLevel * effLevel) + 1.0;
+            }
+            // todo: check if server sends us updated attribute when we equip item with eff
+            //  would need to offset by that amount when we are calcing speed with other items
+//            float miningEfficiencyAttribute = BOT
+//                .getAttributeValue(AttributeType.Builtin.MINING_EFFICIENCY, 0);
+//            speed += miningEfficiencyAttribute;
         }
 
         boolean hasDigSpeedEffect = false;
