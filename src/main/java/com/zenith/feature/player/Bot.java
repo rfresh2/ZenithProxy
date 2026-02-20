@@ -1618,6 +1618,8 @@ public final class Bot extends ModuleUtils {
                 pose2 = Pose.SWIMMING;
             }
             this.pose = pose2;
+            var metadata = MetadataTypes.POSE.getMetadataFactory().create(6, MetadataTypes.POSE, pose2);
+            CACHE.getPlayerCache().getThePlayer().getMetadata().put(6, metadata);
         }
     }
 

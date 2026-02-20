@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.zenith.Globals.BOT;
 import static com.zenith.Globals.CACHE;
 import static java.util.Arrays.asList;
 
@@ -92,7 +91,7 @@ public class SpectatorPacketProvider {
         return asList(
             new ClientboundSetEntityDataPacket(
                 CACHE.getPlayerCache().getEntityId(),
-                newArrayList(new ObjectEntityMetadata<>(6, MetadataTypes.POSE, BOT.getPose())))
+                newArrayList(new ObjectEntityMetadata<>(6, MetadataTypes.POSE, CACHE.getPlayerCache().getThePlayer().getPose())))
         );
     }
 
