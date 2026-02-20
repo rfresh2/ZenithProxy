@@ -84,6 +84,7 @@ public class AutoEatCommand extends Command {
             .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold)
             .addField("Warning", toggleStr(CONFIG.client.extra.autoEat.warning))
             .addField("Allow Unsafe Food", toggleStr(CONFIG.client.extra.autoEat.allowUnsafeFood))
+            .addField("Ignore EGap", toggleStr(CONFIG.client.extra.autoEat.ignoreEgap))
             .primaryColor();
     }
 }
