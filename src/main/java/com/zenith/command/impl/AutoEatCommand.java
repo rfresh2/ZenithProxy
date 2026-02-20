@@ -66,6 +66,13 @@ public class AutoEatCommand extends Command {
                 CONFIG.client.extra.autoEat.allowUnsafeFood = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("AutoEat Allow Unsafe Food " + toggleStrCaps(CONFIG.client.extra.autoEat.allowUnsafeFood));
+                return OK;
+            })))
+            .then(literal("ignoreEgap").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.autoEat.ignoreEgap = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("AutoEat Ignore EGap " + toggleStrCaps(CONFIG.client.extra.autoEat.ignoreEgap));
+                return OK;
             })));
     }
 
