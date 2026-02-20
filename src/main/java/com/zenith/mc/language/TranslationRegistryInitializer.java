@@ -10,7 +10,7 @@ import tools.jackson.databind.node.ObjectNode;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-import static com.zenith.Globals.OBJECT_MAPPER;
+import static com.zenith.mc.MCGlobals.OBJECT_MAPPER;
 
 @UtilityClass
 public class TranslationRegistryInitializer {

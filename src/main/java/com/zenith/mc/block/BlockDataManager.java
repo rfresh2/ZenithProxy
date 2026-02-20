@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.zenith.Globals.OBJECT_MAPPER;
+import static com.zenith.mc.MCGlobals.OBJECT_MAPPER;
 
 public class BlockDataManager {
     static final int blockStateIdCount = BlockRegistry.REGISTRY.getIdMap().int2ObjectEntrySet().stream()

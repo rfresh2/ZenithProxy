@@ -6,7 +6,7 @@ import com.zenith.util.struct.Maps;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 
-import static com.zenith.Globals.OBJECT_MAPPER;
+import static com.zenith.mc.MCGlobals.OBJECT_MAPPER;
 
 public class MapBlockColorManager {
     // todo: provide alternative color map? https://github.com/Godlander/vpp/blob/main/assets/minecraft/shaders/core/render/text.fsh
