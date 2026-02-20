@@ -68,10 +68,10 @@ public class AutoEatCommand extends Command {
                     .title("AutoEat Allow Unsafe Food " + toggleStrCaps(CONFIG.client.extra.autoEat.allowUnsafeFood));
                 return OK;
             })))
-            .then(literal("ignoreEgap").then(argument("toggle", toggle()).executes(c -> {
-                CONFIG.client.extra.autoEat.ignoreEgap = getToggle(c, "toggle");
+            .then(literal("ignoreEgapple").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.autoEat.ignoreEgapple = getToggle(c, "toggle");
                 c.getSource().getEmbed()
-                    .title("AutoEat Ignore EGap " + toggleStrCaps(CONFIG.client.extra.autoEat.ignoreEgap));
+                    .title("AutoEat Ignore EGapple " + toggleStrCaps(CONFIG.client.extra.autoEat.ignoreEgapple));
                 return OK;
             })));
     }
@@ -84,7 +84,7 @@ public class AutoEatCommand extends Command {
             .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold)
             .addField("Warning", toggleStr(CONFIG.client.extra.autoEat.warning))
             .addField("Allow Unsafe Food", toggleStr(CONFIG.client.extra.autoEat.allowUnsafeFood))
-            .addField("Ignore EGap", toggleStr(CONFIG.client.extra.autoEat.ignoreEgap))
+            .addField("Ignore EGapple", toggleStr(CONFIG.client.extra.autoEat.ignoreEgapple))
             .primaryColor();
     }
 }
