@@ -433,7 +433,13 @@ public final class Config {
                 public boolean warning = true;
                 public boolean warningMention = false;
                 public boolean allowUnsafeFood = false;
-                public List<String> blacklist = new ArrayList<>();
+                public Mode mode = Mode.ALL;
+                public enum Mode {
+                    ALL,
+                    BLACKLIST,
+                    WHITELIST
+                }
+                public HashSet<String> foods = new HashSet<>();
             }
 
             public static final class AutoOmen {
