@@ -29,7 +29,11 @@ public class AutoEatCommand extends Command {
                 "health <int>",
                 "hunger <int>",
                 "warning on/off",
-                "allowUnsafeFood on/off"
+                "allowUnsafeFood on/off",
+                "blacklist add <food_name>",
+                "blacklist remove <food_name>",
+                "blacklist list",
+                "blacklist clear"
             )
             .build();
     }
