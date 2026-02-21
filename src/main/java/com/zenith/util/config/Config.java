@@ -433,6 +433,7 @@ public final class Config {
                 public boolean warning = true;
                 public boolean warningMention = false;
                 public boolean allowUnsafeFood = false;
+                public List<String> blacklist = new ArrayList<>();
             }
 
             public static final class AutoOmen {
