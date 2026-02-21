@@ -38,19 +38,27 @@ public final class MovementHelper {
             b == BlockRegistry.ICE // ice becomes water, and water can mess up the path
                 || b.name().startsWith("infested_") // b instanceof InfestedBlock // obvious reasons
                 // call context.get directly with x,y,z. no need to make 5 new BlockPos for no reason
-                || avoidAdjacentBreaking(x, y + 1, z, true)
-                || avoidAdjacentBreaking(x + 1, y, z, false)
-                || avoidAdjacentBreaking(x - 1, y, z, false)
-                || avoidAdjacentBreaking(x, y, z + 1, false)
-                || avoidAdjacentBreaking(x, y, z - 1, false);
+                || avoidAdjacentBreaking(x, y + 1, z, true, false)
+                || avoidAdjacentBreaking(x, y - 1, z, false, true)
+                || avoidAdjacentBreaking(x + 1, y, z, false, false)
+                || avoidAdjacentBreaking(x - 1, y, z, false, false)
+                || avoidAdjacentBreaking(x, y, z + 1, false, false)
+                || avoidAdjacentBreaking(x, y, z - 1, false, false);
     }
 
-    public static boolean avoidAdjacentBreaking(int x, int y, int z, boolean directlyAbove) {
+    public static boolean avoidAdjacentBreaking(int x, int y, int z, boolean directlyAbove, boolean directlyBelow) {
         // returns true if you should avoid breaking a block that's adjacent to this one (e.g. lava that will start flowing if you give it a path)
-        // this is only called for north, south, east, west, and up. this is NOT called for down.
+        // this is only called for north, south, east, west, up, and down
         // we assume that it's ALWAYS okay to break the block thats ABOVE liquid
         int state = BlockStateInterface.getId(x, y, z);
         Block block = BlockStateInterface.getBlock(state);
+
+        if (directlyBelow) {
+            return block.fallingBlock()
+                && CONFIG.client.extra.pathfinder.avoidUpdatingFallingBlocks
+                && freeForFallingBlock(x, y - 1, z);
+        }
+
         if (!directlyAbove // it is fine to mine a block that has a falling block directly above, this (the cost of breaking the stacked fallings) is included in cost calculations
             // therefore if directlyAbove is true, we will actually ignore if this is falling
             && block.fallingBlock() // obviously, this check is only valid for falling blocks
@@ -75,6 +83,9 @@ public final class MovementHelper {
 
     static boolean freeForFallingBlock(int x, int y, int z) {
         var block = BlockStateInterface.getBlock(x, y, z);
+        if (block.fallingBlock()) {
+            return freeForFallingBlock(x, y - 1, z);
+        }
         return block.isAir()
             || block == BlockRegistry.FIRE || block == BlockRegistry.SOUL_FIRE
             || isLiquid(block)
