@@ -76,6 +76,13 @@ jobs:
           path: ZenithProxy.zip
           if-no-files-found: error
 
+      - name: Upload GraalVM Build Report
+        uses: actions/upload-artifact@v6
+        with:
+          name: GraalVM Build Report
+          path: build/native/nativeCompile/*build-report.html
+          if-no-files-found: error
+
       - name: Publish Maven Artifact Snapshot
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}

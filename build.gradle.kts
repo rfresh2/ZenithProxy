@@ -236,13 +236,9 @@ graalvmNative {
             quickBuild = false
             verbose = true
             sharedLibrary = false
+            // additional config in: `src/main/resources/META-INF/native-image/com.zenith/zenithproxy/native-image.properties
             buildArgs.addAll(
-                "-Duser.country=US",
-                "-Duser.language=en",
-                "--enable-url-protocols=https,http",
-                "-H:+ReportExceptionStackTraces",
                 "-H:DeadlockWatchdogInterval=30",
-                "-H:IncludeLocales=en",
                 "-H:+CompactingOldGen",
                 "-H:+TrackPrimitiveValues",
                 "-H:+UsePredicates",
@@ -251,26 +247,9 @@ graalvmNative {
                 "-march=x86-64-v3",
                 "--gc=serial",
                 "-J-XX:MaxRAMPercentage=90",
-//				"--enable-sbom=false", todo: detect and disable on graalvm ce
 //                "--enable-monitoring=nmt,jfr",
-                "-J--enable-native-access=ALL-UNNAMED",
-                "-J--sun-misc-unsafe-memory-access=allow",
-//                "-H:+PrintClassInitialization",
-                "--initialize-at-build-time=com.zenith.feature.deathmessages",
-                "--initialize-at-build-time=org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerType",
-                "--initialize-at-build-time=org.cloudburstmc.math.immutable.vector.ImmutableVector3i",
-                "--initialize-at-build-time=com.google.common.collect.RegularImmutableList",
-                "--initialize-at-build-time=org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType",
-                "--initialize-at-build-time=org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType",
-                "--initialize-at-build-time=it.unimi.dsi.fastutil",
-                "--initialize-at-build-time=com.google.common.collect",
-                "--initialize-at-build-time=com.zenith.mc",
-                "--initialize-at-build-time=com.zenith.event",
-                "--initialize-at-run-time=com.zenith.mc.chat_type",
-                "--initialize-at-run-time=com.zenith.mc.MCGlobals",
-                "--initialize-at-run-time=com.zenith.mc.item",
-                "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl", // fix for windows builds, exception when doing srv lookups with netty
-                "--features=com.zenith.util.graalvm.ReflectionFeature"
+//                "-H:+PrintClassInitialization"
+                "--emit build-report"
             )
             val pgoPath = providers.environmentVariable("GRAALVM_PGO_PATH").orNull
 			val pgoInstrument = providers.environmentVariable("GRAALVM_PGO_INSTRUMENT").orNull
