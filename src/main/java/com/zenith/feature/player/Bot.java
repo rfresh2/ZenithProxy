@@ -134,17 +134,22 @@ public final class Bot extends ModuleUtils {
             of(ClientBotTick.class, POST_TICK_PRIORITY, this::postTick),
             of(ClientBotTick.Starting.class, this::handleClientTickStarting),
             of(ClientBotTick.Stopped.class, this::handleClientTickStopped),
-            of(ClientTickEvent.class, this::syncWhilePlayerControlling)
+            of(ClientTickEvent.class, this::tickWhilePlayerControlling)
         );
     }
 
-    private void syncWhilePlayerControlling(ClientTickEvent event) {
+    private void tickWhilePlayerControlling(ClientTickEvent event) {
         if (!Proxy.getInstance().hasActivePlayer()) return;
         syncFromCache(true);
         var currentPose = pose;
         updatePlayerPose();
         if (currentPose != pose) {
             SpectatorSync.sendPlayerPose();
+        }
+        for (var entity : CACHE.getEntityCache().getEntities().values()) {
+            if (!entity.isRemoved()) {
+                entity.setTickCount(entity.getTickCount() + 1);
+            }
         }
     }
 
@@ -502,6 +507,9 @@ public final class Bot extends ModuleUtils {
 
     private void tickEntities() {
         for (var entity : CACHE.getEntityCache().getEntities().values()) {
+            if (!entity.isRemoved()) {
+                entity.setTickCount(entity.getTickCount() + 1);
+            }
             if (entity == CACHE.getPlayerCache().getThePlayer()) continue;
             switch (entity.getEntityType()) {
                 case FIREWORK_ROCKET -> {
