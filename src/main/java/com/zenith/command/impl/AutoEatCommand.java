@@ -119,6 +119,9 @@ public class AutoEatCommand extends Command {
             .addField("Hunger Threshold", CONFIG.client.extra.autoEat.hungerThreshold)
             .addField("Warning", toggleStr(CONFIG.client.extra.autoEat.warning))
             .addField("Allow Unsafe Food", toggleStr(CONFIG.client.extra.autoEat.allowUnsafeFood))
+            .addField("Blacklist", CONFIG.client.extra.autoEat.blacklist.isEmpty()
+                ? "Empty"
+                : String.join(", ", CONFIG.client.extra.autoEat.blacklist))
             .primaryColor();
     }
 }
