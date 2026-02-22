@@ -828,7 +828,7 @@ public final class Bot extends ModuleUtils {
     }
 
     private MutableVec3d collide(MutableVec3d movement) {
-        List<LocalizedCollisionBox> blockCollisionBoxes = World.getIntersectingCollisionBoxes(
+        List<LocalizedCollisionBox> blockCollisionBoxes = getCollidingCbsWithMojank(
             playerCollisionBox.stretch(movement.getX(), movement.getY(), movement.getZ()));
         MutableVec3d adjustedMovement = collidePlayerBoundingBox(movement, playerCollisionBox, blockCollisionBoxes);
         boolean isYAdjusted = movement.getY() != adjustedMovement.getY();
@@ -842,7 +842,7 @@ public final class Bot extends ModuleUtils {
                 stepUpXZCb = stepUpXZCb.stretch(0, -1.0E-5, 0);
             }
 
-            blockCollisionBoxes.addAll(World.getIntersectingCollisionBoxes(stepUpXZCb));
+            blockCollisionBoxes.addAll(getCollidingCbsWithMojank(stepUpXZCb));
             double[] stepUpHeights = collectCandidateStepUpHeights(playerCB, blockCollisionBoxes, adjustedMovement.getY(), stepHeight);
 
             for (double stepUpHeight : stepUpHeights) {
@@ -1552,15 +1552,42 @@ public final class Bot extends ModuleUtils {
     }
 
     private boolean canPlayerFitWithinBlocksAndEntitiesWhen(CollisionBox poseCb) {
-        var sneakingCb = new LocalizedCollisionBox(poseCb, x, y, z).inflate(-1.0E-7, -1.0E-7, -1.0E-7);
-        var levelCbs = World.getIntersectingCollisionBoxes(sneakingCb);
+        var localizedPoseCb = new LocalizedCollisionBox(poseCb, x, y, z).inflate(-1.0E-7, -1.0E-7, -1.0E-7);
+        var levelCbs = getCollidingCbsWithMojank(localizedPoseCb);
         for (int i = 0; i < levelCbs.size(); i++) {
             final var cb = levelCbs.get(i);
-            if (sneakingCb.intersects(cb)) {
+            if (localizedPoseCb.intersects(cb)) {
                 return false;
             }
         }
         return true;
+    }
+
+    // todo: more general and less hacky solution
+    //  needs api in cb accessor with entity collider context
+    List<LocalizedCollisionBox> getCollidingCbsWithMojank(LocalizedCollisionBox playerCb) {
+        var levelCbs = World.getIntersectingCollisionBoxes(playerCb);
+        var collidingBlockStates = World.getCollidingBlockStatesInside(playerCb);
+        for (var bs : collidingBlockStates) {
+            if (bs.block() == BlockRegistry.SCAFFOLDING) {
+                var defaultScaffoldCbs = bs.getLocalizedCollisionBoxes();
+                if (getY() > bs.y() + 1 - 1.0E-5 && !movementInput.sneaking) {
+                    // keep solid cbs
+                } else {
+                    var distProp = bs.getProperty(BlockStateProperties.STABILITY_DISTANCE);
+                    var bottomProp = bs.getProperty(BlockStateProperties.BOTTOM);
+                    levelCbs.removeAll(defaultScaffoldCbs);
+                    if (distProp != null && bottomProp != null && distProp != 0 && bottomProp && getY() > bs.y() - 1.0E-5) {
+                        var unstableBottomCb = new LocalizedCollisionBox(new CollisionBox(0, 1, 0, 0.125, 0, 1), bs.x(), bs.y(), bs.z());
+                        levelCbs.add(unstableBottomCb);
+                        // replaced cbs
+                    } else {
+                        // no cbs, removed above
+                    }
+                }
+            }
+        }
+        return levelCbs;
     }
 
     private void rideTick() {
