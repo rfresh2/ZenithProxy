@@ -317,6 +317,8 @@ public final class Bot extends ModuleUtils {
             }
         }
 
+        updateInWaterStateAndDoFluidPushing();
+
         if (Math.abs(velocity.getX()) < 0.003) velocity.setX(0);
         if (Math.abs(velocity.getY()) < 0.003) velocity.setY(0);
         if (Math.abs(velocity.getZ()) < 0.003) velocity.setZ(0);
@@ -339,7 +341,6 @@ public final class Bot extends ModuleUtils {
             && !(horizontalCollision && !horizontalCollisionMinor);
         if (isSprinting != lastSprinting) applySprintingSpeedAttributeModifier();
 
-        updateInWaterStateAndDoFluidPushing();
         updateSwimming();
         boolean didUpdateFlyState = false;
         if (CACHE.getPlayerCache().isCanFly()) { // creative flight
@@ -1400,7 +1401,7 @@ public final class Bot extends ModuleUtils {
                     } else {
                         if (blockState.block() != BlockRegistry.LAVA) continue;
                     }
-                    float fluidHeight = World.getFluidHeight(fluidState);
+                    float fluidHeight = World.getFluidHeight(fluidState, x, y, z);
                     if (fluidHeight == 0 || (fluidHeightToWorld = y + fluidHeight) < playerCollisionBox.minY() + 0.001) continue;
                     touched = true;
                     topFluidHDelta = Math.max(fluidHeightToWorld - (playerCollisionBox.minY() + 0.001), topFluidHDelta);
@@ -1424,6 +1425,10 @@ public final class Bot extends ModuleUtils {
                 pushVec.normalize();
             }
             pushVec.multiply(motionScale);
+            if (Math.abs(velocity.getX()) < 0.003 && Math.abs(velocity.getZ()) < 0.003 && pushVec.length() < 0.0045000000000000005) {
+                pushVec.normalize();
+                pushVec.multiply(0.0045000000000000005);
+            }
             velocity.add(pushVec);
         }
         if (waterFluid) {
