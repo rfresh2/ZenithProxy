@@ -5,7 +5,7 @@ import com.zenith.mc.JsonRegistrySpec;
 public class BlockRegistrySpec implements JsonRegistrySpec<Block> {
     @Override
     public String filePath() {
-        return "/mcdata/blocks.json";
+        return "/mcdata/blocks.smile";
     }
 
     @Override

@@ -13,6 +13,7 @@ import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.FloatEntityMetadata;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.BlockBreakStage;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundSetCameraPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundRemoveEntitiesPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundRotateHeadPacket;
@@ -198,6 +199,10 @@ public final class SpectatorSync {
 
     public static void sendSwing() {
         sendSpectatorPackets(SpectatorPacketProvider::playerSwing);
+    }
+
+    public static void sendBlockBreakProgress(int blockX, int blockY, int blockZ, BlockBreakStage blockBreakStage) {
+        sendSpectatorPackets(() -> SpectatorPacketProvider.blockBreakProgress(blockX, blockY, blockZ, blockBreakStage));
     }
 
     public static void sendRespawn() {

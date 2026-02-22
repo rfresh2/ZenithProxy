@@ -134,17 +134,22 @@ public final class Bot extends ModuleUtils {
             of(ClientBotTick.class, POST_TICK_PRIORITY, this::postTick),
             of(ClientBotTick.Starting.class, this::handleClientTickStarting),
             of(ClientBotTick.Stopped.class, this::handleClientTickStopped),
-            of(ClientTickEvent.class, this::syncWhilePlayerControlling)
+            of(ClientTickEvent.class, this::tickWhilePlayerControlling)
         );
     }
 
-    private void syncWhilePlayerControlling(ClientTickEvent event) {
+    private void tickWhilePlayerControlling(ClientTickEvent event) {
         if (!Proxy.getInstance().hasActivePlayer()) return;
         syncFromCache(true);
         var currentPose = pose;
         updatePlayerPose();
         if (currentPose != pose) {
             SpectatorSync.sendPlayerPose();
+        }
+        for (var entity : CACHE.getEntityCache().getEntities().values()) {
+            if (!entity.isRemoved()) {
+                entity.setTickCount(entity.getTickCount() + 1);
+            }
         }
     }
 
@@ -203,7 +208,6 @@ public final class Bot extends ModuleUtils {
                     int blockY = raycast.block().y();
                     int blockZ = raycast.block().z();
                     if (!wasLeftClicking && !interactions.isDestroying()) {
-                        debug("Starting destroy block at: [{}, {}, {}]", blockX, blockY, blockZ);
                         interactions.startDestroyBlock(
                             MathHelper.floorI(blockX),
                             MathHelper.floorI(blockY),
@@ -270,15 +274,27 @@ public final class Bot extends ModuleUtils {
         }
     }
 
+    void onInteractionTickSkipped() {
+        interactions.stopDestroyBlock();
+        wasLeftClicking = false;
+    }
+
     private void tick(final ClientBotTick event) {
         if (this.jumpTriggerTime > 0) --this.jumpTriggerTime;
-        if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) return;
+        if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) {
+            onInteractionTickSkipped();
+            return;
+        }
 
-        if (resyncTeleport()) return;
+        if (resyncTeleport()) {
+            onInteractionTickSkipped();
+            return;
+        }
 
         if (CACHE.getPlayerCache().getThePlayer().isSleeping()) {
             debug("Player sleeping, sending leave bed packet");
             sendClientPacketAwait(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.LEAVE_BED));
+            onInteractionTickSkipped();
             return;
         }
 
@@ -297,6 +313,8 @@ public final class Bot extends ModuleUtils {
                 interactionTick();
             }
         }
+
+        updateInWaterStateAndDoFluidPushing();
 
         if (Math.abs(velocity.getX()) < 0.003) velocity.setX(0);
         if (Math.abs(velocity.getY()) < 0.003) velocity.setY(0);
@@ -320,7 +338,6 @@ public final class Bot extends ModuleUtils {
             && !(horizontalCollision && !horizontalCollisionMinor);
         if (isSprinting != lastSprinting) applySprintingSpeedAttributeModifier();
 
-        updateInWaterStateAndDoFluidPushing();
         updateSwimming();
         boolean didUpdateFlyState = false;
         if (CACHE.getPlayerCache().isCanFly()) { // creative flight
@@ -483,6 +500,9 @@ public final class Bot extends ModuleUtils {
 
     private void tickEntities() {
         for (var entity : CACHE.getEntityCache().getEntities().values()) {
+            if (!entity.isRemoved()) {
+                entity.setTickCount(entity.getTickCount() + 1);
+            }
             if (entity == CACHE.getPlayerCache().getThePlayer()) continue;
             switch (entity.getEntityType()) {
                 case FIREWORK_ROCKET -> {
@@ -800,7 +820,7 @@ public final class Bot extends ModuleUtils {
     }
 
     private MutableVec3d collide(MutableVec3d movement) {
-        List<LocalizedCollisionBox> blockCollisionBoxes = World.getIntersectingCollisionBoxes(
+        List<LocalizedCollisionBox> blockCollisionBoxes = getCollidingCbsWithMojank(
             playerCollisionBox.stretch(movement.getX(), movement.getY(), movement.getZ()));
         MutableVec3d adjustedMovement = collidePlayerBoundingBox(movement, playerCollisionBox, blockCollisionBoxes);
         boolean isYAdjusted = movement.getY() != adjustedMovement.getY();
@@ -814,7 +834,7 @@ public final class Bot extends ModuleUtils {
                 stepUpXZCb = stepUpXZCb.stretch(0, -1.0E-5, 0);
             }
 
-            blockCollisionBoxes.addAll(World.getIntersectingCollisionBoxes(stepUpXZCb));
+            blockCollisionBoxes.addAll(getCollidingCbsWithMojank(stepUpXZCb));
             double[] stepUpHeights = collectCandidateStepUpHeights(playerCB, blockCollisionBoxes, adjustedMovement.getY(), stepHeight);
 
             for (double stepUpHeight : stepUpHeights) {
@@ -1373,7 +1393,7 @@ public final class Bot extends ModuleUtils {
                     } else {
                         if (blockState.block() != BlockRegistry.LAVA) continue;
                     }
-                    float fluidHeight = World.getFluidHeight(fluidState);
+                    float fluidHeight = World.getFluidHeight(fluidState, x, y, z);
                     if (fluidHeight == 0 || (fluidHeightToWorld = y + fluidHeight) < playerCollisionBox.minY() + 0.001) continue;
                     touched = true;
                     topFluidHDelta = Math.max(fluidHeightToWorld - (playerCollisionBox.minY() + 0.001), topFluidHDelta);
@@ -1397,6 +1417,10 @@ public final class Bot extends ModuleUtils {
                 pushVec.normalize();
             }
             pushVec.multiply(motionScale);
+            if (Math.abs(velocity.getX()) < 0.003 && Math.abs(velocity.getZ()) < 0.003 && pushVec.length() < 0.0045000000000000005) {
+                pushVec.normalize();
+                pushVec.multiply(0.0045000000000000005);
+            }
             velocity.add(pushVec);
         }
         if (waterFluid) {
@@ -1520,15 +1544,42 @@ public final class Bot extends ModuleUtils {
     }
 
     private boolean canPlayerFitWithinBlocksAndEntitiesWhen(CollisionBox poseCb) {
-        var sneakingCb = new LocalizedCollisionBox(poseCb, x, y, z).inflate(-1.0E-7, -1.0E-7, -1.0E-7);
-        var levelCbs = World.getIntersectingCollisionBoxes(sneakingCb);
+        var localizedPoseCb = new LocalizedCollisionBox(poseCb, x, y, z).inflate(-1.0E-7, -1.0E-7, -1.0E-7);
+        var levelCbs = getCollidingCbsWithMojank(localizedPoseCb);
         for (int i = 0; i < levelCbs.size(); i++) {
             final var cb = levelCbs.get(i);
-            if (sneakingCb.intersects(cb)) {
+            if (localizedPoseCb.intersects(cb)) {
                 return false;
             }
         }
         return true;
+    }
+
+    // todo: more general and less hacky solution
+    //  needs api in cb accessor with entity collider context
+    List<LocalizedCollisionBox> getCollidingCbsWithMojank(LocalizedCollisionBox playerCb) {
+        var levelCbs = World.getIntersectingCollisionBoxes(playerCb);
+        var collidingBlockStates = World.getCollidingBlockStatesInside(playerCb);
+        for (var bs : collidingBlockStates) {
+            if (bs.block() == BlockRegistry.SCAFFOLDING) {
+                var defaultScaffoldCbs = bs.getLocalizedCollisionBoxes();
+                if (getY() > bs.y() + 1 - 1.0E-5 && !movementInput.sneaking) {
+                    // keep solid cbs
+                } else {
+                    var distProp = bs.getProperty(BlockStateProperties.STABILITY_DISTANCE);
+                    var bottomProp = bs.getProperty(BlockStateProperties.BOTTOM);
+                    levelCbs.removeAll(defaultScaffoldCbs);
+                    if (distProp != null && bottomProp != null && distProp != 0 && bottomProp && getY() > bs.y() - 1.0E-5) {
+                        var unstableBottomCb = new LocalizedCollisionBox(new CollisionBox(0, 1, 0, 0.125, 0, 1), bs.x(), bs.y(), bs.z());
+                        levelCbs.add(unstableBottomCb);
+                        // replaced cbs
+                    } else {
+                        // no cbs, removed above
+                    }
+                }
+            }
+        }
+        return levelCbs;
     }
 
     private void rideTick() {
@@ -1599,6 +1650,8 @@ public final class Bot extends ModuleUtils {
                 pose2 = Pose.SWIMMING;
             }
             this.pose = pose2;
+            var metadata = MetadataTypes.POSE.getMetadataFactory().create(6, MetadataTypes.POSE, pose2);
+            CACHE.getPlayerCache().getThePlayer().getMetadata().put(6, metadata);
         }
     }
 
@@ -1648,6 +1701,15 @@ public final class Bot extends ModuleUtils {
             return damageComponent < maxDamage;
         }
         return false;
+    }
+
+    public void absMoveTo(double x, double y, double z) {
+        double d = MathHelper.clamp(x, -3.0E7, 3.0E7);
+        double e = MathHelper.clamp(z, -3.0E7, 3.0E7);
+        this.x = d;
+        this.y = y;
+        this.z = e;
+        syncPlayerCollisionBox();
     }
 
     public double getBlockReachDistance() {

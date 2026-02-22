@@ -61,6 +61,7 @@ public abstract class Entity {
     protected int vehicleId;
     protected ObjectData objectData;
     protected boolean removed = false;
+    protected int tickCount = 0;
 
     public void addPackets(@NonNull Consumer<Packet> consumer)  {
         if (!this.attributes.isEmpty()) {

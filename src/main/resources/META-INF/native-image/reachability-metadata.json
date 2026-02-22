@@ -2679,6 +2679,20 @@
       ]
     },
     {
+      "type": "com.zenith.util.config.Config$Client$Extra$AutoEat$Mode",
+      "fields": [
+        {
+          "name": "ALL"
+        },
+        {
+          "name": "BLACKLIST"
+        },
+        {
+          "name": "WHITELIST"
+        }
+      ]
+    },
+    {
       "type": "com.zenith.util.config.Config$Client$Extra$AutoFish",
       "allDeclaredFields": true,
       "methods": [

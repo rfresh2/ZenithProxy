@@ -7,14 +7,15 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.Equipment;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ObjectEntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Animation;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.BlockBreakStage;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.*;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundBlockDestructionPacket;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static com.zenith.Globals.BOT;
 import static com.zenith.Globals.CACHE;
 import static java.util.Arrays.asList;
 
@@ -24,7 +25,7 @@ import static java.util.Arrays.asList;
 public class SpectatorPacketProvider {
 
     public static List<Packet> playerPosition() {
-        return asList(
+        return List.of(
             new ClientboundTeleportEntityPacket(
                 CACHE.getPlayerCache().getEntityId(),
                 CACHE.getPlayerCache().getX(),
@@ -50,7 +51,7 @@ public class SpectatorPacketProvider {
         var boots = new Equipment(EquipmentSlot.BOOTS, CACHE.getPlayerCache().getEquipment(EquipmentSlot.BOOTS));
         var mainHand = new Equipment(EquipmentSlot.MAIN_HAND, CACHE.getPlayerCache().getEquipment(EquipmentSlot.MAIN_HAND));
         var offHand = new Equipment(EquipmentSlot.OFF_HAND, CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND));
-        return asList(
+        return List.of(
             new ClientboundSetEquipmentPacket(
                 CACHE.getPlayerCache().getEntityId(),
                 asList(helmet, chestplate, leggings, boots, mainHand, offHand))
@@ -88,18 +89,30 @@ public class SpectatorPacketProvider {
     }
 
     public static List<Packet> playerPose() {
-        return asList(
+        return List.of(
             new ClientboundSetEntityDataPacket(
                 CACHE.getPlayerCache().getEntityId(),
-                newArrayList(new ObjectEntityMetadata<>(6, MetadataTypes.POSE, BOT.getPose())))
+                newArrayList(new ObjectEntityMetadata<>(6,
+                    MetadataTypes.POSE,
+                    CACHE.getPlayerCache().getThePlayer().getPose())))
         );
     }
 
     public static List<Packet> playerSwing() {
-        return asList(
+        return List.of(
             new ClientboundAnimatePacket(
                 CACHE.getPlayerCache().getEntityId(),
                 Animation.SWING_ARM
+            )
+        );
+    }
+
+    public static List<Packet> blockBreakProgress(int blockX, int blockY, int blockZ, BlockBreakStage blockBreakStage) {
+        return List.of(
+            new ClientboundBlockDestructionPacket(
+                CACHE.getPlayerCache().getEntityId(),
+                blockX, blockY, blockZ,
+                blockBreakStage
             )
         );
     }

@@ -177,7 +177,7 @@ public class MovementAscend extends Movement {
             return state; // don't jump while walking from a non double slab into a bottom slab
         }
 
-        if (ctx.playerFeet().equals(src.above())) {
+        if (ctx.playerFeet().equals(src.above()) && !MovementHelper.isLiquid(ctx.playerFeet())) {
             // no need to hit space if we're already jumping
             return state;
         }

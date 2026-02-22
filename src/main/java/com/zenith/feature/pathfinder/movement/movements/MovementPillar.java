@@ -60,10 +60,15 @@ public class MovementPillar extends Movement {
             return COST_INF;
         }
         Block srcUp = null;
-        if (MovementHelper.isWater(toBreakBlock) && MovementHelper.isWater(fromBlock)) { // TODO should this also be allowed if toBreakBlock is air?
+        if (MovementHelper.isLiquid(toBreakBlock) && MovementHelper.isLiquid(fromBlock)) { // TODO should this also be allowed if toBreakBlock is air?
             srcUp = context.getBlock(x, y + 1, z);
-            if (MovementHelper.isWater(srcUp)) {
-                return LADDER_UP_ONE_COST; // allow ascending pillars of water, but only if we're already in one
+            if (MovementHelper.isLiquid(srcUp)) {
+                if (MovementHelper.isWater(srcUp)) {
+                    return LADDER_UP_ONE_COST; // allow ascending pillars of water, but only if we're already in one
+                } else {
+                    // lava
+                    return LADDER_UP_ONE_COST * 10;
+                }
             }
         }
         double placeCost = 0;
@@ -173,7 +178,7 @@ public class MovementPillar extends Movement {
 
         int fromDown = BlockStateInterface.getId(src);
         Block fromDownBlock = BlockStateInterface.getBlock(fromDown);
-        if (MovementHelper.isWater(fromDownBlock) && MovementHelper.isWater(dest)) {
+        if (MovementHelper.isLiquid(fromDownBlock) && MovementHelper.isLiquid(dest)) {
             // stay centered while swimming up a water column
             state.setTarget(new MovementState.MovementTarget(RotationUtils.calcRotationFromVec3d(ctx.playerHead(), VecUtils.getBlockPosCenter(dest), ctx.playerRotations()), false));
             Vector3d destCenter = VecUtils.getBlockPosCenter(dest);
@@ -266,7 +271,7 @@ public class MovementPillar extends Movement {
 //                state.setInput(PathInput.SNEAK, true);
 //            }
 //        }
-        if (MovementHelper.isWater(dest.above())) {
+        if (MovementHelper.isLiquid(dest.above())) {
             return true;
         }
         return super.prepared(state);

@@ -1,8 +1,8 @@
 package com.zenith.mc.item;
 
 import com.google.common.primitives.Ints;
-import io.netty.buffer.Unpooled;
-import jodd.util.Base64;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufOutputStream;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponent;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentType;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentTypes;
@@ -30,13 +30,15 @@ class ItemDataComponentsDeserializer extends StdDeserializer<DataComponents> {
         while (p.nextToken() != JsonToken.END_OBJECT) {
             String fieldName = p.currentName();
             p.nextToken();
+            if (p.currentToken() != JsonToken.VALUE_EMBEDDED_OBJECT && p.currentToken() != JsonToken.VALUE_STRING) {
+                throw ctxt.wrongTokenException(p, byte[].class, JsonToken.VALUE_EMBEDDED_OBJECT, "Expected binary value for DataComponents entry");
+            }
 
             var id = Ints.tryParse(fieldName);
-            var base64Value = p.getString();
-
-            var dataBytes = Base64.decode(base64Value);
-            var buf = Unpooled.wrappedBuffer(dataBytes);
+            if (id == null) throw new RuntimeException("Missing DataComponent ID: " + fieldName);
+            var buf = ByteBufAllocator.DEFAULT.buffer();
             try {
+                p.readBinaryValue(new ByteBufOutputStream(buf));
                 DataComponentType type = DataComponentTypes.from(id);
                 DataComponent dataComponent = type.readDataComponent(buf);
                 components.put(type, dataComponent.getValue());

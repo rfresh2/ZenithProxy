@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.zenith.Globals.OBJECT_MAPPER;
+import static com.zenith.mc.MCGlobals.OBJECT_MAPPER;
 
 public class BlockDataManager {
     static final int blockStateIdCount = BlockRegistry.REGISTRY.getIdMap().int2ObjectEntrySet().stream()
@@ -43,7 +43,7 @@ public class BlockDataManager {
         }
         initShapeCache("blockCollisionShapes", blockStateIdToCollisionBoxes);
         initShapeCache("blockInteractionShapes", blockStateIdToInteractionBoxes);
-        var fluidStatesNode = (ObjectNode) OBJECT_MAPPER.readTree(BlockDataManager.class.getResourceAsStream("/mcdata/fluidStates.json"));
+        var fluidStatesNode = (ObjectNode) OBJECT_MAPPER.readTree(BlockDataManager.class.getResourceAsStream("/mcdata/fluidStates.smile"));
         for (var stateIdString : fluidStatesNode.propertyNames()) {
             int stateId = Integer.parseInt(stateIdString);
             ObjectNode fluidStateNode = (ObjectNode) fluidStatesNode.get(stateIdString);
@@ -53,7 +53,7 @@ public class BlockDataManager {
             boolean falling = fluidStateNode.get("falling").asBoolean();
             blockStateIdToFluidState.put(stateId, new FluidState(water, source, amount, falling));
         }
-        var pathfindableArray = (ArrayNode) OBJECT_MAPPER.readTree(BlockDataManager.class.getResourceAsStream("/mcdata/pathfindable.json"));
+        var pathfindableArray = (ArrayNode) OBJECT_MAPPER.readTree(BlockDataManager.class.getResourceAsStream("/mcdata/pathfindable.smile"));
         pathfindableArray.elements().forEach((stateId) -> {
             pathfindableStateIds.add(stateId.asInt());
         });
@@ -63,7 +63,7 @@ public class BlockDataManager {
     private static void initShapeCache(String name, Int2ObjectOpenHashMap<List<CollisionBox>> output) {
         final Int2ObjectOpenHashMap<List<CollisionBox>> shapeIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(100);
         final Int2ObjectOpenHashMap<CollisionBox> boxIdToBox = new Int2ObjectOpenHashMap<>(100);
-        var node = (ObjectNode) OBJECT_MAPPER.readTree(BlockDataManager.class.getResourceAsStream("/mcdata/" + name + ".json"));
+        var node = (ObjectNode) OBJECT_MAPPER.readTree(BlockDataManager.class.getResourceAsStream("/mcdata/" + name + ".smile"));
         ObjectNode boxesNode = (ObjectNode) node.get("boxes");
         for (var boxIdName : boxesNode.propertyNames()) {
             int boxId = Integer.parseInt(boxIdName);

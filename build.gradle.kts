@@ -28,7 +28,7 @@ repositories {
 
 val mcplVersion = "1.21.11.9"
 dependencies {
-    api("com.github.rfresh2:JDA:6.3.27") {
+    api("com.github.rfresh2:JDA:6.3.28") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -74,10 +74,10 @@ dependencies {
     api("org.jline:jline:3.30.6")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
-    api("org.postgresql:postgresql:42.7.9")
+    api("org.postgresql:postgresql:42.7.10")
     api("org.jdbi:jdbi3-postgres:3.51.0")
     api("com.google.guava:guava:33.5.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.29")
+    api("ch.qos.logback:logback-classic:1.5.32")
     api("org.slf4j:slf4j-api:2.0.17")
     api("org.slf4j:jul-to-slf4j:2.0.17")
     api("com.mojang:brigadier:1.3.10")
@@ -85,8 +85,9 @@ dependencies {
     api("dev.omega24:upnp4j:1.0")
     api(platform("tools.jackson:jackson-bom:3.0.4"))
     api("tools.jackson.core:jackson-databind")
+    api("tools.jackson.dataformat:jackson-dataformat-smile")
 
-    testImplementation(platform("org.junit:junit-bom:6.0.2"))
+    testImplementation(platform("org.junit:junit-bom:6.0.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
@@ -236,13 +237,9 @@ graalvmNative {
             quickBuild = false
             verbose = true
             sharedLibrary = false
+            // additional config in: `src/main/resources/META-INF/native-image/com.zenith/zenithproxy/native-image.properties
             buildArgs.addAll(
-                "-Duser.country=US",
-                "-Duser.language=en",
-                "--enable-url-protocols=https,http",
-                "-H:+ReportExceptionStackTraces",
                 "-H:DeadlockWatchdogInterval=30",
-                "-H:IncludeLocales=en",
                 "-H:+CompactingOldGen",
                 "-H:+TrackPrimitiveValues",
                 "-H:+UsePredicates",
@@ -251,30 +248,13 @@ graalvmNative {
                 "-march=x86-64-v3",
                 "--gc=serial",
                 "-J-XX:MaxRAMPercentage=90",
-//				"--enable-sbom=false", todo: detect and disable on graalvm ce
 //                "--enable-monitoring=nmt,jfr",
-                "-J--enable-native-access=ALL-UNNAMED",
-                "-J--sun-misc-unsafe-memory-access=allow",
-//                "-H:+PrintClassInitialization",
-                "--initialize-at-build-time=com.zenith.feature.deathmessages",
-                "--initialize-at-build-time=org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerType",
-                "--initialize-at-build-time=org.cloudburstmc.math.immutable.vector.ImmutableVector3i",
-                "--initialize-at-build-time=com.google.common.collect.RegularImmutableList",
-                "--initialize-at-build-time=org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType",
-                "--initialize-at-build-time=org.geysermc.mcprotocollib.protocol.data.game.level.block.BlockEntityType",
-                "--initialize-at-build-time=it.unimi.dsi.fastutil",
-                "--initialize-at-build-time=com.google.common.collect",
-                "--initialize-at-build-time=com.zenith.mc",
-                "--initialize-at-run-time=com.zenith.mc.item.hashing",
-                "--initialize-at-build-time=com.zenith.event",
-                "--initialize-at-run-time=com.zenith.mc.chat_type",
-                "--initialize-at-run-time=com.zenith.mc.item",
-                "--initialize-at-run-time=sun.net.dns.ResolverConfigurationImpl", // fix for windows builds, exception when doing srv lookups with netty
-                "--features=com.zenith.util.graalvm.ReflectionFeature"
+//                "-H:+PrintClassInitialization"
             )
             val pgoPath = providers.environmentVariable("GRAALVM_PGO_PATH").orNull
 			val pgoInstrument = providers.environmentVariable("GRAALVM_PGO_INSTRUMENT").orNull
 			val trace = providers.environmentVariable("GRAALVM_NATIVE_IMAGE_TRACE").orNull
+            val buildReport = providers.environmentVariable("GRAALVM_BUILD_REPORT").orNull
             if (pgoPath != null) {
                 println("Using PGO profile: $pgoPath")
                 buildArgs.add("--pgo=$pgoPath")
@@ -288,6 +268,9 @@ graalvmNative {
 					println("Enabling tracing agent")
 					buildArgs.add("-H:Preserve=all")
 				}
+            }
+            if (buildReport != null) {
+                buildArgs.add("--emit build-report")
             }
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }

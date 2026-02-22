@@ -82,7 +82,7 @@ public class AutoOmen extends AbstractInventoryModule {
                             PlayerAction.RELEASE_USE_ITEM,
                             0, 0, 0,
                             Direction.DOWN.mcpl(),
-                            CACHE.getPlayerCache().getSeqId().incrementAndGet()
+                            0
                         ));
                         debug("Cancelling omen drink because omen or raid now active");
                         delay = 0;

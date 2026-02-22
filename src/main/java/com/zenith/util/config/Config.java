@@ -206,6 +206,7 @@ public final class Config {
                 public double blockPlacementPenalty = 20.0;
                 public double blockBreakAdditionalCost = 2;
                 public double jumpPenalty = 2.0;
+                public double lavaWalkCost = 200;
                 public int maxFallHeightNoWater = 3;
                 public boolean allowLongFall = false;
                 public double longFallCostLogMultiplier = 50;
@@ -433,6 +434,13 @@ public final class Config {
                 public boolean warning = true;
                 public boolean warningMention = false;
                 public boolean allowUnsafeFood = false;
+                public Mode mode = Mode.ALL;
+                public enum Mode {
+                    ALL,
+                    BLACKLIST,
+                    WHITELIST
+                }
+                public HashSet<String> foods = new HashSet<>();
             }
 
             public static final class AutoOmen {

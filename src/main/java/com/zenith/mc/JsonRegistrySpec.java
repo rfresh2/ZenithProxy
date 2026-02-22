@@ -3,7 +3,7 @@ package com.zenith.mc;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
-import static com.zenith.Globals.OBJECT_MAPPER;
+import static com.zenith.mc.MCGlobals.OBJECT_MAPPER;
 
 public interface JsonRegistrySpec<T extends RegistryData> {
     String filePath();
