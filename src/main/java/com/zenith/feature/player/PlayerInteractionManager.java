@@ -4,6 +4,7 @@ import com.zenith.Proxy;
 import com.zenith.cache.data.inventory.Container;
 import com.zenith.feature.player.raycast.BlockRaycastResult;
 import com.zenith.feature.player.raycast.EntityRaycastResult;
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.mc.block.Block;
 import com.zenith.mc.block.BlockRegistry;
 import com.zenith.mc.block.BlockTags;
@@ -20,10 +21,7 @@ import org.geysermc.mcprotocollib.protocol.codec.MinecraftPacket;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeType;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.player.InteractAction;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerAction;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.*;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponents;
@@ -99,6 +97,7 @@ public class PlayerInteractionManager {
                         0
                     )
                 );
+                SpectatorSync.sendBlockBreakProgress(x, y, z, BlockBreakStage.RESET);
             }
 
             startPrediction(seqId -> {
@@ -128,6 +127,9 @@ public class PlayerInteractionManager {
                     face.mcpl(),
                     seqId);
             });
+            if (isDestroying) {
+                SpectatorSync.sendBlockBreakProgress(x, y, z, getDestroyStageMcpl());
+            }
         }
 
         return true;
@@ -143,6 +145,7 @@ public class PlayerInteractionManager {
                     Direction.DOWN.mcpl(),
                     0
                 ));
+            SpectatorSync.sendBlockBreakProgress(this.destroyBlockPosX, this.destroyBlockPosY, this.destroyBlockPosZ, BlockBreakStage.RESET);
         }
         this.isDestroying = false;
         this.destroyProgress = 0;
@@ -189,6 +192,9 @@ public class PlayerInteractionManager {
                     this.destroyDelay = destroyDelayInterval;
                     BOT.debug("[{}] [{}, {}, {}] ContinueDestroyBlock FINISH", System.currentTimeMillis(), x, y, z);
                 }
+                if (isDestroying) {
+                    SpectatorSync.sendBlockBreakProgress(x, y, z, getDestroyStageMcpl());
+                }
                 return true;
             }
         } else {
@@ -198,6 +204,15 @@ public class PlayerInteractionManager {
 
     public int getDestroyStage() {
         return this.destroyProgress > 0.0 ? (int)(this.destroyProgress * 10.0) : -1;
+    }
+
+    public BlockBreakStage getDestroyStageMcpl() {
+        int stageInt = getDestroyStage();
+        if (stageInt != -1) {
+            var index = stageInt % 10;
+            return BlockBreakStage.STAGES[index];
+        }
+        return BlockBreakStage.RESET;
     }
 
     public double blockBreakSpeed(Block block) {
