@@ -1468,6 +1468,18 @@ Dropping can be configured based on modes:
 
 Automatically eats food when health or hunger is below a set threshold.
 
+
+
+Which foods to eat can be configured based on modes:
+
+
+
+   * `all`: any food
+
+   * `whitelist`: only added foods
+
+   * `blacklist`: any food not added
+
 **Usage**
 
   ```autoEat on/off```
@@ -1479,6 +1491,16 @@ Automatically eats food when health or hunger is below a set threshold.
   ```autoEat warning on/off```
 
   ```autoEat allowUnsafeFood on/off```
+
+  ```autoEat mode <all/whitelist/blacklist>```
+
+  ```autoEat add/del <food>```
+
+  ```autoEat addAll <food1>,<food2>,...```
+
+  ```autoEat list```
+
+  ```autoEat clear```
 
 
 ### autoFish
