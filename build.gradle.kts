@@ -85,6 +85,7 @@ dependencies {
     api("dev.omega24:upnp4j:1.0")
     api(platform("tools.jackson:jackson-bom:3.0.4"))
     api("tools.jackson.core:jackson-databind")
+    api("tools.jackson.dataformat:jackson-dataformat-smile")
 
     testImplementation(platform("org.junit:junit-bom:6.0.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")

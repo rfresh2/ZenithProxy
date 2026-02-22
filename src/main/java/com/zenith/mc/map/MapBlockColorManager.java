@@ -17,7 +17,7 @@ public class MapBlockColorManager {
     }
 
     private static void init() {
-        var tree = OBJECT_MAPPER.readTree(MapBlockColorManager.class.getResourceAsStream("/mcdata/mapColorIdToColor.json"));
+        var tree = OBJECT_MAPPER.readTree(MapBlockColorManager.class.getResourceAsStream("/mcdata/mapColorIdToColor.smile"));
         tree.propertyNames().forEach((colorId) -> {
             var color = tree.get(colorId).asInt();
             mapColorIdToColor.put(Integer.parseInt(colorId), color);

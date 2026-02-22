@@ -5,7 +5,7 @@ import com.zenith.mc.JsonRegistrySpec;
 public class EntityRegistrySpec implements JsonRegistrySpec<EntityData> {
     @Override
     public String filePath() {
-        return "/mcdata/entities.json";
+        return "/mcdata/entities.smile";
     }
 
     @Override
