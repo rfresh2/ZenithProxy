@@ -249,11 +249,11 @@ graalvmNative {
                 "-J-XX:MaxRAMPercentage=90",
 //                "--enable-monitoring=nmt,jfr",
 //                "-H:+PrintClassInitialization"
-                "--emit build-report"
             )
             val pgoPath = providers.environmentVariable("GRAALVM_PGO_PATH").orNull
 			val pgoInstrument = providers.environmentVariable("GRAALVM_PGO_INSTRUMENT").orNull
 			val trace = providers.environmentVariable("GRAALVM_NATIVE_IMAGE_TRACE").orNull
+            val buildReport = providers.environmentVariable("GRAALVM_BUILD_REPORT").orNull
             if (pgoPath != null) {
                 println("Using PGO profile: $pgoPath")
                 buildArgs.add("--pgo=$pgoPath")
@@ -267,6 +267,9 @@ graalvmNative {
 					println("Enabling tracing agent")
 					buildArgs.add("-H:Preserve=all")
 				}
+            }
+            if (buildReport != null) {
+                buildArgs.add("--emit build-report")
             }
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
