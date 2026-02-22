@@ -66,6 +66,9 @@ jobs:
       - name: Build ZenithProxy Linux Native
         run: ./gradlew nativeCompile
 
+      - name: Move GraalVM Build Report
+        run: mv build/native/nativeCompile/*build-report.html build/native/ZenithProxy-build-report.html
+
       - name: Elevate binary permissions
         run: chmod +x build/native/nativeCompile/*
 
@@ -83,7 +86,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: GraalVM Build Report
-          path: build/native/nativeCompile/*build-report.html
+          path: build/native/ZenithProxy-build-report.html
           if-no-files-found: error
 
       - name: Publish Maven Artifact Snapshot
