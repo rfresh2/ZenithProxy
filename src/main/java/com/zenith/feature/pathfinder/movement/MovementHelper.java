@@ -166,11 +166,7 @@ public final class MovementHelper {
         if (isFluid) {
             FluidState fluidState = World.getFluidState(blockStateId);
             if (fluidState != null) {
-                if (fluidState.amount() != 8) {
-                    return NO;
-                } else {
-                    return MAYBE;
-                }
+                return MAYBE;
             }
 
         }
@@ -209,7 +205,10 @@ public final class MovementHelper {
 
         boolean isFluid = World.isFluid(block);
         if (isFluid) {
-            if (isFlowing(x, y, z)) {
+            var playerInLava = PlayerContext.INSTANCE.player().isTouchingLava() || MovementHelper.isLava(World.getBlock(PlayerContext.INSTANCE.playerFeet()));
+            var playerInWater = PlayerContext.INSTANCE.player().isTouchingWater() || MovementHelper.isWater(World.getBlock(PlayerContext.INSTANCE.playerFeet()));
+            var playerInFluid = playerInLava || playerInWater;
+            if (isFlowing(x, y, z) && !playerInFluid) {
                 return false;
             }
             // Everything after this point has to be a special case as it relies on the water not being flowing, which means a special case is needed.
@@ -220,6 +219,9 @@ public final class MovementHelper {
             Block up = BlockStateInterface.getBlock(x, y + 1, z);
             if (World.isFluid(up) || up == BlockRegistry.LILY_PAD) {
                 return false;
+            }
+            if (isLava(block)) {
+                return playerInLava;
             }
             return World.isWater(block);
         }
@@ -441,9 +443,9 @@ public final class MovementHelper {
             return isWater(up);
         }
 
-        if (MovementHelper.isLava(block)) {
-            MovementHelper.isFlowing(x, y, z);
-        }
+//        if (MovementHelper.isLava(state) && !MovementHelper.isFlowing(x, y, z, state, bsi) && Baritone.settings().assumeWalkOnLava.value) { // if we get here it means that assumeWalkOnLava must be true, so put it last
+//            return true;
+//        }
 
         return false; // If we don't recognise it then we want to just return false to be safe.
     }

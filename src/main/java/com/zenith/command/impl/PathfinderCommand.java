@@ -979,6 +979,13 @@ public class PathfinderCommand extends Command {
                     .title("Pathfinder")
                     .addField("Prefer Silk Touch", CONFIG.client.extra.pathfinder.preferSilkTouch)
                     .primaryColor();
+            })))
+            .then(literal("lavaWalkCost").then(argument("cost", doubleArg()).executes(c -> {
+                CONFIG.client.extra.pathfinder.lavaWalkCost = getDouble(c, "cost");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Lava Walk Cost", CONFIG.client.extra.pathfinder.lavaWalkCost)
+                    .primaryColor();
             })));
     }
 
@@ -988,6 +995,7 @@ public class PathfinderCommand extends Command {
         settingsMap.put("blockBreakAdditionalCost", String.valueOf(CONFIG.client.extra.pathfinder.blockBreakAdditionalCost));
         settingsMap.put("blockPlacementPenalty", String.valueOf(CONFIG.client.extra.pathfinder.blockPlacementPenalty));
         settingsMap.put("jumpPenalty", String.valueOf(CONFIG.client.extra.pathfinder.jumpPenalty));
+        settingsMap.put("lavaWalkCost", String.valueOf(CONFIG.client.extra.pathfinder.lavaWalkCost));
         settingsMap.put("allowSprint", toggleStr(CONFIG.client.extra.pathfinder.allowSprint));
         settingsMap.put("allowPlace", toggleStr(CONFIG.client.extra.pathfinder.allowPlace));
         settingsMap.put("allowInventory", toggleStr(CONFIG.client.extra.pathfinder.allowInventory));

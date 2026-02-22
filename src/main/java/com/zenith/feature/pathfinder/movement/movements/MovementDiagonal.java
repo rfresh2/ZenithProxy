@@ -142,7 +142,7 @@ public class MovementDiagonal extends Movement {
         if (cuttingOver2 == BlockRegistry.MAGMA_BLOCK || MovementHelper.isLava(cuttingOver2)) {
             return;
         }
-        boolean water = false;
+        boolean liquid = false;
         Block startIn = context.getBlock(x, y, z);
         if (MovementHelper.isWater(startIn) || MovementHelper.isWater(BlockStateInterface.getBlock(destInto))) {
             if (ascend) {
@@ -152,7 +152,13 @@ public class MovementDiagonal extends Movement {
             // Whatever we were walking on (possibly soul sand) doesn't matter as we're actually floating on water
             // Not even touching the blocks below
             multiplier = context.waterWalkSpeed;
-            water = true;
+            liquid = true;
+        } else if (MovementHelper.isLava(startIn) || MovementHelper.isLava(BlockStateInterface.getBlock(destInto))) {
+            if (ascend) {
+                return;
+            }
+            multiplier = context.lavaWalkSpeed;
+            liquid = true;
         }
         int pb0 = context.getId(x, y, destZ);
         Block pb0Block = BlockStateInterface.getBlock(pb0);
@@ -217,7 +223,7 @@ public class MovementDiagonal extends Movement {
             }
         } else {
             // only can sprint if not edging around
-            if (context.canSprint && !water) {
+            if (context.canSprint && !liquid) {
                 // If we aren't edging around anything, and we aren't in water
                 // We can sprint =D
                 // Don't check for soul sand, since we can sprint on that too
