@@ -103,7 +103,7 @@ public abstract class Movement implements IMovement {
             World.getSolidBlockCollisionBoxes(predictedCb, predicatedCollisions);
             boolean willCollide = false;
             for (LocalizedCollisionBox box : predicatedCollisions) {
-                if (box.intersects(BOT.getPlayerCollisionBox())) {
+                if (box.intersects(predictedCb)) {
                     willCollide = true;
                     break;
                 }

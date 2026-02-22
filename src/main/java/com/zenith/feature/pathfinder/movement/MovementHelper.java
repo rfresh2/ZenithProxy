@@ -307,7 +307,7 @@ public final class MovementHelper {
         if (block == BlockRegistry.LARGE_FERN || block == BlockRegistry.TALL_GRASS) {
             return true;
         }
-        return false; // state.canBeReplaced();
+        return block.replaceable();
     }
 
     public static boolean isDoorPassable(BlockPos doorPos, BlockPos playerPos) {
@@ -414,7 +414,7 @@ public final class MovementHelper {
         if (block.blockTags().contains(BlockTags.STAIRS)) {
             return YES;
         }
-        if (isWater(block)) {
+        if (isLiquid(block)) {
             return MAYBE;
         }
 //        MovementHelper.isLava(block);
@@ -426,7 +426,12 @@ public final class MovementHelper {
 
     public static boolean canWalkOnPosition(int x, int y, int z, int blockStateId) {
         Block block = BlockStateInterface.getBlock(blockStateId);
-        if (isWater(block)) {
+        if (isLiquid(block)) {
+            var playerInLava = PlayerContext.INSTANCE.player().isTouchingLava() || MovementHelper.isLava(World.getBlock(PlayerContext.INSTANCE.playerFeet()));
+            if (isLava(block) && !playerInLava) {
+                return false;
+            }
+
             // since this is called literally millions of times per second, the benefit of not allocating millions of useless "pos.up()"
             // BlockPos s that we'd just garbage collect immediately is actually noticeable. I don't even think its a decrease in readability
             int upState = BlockStateInterface.getId(x, y + 1, z);
@@ -436,11 +441,11 @@ public final class MovementHelper {
             }
             if (MovementHelper.isFlowing(x, y, z) || MovementHelper.isFlowing(x, y + 1, z)) {
                 // the only scenario in which we can walk on flowing water is if it's under still water with jesus off
-                return isWater(up);
+                return isLiquid(up);
             }
             // if assumeWalkOnWater is on, we can only walk on water if there isn't water above it
             // if assumeWalkOnWater is off, we can only walk on water if there is water above it
-            return isWater(up);
+            return isLiquid(up);
         }
 
 //        if (MovementHelper.isLava(state) && !MovementHelper.isFlowing(x, y, z, state, bsi) && Baritone.settings().assumeWalkOnLava.value) { // if we get here it means that assumeWalkOnLava must be true, so put it last
