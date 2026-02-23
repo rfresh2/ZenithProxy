@@ -1643,6 +1643,10 @@ Simulates a click to the block or entity in front of you
 
   ```click right target <any/none/entity/block>```
 
+  ```click right useItem```
+
+  ```click right useItem <mainHand/offHand>```
+
   ```click right hold```
 
   ```click right hold <mainHand/offHand/alternate>```
