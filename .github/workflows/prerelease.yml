@@ -47,11 +47,21 @@ jobs:
       - name: Build ZenithProxy Java
         run: ./gradlew build
 
+      - name: Generate Java AOT Cache
+        run: ./gradlew generateAotCache
+
       - name: Upload Java Artifact
         uses: actions/upload-artifact@v6
         with:
           name: ZenithProxy-java
           path: build/libs/ZenithProxy.jar
+          if-no-files-found: error
+
+      - name: Upload Java AOT Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: ZenithProxy-java-aot
+          path: build/ZenithProxy.aot
           if-no-files-found: error
 
       - name: Download GraalVM Profile
@@ -122,7 +132,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           tag: ${{ env.JAVA_TAG }}
-          artifacts: "artifacts/*.jar"
+          artifacts: "artifacts/*.jar,artifacts/ZenithProxy.aot"
           prerelease: true
           body: "File upload not for users. **Use the Launcher:** https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3"
           commit: ${{ github.sha }}

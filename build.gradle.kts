@@ -121,21 +121,41 @@ tasks {
         outputFile = project.layout.buildDirectory.file("resources/main/zenith_mc_version.txt")
     }
     val runGroup = "run"
+    val aotCacheFile = layout.buildDirectory.file("ZenithProxy.aot")
+    val baseRunJvmArgs = listOf(
+        "-Xmx300m", "-XX:+UseG1GC", "-XX:+UseCompactObjectHeaders",
+        "--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow"
+    )
     register("run", JavaExec::class.java) {
         group = runGroup
         description = "Execute proxy"
+        dependsOn("shadowJar")
         javaLauncher = javaLauncherProvider
         workingDir = layout.projectDirectory.dir("run").asFile
-        classpath = sourceSets.main.get().runtimeClasspath
+        classpath = shadowJar.get().archiveFile.get().asFile.let { files(it) }
         mainClass.set("com.zenith.Proxy")
-        val args = listOf(
-			"-Xmx300m", "-XX:+UseG1GC", "-XX:+UseCompactObjectHeaders",
-			"--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow"
-		)
-        jvmArgs = args
+        jvmArgs = baseRunJvmArgs
+        doFirst {
+            val cacheFile = aotCacheFile.get().asFile
+            if (cacheFile.isFile) {
+                jvmArgs = jvmArgs + "-XX:AOTCache=${cacheFile.absolutePath}" + "-Xlog:aot"
+                println("Using AOT cache at ${cacheFile.absolutePath}")
+            }
+        }
         standardInput = System.`in`
         environment("ZENITH_DEV", "true")
         outputs.upToDateWhen { false }
+    }
+    register<GenerateAotCacheTask>("generateAotCache") {
+        group = runGroup
+        description = "Start ZenithProxy to generate Java 25 AOT cache at build/ZenithProxy.aot"
+        dependsOn("shadowJar")
+        javaLauncher = javaLauncherProvider
+        executableJar.set(shadowJar.get().archiveFile)
+        outputFile.set(aotCacheFile)
+        workingDir.set(layout.projectDirectory.dir("run"))
+        jvmArgs.set(baseRunJvmArgs + "-Xlog:aot")
+        startupMarker.set("ZenithProxy started!")
     }
     val javaPathTask = register<JavaPathTask>("javaPath") {
         javaLauncher = javaLauncherProvider

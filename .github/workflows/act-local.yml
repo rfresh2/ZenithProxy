@@ -38,6 +38,16 @@ jobs:
 
       - name: Build ZenithProxy Java
         run: ./gradlew build
+
+      - name: Generate Java AOT Cache
+        run: ./gradlew generateAotCache
+
+      - name: Upload Java AOT Cache
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-aot-cache
+          path: build/ZenithProxy.aot
+          if-no-files-found: error
 #
 #      - name: Set ACT Runner Env Variables
 #        run: |
