@@ -3,7 +3,7 @@ name = "ZenithProxy-Wiki"
 version = "0.1.0"
 description = "ZenithProxy Wiki Documentation"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 dependencies = [
-    "zensical>=0.0.15",
+    "zensical>=0.0.23",
 ]

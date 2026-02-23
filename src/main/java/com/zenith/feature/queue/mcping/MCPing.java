@@ -107,6 +107,7 @@ public class MCPing {
             var online = playersNode.get("online").asInt();
             var max = playersNode.get("max").asInt();
             var sampleNode = (ArrayNode) (playersNode.get("sample"));
+            if (sampleNode == null) sampleNode = new ArrayNode(null);
             var playersList = new ArrayList<Player>(sampleNode.size());
             for (JsonNode playerListNode : sampleNode) {
                 JsonNode nameNode = playerListNode.get("name");

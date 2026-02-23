@@ -26,7 +26,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.11.9"
+val mcplVersion = "1.21.11.10"
 dependencies {
     api("com.github.rfresh2:JDA:6.3.28") {
         exclude(group = "club.minnced")
@@ -108,6 +108,8 @@ tasks {
     test {
         useJUnitPlatform()
         workingDir = layout.projectDirectory.dir("run").asFile
+        forkEvery = 1 // needed bc zenith uses global static state
+        maxParallelForks = Runtime.getRuntime().availableProcessors()
     }
     val commitHashTask = register<CommitHashTask>("writeCommitHash") {
         outputFile = project.layout.buildDirectory.file("resources/main/zenith_commit.txt")
@@ -150,6 +152,7 @@ tasks {
         val outputFile = project.layout.buildDirectory.file("Commands.md")
         args = listOf(outputFile.get().asFile.absolutePath)
         environment("ZENITH_DEV", "true")
+        jvmArgs = listOf("-Xmx300m", "--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow")
         outputs.file(outputFile)
     }
     val pluginLoadTestTask = register("pluginLoadTest", PluginLoadTestTask::class.java) {
