@@ -163,6 +163,7 @@ public final class Config {
             public final PearlLoader pearlLoader = new PearlLoader();
             public final Waypoints waypoints = new Waypoints();
             public final AutoDrop autoDrop = new AutoDrop();
+            public final AutoGap autoGap = new AutoGap();
             public String whisperCommand = "msg";
             public int tpsBufferSize = 20;
             public final Tasks tasks = new Tasks();
@@ -441,6 +442,13 @@ public final class Config {
                     WHITELIST
                 }
                 public HashSet<String> foods = new HashSet<>();
+            }
+
+            public static final class AutoGap {
+                public @Nullable Integer priority = null;
+                public boolean enabled = false;
+                public int healthThreshold = 10;
+                public boolean onFire = false;
             }
 
             public static final class AutoOmen {

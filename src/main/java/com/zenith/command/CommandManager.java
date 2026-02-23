@@ -39,6 +39,7 @@ public class CommandManager {
         new AutoDisconnectCommand(),
         new AutoDropCommand(),
         new AutoEatCommand(),
+        new AutoGapCommand(),
         new AutoFishCommand(),
         new AutoMendCommand(),
         new AutoOmenCommand(),

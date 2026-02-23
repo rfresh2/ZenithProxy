@@ -39,6 +39,7 @@ public class ModulePriorityCommand extends Command {
                 "autoTotem <default/int>",
                 "autoArmor <default/int>",
                 "autoEat <default/int>",
+                "autoGap <default/int>",
                 "autoOmen <default/int>",
                 "click <default/int>",
                 "killAura <default/int>",
@@ -89,6 +90,17 @@ public class ModulePriorityCommand extends Command {
                     CONFIG.client.extra.autoEat.priority = null;
                     c.getSource().getEmbed()
                         .title("AutoEat Priority Reset");
+                })))
+            .then(literal("autoGap")
+                .then(argument("priority", integer()).executes(c -> {
+                    CONFIG.client.extra.autoGap.priority = getInteger(c, "priority");
+                    c.getSource().getEmbed()
+                        .title("AutoGap Priority Set");
+                }))
+                .then(literal("default").executes(c -> {
+                    CONFIG.client.extra.autoGap.priority = null;
+                    c.getSource().getEmbed()
+                        .title("AutoGap Priority Reset");
                 })))
             .then(literal("autoOmen")
                 .then(argument("priority", integer()).executes(c -> {
@@ -219,6 +231,7 @@ public class ModulePriorityCommand extends Command {
                 new ModuleInstance("AutoTotem", () -> MODULE.get(AutoTotem.class).getPriority(), () -> CONFIG.client.extra.autoTotem.priority),
                 new ModuleInstance("AutoArmor", () -> MODULE.get(AutoArmor.class).getPriority(), () -> CONFIG.client.extra.autoArmor.priority),
                 new ModuleInstance("AutoEat", () -> MODULE.get(AutoEat.class).getPriority(), () -> CONFIG.client.extra.autoEat.priority),
+                new ModuleInstance("AutoGap", () -> MODULE.get(AutoGap.class).getPriority(), () -> CONFIG.client.extra.autoGap.priority),
                 new ModuleInstance("AutoOmen", () -> MODULE.get(AutoOmen.class).getPriority(), () -> CONFIG.client.extra.autoOmen.priority),
                 new ModuleInstance("Click", () -> MODULE.get(Click.class).getPriority(), () -> CONFIG.client.extra.click.priority),
                 new ModuleInstance("KillAura", () -> MODULE.get(KillAura.class).getPriority(), () -> CONFIG.client.extra.killAura.actionPriority),
