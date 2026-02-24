@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 public class SkinRendererTest {
 
@@ -17,7 +15,6 @@ public class SkinRendererTest {
         byte[] skinData = readSkinPng();
         byte[] headData = SkinRenderer.renderHead(skinData, 8);
         Assertions.assertNotNull(headData);
-        Files.write(Paths.get("head.png"), headData);
         byte[] expectedData = readHelmPng();
         comparePngs(expectedData, headData);
     }

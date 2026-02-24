@@ -1,4 +1,4 @@
-name: 1.21.4 Plugin Test
+name: 1.21.4 Integ Test
 
 on:
   workflow_dispatch:
@@ -43,6 +43,9 @@ jobs:
 
       - name: Run Plugin Load Test
         run: ./gradlew pluginLoadTest
+
+      - name: Run Native Tests
+        run: ./gradlew nativeTest
 
       - name: Upload Java Artifact
         uses: actions/upload-artifact@v6
