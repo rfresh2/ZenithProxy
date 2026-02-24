@@ -111,7 +111,7 @@ public class AutoReconnect extends Module {
         }
     }
 
-    private static final Set<String> RECONNECTABLE_DISCONNECT_REASONS = Sets.newHashSet(
+    private static final Set<String> NON_RECONNECTABLE_DISCONNECT_REASONS = Sets.newHashSet(
         SYSTEM_DISCONNECT,
         MANUAL_DISCONNECT,
         SERVER_CLOSING_MESSAGE,
@@ -121,7 +121,7 @@ public class AutoReconnect extends Module {
     );
 
     private boolean isReconnectableDisconnect(final String reason) {
-        if (RECONNECTABLE_DISCONNECT_REASONS.contains(reason)) {
+        if (NON_RECONNECTABLE_DISCONNECT_REASONS.contains(reason)) {
             return false;
         } else if (ActiveHours.isActiveHoursDisconnect(reason)) {
             return false;

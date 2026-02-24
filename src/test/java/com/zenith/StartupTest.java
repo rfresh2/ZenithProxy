@@ -16,7 +16,6 @@ public class StartupTest {
         TestUtils.setConfigFile(config);
 
         var launchThread = Thread.ofPlatform().start(Proxy::main);
-        Wait.wait(1);
 
         assertTrue(Wait.waitUntil(() ->
             !launchThread.isAlive()
