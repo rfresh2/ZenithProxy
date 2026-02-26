@@ -39,6 +39,8 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
             bestSoFar[i] = startNode;
         }
         MutableMoveResult res = new MutableMoveResult();
+        final double directionChangePenalty = calcContext.directionChangePenalty;
+        final boolean applyDirectionChangePenalty = directionChangePenalty > 0;
 //        BetterWorldBorder worldBorder = new BetterWorldBorder(calcContext.world.getWorldBorder());
         long startTime = System.currentTimeMillis();
 //        boolean slowPath = Baritone.settings().slowPath.value;
@@ -102,6 +104,18 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
                 }
                 if (actionCost <= 0 || Double.isNaN(actionCost)) {
                     throw new IllegalStateException(moves + " calculated implausible cost " + actionCost);
+                }
+                // Apply direction change penalty when the horizontal movement direction differs from
+                // the direction the bot used to reach the current node. This penalizes turns (e.g. 90°)
+                // which cause the bot to lose momentum/speed in-game.
+                if (applyDirectionChangePenalty && currentNode.previous != null) {
+                    int incomingDx = currentNode.x - currentNode.previous.x;
+                    int incomingDz = currentNode.z - currentNode.previous.z;
+                    int outgoingDx = res.x - currentNode.x;
+                    int outgoingDz = res.z - currentNode.z;
+                    if (incomingDx != outgoingDx || incomingDz != outgoingDz) {
+                        actionCost += directionChangePenalty;
+                    }
                 }
                 // check destination after verifying it's not COST_INF -- some movements return a static IMPOSSIBLE object with COST_INF and destination being 0,0,0 to avoid allocating a new result for every failed calculation
 //                if (moves.dynamicXZ && !worldBorder.entirelyContains(res.x, res.z)) { // see issue #218

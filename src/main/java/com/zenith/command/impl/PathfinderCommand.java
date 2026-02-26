@@ -683,6 +683,13 @@ public class PathfinderCommand extends Command {
                     .addField("Jump Penalty", CONFIG.client.extra.pathfinder.jumpPenalty)
                     .primaryColor();
             })))
+            .then(literal("directionChangePenalty").then(argument("cost", doubleArg()).executes(c -> {
+                CONFIG.client.extra.pathfinder.directionChangePenalty = getDouble(c, "cost");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Direction Change Penalty", CONFIG.client.extra.pathfinder.directionChangePenalty)
+                    .primaryColor();
+            })))
             .then(literal("allowSprint").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.allowSprint = getToggle(c, "toggle");
                 c.getSource().getEmbed()
@@ -995,6 +1002,7 @@ public class PathfinderCommand extends Command {
         settingsMap.put("blockBreakAdditionalCost", String.valueOf(CONFIG.client.extra.pathfinder.blockBreakAdditionalCost));
         settingsMap.put("blockPlacementPenalty", String.valueOf(CONFIG.client.extra.pathfinder.blockPlacementPenalty));
         settingsMap.put("jumpPenalty", String.valueOf(CONFIG.client.extra.pathfinder.jumpPenalty));
+        settingsMap.put("directionChangePenalty", String.valueOf(CONFIG.client.extra.pathfinder.directionChangePenalty));
         settingsMap.put("lavaWalkCost", String.valueOf(CONFIG.client.extra.pathfinder.lavaWalkCost));
         settingsMap.put("allowSprint", toggleStr(CONFIG.client.extra.pathfinder.allowSprint));
         settingsMap.put("allowPlace", toggleStr(CONFIG.client.extra.pathfinder.allowPlace));

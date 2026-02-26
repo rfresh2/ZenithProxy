@@ -49,6 +49,7 @@ public class CalculationContext {
     public final double breakBlockAdditionalCost = CONFIG.client.extra.pathfinder.blockBreakAdditionalCost;
     public final double backtrackCostFavoringCoefficient = 0.5;
     public final double jumpPenalty = CONFIG.client.extra.pathfinder.jumpPenalty;
+    public final double directionChangePenalty = CONFIG.client.extra.pathfinder.directionChangePenalty;
     public final double walkOnWaterOnePenalty = 3;
 
     public final PrecomputedData precomputedData = PrecomputedData.INSTANCE;

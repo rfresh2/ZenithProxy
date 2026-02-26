@@ -206,6 +206,7 @@ public final class Config {
                 public double blockPlacementPenalty = 20.0;
                 public double blockBreakAdditionalCost = 2;
                 public double jumpPenalty = 2.0;
+                public double directionChangePenalty = 0.0;
                 public double lavaWalkCost = 200;
                 public int maxFallHeightNoWater = 3;
                 public boolean allowLongFall = false;
