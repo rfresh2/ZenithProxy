@@ -765,6 +765,18 @@ public final class MovementHelper {
         return World.isFluid(block);
     }
 
+    public static boolean isPlayerTouchingWater() {
+        return PlayerContext.INSTANCE.player().isTouchingWater() || MovementHelper.isWater(World.getBlock(PlayerContext.INSTANCE.playerFeet()));
+    }
+
+    public static boolean isPlayerTouchingLava() {
+        return PlayerContext.INSTANCE.player().isTouchingLava() || MovementHelper.isLava(World.getBlock(PlayerContext.INSTANCE.playerFeet()));
+    }
+
+    public static boolean isPlayerTouchingLiquid() {
+        return isPlayerTouchingWater() || isPlayerTouchingLava();
+    }
+
 //    static boolean possiblyFlowing(BlockState state) {
 //        if (World.isFluid(state.block())) {
 //            return World.getFluidFlow(state) != MutableVec3d.ZERO;
