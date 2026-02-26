@@ -45,6 +45,9 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
             )}
         ));
         EVENT_BUS.postAsync(new SpectatorLoggedInEvent(session));
+        // allows client packets to begin being forwarded to spectator
+        // but they will queue behind this handler as its already executing in the event loop
+        session.setLoggedIn();
         SpectatorSync.initSpectator(session, () -> CACHE.getAllDataSpectator(session.getSpectatorPlayerCache()));
         if (CONFIG.server.welcomeMessages) {
             var connections = Proxy.getInstance().getActiveConnections().getArray();
@@ -57,7 +60,6 @@ public class LoginSpectatorPostHandler implements PostOutgoingPacketHandler<Clie
                 }
             }
         }
-        session.setLoggedIn();
         ServerSession currentPlayer = Proxy.getInstance().getCurrentPlayer().get();
         if (currentPlayer != null) currentPlayer.syncTeamMembers();
         SpectatorSync.syncPlayerEquipmentWithSpectatorsFromCache();

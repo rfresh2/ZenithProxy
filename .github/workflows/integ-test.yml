@@ -1,4 +1,4 @@
-name: 1.21.4 Plugin Test
+name: 1.21.4 Integ Test
 
 on:
   workflow_dispatch:
@@ -15,11 +15,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Setup JDK
-        uses: actions/setup-java@v5
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
         with:
           java-version: '25'
-          distribution: 'corretto'
+          distribution: 'graalvm'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Elevate wrapper permissions
         run: chmod +x ./gradlew
@@ -43,6 +44,18 @@ jobs:
 
       - name: Run Plugin Load Test
         run: ./gradlew pluginLoadTest
+
+      - name: Run Native Tests
+        run: ./gradlew nativeTest
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: reports
+          path: |
+            **/build/reports/
+            **/build/test-results/
 
       - name: Upload Java Artifact
         uses: actions/upload-artifact@v6

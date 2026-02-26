@@ -89,6 +89,8 @@ dependencies {
 
     testImplementation(platform("org.junit:junit-bom:6.0.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers:2.0.3")
+    testImplementation("org.testcontainers:testcontainers-junit-jupiter:2.0.3")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
     annotationProcessor("com.google.auto.service:auto-service:1.1.1")
@@ -275,6 +277,25 @@ graalvmNative {
             if (buildReport != null) {
                 buildArgs.add("--emit build-report")
             }
+            configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
+        }
+        named("test") {
+            javaLauncher = javaLauncherProvider
+            quickBuild = true
+            verbose = true
+            debug = true
+            // additional config in: `src/main/resources/META-INF/native-image/com.zenith/zenithproxy/native-image.properties
+            buildArgs.addAll(
+                "-H:DeadlockWatchdogInterval=30",
+                "-H:+CompactingOldGen",
+                "-H:+TrackPrimitiveValues",
+                "-H:+UsePredicates",
+                "--future-defaults=all",
+                "-R:MaxHeapSize=200m",
+                "-march=x86-64-v3",
+                "--gc=serial",
+                "-J-XX:MaxRAMPercentage=90",
+            )
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
     }
