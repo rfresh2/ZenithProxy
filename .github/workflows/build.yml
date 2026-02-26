@@ -33,6 +33,15 @@ jobs:
       - name: Build ZenithProxy
         run: ./gradlew build
 
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: reports
+          path: |
+            **/build/reports/
+            **/build/test-results/
+
       - name: Upload Java Artifact
         uses: actions/upload-artifact@v6
         with:

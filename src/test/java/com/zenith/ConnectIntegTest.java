@@ -3,6 +3,7 @@ package com.zenith;
 import com.zenith.util.Wait;
 import com.zenith.util.config.Config;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -13,18 +14,18 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers(disabledWithoutDocker = true)
+@ExtendWith(TestLogCaptureJunitExtension.class)
 public class ConnectIntegTest {
 
     @Container
     public GenericContainer minecraftServer = new GenericContainer(DockerImageName.parse("itzg/minecraft-server:java21"))
         .withExposedPorts(25565)
-        .withExposedPorts(25565)
         .withEnv("EULA", "TRUE")
         .withEnv("TYPE", "PAPER")
         .withEnv("VERSION", "1.21.4")
         .withEnv("ONLINE_MODE", "FALSE")
-        .waitingFor(org.testcontainers.containers.wait.strategy.Wait.forLogMessage(".*Done \\([0-9.]+s\\)!.*\\n", 1))
-        .withStartupTimeout(Duration.ofMinutes(1));
+        .waitingFor(org.testcontainers.containers.wait.strategy.Wait.forLogMessage(".*Done \\(.*\\)!.*", 1))
+        .withStartupTimeout(Duration.ofMinutes(3));
 
     @Test
     public void connectTest() {

@@ -46,7 +46,7 @@ jobs:
           cache-read-only: ${{ github.event_name == 'pull_request' }}
 
       - name: Build ZenithProxy Java
-        run: ./gradlew build
+        run: ./gradlew build -x test
 
       - name: Upload Java Artifact
         uses: actions/upload-artifact@v6
@@ -64,7 +64,7 @@ jobs:
         run: echo "GRAALVM_BUILD_REPORT=true" >> "$GITHUB_ENV"
 
       - name: Build ZenithProxy Linux Native
-        run: ./gradlew nativeCompile
+        run: ./gradlew nativeCompile -x test
 
       - name: Move GraalVM Build Report
         run: mv build/native/nativeCompile/*build-report.html build/native/ZenithProxy-build-report.html
