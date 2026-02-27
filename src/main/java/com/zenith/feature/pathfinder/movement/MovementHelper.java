@@ -240,6 +240,10 @@ public final class MovementHelper {
             || block == BlockRegistry.COBWEB
             || block == BlockRegistry.VINE
             || block == BlockRegistry.LADDER
+            || block == BlockRegistry.TWISTING_VINES
+            || block == BlockRegistry.TWISTING_VINES_PLANT
+            || block == BlockRegistry.WEEPING_VINES
+            || block == BlockRegistry.WEEPING_VINES_PLANT
             || block == BlockRegistry.COCOA
             || block == BlockRegistry.AZALEA || block == BlockRegistry.FLOWERING_AZALEA
             || block.blockTags().contains(BlockTags.DOORS)
@@ -392,7 +396,13 @@ public final class MovementHelper {
         if (block == BlockRegistry.AZALEA || block == BlockRegistry.FLOWERING_AZALEA) {
             return YES;
         }
-        if (block == BlockRegistry.LADDER) { // TODO reconsider this
+        if (block == BlockRegistry.LADDER
+            || block == BlockRegistry.VINE
+            || block == BlockRegistry.TWISTING_VINES
+            || block == BlockRegistry.TWISTING_VINES_PLANT
+            || block == BlockRegistry.WEEPING_VINES
+            || block == BlockRegistry.WEEPING_VINES_PLANT)
+        { // TODO reconsider this
             return YES;
         }
         if (block == BlockRegistry.FARMLAND || block == BlockRegistry.DIRT_PATH || block == BlockRegistry.SOUL_SAND) {

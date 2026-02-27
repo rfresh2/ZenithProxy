@@ -40,7 +40,12 @@ public class MovementPillar extends Movement {
     public static double cost(CalculationContext context, int x, int y, int z) {
         int fromState = context.getId(x, y, z);
         Block fromBlock = BlockStateInterface.getBlock(fromState);
-        boolean ladder = fromBlock == BlockRegistry.LADDER || fromBlock == BlockRegistry.VINE;
+        boolean ladder = fromBlock == BlockRegistry.LADDER
+            || fromBlock == BlockRegistry.VINE
+            || fromBlock == BlockRegistry.TWISTING_VINES
+            || fromBlock == BlockRegistry.TWISTING_VINES_PLANT
+            || fromBlock == BlockRegistry.WEEPING_VINES
+            || fromBlock == BlockRegistry.WEEPING_VINES_PLANT;
         int fromDown = context.getId(x, y - 1, z);
         Block fromDownBlock = BlockStateInterface.getBlock(fromDown);
         if (!ladder) {
@@ -97,7 +102,13 @@ public class MovementPillar extends Movement {
             return COST_INF;
         }
         if (hardness != 0) {
-            if (toBreakBlock == BlockRegistry.LADDER || toBreakBlock == BlockRegistry.VINE) {
+            if (toBreakBlock == BlockRegistry.LADDER
+                || toBreakBlock == BlockRegistry.VINE
+                || toBreakBlock == BlockRegistry.TWISTING_VINES
+                || toBreakBlock == BlockRegistry.TWISTING_VINES_PLANT
+                || toBreakBlock == BlockRegistry.WEEPING_VINES
+                || toBreakBlock == BlockRegistry.WEEPING_VINES_PLANT
+            ) {
                 hardness = 0; // we won't actually need to break the ladder / vine because we're going to use it
             } else {
                 var check = context.getBlock(x, y + 3, z); // the block on top of the one we're going to break, could it fall on us?
