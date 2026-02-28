@@ -190,6 +190,24 @@ public class MovementPillar extends Movement {
         int fromDown = BlockStateInterface.getId(src);
         Block fromDownBlock = BlockStateInterface.getBlock(fromDown);
         if (MovementHelper.isLiquid(fromDownBlock) && MovementHelper.isLiquid(dest)) {
+            var headBonkPos = dest.above(1);
+            var headBonkBlock = BlockStateInterface.getBlock(headBonkPos);
+            var headBonkPos2 = dest.above(2);
+            var headBonkBlock2 = BlockStateInterface.getBlock(headBonkPos2);
+            BlockPos breakHeadBonk = null;
+            if (!MovementHelper.isLiquid(headBonkBlock) && !MovementHelper.canWalkThrough(headBonkPos)) {
+                breakHeadBonk = headBonkPos;
+            } else if (!MovementHelper.isLiquid(headBonkBlock2) && !MovementHelper.canWalkThrough(headBonkPos2)) {
+                breakHeadBonk = headBonkPos2;
+            }
+            if (breakHeadBonk != null) {
+                state.setTarget(new MovementState.MovementTarget(RotationUtils.calcRotationFromVec3d(ctx.playerHead(), VecUtils.calculateBlockCenter(breakHeadBonk), ctx.playerRotations()), false));
+                MovementHelper.switchToBestToolFor(World.getBlock(breakHeadBonk));
+                state.setInput(PathInput.LEFT_CLICK_BLOCK, true);
+                state.setClickTarget(breakHeadBonk);
+                state.setInput(PathInput.JUMP, true);
+                return state;
+            }
             // stay centered while swimming up a water column
             state.setTarget(new MovementState.MovementTarget(RotationUtils.calcRotationFromVec3d(ctx.playerHead(), VecUtils.getBlockPosCenter(dest), ctx.playerRotations()), false));
             Vector3d destCenter = VecUtils.getBlockPosCenter(dest);
