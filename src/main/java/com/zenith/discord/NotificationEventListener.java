@@ -20,6 +20,7 @@ import com.zenith.feature.player.World;
 import com.zenith.feature.queue.Queue;
 import com.zenith.module.impl.AntiAFK;
 import com.zenith.module.impl.SessionTimeLimit;
+import com.zenith.util.ChatUtil;
 import com.zenith.util.DisconnectReasonInfo;
 import com.zenith.util.math.MathHelper;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -688,7 +689,7 @@ public class NotificationEventListener {
         Another possible cause is your microsoft account needing to have a password (re)set. Usually only possible if you are using email codes to log in instead of passwords.
         """;
         if (event.exception() != null) {
-            description = "Error: " + event.exception().getMessage() + "\n\n" + description;
+            description = "Error: " + ChatUtil.constrainChatMessageSize(event.exception().getMessage(), true) + "\n\n" + description;
         }
         var embed = Embed.builder()
             .title("Login Failed")
