@@ -50,7 +50,7 @@ jobs:
 
       - name: Upload Test Results
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: reports
           path: |
@@ -58,8 +58,9 @@ jobs:
             **/build/test-results/
 
       - name: Upload Java Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ZenithProxy-java
           path: build/libs/ZenithProxy.jar
           if-no-files-found: error
+          archive: false

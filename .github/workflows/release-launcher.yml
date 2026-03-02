@@ -23,11 +23,12 @@ jobs:
         run: zip -j -r launcher-assets.zip launcher-assets/
 
       - name: Upload assets
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: existing-launcher-assets
           path: launcher-assets.zip
           if-no-files-found: error
+          archive: false
 
   build-pyinstaller:
     runs-on: ${{ matrix.os }}
@@ -84,21 +85,23 @@ jobs:
           zip -j dist/ZenithProxy-${{ matrix.artifact-name }}.zip dist/launch
 
       - name: Upload Binary
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact-name }}
           path: dist/ZenithProxy-${{ matrix.artifact-name }}.zip
           if-no-files-found: error
+          archive: false
 
       - name: Get Binary Hash
         run: ${{ matrix.sha1-command }} > ZenithProxy-${{ matrix.artifact-name }}.sha1
 
       - name: Upload Launcher Hash Version
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact-name }}.sha1
           path: ZenithProxy-${{ matrix.artifact-name }}.sha1
           if-no-files-found: error
+          archive: false
 
   build-alpine:
     env:
@@ -172,21 +175,23 @@ jobs:
           zip -j dist/ZenithProxy-${{ matrix.artifact-name }}.zip dist/launch
 
       - name: Upload Binary
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact-name }}
           path: dist/ZenithProxy-${{ matrix.artifact-name }}.zip
           if-no-files-found: error
+          archive: false
 
       - name: Get Binary Hash
         run: ${{ matrix.sha1-command }} > ZenithProxy-${{ matrix.artifact-name }}.sha1
 
       - name: Upload Launcher Hash Version
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact-name }}.sha1
           path: ZenithProxy-${{ matrix.artifact-name }}.sha1
           if-no-files-found: error
+          archive: false
 
 
   package-python:
@@ -208,21 +213,23 @@ jobs:
         run: zip -j ZenithProxy-launcher-python.zip launcher-py.zip src/launcher/requirements.txt src/launcher/launch.sh src/launcher/launch.bat
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: launcher-python
           path: ZenithProxy-launcher-python.zip
           if-no-files-found: error
+          archive: false
 
       - name: Get Binary Hash
         run: sha1sum -b launcher-py.zip | cut -d" " -f 1 > ZenithProxy-launcher-python.sha1
 
       - name: Upload Launcher Hash Version
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: launcher-python.sha1
           path: ZenithProxy-launcher-python.sha1
           if-no-files-found: error
+          archive: false
 
   # same as python package but with a custom bat script that bootstraps the python interpreter
   package-windows-python:
@@ -243,21 +250,23 @@ jobs:
         run: zip -j ZenithProxy-launcher-windows-python-amd64.zip launcher-py.zip src/launcher/requirements.txt launch.bat scripts/windows_help.txt
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: launcher-windows-python-amd64
           path: ZenithProxy-launcher-windows-python-amd64.zip
           if-no-files-found: error
+          archive: false
 
       - name: Get Binary Hash
         run: sha1sum -b launcher-py.zip | cut -d" " -f 1 > ZenithProxy-launcher-windows-python-amd64.sha1
 
       - name: Upload Launcher Hash Version
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: launcher-windows-python-amd64.sha1
           path: ZenithProxy-launcher-windows-python-amd64.sha1
           if-no-files-found: error
+          archive: false
 
   release-artifacts:
     needs:
@@ -281,11 +290,12 @@ jobs:
           cat artifacts/*.sha1 > hashes.txt
 
       - name: Upload hashes.txt
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: hashes
           path: hashes.txt
           if-no-files-found: error
+          archive: false
 
       - name: Publish Release Artifacts
         uses: ncipollo/release-action@v1

@@ -48,11 +48,12 @@ jobs:
         run: ./gradlew build -x test
 
       - name: Upload Java Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ZenithProxy-java
           path: build/libs/ZenithProxy.jar
           if-no-files-found: error
+          archive: false
 
       - name: Download GraalVM Profile
         run: |
@@ -79,18 +80,20 @@ jobs:
         run: zip -j ZenithProxy.zip build/native/nativeCompile/*
 
       - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ZenithProxy-linux
           path: ZenithProxy.zip
           if-no-files-found: error
+          archive: false
 
       - name: Upload GraalVM Build Report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: GraalVM Build Report
           path: build/native/ZenithProxy-build-report.html
           if-no-files-found: error
+          archive: false
 
       - name: Publish Maven Artifact Snapshot
         env:
