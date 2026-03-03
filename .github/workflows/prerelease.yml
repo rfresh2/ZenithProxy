@@ -50,7 +50,6 @@ jobs:
       - name: Upload Java Artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ZenithProxy-java
           path: build/libs/ZenithProxy.jar
           if-no-files-found: error
           archive: false
@@ -82,7 +81,6 @@ jobs:
       - name: Upload Linux Artifact
         uses: actions/upload-artifact@v7
         with:
-          name: ZenithProxy-linux
           path: ZenithProxy.zip
           if-no-files-found: error
           archive: false
@@ -106,9 +104,17 @@ jobs:
       - build-java-and-linux-amd64
     runs-on: ubuntu-latest
     steps:
-      - name: Download job artifacts
+      - name: Download java artifact
         uses: actions/download-artifact@v7
         with:
+          name: ZenithProxy.jar
+          merge-multiple: true
+          path: artifacts/
+
+      - name: Download linux artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: ZenithProxy.zip
           merge-multiple: true
           path: artifacts/
 
