@@ -29,6 +29,7 @@ import com.zenith.plugin.api.ConfigSerializer;
 import com.zenith.terminal.TerminalManager;
 import com.zenith.util.KotlinUtil;
 import com.zenith.util.Wait;
+import com.zenith.util.ZenithScheduledExecutor;
 import com.zenith.util.config.Config;
 import com.zenith.util.config.ConfigVerifier;
 import com.zenith.util.config.LaunchConfig;
@@ -195,7 +196,7 @@ public class Globals {
         try {
             Thread.setDefaultUncaughtExceptionHandler(
                 (thread, e) -> DEFAULT_LOG.error("Uncaught exception in thread {}", thread, e));
-            EXECUTOR = Executors.newScheduledThreadPool(4, new ThreadFactoryBuilder()
+            EXECUTOR = new ZenithScheduledExecutor(4, new ThreadFactoryBuilder()
                 .setNameFormat("ZenithProxy Scheduled Executor - #%d")
                 .setDaemon(true)
                 .setUncaughtExceptionHandler((thread, e) -> DEFAULT_LOG.error("Uncaught exception in scheduled executor thread {}", thread, e))
