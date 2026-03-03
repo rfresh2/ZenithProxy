@@ -105,14 +105,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download java artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: ZenithProxy.jar
           merge-multiple: true
           path: artifacts/
 
       - name: Download linux artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: ZenithProxy.zip
           merge-multiple: true
