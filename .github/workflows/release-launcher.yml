@@ -308,6 +308,7 @@ jobs:
           omitBodyDuringUpdate: true
           removeArtifacts: true
           makeLatest: true
+          artifactErrorsFailBuild: true
 
       - name: Docker Update
         uses: peter-evans/repository-dispatch@v4

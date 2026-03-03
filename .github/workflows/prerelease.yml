@@ -117,6 +117,7 @@ jobs:
           name: ZenithProxy.zip
           merge-multiple: true
           path: artifacts/
+          skip-decompress: true
 
       - name: Get Release Tags
         env:
@@ -135,6 +136,7 @@ jobs:
           prerelease: true
           body: "File upload not for users. **Use the Launcher:** https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3"
           commit: ${{ github.sha }}
+          artifactErrorsFailBuild: true
 
       - name: Publish Linux Artifact
         uses: ncipollo/release-action@v1
@@ -144,3 +146,4 @@ jobs:
           prerelease: true
           body: "File upload not for users. **Use the Launcher:** https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3"
           commit: ${{ github.sha }}
+          artifactErrorsFailBuild: true
