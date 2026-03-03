@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     id("org.graalvm.buildtools.native") version "0.11.4"
-    id("com.gradleup.shadow") version "9.3.1"
+    id("com.gradleup.shadow") version "9.3.2"
     id("io.freefair.lombok") version "9.2.0"
     `maven-publish`
 }
@@ -54,7 +54,7 @@ dependencies {
     api("io.netty:netty-resolver-dns-native-macos") { artifact { classifier = "osx-aarch_64" } }
     api("org.cloudburstmc.math:api:2.0")
     api("org.cloudburstmc.math:immutable:2.0")
-    api("org.redisson:redisson:4.2.0") {
+    api("org.redisson:redisson:4.3.0") {
         exclude(group = "io.netty")
     }
     api("com.github.rfresh2:SimpleEventBus:1.6")
