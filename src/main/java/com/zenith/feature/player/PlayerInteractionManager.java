@@ -35,8 +35,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-import static com.zenith.Globals.BOT;
-import static com.zenith.Globals.CACHE;
+import static com.zenith.Globals.*;
 
 @Getter
 public class PlayerInteractionManager {
@@ -233,6 +232,9 @@ public class PlayerInteractionManager {
     }
 
     public boolean hasCorrectToolForDrops(Block block, ItemStack item) {
+        if (CONFIG.debug.chainBreakSpeed2b2tFix && block == BlockRegistry.CHAIN && Proxy.getInstance().isOn2b2t()) {
+            return false;
+        }
         if (!block.requiresCorrectToolForDrops()) return true;
         if (item == Container.EMPTY_STACK) return false;
         ItemData itemData = ItemRegistry.REGISTRY.get(item.getId());
@@ -335,6 +337,9 @@ public class PlayerInteractionManager {
 
     public double getItemDestroySpeed(Block block, ItemStack item) {
         if (item == Container.EMPTY_STACK) return 1.0;
+        if (CONFIG.debug.chainBreakSpeed2b2tFix && block == BlockRegistry.CHAIN && Proxy.getInstance().isOn2b2t()) {
+            return 1.0;
+        }
         var itemData = ItemRegistry.REGISTRY.get(item.getId());
         if (itemData == null) return 1.0f;
         var itemComponents = item.withAddedComponents(itemData.components()).getDataComponents();
