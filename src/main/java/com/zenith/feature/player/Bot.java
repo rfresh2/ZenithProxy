@@ -1317,9 +1317,9 @@ public final class Bot extends ModuleUtils {
     }
 
     public void syncFromCache(boolean full) {
-        this.x = this.lastX = CACHE.getPlayerCache().getX();
-        this.y = this.lastY = CACHE.getPlayerCache().getY();
-        this.z = this.lastZ = CACHE.getPlayerCache().getZ();
+        this.x = CACHE.getPlayerCache().getX();
+        this.y = CACHE.getPlayerCache().getY();
+        this.z = CACHE.getPlayerCache().getZ();
         this.yaw = this.lastYaw = this.requestedYaw = CACHE.getPlayerCache().getYaw();
         this.pitch = this.lastPitch = this.requestedPitch = CACHE.getPlayerCache().getPitch();
         this.onGround = this.lastOnGround = true; // todo: cache
@@ -1329,7 +1329,6 @@ public final class Bot extends ModuleUtils {
         this.velocity.set(0, 0, 0);
         this.supportingBlockPos = Optional.empty();
         this.onGroundNoBlocks = false;
-        this.ticksSinceLastPositionPacketSent = 0;
         if (full) {
             this.isSneaking = this.wasSneaking = false;
             this.isSprinting = this.lastSprinting = false;
