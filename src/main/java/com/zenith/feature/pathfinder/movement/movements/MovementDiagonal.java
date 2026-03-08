@@ -217,7 +217,13 @@ public class MovementDiagonal extends Movement {
         }
         if (optionA != 0 || optionB != 0) {
             multiplier *= SQRT_2 - 0.001; // TODO tune
-            if (startIn == BlockRegistry.LADDER || startIn == BlockRegistry.VINE) {
+            if (startIn == BlockRegistry.LADDER
+                || startIn == BlockRegistry.VINE
+                || startIn == BlockRegistry.TWISTING_VINES
+                || startIn == BlockRegistry.TWISTING_VINES_PLANT
+                || startIn == BlockRegistry.WEEPING_VINES
+                || startIn == BlockRegistry.WEEPING_VINES_PLANT
+            ) {
                 // edging around doesn't work if doing so would climb a ladder or vine instead of moving sideways
                 return;
             }

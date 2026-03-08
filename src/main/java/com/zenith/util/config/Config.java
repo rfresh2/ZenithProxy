@@ -693,6 +693,7 @@ public final class Config {
         public boolean botPitchPrecisionClamping = true;
         public boolean botRotateBeforeInteract = true;
         public boolean inventoryRequestServerSyncOnAction = false;
+        public boolean chainBreakSpeed2b2tFix = true;
 
         public static final class PacketLog {
             public boolean enabled = false;

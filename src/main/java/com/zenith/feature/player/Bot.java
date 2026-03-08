@@ -604,8 +604,8 @@ public final class Bot extends ModuleUtils {
 
     private MutableVec3d getMovementInputVec() {
         float strafe = 0.0F;
-        if (movementInput.pressingLeft) --strafe;
-        if (movementInput.pressingRight) ++strafe;
+        if (movementInput.pressingLeft) ++strafe;
+        if (movementInput.pressingRight) --strafe;
         // todo:
 //        if (isUsingItem && !isPassenger) {
 //            this.input.leftImpulse *= 0.2F;

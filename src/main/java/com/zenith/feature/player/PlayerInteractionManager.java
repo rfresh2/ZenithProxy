@@ -17,6 +17,7 @@ import com.zenith.mc.item.ToolTag;
 import com.zenith.mc.item.ToolTier;
 import com.zenith.util.math.MathHelper;
 import lombok.Getter;
+import net.kyori.adventure.key.Key;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftPacket;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
@@ -34,8 +35,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-import static com.zenith.Globals.BOT;
-import static com.zenith.Globals.CACHE;
+import static com.zenith.Globals.*;
 
 @Getter
 public class PlayerInteractionManager {
@@ -232,6 +232,9 @@ public class PlayerInteractionManager {
     }
 
     public boolean hasCorrectToolForDrops(Block block, ItemStack item) {
+        if (CONFIG.debug.chainBreakSpeed2b2tFix && block.blockTags().contains(BlockTags.CHAINS) && Proxy.getInstance().isOn2b2t()) {
+            return false;
+        }
         if (!block.requiresCorrectToolForDrops()) return true;
         if (item == Container.EMPTY_STACK) return false;
         ItemData itemData = ItemRegistry.REGISTRY.get(item.getId());
@@ -253,11 +256,7 @@ public class PlayerInteractionManager {
     }
 
     public boolean matchingTool(ItemStack item, Block block) {
-        ItemData itemData = ItemRegistry.REGISTRY.get(item.getId());
-        if (itemData == null) return false;
-        ToolTag toolTag = itemData.toolTag();
-        if (toolTag == null) return false;
-        return block.blockTags().contains(toolTag.type().getBlockTag());
+        return isItemCorrectForDrops(block, item);
     }
 
     public int getEnchantmentLevel(ItemStack item, EnchantmentData enchantmentData) {
@@ -274,14 +273,7 @@ public class PlayerInteractionManager {
     }
 
     public double getPlayerDestroySpeed(Block block, ItemStack item) {
-        double speed = 1.0;
-        if (item != Container.EMPTY_STACK) {
-            if (matchingTool(item, block)) {
-                ItemData itemData = ItemRegistry.REGISTRY.get(item.getId());
-                ToolTag toolTag = itemData.toolTag();
-                speed = toolTag.tier().getSpeed();
-            }
-        }
+        double speed = getItemDestroySpeed(block, item);
 
         if (speed > 1.0) {
             var effLevel = getEnchantmentLevel(item, EnchantmentRegistry.EFFICIENCY.get());
@@ -341,6 +333,95 @@ public class PlayerInteractionManager {
         }
 
         return speed;
+    }
+
+    public double getItemDestroySpeed(Block block, ItemStack item) {
+        if (item == Container.EMPTY_STACK) return 1.0;
+        if (CONFIG.debug.chainBreakSpeed2b2tFix && block.blockTags().contains(BlockTags.CHAINS) && Proxy.getInstance().isOn2b2t()) {
+            return 1.0;
+        }
+        var itemData = ItemRegistry.REGISTRY.get(item.getId());
+        if (itemData == null) return 1.0f;
+        var itemComponents = item.withAddedComponents(itemData.components()).getDataComponents();
+        var toolComponent = itemComponents.get(DataComponentTypes.TOOL);
+        if (toolComponent == null) return 1.0;
+        ToolTag toolTag = itemData.toolTag();
+        if (toolTag == null) return 1.0;
+        var rules = toolComponent.getRules();
+        for (int i = 0; i < rules.size(); i++) {
+            final var rule = rules.get(i);
+            if (rule.getSpeed() == null) continue;
+            var ruleBlocksHolder = rule.getBlocks();
+            var tag = ruleBlocksHolder.getLocation();
+            if (tag != null) {
+                var tagKey = Key.key(tag);
+                try {
+                    // todo: i don't think all tag strings will align with our enum names exactly
+                    var blockTag = BlockTags.valueOf(tagKey.value().toUpperCase());
+                    if (block.blockTags().contains(blockTag)) {
+                        return rule.getSpeed();
+                    }
+                } catch (Exception e) {
+                    // todo: def incorrect for some cases
+                    if (block.blockTags().contains(toolTag.type().getBlockTag())) {
+                        return rule.getSpeed();
+                    }
+                }
+            } else {
+                var blockIdsArray = ruleBlocksHolder.getHolders();
+                if (blockIdsArray != null) {
+                    for (int j = 0; j < blockIdsArray.length; j++) {
+                        if (block.id() == blockIdsArray[j]) {
+                            return rule.getSpeed();
+                        }
+                    }
+                }
+            }
+        }
+        return toolComponent.getDefaultMiningSpeed();
+    }
+
+    public boolean isItemCorrectForDrops(Block block, ItemStack item) {
+        if (item == Container.EMPTY_STACK) return false;
+        var itemData = ItemRegistry.REGISTRY.get(item.getId());
+        if (itemData == null) return false;
+        var itemComponents = item.withAddedComponents(itemData.components()).getDataComponents();
+        var toolComponent = itemComponents.get(DataComponentTypes.TOOL);
+        if (toolComponent == null) return false;
+        ToolTag toolTag = itemData.toolTag();
+        if (toolTag == null) return false;
+        var rules = toolComponent.getRules();
+        for (int i = 0; i < rules.size(); i++) {
+            final var rule = rules.get(i);
+            if (rule.getCorrectForDrops() == null) continue;
+            var ruleBlocksHolder = rule.getBlocks();
+            var tag = ruleBlocksHolder.getLocation();
+            if (tag != null) {
+                var tagKey = Key.key(tag);
+                try {
+                    // todo: i don't think all tag strings will align with our enum names exactly
+                    var blockTag = BlockTags.valueOf(tagKey.value().toUpperCase());
+                    if (block.blockTags().contains(blockTag)) {
+                        return rule.getCorrectForDrops();
+                    }
+                } catch (Exception e) {
+                    // todo: def incorrect for some cases
+                    if (block.blockTags().contains(toolTag.type().getBlockTag())) {
+                        return rule.getCorrectForDrops();
+                    }
+                }
+            } else {
+                var blockIdsArray = ruleBlocksHolder.getHolders();
+                if (blockIdsArray != null) {
+                    for (int j = 0; j < blockIdsArray.length; j++) {
+                        if (block.id() == blockIdsArray[j]) {
+                            return rule.getCorrectForDrops();
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void destroyBlock(int x, int y, int z) {

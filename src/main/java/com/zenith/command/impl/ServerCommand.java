@@ -10,6 +10,7 @@ import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
 import com.zenith.feature.queue.mcping.MCPing;
+import com.zenith.util.ChatUtil;
 
 import java.util.regex.Pattern;
 
@@ -128,7 +129,7 @@ public class ServerCommand extends Command {
                 c.getSource().logEmbed(c, Embed.builder()
                     .title("Server Ping Failed")
                     .description("Double check if you have set the correct server IP")
-                    .addField("Error", e.getMessage())
+                    .addField("Error", ChatUtil.constrainChatMessageSize(e.getMessage(), true))
                     .addField("IP", ip)
                     .addField("Port", port)
                     .errorColor());

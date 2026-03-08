@@ -28,9 +28,16 @@
         <appender-ref ref="TERMINAL"/>
         <discardingThreshold>0</discardingThreshold>
     </appender>
+    <appender name="TEST_CAPTURE" class="com.zenith.TestLogCaptureAppender">
+        <filter class="com.zenith.terminal.logback.LogSourceFilter"/>
+        <filter class="ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
 
     <root>
-        <!--        allow logs from other libs to also go to stdout-->
         <appender-ref ref="ASYNC_TERMINAL"/>
+        <appender-ref ref="TEST_CAPTURE"/>
     </root>
 </configuration>
