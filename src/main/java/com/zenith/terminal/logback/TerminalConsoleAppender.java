@@ -50,7 +50,6 @@ public class TerminalConsoleAppender extends ConsoleAppender<ILoggingEvent> {
                     .encoding(StandardCharsets.UTF_8)
                     .stdoutEncoding(StandardCharsets.UTF_8)
                     .stderrEncoding(StandardCharsets.UTF_8)
-                    .jansi(true)
                     .systemOutput(TerminalBuilder.SystemOutput.SysOut)
                     .color(true)
                     .build();
