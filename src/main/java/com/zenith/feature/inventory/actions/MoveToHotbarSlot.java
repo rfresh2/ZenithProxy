@@ -35,10 +35,6 @@ public class MoveToHotbarSlot implements InventoryAction {
             return null; // can't swap if mouse stack is not empty
         }
         final ItemStack clickStack = container.getItemStack(slotId);
-        if (isStackEmpty(clickStack)) {
-            CLIENT_LOG.debug("{} Can't swap empty stack", this);
-            return null; // can't swap if clickStack is empty
-        }
         Int2ObjectMap<ItemStack> changedSlots = new Int2ObjectArrayMap<>();
         int hotBarSlot = -1;
         boolean playerInv = containerId == 0;
