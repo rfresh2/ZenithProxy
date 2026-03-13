@@ -219,6 +219,18 @@ public class MovementTraverse extends Movement {
             }
         }
 
+        var src0Block = BlockStateInterface.getBlock(src);
+        var src1Block = BlockStateInterface.getBlock(src.above());
+        if (src0Block.blockTags().contains(BlockTags.DOORS) || src1Block.blockTags().contains(BlockTags.DOORS)) {
+            boolean notPassable = src0Block.blockTags().contains(BlockTags.DOORS) && !MovementHelper.isDoorPassable(src, dest) || src1Block.blockTags().contains(BlockTags.DOORS) && !MovementHelper.isDoorPassable(dest, src);
+            boolean canOpen = !(BlockRegistry.IRON_DOOR.equals(src0Block) || BlockRegistry.IRON_DOOR.equals(src1Block));
+            if (notPassable && canOpen) {
+                return state.setTarget(new MovementState.MovementTarget(RotationUtils.calcRotationFromVec3d(ctx.playerHead(), VecUtils.calculateBlockCenter(src), ctx.playerRotations()), true))
+                    .setInput(PathInput.RIGHT_CLICK_BLOCK, true)
+                    .setClickTarget(src);
+            }
+        }
+
         if (pb0Block.blockTags().contains(BlockTags.FENCE_GATES) || pb1Block.blockTags().contains(BlockTags.FENCE_GATES)) {
             BlockPos blocked = !MovementHelper.isGatePassable(positionsToBreak[0], src.above()) ? positionsToBreak[0]
                 : !MovementHelper.isGatePassable(positionsToBreak[1], src) ? positionsToBreak[1]
