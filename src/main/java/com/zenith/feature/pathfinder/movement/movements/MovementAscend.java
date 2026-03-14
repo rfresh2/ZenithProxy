@@ -140,7 +140,8 @@ public class MovementAscend extends Movement {
 
     @Override
     public MovementState updateState(MovementState state) {
-        if (ctx.playerFeet().y() < src.y()) {
+        var isTouchingLiquid = MovementHelper.isPlayerTouchingLiquid();
+        if (ctx.playerFeet().y() < src.y() && !isTouchingLiquid) {
             // this check should run even when in preparing state (breaking blocks)
             return state.setStatus(MovementStatus.UNREACHABLE);
         }

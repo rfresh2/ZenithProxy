@@ -166,6 +166,9 @@ public abstract class Movement implements IMovement {
                         state.setInput(PathInput.LEFT_CLICK_BLOCK, true);
                         state.setClickTarget(blockPos);
                     }
+                    if (MovementHelper.isPlayerTouchingLiquid() && ctx.player().getY() < getDest().y()) {
+                        state.setInput(PathInput.JUMP, true);
+                    }
                     return false;
                 }
                 //get rekt minecraft

@@ -40,7 +40,12 @@ public class MovementPillar extends Movement {
     public static double cost(CalculationContext context, int x, int y, int z) {
         int fromState = context.getId(x, y, z);
         Block fromBlock = BlockStateInterface.getBlock(fromState);
-        boolean ladder = fromBlock == BlockRegistry.LADDER || fromBlock == BlockRegistry.VINE;
+        boolean ladder = fromBlock == BlockRegistry.LADDER
+            || fromBlock == BlockRegistry.VINE
+            || fromBlock == BlockRegistry.TWISTING_VINES
+            || fromBlock == BlockRegistry.TWISTING_VINES_PLANT
+            || fromBlock == BlockRegistry.WEEPING_VINES
+            || fromBlock == BlockRegistry.WEEPING_VINES_PLANT;
         int fromDown = context.getId(x, y - 1, z);
         Block fromDownBlock = BlockStateInterface.getBlock(fromDown);
         if (!ladder) {
@@ -97,7 +102,13 @@ public class MovementPillar extends Movement {
             return COST_INF;
         }
         if (hardness != 0) {
-            if (toBreakBlock == BlockRegistry.LADDER || toBreakBlock == BlockRegistry.VINE) {
+            if (toBreakBlock == BlockRegistry.LADDER
+                || toBreakBlock == BlockRegistry.VINE
+                || toBreakBlock == BlockRegistry.TWISTING_VINES
+                || toBreakBlock == BlockRegistry.TWISTING_VINES_PLANT
+                || toBreakBlock == BlockRegistry.WEEPING_VINES
+                || toBreakBlock == BlockRegistry.WEEPING_VINES_PLANT
+            ) {
                 hardness = 0; // we won't actually need to break the ladder / vine because we're going to use it
             } else {
                 var check = context.getBlock(x, y + 3, z); // the block on top of the one we're going to break, could it fall on us?
@@ -179,6 +190,24 @@ public class MovementPillar extends Movement {
         int fromDown = BlockStateInterface.getId(src);
         Block fromDownBlock = BlockStateInterface.getBlock(fromDown);
         if (MovementHelper.isLiquid(fromDownBlock) && MovementHelper.isLiquid(dest)) {
+            var headBonkPos = dest.above(1);
+            var headBonkBlock = BlockStateInterface.getBlock(headBonkPos);
+            var headBonkPos2 = dest.above(2);
+            var headBonkBlock2 = BlockStateInterface.getBlock(headBonkPos2);
+            BlockPos breakHeadBonk = null;
+            if (!MovementHelper.isLiquid(headBonkBlock) && !MovementHelper.canWalkThrough(headBonkPos)) {
+                breakHeadBonk = headBonkPos;
+            } else if (!MovementHelper.isLiquid(headBonkBlock2) && !MovementHelper.canWalkThrough(headBonkPos2)) {
+                breakHeadBonk = headBonkPos2;
+            }
+            if (breakHeadBonk != null) {
+                state.setTarget(new MovementState.MovementTarget(RotationUtils.calcRotationFromVec3d(ctx.playerHead(), VecUtils.calculateBlockCenter(breakHeadBonk), ctx.playerRotations()), false));
+                MovementHelper.switchToBestToolFor(World.getBlock(breakHeadBonk));
+                state.setInput(PathInput.LEFT_CLICK_BLOCK, true);
+                state.setClickTarget(breakHeadBonk);
+                state.setInput(PathInput.JUMP, true);
+                return state;
+            }
             // stay centered while swimming up a water column
             state.setTarget(new MovementState.MovementTarget(RotationUtils.calcRotationFromVec3d(ctx.playerHead(), VecUtils.getBlockPosCenter(dest), ctx.playerRotations()), false));
             Vector3d destCenter = VecUtils.getBlockPosCenter(dest);

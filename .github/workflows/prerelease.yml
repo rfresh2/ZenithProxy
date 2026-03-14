@@ -48,11 +48,11 @@ jobs:
         run: ./gradlew build -x test
 
       - name: Upload Java Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
-          name: ZenithProxy-java
           path: build/libs/ZenithProxy.jar
           if-no-files-found: error
+          archive: false
 
       - name: Download GraalVM Profile
         run: |
@@ -79,18 +79,19 @@ jobs:
         run: zip -j ZenithProxy.zip build/native/nativeCompile/*
 
       - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
-          name: ZenithProxy-linux
           path: ZenithProxy.zip
           if-no-files-found: error
+          archive: false
 
       - name: Upload GraalVM Build Report
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: GraalVM Build Report
           path: build/native/ZenithProxy-build-report.html
           if-no-files-found: error
+          archive: false
 
       - name: Publish Maven Artifact Snapshot
         env:
@@ -103,11 +104,20 @@ jobs:
       - build-java-and-linux-amd64
     runs-on: ubuntu-latest
     steps:
-      - name: Download job artifacts
-        uses: actions/download-artifact@v7
+      - name: Download java artifact
+        uses: actions/download-artifact@v8
         with:
+          name: ZenithProxy.jar
           merge-multiple: true
           path: artifacts/
+
+      - name: Download linux artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: ZenithProxy.zip
+          merge-multiple: true
+          path: artifacts/
+          skip-decompress: true
 
       - name: Get Release Tags
         env:
@@ -126,6 +136,7 @@ jobs:
           prerelease: true
           body: "File upload not for users. **Use the Launcher:** https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3"
           commit: ${{ github.sha }}
+          artifactErrorsFailBuild: true
 
       - name: Publish Linux Artifact
         uses: ncipollo/release-action@v1
@@ -135,3 +146,4 @@ jobs:
           prerelease: true
           body: "File upload not for users. **Use the Launcher:** https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3"
           commit: ${{ github.sha }}
+          artifactErrorsFailBuild: true

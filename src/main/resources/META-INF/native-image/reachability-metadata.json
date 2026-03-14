@@ -4490,6 +4490,15 @@
       "type": "java.lang.Long[]"
     },
     {
+      "type": "java.lang.Module",
+      "methods": [
+        {
+          "name": "isNativeAccessEnabled",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "java.lang.Number",
       "serializable": true
     },
