@@ -34,7 +34,6 @@ public class MoveToHotbarSlot implements InventoryAction {
             CLIENT_LOG.debug("Can't move to hotbar, mouse stack is not empty: {}", this);
             return null; // can't swap if mouse stack is not empty
         }
-        final ItemStack clickStack = container.getItemStack(slotId);
         Int2ObjectMap<ItemStack> changedSlots = new Int2ObjectArrayMap<>();
         int hotBarSlot = -1;
         boolean playerInv = containerId == 0;
@@ -50,6 +49,19 @@ public class MoveToHotbarSlot implements InventoryAction {
                 CLIENT_LOG.debug("Unhandled action param: {}", this);
                 return null;
             }
+        }
+        // We reject the MoveToHotbarSlot InventoryAction if both slots we want to swap are empty.
+        final ItemStack clickStack = container.getItemStack(slotId);
+        ItemStack swapStack0;
+        // if hotBarSlot == -1 we are not in the inventory and swapping with the offhand
+        if (hotBarSlot == 45 || hotBarSlot == -1) {
+            swapStack0 = CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND);
+        } else {
+            swapStack0 = container.getItemStack(hotBarSlot);
+        }
+        if (isStackEmpty(clickStack) && isStackEmpty(swapStack0)) {
+            CLIENT_LOG.debug("{} Can't swap two empty stacks with each other", this);
+            return null; // can't swap if clickStack and swapStack is empty
         }
         if (hotBarSlot != -1) {
             final ItemStack swapStack = container.getItemStack(hotBarSlot);
