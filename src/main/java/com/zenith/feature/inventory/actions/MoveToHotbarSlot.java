@@ -39,8 +39,7 @@ public class MoveToHotbarSlot implements InventoryAction {
         boolean playerInv = containerId == 0;
         int hotbarOffset = playerInv ? 36 : container.getSize() - 9;
         switch (moveToHotbarAction) {
-            case SLOT_1, SLOT_2, SLOT_3, SLOT_4, SLOT_5, SLOT_6, SLOT_7, SLOT_8,
-                 SLOT_9 -> {// swap the clickStack with the item in the hotbar slot
+            case SLOT_1, SLOT_2, SLOT_3, SLOT_4, SLOT_5, SLOT_6, SLOT_7, SLOT_8, SLOT_9 -> {// swap the clickStack with the item in the hotbar slot
                 hotBarSlot = moveToHotbarAction.getId() + hotbarOffset;
             }
             case OFF_HAND -> {
