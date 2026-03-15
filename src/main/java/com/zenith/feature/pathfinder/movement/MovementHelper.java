@@ -669,7 +669,7 @@ public final class MovementHelper {
         Rotation targetRotation = state.getTarget().rotation();
         MutableVec3d playerVelocity = ctx.player().getVelocity();
         double velThreshold = 0.02;
-        if (Math.abs(playerVelocity.getX()) > velThreshold || Math.abs(playerVelocity.getZ()) > velThreshold) {
+        if (!BOT.isHorizontalCollision() && (Math.abs(playerVelocity.getX()) > velThreshold || Math.abs(playerVelocity.getZ()) > velThreshold)) {
             double velX = MathHelper.round(playerVelocity.getX(), 3);
             double velZ = MathHelper.round(playerVelocity.getZ(), 3);
             // we really only care about the x and z components of the velocity
