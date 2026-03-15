@@ -34,11 +34,6 @@ public class MoveToHotbarSlot implements InventoryAction {
             CLIENT_LOG.debug("Can't move to hotbar, mouse stack is not empty: {}", this);
             return null; // can't swap if mouse stack is not empty
         }
-        final ItemStack clickStack = container.getItemStack(slotId);
-        if (isStackEmpty(clickStack)) {
-            CLIENT_LOG.debug("{} Can't swap empty stack", this);
-            return null; // can't swap if clickStack is empty
-        }
         Int2ObjectMap<ItemStack> changedSlots = new Int2ObjectArrayMap<>();
         int hotBarSlot = -1;
         boolean playerInv = containerId == 0;
@@ -55,16 +50,19 @@ public class MoveToHotbarSlot implements InventoryAction {
                 return null;
             }
         }
-        if (hotBarSlot != -1) {
-            final ItemStack swapStack = container.getItemStack(hotBarSlot);
-            changedSlots.put(hotBarSlot, clickStack);
-            changedSlots.put(slotId, swapStack);
-        } else {
-            // there is no offhand slot id in the container, so only one slot is set as changed in the packet
-            var offhandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND);
-            changedSlots.put(slotId, offhandStack);
+        final ItemStack clickStack = container.getItemStack(slotId);
+        final ItemStack swapStack = hotBarSlot == -1
+            ? CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND)
+            : container.getItemStack(hotBarSlot);
+        if (isStackEmpty(clickStack) && isStackEmpty(swapStack)) {
+            CLIENT_LOG.debug("{} Can't swap two empty stacks with each other", this);
+            return null; // can't swap if clickStack and swapStack is empty
         }
-
+        if (hotBarSlot != -1) { // -1 == Swapping with offhand while in a container
+            changedSlots.put(hotBarSlot, clickStack);
+        }
+        // there is no offhand slot id in the container, so only one slot is set as changed in the packet
+        changedSlots.put(slotId, swapStack);
 
         return new ServerboundContainerClickPacket(
             containerId,
