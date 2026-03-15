@@ -39,7 +39,8 @@ public class MoveToHotbarSlot implements InventoryAction {
         boolean playerInv = containerId == 0;
         int hotbarOffset = playerInv ? 36 : container.getSize() - 9;
         switch (moveToHotbarAction) {
-            case SLOT_1, SLOT_2, SLOT_3, SLOT_4, SLOT_5, SLOT_6, SLOT_7, SLOT_8, SLOT_9 -> {// swap the clickStack with the item in the hotbar slot
+            case SLOT_1, SLOT_2, SLOT_3, SLOT_4, SLOT_5, SLOT_6, SLOT_7, SLOT_8,
+                 SLOT_9 -> {// swap the clickStack with the item in the hotbar slot
                 hotBarSlot = moveToHotbarAction.getId() + hotbarOffset;
             }
             case OFF_HAND -> {
@@ -50,29 +51,19 @@ public class MoveToHotbarSlot implements InventoryAction {
                 return null;
             }
         }
-        // We reject the MoveToHotbarSlot InventoryAction if both slots we want to swap are empty.
         final ItemStack clickStack = container.getItemStack(slotId);
-        ItemStack swapStack0;
-        // if hotBarSlot == -1 we are not in the inventory and swapping with the offhand
-        if (hotBarSlot == 45 || hotBarSlot == -1) {
-            swapStack0 = CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND);
-        } else {
-            swapStack0 = container.getItemStack(hotBarSlot);
-        }
-        if (isStackEmpty(clickStack) && isStackEmpty(swapStack0)) {
+        final ItemStack swapStack = hotBarSlot == -1
+            ? CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND)
+            : container.getItemStack(hotBarSlot);
+        if (isStackEmpty(clickStack) && isStackEmpty(swapStack)) {
             CLIENT_LOG.debug("{} Can't swap two empty stacks with each other", this);
             return null; // can't swap if clickStack and swapStack is empty
         }
-        if (hotBarSlot != -1) {
-            final ItemStack swapStack = container.getItemStack(hotBarSlot);
+        if (hotBarSlot != -1) { // -1 == Swapping with offhand while in a container
             changedSlots.put(hotBarSlot, clickStack);
-            changedSlots.put(slotId, swapStack);
-        } else {
-            // there is no offhand slot id in the container, so only one slot is set as changed in the packet
-            var offhandStack = CACHE.getPlayerCache().getEquipment(EquipmentSlot.OFF_HAND);
-            changedSlots.put(slotId, offhandStack);
         }
-
+        // there is no offhand slot id in the container, so only one slot is set as changed in the packet
+        changedSlots.put(slotId, swapStack);
 
         return new ServerboundContainerClickPacket(
             containerId,
