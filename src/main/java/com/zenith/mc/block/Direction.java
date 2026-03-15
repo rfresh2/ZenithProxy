@@ -3,6 +3,7 @@ package com.zenith.mc.block;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
 import com.zenith.mc.block.properties.api.StringRepresentable;
+import lombok.Getter;
 import org.cloudburstmc.math.vector.Vector3i;
 
 import java.util.Arrays;
@@ -12,17 +13,22 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public enum Direction implements StringRepresentable {
-    DOWN(Vector3i.from(0, -1, 0), Direction.Axis.Y),
-    UP(Vector3i.from(0, 1, 0), Direction.Axis.Y),
-    NORTH(Vector3i.from(0, 0, -1), Direction.Axis.Z),
-    SOUTH(Vector3i.from(0, 0, 1), Direction.Axis.Z),
-    WEST(Vector3i.from(-1, 0, 0), Direction.Axis.X),
-    EAST(Vector3i.from(1, 0, 0), Direction.Axis.X);
+    DOWN(Vector3i.from(0, -1, 0), AxisDirection.NEGATIVE, Direction.Axis.Y),
+    UP(Vector3i.from(0, 1, 0), AxisDirection.POSITIVE, Direction.Axis.Y),
+    NORTH(Vector3i.from(0, 0, -1), AxisDirection.NEGATIVE, Direction.Axis.Z),
+    SOUTH(Vector3i.from(0, 0, 1), AxisDirection.POSITIVE, Direction.Axis.Z),
+    WEST(Vector3i.from(-1, 0, 0), AxisDirection.NEGATIVE, Direction.Axis.X),
+    EAST(Vector3i.from(1, 0, 0), AxisDirection.POSITIVE, Direction.Axis.X);
 
+    @Getter
     private final Vector3i normal;
+    @Getter
     private final Direction.Axis axis;
-    Direction(Vector3i normal, Direction.Axis axis) {
+    @Getter
+    private final Direction.AxisDirection axisDirection;
+    Direction(Vector3i normal, Direction.AxisDirection axisDirection, Direction.Axis axis) {
         this.normal = normal;
+        this.axisDirection = axisDirection;
         this.axis = axis;
     }
 
@@ -43,14 +49,6 @@ public enum Direction implements StringRepresentable {
 
     public int z() {
         return this.normal.getZ();
-    }
-
-    public Vector3i getNormal() {
-        return this.normal;
-    }
-
-    public Direction.Axis getAxis() {
-        return this.axis;
     }
 
     public Direction.Plane getPlane() {
@@ -162,6 +160,38 @@ public enum Direction implements StringRepresentable {
         public abstract int choose(int x, int y, int z);
 
         public abstract double choose(double x, double y, double z);
+    }
+
+    public static enum AxisDirection {
+        POSITIVE(1, "Towards positive"),
+        NEGATIVE(-1, "Towards negative");
+
+        private final int step;
+        private final String name;
+
+        private AxisDirection(final int step, final String name) {
+            this.step = step;
+            this.name = name;
+        }
+
+        /**
+         * @return the offset for this AxisDirection. 1 for POSITIVE, -1 for NEGATIVE
+         */
+        public int getStep() {
+            return this.step;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public String toString() {
+            return this.name;
+        }
+
+        public Direction.AxisDirection opposite() {
+            return this == POSITIVE ? NEGATIVE : POSITIVE;
+        }
     }
 
     public enum Plane implements Iterable<Direction>, Predicate<Direction> {

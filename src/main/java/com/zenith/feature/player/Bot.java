@@ -341,6 +341,13 @@ public final class Bot extends ModuleUtils {
             && !(horizontalCollision && !horizontalCollisionMinor);
         if (isSprinting != lastSprinting) applySprintingSpeedAttributeModifier();
 
+        var selfDimensions = getEntityDimensions(pose);
+        var bbWidth = selfDimensions.getWidth();
+        moveTowardsClosestSpace(getX() - bbWidth * 0.35, getZ() + bbWidth * 0.35);
+        moveTowardsClosestSpace(getX() - bbWidth * 0.35, getZ() - bbWidth * 0.35);
+        moveTowardsClosestSpace(getX() + bbWidth * 0.35, getZ() - bbWidth * 0.35);
+        moveTowardsClosestSpace(getX() + bbWidth * 0.35, getZ() + bbWidth * 0.35);
+
         updateSwimming();
         boolean didUpdateFlyState = false;
         if (CACHE.getPlayerCache().isCanFly()) { // creative flight
@@ -1459,6 +1466,40 @@ public final class Bot extends ModuleUtils {
             }
         }
         return false;
+    }
+
+    private void moveTowardsClosestSpace(double x, double z) {
+        int posX = MathHelper.floorI(x);
+        int posY = MathHelper.floorI(getY());
+        int posZ = MathHelper.floorI(z);
+        if (!suffocatesAt(posX, posY, posZ)) return;
+        Direction resultDir = null;
+        var minAxisOff = Double.MAX_VALUE;
+        var directions = new Direction[]{Direction.WEST, Direction.EAST, Direction.NORTH, Direction.SOUTH};
+        for (var dir : directions) {
+            double axisDir = dir.getAxis().choose(x - posX, 0, z - posZ);
+            double axisOff = dir.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1.0 - axisDir : axisDir;
+            if (axisOff < minAxisOff && !suffocatesAt(posX + dir.getNormal().getX(), posY + dir.getNormal().getY(), posZ + dir.getNormal().getZ())) {
+                minAxisOff = axisOff;
+                resultDir = dir;
+            }
+        }
+
+        if (resultDir != null) {
+            if (resultDir.getAxis() == Direction.Axis.X) {
+                this.velocity.setX(0.1 * resultDir.getNormal().getX());
+            } else {
+                this.velocity.setZ(0.1 * resultDir.getNormal().getZ());
+            }
+        }
+    }
+
+    private boolean suffocatesAt(int blockPosX, int blockPosY, int blockPosZ) {
+        var cb = new LocalizedCollisionBox(blockPosX, blockPosX + 1, playerCollisionBox.minY(), playerCollisionBox.maxY(), blockPosZ, blockPosZ + 1, blockPosX, blockPosY, blockPosZ);
+        var states = World.getCollidingBlockStatesInside(cb);
+        // todo: this is not correct, there's more state we don't have in the blockstate
+        //  but falling blocks do indeed suffocate us
+        return states.stream().anyMatch(state -> state.block().fallingBlock());
     }
 
     private boolean resyncTeleport() {
