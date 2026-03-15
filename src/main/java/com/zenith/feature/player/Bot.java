@@ -1150,6 +1150,7 @@ public final class Bot extends ModuleUtils {
     }
 
     private void tickEntityPushing() {
+        if (!CONFIG.debug.entityPushing) return;
         if (CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) return;
         var selfTeam = CACHE.getTeamCache().getTeamsByPlayer().get(CACHE.getProfileCache().getProfile().getName());
         var selfCollisionRule = selfTeam == null ? CollisionRule.ALWAYS : selfTeam.getCollisionRule();

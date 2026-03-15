@@ -694,6 +694,7 @@ public final class Config {
         public boolean botRotateBeforeInteract = true;
         public boolean inventoryRequestServerSyncOnAction = false;
         public boolean chainBreakSpeed2b2tFix = true;
+        public boolean entityPushing = true;
 
         public static final class PacketLog {
             public boolean enabled = false;
