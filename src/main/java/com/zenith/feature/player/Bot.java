@@ -94,6 +94,8 @@ public final class Bot extends ModuleUtils {
     @Getter private boolean isTouchingWater;
     @Getter private boolean isTouchingLava;
     private boolean wasJumpPressed = false;
+    private int jumpTriggerTime;
+    private int noJumpDelay;
     private boolean wasSneakPressed = false;
     private double waterHeight;
     private double lavaHeight;
@@ -115,7 +117,6 @@ public final class Bot extends ModuleUtils {
     private float flyingSpeed = 0.05f;
     private boolean onGroundNoBlocks = false;
     @Getter Optional<BlockPos> supportingBlockPos = Optional.empty();
-    private int jumpTriggerTime;
     @Getter private boolean horizontalCollision = false;
     private boolean horizontalCollisionMinor = false;
     @Getter private boolean verticalCollision = false;
@@ -283,7 +284,6 @@ public final class Bot extends ModuleUtils {
     }
 
     private void tick(final ClientBotTick event) {
-        if (this.jumpTriggerTime > 0) --this.jumpTriggerTime;
         if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) {
             onInteractionTickSkipped();
             return;
@@ -387,15 +387,15 @@ public final class Bot extends ModuleUtils {
         }
 
         if (movementInput.isJumping()) {
-            if (this.onGround && jumpTriggerTime == 0 && (!isTouchingWater && !isTouchingLava)) {
+            if (this.onGround && this.noJumpDelay == 0 && (!isTouchingWater && !isTouchingLava)) {
                 jump();
-                jumpTriggerTime = 10;
+                this.noJumpDelay = 10;
             } else if (isTouchingWater || isTouchingLava) {
                 this.velocity.setY(this.velocity.getY() + 0.04F);
             }
             // todo: lava swimming
             // todo: full jump when at water surface
-        } else jumpTriggerTime = 0;
+        } else this.noJumpDelay = 0;
 
         final MutableVec3d movementInputVec = getMovementInputVec();
         if (isTouchingWater && isSneaking && !isFlying) velocity.setY(velocity.getY() - 0.04f);
@@ -409,6 +409,8 @@ public final class Bot extends ModuleUtils {
             playerTravel(movementInputVec);
             tryCheckInsideBlocks();
         }
+        if (this.jumpTriggerTime > 0) --this.jumpTriggerTime;
+        if (this.noJumpDelay > 0) --this.noJumpDelay;
 
         if (onGround && isFlying && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR) {
             isFlying = false;
