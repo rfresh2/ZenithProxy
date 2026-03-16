@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     id("org.graalvm.buildtools.native") version "0.11.5"
-    id("com.gradleup.shadow") version "9.3.2"
+    id("com.gradleup.shadow") version "9.4.0"
     id("io.freefair.lombok") version "9.2.0"
     `maven-publish`
 }
@@ -71,7 +71,7 @@ dependencies {
     api("com.viaversion:viaversion-common:5.7.2")
     api("com.viaversion:viabackwards-common:5.7.2")
     api("com.viaversion:viarewind-common:4.0.15")
-    api("org.jline:jline:4.0.2")
+    api("org.jline:jline:4.0.4")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
     api("org.postgresql:postgresql:42.7.10")
