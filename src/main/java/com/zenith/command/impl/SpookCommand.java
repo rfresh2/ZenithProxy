@@ -22,7 +22,7 @@ public class SpookCommand extends Command {
             .category(CommandCategory.MODULE)
             .description("""
             Rotates and stares at players in visual range.
-            
+
             Can often confuse other players in-game into thinking you are a real player.
             """)
             .usageLines(
@@ -54,6 +54,7 @@ public class SpookCommand extends Command {
                         .title("Invalid mode: " + arg);
                     return ERROR;
                 }
+                CONFIG.client.extra.spook.spookTargetingMode = mode;
                 c.getSource().getEmbed()
                     .title("Spook Mode Updated!");
                 return OK;
