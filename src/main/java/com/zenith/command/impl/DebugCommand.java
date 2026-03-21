@@ -293,6 +293,11 @@ public class DebugCommand extends Command {
                 CONFIG.debug.chainBreakSpeed2b2tFix = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Chain Break Speed 2b2t Fix " + toggleStrCaps(CONFIG.debug.chainBreakSpeed2b2tFix));
+            })))
+            .then(literal("entityPushing").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.entityPushing = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Entity Pushing " + toggleStrCaps(CONFIG.debug.entityPushing));
             })));
     }
 

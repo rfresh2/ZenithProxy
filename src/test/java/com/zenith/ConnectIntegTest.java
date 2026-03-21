@@ -22,7 +22,7 @@ public class ConnectIntegTest {
         .withExposedPorts(25565)
         .withEnv("EULA", "TRUE")
         .withEnv("TYPE", "PAPER")
-        .withEnv("VERSION", "1.21.4")
+        .withEnv("VERSION", "1.21.11")
         .withEnv("ONLINE_MODE", "FALSE")
         .waitingFor(org.testcontainers.containers.wait.strategy.Wait.forLogMessage(".*Done \\(.*\\)!.*", 1))
         .withStartupTimeout(Duration.ofMinutes(3));
