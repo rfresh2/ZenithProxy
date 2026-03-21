@@ -3,7 +3,6 @@ package com.zenith.via;
 import com.viaversion.viaversion.api.connection.UserConnection;
 import com.viaversion.viaversion.configuration.AbstractViaConfig;
 import com.viaversion.viaversion.platform.UserConnectionViaVersionPlatform;
-import com.zenith.Globals;
 import com.zenith.Proxy;
 import com.zenith.network.server.ServerSession;
 import net.kyori.adventure.key.Key;
@@ -15,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Optional;
+
+import static com.zenith.Globals.VERSION;
 
 public class ZenithViaPlatform extends UserConnectionViaVersionPlatform {
     private static final Logger LOGGER = LoggerFactory.getLogger("ViaVersion");
@@ -29,7 +30,7 @@ public class ZenithViaPlatform extends UserConnectionViaVersionPlatform {
 
     @Override
     public String getPlatformVersion() {
-        return Globals.LAUNCH_CONFIG.version;
+        return VERSION;
     }
 
     @Override

@@ -143,7 +143,7 @@ public abstract class LockingDatabase extends Database {
                     "Player=" + CONFIG.authentication.username + ", " +
                     "IP=" + CONFIG.server.proxyIP + ", " +
                     "Time=" + Instant.now().toString() + ", " +
-                    "Version=" + LAUNCH_CONFIG.version
+                    "Version=" + VERSION
                 );
         } catch (final Exception e) {
             DATABASE_LOG.warn("Error writing lock info to redis for database: {}", getLockKey(), e);
@@ -154,7 +154,7 @@ public abstract class LockingDatabase extends Database {
                 .bind("key", getLockKey())
                 .bind("writing", true)
                 .bind("player_name", CONFIG.authentication.username)
-                .bind("version", LAUNCH_CONFIG.version)
+                .bind("version", VERSION)
                 .execute();
         } catch (final Exception e) {
             DATABASE_LOG.warn("Error writing lock info to db for database: {}", getLockKey(), e);
@@ -168,7 +168,7 @@ public abstract class LockingDatabase extends Database {
                 .bind("key", getLockKey())
                 .bind("writing", false)
                 .bind("player_name", CONFIG.authentication.username)
-                .bind("version", LAUNCH_CONFIG.version)
+                .bind("version", VERSION)
                 .execute();
         } catch (final Exception e) {
             DATABASE_LOG.warn("Error writing lock info to db for database: {}", getLockKey(), e);

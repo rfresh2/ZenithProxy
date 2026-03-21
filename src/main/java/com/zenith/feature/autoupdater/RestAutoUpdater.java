@@ -46,7 +46,7 @@ public class RestAutoUpdater extends AutoUpdater {
     public void updateCheck() {
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(baseUrl + "/repos/" + LAUNCH_CONFIG.repo_owner + "/" + LAUNCH_CONFIG.repo_name + "/releases?per_page=100"))
-            .headers("User-Agent", "ZenithProxy/" + LAUNCH_CONFIG.version)
+            .headers("User-Agent", "ZenithProxy/" + VERSION)
             .headers("Accept", "application/vnd.github+json")
             .headers("X-GitHub-Api-Version", "2022-11-28")
             .timeout(Duration.ofSeconds(5))

@@ -134,7 +134,7 @@ public class Proxy {
     }
 
     public void start() {
-        DEFAULT_LOG.info("Starting ZenithProxy-{}", LAUNCH_CONFIG.version);
+        DEFAULT_LOG.info("Starting ZenithProxy-{}", VERSION);
         var exeReleaseVersion = getExecutableReleaseVersion();
         if (exeReleaseVersion == null) {
             DEFAULT_LOG.warn("Detected unofficial ZenithProxy development build!");

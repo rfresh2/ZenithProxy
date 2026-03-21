@@ -346,7 +346,7 @@ public class DiscordBot {
                   https://discord.gg/nJZrSaRKtb
                 **Github**:
                   https://github.com/rfresh2/ZenithProxy
-                """.formatted(LAUNCH_CONFIG.version));
+                """.formatted(VERSION));
     }
 
     public void updateBotAvatar() {

@@ -90,9 +90,24 @@ public class Globals {
     public static final PluginManager PLUGIN_MANAGER;
     public static final InGameGuiManager GUI;
     public static final String MC_VERSION;
+    public static final String VERSION;
 
     public static boolean inDevEnv() {
         return System.getenv("ZENITH_DEV") != null;
+    }
+
+    public static String getVersion() {
+        var releaseVersion = getExecutableReleaseVersion();
+        if (releaseVersion != null) {
+            if (releaseVersion.endsWith("pre")) {
+                var commit = getExecutableCommit();
+                if (commit != null) {
+                    return releaseVersion + "-" + commit;
+                }
+            }
+            return releaseVersion;
+        }
+        return LAUNCH_CONFIG.version;
     }
 
     public static @Nullable String getExecutableCommit() {
@@ -224,6 +239,7 @@ public class Globals {
             TranslationRegistryInitializer.registerAllTranslations();
             CONFIG = loadConfig();
             LAUNCH_CONFIG = loadLaunchConfig();
+            VERSION = getVersion();
             PLUGIN_MANAGER = new PluginManager();
             ConfigVerifier.verifyConfigs();
             PLAYER_LISTS.init(); // must be init after config

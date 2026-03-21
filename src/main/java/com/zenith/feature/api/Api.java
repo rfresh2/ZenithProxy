@@ -64,7 +64,7 @@ public abstract class Api {
     protected HttpRequest.Builder buildBaseRequest(final String uri) {
         return HttpRequest.newBuilder()
             .uri(URI.create(baseUrl + uri))
-            .headers("User-Agent", "ZenithProxy/" + LAUNCH_CONFIG.version)
+            .headers("User-Agent", "ZenithProxy/" + VERSION)
             .timeout(Duration.ofSeconds(15));
     }
 }
