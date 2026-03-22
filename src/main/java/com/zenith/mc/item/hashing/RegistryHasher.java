@@ -55,6 +55,8 @@ import java.util.stream.IntStream;
 
 import static com.zenith.Globals.CLIENT_LOG;
 
+// todo: 26.1 updates
+
 /**
  * {@link RegistryHasher}s are hashers that hash a network integer ID to a namespaced identifier. {@link RegistryHasher}s can be created using static utility methods in this class, and all registry hashers should be kept in here.
  *
@@ -108,13 +110,13 @@ public interface RegistryHasher<DirectType> extends MinecraftHasher<Integer> {
         return CUSTOM_SOUND.hash((CustomSound) sound, encoder);
     };
 
-    MinecraftHasher<InstrumentComponent.Instrument> DIRECT_INSTRUMENT = MinecraftHasher.mapBuilder(builder -> builder
-        .accept("sound_event", SOUND_EVENT, InstrumentComponent.Instrument::soundEvent)
-        .accept("use_duration", FLOAT, InstrumentComponent.Instrument::useDuration)
-        .accept("range", FLOAT, InstrumentComponent.Instrument::range)
-        .accept("description", ComponentHasher.COMPONENT, InstrumentComponent.Instrument::description));
-
-    MinecraftHasher<Holder<InstrumentComponent.Instrument>> INSTRUMENT = holderIdOnly(DIRECT_INSTRUMENT);
+//    MinecraftHasher<InstrumentComponent.Instrument> DIRECT_INSTRUMENT = MinecraftHasher.mapBuilder(builder -> builder
+//        .accept("sound_event", SOUND_EVENT, InstrumentComponent.Instrument::soundEvent)
+//        .accept("use_duration", FLOAT, InstrumentComponent.Instrument::useDuration)
+//        .accept("range", FLOAT, InstrumentComponent.Instrument::range)
+//        .accept("description", ComponentHasher.COMPONENT, InstrumentComponent.Instrument::description));
+//
+//    MinecraftHasher<Holder<InstrumentComponent.Instrument>> INSTRUMENT = holderIdOnly(DIRECT_INSTRUMENT);
 
     MinecraftHasher<ArmorTrim.TrimMaterial> DIRECT_TRIM_MATERIAL = MinecraftHasher.mapBuilder(builder -> builder
         .accept("asset_name", MinecraftHasher.STRING, ArmorTrim.TrimMaterial::assetBase)
@@ -130,13 +132,13 @@ public interface RegistryHasher<DirectType> extends MinecraftHasher<Integer> {
 
     MinecraftHasher<Holder<ArmorTrim.TrimPattern>> TRIM_PATTERN = holderIdOnly(DIRECT_TRIM_PATTERN);
 
-    MinecraftHasher<JukeboxPlayable.JukeboxSong> DIRECT_JUKEBOX_SONG = MinecraftHasher.mapBuilder(builder -> builder
-        .accept("sound_event", SOUND_EVENT, JukeboxPlayable.JukeboxSong::soundEvent)
-        .accept("description", ComponentHasher.COMPONENT, JukeboxPlayable.JukeboxSong::description)
-        .accept("length_in_seconds", FLOAT, JukeboxPlayable.JukeboxSong::lengthInSeconds)
-        .accept("comparator_output", INT, JukeboxPlayable.JukeboxSong::comparatorOutput));
+//    MinecraftHasher<JukeboxPlayable.JukeboxSong> DIRECT_JUKEBOX_SONG = MinecraftHasher.mapBuilder(builder -> builder
+//        .accept("sound_event", SOUND_EVENT, JukeboxPlayable.JukeboxSong::soundEvent)
+//        .accept("description", ComponentHasher.COMPONENT, JukeboxPlayable.JukeboxSong::description)
+//        .accept("length_in_seconds", FLOAT, JukeboxPlayable.JukeboxSong::lengthInSeconds)
+//        .accept("comparator_output", INT, JukeboxPlayable.JukeboxSong::comparatorOutput));
 
-    MinecraftHasher<Holder<JukeboxPlayable.JukeboxSong>> JUKEBOX_SONG = holderIdOnly(DIRECT_JUKEBOX_SONG);
+//    MinecraftHasher<Holder<JukeboxPlayable.JukeboxSong>> JUKEBOX_SONG = holderIdOnly(DIRECT_JUKEBOX_SONG);
 
     MinecraftHasher<BannerPatternLayer.BannerPattern> DIRECT_BANNER_PATTERN = MinecraftHasher.mapBuilder(builder -> builder
         .accept("asset_id", KEY, BannerPatternLayer.BannerPattern::getAssetId)
@@ -281,7 +283,7 @@ public interface RegistryHasher<DirectType> extends MinecraftHasher<Integer> {
         .accept("id", EFFECT_ID, SuspiciousStewEffect::getMobEffectId)
         .optional("duration", INT, SuspiciousStewEffect::getDuration, 160));
 
-    MinecraftHasher<InstrumentComponent> INSTRUMENT_COMPONENT = MinecraftHasher.either(INSTRUMENT, InstrumentComponent::instrumentHolder, KEY, InstrumentComponent::instrumentLocation);
+//    MinecraftHasher<InstrumentComponent> INSTRUMENT_COMPONENT = MinecraftHasher.either(INSTRUMENT, InstrumentComponent::instrumentHolder, KEY, InstrumentComponent::instrumentLocation);
 
     MinecraftHasher<ToolData.Rule> TOOL_RULE = MinecraftHasher.mapBuilder(builder -> builder
         .accept("blocks", RegistryHasher.BLOCK.holderSet(), ToolData.Rule::getBlocks)
@@ -301,13 +303,13 @@ public interface RegistryHasher<DirectType> extends MinecraftHasher<Integer> {
         .accept("base", FLOAT, BlocksAttacks.ItemDamageFunction::base)
         .accept("factor", FLOAT, BlocksAttacks.ItemDamageFunction::factor));
 
-    MinecraftHasher<ProvidesTrimMaterial> PROVIDES_TRIM_MATERIAL = MinecraftHasher.either(TRIM_MATERIAL, ProvidesTrimMaterial::materialHolder, KEY, ProvidesTrimMaterial::materialLocation);
+//    MinecraftHasher<ProvidesTrimMaterial> PROVIDES_TRIM_MATERIAL = MinecraftHasher.either(TRIM_MATERIAL, ProvidesTrimMaterial::materialHolder, KEY, ProvidesTrimMaterial::materialLocation);
 
     MinecraftHasher<ArmorTrim> ARMOR_TRIM = MinecraftHasher.mapBuilder(builder -> builder
         .accept("material", TRIM_MATERIAL, ArmorTrim::material)
         .accept("pattern", TRIM_PATTERN, ArmorTrim::pattern));
 
-    MinecraftHasher<JukeboxPlayable> JUKEBOX_PLAYABLE = MinecraftHasher.either(JUKEBOX_SONG, JukeboxPlayable::songHolder, KEY, JukeboxPlayable::songLocation);
+//    MinecraftHasher<JukeboxPlayable> JUKEBOX_PLAYABLE = MinecraftHasher.either(JUKEBOX_SONG, JukeboxPlayable::songHolder, KEY, JukeboxPlayable::songLocation);
 
     MinecraftHasher<BannerPatternLayer> BANNER_PATTERN_LAYER = MinecraftHasher.mapBuilder(builder -> builder
         .accept("pattern", BANNER_PATTERN, BannerPatternLayer::getPattern)

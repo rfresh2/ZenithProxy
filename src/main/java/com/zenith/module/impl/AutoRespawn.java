@@ -55,7 +55,7 @@ public class AutoRespawn extends Module {
             && !Proxy.getInstance().hasActivePlayer()
         ) {
             info("Performing Respawn");
-            sendClientPacketAsync(new ServerboundClientCommandPacket(ClientCommand.RESPAWN));
+            sendClientPacketAsync(new ServerboundClientCommandPacket(ClientCommand.PERFORM_RESPAWN));
             CACHE.getPlayerCache().getThePlayer().setHealth(20.0f);
         }
     }

@@ -18,19 +18,20 @@ import com.zenith.mc.item.ToolTier;
 import com.zenith.util.math.MathHelper;
 import lombok.Getter;
 import net.kyori.adventure.key.Key;
+import org.cloudburstmc.math.vector.Vector3d;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftPacket;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeType;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.player.*;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.BlockBreakStage;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerAction;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponents;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.ItemEnchantments;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundInteractPacket;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundPlayerActionPacket;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundUseItemOnPacket;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundUseItemPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.*;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
@@ -431,9 +432,8 @@ public class PlayerInteractionManager {
     protected InteractionResult interact(Hand hand, EntityRaycastResult ray) {
         Proxy.getInstance().getClient().send(new ServerboundInteractPacket(
             ray.entity().getEntityId(),
-            InteractAction.INTERACT,
-            0, 0, 0,
             hand,
+            Vector3d.from(0, 0, 0),
             BOT.isSneaking()
         ));
         return InteractionResult.PASS;
@@ -442,9 +442,8 @@ public class PlayerInteractionManager {
     protected InteractionResult interactAt(Hand hand, EntityRaycastResult ray) {
         Proxy.getInstance().getClient().send(new ServerboundInteractPacket(
             ray.entity().getEntityId(),
-            InteractAction.INTERACT_AT,
-            0, 0, 0,
             hand,
+            Vector3d.from(0, 0, 0),
             BOT.isSneaking()
         ));
         return InteractionResult.PASS;
@@ -483,7 +482,7 @@ public class PlayerInteractionManager {
 
     protected void attackEntity(final EntityRaycastResult entity) {
         BOT.debug("[{}] [{}, {}, {}] Attack Entity", System.currentTimeMillis(), entity.entity().getX(), entity.entity().getY(), entity.entity().getZ());
-        Proxy.getInstance().getClient().sendAsync(new ServerboundInteractPacket(entity.entity().getEntityId(), InteractAction.ATTACK, false));
+        Proxy.getInstance().getClient().sendAsync(new ServerboundAttackPacket(entity.entity().getEntityId()));
     }
 
     protected void releaseUsingItem() {

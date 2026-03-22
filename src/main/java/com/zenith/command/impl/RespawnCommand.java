@@ -30,7 +30,7 @@ public class RespawnCommand extends Command {
             .executes(c -> {
                 final ClientSession client = Proxy.getInstance().getClient();
                 if (nonNull(client)) {
-                    client.sendAsync(new ServerboundClientCommandPacket(ClientCommand.RESPAWN));
+                    client.sendAsync(new ServerboundClientCommandPacket(ClientCommand.PERFORM_RESPAWN));
                 }
                 final EntityPlayer player = CACHE.getPlayerCache().getThePlayer();
                 if (nonNull(player)) {

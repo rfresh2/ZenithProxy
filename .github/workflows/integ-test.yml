@@ -1,10 +1,10 @@
-name: 1.21.4 Integ Test
+name: 26.1 Integ Test
 
 on:
   workflow_dispatch:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+\+1.21.11.pre'
+      - '[0-9]+.[0-9]+.[0-9]+\+26.1.0.pre'
 
 jobs:
   build:

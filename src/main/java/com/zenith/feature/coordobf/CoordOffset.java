@@ -197,13 +197,15 @@ public record CoordOffset(
                     var containerDataComponent = entry.getValue();
                     var containerDataComponentValue = containerDataComponent.getValue();
                     if (containerDataComponentValue != null) {
-                        var itemStacks = (List<ItemStack>) containerDataComponent.getValue();
-                        var copiedItemStacks = new ArrayList<ItemStack>(itemStacks.size());
+                        var itemStacks = (List<Optional<ItemStack>>) containerDataComponent.getValue();
+                        var copiedItemStacks = new ArrayList<Optional<ItemStack>>(itemStacks.size());
                         for (var itemStackValue : itemStacks) {
-                            // recursively sanitize item stacks in the container
-                            var newStack = sanitizeItemStack(itemStackValue);
-                            if (newStack != null) {
-                                copiedItemStacks.add(newStack);
+                            if (itemStackValue.isEmpty()) {
+                                copiedItemStacks.add(itemStackValue);
+                            } else {
+                                // recursively sanitize item stacks in the container
+                                var newStack = sanitizeItemStack(itemStackValue.get());
+                                copiedItemStacks.add(Optional.ofNullable(newStack));
                             }
                         }
                         var newDataComponent = DataComponentTypes.CONTAINER.getDataComponentFactory()

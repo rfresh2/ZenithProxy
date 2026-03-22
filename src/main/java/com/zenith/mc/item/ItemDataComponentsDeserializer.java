@@ -40,8 +40,12 @@ class ItemDataComponentsDeserializer extends StdDeserializer<DataComponents> {
             try {
                 p.readBinaryValue(new ByteBufOutputStream(buf));
                 DataComponentType type = DataComponentTypes.from(id);
-                DataComponent dataComponent = type.readDataComponent(buf);
-                components.put(type, dataComponent.getValue());
+                try {
+                    DataComponent dataComponent = type.readDataComponent(buf);
+                    components.put(type, dataComponent.getValue());
+                } catch (Exception e) {
+                    throw new RuntimeException("Failed to read DataComponent", e);
+                }
             } finally {
                 buf.release();
             }

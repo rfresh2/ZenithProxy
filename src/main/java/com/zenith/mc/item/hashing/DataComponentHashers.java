@@ -94,8 +94,8 @@ public class DataComponentHashers {
         registerMap(DataComponentTypes.USE_COOLDOWN, builder -> builder
             .accept("seconds", MinecraftHasher.FLOAT, UseCooldown::seconds)
             .optionalNullable("cooldown_group", MinecraftHasher.KEY, UseCooldown::cooldownGroup));
-        registerMap(DataComponentTypes.DAMAGE_RESISTANT, builder -> builder
-            .accept("types", MinecraftHasher.TAG, Function.identity()));
+//        registerMap(DataComponentTypes.DAMAGE_RESISTANT, builder -> builder
+//            .accept("types", MinecraftHasher.TAG, Function.identity()));
         registerMap(DataComponentTypes.TOOL, builder -> builder
             .acceptList("rules", RegistryHasher.TOOL_RULE, ToolData::getRules)
             .optional("default_mining_speed", MinecraftHasher.FLOAT, ToolData::getDefaultMiningSpeed, 1.0F)
@@ -131,7 +131,7 @@ public class DataComponentHashers {
             .optional("disable_cooldown_scale", MinecraftHasher.FLOAT, BlocksAttacks::disableCooldownScale, 1.0F)
             .optional("damage_reductions", RegistryHasher.BLOCKS_ATTACKS_DAMAGE_REDUCTION.list(), BlocksAttacks::damageReductions, List.of(new BlocksAttacks.DamageReduction(90.0F, null, 0.0F, 1.0F)))
             .optional("item_damage", RegistryHasher.BLOCKS_ATTACKS_ITEM_DAMAGE_FUNCTION, BlocksAttacks::itemDamage, new BlocksAttacks.ItemDamageFunction(1.0F, 0.0F, 1.0F))
-            .optionalNullable("bypassed_by", MinecraftHasher.TAG, BlocksAttacks::bypassedBy)
+//            .optionalNullable("bypassed_by", MinecraftHasher.TAG, BlocksAttacks::bypassedBy)
             .optionalNullable("block_sound", RegistryHasher.SOUND_EVENT, BlocksAttacks::blockSound)
             .optionalNullable("disabled_sound", RegistryHasher.SOUND_EVENT, BlocksAttacks::disableSound)); // TODO needs tests
         register(DataComponentTypes.STORED_ENCHANTMENTS, RegistryHasher.ITEM_ENCHANTMENTS);
@@ -168,13 +168,13 @@ public class DataComponentHashers {
         register(DataComponentTypes.BUCKET_ENTITY_DATA, MinecraftHasher.MNBT);
 //        register(DataComponentTypes.BLOCK_ENTITY_DATA, MinecraftHasher.MNBT);
 
-        register(DataComponentTypes.INSTRUMENT, RegistryHasher.INSTRUMENT_COMPONENT);
-        register(DataComponentTypes.PROVIDES_TRIM_MATERIAL, RegistryHasher.PROVIDES_TRIM_MATERIAL);
+//        register(DataComponentTypes.INSTRUMENT, RegistryHasher.INSTRUMENT_COMPONENT);
+//        register(DataComponentTypes.PROVIDES_TRIM_MATERIAL, RegistryHasher.PROVIDES_TRIM_MATERIAL);
 
         registerInt(DataComponentTypes.OMINOUS_BOTTLE_AMPLIFIER);
 
-        register(DataComponentTypes.JUKEBOX_PLAYABLE, RegistryHasher.JUKEBOX_PLAYABLE);
-        register(DataComponentTypes.PROVIDES_BANNER_PATTERNS, MinecraftHasher.TAG);
+//        register(DataComponentTypes.JUKEBOX_PLAYABLE, RegistryHasher.JUKEBOX_PLAYABLE);
+//        register(DataComponentTypes.PROVIDES_BANNER_PATTERNS, MinecraftHasher.TAG);
         register(DataComponentTypes.RECIPES, MinecraftHasher.NBT_LIST);
 
         registerMap(DataComponentTypes.LODESTONE_TRACKER, builder -> builder
@@ -191,7 +191,7 @@ public class DataComponentHashers {
         register(DataComponentTypes.BANNER_PATTERNS, RegistryHasher.BANNER_PATTERN_LAYER.list());
         register(DataComponentTypes.BASE_COLOR, MinecraftHasher.DYE_COLOR);
         register(DataComponentTypes.POT_DECORATIONS, RegistryHasher.ITEM.list());
-        register(DataComponentTypes.CONTAINER, RegistryHasher.ITEM_CONTAINER_CONTENTS);
+//        register(DataComponentTypes.CONTAINER, RegistryHasher.ITEM_CONTAINER_CONTENTS);
         register(DataComponentTypes.BLOCK_STATE, MinecraftHasher.map(MinecraftHasher.STRING, MinecraftHasher.STRING).cast(BlockStateProperties::getProperties));
 //        register(DataComponentTypes.BEES, RegistryHasher.BEEHIVE_OCCUPANT.list());
 
