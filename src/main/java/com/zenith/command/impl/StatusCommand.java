@@ -102,7 +102,7 @@ public class StatusCommand extends Command {
         return command("status")
             .then(literal("modules").executes(c -> {
                 c.getSource().getEmbed()
-                    .title("ZenithProxy " + LAUNCH_CONFIG.version + " - " + CONFIG.authentication.username)
+                    .title("ZenithProxy " + VERSION + " - " + CONFIG.authentication.username)
                     .color(Proxy.getInstance().isConnected()
                                ? (Proxy.getInstance().isInQueue()
                                     ? CONFIG.theme.inQueue.discord()
@@ -135,7 +135,7 @@ public class StatusCommand extends Command {
             .executes(c -> {
                 final var embed = c.getSource().getEmbed();
                 embed
-                    .title("ZenithProxy " + LAUNCH_CONFIG.version + " - " + CONFIG.authentication.username)
+                    .title("ZenithProxy " + VERSION + " - " + CONFIG.authentication.username)
                     .color(Proxy.getInstance().isConnected()
                                ? (Proxy.getInstance().isInQueue()
                         ? CONFIG.theme.inQueue.discord()
