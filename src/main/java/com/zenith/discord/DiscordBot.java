@@ -189,10 +189,22 @@ public class DiscordBot {
     }
 
     private void executeDiscordCommand(final DiscordMainChannelCommandReceivedEvent event) {
+        var inputMessage = event.message().substring(CONFIG.discord.prefix.length()).trim();
+        var submission = COMMAND.submitQueuedCommand(() -> executeDiscordCommandNow(event, inputMessage));
+        if (!submission.accepted()) {
+            replyToDiscordCommand(event, "Discord command queue is full. Please try again in a moment.");
+            return;
+        }
+        if (submission.commandsAhead() > 0) {
+            DISCORD_LOG.info("Queued discord command: {} ({} command(s) ahead)", inputMessage, submission.commandsAhead());
+            replyToDiscordCommand(event, "Queued command. " + submission.commandsAhead() + " command(s) ahead of you.");
+        }
+    }
+
+    private void executeDiscordCommandNow(final DiscordMainChannelCommandReceivedEvent event, final String inputMessage) {
         try {
             var jdaEvent = event.event();
             var member = event.member();
-            var inputMessage = event.message().substring(CONFIG.discord.prefix.length());
             var memberName = member.getUser().getName();
             var memberId = member.getId();
             DISCORD_LOG.info("{} ({}) executed discord command: {}", memberName, memberId, inputMessage);
@@ -200,18 +212,37 @@ public class DiscordBot {
             COMMAND.execute(context);
             final MessageCreateData request = commandEmbedOutputToMessage(context);
             if (request != null) {
-                mainChannel.sendMessage(request).queue();
+                sendMessageToMainChannel(request);
                 CommandOutputHelper.logEmbedOutputToTerminal(context.getEmbed());
             }
             if (!context.getMultiLineOutput().isEmpty()) {
                 for (final String line : context.getMultiLineOutput()) {
-                    mainChannel.sendMessage(line).queue();
+                    sendMessageToMainChannel(line);
                 }
                 CommandOutputHelper.logMultiLineOutputToTerminal(context.getMultiLineOutput());
             }
         } catch (final Exception e) {
             DISCORD_LOG.error("Failed processing discord command: {}", event.message(), e);
         }
+    }
+
+    private void replyToDiscordCommand(final DiscordMainChannelCommandReceivedEvent event, final String message) {
+        event.event().getMessage().reply(message).queue(
+            s -> {},
+            e -> DISCORD_LOG.debug("Failed sending discord command queue reply", e)
+        );
+    }
+
+    private void sendMessageToMainChannel(final MessageCreateData message) {
+        var channel = this.mainChannel;
+        if (channel == null || !isRunning()) return;
+        channel.sendMessage(message).queue();
+    }
+
+    private void sendMessageToMainChannel(final String message) {
+        var channel = this.mainChannel;
+        if (channel == null || !isRunning()) return;
+        channel.sendMessage(message).queue();
     }
 
     private MessageCreateData commandEmbedOutputToMessage(final CommandContext context) {

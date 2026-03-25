@@ -28,6 +28,7 @@ import static java.util.Arrays.asList;
 
 @Getter
 public class CommandManager {
+    private static final int MAX_QUEUED_ASYNC_COMMANDS = 100;
     private final List<Command> commandsList = Lists.newArrayList(
         new ActionLimiterCommand(),
         new ActiveHoursCommand(),
@@ -120,6 +121,7 @@ public class CommandManager {
         new WhitelistCommand()
     );
     private final CommandDispatcher<CommandContext> dispatcher;
+    private final CommandQueue queuedCommandExecutor = new CommandQueue("ZenithProxy Queued Command Executor - #%d", MAX_QUEUED_ASYNC_COMMANDS);
     private @NonNull CommandNode[] mcplCommandNodes = new CommandNode[0];
     private AtomicBoolean mcplCommandNodesStale = new AtomicBoolean(true);
 
@@ -264,5 +266,9 @@ public class CommandManager {
         ctx.setInGamePlayerInfo(new CommandContext.InGamePlayerInfo(session));
         final ParseResults<CommandContext> parse = this.dispatcher.parse(stringReader, ctx);
         return this.dispatcher.getCompletionSuggestions(parse);
+    }
+
+    public CommandQueue.Submission submitQueuedCommand(final Runnable runnable) {
+        return queuedCommandExecutor.submit(runnable);
     }
 }

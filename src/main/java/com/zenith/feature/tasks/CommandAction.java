@@ -26,6 +26,20 @@ public class CommandAction implements Action {
 
     @Override
     public void execute() {
+        var submission = COMMAND.submitQueuedCommand(this::executeQueuedCommand);
+        if (!submission.accepted()) {
+            MODULE_LOG.error("Failed queueing scheduled command: {} ({} command(s) ahead)", command, submission.commandsAhead());
+            if (CONFIG.client.extra.tasks.logCommandActionOutput) {
+                CommandOutputHelper.logEmbedOutputToDiscord(Embed.builder()
+                    .title("Tasks Error")
+                    .addField("Error", "Command queue full")
+                    .addField("Command", "`" + command + "`"));
+            }
+            return;
+        }
+    }
+
+    private void executeQueuedCommand() {
         MODULE_LOG.info("Executing scheduled command: {}", command);
         EVENT_BUS.postAsync(new TasksCommandExecutedEvent(command));
         var ctx = CommandContext.create(command, SOURCE);
