@@ -28,7 +28,7 @@ repositories {
 
 val mcplVersion = "1.21.4.45"
 dependencies {
-    api("com.github.rfresh2:JDA:6.3.29") {
+    api("com.github.rfresh2:JDA:6.4.30") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -36,7 +36,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.10.Final"))
+    api(platform("io.netty:netty-bom:4.2.12.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -68,8 +68,8 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.maps:long-double-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
-    api("com.viaversion:viaversion-common:5.7.2")
-    api("com.viaversion:viabackwards-common:5.7.2")
+    api("com.viaversion:viaversion-common:5.8.0")
+    api("com.viaversion:viabackwards-common:5.8.0")
     api("com.viaversion:viarewind-common:4.0.15")
     api("org.jline:jline:4.0.9")
     api("ar.com.hjg:pngj:2.1.0")

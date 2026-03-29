@@ -1246,6 +1246,9 @@
       "type": "com.viaversion.viaversion.libs.opennbt.tag.builtin.Tag[]"
     },
     {
+      "type": "com.viaversion.viaversion.platform.ViaCodecHandler"
+    },
+    {
       "type": "com.viaversion.viaversion.protocols.protocol1_13to1_12_2.data.EntityTypeRewriter",
       "fields": [
         {
