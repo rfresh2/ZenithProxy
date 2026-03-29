@@ -32,17 +32,27 @@ jobs:
       - name: Elevate wrapper permissions
         run: chmod +x ./gradlew
 
-      - name: Export Tag
-        env:
-          TAG_NAME: ${{ github.ref_name }}
-        run: |
-          echo "RELEASE_TAG=$TAG_NAME" >> "$GITHUB_ENV"
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
         with:
           dependency-graph: generate-and-submit
           cache-read-only: ${{ github.event_name == 'pull_request' }}
+
+      - name: Get Release Tags
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          j_tag="$(sed 's/\+/\+java./' <<< $TAG_NAME)"
+          echo "JAVA_TAG=$j_tag" >> "$GITHUB_ENV"
+          l_tag="$(sed 's/\+/\+linux./' <<< $TAG_NAME)"
+          echo "LINUX_TAG=$l_tag" >> "$GITHUB_ENV"
+        shell: bash
+
+      - name: Export Java Tag
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          echo "RELEASE_TAG=$JAVA_TAG" >> "$GITHUB_ENV"
 
       - name: Build ZenithProxy Java
         run: ./gradlew build -x test
@@ -65,6 +75,12 @@ jobs:
 #      - name: Enable GraalVM Profile Instrumenting
 #        run: |
 #          echo "GRAALVM_PGO_INSTRUMENT=true" >> "$GITHUB_ENV"
+
+      - name: Export Linux Tag
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          echo "RELEASE_TAG=$LINUX_TAG" >> "$GITHUB_ENV"
 
       - name: Build ZenithProxy Linux Native
         run: ./gradlew nativeCompile -x test
