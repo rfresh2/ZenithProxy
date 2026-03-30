@@ -1,7 +1,7 @@
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "0.11.5"
-    id("com.gradleup.shadow") version "9.4.0"
+    id("org.graalvm.buildtools.native") version "1.0.0"
+    id("com.gradleup.shadow") version "9.4.1"
     id("io.freefair.lombok") version "9.2.0"
     `maven-publish`
 }
@@ -68,8 +68,8 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.maps:long-double-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
-    api("com.viaversion:viaversion-common:5.8.0")
-    api("com.viaversion:viabackwards-common:5.8.0")
+    api("com.viaversion:viaversion-common:5.8.1")
+    api("com.viaversion:viabackwards-common:5.8.1")
     api("com.viaversion:viarewind-common:4.0.15")
     api("org.jline:jline:4.0.9")
     api("ar.com.hjg:pngj:2.1.0")
@@ -83,7 +83,7 @@ dependencies {
     api("com.mojang:brigadier:1.3.10")
     api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
-    api(platform("tools.jackson:jackson-bom:3.1.0"))
+    api(platform("tools.jackson:jackson-bom:3.1.1"))
     api("tools.jackson.core:jackson-databind")
     api("tools.jackson.dataformat:jackson-dataformat-smile")
 
