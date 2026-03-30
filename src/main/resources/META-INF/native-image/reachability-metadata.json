@@ -1246,6 +1246,9 @@
       "type": "com.viaversion.viaversion.libs.opennbt.tag.builtin.Tag[]"
     },
     {
+      "type": "com.viaversion.viaversion.platform.ViaCodecHandler"
+    },
+    {
       "type": "com.viaversion.viaversion.protocols.protocol1_13to1_12_2.data.EntityTypeRewriter",
       "fields": [
         {
@@ -4667,6 +4670,60 @@
       ]
     },
     {
+      "type": "java.lang.foreign.MemorySegment",
+      "methods": [
+        {
+          "name": "address",
+          "parameterTypes": []
+        },
+        {
+          "name": "ofBuffer",
+          "parameterTypes": [
+            "java.nio.Buffer"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "java.lang.invoke.MethodHandles",
+      "methods": [
+        {
+          "name": "byteArrayViewVarHandle",
+          "parameterTypes": [
+            "java.lang.Class",
+            "java.nio.ByteOrder"
+          ]
+        },
+        {
+          "name": "byteBufferViewVarHandle",
+          "parameterTypes": [
+            "java.lang.Class",
+            "java.nio.ByteOrder"
+          ]
+        },
+        {
+          "name": "privateLookupIn",
+          "parameterTypes": [
+            "java.lang.Class",
+            "java.lang.invoke.MethodHandles$Lookup"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "java.lang.invoke.MethodHandles$Lookup",
+      "methods": [
+        {
+          "name": "findVarHandle",
+          "parameterTypes": [
+            "java.lang.Class",
+            "java.lang.String",
+            "java.lang.Class"
+          ]
+        }
+      ]
+    },
+    {
       "type": "java.lang.invoke.VarHandle"
     },
     {
@@ -5579,6 +5636,21 @@
       ]
     },
     {
+      "type": "jdk.jfr.FlightRecorder",
+      "methods": [
+        {
+          "name": "isAvailable",
+          "parameterTypes": []
+        },
+        {
+          "name": "register",
+          "parameterTypes": [
+            "java.lang.Class"
+          ]
+        }
+      ]
+    },
+    {
       "type": "jdk.management.VirtualThreadSchedulerMXBean"
     },
     {
@@ -6012,6 +6084,9 @@
     },
     {
       "type": "org.jdbi.v3.json.JsonConfig"
+    },
+    {
+      "type": "org.jdbi.v3.meta.Legacy"
     },
     {
       "type": "org.jdbi.v3.postgres.PostgresTypes",
@@ -8620,6 +8695,13 @@
       "type": {
         "proxy": [
           "java.sql.Connection"
+        ]
+      }
+    },
+    {
+      "type": {
+        "proxy": [
+          "org.jdbi.v3.meta.Legacy"
         ]
       }
     },
