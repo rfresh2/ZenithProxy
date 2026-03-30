@@ -1,7 +1,7 @@
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "0.11.5"
-    id("com.gradleup.shadow") version "9.4.0"
+    id("org.graalvm.buildtools.native") version "1.0.0"
+    id("com.gradleup.shadow") version "9.4.1"
     id("io.freefair.lombok") version "9.2.0"
     `maven-publish`
 }
@@ -28,7 +28,7 @@ repositories {
 
 val mcplVersion = "1.21.11.10"
 dependencies {
-    api("com.github.rfresh2:JDA:6.3.29") {
+    api("com.github.rfresh2:JDA:6.4.30") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -36,7 +36,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.10.Final"))
+    api(platform("io.netty:netty-bom:4.2.12.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -68,14 +68,14 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.maps:long-double-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
-    api("com.viaversion:viaversion-common:5.7.2")
-    api("com.viaversion:viabackwards-common:5.7.2")
+    api("com.viaversion:viaversion-common:5.8.1")
+    api("com.viaversion:viabackwards-common:5.8.1")
     api("com.viaversion:viarewind-common:4.0.15")
-    api("org.jline:jline:4.0.4")
+    api("org.jline:jline:4.0.9")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
     api("org.postgresql:postgresql:42.7.10")
-    api("org.jdbi:jdbi3-postgres:3.51.0")
+    api("org.jdbi:jdbi3-postgres:3.52.0")
     api("com.google.guava:guava:33.5.0-jre")
     api("ch.qos.logback:logback-classic:1.5.32")
     api("org.slf4j:slf4j-api:2.0.17")
@@ -83,14 +83,14 @@ dependencies {
     api("com.mojang:brigadier:1.3.10")
     api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
-    api(platform("tools.jackson:jackson-bom:3.1.0"))
+    api(platform("tools.jackson:jackson-bom:3.1.1"))
     api("tools.jackson.core:jackson-databind")
     api("tools.jackson.dataformat:jackson-dataformat-smile")
 
     testImplementation(platform("org.junit:junit-bom:6.0.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.testcontainers:testcontainers:2.0.3")
-    testImplementation("org.testcontainers:testcontainers-junit-jupiter:2.0.3")
+    testImplementation("org.testcontainers:testcontainers:2.0.4")
+    testImplementation("org.testcontainers:testcontainers-junit-jupiter:2.0.4")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
     annotationProcessor("com.google.auto.service:auto-service:1.1.1")
