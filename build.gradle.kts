@@ -11,7 +11,10 @@ version = "26.1.0"
 
 val javaReleaseVersion = 25
 val javaVersion = JavaLanguageVersion.of(25)
-val javaLauncherProvider = javaToolchains.launcherFor { languageVersion = javaVersion }
+val javaLauncherProvider = javaToolchains.launcherFor {
+    languageVersion = javaVersion
+    nativeImageCapable = true
+}
 java {
     toolchain { languageVersion = javaVersion }
     withSourcesJar()
@@ -247,6 +250,7 @@ graalvmNative {
                 "-H:DeadlockWatchdogInterval=30",
                 "-H:+CompactingOldGen",
                 "-H:+TrackPrimitiveValues",
+                "-H:+TreatAllTypeReachableConditionsAsTypeReached",
                 "-H:+UsePredicates",
                 "--future-defaults=all",
                 "-R:MaxHeapSize=200m",
@@ -289,6 +293,7 @@ graalvmNative {
                 "-H:DeadlockWatchdogInterval=30",
                 "-H:+CompactingOldGen",
                 "-H:+TrackPrimitiveValues",
+                "-H:+TreatAllTypeReachableConditionsAsTypeReached",
                 "-H:+UsePredicates",
                 "--future-defaults=all",
                 "-R:MaxHeapSize=200m",
