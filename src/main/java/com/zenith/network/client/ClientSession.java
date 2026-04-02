@@ -102,7 +102,8 @@ public class ClientSession extends TcpClientSession {
             BLOCK_DATA.blockStateRegistrySize(),
             BlockRegistry.AIR.minStateId(),
             BiomeRegistry.REGISTRY.size(),
-            defaultBiomeId
+            defaultBiomeId,
+            BLOCK_DATA.fluidStates()
         );
     }
 

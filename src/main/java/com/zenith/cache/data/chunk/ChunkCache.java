@@ -128,7 +128,7 @@ public class ChunkCache implements CachedData {
             var chunkSection = chunk.getChunkSection(y);
             if (chunkSection == null) {
                 var palettedWorldState = Proxy.getInstance().getClient().getPalettedWorldState();
-                chunkSection = new ChunkSection(0,
+                chunkSection = new ChunkSection(0, 0,
                     DataPalette.createForChunk(palettedWorldState),
                     DataPalette.createForBiome(palettedWorldState)
                 );

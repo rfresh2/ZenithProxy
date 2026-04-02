@@ -1,10 +1,7 @@
 package com.zenith.mc.block;
 
 import com.zenith.util.struct.Maps;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.*;
 import lombok.SneakyThrows;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.databind.JsonNode;
@@ -193,5 +190,9 @@ public class BlockDataManager {
 
     public int blockStateRegistrySize() {
         return blockStateIdToBlock.size();
+    }
+
+    public IntSet fluidStates() {
+        return blockStateIdToFluidState.keySet();
     }
 }

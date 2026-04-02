@@ -117,7 +117,8 @@ public class ReplayReader {
                     BLOCK_DATA.blockStateRegistrySize(),
                     BlockRegistry.AIR.minStateId(),
                     BiomeRegistry.REGISTRY.size(),
-                    BiomeRegistry.PLAINS.get().id()
+                    BiomeRegistry.PLAINS.get().id(),
+                    BLOCK_DATA.fluidStates()
                 ));
             } else if (packet instanceof ClientboundRespawnPacket respawnPacket) {
                 session.setPalettedWorldState(new PalettedWorldState(
@@ -125,7 +126,8 @@ public class ReplayReader {
                     BLOCK_DATA.blockStateRegistrySize(),
                     BlockRegistry.AIR.minStateId(),
                     BiomeRegistry.REGISTRY.size(),
-                    BiomeRegistry.PLAINS.get().id()
+                    BiomeRegistry.PLAINS.get().id(),
+                    BLOCK_DATA.fluidStates()
                 ));
             }
         } catch (final Throwable e) {
