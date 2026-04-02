@@ -1648,6 +1648,7 @@ public final class Bot extends ModuleUtils {
         x = vehicle.getX();
         y = vehicleAttachY - playerAttachY;
         z = vehicle.getZ();
+        CACHE.getPlayerCache().getThePlayer().setX(x).setY(y).setZ(z);
     }
 
     public void onUpdateAbilities() {
