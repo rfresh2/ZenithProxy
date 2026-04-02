@@ -10,6 +10,120 @@
 #  a(n) = either "a" or "an"
 # keywords are used as wildcard strings that match instance of that type (kind of).
 
+# suicides
+$v assassinated themselves.
+$v became lava.
+$v blew themselves up with a(n) $w
+$v broke apart from falling.
+$v broke their neck, and the rest of their body.
+$v burned apart.
+$v burned to death.
+$v burned up in lava.
+$v choked to death.
+$v combusted.
+$v committed suicide with a(n) $w
+$v committed suicide.
+$v couldn't swim up quick enough.
+$v destroyed themselves with a(n) $w
+$v died by mysterious means.
+$v died from an arrow trap.
+$v died from bee allergies.
+$v died from unknown causes.
+$v died inside a wall.
+$v died inside lava somehow.
+$v died randomly.
+$v died stuck in a berry bush.
+$v died stuck on a cactus.
+$v died suddenly.
+$v drank themselves dead.
+$v dried up and fell apart.
+$v drowned in lava.
+$v drowned.
+$v ended their own pitiful existence.
+$v ended their life.
+$v ended themselves.
+$v exhausted and died.
+$v exploded into gibs playing with fireworks.
+$v exploded themselves with a(n) $w
+$v fell and crushed their insides with their legbones.
+$v fell and crushed their lungs with their legbones.
+$v fell and was reduced into a jittering flesh heap.
+$v fell and was reduced into a jittering flesh pile.
+$v fell into the void and instantly died.
+$v fell to death.
+$v fireballed themselves.
+$v forgot to breath air.
+$v forgot to eat.
+$v froze to death.
+$v gave up and faded away.
+$v gave up life.
+$v got stuck in a berry bush.
+$v got stuck on a cactus.
+$v had their health meter depleted.
+$v had their life instantly removed.
+$v hit the ground too hard.
+$v impaled themselves.
+$v killed themselves using magic.
+$v killed themselves.
+$v lost grip of a ladder and fell to death.
+$v lost grip of vines and fell to death.
+$v melted by fire.
+$v melted in lava.
+$v rubbed themselves too hard against a berry bush.
+$v rubbed themselves too hard against a cactus.
+$v rubbed themselves too hard against a cactus.
+$v shot themselves.
+$v smashed themselves against a cactus and instantly died.
+$v smashed themselves and died trying to fly with elytra.
+$v sprained their entire body and instantly died.
+$v starved to death.
+$v suffocated in water.
+$v suffocated.
+$v suicide bombed with a(n) $w
+$v swam out of a waterfall and fell to death.
+$v took an arrow to the knee and died.
+$v tried to swim in lava and didn't get out quick enough.
+$v tripped too hard and died.
+$v tripped, broke a bone or died somehow inside lava.
+$v turned into ash.
+$v violently ended their own life with a(n) $w
+$v was blown apart by an explosion.
+$v was boned to death by $w
+$v was boned to death.
+$v was buried alive.
+$v was buried alive.
+$v was consumed by living magma.
+$v was consumed by the void.
+$v was crushed by an anvil.
+$v was crushed, drowned, killed or something.
+$v was deleted by an explosion.
+$v was disintegrated by explosives.
+$v was fireballed to death.
+$v was hit by a dispensed arrow and died.
+$v was hit by a life erasing potion.
+$v was hit too hard by a fireball.
+$v was impaled by dripstone.
+$v was reduced to lava by lava.
+$v was reduced to mince from an anvil falling on them.
+$v was removed by an explosion.
+$v was smashed and reduced to mince.
+$v was smashed by an anvil.
+$v was struck by lightning and exploded.
+$v was stung to death by a berry bush.
+$v was stung to death by a cactus.
+$v was stung to death by cactus.
+$v was torn in half by an arrow trap.
+$v was turned into bloody rain by an explosion.
+$v was turned into red dust by an explosion.
+$v was utterly destroyed by an anvil.
+$v was utterly destroyed by an explosion.
+$v was violently separated by explosives.
+$v was violently severed by explosives.
+$v withered away.
+The Zone claims $v's life.
+# incorrect grammar, is this a named mob? "$v was pricked to death <by> a pufferfish"?
+$v was pricked to death a pufferfish.
+
 # pvp messages
 $v was violently assassinated by $k with a(n) $w
 $v was utterly destroyed by $k with a(n) $w
@@ -22,6 +136,7 @@ $v was shot by $k (with) $w
 $v was removed by $k (with) a(n) $w
 $v was reduced to lava by lava whilst fighting $k
 $v was pushed off of vines by $k
+$v was pushed off of vines by $w
 $v was pushed off a ladder by $k
 $v was killed by $k using magic.
 $v was impaled by $k using $w
@@ -327,117 +442,3 @@ $v was violently severed into pieces by $w.
 $v went inside $m and died.
 $v went inside $w and died.
 $v got stuck in a berry bush and died trying to escape $m
-
-# suicides
-$v assassinated themselves.
-$v became lava.
-$v blew themselves up with a(n) $w
-$v broke apart from falling.
-$v broke their neck, and the rest of their body.
-$v burned apart.
-$v burned to death.
-$v burned up in lava.
-$v choked to death.
-$v combusted.
-$v committed suicide with a(n) $w
-$v committed suicide.
-$v couldn't swim up quick enough.
-$v destroyed themselves with a(n) $w
-$v died by mysterious means.
-$v died from an arrow trap.
-$v died from bee allergies.
-$v died from unknown causes.
-$v died inside a wall.
-$v died inside lava somehow.
-$v died randomly.
-$v died stuck in a berry bush.
-$v died stuck on a cactus.
-$v died suddenly.
-$v drank themselves dead.
-$v dried up and fell apart.
-$v drowned in lava.
-$v drowned.
-$v ended their own pitiful existence.
-$v ended their life.
-$v ended themselves.
-$v exhausted and died.
-$v exploded into gibs playing with fireworks.
-$v exploded themselves with a(n) $w
-$v fell and crushed their insides with their legbones.
-$v fell and crushed their lungs with their legbones.
-$v fell and was reduced into a jittering flesh heap.
-$v fell and was reduced into a jittering flesh pile.
-$v fell into the void and instantly died.
-$v fell to death.
-$v fireballed themselves.
-$v forgot to breath air.
-$v forgot to eat.
-$v froze to death.
-$v gave up and faded away.
-$v gave up life.
-$v got stuck in a berry bush.
-$v got stuck on a cactus.
-$v had their health meter depleted.
-$v had their life instantly removed.
-$v hit the ground too hard.
-$v impaled themselves.
-$v killed themselves using magic.
-$v killed themselves.
-$v lost grip of a ladder and fell to death.
-$v lost grip of vines and fell to death.
-$v melted by fire.
-$v melted in lava.
-$v rubbed themselves too hard against a berry bush.
-$v rubbed themselves too hard against a cactus.
-$v rubbed themselves too hard against a cactus.
-$v shot themselves.
-$v smashed themselves against a cactus and instantly died.
-$v smashed themselves and died trying to fly with elytra.
-$v sprained their entire body and instantly died.
-$v starved to death.
-$v suffocated in water.
-$v suffocated.
-$v suicide bombed with a(n) $w
-$v swam out of a waterfall and fell to death.
-$v took an arrow to the knee and died.
-$v tried to swim in lava and didn't get out quick enough.
-$v tripped too hard and died.
-$v tripped, broke a bone or died somehow inside lava.
-$v turned into ash.
-$v violently ended their own life with a(n) $w
-$v was blown apart by an explosion.
-$v was boned to death by $w
-$v was boned to death.
-$v was buried alive.
-$v was buried alive.
-$v was consumed by living magma.
-$v was consumed by the void.
-$v was crushed by an anvil.
-$v was crushed, drowned, killed or something.
-$v was deleted by an explosion.
-$v was disintegrated by explosives.
-$v was fireballed to death.
-$v was hit by a dispensed arrow and died.
-$v was hit by a life erasing potion.
-$v was hit too hard by a fireball.
-$v was impaled by dripstone.
-$v was reduced to lava by lava.
-$v was reduced to mince from an anvil falling on them.
-$v was removed by an explosion.
-$v was smashed and reduced to mince.
-$v was smashed by an anvil.
-$v was struck by lightning and exploded.
-$v was stung to death by a berry bush.
-$v was stung to death by a cactus.
-$v was stung to death by cactus.
-$v was torn in half by an arrow trap.
-$v was turned into bloody rain by an explosion.
-$v was turned into red dust by an explosion.
-$v was utterly destroyed by an anvil.
-$v was utterly destroyed by an explosion.
-$v was violently separated by explosives.
-$v was violently severed by explosives.
-$v withered away.
-The Zone claims $v's life.
-# incorrect grammar, is this a named mob? "$v was pricked to death <by> a pufferfish"?
-$v was pricked to death a pufferfish.
