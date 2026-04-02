@@ -1,9 +1,9 @@
-name: 26.1.0 PreRelease Build and Release
+name: 26.1.1 PreRelease Build and Release
 
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+\+26.1.0.pre'
+      - '[0-9]+.[0-9]+.[0-9]+\+26.1.1.pre'
 
 jobs:
   build-java-and-linux-amd64:
