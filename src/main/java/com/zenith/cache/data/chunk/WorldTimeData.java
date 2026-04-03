@@ -5,12 +5,13 @@ import org.geysermc.mcprotocollib.protocol.data.game.level.ClockNetworkState;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundSetTimePacket;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Data
 public class WorldTimeData {
     private long lastUpdate;
     private long gameTime;
-    private Map<Integer, ClockNetworkState> clockStates;
+    private Map<Integer, ClockNetworkState> clockStates = new ConcurrentHashMap<>();
 
     public void update(ClientboundSetTimePacket packet) {
         this.lastUpdate = System.currentTimeMillis();
