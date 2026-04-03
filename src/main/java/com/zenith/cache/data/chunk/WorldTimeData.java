@@ -15,7 +15,7 @@ public class WorldTimeData {
     public void update(ClientboundSetTimePacket packet) {
         this.lastUpdate = System.currentTimeMillis();
         this.gameTime = packet.getGameTime();
-        this.clockStates = packet.getClockUpdates();
+        this.clockStates.putAll(packet.getClockUpdates());
     }
 
     public ClientboundSetTimePacket toPacket() {
@@ -27,15 +27,6 @@ public class WorldTimeData {
         if (worldAge > 0) {
             worldAge += offset;
         }
-
-        // todo:
-//        long time = this.dayTime;
-//
-//        // If time is negative, the daylight cycle is disabled (e.g. from the "doDaylightCycle" gamerule being false)
-//        if (time >= 0) {
-//            time += offset;
-//            time %= 24000;
-//        }
 
         return new ClientboundSetTimePacket(worldAge, clockStates);
     }

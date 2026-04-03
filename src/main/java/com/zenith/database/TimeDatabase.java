@@ -74,7 +74,15 @@ public class TimeDatabase extends LockingDatabase {
         var timeInstant = Instant.ofEpochMilli(worldTimeData.getLastUpdate());
         var time = timeInstant.atOffset(ZoneOffset.UTC);
         long worldage = worldTimeData.getGameTime();
-        long worldtime = 0L; // todo: worldTimeData.isTickDayTime() ? worldTimeData.getDayTime() : -worldTimeData.getDayTime();
+        // todo: networked world clock registry in 26.1
+        //  the clockstates map is a clock id (related to dimension) -> state
+        //  nether does not have a default clock, so i dont think it will have a worldtime necessarily
+        //  but we only are saving the overworld clock, so maybe it doesn't matter too much
+        var owClock = worldTimeData.getClockStates().get(0);
+        if (owClock == null) {
+            DATABASE_LOG.warn("no overworld clock found?");
+        }
+        long worldtime = owClock != null ? owClock.totalTicks() : worldage;
         insert(timeInstant, handle -> {
             handle.createUpdate("INSERT INTO worldtime (time, worldage, worldtime) VALUES  (:time, :worldage, :worldtime)")
                   .bind("time", time)

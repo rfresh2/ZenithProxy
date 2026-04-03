@@ -398,6 +398,9 @@ public class ChunkCache implements CachedData {
             this.worldTimeData = null;
             this.serverBrand = null;
         }
+        if (type == CacheResetType.PROTOCOL_SWITCH) {
+            this.worldTimeData = null;
+        }
     }
 
     @Override
