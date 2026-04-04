@@ -28,7 +28,7 @@ repositories {
 
 val mcplVersion = "1.21.11.10"
 dependencies {
-    api("com.github.rfresh2:JDA:6.4.30") {
+    api("com.github.rfresh2:JDA:6.4.31") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -247,6 +247,7 @@ graalvmNative {
                 "-H:DeadlockWatchdogInterval=30",
                 "-H:+CompactingOldGen",
                 "-H:+TrackPrimitiveValues",
+                "-H:+TreatAllTypeReachableConditionsAsTypeReached",
                 "-H:+UsePredicates",
                 "--future-defaults=all",
                 "-R:MaxHeapSize=200m",
@@ -289,6 +290,7 @@ graalvmNative {
                 "-H:DeadlockWatchdogInterval=30",
                 "-H:+CompactingOldGen",
                 "-H:+TrackPrimitiveValues",
+                "-H:+TreatAllTypeReachableConditionsAsTypeReached",
                 "-H:+UsePredicates",
                 "--future-defaults=all",
                 "-R:MaxHeapSize=200m",
