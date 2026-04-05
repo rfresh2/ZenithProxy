@@ -1,5 +1,7 @@
 [Create an account here ](https://m.do.co/c/f3afffef9a46)[for free $200 credit](https://m.do.co/c/3a3a226e4936)
 
+Also see [Hosting Providers](Hosting-Providers.md) for more options.
+
 ## Create a Droplet (VPS)
 ![Create Droplet](./_assets/img/digitalocean-setup/DigitalOcean-Setup-Guide-1.png)
 
