@@ -2,6 +2,8 @@ This wiki will outline recommended tools, workflows, and tips for hosting Zenith
 
 ## Hosting Providers
 
+See [Hosting Providers](Hosting-Providers.md) for good hosting options.
+
 I recommend DigitalOcean `1 GB Memory / 1 vCPU` droplets in NYC-1. [Free DigitalOcean $200 credit ](https://m.do.co/c/f3afffef9a46)[for new accounts](https://m.do.co/c/3a3a226e4936). Each droplet is $6/month.
 
 Additional providers:

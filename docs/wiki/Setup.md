@@ -17,7 +17,6 @@
 ### Setup Guides
 
 * [DigitalOcean VPS + $200 free credits + auto setup script](DigitalOcean-Setup-Guide.md)
-* [Hosting Providers](Hosting-Providers.md)
 * [Windows](Windows-Python-Launcher-Guide.md)
 
 ### Downloads
@@ -107,6 +106,10 @@ To select a specific release channel, use the [`channel`](Commands.md#channel) c
 Example: `channel set java 1.21.4`
 
 To see the current release channel, use the [`status`](Commands.md#status) command, the channel is at the top of the response.
+
+### Hosting Providers
+
+See [Hosting Providers](Hosting-Providers.md) for managed hosting and VPS options.
 
 ### Running on Linux Servers
 
