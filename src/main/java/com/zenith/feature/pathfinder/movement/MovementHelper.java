@@ -308,7 +308,7 @@ public final class MovementHelper {
             var layersProperty = World.getBlockStateProperty(blockStateId, BlockStateProperties.LAYERS);
             return layersProperty != null && layersProperty == 1;
         }
-        if (block == BlockRegistry.LARGE_FERN || block == BlockRegistry.TALL_GRASS) {
+        if (block == BlockRegistry.LARGE_FERN || block == BlockRegistry.TALL_GRASS || block == BlockRegistry.SCULK_VEIN) {
             return true;
         }
         return block.replaceable();
