@@ -109,7 +109,7 @@ To see the current release channel, use the [`status`](Commands.md#status) comma
 
 ### Hosting Providers
 
-See [Hosting Providers](Hosting-Providers.md) for managed hosting and VPS options.
+See [Hosting Providers](Hosting-Providers.md)
 
 ### Running on Linux Servers
 

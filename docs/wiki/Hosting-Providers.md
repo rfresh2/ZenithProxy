@@ -1,38 +1,80 @@
-## Hosting Providers
+# Hosting Providers
 
-Managed hosting services and VPS providers for running ZenithProxy.
+ZenithProxy can run on any computer, including your own. But many choose to rent a computer in a datacenter (called a VPS or dedicated server)
 
----
+These are some companies that offer hosting services (none are affiliated with ZenithProxy)
 
-### Zenith Hosting (Managed)
+## Managed Providers
 
-[Zenith Hosting](https://zenith.hosting) provides a user friendly web interface for setting up and managing your ZenithProxy instances. No VPS or Linux knowledge required.
+### Zenith Hosting
 
-**Features:**
+https://zenith.hosting
 
-* One-click instance creation
-* Fully graphical web interface for managing ZenithProxy, no downloads required
-* <5ms ping to 2b2t, 99.99% uptime
-* Supports thousands of concurrent instances and Minecraft accounts
-* Early access to advanced plugins like stash finder and ping bypass, developed daily
-* Automatic updates, everything in base ZenithProxy and more!
-* As cheap as other hosting options, cancel anytime
+One-click instance creation with a web interface for setting up and managing ZenithProxy instances. No VPS or Linux knowledge required.
 
-[Get started at zenith.hosting](https://zenith.hosting){ .md-button .md-button--primary }
+## Providers with Free Tiers/Trials
 
-<small>_Zenith Hosting is not affiliated with rfresh._</small>
+### DigitalOcean
 
----
+[Setup guide](DigitalOcean-Setup-Guide.md)
 
-### VPS Providers (Self-Hosted)
+60-day trial with $200 free credits.
 
-These providers offer virtual private servers where you can run ZenithProxy yourself. See the [Linux Guide](Linux-Guide.md) for setup help.
+### Oracle Cloud
 
-| Provider | Free Tier / Trial | Notes |
-|---|---|---|
-| [DigitalOcean](https://m.do.co/c/f3afffef9a46) | $200 free credit for 60 days | [Setup guide](DigitalOcean-Setup-Guide.md) with auto setup script |
-| [Oracle Cloud](https://www.oracle.com/cloud/free/) | Always Free tier | Best free option, albeit can be unreliable at times |
-| [Hetzner](https://www.hetzner.com/cloud/) | No free tier | Cheap VPS, but expect 150ms+ ping to 2b2t |
-| [Vultr](https://www.vultr.com/) | $300 free credit for 30 days | US/EU/Asia datacenters |
-| [AWS](https://aws.amazon.com/free/) | 12 months free (t2.micro, 1GB RAM) | More complex setup |
-| [Google Cloud](https://cloud.google.com/free) | $300 free credit for 90 days + Always Free e2-micro | Good free trial |
+https://www.oracle.com/cloud/free/
+
+"Always Free" tier includes 2 of each x64 and ARM "Compute Instances"
+
+??? "Firewall Help"
+    Setup the instance, then run these commands via SSH:
+    ``` bash title="shell"
+    sudo iptables -I INPUT -j ACCEPT
+    sudo su
+    iptables-save > /etc/iptables/rules.v4
+    exit
+    ```
+    source: https://www.reddit.com/r/oraclecloud/comments/r8lkf7/a_quick_tips_to_people_who_are_having_issue/
+
+### AWS
+
+https://aws.amazon.com/free/
+
+6 month Free Plan includes $200 in credits
+
+??? "Firewall Help"
+    Configure the "Security Group" of your EC2 instance to allow inbound TCP traffic:
+    ![](./_assets/img/hosting-providers/aws-security-group.png)
+
+
+### Google Cloud
+
+https://cloud.google.com/free
+
+90-day free trial with $300 credit.
+
+And infinite Free Tier with 1 `e2-micro` instance
+
+??? "Firewall Help"
+    Edit the network attached to your VM and add a firewall rule that allows all inbound traffic:
+    ![](./_assets/img/hosting-providers/google-cloud-firewall-rule.png)
+
+## Paid-only Providers
+
+### OVH
+
+https://us.ovhcloud.com/vps/
+
+VPS stock is usually limited, but very competitive prices for the specs.
+
+Allows purchasing additional IP's which is useful for getting around 2b2t's IP limits.
+
+### Hetzner
+
+https://www.hetzner.com/cloud/
+
+Primarily EU only, which will have higher ping to 2b2t
+
+### Vultr
+
+https://www.vultr.com/
