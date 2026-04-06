@@ -23,12 +23,13 @@ public class AutoUpdateCommand extends Command {
             .category(CommandCategory.MANAGE)
             .description("""
             Configures the AutoUpdater.
-            
+
             Updates are not immediately applied while the client is connected.
             When an update is found, it will be applied 30 seconds after the next disconnect, or immediately if already disconnected.
             """)
             .usageLines(
-                "on/off"
+                "on/off",
+                "launcher on/off"
             )
             .build();
     }
@@ -44,15 +45,22 @@ public class AutoUpdateCommand extends Command {
                 else autoUpdater.stop();
                 LAUNCH_CONFIG.auto_update = toggle;
                 saveLaunchConfig();
-                c.getSource().getEmbed().title("AutoUpdater " + toggleStrCaps(toggle));
-                return OK;
-            }));
+                c.getSource().getEmbed()
+                    .title("AutoUpdate " + toggleStrCaps(toggle));
+            }))
+            .then(literal("launcher").then(argument("launcherToggle", toggle()).executes(c -> {
+                LAUNCH_CONFIG.auto_update_launcher = getToggle(c, "launcherToggle");
+                saveLaunchConfig();
+                c.getSource().getEmbed()
+                    .title("Launcher AutoUpdate " + toggleStrCaps(LAUNCH_CONFIG.auto_update_launcher));
+            })));
     }
 
     @Override
     public void defaultEmbed(final Embed builder) {
         builder
-            .addField("AutoUpdater", toggleStr(LAUNCH_CONFIG.auto_update), false)
+            .addField("AutoUpdate", toggleStr(LAUNCH_CONFIG.auto_update))
+            .addField("Launcher AutoUpdate", toggleStr(LAUNCH_CONFIG.auto_update_launcher))
             .primaryColor();
     }
 }

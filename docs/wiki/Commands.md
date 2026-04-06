@@ -231,6 +231,8 @@ When an update is found, it will be applied 30 seconds after the next disconnect
 
   ```autoUpdate on/off```
 
+  ```autoUpdate launcher on/off```
+
 
 ### chatRelay
 
