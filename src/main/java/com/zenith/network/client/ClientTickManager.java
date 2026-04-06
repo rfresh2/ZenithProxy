@@ -7,10 +7,12 @@ import com.zenith.event.client.ClientOnlineEvent;
 import com.zenith.event.client.ClientTickEvent;
 import com.zenith.event.player.PlayerConnectedEvent;
 import com.zenith.event.player.PlayerDisconnectedEvent;
+import com.zenith.util.Wait;
+import com.zenith.util.math.MathHelper;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.Future;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -20,7 +22,6 @@ import static java.util.Objects.nonNull;
 public class ClientTickManager {
     private final AtomicBoolean doClientTicks = new AtomicBoolean(false);
     private final AtomicBoolean doBotTicks = new AtomicBoolean(false);
-    private long lastTick = 0L;
     private final Thread tickManagerThread;
 
     public ClientTickManager() {
@@ -42,20 +43,18 @@ public class ClientTickManager {
         while (true) {
             try {
                 if (!doClientTicks.get()) {
-                    Thread.yield();
+                    Wait.waitMs((int) (50.0 / CONFIG.client.tickRate));
                     continue;
                 }
-                // todo: benchmark alternative solution where we calculate how long to sleep this thread
-                //  current loop is kinda just wasting cpu cycles
-                //  but current is prob better in time precision (sleep duration is somewhat variable in practice)
-                var now = System.nanoTime();
-                var elapsed = now - lastTick;
-                var nanoPerTick = TimeUnit.MILLISECONDS.toNanos(50L) / CONFIG.client.tickRate;
-                if (elapsed >= nanoPerTick) {
-                    lastTick = now;
-                    submitInEventLoop(this::tick).await();
-                }
-                Thread.yield();
+                var before = System.nanoTime();
+                submitInEventLoop(this::tick).await();
+                // now calculate how long to wait until next tick
+                // we will drift slightly lower in tps as thread sleep duration is variable in scheduling
+                // todo: vanilla client limits to 10 catch-up ticks, but we are not tracking this across multiple ticks
+                var elapsed = System.nanoTime() - before;
+                var nextTickNsDelay = (long) (50_000_000.0 / CONFIG.client.tickRate);
+                var waitDuration = Duration.ofNanos(MathHelper.clamp(nextTickNsDelay - elapsed, 0L, nextTickNsDelay));
+                Wait.wait(waitDuration);
             } catch (Exception e) {
                 CLIENT_LOG.error("ClientTickManager loop error", e);
             }
