@@ -2199,6 +2199,45 @@ To add messages in bulk, use the `addAll` subcommand. Each message is delimited 
   ```spammer del <index>```
 
 
+### spawnPatrol
+
+Patrols spawn and paths to any player it finds, killing them if you have kill aura enabled.
+
+**Usage**
+
+  ```spawnPatrol on/off```
+
+  ```spawnPatrol goal <x> <y> <z>```
+
+  ```spawnPatrol maxPatrolRange <blocks>```
+
+  ```spawnPatrol targetOnlyNakeds on/off```
+
+  ```spawnPatrol targetOnlyBedrock on/off```
+
+  ```spawnPatrol stickyTargeting on/off```
+
+  ```spawnPatrol targetAttackers on/off```
+
+  ```spawnPatrol nether on/off```
+
+  ```spawnPatrol stuckKill on/off```
+
+  ```spawnPatrol stuckKill seconds <seconds>```
+
+  ```spawnPatrol stuckKill minDist <blocks>```
+
+  ```spawnPatrol stuckKill antiStuck on/off```
+
+  ```spawnPatrol ignore add/del <player>```
+
+  ```spawnPatrol ignore addAll <player1,player2,...>```
+
+  ```spawnPatrol ignore clear```
+
+  ```spawnPatrol ignore list```
+
+
 ### swap
 
 Swaps the current controlling player to spectator mode.
@@ -2277,43 +2316,25 @@ Examples:
   ```tasks taskCommandExecutedNotification on/off```
 
 
-### spawnPatrol
+### tickRate
 
-Patrols spawn and paths to any player it finds, killing them if you have kill aura enabled.
+Modifies the client tick rate, as a multiple of the default rate (20 ticks per second)
+
+
+
+Example:
+
+
+
+* 1.0 would be 20 tps
+
+* 0.5 would slow down the tickrate to 10 tps
+
+* 2.0 would speed up the tickrate to 40 tps
 
 **Usage**
 
-  ```spawnPatrol on/off```
-
-  ```spawnPatrol goal <x> <y> <z>```
-
-  ```spawnPatrol maxPatrolRange <blocks>```
-
-  ```spawnPatrol targetOnlyNakeds on/off```
-
-  ```spawnPatrol targetOnlyBedrock on/off```
-
-  ```spawnPatrol stickyTargeting on/off```
-
-  ```spawnPatrol targetAttackers on/off```
-
-  ```spawnPatrol nether on/off```
-
-  ```spawnPatrol stuckKill on/off```
-
-  ```spawnPatrol stuckKill seconds <seconds>```
-
-  ```spawnPatrol stuckKill minDist <blocks>```
-
-  ```spawnPatrol stuckKill antiStuck on/off```
-
-  ```spawnPatrol ignore add/del <player>```
-
-  ```spawnPatrol ignore addAll <player1,player2,...>```
-
-  ```spawnPatrol ignore clear```
-
-  ```spawnPatrol ignore list```
+  ```tickRate <rate>```
 
 
 ### via
