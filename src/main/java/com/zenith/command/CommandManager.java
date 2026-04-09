@@ -73,6 +73,7 @@ public class CommandManager {
         new LicenseCommand(),
         new MapCommand(),
         new ModulePriorityCommand(),
+        new MultiCommand(),
         new PathfinderCommand(),
         new PearlLoader(),
         new PlaytimeCommand(),

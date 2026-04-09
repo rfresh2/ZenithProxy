@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 
+import java.util.List;
 import java.util.UUID;
 
 import static com.zenith.Globals.*;
@@ -58,5 +59,10 @@ public class PlayerCommandSource implements CommandSource {
     public void logEmbed(final CommandContext ctx, final Embed embed) {
         CommandOutputHelper.logEmbedOutputToTerminal(embed);
         CommandOutputHelper.logEmbedOutputToInGame(embed, ctx.getInGamePlayerInfo().session());
+    }
+
+    @Override
+    public void logMultiLine(final List<String> multiLine) {
+        CommandOutputHelper.logMultiLineOutputToTerminal(multiLine);
     }
 }

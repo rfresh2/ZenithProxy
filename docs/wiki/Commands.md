@@ -1891,6 +1891,29 @@ Default module priorities may be changed between versions.
   ```modulePriority list```
 
 
+### multi
+
+Execute multiple commands one after another
+
+
+
+Each command is separated by a double comma: `,,`
+
+
+
+The contained commands do not have a prefix.
+
+
+
+Example: `multi friend add rfresh2,,say hello,,pearlLoader load rfresh2`
+
+**Aliases:** `x`
+
+**Usage**
+
+  ```multi <command1>,,<command2>...```
+
+
 ### pathfinder
 
 Baritone pathfinder
