@@ -107,6 +107,10 @@ Example: `channel set java 1.21.4`
 
 To see the current release channel, use the [`status`](Commands.md#status) command, the channel is at the top of the response.
 
+### Hosting Providers
+
+See [Hosting Providers](Hosting-Providers.md)
+
 ### Running on Linux Servers
 
 See the [Linux Guide](Linux-Guide.md)

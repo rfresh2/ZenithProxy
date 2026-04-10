@@ -52,6 +52,7 @@ edit_uri = "edit/1.21.4/docs/wiki"
      { "Home" = "index.md" },
      { "Setup" = "Setup.md" },
      { "DigitalOcean Setup Guide" = "DigitalOcean-Setup-Guide.md" },
+     { "Hosting Providers" = "Hosting-Providers.md" },
      { "Windows Launcher Guide" = "Windows-Python-Launcher-Guide.md" },
      { "Discord Bot Guide" = "Discord-Bot-Guide.md" },
      { "Commands" = "Commands.md" },

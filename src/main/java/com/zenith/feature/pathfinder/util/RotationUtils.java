@@ -131,6 +131,7 @@ public class RotationUtils {
         return reachable(ctx, pos, blockReachDistance, false);
     }
 
+    // todo: use blockstate interaction boxes instead of blockpos center
     public static Optional<Rotation> reachable(PlayerContext ctx, BlockPos pos, double blockReachDistance, boolean wouldSneak) {
         var rotation = RotationHelper.rotationTo(pos.x() + 0.5, pos.y() + 0.5, pos.z() + 0.5);
         BlockRaycastResult blockRaycastResult = RaycastHelper.blockRaycastFromPos(

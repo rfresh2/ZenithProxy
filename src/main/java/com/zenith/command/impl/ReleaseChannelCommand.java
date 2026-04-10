@@ -38,7 +38,8 @@ public class ReleaseChannelCommand extends Command {
         "1.21.8",
         "1.21.10",
         "1.21.11",
-        "26.1.1"
+        "26.1.1",
+        "26.1.2"
     );
 
     @Override
@@ -72,7 +73,7 @@ public class ReleaseChannelCommand extends Command {
                     .addField("Available Minecraft Versions", MINECRAFT_VERSIONS.stream().collect(Collectors.joining("`, `", "`", "`")), false)
                     .primaryColor();
             }))
-            .then(literal("set")
+            .then(literal("set").requires(Command::validateAccountOwner)
                 .then(argument("channel", enumStrings(PLATFORMS))
                     .then(argument("minecraft_version", enumStrings(MINECRAFT_VERSIONS)).executes(c -> {
                             final String channel = getString(c, "channel");
