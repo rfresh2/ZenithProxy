@@ -5,6 +5,7 @@ import com.zenith.util.MentionUtil;
 import lombok.Data;
 import net.dv8tion.jda.api.entities.ISnowflake;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.zenith.Globals.CONFIG;
@@ -50,5 +51,10 @@ public class DiscordCommandSource implements CommandSource {
     @Override
     public void logEmbed(final CommandContext ctx, final Embed embed) {
         CommandOutputHelper.logEmbedOutputToDiscord(embed);
+    }
+
+    @Override
+    public void logMultiLine(final List<String> multiLine) {
+        CommandOutputHelper.logMultiLineOutputToDiscord(multiLine);
     }
 }

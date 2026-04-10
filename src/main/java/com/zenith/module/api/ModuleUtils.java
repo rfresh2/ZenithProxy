@@ -11,6 +11,8 @@ import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 
+import java.util.List;
+
 import static com.zenith.Globals.*;
 
 public abstract class ModuleUtils {
@@ -143,6 +145,11 @@ public abstract class ModuleUtils {
             @Override
             public void logEmbed(final CommandContext ctx, final Embed embed) {
                 discordNotification(embed);
+            }
+
+            @Override
+            public void logMultiLine(final List<String> multiLine) {
+                CommandOutputHelper.logMultiLineOutputToDiscord(multiLine);
             }
         }
         var ctx = CommandContext.create(command, new ModuleCommandSource());

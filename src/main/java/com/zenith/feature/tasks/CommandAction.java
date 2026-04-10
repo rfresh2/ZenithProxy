@@ -8,6 +8,8 @@ import com.zenith.event.module.TasksCommandExecutedEvent;
 import lombok.Data;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.List;
+
 import static com.zenith.Globals.*;
 
 /**
@@ -58,6 +60,13 @@ public class CommandAction implements Action {
         public void logEmbed(final CommandContext ctx, final Embed embed) {
             if (CONFIG.client.extra.tasks.logCommandActionOutput) {
                 CommandOutputHelper.logEmbedOutputToDiscord(embed);
+            }
+        }
+
+        @Override
+        public void logMultiLine(final List<String> multiLine) {
+            if (CONFIG.client.extra.tasks.logCommandActionOutput) {
+                CommandOutputHelper.logMultiLineOutputToDiscord(multiLine);
             }
         }
     }

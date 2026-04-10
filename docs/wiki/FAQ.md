@@ -67,7 +67,12 @@ AWS calls their firewall a "Security Group".
 
 Edit it to allow all traffic:
 
-![](./_assets/img/faq/aws-security-group.png)
+![](./_assets/img/hosting-providers/aws-security-group.png)
+
+### Google Cloud
+
+Edit the network attached to your VM and add a firewall rule that allows all inbound traffic:
+![](./_assets/img/hosting-providers/google-cloud-firewall-rule.png)
 
 ### Other
 

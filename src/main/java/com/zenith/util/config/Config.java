@@ -81,6 +81,7 @@ public final class Config {
         public final Inventory inventory = new Inventory();
         public final ChatSchemas chatSchemas = new ChatSchemas();
         public final KeepAliveHandling keepAliveHandling = new KeepAliveHandling();
+        public double tickRate = 1.0;
 
         public static final class KeepAliveHandling {
             public KeepAliveMode keepAliveMode = KeepAliveMode.PASSTHROUGH;
