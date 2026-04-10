@@ -54,7 +54,7 @@ dependencies {
     api("io.netty:netty-resolver-dns-native-macos") { artifact { classifier = "osx-aarch_64" } }
     api("org.cloudburstmc.math:api:2.0")
     api("org.cloudburstmc.math:immutable:2.0")
-    api("org.redisson:redisson:4.3.0") {
+    api("org.redisson:redisson:4.3.1") {
         exclude(group = "io.netty")
     }
     api("com.github.rfresh2:SimpleEventBus:1.6")
@@ -71,7 +71,7 @@ dependencies {
     api("com.viaversion:viaversion-common:5.8.1")
     api("com.viaversion:viabackwards-common:5.8.1")
     api("com.viaversion:viarewind-common:4.0.15")
-    api("org.jline:jline:4.0.9")
+    api("org.jline:jline:4.0.10")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
     api("org.postgresql:postgresql:42.7.10")

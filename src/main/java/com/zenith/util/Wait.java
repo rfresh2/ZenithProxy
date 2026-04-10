@@ -2,6 +2,7 @@ package com.zenith.util;
 
 import lombok.SneakyThrows;
 
+import java.time.Duration;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
@@ -16,6 +17,11 @@ public class Wait {
     @SneakyThrows
     public static void waitMs(int milliseconds) {
         Thread.sleep(milliseconds);
+    }
+
+    @SneakyThrows
+    public static void wait(Duration duration) {
+        Thread.sleep(duration);
     }
 
     @SuppressWarnings("InfiniteLoopStatement")

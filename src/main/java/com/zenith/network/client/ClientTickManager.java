@@ -7,19 +7,22 @@ import com.zenith.event.client.ClientOnlineEvent;
 import com.zenith.event.client.ClientTickEvent;
 import com.zenith.event.player.PlayerConnectedEvent;
 import com.zenith.event.player.PlayerDisconnectedEvent;
+import com.zenith.util.Wait;
+import com.zenith.util.math.MathHelper;
+import io.netty.channel.EventLoop;
+import io.netty.util.concurrent.Future;
 
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.github.rfresh2.EventConsumer.of;
-import static com.zenith.Globals.CLIENT_LOG;
-import static com.zenith.Globals.EVENT_BUS;
+import static com.zenith.Globals.*;
 import static java.util.Objects.nonNull;
 
 public class ClientTickManager {
-    protected ScheduledFuture<?> clientTickFuture;
+    private final AtomicBoolean doClientTicks = new AtomicBoolean(false);
     private final AtomicBoolean doBotTicks = new AtomicBoolean(false);
+    private final Thread tickManagerThread;
 
     public ClientTickManager() {
         EVENT_BUS.subscribe(
@@ -29,10 +32,37 @@ public class ClientTickManager {
             of(PlayerDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
             of(ClientDisconnectEvent.class, this::handleDisconnectEvent)
         );
+        tickManagerThread = Thread.ofPlatform()
+            .name("ZenithProxy Client Tick Manager")
+            .daemon(true)
+            .uncaughtExceptionHandler((t, e) -> CLIENT_LOG.error("ClientTickManager Error", e))
+            .start(this::tickManagerLoop);
+    }
+
+    private void tickManagerLoop() {
+        while (true) {
+            try {
+                if (!doClientTicks.get()) {
+                    Wait.waitMs((int) (50.0 / CONFIG.client.tickRate));
+                    continue;
+                }
+                var before = System.nanoTime();
+                submitInEventLoop(this::tick).await();
+                // now calculate how long to wait until next tick
+                // we will drift slightly lower in tps as thread sleep duration is variable in scheduling
+                // todo: vanilla client limits to 10 catch-up ticks, but we are not tracking this across multiple ticks
+                var elapsed = System.nanoTime() - before;
+                var nextTickNsDelay = (long) (50_000_000.0 / CONFIG.client.tickRate);
+                var waitDuration = Duration.ofNanos(MathHelper.clamp(nextTickNsDelay - elapsed, 0L, nextTickNsDelay));
+                Wait.wait(waitDuration);
+            } catch (Exception e) {
+                CLIENT_LOG.error("ClientTickManager loop error", e);
+            }
+        }
     }
 
     public void handlePlayerOnlineEvent(final ClientOnlineEvent event) {
-        Proxy.getInstance().getClient().executeInEventLoop(() -> {
+        executeInEventLoop(() -> {
             if (!Proxy.getInstance().hasActivePlayer()) {
                 startBotTicks();
             }
@@ -40,15 +70,15 @@ public class ClientTickManager {
     }
 
     public void handleDisconnectEvent(final ClientDisconnectEvent event) {
-        stopBotTicks();
+        executeInEventLoop(this::stopBotTicks);
     }
 
     public void handleProxyClientConnectedEvent(final PlayerConnectedEvent event) {
-        Proxy.getInstance().getClient().executeInEventLoop(this::stopBotTicks);
+        executeInEventLoop(this::stopBotTicks);
     }
 
     public void handleProxyClientDisconnectedEvent(final PlayerDisconnectedEvent event) {
-        Proxy.getInstance().getClient().executeInEventLoop(() -> {
+        executeInEventLoop(() -> {
             if (nonNull(Proxy.getInstance().getClient()) && Proxy.getInstance().getClient().isOnline()) {
                 startBotTicks();
             }
@@ -56,11 +86,11 @@ public class ClientTickManager {
     }
 
     public synchronized void startClientTicks() {
-        if (this.clientTickFuture == null || this.clientTickFuture.isDone()) {
-            CLIENT_LOG.debug("Starting Client Ticks");
-            EVENT_BUS.post(ClientTickEvent.Starting.INSTANCE);
-            var eventLoop = Proxy.getInstance().getClient().getClientEventLoop();
-            this.clientTickFuture = eventLoop.scheduleWithFixedDelay(this::tick, 0, 50, TimeUnit.MILLISECONDS);
+        if (doClientTicks.compareAndSet(false, true)) {
+            executeInEventLoop(() -> {
+                CLIENT_LOG.debug("Starting Client Ticks");
+                EVENT_BUS.post(ClientTickEvent.Starting.INSTANCE);
+            });
         }
     }
 
@@ -84,36 +114,47 @@ public class ClientTickManager {
     };
 
     public synchronized void stopClientTicks() {
-        if (this.clientTickFuture != null && !this.clientTickFuture.isDone()) {
-            this.clientTickFuture.cancel(false);
-            try {
-                this.clientTickFuture.get(1L, TimeUnit.SECONDS);
-            } catch (final Exception e) {
-                // fall through
-            }
-            if (doBotTicks.compareAndExchange(true, false)) {
-                CLIENT_LOG.debug("Stopped Bot Ticks");
-                EVENT_BUS.post(ClientBotTick.Stopped.INSTANCE);
-            }
-            CLIENT_LOG.debug("Stopped Client Ticks");
-            EVENT_BUS.post(ClientTickEvent.Stopped.INSTANCE);
-            this.clientTickFuture = null;
+        stopBotTicks();
+        if (doClientTicks.compareAndSet(true, false)) {
+            executeInEventLoop(() -> {
+                CLIENT_LOG.debug("Stopped Client Ticks");
+                EVENT_BUS.post(ClientTickEvent.Stopped.INSTANCE);
+            });
         }
     }
 
     public void startBotTicks() {
         if (doBotTicks.compareAndSet(false, true)) {
-            CLIENT_LOG.debug("Starting Bot Ticks");
-            EVENT_BUS.post(ClientBotTick.Starting.INSTANCE);
+            executeInEventLoop(() -> {
+                CLIENT_LOG.debug("Starting Bot Ticks");
+                EVENT_BUS.post(ClientBotTick.Starting.INSTANCE);
+            });
         }
     }
 
     public void stopBotTicks() {
         if (doBotTicks.compareAndSet(true, false)) {
-            Proxy.getInstance().getClient().executeInEventLoop(() -> {
+            executeInEventLoop(() -> {
                 CLIENT_LOG.debug("Stopped Bot Ticks");
                 EVENT_BUS.post(ClientBotTick.Stopped.INSTANCE);
             });
         }
+    }
+
+    private EventLoop getEventLoop() {
+        return Proxy.getInstance().getClient().getClientEventLoop();
+    }
+
+    private void executeInEventLoop(Runnable runnable) {
+        var eventLoop = getEventLoop();
+        if (eventLoop.inEventLoop() || eventLoop.isShuttingDown()) {
+            runnable.run();
+        } else {
+            eventLoop.execute(runnable);
+        }
+    }
+
+    private Future<?> submitInEventLoop(Runnable task) {
+        return getEventLoop().submit(task);
     }
 }

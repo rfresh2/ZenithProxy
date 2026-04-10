@@ -73,6 +73,10 @@ public class MathHelper {
         return Math.max(min, Math.min(max, value));
     }
 
+    public static long clamp(final long value, final long min, final long max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
     public static double clamp(final double value, final double min, final double max) {
         return Math.max(min, Math.min(max, value));
     }
