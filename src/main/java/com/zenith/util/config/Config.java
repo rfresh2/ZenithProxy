@@ -32,7 +32,6 @@ public final class Config {
     public final Discord discord = new Discord();
     public final Database database = new Database();
     public final AutoUpdater autoUpdater = new AutoUpdater();
-    public boolean deprecationWarning_26_1_1 = true;
 
     public static final class Authentication {
         public AccountType accountType = AccountType.DEVICE_CODE;
