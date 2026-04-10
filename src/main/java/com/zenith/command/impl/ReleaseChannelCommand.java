@@ -38,7 +38,8 @@ public class ReleaseChannelCommand extends Command {
         "1.21.8",
         "1.21.10",
         "1.21.11",
-        "26.1.1"
+        "26.1.1",
+        "26.1.2"
     );
 
     @Override
