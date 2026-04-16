@@ -62,6 +62,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.*;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.*;
 
 import java.security.SecureRandom;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,7 @@ public class CoordObfuscation extends Module {
     private final Map<ServerSession, ObfPlayerState> playerStateMap = new ConcurrentHashMap<>();
     private final Cache<Integer, ServerTeleport> preTeleportPositionCache = CacheBuilder.newBuilder()
         .maximumSize(20)
-        .expireAfterWrite(5L, TimeUnit.SECONDS)
+        .expireAfterWrite(Duration.ofSeconds(5L))
         .build();
     // todo: maybe add spectator entities to the main entity cache
     @Getter private final IntSet spectatorEntityIds = new IntOpenHashSet();

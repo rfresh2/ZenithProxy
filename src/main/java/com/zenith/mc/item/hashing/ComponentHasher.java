@@ -38,13 +38,19 @@ public interface ComponentHasher {
 
     MinecraftHasher<ClickEvent.Action> CLICK_EVENT_ACTION = MinecraftHasher.STRING.cast(ClickEvent.Action::toString);
 
-    MinecraftHasher<ClickEvent> CLICK_EVENT = CLICK_EVENT_ACTION.dispatch("action", ClickEvent::action, action -> switch (action) {
-        case OPEN_URL -> builder -> builder.accept("url", MinecraftHasher.STRING, ClickEvent::value);
-        case OPEN_FILE -> builder -> builder.accept("path", MinecraftHasher.STRING, ClickEvent::value);
-        case RUN_COMMAND, SUGGEST_COMMAND -> builder -> builder.accept("command", MinecraftHasher.STRING, ClickEvent::value);
-        case CHANGE_PAGE -> builder -> builder.accept("page", MinecraftHasher.STRING, ClickEvent::value);
-        case COPY_TO_CLIPBOARD -> builder -> builder.accept("value", MinecraftHasher.STRING, ClickEvent::value);
-        case CUSTOM,SHOW_DIALOG ->  builder -> builder.accept("value", MinecraftHasher.STRING, ClickEvent::value);
+    MinecraftHasher<ClickEvent> CLICK_EVENT = CLICK_EVENT_ACTION.dispatch("action", ClickEvent::action, action -> {
+        if (action == ClickEvent.Action.OPEN_URL) {
+            return builder -> builder.accept("url", MinecraftHasher.STRING, (v) -> ((ClickEvent.Payload.Text) v.payload()).value());
+        } else if (action == ClickEvent.Action.OPEN_FILE) {
+            return builder -> builder.accept("path", MinecraftHasher.STRING, (v) -> ((ClickEvent.Payload.Text) v.payload()).value());
+        } else if (action == ClickEvent.Action.RUN_COMMAND || action == ClickEvent.Action.SUGGEST_COMMAND) {
+            return builder -> builder.accept("command", MinecraftHasher.STRING, (v) -> ((ClickEvent.Payload.Text) v.payload()).value());
+        } else if (action == ClickEvent.Action.CHANGE_PAGE) {
+            return builder -> builder.accept("page", MinecraftHasher.STRING, (v) -> ((ClickEvent.Payload.Text) v.payload()).value());
+        } else if (action == ClickEvent.Action.COPY_TO_CLIPBOARD || action == ClickEvent.Action.CUSTOM || action == ClickEvent.Action.SHOW_DIALOG) {
+            return builder -> builder.accept("value", MinecraftHasher.STRING, (v) -> ((ClickEvent.Payload.Text) v.payload()).value());
+        }
+        return builder -> builder;
     });
 
     MinecraftHasher<HoverEvent.Action<?>> HOVER_EVENT_ACTION = MinecraftHasher.STRING.cast(HoverEvent.Action::toString);
@@ -104,7 +110,7 @@ public interface ComponentHasher {
         .accept("selector", MinecraftHasher.STRING, SelectorComponent::pattern)
         .optionalNullable("separator", COMPONENT, SelectorComponent::separator));
 
-    MinecraftHasher<NBTComponent<?, ?>> NBT_COMPONENT = component(builder -> builder
+    MinecraftHasher<NBTComponent<?>> NBT_COMPONENT = component(builder -> builder
         .accept("nbt", MinecraftHasher.STRING, NBTComponent::nbtPath)
         .optional("interpret", MinecraftHasher.BOOL, NBTComponent::interpret, false)
         .optionalNullable("separator", COMPONENT, NBTComponent::separator)); // TODO source key, needs kyori update?
@@ -120,7 +126,7 @@ public interface ComponentHasher {
             return SCORE_COMPONENT.hash(score, encoder);
         } else if (component instanceof SelectorComponent selector) {
             return SELECTOR_COMPONENT.hash(selector, encoder);
-        } else if (component instanceof NBTComponent<?,?> nbt) {
+        } else if (component instanceof NBTComponent<?> nbt) {
             return NBT_COMPONENT.hash(nbt, encoder);
         }
         throw new IllegalStateException("Unimplemented component hasher: " + component);
