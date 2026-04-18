@@ -1487,11 +1487,28 @@ public final class Bot extends ModuleUtils {
     }
 
     private boolean suffocatesAt(int blockPosX, int blockPosY, int blockPosZ) {
-        var cb = new LocalizedCollisionBox(blockPosX, blockPosX + 1, playerCollisionBox.minY(), playerCollisionBox.maxY(), blockPosZ, blockPosZ + 1, blockPosX, blockPosY, blockPosZ);
+        var cb = new LocalizedCollisionBox(blockPosX, blockPosX + 1, playerCollisionBox.minY(), playerCollisionBox.maxY(), blockPosZ, blockPosZ + 1, blockPosX, blockPosY, blockPosZ)
+            .inflate(-1.0E-7, -1.0E-7, -1.0E-7);
         var states = World.getCollidingBlockStatesInside(cb);
         // todo: this is not correct, there's more state we don't have in the blockstate
-        //  but falling blocks do indeed suffocate us
-        return states.stream().anyMatch(state -> state.block().fallingBlock());
+        // todo: extract all this logic from data generator, vanilla has a `isSuffocating` lambda property on blockstate
+        return states.stream().anyMatch(state -> {
+            if (state.block() == BlockRegistry.FARMLAND
+                || state.block() == BlockRegistry.SOUL_SAND
+                || state.block() == BlockRegistry.DIRT_PATH
+                || state.block() == BlockRegistry.MUD
+            ) {
+                return true;
+            }
+            return state.block() != BlockRegistry.COBWEB
+                && state.block() != BlockRegistry.BAMBOO_SAPLING
+                && state.block() != BlockRegistry.MANGROVE_ROOTS
+                && state.block() != BlockRegistry.MOVING_PISTON
+                && state.block() != BlockRegistry.COPPER_GRATE
+                && !state.block().blockTags().contains(BlockTags.LEAVES)
+                && !state.block().name().contains("glass")
+                && state.isSolidBlock() && state.isShapeFullBlock();
+        });
     }
 
     private boolean resyncTeleport() {

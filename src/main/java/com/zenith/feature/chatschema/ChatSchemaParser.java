@@ -7,7 +7,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,7 +23,7 @@ public class ChatSchemaParser {
 
     private static final LoadingCache<String, Pattern> compiledPatternsCache = CacheBuilder.newBuilder()
         .maximumSize(10)
-        .expireAfterAccess(10, TimeUnit.MINUTES)
+        .expireAfterAccess(Duration.ofMinutes(10))
         .build(CacheLoader.from(ChatSchemaParser::compilePattern));
 
     public static @Nullable ChatParseResult parse(String input) {

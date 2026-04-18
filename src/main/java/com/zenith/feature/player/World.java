@@ -286,7 +286,13 @@ public class World {
             var blockPos = blockPosList.getLong(i);
             var blockState = getBlockState(blockPos);
             if (blockState.block().isAir()) continue; // air
-            blockStates.add(blockState);
+            var blockStateCbs = blockState.getLocalizedCollisionBoxes();
+            for (int j = 0; j < blockStateCbs.size(); j++) {
+                if (blockStateCbs.get(j).intersects(cb)) {
+                    blockStates.add(blockState);
+                    break;
+                }
+            }
         }
         return blockStates;
     }

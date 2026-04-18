@@ -6,7 +6,7 @@ import com.zenith.network.server.ServerSession;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.Globals.SERVER_LOG;
@@ -21,7 +21,7 @@ public class LoginRateLimiter {
 
     public LoginRateLimiter(final int rateLimitSeconds) {
         this.cache = CacheBuilder.newBuilder()
-            .expireAfterWrite(rateLimitSeconds, TimeUnit.SECONDS)
+            .expireAfterWrite(Duration.ofSeconds(rateLimitSeconds))
             .build();
     }
 
