@@ -11,7 +11,6 @@ import com.zenith.util.ChatUtil;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.CONFIG;
@@ -20,7 +19,7 @@ import static java.util.Objects.isNull;
 
 public class AutoReply extends Module {
     private Cache<String, String> repliedPlayersCache = CacheBuilder.newBuilder()
-            .expireAfterWrite(CONFIG.client.extra.autoReply.cooldownSeconds, TimeUnit.SECONDS)
+            .expireAfterWrite(Duration.ofSeconds(CONFIG.client.extra.autoReply.cooldownSeconds))
             .build();
     private Instant lastReply = Instant.now();
 
@@ -39,7 +38,7 @@ public class AutoReply extends Module {
     public void updateCooldown(final int newCooldown) {
         CONFIG.client.extra.autoReply.cooldownSeconds = newCooldown;
         Cache<String, String> newCache = CacheBuilder.newBuilder()
-                .expireAfterWrite(newCooldown, TimeUnit.SECONDS)
+                .expireAfterWrite(Duration.ofSeconds(newCooldown))
                 .build();
         newCache.putAll(this.repliedPlayersCache.asMap());
         this.repliedPlayersCache = newCache;

@@ -29,7 +29,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "26.1.1.2"
+val mcplVersion = "26.1.2.3"
 dependencies {
     api("com.github.rfresh2:JDA:6.4.31") {
         exclude(group = "club.minnced")
@@ -71,14 +71,14 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.maps:long-double-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
-    api("com.viaversion:viaversion-common:5.8.1")
-    api("com.viaversion:viabackwards-common:5.8.1")
-    api("com.viaversion:viarewind-common:4.0.15")
-    api("org.jline:jline:4.0.10")
+    api("com.viaversion:viaversion-common:5.9.0-20260417.203614-32")
+    api("com.viaversion:viabackwards-common:5.9.0-20260417.203715-15")
+    api("com.viaversion:viarewind-common:4.1.0-20260409.155713-7")
+    api("org.jline:jline:4.0.12")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
     api("org.postgresql:postgresql:42.7.10")
-    api("org.jdbi:jdbi3-postgres:3.52.0")
+    api("org.jdbi:jdbi3-postgres:3.52.1")
     api("com.google.guava:guava:33.5.0-jre")
     api("ch.qos.logback:logback-classic:1.5.32")
     api("org.slf4j:slf4j-api:2.0.17")
@@ -86,7 +86,7 @@ dependencies {
     api("com.mojang:brigadier:1.3.10")
     api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
-    api(platform("tools.jackson:jackson-bom:3.1.1"))
+    api(platform("tools.jackson:jackson-bom:3.1.2"))
     api("tools.jackson.core:jackson-databind")
     api("tools.jackson.dataformat:jackson-dataformat-smile")
 
