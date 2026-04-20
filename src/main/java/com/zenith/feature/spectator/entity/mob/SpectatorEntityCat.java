@@ -16,7 +16,7 @@ public class SpectatorEntityCat extends SpectatorMob {
     @Override
     public ArrayList<EntityMetadata<?, ?>> getBaseEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
         return metadataListOf(
-            new IntEntityMetadata(19, MetadataTypes.CAT_VARIANT, (spectatorEntityId % 10))
+            new IntEntityMetadata(20, MetadataTypes.CAT_VARIANT, (spectatorEntityId % 10))
         );
     }
 

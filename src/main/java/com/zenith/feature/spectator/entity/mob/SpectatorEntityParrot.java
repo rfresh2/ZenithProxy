@@ -16,7 +16,7 @@ public class SpectatorEntityParrot extends SpectatorMob {
     @Override
     public ArrayList<EntityMetadata<?, ?>> getBaseEntityMetadata(final GameProfile spectatorProfile, final int spectatorEntityId) {
         return metadataListOf(
-            new IntEntityMetadata(19, MetadataTypes.INT, (spectatorEntityId % 5)) // variant
+            new IntEntityMetadata(20, MetadataTypes.INT, (spectatorEntityId % 5)) // variant
         );
     }
 
