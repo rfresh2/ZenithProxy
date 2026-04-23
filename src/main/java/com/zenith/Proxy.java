@@ -827,7 +827,11 @@ public class Proxy {
     public void handleStartQueueEvent(QueueStartEvent event) {
         this.inQueue = true;
         this.queuePosition = 0;
-        if (event.wasOnline()) this.connectTime = Instant.now();
+        if (event.wasOnline()) {
+            this.prevOnlineSeconds = OptionalLong.of(this.prevOnlineSeconds.orElse(0L) + Duration.between(this.connectTime, Instant.now()).toSeconds());
+            this.didQueueSkip = true;
+            this.connectTime = Instant.now();
+        }
     }
 
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
