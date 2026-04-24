@@ -518,6 +518,8 @@ The relay is configured using the `chatRelay` command
 
   ```discord ignoreOtherBots on/off```
 
+  ```discord ignoreWebhooks on/off```
+
 
 ### displayCoords
 
