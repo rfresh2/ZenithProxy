@@ -858,6 +858,13 @@ public class PathfinderCommand extends Command {
                     .addField("Place Block Verify Able To Place", CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace)
                     .primaryColor();
             })))
+            .then(literal("placeBlockSneak").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.pathfinder.placeBlockSneak = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Place Block Sneak", CONFIG.client.extra.pathfinder.placeBlockSneak)
+                    .primaryColor();
+            })))
             .then(literal("interactWithProcessMaxPathTries").then(argument("count", integer(1)).executes(c -> {
                 CONFIG.client.extra.pathfinder.interactWithProcessMaxPathTries = getInteger(c, "count");
                 c.getSource().getEmbed()
@@ -1024,6 +1031,8 @@ public class PathfinderCommand extends Command {
         settingsMap.put("assumeExternalAutoTool", toggleStr(CONFIG.client.extra.pathfinder.assumeExternalAutoTool));
         settingsMap.put("itemSaver", toggleStr(CONFIG.client.extra.pathfinder.itemSaver));
         settingsMap.put("itemSaverThreshold", String.valueOf(CONFIG.client.extra.pathfinder.itemSaverThreshold));
+        settingsMap.put("placeBlockVerifyAbleToPlace", toggleStr(CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace));
+        settingsMap.put("placeBlockSneak", toggleStr(CONFIG.client.extra.pathfinder.placeBlockSneak));
         return settingsMap;
     }
 

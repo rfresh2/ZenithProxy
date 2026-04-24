@@ -226,6 +226,7 @@ public final class Config {
                 public boolean getToBlockBlacklistClosestOnFailure = false;
                 public boolean simplifyUnloadedYGoal = false;
                 public boolean placeBlockVerifyAbleToPlace = true;
+                public boolean placeBlockSneak = false;
                 public int interactWithProcessMaxPathTries = 5;
                 public boolean avoidUpdatingFallingBlocks = true;
                 public boolean pauseMiningForFallingBlocks = true;

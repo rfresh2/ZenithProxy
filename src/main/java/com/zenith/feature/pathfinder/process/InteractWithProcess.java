@@ -20,6 +20,7 @@ import com.zenith.mc.item.ItemData;
 import com.zenith.util.math.MathHelper;
 import lombok.Data;
 import org.cloudburstmc.math.vector.Vector2f;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.Pose;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.MoveToHotbarAction;
 import org.jspecify.annotations.Nullable;
@@ -144,10 +145,26 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         }
 
         public void interact(Hand hand, PlaceTarget placeTarget, Rotation rotation) {
+            // must be sneaking on prior tick to hit server sneak-place codepath
+            if (CONFIG.client.extra.pathfinder.placeBlockSneak && !BOT.isSneaking()) {
+                INPUTS.submit(
+                    InputRequest.builder()
+                        .owner(this)
+                        .input(Input.builder()
+                            .sneaking(true)
+                            .build())
+                        .yaw(rotation.yaw())
+                        .pitch(rotation.pitch())
+                        .priority(Baritone.getPriority() + 1)
+                        .build()
+                );
+                return;
+            }
             var in = Input.builder()
                 .hand(hand)
                 .clickRequiresRotation(true)
                 .clickTarget(new ClickTarget.BlockPosition(placeTarget.supportingBlockState().x(), placeTarget.supportingBlockState().y(), placeTarget.supportingBlockState().z()))
+                .sneaking(CONFIG.client.extra.pathfinder.placeBlockSneak)
                 .rightClick(true);
             // will often need a second tick to place with rotation
             INPUTS.submit(
@@ -255,8 +272,16 @@ public class InteractWithProcess extends BaritoneProcessHelper {
             int placeY = placeTarget.supportingBlockState().y();
             int placeZ = placeTarget.supportingBlockState().z();
             Position center = World.blockInteractionCenter(placeX, placeY, placeZ);
-            Vector2f centerRotation = RotationHelper.rotationTo(center.x(), center.y(), center.z());
-            var centerRaycastResult = RaycastHelper.playerEyeRaycastThroughToBlockTarget(placeX, placeY, placeZ, centerRotation.getX(), centerRotation.getY());
+            double srcX = CACHE.getPlayerCache().getX();
+            double srcY = CONFIG.client.extra.pathfinder.placeBlockSneak
+                ? CACHE.getPlayerCache().getY() + BOT.getEntityDimensions(Pose.SNEAKING).getEyeHeight()
+                : CACHE.getPlayerCache().getEyeY();
+            double srcZ = CACHE.getPlayerCache().getZ();
+            Vector2f centerRotation = RotationHelper.rotationTo(
+                center.x(), center.y(), center.z(),
+                srcX, srcY, srcZ
+            );
+            var centerRaycastResult = RaycastHelper.blockRaycastThroughToBlockTarget(placeX, placeY, placeZ, srcX, srcY, srcZ, centerRotation.getX(), centerRotation.getY(), BOT.getBlockReachDistance());
             if (centerRaycastResult.hit() && centerRaycastResult.x() == placeX && centerRaycastResult.y() == placeY && centerRaycastResult.z() == placeZ && centerRaycastResult.direction() == placeTarget.direction()) {
                 return new Rotation(centerRotation.getX(), centerRotation.getY());
             }
@@ -269,7 +294,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
             var posList = rotationStepList(center.x(), center.y(), center.z(), step, maxStep);
             for (var pos : posList) {
                 Vector2f rotation = RotationHelper.rotationTo(pos.x(), pos.y(), pos.z());
-                var raycastResult = RaycastHelper.playerEyeRaycastThroughToBlockTarget(placeX, placeY, placeZ, rotation.getX(), rotation.getY());
+                var raycastResult = RaycastHelper.blockRaycastThroughToBlockTarget(placeX, placeY, placeZ, srcX, srcY, srcZ, rotation.getX(), rotation.getY(), BOT.getBlockReachDistance());
                 if (raycastResult.hit() && raycastResult.x() == placeX && raycastResult.y() == placeY && raycastResult.z() == placeZ && raycastResult.direction() == placeTarget.direction()) {
                     return new Rotation(rotation.getX(), rotation.getY());
                 }
