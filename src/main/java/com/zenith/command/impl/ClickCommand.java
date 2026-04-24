@@ -16,6 +16,7 @@ import com.zenith.feature.player.InputRequest;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.util.config.Config.Client.Extra.Click.HoldClickTarget;
 import com.zenith.util.config.Config.Client.Extra.Click.HoldRightClickMode;
+import com.zenith.util.math.MathHelper;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
@@ -63,6 +64,7 @@ public class ClickCommand extends Command {
                 "addedEntityReach <float>",
                 "hold forceRotation on/off",
                 "hold forceRotation <yaw> <pitch>",
+                "hold forceRotation sync",
                 "hold sneak on/off",
                 "hold target <any/none/entity/block>",
                 "stop"
@@ -79,7 +81,6 @@ public class ClickCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Click Hold Off")
                     .primaryColor();
-                return OK;
             }))
             .then(literal("left").executes(c -> {
                     if (!Proxy.getInstance().isConnected()) {
@@ -265,7 +266,6 @@ public class ClickCommand extends Command {
                         c.getSource().getEmbed()
                             .title("Right Click Hold")
                             .primaryColor();
-                        return OK;
                     })
                     .then(literal("mainHand").executes(c -> {
                         CONFIG.client.extra.click.holdLeftClick = false;
@@ -274,7 +274,6 @@ public class ClickCommand extends Command {
                         c.getSource().getEmbed()
                             .title("Right Click Hold (Main Hand)")
                             .primaryColor();
-                        return OK;
                     }))
                     .then(literal("offHand").executes(c -> {
                         CONFIG.client.extra.click.holdLeftClick = false;
@@ -283,7 +282,6 @@ public class ClickCommand extends Command {
                         c.getSource().getEmbed()
                             .title("Right Click Hold (Offhand)")
                             .primaryColor();
-                        return OK;
                     }))
                     .then(literal("alternate").executes(c -> {
                         CONFIG.client.extra.click.holdLeftClick = false;
@@ -292,30 +290,24 @@ public class ClickCommand extends Command {
                         c.getSource().getEmbed()
                             .title("Right Click Hold (Alternate)")
                             .primaryColor();
-                        return OK;
                     }))
                     .then(literal("interval").then(argument("ticks", time(0, 100)).executes(c -> {
                         CONFIG.client.extra.click.holdRightClickInterval = getInteger(c, "ticks");
                         c.getSource().getEmbed()
                             .title("Right Click Hold Interval Set")
                             .primaryColor();
-                        return OK;
                     })))))
             .then(literal("addedBlockReach").then(argument("reach", floatArg(-10, 10)).executes(c -> {
-                float f = getFloat(c, "reach");
-                CONFIG.client.extra.click.additionalBlockReach = f;
+                CONFIG.client.extra.click.additionalBlockReach = getFloat(c, "reach");
                 c.getSource().getEmbed()
                     .title("Additional Block Reach Set")
                     .primaryColor();
-                return OK;
             })))
             .then(literal("addedEntityReach").then(argument("reach", floatArg(-10, 10)).executes(c -> {
-                float f = getFloat(c, "reach");
-                CONFIG.client.extra.click.additionalEntityReach = f;
+                CONFIG.client.extra.click.additionalEntityReach = getFloat(c, "reach");
                 c.getSource().getEmbed()
                     .title("Additional Entity Reach Set")
                     .primaryColor();
-                return OK;
             })))
             .then(literal("hold")
                 .then(literal("forceRotation")
@@ -324,23 +316,27 @@ public class ClickCommand extends Command {
                         c.getSource().getEmbed()
                             .title("Hold Force Rotation Set")
                             .primaryColor();
-                        return OK;
                     }))
                     .then(argument("yaw", floatArg(-180, 180)).then(argument("pitch", floatArg(-90, 90)).executes(c -> {
-                        CONFIG.client.extra.click.hasRotation = true;
                         CONFIG.client.extra.click.rotationYaw = getFloat(c, "yaw");
                         CONFIG.client.extra.click.rotationPitch = getFloat(c, "pitch");
                         c.getSource().getEmbed()
                             .title("Hold Force Rotation Set")
                             .primaryColor();
-                        return OK;
-                    }))))
+                    })))
+                    .then(literal("sync").executes(c -> {
+                        CONFIG.client.extra.click.hasRotation = true;
+                        CONFIG.client.extra.click.rotationYaw = MathHelper.wrapYaw(CACHE.getPlayerCache().getYaw());
+                        CONFIG.client.extra.click.rotationPitch = MathHelper.wrapPitch(CACHE.getPlayerCache().getPitch());
+                        c.getSource().getEmbed()
+                            .title("Hold Force Rotation Set")
+                            .primaryColor();
+                    })))
                 .then(literal("sneak").then(argument("toggle", toggle()).executes(c -> {
                     CONFIG.client.extra.click.holdSneak = getToggle(c, "toggle");
                     c.getSource().getEmbed()
                         .title("Hold Sneak Set")
                         .primaryColor();
-                    return OK;
                 })))
                 .then(literal("target")
                     .then(argument("targetType", enumStrings(HoldClickTarget.values())).executes(c -> {
@@ -349,7 +345,6 @@ public class ClickCommand extends Command {
                         c.getSource().getEmbed()
                             .title("Hold Target Set")
                             .primaryColor();
-                        return OK;
                     }))));
     }
 

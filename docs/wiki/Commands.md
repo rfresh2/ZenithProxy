@@ -1665,6 +1665,8 @@ Simulates a click to the block or entity in front of you
 
   ```click hold forceRotation <yaw> <pitch>```
 
+  ```click hold forceRotation sync```
+
   ```click hold sneak on/off```
 
   ```click hold target <any/none/entity/block>```
