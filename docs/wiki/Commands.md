@@ -2104,6 +2104,8 @@ Note that many other modules can change the player's rotation after this command
 
 **Usage**
 
+  ```rotate```
+
   ```rotate <yaw> <pitch>```
 
   ```rotate yaw <yaw>```

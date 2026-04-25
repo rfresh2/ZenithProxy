@@ -24,10 +24,11 @@ public class RotateCommand extends Command {
             .category(CommandCategory.MODULE)
             .description("""
             Rotates the bot in-game.
-            
+
             Note that many other modules can change the player's rotation after this command is executed.
             """)
             .usageLines(
+                "",
                 "<yaw> <pitch>",
                 "yaw <yaw>",
                 "pitch <pitch>"
@@ -38,6 +39,20 @@ public class RotateCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("rotate")
+            .executes(c -> {
+                if (!Proxy.getInstance().isConnected()) {
+                    c.getSource().getEmbed()
+                        .title("Error")
+                        .errorColor()
+                        .description("Not connected to a server");
+                    return OK;
+                }
+                c.getSource().getEmbed()
+                    .title("Current Rotation")
+                    .addField("Yaw", BOT.getYaw())
+                    .addField("Pitch", BOT.getPitch());
+                return OK;
+            })
             .then(literal("yaw").then(argument("yaw", floatArg(-180, 180)).executes(c -> {
                 float yaw = getFloat(c, "yaw");
                 if (!Proxy.getInstance().isConnected()) {

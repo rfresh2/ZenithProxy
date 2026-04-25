@@ -41,59 +41,59 @@ public class MapCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("map")
             .then(literal("render")
-                      .then(argument("mapId", integer()).executes(c -> {
-                          final int id = c.getArgument("mapId", Integer.class);
-                          var mapData = CACHE.getMapDataCache().getMapDataMap().get(id);
-                          if (mapData == null) {
-                              var knownIdList = CACHE.getMapDataCache().getMapDataMap().keySet().stream()
-                                  .map(String::valueOf)
-                                  .collect(Collectors.joining(", ", "[", "]"));
-                              c.getSource().getEmbed()
-                                  .title("Map Not Found")
-                                  .description("**Known Map ID's**\n" + knownIdList)
-                                  .addField("Map ID", id, true)
-                                  .errorColor();
-                              return OK;
-                          }
-                          var bytes = MapRenderer.render(mapData.getData(), id);
-                          var attachmentName = "map_" + id + ".png";
-                          c.getSource().getEmbed()
-                              .title("Map Rendered!")
-                              .addField("Map ID", id, true)
-                              .fileAttachment(new Embed.FileAttachment(
-                                  attachmentName,
-                                  bytes
-                              ))
-                              .image("attachment://" + attachmentName)
-                              .primaryColor();
-                          return OK;
-                      }))
-                      .then(literal("all").executes(c -> {
-                          final AtomicInteger count = new AtomicInteger(0);
-                          CACHE.getMapDataCache().getMapDataMap().forEach((id, mapData) -> {
-                              MapRenderer.render(mapData.getData(), id);
-                              count.incrementAndGet();
-                          });
-                          c.getSource().getEmbed()
-                              .title("All Cached Maps Rendered")
-                              .primaryColor()
-                              .addField("Map Count", count.get(), false);
-                          return OK;
-                      })))
+                .then(argument("mapId", integer()).executes(c -> {
+                    final int id = c.getArgument("mapId", Integer.class);
+                    var mapData = CACHE.getMapDataCache().getMapDataMap().get(id);
+                    if (mapData == null) {
+                        var knownIdList = CACHE.getMapDataCache().getMapDataMap().keySet().stream()
+                            .map(String::valueOf)
+                            .collect(Collectors.joining(", ", "[", "]"));
+                        c.getSource().getEmbed()
+                            .title("Map Not Found")
+                            .description("**Known Map ID's**\n" + knownIdList)
+                            .addField("Map ID", id, true)
+                            .errorColor();
+                        return OK;
+                    }
+                    var bytes = MapRenderer.render(mapData.getData(), id);
+                    var attachmentName = "map_" + id + ".png";
+                    c.getSource().getEmbed()
+                        .title("Map Rendered!")
+                        .addField("Map ID", id, true)
+                        .fileAttachment(new Embed.FileAttachment(
+                            attachmentName,
+                            bytes
+                        ))
+                        .image("attachment://" + attachmentName)
+                        .primaryColor();
+                    return OK;
+                }))
+                .then(literal("all").executes(c -> {
+                    final AtomicInteger count = new AtomicInteger(0);
+                    CACHE.getMapDataCache().getMapDataMap().forEach((id, mapData) -> {
+                        MapRenderer.render(mapData.getData(), id);
+                        count.incrementAndGet();
+                    });
+                    c.getSource().getEmbed()
+                        .title("All Cached Maps Rendered")
+                        .primaryColor()
+                        .addField("Map Count", count.get(), false);
+                    return OK;
+                })))
             .then(literal("generate")
-                      .executes(c -> {
-                          generate(c.getSource().getEmbed(), 4, false);
-                          return OK;
-                      })
-                      .then(literal("align").executes(c -> {
-                          generate(c.getSource().getEmbed(), 4, true);
-                          return OK;
-                      }))
-                      .then(argument("viewDistance", integer(1, 16)).executes(c -> {
-                          var viewDistance = c.getArgument("viewDistance", Integer.class);
-                          generate(c.getSource().getEmbed(), viewDistance, false);
-                          return OK;
-                      })));
+                .executes(c -> {
+                    generate(c.getSource().getEmbed(), 4, false);
+                    return OK;
+                })
+                .then(literal("align").executes(c -> {
+                    generate(c.getSource().getEmbed(), 4, true);
+                    return OK;
+                }))
+                .then(argument("viewDistance", integer(1, 16)).executes(c -> {
+                    var viewDistance = c.getArgument("viewDistance", Integer.class);
+                    generate(c.getSource().getEmbed(), viewDistance, false);
+                    return OK;
+                })));
     }
 
     private void generate(final Embed embed, final int viewDistance, final boolean vanillaAlign) {
