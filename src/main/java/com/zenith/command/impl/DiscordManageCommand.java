@@ -44,7 +44,8 @@ public class DiscordManageCommand extends Command {
                 "manageDescription on/off",
                 "managePresence on/off",
                 "showNonWhitelistIP on/off",
-                "ignoreOtherBots on/off"
+                "ignoreOtherBots on/off",
+                "ignoreWebhooks on/off"
             )
             .build();
     }
@@ -183,6 +184,11 @@ public class DiscordManageCommand extends Command {
                 CONFIG.discord.ignoreOtherBots = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Ignore Other Bots " + toggleStrCaps(CONFIG.discord.ignoreOtherBots));
+            })))
+            .then(literal("ignoreWebhooks").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.discord.ignoreWebhooks = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Ignore Webhooks " + toggleStrCaps(CONFIG.discord.ignoreWebhooks));
             })));
     }
 
@@ -204,6 +210,7 @@ public class DiscordManageCommand extends Command {
             .addField("Manage Presence", toggleStr(CONFIG.discord.managePresence))
             .addField("Show Non-Whitelist IP", toggleStr(CONFIG.discord.showNonWhitelistLoginIP))
             .addField("Ignore Other Bots", toggleStr(CONFIG.discord.ignoreOtherBots))
+            .addField("Ignore Webhooks", toggleStr(CONFIG.discord.ignoreWebhooks))
             .primaryColor();
     }
 

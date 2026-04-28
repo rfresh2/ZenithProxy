@@ -23,6 +23,8 @@ public class ZenithComponentLoggerProvider implements ComponentLoggerProvider {
         if (initial != null) return initial;
         final Logger backing = LoggerFactory.getLogger(name);
         LogSourceFilter.registerLogger(name, Level.TRACE);
-        return helper.delegating(backing, ComponentSerializer::serializeAnsi);
+        var created = helper.delegating(backing, ComponentSerializer::serializeAnsi);
+        final ComponentLogger existing = this.loggers.putIfAbsent(name, created);
+        return existing == null ? created : existing;
     }
 }

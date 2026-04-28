@@ -518,6 +518,8 @@ The relay is configured using the `chatRelay` command
 
   ```discord ignoreOtherBots on/off```
 
+  ```discord ignoreWebhooks on/off```
+
 
 ### displayCoords
 
@@ -1663,6 +1665,8 @@ Simulates a click to the block or entity in front of you
 
   ```click hold forceRotation <yaw> <pitch>```
 
+  ```click hold forceRotation sync```
+
   ```click hold sneak on/off```
 
   ```click hold target <any/none/entity/block>```
@@ -2099,6 +2103,8 @@ Rotates the bot in-game.
 Note that many other modules can change the player's rotation after this command is executed.
 
 **Usage**
+
+  ```rotate```
 
   ```rotate <yaw> <pitch>```
 

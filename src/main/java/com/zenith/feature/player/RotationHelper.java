@@ -16,9 +16,13 @@ public final class RotationHelper {
     }
 
     public static Vector2f rotationTo(final double x, final double y, final double z) {
-        final double dx = x - CACHE.getPlayerCache().getX();
-        final double dy = y - CACHE.getPlayerCache().getEyeY();
-        final double dz = z - CACHE.getPlayerCache().getZ();
+        return rotationTo(x, y, z, CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getEyeY(), CACHE.getPlayerCache().getZ());
+    }
+
+    public static Vector2f rotationTo(final double x, final double y, final double z, final double srcX, final double srcY, final double srcZ) {
+        final double dx = x - srcX;
+        final double dy = y - srcY;
+        final double dz = z - srcZ;
         final double distance = Math.sqrt(dx * dx + dz * dz);
         final double yaw = Math.toDegrees(Math.atan2(dz, dx)) - 90.0;
         final double pitch = -Math.toDegrees(Math.atan2(dy, distance));

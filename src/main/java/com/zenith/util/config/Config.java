@@ -226,6 +226,7 @@ public final class Config {
                 public boolean getToBlockBlacklistClosestOnFailure = false;
                 public boolean simplifyUnloadedYGoal = false;
                 public boolean placeBlockVerifyAbleToPlace = true;
+                public boolean placeBlockSneak = false;
                 public int interactWithProcessMaxPathTries = 5;
                 public boolean avoidUpdatingFallingBlocks = true;
                 public boolean pauseMiningForFallingBlocks = true;
@@ -905,6 +906,7 @@ public final class Config {
         public String notificationMentionRoleId = "";
         public String prefix = ".";
         public boolean ignoreOtherBots = true;
+        public boolean ignoreWebhooks = true;
         public boolean reportCoords = true;
         public boolean mentionRoleOnConnect = false;
         public boolean mentionRoleOnPlayerOnline = false;

@@ -8,6 +8,7 @@ public record DiscordMainChannelCommandReceivedEvent(MessageReceivedEvent event)
         return event.getMessage().getContentRaw();
     }
 
+    @Deprecated
     public Member member() {
         return event.getMember();
     }

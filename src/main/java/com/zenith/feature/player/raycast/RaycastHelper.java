@@ -100,9 +100,10 @@ public class RaycastHelper {
 
     public static BlockRaycastResult playerEyeRaycastThroughToBlockTarget(int blockX, int blockY, int blockZ, float yaw, float pitch, double blockReachDistance) {
         var sim = BOT;
-        final double x1 = sim.getX();
-        final double y1 = sim.getEyeY();
-        final double z1 = sim.getZ();
+        return blockRaycastThroughToBlockTarget(blockX, blockY, blockZ, sim.getX(), sim.getEyeY(), sim.getZ(), yaw, pitch, blockReachDistance);
+    }
+
+    public static BlockRaycastResult blockRaycastThroughToBlockTarget(int blockX, int blockY, int blockZ, double x1, double y1, double z1, float yaw, float pitch, double blockReachDistance) {
         var rayEndPos = MathHelper.calculateRayEndPos(x1, y1, z1, yaw, pitch, blockReachDistance);
         final double startX = MathHelper.lerp(-1.0E-7, x1, rayEndPos.getX());
         final double startY = MathHelper.lerp(-1.0E-7, y1, rayEndPos.getY());

@@ -27,9 +27,8 @@ public class DiscordCommandSource implements CommandSource {
         if (!(ctx instanceof DiscordCommandContext context)) return false;
         var event = context.getMessageReceivedEvent();
         final boolean hasAccountOwnerRole = Optional.ofNullable(event.getMember())
-            .orElseThrow(() -> new RuntimeException("Message does not have a valid member"))
-            .getRoles()
             .stream()
+            .flatMap(member -> member.getRoles().stream())
             .map(ISnowflake::getId)
             .anyMatch(roleId -> roleId.equals(CONFIG.discord.accountOwnerRoleId));
         if (!hasAccountOwnerRole) {
@@ -41,7 +40,7 @@ public class DiscordCommandSource implements CommandSource {
             }
             context.getEmbed()
                 .addField("Error",
-                          "User: " + Optional.ofNullable(event.getMember()).map(m -> m.getUser().getName()).orElse("Unknown")
+                          "User: " + event.getAuthor().getName()
                               + " is not authorized to execute this command! "
                               + "You must have the account owner role: " + accountOwnerRoleMention, false);
         }
