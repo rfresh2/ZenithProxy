@@ -70,7 +70,7 @@ dependencies {
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
     api("com.viaversion:viaversion-common:5.9.0")
     api("com.viaversion:viabackwards-common:5.9.0")
-    api("com.viaversion:viarewind-common:4.1.0-20260419.200015-10")
+    api("com.viaversion:viarewind-common:4.1.0")
     api("org.jline:jline:4.0.13")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
