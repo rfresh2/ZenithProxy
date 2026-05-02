@@ -836,6 +836,9 @@ public class Proxy {
 
     public void handleQueuePositionUpdateEvent(QueuePositionUpdateEvent event) {
         this.queuePosition = event.position();
+        // we don't receive position updates when queue skipping
+        this.prevOnlineSeconds = OptionalLong.empty();
+        this.didQueueSkip = false;
     }
 
     public void handleQueueCompleteEvent(QueueCompleteEvent event) {
