@@ -105,10 +105,10 @@ public class ChatRelayEventListener {
         final String sender;
         if (color != null && color.equals(Color.MAGENTA)) {
             // extract whisper sender
-            sender = msgContent.split("\\*\\*")[1];
+            sender = msgContent.split("\\*\\*")[1].replace("\\", "");
         } else if (color != null && color.equals(Color.BLACK)) {
             // extract public chat sender
-            sender = msgContent.split("\\*\\*")[1].replace(":", "");
+            sender = msgContent.split("\\*\\*")[1].replace(":", "").replace("\\", "");
             // todo: we could support death messages here if we remove any bolded discord formatting and feed the message content into the parser
         } else {
             throw new RuntimeException("Unhandled message being replied to, aborting relay");
