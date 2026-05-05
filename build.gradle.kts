@@ -26,7 +26,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.4.51"
+val mcplVersion = "1.21.4.53"
 dependencies {
     api("com.github.rfresh2:JDA:6.4.31") {
         exclude(group = "club.minnced")
@@ -36,7 +36,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.12.Final"))
+    api(platform("io.netty:netty-bom:4.2.13.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -70,7 +70,7 @@ dependencies {
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
     api("com.viaversion:viaversion-common:5.9.1")
     api("com.viaversion:viabackwards-common:5.9.1")
-    api("com.viaversion:viarewind-common:4.1.0")
+    api("com.viaversion:viarewind-common:4.1.1")
     api("org.jline:jline:4.0.15")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
