@@ -1,6 +1,7 @@
 package com.zenith.discord;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -17,12 +18,17 @@ public class EmbedSerializer {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss O");
     // used to find discord formatted text and replace it with the appropriate style
     // **bold** -> bold
+    // *italic* -> italic
+    // _italic_ -> italic
+    // __underline__ -> underline
     // `code` -> code
     // ```code block``` -> code block
     // [link](url) -> text with click event
     // ||spoiler|| -> spoiler
     // there's more we don't currently use that aren't implemented here
-    private static final Pattern DISCORD_FORMATTING_REGEX = Pattern.compile("(\\*\\*(.+?)\\*\\*)|(```(.+?)```)|(`(.+?)`)|(\\[(.+?)]\\((.+?)\\))|(\\|\\|(.+?)\\|\\|)");
+    private static final Pattern DISCORD_FORMATTING_REGEX = Pattern.compile(
+        "(\\*\\*([^\\\\\\*]+?)\\*\\*)|(\\*([^\\\\\\*]+?)\\*)|(__([^\\\\_]+?)__)|(_([^\\\\_]+?)_)|(```([^\\\\`]+?)```)|(`([^\\\\`]+?)`)|(\\[(.+?)]\\((.+?)\\))|(\\|\\|(.+?)\\|\\|)"
+    );
 
     public static Component serialize(final Embed embed) {
         var c = Component.text()
@@ -71,8 +77,6 @@ public class EmbedSerializer {
     }
 
     public static Component serializeText(String text) {
-        /** replace escaped underscores from {@link DiscordBot#escape(String)} **/
-        text = text.replaceAll("\\\\_", "_");
         var matcher = DISCORD_FORMATTING_REGEX.matcher(text);
         var component = Component.text();
         var lastEnd = 0;
@@ -85,15 +89,21 @@ public class EmbedSerializer {
             if (matcher.group(2) != null) {
                 component.append(Component.text(matcher.group(2)).decorate(TextDecoration.BOLD));
             } else if (matcher.group(4) != null) {
-                component.append(Component.text(matcher.group(4)).color(NamedTextColor.GRAY));
+                component.append(Component.text(matcher.group(4)).decorate(TextDecoration.ITALIC));
             } else if (matcher.group(6) != null) {
-                component.append(Component.text(matcher.group(6)).color(NamedTextColor.GRAY));
+                component.append(Component.text(matcher.group(6)).decorate(TextDecoration.UNDERLINED));
             } else if (matcher.group(8) != null) {
-                component.append(Component.text(matcher.group(8)).color(NamedTextColor.BLUE)
-                    .clickEvent(ClickEvent.openUrl(matcher.group(9)))
-                    .hoverEvent(HoverEvent.showText(Component.text(matcher.group(9)))));
-            } else if (matcher.group(11) != null) {
-                component.append(Component.text(matcher.group(11)))
+                component.append(Component.text(matcher.group(8)).decorate(TextDecoration.ITALIC));
+            } else if (matcher.group(10) != null) {
+                component.append(Component.text(matcher.group(10)).color(NamedTextColor.GRAY));
+            } else if (matcher.group(12) != null) {
+                component.append(Component.text(matcher.group(12)).color(NamedTextColor.GRAY));
+            } else if (matcher.group(14) != null) {
+                component.append(Component.text(matcher.group(14)).color(NamedTextColor.BLUE)
+                    .clickEvent(ClickEvent.openUrl(matcher.group(15)))
+                    .hoverEvent(HoverEvent.showText(Component.text(matcher.group(15)))));
+            } else if (matcher.group(16) != null) {
+                component.append(Component.text(matcher.group(16)))
                                      .decorate(TextDecoration.ITALIC);
             }
             lastEnd = end;
@@ -101,6 +111,12 @@ public class EmbedSerializer {
         if (lastEnd < text.length()) {
             component.append(Component.text(text.substring(lastEnd)));
         }
+
+        component.applyDeep(c -> {
+            if (c instanceof TextComponent.Builder t) {
+                t.content(DiscordBot.unescape(t.content()));
+            }
+        });
 
         return component.build();
     }
