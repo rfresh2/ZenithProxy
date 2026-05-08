@@ -37,8 +37,8 @@ public final class DeathMessageSchemaInstance {
         for (int i = 0; i < schema.size(); i++) {
             final String schemaWord = schema.get(i);
             final String mcTextWord = iterator.next();
-            if (isNull(mcTextWord)) return Optional.empty();
             if (schemaWord.startsWith("$v")) {
+                if (isNull(mcTextWord)) return Optional.empty();
                 String textWord = mcTextWord;
                 if (schemaWord.endsWith("'s")) { // handle special case with apostrophe
                     textWord = mcTextWord.replace("'s", "");
@@ -50,6 +50,7 @@ public final class DeathMessageSchemaInstance {
                     victim = textWord;
                 }
             } else if (schemaWord.startsWith("$k")) {
+                if (isNull(mcTextWord)) return Optional.empty();
                 if (!userNameValidPattern.matcher(mcTextWord).matches()) {
                     return Optional.empty();
                 } else {
@@ -57,6 +58,9 @@ public final class DeathMessageSchemaInstance {
                     killer = new Killer(mcTextWord, KillerType.PLAYER);
                 }
             } else if (schemaWord.startsWith("$w")) {
+                if (isNull(mcTextWord)) {
+                    continue;
+                }
                 // we want to match just about any character and multiple words here
                 // if there are additional schema words after $w we want to ensure we match those too though
                 if (i + 1 < schema.size()) {
@@ -83,6 +87,7 @@ public final class DeathMessageSchemaInstance {
                     weapon = weaponWip;
                 }
             } else if (schemaWord.startsWith("$m")) { // iterator doesn't split these out
+                if (isNull(mcTextWord)) return Optional.empty();
                 if (mcTextWord.equals("a") || mcTextWord.equals("an")) {
                     i--; // skips any a or an prefix to a mob type
                     continue;
@@ -123,6 +128,7 @@ public final class DeathMessageSchemaInstance {
                 }
                 return Optional.empty();
             } else {
+                if (isNull(mcTextWord)) return Optional.empty();
                 if (schemaWord.equals("a(n)")) {
                     // special case for grammar
                     if (!(mcTextWord.equals("a") || mcTextWord.equals("an"))) {
