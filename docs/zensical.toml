@@ -50,17 +50,21 @@ edit_uri = "edit/1.21.4/docs/wiki"
 # Read more: https://zensical.org/docs/setup/navigation/
  nav = [
      { "Home" = "index.md" },
-     { "Setup" = "Setup.md" },
-     { "DigitalOcean Setup Guide" = "DigitalOcean-Setup-Guide.md" },
-     { "Hosting Providers" = "Hosting-Providers.md" },
-     { "Windows Launcher Guide" = "Windows-Python-Launcher-Guide.md" },
-     { "Discord Bot Guide" = "Discord-Bot-Guide.md" },
-     { "Commands" = "Commands.md" },
+     { "Getting Started" = [
+         { "Setup" = "Setup.md" },
+         { "DigitalOcean Setup Guide" = "DigitalOcean-Setup-Guide.md" },
+         { "Windows Launcher Guide" = "Windows-Python-Launcher-Guide.md" },
+         { "Hosting Providers" = "Hosting-Providers.md" },
+         { "Discord Bot Guide" = "Discord-Bot-Guide.md" },
+         { "Linux Guide" = "Linux-Guide.md" },
+         { "Docker" = "Docker.md" }
+     ]},
+     { "Usage" = [
+         { "Commands" = "Commands.md" },
+         { "Plugins" = "Plugins.md" },
+         { "Disconnects" = "Disconnects.md" },
+     ]},
      { "Frequently Asked Questions (FAQ)" = "FAQ.md" },
-     { "Disconnects" = "Disconnects.md" },
-     { "Linux Guide" = "Linux-Guide.md" },
-     { "Plugins" = "Plugins.md" },
-     { "Docker" = "Docker.md" }
  ]
 
 # With the "extra_css" option you can add your own CSS styling to customize
@@ -182,7 +186,7 @@ features = [
     # Turn on this feature to expand all collapsible sections in the
     # navigation sidebar by default.
     # https://zensical.org/docs/setup/navigation/#navigation-expansion
-    # "navigation.expand",
+     "navigation.expand",
 
     # This feature turns on navigation elements in the footer that allow the
     # user to navigate to a next or previous page.
@@ -223,7 +227,7 @@ features = [
     # When sections are enabled, top-level sections are rendered as groups in
     # the sidebar for viewports above 1220px, but remain as-is on mobile.
     # https://zensical.org/docs/setup/navigation/#navigation-sections
-    "navigation.sections",
+#    "navigation.sections",
 
     # When tabs are enabled, top-level sections are rendered in a menu layer
     # below the header for viewports above 1220px, but remain as-is on mobile.
