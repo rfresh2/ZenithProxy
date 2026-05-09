@@ -16,6 +16,9 @@ default_java_args = """\
 java24_addnl_args = """\
 -XX:+UseCompactObjectHeaders --sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED"""
 
+java26_addnl_args = """\
+--enable-final-field-mutation=ALL-UNNAMED"""
+
 default_linux_xmx = 225
 
 default_linux_args = ""
@@ -78,10 +81,14 @@ def launch_java(config):
             jvm_args += " " + default_java_args
             if java_version == 24 or java_version == 25:
                 jvm_args += " " + java24_addnl_args
+            if java_version == 26:
+                jvm_args += " " + java24_addnl_args + " " + java26_addnl_args
     else:
         jvm_args = default_java_args
         if java_version == 24 or java_version == 25:
             jvm_args += " " + java24_addnl_args
+        if java_version == 26:
+            jvm_args += " " + java24_addnl_args + " " + java26_addnl_args
     if "-Xmx" not in jvm_args:
         jvm_args += f" -Xmx{default_java_xmx}M"
     if platform.system() == "Windows":
