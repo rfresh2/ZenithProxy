@@ -5,7 +5,7 @@ on:
 
 env:
   UV_PYTHON: '3.14.4'
-  pyinstaller_version: "6.19.0"
+  pyinstaller_version: "6.20.0"
 
 jobs:
   backup-existing:
