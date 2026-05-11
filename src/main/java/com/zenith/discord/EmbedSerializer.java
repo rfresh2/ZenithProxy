@@ -27,7 +27,7 @@ public class EmbedSerializer {
     // ||spoiler|| -> spoiler
     // there's more we don't currently use that aren't implemented here
     private static final Pattern DISCORD_FORMATTING_REGEX = Pattern.compile(
-        "(\\*\\*([^\\\\\\*]+?)\\*\\*)|(\\*([^\\\\\\*]+?)\\*)|(__([^\\\\_]+?)__)|(_([^\\\\_]+?)_)|(```([^\\\\`]+?)```)|(`([^\\\\`]+?)`)|(\\[(.+?)]\\((.+?)\\))|(\\|\\|(.+?)\\|\\|)"
+        "(\\*\\*(\\w[^\\n\\\\\\*]*)\\*\\*)|(\\*(\\w[^\\n\\\\\\*]*)\\*)|(__(\\w[^\\n\\\\_]*)__)|(_(\\w[^\\n\\\\_]*)_)|(```(\\w[^\\\\`]*)```)|(`(\\w[^\\n\\\\`]*)`)|(\\[(.+?)]\\((.+?)\\))|(\\|\\|(.+?)\\|\\|)"
     );
 
     public static Component serialize(final Embed embed) {
