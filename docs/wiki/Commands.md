@@ -661,6 +661,8 @@ The release channel is a combination of a platform (java or linux) and a Minecra
 
   ```channel set <platform> <minecraft version>```
 
+  ```channel set <platform> <minecraft version> pre```
+
 
 ### server
 

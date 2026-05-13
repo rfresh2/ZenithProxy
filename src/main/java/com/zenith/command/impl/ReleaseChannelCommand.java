@@ -54,7 +54,8 @@ public class ReleaseChannelCommand extends Command {
             """)
             .usageLines(
                 "list",
-                "set <platform> <minecraft version>"
+                "set <platform> <minecraft version>",
+                "set <platform> <minecraft version> pre"
             )
             .aliases(
                 "release",
@@ -74,29 +75,29 @@ public class ReleaseChannelCommand extends Command {
                     .primaryColor();
             }))
             .then(literal("set").requires(Command::validateAccountOwner)
-                .then(argument("channel", enumStrings(PLATFORMS))
+                .then(argument("platform", enumStrings(PLATFORMS))
                     .then(argument("minecraft_version", enumStrings(MINECRAFT_VERSIONS)).executes(c -> {
-                            final String channel = getString(c, "channel");
+                            final String platform = getString(c, "platform");
                             final String minecraft_version = getString(c, "minecraft_version");
-                            setChannel(c, channel, minecraft_version, false, false);
+                            setChannel(c, platform, minecraft_version, false, false);
                             return OK;
                         })
                         .then(literal("force").executes(c -> {
-                            final String channel = getString(c, "channel");
+                            final String platform = getString(c, "platform");
                             final String minecraft_version = getString(c, "minecraft_version");
-                            setChannel(c, channel, minecraft_version, false, true);
+                            setChannel(c, platform, minecraft_version, false, true);
                             return OK;
                         }))
                         .then(literal("pre").executes(c -> {
-                                final String channel = getString(c, "channel");
+                                final String platform = getString(c, "platform");
                                 final String minecraft_version = getString(c, "minecraft_version");
-                                setChannel(c, channel, minecraft_version, true, false);
+                                setChannel(c, platform, minecraft_version, true, false);
                                 return OK;
                             })
                             .then(literal("force").executes(c -> {
-                                final String channel = getString(c, "channel");
+                                final String platform = getString(c, "platform");
                                 final String minecraft_version = getString(c, "minecraft_version");
-                                setChannel(c, channel, minecraft_version, true, true);
+                                setChannel(c, platform, minecraft_version, true, true);
                                 return OK;
                             }))))));
     }
@@ -107,8 +108,8 @@ public class ReleaseChannelCommand extends Command {
             .addField("Current Release Channel", LAUNCH_CONFIG.release_channel, false);
     }
 
-    private void setChannel(com.mojang.brigadier.context.CommandContext<CommandContext> c, String channel, String minecraft_version, boolean pre, boolean force) {
-        if (!PLATFORMS.contains(channel) && !force) {
+    private void setChannel(com.mojang.brigadier.context.CommandContext<CommandContext> c, String platform, String minecraft_version, boolean pre, boolean force) {
+        if (!PLATFORMS.contains(platform) && !force) {
             c.getSource().getEmbed()
                 .title("Invalid Platform!")
                 .description("Available platforms: " + PLATFORMS)
@@ -122,7 +123,22 @@ public class ReleaseChannelCommand extends Command {
                 .errorColor();
             return;
         }
-        if (channel.equals("linux") && !force) {
+        if (!LAUNCH_CONFIG.auto_update && !force) {
+            c.getSource().getEmbed()
+                .title("Error: AutoUpdate Disabled")
+                .description("""
+                    You cannot change release channels while AutoUpdate is disabled.
+
+                    ZenithProxy will be unable to restart.
+
+                    `autoUpdate on` then try again.
+
+                    or override this check with the `force` arg: `channel set <platform> <minecraft_version> force`
+                    """)
+                .errorColor();
+            return;
+        }
+        if (platform.equals("linux") && !force) {
             if (!validateLinuxPlatform()) {
                 c.getSource().getEmbed()
                     .title("Invalid Platform!")
@@ -131,7 +147,7 @@ public class ReleaseChannelCommand extends Command {
                 return;
             }
         }
-        LAUNCH_CONFIG.release_channel = channel + "." + minecraft_version;
+        LAUNCH_CONFIG.release_channel = platform + "." + minecraft_version;
         if (pre) LAUNCH_CONFIG.release_channel += ".pre";
         c.getSource().getEmbed()
             .title("Release Channel Updated!")

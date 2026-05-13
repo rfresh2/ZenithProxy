@@ -8,7 +8,7 @@ These are some companies that offer hosting services (none are affiliated with Z
 
 ### Zenith Hosting
 
-https://zenith.hosting
+https://proxy.zenith.hosting
 
 One-click instance creation with a web interface for setting up and managing ZenithProxy instances. No VPS or Linux knowledge required.
 

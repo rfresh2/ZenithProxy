@@ -179,4 +179,17 @@ public class DeathMessageParserTest {
         final var playerCount = deathMessagesParser.getPlayerNames(component).size();
         assertEquals(2, playerCount);
     }
+
+    @Test
+    public void component2b2tUtfWeaponFilteringTest() {
+        var component = ComponentSerializer.deserialize("{\"extra\":[{\"color\":\"dark_aqua\",\"text\":\"\"},{\"color\":\"dark_aqua\",\"click_event\":{\"action\":\"suggest_command\",\"command\":\"/w NotLeonetic \"},\"hover_event\":{\"action\":\"show_text\",\"value\":{\"extra\":[{\"extra\":[{\"color\":\"gold\",\"text\":\"Message \"},{\"color\":\"dark_aqua\",\"text\":\"\"}],\"text\":\"\"},{\"color\":\"dark_aqua\",\"text\":\"NotLeonetic\"},{\"color\":\"dark_aqua\",\"text\":\"\"}],\"text\":\"\"}},\"text\":\"NotLeonetic\"},{\"color\":\"dark_aqua\",\"extra\":[{\"color\":\"dark_red\",\"text\":\" executed \"},{\"color\":\"dark_aqua\",\"text\":\"\"}],\"text\":\"\"},{\"color\":\"dark_aqua\",\"click_event\":{\"action\":\"suggest_command\",\"command\":\"/w larplarplarp1 \"},\"hover_event\":{\"action\":\"show_text\",\"value\":{\"extra\":[{\"extra\":[{\"color\":\"gold\",\"text\":\"Message \"},{\"color\":\"dark_aqua\",\"text\":\"\"}],\"text\":\"\"},{\"color\":\"dark_aqua\",\"text\":\"larplarplarp1\"},{\"color\":\"dark_aqua\",\"text\":\"\"}],\"text\":\"\"}},\"text\":\"larplarplarp1\"},{\"color\":\"dark_aqua\",\"extra\":[{\"color\":\"dark_red\",\"text\":\" with \"},{\"color\":\"gold\",\"text\":\"\"}],\"text\":\"\"},{\"color\":\"gold\",\"hover_event\":{\"action\":\"show_item\",\"id\":\"minecraft:netherite_sword\",\"count\":1,\"components\":{\"minecraft:enchantments\":{\"levels\":{\"minecraft:mending\":1,\"minecraft:fire_aspect\":2,\"minecraft:sweeping_edge\":3,\"minecraft:looting\":3,\"minecraft:sharpness\":5,\"minecraft:knockback\":2,\"minecraft:unbreaking\":3}},\"minecraft:damage\":35,\"minecraft:repair_cost\":31,\"minecraft:custom_name\":\"吸血鬼\"}},\"text\":\"\"},{\"color\":\"gold\",\"text\":\"\"}],\"text\":\"\"}");
+        var rawInput = "NotLeonetic executed larplarplarp1 with";
+        // when weapon name = '吸血鬼'
+        var result = deathMessagesParser.parse(component, rawInput);
+        assertTrue(result.isPresent());
+        assertTrue(result.get().killer().isPresent());
+        assertEquals(KillerType.PLAYER, result.get().killer().get().type());
+        assertEquals("NotLeonetic", result.get().killer().get().name());
+        assertEquals("larplarplarp1", result.get().victim());
+    }
 }

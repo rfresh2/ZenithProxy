@@ -279,6 +279,9 @@ public class World {
         return blockStates;
     }
 
+    /**
+     * with collision box intersect check
+      */
     public List<BlockState> getCollidingBlockStatesInside(final LocalizedCollisionBox cb) {
         final List<BlockState> blockStates = new ArrayList<>(4);
         LongList blockPosList = getBlockPosLongListInCollisionBoxInside(cb);
@@ -293,6 +296,21 @@ public class World {
                     break;
                 }
             }
+        }
+        return blockStates;
+    }
+
+    /**
+     * no collision box clip check
+     */
+    public List<BlockState> getBlockStatesInside(final LocalizedCollisionBox cb) {
+        final List<BlockState> blockStates = new ArrayList<>(4);
+        LongList blockPosList = getBlockPosLongListInCollisionBoxInside(cb);
+        for (int i = 0; i < blockPosList.size(); i++) {
+            var blockPos = blockPosList.getLong(i);
+            var blockState = getBlockState(blockPos);
+            if (blockState.block().isAir()) continue; // air
+            blockStates.add(blockState);
         }
         return blockStates;
     }

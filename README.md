@@ -2,13 +2,13 @@
 
 <p align="center">
   <a href="https://discord.gg/nJZrSaRKtb">
-  <img alt="Discord" src="https://dcbadge.vercel.app/api/server/nJZrSaRKtb">
+  <img alt="Discord" src="https://dcbadge.limes.pink/api/server/nJZrSaRKtb">
   </a>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/MC-1.21.4-brightgreen.svg" alt="Minecraft"/>
-  <img src="https://tokei.rs/b1/github/rfresh2/ZenithProxy?category=code&style=flat" alt="Lines of Code"/>
+  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Ftokei.kojix2.net%2Fbadge%2Fgithub%2Frfresh2%2FZenithProxy%2Flines" alt="Lines of Code"/>
 </p>
 
 ZenithProxy is a Minecraft bot that players can also log into and control ingame

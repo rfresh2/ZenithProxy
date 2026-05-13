@@ -3,6 +3,8 @@ import ssl
 import sys
 import time
 
+import env_config
+
 if sys.version_info[0] < 3 or sys.version_info[1] < 6:
     # f strings added in 3.6
     # it's possible other things will break pre 3.10, not sure tho
@@ -45,6 +47,8 @@ no_launcher_update = False
 setup_only = False
 # Initialize configs from env variables
 unattended = False
+# set config.json values from env variables
+env_config_enabled = False
 for arg in sys.argv:
     if arg == "--no-launcher-update":
         no_launcher_update = True
@@ -52,6 +56,8 @@ for arg in sys.argv:
         setup_only = True
     if arg == "--unattended":
         unattended = True
+    if arg == "--env-config":
+        env_config_enabled = True
 
 if setup_only:
     setup_execute(config)
@@ -59,6 +65,11 @@ if setup_only:
 
 if unattended:
     setup_unattended(config)
+
+if env_config_enabled:
+    if not os.path.exists("config.json") and not unattended:
+        setup_execute(config)
+    env_config.apply()
 
 try:
     while True:

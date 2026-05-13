@@ -82,14 +82,13 @@ public class PluginsCommand extends Command {
                          * Author(s): %s
                          * MC: %s
                          """.formatted(
-                             p.id(),
-                             p.version(),
-                             p.description(),
-                             p.url(),
-                             String.join(", ", p.authors()),
-                             String.join(", ", p.mcVersions())
+                             DiscordBot.escape(p.id()),
+                             DiscordBot.escape(p.version().toString()),
+                             DiscordBot.escape(p.description()),
+                             DiscordBot.escape(p.url()),
+                             DiscordBot.escape(String.join(", ", p.authors())),
+                             DiscordBot.escape(String.join(", ", p.mcVersions()))
                     ))
-                    .map(DiscordBot::escape)
                     .collect(Collectors.joining("\n"));
                 c.getSource().getEmbed()
                     .title("Loaded Plugins (" + plugins.size() + ")")

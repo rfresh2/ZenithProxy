@@ -158,3 +158,23 @@ An `SRV` record for `_minecraft._tcp` with the port and the `A` record as its ta
 ??? info "Image"
 
     ![](./_assets/img/dns/dns-srv.png)
+
+### Launcher CLI Options
+
+* `--setup` - Run the interactive setup wizard
+* `--unattended` - For headless environments like Docker. Setup is configured by environment variables:
+    * `ZENITH_DISCORD_TOKEN` - required
+    * `ZENITH_DISCORD_CHANNEL_ID` - required
+    * `ZENITH_DISCORD_ROLE_ID` - required
+    * `ZENITH_DISCORD_CHAT_RELAY_CHANNEL` - optional
+    * `ZENITH_DISCORD_DISABLED` - optional, if set "true" the above discord env variables do not need to be set
+    * `ZENITH_MC_VERSION` - optional - default:"1.21.4"
+    * `ZENITH_PLATFORM` - optional - default:"linux", or "java"
+    * `ZENITH_PORT` - optional - default:"25565"
+    * `ZENITH_IP` - optional - default:"localhost", informational "Proxy IP" shown in Zenith's notifications for users
+* `--env-config` - Set `config.json` values from environment variables on launch.
+    * format: `ZENITH_CONFIG_<config_path>=<value>`
+        * `config_path` is case-sensitive with key/value traversal separated by `_`
+    * examples:
+        * `ZENITH_CONFIG_server_bind_port="25565"`
+        * `ZENITH_CONFIG_server_proxyIP="localhost"`

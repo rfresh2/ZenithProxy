@@ -283,7 +283,11 @@ public class DiscordBot {
     }
 
     public static String escape(String message) {
-        return message.replaceAll("_", "\\\\_");
+        return message.replace("_", "\\_").replace("*", "\\*").replace("`", "\\`");
+    }
+
+    public static String unescape(String message) {
+        return message.replace("\\_", "_").replace("\\*", "*").replace("\\`", "`");
     }
 
     void tickPresence() {

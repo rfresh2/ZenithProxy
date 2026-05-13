@@ -2,7 +2,7 @@ plugins {
     `java-library`
     id("org.graalvm.buildtools.native") version "1.1.0"
     id("com.gradleup.shadow") version "9.4.1"
-    id("io.freefair.lombok") version "9.4.0"
+    id("io.freefair.lombok") version "9.5.0"
     `maven-publish`
 }
 
@@ -29,7 +29,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "26.1.2.6"
+val mcplVersion = "26.1.2.8"
 dependencies {
     api("com.github.rfresh2:JDA:6.4.31") {
         exclude(group = "club.minnced")
@@ -39,7 +39,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.12.Final"))
+    api(platform("io.netty:netty-bom:4.2.13.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -71,13 +71,13 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.maps:long-double-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
-    api("com.viaversion:viaversion-common:5.9.0")
-    api("com.viaversion:viabackwards-common:5.9.0")
-    api("com.viaversion:viarewind-common:4.1.0")
-    api("org.jline:jline:4.0.13")
+    api("com.viaversion:viaversion-common:5.9.1")
+    api("com.viaversion:viabackwards-common:5.9.1")
+    api("com.viaversion:viarewind-common:4.1.1")
+    api("org.jline:jline:4.1.0")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
-    api("org.postgresql:postgresql:42.7.10")
+    api("org.postgresql:postgresql:42.7.11")
     api("org.jdbi:jdbi3-postgres:3.53.0")
     api("com.google.guava:guava:33.6.0-jre")
     api("ch.qos.logback:logback-classic:1.5.32")
@@ -86,7 +86,7 @@ dependencies {
     api("com.mojang:brigadier:1.3.10")
     api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
-    api(platform("tools.jackson:jackson-bom:3.1.2"))
+    api(platform("tools.jackson:jackson-bom:3.1.3"))
     api("tools.jackson.core:jackson-databind")
     api("tools.jackson.dataformat:jackson-dataformat-smile")
 
@@ -101,7 +101,7 @@ dependencies {
 }
 
 lombok {
-    version = "1.18.44"
+    version = "1.18.46"
 }
 
 tasks {

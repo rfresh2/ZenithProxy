@@ -934,7 +934,8 @@ public final class Bot extends ModuleUtils {
     }
 
     private void tryCheckInsideBlocks() {
-        var collidingBlockStates = World.getCollidingBlockStatesInside(playerCollisionBox);
+        // blockstates we're checking don't all have collision boxes, so no intersect check
+        var collidingBlockStates = World.getBlockStatesInside(playerCollisionBox);
         if (collidingBlockStates.isEmpty()) return;
         for (int i = 0; i < collidingBlockStates.size(); i++) {
             var localState = collidingBlockStates.get(i);
