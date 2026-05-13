@@ -21,8 +21,8 @@ public class ConnectIntegTest {
     public GenericContainer minecraftServer = new GenericContainer(DockerImageName.parse("itzg/minecraft-server:java25"))
         .withExposedPorts(25565)
         .withEnv("EULA", "TRUE")
-        .withEnv("TYPE", "VANILLA")
-        .withEnv("VERSION", "26.1")
+        .withEnv("TYPE", "PAPER")
+        .withEnv("VERSION", "26.1.2")
         .withEnv("ONLINE_MODE", "FALSE")
         .waitingFor(org.testcontainers.containers.wait.strategy.Wait.forLogMessage(".*Done \\(.*\\)!.*", 1))
         .withStartupTimeout(Duration.ofMinutes(3));
