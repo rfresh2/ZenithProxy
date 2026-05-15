@@ -48,22 +48,6 @@ jobs:
           echo "LINUX_TAG=$l_tag" >> "$GITHUB_ENV"
         shell: bash
 
-      - name: Export Java Tag
-        env:
-          TAG_NAME: ${{ github.ref_name }}
-        run: |
-          echo "RELEASE_TAG=$JAVA_TAG" >> "$GITHUB_ENV"
-
-      - name: Build ZenithProxy Java
-        run: ./gradlew build -x test
-
-      - name: Upload Java Artifact
-        uses: actions/upload-artifact@v7
-        with:
-          path: build/libs/ZenithProxy.jar
-          if-no-files-found: error
-          archive: false
-
       - name: Download GraalVM Profile
         run: |
           wget https://cdn.2b2t.vc/profile.iprof
@@ -106,6 +90,22 @@ jobs:
         with:
           name: GraalVM Build Report
           path: build/native/ZenithProxy-build-report.html
+          if-no-files-found: error
+          archive: false
+
+      - name: Export Java Tag
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          echo "RELEASE_TAG=$JAVA_TAG" >> "$GITHUB_ENV"
+
+      - name: Build ZenithProxy Java
+        run: ./gradlew build -x test
+
+      - name: Upload Java Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          path: build/libs/ZenithProxy.jar
           if-no-files-found: error
           archive: false
 
