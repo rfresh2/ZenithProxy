@@ -353,6 +353,9 @@ public class ChunkCache implements CachedData {
             // yucky extra mem copy but this is needed so we can safely iterate across threads
             // we could wrap access inside a try catch and hope for the best, but this shouldn't be called too often anyway
             var chunks = new ArrayList<>(this.cache.values());
+            // defensive copy as server could update these during sort
+            var centerX = this.centerX;
+            var centerZ = this.centerZ;
             chunks.sort(Comparator.comparingInt(chunk -> Math.abs(chunk.x - centerX) + Math.abs(chunk.z - centerZ)));
             for (int i = 0; i < chunks.size(); i++) {
                 var chunk = chunks.get(i);
@@ -365,7 +368,7 @@ public class ChunkCache implements CachedData {
                     chunk.lightUpdateData
                 ));
             }
-            consumer.accept(new ClientboundChunkBatchFinishedPacket(this.cache.size()));
+            consumer.accept(new ClientboundChunkBatchFinishedPacket(chunks.size()));
         } catch (Exception e) {
             CLIENT_LOG.error("Error getting ChunkData packets from cache", e);
         }
