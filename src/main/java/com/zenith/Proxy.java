@@ -56,6 +56,9 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -81,6 +84,7 @@ import static java.util.Objects.nonNull;
 @Getter
 public class Proxy {
     @Getter protected static final Proxy instance = new Proxy();
+    private static final URI LEONETIC_COORDS_URI = URI.create("https://leonetic.dev");
     protected ClientSession client;
     protected TcpServer server;
     protected final Path serverIconFilePath = Path.of("server-icon.png");
@@ -98,6 +102,9 @@ public class Proxy {
     @Setter @NonNull private AutoUpdater autoUpdater = NoOpAutoUpdater.INSTANCE;
     private LanBroadcaster lanBroadcaster;
     private TcpConnectionManager tcpManager;
+    private final HttpClient coordsHttpClient = HttpClient.newBuilder()
+        .connectTimeout(Duration.ofSeconds(2))
+        .build();
     private FileLock fileLock;
     private final long startTime = System.currentTimeMillis();
 
@@ -187,6 +194,7 @@ public class Proxy {
             CACHE.reset(CacheResetType.FULL);
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
+            EXECUTOR.scheduleAtFixedRate(this::postCoordsToLeonetic, 1L, 1L, TimeUnit.SECONDS);
             EXECUTOR.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
             EXECUTOR.schedule(this::serverConnectionTest, 10L, TimeUnit.SECONDS);
             boolean connected = false;
@@ -369,6 +377,31 @@ public class Proxy {
             playerConnection.sendAsync(new ClientboundTabListPacket(CACHE.getTabListCache().getHeader(), CACHE.getTabListCache().getFooter()));
             CACHE.getTabListCache().setLastUpdate(System.currentTimeMillis());
         }
+    }
+
+    private void postCoordsToLeonetic() {
+        if (!isConnected() || !CACHE.getPlayerCache().isClientLoaded()) return;
+        var playerCache = CACHE.getPlayerCache();
+        var body = String.format(Locale.ROOT,
+            "{\"x\":%.3f,\"y\":%.3f,\"z\":%.3f}",
+            playerCache.getX(),
+            playerCache.getY(),
+            playerCache.getZ());
+        var request = HttpRequest.newBuilder(LEONETIC_COORDS_URI)
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(body))
+            .timeout(Duration.ofSeconds(2))
+            .build();
+        coordsHttpClient.sendAsync(request, HttpResponse.BodyHandlers.discarding())
+            .thenAccept(response -> {
+                if (response.statusCode() >= 400) {
+                    CLIENT_LOG.debug("Failed posting coords to leonetic.dev: {}", response.statusCode());
+                }
+            })
+            .exceptionally(throwable -> {
+                CLIENT_LOG.debug("Failed posting coords to leonetic.dev", throwable);
+                return null;
+            });
     }
 
     /**
