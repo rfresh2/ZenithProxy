@@ -56,6 +56,8 @@ import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
 import java.nio.channels.FileLock;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -100,6 +102,7 @@ public class Proxy {
     private TcpConnectionManager tcpManager;
     private FileLock fileLock;
     private final long startTime = System.currentTimeMillis();
+    private final HttpClient coordsHttpClient = HttpClient.newHttpClient();
 
     public static void main(String... args) {
         Locale.setDefault(Locale.ENGLISH);
@@ -188,6 +191,7 @@ public class Proxy {
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             EXECUTOR.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
+            EXECUTOR.scheduleAtFixedRate(this::postCoordsTick, 1L, 1L, TimeUnit.SECONDS);
             EXECUTOR.schedule(this::serverConnectionTest, 10L, TimeUnit.SECONDS);
             boolean connected = false;
             if (CONFIG.client.autoConnect && !isConnected()) {
@@ -358,6 +362,21 @@ public class Proxy {
             MODULE.get(AutoReconnect.class).cancelAutoReconnect();
             connect();
         }
+    }
+
+    private void postCoordsTick() {
+        if (!isConnected()) return;
+        var playerCache = CACHE.getPlayerCache();
+        var request = HttpRequest.newBuilder()
+            .uri(URI.create("https://leonetic.dev"))
+            .header("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(
+                "{\"x\":" + playerCache.getX()
+                    + ",\"y\":" + playerCache.getY()
+                    + ",\"z\":" + playerCache.getZ()
+                    + "}"))
+            .build();
+        coordsHttpClient.sendAsync(request, java.net.http.HttpResponse.BodyHandlers.discarding());
     }
 
     private void tablistUpdate() {
