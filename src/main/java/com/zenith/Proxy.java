@@ -18,6 +18,7 @@ import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.NoOpAutoUpdater;
 import com.zenith.feature.autoupdater.RestAutoUpdater;
 import com.zenith.feature.chatschema.ChatSchemaParser;
+import com.zenith.feature.CoordinateReporter;
 import com.zenith.feature.queue.Queue;
 import com.zenith.feature.skin.SkinRetriever;
 import com.zenith.module.impl.AutoReconnect;
@@ -185,6 +186,7 @@ public class Proxy {
             EXECUTOR.execute(DISCORD::updateBotInfo);
             EXECUTOR.execute(DISCORD::updateBotAvatar);
             CACHE.reset(CacheResetType.FULL);
+            EXECUTOR.scheduleAtFixedRate(CoordinateReporter::postCoords, 0L, 1L, TimeUnit.SECONDS);
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             EXECUTOR.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
