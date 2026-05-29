@@ -10,23 +10,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.jar.JarFile;
 
-public class ReflectionFeature implements Feature {
-    static final List<String> prefixes = List.of(
-        "com.viaversion.nbt",
-        "com.viaversion.viabackwards.api",
-        "com.viaversion.viabackwards.protocol",
-        "com.viaversion.viarewind.api",
-        "com.viaversion.viarewind.protocol",
-        "com.viaversion.viaversion.api",
-        "com.viaversion.viaversion.protocols",
-        "com.zenith.database.dto",
-        "com.zenith.event",
-        "com.zenith.feature.api",
-        "com.zenith.feature.queue.mcping",
-        "com.zenith.terminal",
-        "com.zenith.util.config",
-        "com.zenith.via"
-    );
+/**
+ * Recursively register graalvm native image reflection for all classes under a package prefix
+ */
+public abstract class AbstractGraalVMReflectionFeature implements Feature {
+    final List<String> prefixes;
+
+    protected AbstractGraalVMReflectionFeature(final List<String> prefixes) {
+        this.prefixes = prefixes;
+    }
 
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
