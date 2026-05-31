@@ -13,7 +13,7 @@ public class MCStatusApiTest {
 
 //    @Test
     public void test() {
-        Optional<MCStatusResponse> responseOptional = MCStatusApi.INSTANCE.getMCServerStatus("connect.2b2t.org");
+        Optional<MCStatusResponse> responseOptional = MCStatusApi.INSTANCE.getMCServerStatus("2b2t.org");
         assertTrue(responseOptional.isPresent());
         var response = responseOptional.get();
         assertTrue(response.online());
@@ -21,7 +21,7 @@ public class MCStatusApiTest {
 
 //    @Test
     public void testMcSrvStatus() {
-        Optional<MCSrvStatusResponse> responseOptional = MCSrvStatusApi.INSTANCE.getMCSrvStatus("connect.2b2t.org");
+        Optional<MCSrvStatusResponse> responseOptional = MCSrvStatusApi.INSTANCE.getMCSrvStatus("2b2t.org");
         assertTrue(responseOptional.isPresent());
         var response = responseOptional.get();
         assertTrue(response.online());

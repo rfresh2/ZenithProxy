@@ -327,7 +327,7 @@ You can configure different schemas for different servers based on the server ad
 
 
 
-Server address is without port, e.g. `connect.2b2t.org` or `192.168.0.5`
+Server address is without port, e.g. `2b2t.org` or `192.168.0.5`
 
 **Usage**
 

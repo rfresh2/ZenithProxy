@@ -14,7 +14,7 @@ If the Microsoft website is automatically logging you in with the wrong account,
 
 `server <address>`
 
-Example: `server connect.2b2t.org`
+Example: `server 2b2t.org`
 
 ## I keep getting disconnected from 2b2t!
 

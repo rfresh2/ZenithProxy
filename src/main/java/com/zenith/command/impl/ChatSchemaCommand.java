@@ -21,23 +21,23 @@ public class ChatSchemaCommand extends Command {
             .category(CommandCategory.MANAGE)
             .description("""
                 Configure how ZenithProxy parses public chats and whispers.
-                
+
                 Correct schemas are needed for chat relay and chat based features to work correctly.
-                
+
                 Schemas have the following special tokens:
                 * $s -> Chat/whisper sender, player name
                 * $r -> Whisper receiver, player name
                 * $m -> Message, text content of the chat/whisper
                 * $w -> Wildcard, any varying text, e.g. a role prefix `[ADMIN] rfresh2: test message`
-                
+
                 Example 2b2t chat schema:
                 * public chat: `<$s> $m`
                 * whisper inbound: `$s whispers: $m`
                 * whisper outbound: `to $r: $m`
-                
+
                 You can configure different schemas for different servers based on the server address.
-                
-                Server address is without port, e.g. `connect.2b2t.org` or `192.168.0.5`
+
+                Server address is without port, e.g. `2b2t.org` or `192.168.0.5`
                 """)
             .usageLines(
                 "set <publicChat/whisperInbound/whisperOutbound> <serverAddress> <schema>",

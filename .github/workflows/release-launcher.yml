@@ -267,6 +267,7 @@ jobs:
 
   release-artifacts:
     needs:
+      - backup-existing
       - build-pyinstaller
       - build-alpine
       - package-python
@@ -278,9 +279,10 @@ jobs:
         with:
           merge-multiple: true
           path: artifacts/
+          skip-decompress: true
 
       - name: Remove old launcher assets
-        run: rm artifacts/launcher-assets.zip
+        run: rm -f artifacts/launcher-assets.zip
 
       - name: Compile Hashes
         run: |
