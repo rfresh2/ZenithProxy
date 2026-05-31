@@ -2,16 +2,17 @@ package com.zenith.feature.queue.mcping;
 
 import com.zenith.feature.queue.mcping.data.MCResponse;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PingTest {
-//    @Test
+    @Test
     public void test() throws IOException {
         final Pattern digitPattern = Pattern.compile("\\d+");
-        final MCResponse pingWithDetails = MCPing.INSTANCE.ping("connect.2b2t.org", 25565, 3000, false);
+        final MCResponse pingWithDetails = MCPing.INSTANCE.ping("2b2t.org", 25565, 3000, true);
         final String queueStr = pingWithDetails.players().sample().get(1).name();
         final Matcher regularQMatcher = digitPattern.matcher(queueStr.substring(queueStr.lastIndexOf(" ")));
         final String prioQueueStr = pingWithDetails.players().sample().get(2).name();

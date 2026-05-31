@@ -38,7 +38,6 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import net.raphimc.minecraftauth.bedrock.exception.MinecraftRequestException;
 import org.geysermc.mcprotocollib.auth.GameProfile;
-import org.geysermc.mcprotocollib.network.BuiltinFlags;
 import org.geysermc.mcprotocollib.network.ProxyInfo;
 import org.geysermc.mcprotocollib.network.tcp.TcpConnectionManager;
 import org.geysermc.mcprotocollib.network.tcp.TcpServer;
@@ -174,6 +173,7 @@ public class Proxy {
             }
             NotificationEventListener.INSTANCE.subscribeEvents();
             ChatRelayEventListener.INSTANCE.subscribeEvents();
+            fixConnectDot2b2tDotOrgDnsChange();
             if (CONFIG.plugins.enabled) PLUGIN_MANAGER.initialize();
             Queue.start();
             saveConfigAsync();
@@ -235,6 +235,15 @@ public class Proxy {
             DEFAULT_LOG.info("Shutting down...");
             if (this.server != null) this.server.close(true);
             saveConfig();
+        }
+    }
+
+    private static void fixConnectDot2b2tDotOrgDnsChange() {
+        if (!CONFIG.debug.fixConnectDot2b2tDotOrgDnsChange) return;
+        if (CONFIG.client.server.address.equals("connect.2b2t.org")) {
+            CONFIG.client.server.address = "2b2t.org";
+            saveConfig();
+            CLIENT_LOG.info("fix connect.2b2t.org DNS change");
         }
     }
 
@@ -467,8 +476,6 @@ public class Proxy {
         }
         CLIENT_LOG.info("Connecting to {}:{}...", address, port);
         this.client = new ClientSession(address, port, CONFIG.client.bindAddress, minecraftProtocol, getClientProxyInfo(), tcpManager);
-        if (Objects.equals(address, "connect.2b2t.org"))
-            this.client.setFlag(BuiltinFlags.ATTEMPT_SRV_RESOLVE, false);
         this.client.setReadTimeout(CONFIG.client.timeout.enable ? CONFIG.client.timeout.seconds : 0);
         this.client.setFlag(MinecraftConstants.CLIENT_CHANNEL_INITIALIZER, ZenithClientChannelInitializer.FACTORY);
         this.client.connect(true);
