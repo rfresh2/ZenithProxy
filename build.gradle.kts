@@ -11,7 +11,13 @@ version = "1.21.4"
 
 val javaReleaseVersion = 21
 val javaVersion = JavaLanguageVersion.of(25)
-val javaLauncherProvider = javaToolchains.launcherFor { languageVersion = javaVersion }
+val javaLauncherProvider = javaToolchains.launcherFor {
+    languageVersion = javaVersion
+}
+val graalVMJavaLauncher = javaToolchains.launcherFor {
+    languageVersion = JavaLanguageVersion.of(25)
+    nativeImageCapable = true
+}
 java {
     toolchain { languageVersion = javaVersion }
     withSourcesJar()
@@ -71,7 +77,7 @@ dependencies {
     api("com.viaversion:viaversion-common:5.9.1")
     api("com.viaversion:viabackwards-common:5.9.1")
     api("com.viaversion:viarewind-common:4.1.1")
-    api("org.jline:jline:4.1.0")
+    api("org.jline:jline:4.1.3")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
     api("org.postgresql:postgresql:42.7.11")
@@ -236,7 +242,7 @@ tasks {
 graalvmNative {
     binaries {
         named("main") {
-            javaLauncher = javaLauncherProvider
+            javaLauncher = graalVMJavaLauncher
             imageName = "ZenithProxy"
             mainClass = "com.zenith.Proxy"
             quickBuild = false
@@ -281,7 +287,7 @@ graalvmNative {
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
         named("test") {
-            javaLauncher = javaLauncherProvider
+            javaLauncher = graalVMJavaLauncher
             quickBuild = true
             verbose = true
             debug = true
