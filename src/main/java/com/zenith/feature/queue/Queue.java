@@ -90,7 +90,7 @@ public class Queue {
 
     public static boolean pingUpdate() {
         try {
-            final MCResponse pingWithDetails = MCPing.INSTANCE.ping("2b2t.org", 25565, 3000, false);
+            final MCResponse pingWithDetails = MCPing.INSTANCE.ping("2b2t.org", 25565, 3000, true);
             final String queueStr = pingWithDetails.players().sample().get(1).name();
             final Matcher regularQMatcher = digitPattern.matcher(queueStr.substring(queueStr.lastIndexOf(" ")));
             final String prioQueueStr = pingWithDetails.players().sample().get(2).name();
