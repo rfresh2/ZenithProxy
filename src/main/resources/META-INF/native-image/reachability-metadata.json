@@ -8825,6 +8825,9 @@
     },
     {
       "type": "javax.management.remote.rmi.RMIServerImpl_Stub"
+    },
+    {
+      "type": "org.junit.platform.engine.UniqueId$SerializedForm"
     }
   ],
   "foreign": {
