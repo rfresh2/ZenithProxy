@@ -243,7 +243,7 @@ public class Proxy {
         if (CONFIG.client.server.address.equals("connect.2b2t.org")) {
             CONFIG.client.server.address = "2b2t.org";
             saveConfig();
-            CLIENT_LOG.info("fix connect.2b2t.org DNS change");
+            CLIENT_LOG.info("Fixed connect.2b2t.org DNS change -> is now set to `2b2t.org`");
         }
     }
 
