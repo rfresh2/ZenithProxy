@@ -1,4 +1,4 @@
-package com.zenith.util.graalvm;
+package graalvm.com.zenith;
 
 import java.util.List;
 
