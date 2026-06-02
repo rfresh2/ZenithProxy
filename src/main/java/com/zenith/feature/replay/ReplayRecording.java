@@ -205,6 +205,17 @@ public class ReplayRecording implements Closeable {
                 MODULE.get(ReplayMod.class).error("Failed waiting for termination of ReplayMod PacketHandler executor", e);
             }
         }
+        if (!executor.isShutdown()) {
+            try {
+                MODULE.get(ReplayMod.class).info("Force shutting down ReplayMod PacketHandler executor");
+                executor.shutdownNow();
+                if (!executor.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS)) {
+                    throw new Exception("");
+                }
+            } catch (final Exception e) {
+                MODULE.get(ReplayMod.class).error("Failed to force shutdown ReplayMod PacketHandler executor", e);
+            }
+        }
         if (writerStream != null) {
             writerStream.flush();
             zipOutputStream.closeEntry();
