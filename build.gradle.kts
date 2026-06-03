@@ -1,7 +1,7 @@
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "1.1.0"
-    id("com.gradleup.shadow") version "9.4.1"
+    id("org.graalvm.buildtools.native") version "1.1.1"
+    id("com.gradleup.shadow") version "9.4.2"
     id("io.freefair.lombok") version "9.5.0"
     `maven-publish`
 }
@@ -77,19 +77,19 @@ dependencies {
     api("com.viaversion:viaversion-common:5.9.1")
     api("com.viaversion:viabackwards-common:5.9.1")
     api("com.viaversion:viarewind-common:4.1.1")
-    api("org.jline:jline:4.1.0")
+    api("org.jline:jline:4.1.3")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
     api("org.postgresql:postgresql:42.7.11")
     api("org.jdbi:jdbi3-postgres:3.53.0")
     api("com.google.guava:guava:33.6.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.32")
+    api("ch.qos.logback:logback-classic:1.5.34")
     api("org.slf4j:slf4j-api:2.0.18")
     api("org.slf4j:jul-to-slf4j:2.0.18")
     api("com.mojang:brigadier:1.3.10")
     api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
-    api(platform("tools.jackson:jackson-bom:3.1.3"))
+    api(platform("tools.jackson:jackson-bom:3.1.4"))
     api("tools.jackson.core:jackson-databind")
     api("tools.jackson.dataformat:jackson-dataformat-smile")
 
