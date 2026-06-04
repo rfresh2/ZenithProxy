@@ -74,6 +74,7 @@ public class CommandManager {
         new MapCommand(),
         new ModulePriorityCommand(),
         new MultiCommand(),
+        new PacketLogCommand(),
         new PathfinderCommand(),
         new PearlLoader(),
         new PlaytimeCommand(),

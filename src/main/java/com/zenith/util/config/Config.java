@@ -704,8 +704,7 @@ public final class Config {
             public boolean logLevelDebug = true;
             public PacketLogConfig clientPacketLog = new PacketLogConfig();
             public PacketLogConfig serverPacketLog = new PacketLogConfig();
-            // todo: could be more flexible, but this can cover the most basic use cases
-            public String packetFilter = "";
+            public ArrayList<String> packetFilterList = new ArrayList<>();
 
             public static final class PacketLogConfig {
                 public boolean received = false;
