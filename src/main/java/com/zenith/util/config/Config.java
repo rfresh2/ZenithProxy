@@ -252,6 +252,8 @@ public final class Config {
                     ItemRegistry.OAK_PLANKS.name()
                 });
                 public final Set<String> allowBreakAnyway = new ObjectArraySet<>();
+                public final Set<String> blocksToDisallowBreaking = new ObjectArraySet<>();
+                public final Set<String> blocksToAvoid = new ObjectArraySet<>();
             }
 
             public static class SessionTimeLimit {
