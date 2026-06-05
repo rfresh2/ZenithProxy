@@ -919,6 +919,39 @@ public class PathfinderCommand extends Command {
                         .description("Acceptable Throwaway Items Cleared")
                         .primaryColor();
                 })))
+            .then(literal("blocksToAvoidBreaking")
+                .then(literal("list").executes(c -> {
+                    CONFIG.client.extra.pathfinder.blocksToAvoidBreaking.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.blocksToAvoidBreaking))
+                        .primaryColor();
+                }))
+                .then(literal("add").then(argument("block", block()).executes(c -> {
+                    var block = getBlock(c, "block");
+                    CONFIG.client.extra.pathfinder.blocksToAvoidBreaking.add(block.name());
+                    CONFIG.client.extra.pathfinder.blocksToAvoidBreaking.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.blocksToAvoidBreaking))
+                        .primaryColor();
+                })))
+                .then(literal("del").then(argument("block", block()).executes(c -> {
+                    var block = getBlock(c, "block");
+                    CONFIG.client.extra.pathfinder.blocksToAvoidBreaking.remove(block.name());
+                    CONFIG.client.extra.pathfinder.blocksToAvoidBreaking.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.blocksToAvoidBreaking))
+                        .primaryColor();
+                })))
+                .then(literal("clear").executes(c -> {
+                    CONFIG.client.extra.pathfinder.blocksToAvoidBreaking.clear();
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description("Blocks To Avoid Breaking Cleared")
+                        .primaryColor();
+                })))
             .then(literal("allowBreakAnyway")
                 .then(literal("list").executes(c -> {
                     CONFIG.client.extra.pathfinder.allowBreakAnyway.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
