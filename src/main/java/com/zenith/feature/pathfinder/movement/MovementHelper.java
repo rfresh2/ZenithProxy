@@ -34,7 +34,7 @@ public final class MovementHelper {
 //            return true;
 //        }
         Block b = BlockStateInterface.getBlock(state);
-        return // Baritone.settings().blocksToDisallowBreaking.value.contains(b) ||
+        return CONFIG.client.extra.pathfinder.blocksToDisallowBreaking.contains(b.name()) ||
             b == BlockRegistry.ICE // ice becomes water, and water can mess up the path
                 || b.name().startsWith("infested_") // b instanceof InfestedBlock // obvious reasons
                 // call context.get directly with x,y,z. no need to make 5 new BlockPos for no reason
@@ -144,9 +144,9 @@ public final class MovementHelper {
         if (block == BlockRegistry.POWDER_SNOW) {
             return NO;
         }
-//        if (Baritone.settings().blocksToAvoid.value.contains(block)) {
-//            return NO;
-//        }
+        if (CONFIG.client.extra.pathfinder.blocksToAvoid.contains(block.name())) {
+            return NO;
+        }
         if (block.blockTags().contains(BlockTags.DOORS) || block.blockTags().contains(BlockTags.FENCE_GATES)) {
             // TODO this assumes that all doors in all mods are openable
             if (block == BlockRegistry.IRON_DOOR) {

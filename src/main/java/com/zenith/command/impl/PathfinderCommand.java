@@ -952,6 +952,72 @@ public class PathfinderCommand extends Command {
                         .description(String.join("\n", CONFIG.client.extra.pathfinder.allowBreakAnyway))
                         .primaryColor();
                 })))
+            .then(literal("blocksToDisallowBreaking")
+                .then(literal("list").executes(c -> {
+                    CONFIG.client.extra.pathfinder.blocksToDisallowBreaking.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.blocksToDisallowBreaking))
+                        .primaryColor();
+                }))
+                .then(literal("add").then(argument("block", block()).executes(c -> {
+                    var block = getBlock(c, "block");
+                    CONFIG.client.extra.pathfinder.blocksToDisallowBreaking.add(block.name());
+                    CONFIG.client.extra.pathfinder.blocksToDisallowBreaking.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.blocksToDisallowBreaking))
+                        .primaryColor();
+                })))
+                .then(literal("del").then(argument("block", block()).executes(c -> {
+                    var block = getBlock(c, "block");
+                    CONFIG.client.extra.pathfinder.blocksToDisallowBreaking.remove(block.name());
+                    CONFIG.client.extra.pathfinder.blocksToDisallowBreaking.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.blocksToDisallowBreaking))
+                        .primaryColor();
+                })))
+                .then(literal("clear").executes(c -> {
+                    CONFIG.client.extra.pathfinder.blocksToDisallowBreaking.clear();
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.blocksToDisallowBreaking))
+                        .primaryColor();
+                })))
+            .then(literal("blocksToAvoid")
+                .then(literal("list").executes(c -> {
+                    CONFIG.client.extra.pathfinder.blocksToAvoid.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.blocksToAvoid))
+                        .primaryColor();
+                }))
+                .then(literal("add").then(argument("block", block()).executes(c -> {
+                    var block = getBlock(c, "block");
+                    CONFIG.client.extra.pathfinder.blocksToAvoid.add(block.name());
+                    CONFIG.client.extra.pathfinder.blocksToAvoid.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.blocksToAvoid))
+                        .primaryColor();
+                })))
+                .then(literal("del").then(argument("block", block()).executes(c -> {
+                    var block = getBlock(c, "block");
+                    CONFIG.client.extra.pathfinder.blocksToAvoid.remove(block.name());
+                    CONFIG.client.extra.pathfinder.blocksToAvoid.removeIf(blockName -> BlockRegistry.REGISTRY.get(blockName) == null);
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.blocksToAvoid))
+                        .primaryColor();
+                })))
+                .then(literal("clear").executes(c -> {
+                    CONFIG.client.extra.pathfinder.blocksToAvoid.clear();
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .description(String.join("\n", CONFIG.client.extra.pathfinder.blocksToAvoid))
+                        .primaryColor();
+                })))
             .then(literal("autoTool").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.pathfinder.autoTool = getToggle(c, "toggle");
                 c.getSource().getEmbed()

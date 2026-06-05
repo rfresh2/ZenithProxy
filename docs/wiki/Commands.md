@@ -1040,6 +1040,49 @@ Generated maps cannot be larger than what chunks are currently cached in the pro
   ```map generate <viewDistance>```
 
 
+### packetLog
+
+Logs packets that are sent/received. Requires account owner permissions.
+
+
+
+`client` -> packets between Zenith and destination MC server
+
+`server` -> packets between players and Zenith
+
+
+
+If a filter is set, only packets matching the filter will be logged.
+
+Filters are always lowercase, but matched case-insensitive.
+
+
+
+`logLevelDebug` -> toggles the logger level between INFO and DEBUG
+
+
+
+To enable the debug log: `debug debugLogs on`
+
+And to enable debug log in the terminal: `debug terminalDebugLogs on`
+
+**Usage**
+
+  ```packetLog on/off```
+
+  ```packetLog client on/off```
+
+  ```packetLog server on/off```
+
+  ```packetLog filter add/del <string>```
+
+  ```packetLog filter list```
+
+  ```packetLog filter clear```
+
+  ```packetLog logLevelDebug on/off```
+
+
 ### playtime
 
 Gets the playtime of a player on 2b2t using https://api.2b2t.vc/

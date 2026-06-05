@@ -1,7 +1,7 @@
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "1.1.0"
-    id("com.gradleup.shadow") version "9.4.1"
+    id("org.graalvm.buildtools.native") version "1.1.1"
+    id("com.gradleup.shadow") version "9.4.2"
     id("io.freefair.lombok") version "9.5.0"
     `maven-publish`
 }
@@ -12,6 +12,9 @@ version = "26.1.2"
 val javaReleaseVersion = 25
 val javaVersion = JavaLanguageVersion.of(25)
 val javaLauncherProvider = javaToolchains.launcherFor {
+    languageVersion = javaVersion
+}
+val graalVMJavaLauncher = javaToolchains.launcherFor {
     languageVersion = javaVersion
     nativeImageCapable = true
 }
@@ -29,7 +32,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "26.1.2.9"
+val mcplVersion = "26.1.2.10"
 dependencies {
     api("com.github.rfresh2:JDA:6.4.31") {
         exclude(group = "club.minnced")
@@ -39,7 +42,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.14.Final"))
+    api(platform("io.netty:netty-bom:4.2.15.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -74,19 +77,19 @@ dependencies {
     api("com.viaversion:viaversion-common:5.9.1")
     api("com.viaversion:viabackwards-common:5.9.1")
     api("com.viaversion:viarewind-common:4.1.1")
-    api("org.jline:jline:4.1.0")
+    api("org.jline:jline:4.1.3")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.0.2")
     api("org.postgresql:postgresql:42.7.11")
     api("org.jdbi:jdbi3-postgres:3.53.0")
     api("com.google.guava:guava:33.6.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.32")
+    api("ch.qos.logback:logback-classic:1.5.34")
     api("org.slf4j:slf4j-api:2.0.18")
     api("org.slf4j:jul-to-slf4j:2.0.18")
     api("com.mojang:brigadier:1.3.10")
     api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
-    api(platform("tools.jackson:jackson-bom:3.1.3"))
+    api(platform("tools.jackson:jackson-bom:3.1.4"))
     api("tools.jackson.core:jackson-databind")
     api("tools.jackson.dataformat:jackson-dataformat-smile")
 
@@ -239,7 +242,7 @@ tasks {
 graalvmNative {
     binaries {
         named("main") {
-            javaLauncher = javaLauncherProvider
+            javaLauncher = graalVMJavaLauncher
             imageName = "ZenithProxy"
             mainClass = "com.zenith.Proxy"
             quickBuild = false
@@ -284,7 +287,7 @@ graalvmNative {
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
         named("test") {
-            javaLauncher = javaLauncherProvider
+            javaLauncher = graalVMJavaLauncher
             quickBuild = true
             verbose = true
             debug = true

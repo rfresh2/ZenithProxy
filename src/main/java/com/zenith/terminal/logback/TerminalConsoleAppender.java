@@ -51,6 +51,7 @@ public class TerminalConsoleAppender extends ConsoleAppender<ILoggingEvent> {
                     .stdoutEncoding(StandardCharsets.UTF_8)
                     .stderrEncoding(StandardCharsets.UTF_8)
                     .systemOutput(TerminalBuilder.SystemOutput.SysOut)
+                    .graphemeCluster(false) // disabling because this causes ansi escape codes to leak into readLine input on launch
                     .color(true)
                     .build();
 

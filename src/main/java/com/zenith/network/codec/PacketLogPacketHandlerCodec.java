@@ -74,7 +74,19 @@ public class PacketLogPacketHandlerCodec extends PacketHandlerCodec {
     }
 
     private boolean shouldLog(Packet packet) {
-        return CONFIG.debug.packetLog.packetFilter.isEmpty()
-            || packet.getClass().getSimpleName().toLowerCase().contains(CONFIG.debug.packetLog.packetFilter.toLowerCase());
+        if (CONFIG.debug.packetLog.packetFilterList.isEmpty()) return true;
+        var packetName = packet.getClass().getSimpleName().toLowerCase();
+        var packetFilter = CONFIG.debug.packetLog.packetFilterList;
+        try {
+            for (int i = 0; i < packetFilter.size(); i++) {
+                if (packetName.contains(packetFilter.get(i))) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            // filter list CME possible
+            // just fall through and ignore
+        }
+        return false;
     }
 }

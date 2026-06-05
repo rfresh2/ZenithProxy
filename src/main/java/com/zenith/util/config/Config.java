@@ -252,6 +252,8 @@ public final class Config {
                     ItemRegistry.OAK_PLANKS.name()
                 });
                 public final Set<String> allowBreakAnyway = new ObjectArraySet<>();
+                public final Set<String> blocksToDisallowBreaking = new ObjectArraySet<>();
+                public final Set<String> blocksToAvoid = new ObjectArraySet<>();
             }
 
             public static class SessionTimeLimit {
@@ -704,8 +706,7 @@ public final class Config {
             public boolean logLevelDebug = true;
             public PacketLogConfig clientPacketLog = new PacketLogConfig();
             public PacketLogConfig serverPacketLog = new PacketLogConfig();
-            // todo: could be more flexible, but this can cover the most basic use cases
-            public String packetFilter = "";
+            public ArrayList<String> packetFilterList = new ArrayList<>();
 
             public static final class PacketLogConfig {
                 public boolean received = false;
