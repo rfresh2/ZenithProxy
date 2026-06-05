@@ -6,6 +6,7 @@ import com.zenith.feature.chatschema.ChatSchema;
 import com.zenith.feature.tasks.Task;
 import com.zenith.feature.waypoints.Waypoint;
 import com.zenith.feature.whitelist.PlayerEntry;
+import com.zenith.mc.block.BlockRegistry;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.module.impl.ActiveHours.ActiveTime;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
@@ -252,6 +253,16 @@ public final class Config {
                     ItemRegistry.OAK_PLANKS.name()
                 });
                 public final Set<String> allowBreakAnyway = new ObjectArraySet<>();
+                public final Set<String> blocksToAvoidBreaking = new ObjectArraySet<>(new String[]{
+                    BlockRegistry.ICE.name(),
+                    BlockRegistry.INFESTED_STONE.name(),
+                    BlockRegistry.INFESTED_COBBLESTONE.name(),
+                    BlockRegistry.INFESTED_STONE_BRICKS.name(),
+                    BlockRegistry.INFESTED_MOSSY_STONE_BRICKS.name(),
+                    BlockRegistry.INFESTED_CRACKED_STONE_BRICKS.name(),
+                    BlockRegistry.INFESTED_CHISELED_STONE_BRICKS.name(),
+                    BlockRegistry.INFESTED_DEEPSLATE.name()
+                });
             }
 
             public static class SessionTimeLimit {
@@ -854,7 +865,7 @@ public final class Config {
             if (!this.proxyIP.contains(":")
                 && (this.proxyIP.matches("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+") || this.proxyIP.startsWith("localhost"))) // IP address
                 return this.proxyIP + ":" + this.bind.port;
-             else
+            else
                 return this.proxyIP;
         }
 
