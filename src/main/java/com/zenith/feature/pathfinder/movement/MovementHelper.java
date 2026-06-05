@@ -34,16 +34,14 @@ public final class MovementHelper {
 //            return true;
 //        }
         Block b = BlockStateInterface.getBlock(state);
-        return // Baritone.settings().blocksToDisallowBreaking.value.contains(b) ||
-            b == BlockRegistry.ICE // ice becomes water, and water can mess up the path
-                || b.name().startsWith("infested_") // b instanceof InfestedBlock // obvious reasons
-                // call context.get directly with x,y,z. no need to make 5 new BlockPos for no reason
-                || avoidAdjacentBreaking(x, y + 1, z, true, false)
-                || avoidAdjacentBreaking(x, y - 1, z, false, true)
-                || avoidAdjacentBreaking(x + 1, y, z, false, false)
-                || avoidAdjacentBreaking(x - 1, y, z, false, false)
-                || avoidAdjacentBreaking(x, y, z + 1, false, false)
-                || avoidAdjacentBreaking(x, y, z - 1, false, false);
+        return CONFIG.client.extra.pathfinder.blocksToAvoidBreaking.contains(b.name())
+            // call context.get directly with x,y,z. no need to make 5 new BlockPos for no reason
+            || avoidAdjacentBreaking(x, y + 1, z, true, false)
+            || avoidAdjacentBreaking(x, y - 1, z, false, true)
+            || avoidAdjacentBreaking(x + 1, y, z, false, false)
+            || avoidAdjacentBreaking(x - 1, y, z, false, false)
+            || avoidAdjacentBreaking(x, y, z + 1, false, false)
+            || avoidAdjacentBreaking(x, y, z - 1, false, false);
     }
 
     public static boolean avoidAdjacentBreaking(int x, int y, int z, boolean directlyAbove, boolean directlyBelow) {
