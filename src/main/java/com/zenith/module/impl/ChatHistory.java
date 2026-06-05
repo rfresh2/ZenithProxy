@@ -9,6 +9,7 @@ import com.zenith.event.player.PlayerLoginEvent;
 import com.zenith.event.player.SpectatorLoggedInEvent;
 import com.zenith.module.api.Module;
 import com.zenith.util.struct.CircularFifoQueue;
+import lombok.Locked;
 import net.kyori.adventure.text.Component;
 
 import java.time.Instant;
@@ -34,6 +35,7 @@ public class ChatHistory extends Module {
         );
     }
 
+    @Locked
     @Override
     public void onDisable() {
         chatHistory.clear();
@@ -45,24 +47,29 @@ public class ChatHistory extends Module {
     }
 
 
+    @Locked
     private void handleSystemChat(SystemChatEvent event) {
         chatHistory.add(new StoredChat(event.component(), Instant.now()));
     }
 
+    @Locked
     private void handleWhisperChat(WhisperChatEvent event) {
         chatHistory.add(new StoredChat(event.component(), Instant.now()));
     }
 
+    @Locked
     private void handlePublicChat(PublicChatEvent event) {
         chatHistory.add(new StoredChat(event.component(), Instant.now()));
     }
 
+    @Locked
     private void handleClientLoggedIn(PlayerLoginEvent.Post event) {
         removeOldChats();
         var session = event.session();
         chatHistory.forEach(chat -> session.sendAsyncMessage(chat.message()));
     }
 
+    @Locked
     private void handleSpectatorLoggedIn(SpectatorLoggedInEvent event) {
         if (!CONFIG.server.extra.chatHistory.spectators) return;
         removeOldChats();
@@ -70,10 +77,12 @@ public class ChatHistory extends Module {
         chatHistory.forEach(chat -> session.sendAsyncMessage(chat.message()));
     }
 
+    @Locked
     private void handleDisconnect(ClientDisconnectEvent event) {
         chatHistory.clear();
     }
 
+    @Locked
     private void removeOldChats() {
         while (checkChatTime(chatHistory.peek())) chatHistory.poll();
     }
@@ -84,6 +93,7 @@ public class ChatHistory extends Module {
         return storedChat.time().isBefore(Instant.now().minus(CONFIG.server.extra.chatHistory.seconds, ChronoUnit.SECONDS));
     }
 
+    @Locked
     public void syncMaxCountFromConfig() {
         final Queue<StoredChat> newChatHistory = new CircularFifoQueue<>(CONFIG.server.extra.chatHistory.maxCount);
         while (chatHistory.peek() != null) {
