@@ -806,8 +806,8 @@ public final class Bot extends ModuleUtils {
 
     private void travelInAir(MutableVec3d movementInputVec) {
         final Block floorBlock = World.getBlock(getVelocityAffectingPos());
-        float floorSlipperiness = floorBlock.friction();
-        float friction = this.onGround ? floorSlipperiness * 0.91f : 0.91F;
+        float floorSlipperiness = this.onGround ? floorBlock.friction() : 1.0f;
+        float friction = floorSlipperiness * 0.91f;
         applyMovementInput(movementInputVec, floorSlipperiness);
         if (!isFlying) velocity.setY(velocity.getY() - gravity);
         velocity.multiply(friction, 0.9800000190734863, friction);
@@ -1293,7 +1293,15 @@ public final class Bot extends ModuleUtils {
     }
 
     private float getMovementSpeed(float slipperiness) {
-        return this.onGround ? this.speed * (0.21600002f / (slipperiness * slipperiness * slipperiness)) : 0.02f;
+        return this.onGround ? this.speed * (0.21600002f / (slipperiness * slipperiness * slipperiness)) : getPlayerFlyingSpeed();
+    }
+
+    private float getPlayerFlyingSpeed() {
+        if (isFlying && !CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
+            return isSprinting() ? this.flyingSpeed * 2.0f : this.flyingSpeed;
+        } else {
+            return this.isSprinting() ? 0.025999999F : 0.02F;
+        }
     }
 
     private float getBlockSpeedFactor() {
