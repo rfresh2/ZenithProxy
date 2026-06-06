@@ -42,7 +42,12 @@ public class ClientTickManager {
     private void tickManagerLoop() {
         while (true) {
             try {
-                var eventLoop = getEventLoop();
+                var client = Proxy.getInstance().getClient();
+                if (client == null) {
+                    Wait.waitMs((int) (50.0 / CONFIG.client.tickRate));
+                    continue;
+                }
+                var eventLoop = client.getClientEventLoop();
                 if (!doClientTicks.get() || eventLoop.isShuttingDown()) {
                     Wait.waitMs((int) (50.0 / CONFIG.client.tickRate));
                     continue;
