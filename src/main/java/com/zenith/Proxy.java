@@ -44,7 +44,7 @@ import org.geysermc.mcprotocollib.network.tcp.TcpServer;
 import org.geysermc.mcprotocollib.protocol.MinecraftConstants;
 import org.geysermc.mcprotocollib.protocol.MinecraftProtocol;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundSetCarriedItemPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.LoggerFactory;
@@ -433,7 +433,8 @@ public class Proxy {
         var client = this.client;
 
         try {
-            client.send(new ServerboundSetCarriedItemPacket(10)).get();
+            // todo: find an alternative method other than chat
+            client.send(new ServerboundChatPacket("§")).get();
         } catch (final Exception e) {
             CLIENT_LOG.error("Error performing kick disconnect", e);
         }
