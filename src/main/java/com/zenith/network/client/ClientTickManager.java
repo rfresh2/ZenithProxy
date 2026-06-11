@@ -10,9 +10,9 @@ import com.zenith.event.player.PlayerDisconnectedEvent;
 import com.zenith.util.Wait;
 import com.zenith.util.math.MathHelper;
 import io.netty.channel.EventLoop;
-import io.netty.util.concurrent.Future;
 
 import java.time.Duration;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -42,12 +42,18 @@ public class ClientTickManager {
     private void tickManagerLoop() {
         while (true) {
             try {
-                if (!doClientTicks.get()) {
+                var client = Proxy.getInstance().getClient();
+                if (client == null) {
+                    Wait.waitMs((int) (50.0 / CONFIG.client.tickRate));
+                    continue;
+                }
+                var eventLoop = client.getClientEventLoop();
+                if (!doClientTicks.get() || eventLoop.isShuttingDown()) {
                     Wait.waitMs((int) (50.0 / CONFIG.client.tickRate));
                     continue;
                 }
                 var before = System.nanoTime();
-                submitInEventLoop(this::tick).await();
+                eventLoop.submit(this::tick).await();
                 // now calculate how long to wait until next tick
                 // we will drift slightly lower in tps as thread sleep duration is variable in scheduling
                 // todo: vanilla client limits to 10 catch-up ticks, but we are not tracking this across multiple ticks
@@ -55,6 +61,8 @@ public class ClientTickManager {
                 var nextTickNsDelay = (long) (50_000_000.0 / CONFIG.client.tickRate);
                 var waitDuration = Duration.ofNanos(MathHelper.clamp(nextTickNsDelay - elapsed, 0L, nextTickNsDelay));
                 Wait.wait(waitDuration);
+            } catch (RejectedExecutionException e) {
+                CLIENT_LOG.debug("ClientTickManager eventloop rejected execution", e);
             } catch (Exception e) {
                 CLIENT_LOG.error("ClientTickManager loop error", e);
             }
@@ -152,9 +160,5 @@ public class ClientTickManager {
         } else {
             eventLoop.execute(runnable);
         }
-    }
-
-    private Future<?> submitInEventLoop(Runnable task) {
-        return getEventLoop().submit(task);
     }
 }

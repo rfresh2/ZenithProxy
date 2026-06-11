@@ -8,12 +8,15 @@ import com.zenith.feature.deathmessages.DeathMessageParseResult;
 import com.zenith.feature.deathmessages.Killer;
 import com.zenith.feature.deathmessages.KillerType;
 import com.zenith.feature.whitelist.PlayerListsManager;
+import com.zenith.util.ComponentSerializer;
+import net.kyori.adventure.text.Component;
 import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.zenith.Globals.*;
 
@@ -51,50 +54,60 @@ public class DeathsDatabase extends LiveDatabase {
 
     public void handleDeathMessageEvent(DeathMessageChatEvent event) {
         if (!Proxy.getInstance().isOn2b2t()) return;
-        writeDeath(event.deathMessage(), event.message(), Instant.now().atOffset(ZoneOffset.UTC));
+        writeDeath(event.deathMessage(), event.message(), Instant.now().atOffset(ZoneOffset.UTC), event.component());
     }
 
-    private void writeDeath(final DeathMessageParseResult deathMessageParseResult, final String rawDeathMessage, final OffsetDateTime time) {
+    private void writeDeath(final DeathMessageParseResult deathMessageParseResult, final String rawDeathMessage, final OffsetDateTime time, final Component component) {
         final Optional<PlayerListEntry> victimEntry = getPlayerEntryFromNameWithFallback(deathMessageParseResult.victim());
         if (victimEntry.isEmpty()) {
             DATABASE_LOG.error("Unable to resolve victim player data: {}", deathMessageParseResult.victim());
             return;
         }
+        String killerPlayerName = null;
+        UUID killerPlayerUuid = null;
         var victimPlayerName = victimEntry.get().getName();
         var victimPlayerUuid = victimEntry.get().getProfileId();
-        var pojo = new DeathsRecord(time, rawDeathMessage, victimPlayerName, victimPlayerUuid, null, null, null, null);
-
+        String killerMob = null;
+        String weaponName = null;
         if (deathMessageParseResult.killer().isPresent()) {
             final Killer killer = deathMessageParseResult.killer().get();
             if (killer.type().equals(KillerType.PLAYER)) {
                 final Optional<PlayerListEntry> killerEntry = getPlayerEntryFromNameWithFallback(killer.name());
                 if (killerEntry.isEmpty()) {
-                    pojo
-                        .setKillerPlayerName(killer.name());
+                    killerPlayerName = killer.name();
                     DATABASE_LOG.error("Unable to resolve killer player data: {}", deathMessageParseResult.killer());
                 } else {
-                    pojo
-                        .setKillerPlayerName(killerEntry.get().getName())
-                        .setKillerPlayerUuid(killerEntry.get().getProfileId());
+                    killerPlayerName = killerEntry.get().getName();
+                    killerPlayerUuid = killerEntry.get().getProfileId();
                 }
             } else if (killer.type().equals(KillerType.MOB)) {
-                pojo
-                    .setKillerMob(killer.name());
+                killerMob = killer.name();
             }
         }
         if (deathMessageParseResult.weapon().isPresent()) {
-            pojo.setWeaponName(deathMessageParseResult.weapon().get());
+            weaponName = deathMessageParseResult.weapon().get();
         }
+        var pojo = new DeathsRecord(
+            time,
+            rawDeathMessage,
+            victimPlayerName,
+            victimPlayerUuid,
+            killerPlayerName,
+            killerPlayerUuid,
+            weaponName,
+            killerMob,
+            ComponentSerializer.serializeJson(component)
+        );
         this.insert(time.toInstant(), pojo, handle ->
             handle.createUpdate("INSERT INTO deaths (time, death_message, victim_player_name, victim_player_uuid, killer_player_name, killer_player_uuid, weapon_name, killer_mob) VALUES (:time, :deathMessage, :victimPlayerName, :victimPlayerUuid, :killerPlayerName, :killerPlayerUuid, :weaponName, :killerMob)")
-                .bind("time", pojo.getTime())
-                .bind("deathMessage", pojo.getDeathMessage())
-                .bind("victimPlayerName", pojo.getVictimPlayerName())
-                .bind("victimPlayerUuid", pojo.getVictimPlayerUuid())
-                .bind("killerPlayerName", pojo.getKillerPlayerName())
-                .bind("killerPlayerUuid", pojo.getKillerPlayerUuid())
-                .bind("weaponName", pojo.getWeaponName())
-                .bind("killerMob", pojo.getKillerMob())
+                .bind("time", pojo.time())
+                .bind("deathMessage", pojo.deathMessage())
+                .bind("victimPlayerName", pojo.victimPlayerName())
+                .bind("victimPlayerUuid", pojo.victimPlayerUuid())
+                .bind("killerPlayerName", pojo.killerPlayerName())
+                .bind("killerPlayerUuid", pojo.killerPlayerUuid())
+                .bind("weaponName", pojo.weaponName())
+                .bind("killerMob", pojo.killerMob())
                 .execute()
         );
     }

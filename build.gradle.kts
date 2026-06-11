@@ -34,7 +34,7 @@ repositories {
 
 val mcplVersion = "26.1.2.10"
 dependencies {
-    api("com.github.rfresh2:JDA:6.4.31") {
+    api("com.github.rfresh2:JDA:6.4.32") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -60,7 +60,7 @@ dependencies {
     api("io.netty:netty-resolver-dns-native-macos") { artifact { classifier = "osx-aarch_64" } }
     api("org.cloudburstmc.math:api:2.0")
     api("org.cloudburstmc.math:immutable:2.0")
-    api("org.redisson:redisson:4.4.0") {
+    api("org.redisson:redisson:4.5.0") {
         exclude(group = "io.netty")
     }
     api("com.github.rfresh2:SimpleEventBus:1.6")
@@ -89,7 +89,7 @@ dependencies {
     api("com.mojang:brigadier:1.3.10")
     api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
-    api(platform("tools.jackson:jackson-bom:3.1.4"))
+    api(platform("tools.jackson:jackson-bom:3.2.0"))
     api("tools.jackson.core:jackson-databind")
     api("tools.jackson.dataformat:jackson-dataformat-smile")
 

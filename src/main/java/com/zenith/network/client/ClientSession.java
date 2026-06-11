@@ -109,6 +109,16 @@ public class ClientSession extends TcpClientSession {
 
     @Override
     public void disconnect(Component reason, Throwable cause) {
+        if (getClientEventLoop().inEventLoop()) {
+            var channel = getChannel();
+            if (!disconnected && channel != null && channel.isActive() && !channel.eventLoop().isShuttingDown()) {
+                channel.eventLoop().execute(() -> disconnect(reason, cause));
+            } else {
+                // probably should just return if we hit here, but idk
+                EXECUTOR.execute(() -> disconnect(reason, cause));
+            }
+            return;
+        }
         super.disconnect(reason, cause);
         if (cause != null) CLIENT_LOG.error("Exception during client disconnect", cause);
         this.online = false;
