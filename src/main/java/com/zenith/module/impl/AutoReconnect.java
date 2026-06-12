@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.zenith.Proxy;
 import com.zenith.event.client.ClientConnectEvent;
 import com.zenith.event.client.ClientDisconnectEvent;
+import com.zenith.event.module.AutoReconnectDecisionEvent;
 import com.zenith.event.module.AutoReconnectEvent;
 import com.zenith.module.api.Module;
 import com.zenith.util.Wait;
@@ -25,7 +26,8 @@ public class AutoReconnect extends Module {
     public List<EventConsumer<?>> registerEvents() {
         return List.of(
             of(ClientDisconnectEvent.class, this::handleDisconnectEvent),
-            of(ClientConnectEvent.class, this::handleConnectEvent)
+            of(ClientConnectEvent.class, this::handleConnectEvent),
+            of(AutoReconnectDecisionEvent.class, this::defaultAutoReconnectCancelHandler)
         );
     }
 
@@ -54,11 +56,9 @@ public class AutoReconnect extends Module {
     }
 
     public void handleDisconnectEvent(ClientDisconnectEvent event) {
-        if (shouldAutoDisconnectCancelAutoReconnect(event)) {
-            info("Cancelling AutoReconnect due to AutoDisconnect cancelAutoReconnect");
-            return;
-        }
-        if (isReconnectableDisconnect(event.reason())) {
+        var autoReconnectEvent = new AutoReconnectDecisionEvent(event);
+        EVENT_BUS.post(autoReconnectEvent);
+        if (!autoReconnectEvent.isCancelled()) {
             scheduleAutoReconnect(CONFIG.client.extra.autoReconnect.delaySeconds);
         } else {
             info("Cancelling AutoReconnect because disconnect reason is not reconnectable");
@@ -71,12 +71,6 @@ public class AutoReconnect extends Module {
             return;
         }
         this.autoReconnectFuture = EXECUTOR.submit(() -> autoReconnectRunnable(delaySeconds));
-    }
-
-    public boolean shouldAutoDisconnectCancelAutoReconnect(ClientDisconnectEvent event) {
-        return CONFIG.client.extra.utility.actions.autoDisconnect.enabled
-            && CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect
-            && AutoDisconnect.isAutoDisconnectReason(event.reason());
     }
 
     public void handleConnectEvent(ClientConnectEvent event) {
@@ -101,11 +95,10 @@ public class AutoReconnect extends Module {
     }
 
     private void delayBeforeReconnect(int delaySeconds) {
-        final int countdown = delaySeconds;
-        EVENT_BUS.postAsync(new AutoReconnectEvent(countdown));
+        EVENT_BUS.postAsync(new AutoReconnectEvent(delaySeconds));
         // random jitter to help prevent multiple clients from logging in at the same time
         Wait.waitRandomMs(1000);
-        for (int i = countdown; i > 0; i-=10) {
+        for (int i = delaySeconds; i > 0; i-=10) {
             info("Reconnecting in {}s", i);
             Wait.wait(Math.min(10, i));
         }
@@ -120,15 +113,9 @@ public class AutoReconnect extends Module {
         MAX_PT_DISCONNECT
     );
 
-    private boolean isReconnectableDisconnect(final String reason) {
-        if (NON_RECONNECTABLE_DISCONNECT_REASONS.contains(reason)) {
-            return false;
-        } else if (ActiveHours.isActiveHoursDisconnect(reason)) {
-            return false;
-        } else if (AutoDisconnect.isAutoDisconnectReason(reason)) {
-            return (!CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect && !Proxy.getInstance().isPrio());
-        } else {
-            return true;
+    public void defaultAutoReconnectCancelHandler(AutoReconnectDecisionEvent event) {
+        if (NON_RECONNECTABLE_DISCONNECT_REASONS.contains(event.getDisconnectEvent().reason())) {
+            event.setCancelled(true);
         }
     }
 }

@@ -29,7 +29,8 @@ public class AutoDisconnect extends Module {
             of(WeatherChangeEvent.class, this::handleWeatherChangeEvent),
             of(PlayerDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent),
             of(ServerPlayerInVisualRangeEvent.class, this::handleNewPlayerInVisualRangeEvent),
-            of(TotemPopEvent.class, this::handleTotemPopEvent)
+            of(TotemPopEvent.class, this::handleTotemPopEvent),
+            of(AutoReconnectDecisionEvent.class, this::handleAutoReconnectDecisionEvent)
         );
     }
 
@@ -105,6 +106,14 @@ public class AutoDisconnect extends Module {
 
     private void doDisconnect(String reason) {
         Proxy.getInstance().disconnect(AUTODISCONNECT_REASON_PREFIX + reason);
+    }
+
+    private void handleAutoReconnectDecisionEvent(AutoReconnectDecisionEvent event) {
+        if (isAutoDisconnectReason(event.getDisconnectEvent().reason())
+            && (CONFIG.client.extra.utility.actions.autoDisconnect.cancelAutoReconnect || Proxy.getInstance().isPrio())
+        ) {
+            event.setCancelled(true);
+        }
     }
 
     public static boolean isAutoDisconnectReason(String reason) {
