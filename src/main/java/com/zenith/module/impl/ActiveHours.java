@@ -4,6 +4,7 @@ import com.github.rfresh2.EventConsumer;
 import com.zenith.Proxy;
 import com.zenith.event.client.ClientDisconnectEvent;
 import com.zenith.event.module.ActiveHoursConnectEvent;
+import com.zenith.event.module.AutoReconnectDecisionEvent;
 import com.zenith.feature.queue.Queue;
 import com.zenith.module.api.Module;
 import org.jspecify.annotations.Nullable;
@@ -32,7 +33,8 @@ public class ActiveHours extends Module {
     @Override
     public List<EventConsumer<?>> registerEvents() {
         return List.of(
-            of(ClientDisconnectEvent.class, this::onDisconnect)
+            of(ClientDisconnectEvent.class, this::onDisconnect),
+            of(AutoReconnectDecisionEvent.class, this::onAutoReconnectDecision)
         );
     }
 
@@ -128,6 +130,12 @@ public class ActiveHours extends Module {
         @Override
         public String toString() {
             return (hour() < 10 ? "0" + hour() : hour()) + ":" + (minute() < 10 ? "0" + minute() : minute());
+        }
+    }
+
+    private void onAutoReconnectDecision(AutoReconnectDecisionEvent event) {
+        if (isActiveHoursDisconnect(event.getDisconnectEvent().reason())) {
+            event.setCancelled(true);
         }
     }
 
