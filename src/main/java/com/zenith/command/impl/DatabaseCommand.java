@@ -23,9 +23,9 @@ public class DatabaseCommand extends Command {
             .name("database")
             .category(CommandCategory.MANAGE)
             .description("""
-            Configures the database module used for https://api.2b2t.vc
-            
-            This is disabled by default. No ZenithProxy users contribute or collect data, this is purely for use with my own accounts.
+            Configures the database module used by https://api.2b2t.vc
+
+            This is disabled by default - no ZenithProxy users contribute or collect data
             """)
             .usageLines(
                 "on/off",

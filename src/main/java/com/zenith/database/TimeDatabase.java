@@ -74,7 +74,6 @@ public class TimeDatabase extends LockingDatabase {
         var timeInstant = Instant.ofEpochMilli(worldTimeData.getLastUpdate());
         var time = timeInstant.atOffset(ZoneOffset.UTC);
         long worldage = worldTimeData.getGameTime();
-        // todo: verify this matches 1.21 data
         long worldtime = worldTimeData.isTickDayTime() ? worldTimeData.getDayTime() : -worldTimeData.getDayTime();
         insert(timeInstant, handle -> {
             handle.createUpdate("INSERT INTO worldtime (time, worldage, worldtime) VALUES  (:time, :worldage, :worldtime)")

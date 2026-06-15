@@ -4,7 +4,7 @@ package com.zenith.database.dto.enums;
 import lombok.Getter;
 
 @Getter
-public enum Connectiontype {
+public enum ConnectionType {
 
     JOIN("JOIN"),
 
@@ -12,7 +12,7 @@ public enum Connectiontype {
 
     private final String literal;
 
-    Connectiontype(String literal) {
+    ConnectionType(String literal) {
         this.literal = literal;
     }
 }

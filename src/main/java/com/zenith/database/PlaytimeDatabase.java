@@ -1,7 +1,7 @@
 package com.zenith.database;
 
 import com.zenith.Proxy;
-import com.zenith.database.dto.enums.Connectiontype;
+import com.zenith.database.dto.enums.ConnectionType;
 import com.zenith.event.client.ClientConnectEvent;
 import com.zenith.event.client.ClientDisconnectEvent;
 import com.zenith.event.client.ClientOnlineEvent;
@@ -25,7 +25,7 @@ public class PlaytimeDatabase extends LockingDatabase {
     private final Map<GameProfile, List<ConnectionEvent>> connectionEvents = new ConcurrentHashMap<>();
     private Instant prevSyncTime = Instant.now();
 
-    private record ConnectionEvent(Connectiontype type, long time) {}
+    private record ConnectionEvent(ConnectionType type, long time) {}
 
     public PlaytimeDatabase(final QueryExecutor queryExecutor, final RedisClient redisClient) {
         super(queryExecutor, redisClient);
@@ -100,7 +100,7 @@ public class PlaytimeDatabase extends LockingDatabase {
         synchronized (this) {
             connectionEvents.compute(event.playerEntry().getProfile(), (k, v) -> {
                 if (v == null) v = new ArrayList<>();
-                v.add(new ConnectionEvent(Connectiontype.JOIN, Instant.now().getEpochSecond()));
+                v.add(new ConnectionEvent(ConnectionType.JOIN, Instant.now().getEpochSecond()));
                 return v;
             });
         }
@@ -111,7 +111,7 @@ public class PlaytimeDatabase extends LockingDatabase {
         synchronized (this) {
             connectionEvents.compute(event.playerEntry().getProfile(), (k, v) -> {
                 if (v == null) v = new ArrayList<>();
-                v.add(new ConnectionEvent(Connectiontype.LEAVE, Instant.now().getEpochSecond()));
+                v.add(new ConnectionEvent(ConnectionType.LEAVE, Instant.now().getEpochSecond()));
                 return v;
             });
         }
@@ -153,7 +153,7 @@ public class PlaytimeDatabase extends LockingDatabase {
                     var playerName = gameProfile.getName();
                     var events = entry.getValue();
                     long prevTime = beforeTimeLong;
-                    Connectiontype lastType = null;
+                    ConnectionType lastType = null;
                     long playtime = 0;
                     for (int i = 0; i < events.size(); i++) {
                         final var event = events.get(i);

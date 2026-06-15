@@ -1,7 +1,7 @@
 package com.zenith.database;
 
 import com.zenith.Proxy;
-import com.zenith.database.dto.records.DeathsRecord;
+import com.zenith.database.dto.records.DeathsFeedRecord;
 import com.zenith.event.chat.DeathMessageChatEvent;
 import com.zenith.feature.api.ProfileData;
 import com.zenith.feature.deathmessages.DeathMessageParseResult;
@@ -87,7 +87,7 @@ public class DeathsDatabase extends LiveDatabase {
         if (deathMessageParseResult.weapon().isPresent()) {
             weaponName = deathMessageParseResult.weapon().get();
         }
-        var pojo = new DeathsRecord(
+        var pojo = new DeathsFeedRecord(
             time,
             rawDeathMessage,
             victimPlayerName,
@@ -98,17 +98,22 @@ public class DeathsDatabase extends LiveDatabase {
             killerMob,
             ComponentSerializer.serializeJson(component)
         );
-        this.insert(time.toInstant(), pojo, handle ->
-            handle.createUpdate("INSERT INTO deaths (time, death_message, victim_player_name, victim_player_uuid, killer_player_name, killer_player_uuid, weapon_name, killer_mob) VALUES (:time, :deathMessage, :victimPlayerName, :victimPlayerUuid, :killerPlayerName, :killerPlayerUuid, :weaponName, :killerMob)")
-                .bind("time", pojo.time())
-                .bind("deathMessage", pojo.deathMessage())
-                .bind("victimPlayerName", pojo.victimPlayerName())
-                .bind("victimPlayerUuid", pojo.victimPlayerUuid())
-                .bind("killerPlayerName", pojo.killerPlayerName())
-                .bind("killerPlayerUuid", pojo.killerPlayerUuid())
-                .bind("weaponName", pojo.weaponName())
-                .bind("killerMob", pojo.killerMob())
-                .execute()
+        this.insert(
+            time.toInstant(),
+            pojo,
+            handle -> {
+                handle.createUpdate(
+                        "INSERT INTO deaths (time, death_message, victim_player_name, victim_player_uuid, killer_player_name, killer_player_uuid, weapon_name, killer_mob) VALUES (:time, :deathMessage, :victimPlayerName, :victimPlayerUuid, :killerPlayerName, :killerPlayerUuid, :weaponName, :killerMob)")
+                    .bind("time", pojo.time())
+                    .bind("deathMessage", pojo.deathMessage())
+                    .bind("victimPlayerName", pojo.victimPlayerName())
+                    .bind("victimPlayerUuid", pojo.victimPlayerUuid())
+                    .bind("killerPlayerName", pojo.killerPlayerName())
+                    .bind("killerPlayerUuid", pojo.killerPlayerUuid())
+                    .bind("weaponName", pojo.weaponName())
+                    .bind("killerMob", pojo.killerMob())
+                    .execute();
+            }
         );
     }
 

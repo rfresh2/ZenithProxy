@@ -262,11 +262,11 @@ public abstract class LockingDatabase extends Database {
         }
     }
 
-    public void insert(final Instant instant, final HandleConsumer query) {
+    public void insert(final Instant instant, final HandleConsumer<?> query) {
         insert(instant, null, query);
     }
 
-    protected void insert(final Instant instant, final Runnable liveRunnable, final HandleConsumer query) {
+    protected void insert(final Instant instant, final Runnable liveRunnable, final HandleConsumer<?> query) {
         if (insertQueue.size() > getMaxQueueLength()) {
             if (lockAcquired.get()) {
                 DATABASE_LOG.warn("Insert queue size: {} > {} : Flushing {} entries in DB: {}", insertQueue.size(), getMaxQueueLength(), insertQueue.size() - getMaxQueueLength(), getLockKey());
@@ -298,5 +298,5 @@ public abstract class LockingDatabase extends Database {
     }
 
 
-    public record InsertInstance(Instant instant, @Nullable Runnable redisQuery, HandleConsumer query) { }
+    public record InsertInstance(Instant instant, @Nullable Runnable redisQuery, HandleConsumer<?> query) { }
 }

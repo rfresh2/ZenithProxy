@@ -398,11 +398,11 @@ Configures ZenithProxy command prefixes and settings.
 
 ### database
 
-Configures the database module used for https://api.2b2t.vc
+Configures the database module used by https://api.2b2t.vc
 
 
 
-This is disabled by default. No ZenithProxy users contribute or collect data, this is purely for use with my own accounts.
+This is disabled by default - no ZenithProxy users contribute or collect data
 
 **Aliases:** `db`
 

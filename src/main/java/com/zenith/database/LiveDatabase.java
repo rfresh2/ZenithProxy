@@ -38,16 +38,13 @@ public abstract class LiveDatabase extends LockingDatabase {
         return redisClient.getRedissonClient().getReliableTopic(getTopicKey());
     }
 
-    public void insert(final Instant instant, final Object pojo, final HandleConsumer query) {
-        insert(instant, () -> liveQueueRunnable(pojo), query);
+    public void insert(final Instant instant, final Object liveFeedRecord, final HandleConsumer<?> query) {
+        insert(instant, () -> liveQueueRunnable(liveFeedRecord), query);
     }
 
     private String getTopicKey() {
         return getLockKey() + "Topic";
     }
-
-    // todo: should we not extend locking database queue system so we can move live impl out of locking database?
-    // todo: refactor locking database class into hierarchy
 
     void liveQueueRunnable(Object pojo) {
         try {

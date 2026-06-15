@@ -5,7 +5,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 
-public record DeathsRecord(
+public record DeathsFeedRecord(
     OffsetDateTime time,
     String deathMessage,
     String victimPlayerName,
