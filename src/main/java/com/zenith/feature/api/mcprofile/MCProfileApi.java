@@ -2,6 +2,7 @@ package com.zenith.feature.api.mcprofile;
 
 import com.zenith.feature.api.Api;
 import com.zenith.feature.api.mcprofile.model.MCProfileBedrockResponse;
+import com.zenith.feature.api.mcprofile.model.MCProfileJavaResponse;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,6 +20,14 @@ public class MCProfileApi extends Api {
 
     public Optional<MCProfileBedrockResponse> getBedrockProfile(final UUID uuid) {
         return get("/bedrock/xuid/" + xuidFromUUID(uuid), MCProfileBedrockResponse.class);
+    }
+
+    public Optional<MCProfileJavaResponse> getJavaProfile(final String username) {
+        return get("/java/username/" + username, MCProfileJavaResponse.class);
+    }
+
+    public Optional<MCProfileJavaResponse> getJavaProfile(final UUID uuid) {
+        return get("/java/uuid/" + uuid.toString(), MCProfileJavaResponse.class);
     }
 
     static String xuidFromUUID(UUID uuid) {

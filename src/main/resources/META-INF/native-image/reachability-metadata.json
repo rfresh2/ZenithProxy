@@ -1698,6 +1698,21 @@
       ]
     },
     {
+      "type": "com.zenith.feature.api.mcprofile.model.MCProfileJavaResponse",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.lang.String",
+            "java.util.UUID",
+            "java.lang.String",
+            "java.lang.String",
+            "boolean"
+          ]
+        }
+      ]
+    },
+    {
       "type": "com.zenith.feature.api.mcsrvstatus.model.MCSrvStatusResponse",
       "allDeclaredFields": true,
       "methods": [
