@@ -1,7 +1,7 @@
 package com.zenith.database;
 
 import com.zenith.Globals;
-import com.zenith.database.dto.records.ChatsRecord;
+import com.zenith.database.dto.records.ChatsFeedRecord;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
 import org.redisson.api.RReliableTopic;
@@ -20,7 +20,7 @@ public class LiveChatTest {
         final RedisClient redisClient = new RedisClient();
         RedissonClient redissonClient = redisClient.getRedissonClient();
         RReliableTopic topic = redissonClient.getReliableTopic("ChatsTopic");
-        final ChatsRecord chat = new ChatsRecord(
+        final ChatsFeedRecord chat = new ChatsFeedRecord(
             OffsetDateTime.now(),
             "test chat",
             "rfresh2",

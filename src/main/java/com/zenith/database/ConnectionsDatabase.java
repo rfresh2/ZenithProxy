@@ -1,8 +1,8 @@
 package com.zenith.database;
 
 import com.zenith.Proxy;
-import com.zenith.database.dto.enums.Connectiontype;
-import com.zenith.database.dto.records.ConnectionsRecord;
+import com.zenith.database.dto.enums.ConnectionType;
+import com.zenith.database.dto.records.ConnectionsFeedRecord;
 import com.zenith.event.client.ClientDisconnectEvent;
 import com.zenith.event.client.ClientOnlineEvent;
 import com.zenith.event.queue.QueueStartEvent;
@@ -62,19 +62,19 @@ public class ConnectionsDatabase extends LiveDatabase {
 
     public void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
         if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(1))) return;
-        writeConnection(Connectiontype.JOIN, event.playerEntry().getName(), event.playerEntry().getProfileId(), Instant.now().atOffset(ZoneOffset.UTC));
+        writeConnection(ConnectionType.JOIN, event.playerEntry().getName(), event.playerEntry().getProfileId(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
     public void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
         if (!Proxy.getInstance().isOnlineOn2b2tForAtLeastDuration(Duration.ofSeconds(1))) return;
-        writeConnection(Connectiontype.LEAVE, event.playerEntry().getName(), event.playerEntry().getProfileId(), Instant.now().atOffset(ZoneOffset.UTC));
+        writeConnection(ConnectionType.LEAVE, event.playerEntry().getName(), event.playerEntry().getProfileId(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
     public void handleClientOnlineEvent(ClientOnlineEvent event) {
         if (!Proxy.getInstance().isOn2b2t()) return;
         var profile = CACHE.getProfileCache().getProfile();
         if (profile == null || profile.getName() == null || profile.getId() == null) return;
-        writeConnection(Connectiontype.JOIN, profile.getName(), profile.getId(), Instant.now().atOffset(ZoneOffset.UTC));
+        writeConnection(ConnectionType.JOIN, profile.getName(), profile.getId(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
     public void handleDisconnectEvent(ClientDisconnectEvent event) {
@@ -83,7 +83,7 @@ public class ConnectionsDatabase extends LiveDatabase {
             || event.onlineDuration().getSeconds() < 1) return;
         var profile = CACHE.getProfileCache().getProfile();
         if (profile == null || profile.getName() == null || profile.getId() == null) return;
-        writeConnection(Connectiontype.LEAVE, profile.getName(), profile.getId(), Instant.now().atOffset(ZoneOffset.UTC));
+        writeConnection(ConnectionType.LEAVE, profile.getName(), profile.getId(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
     private void handleQueueStartEvent(QueueStartEvent event) {
@@ -91,7 +91,7 @@ public class ConnectionsDatabase extends LiveDatabase {
         if (!event.wasOnline()) return;
         var profile = CACHE.getProfileCache().getProfile();
         if (profile == null || profile.getName() == null || profile.getId() == null) return;
-        writeConnection(Connectiontype.LEAVE, profile.getName(), profile.getId(), Instant.now().atOffset(ZoneOffset.UTC));
+        writeConnection(ConnectionType.LEAVE, profile.getName(), profile.getId(), Instant.now().atOffset(ZoneOffset.UTC));
     }
 
     // todo: handle server restart
@@ -102,13 +102,17 @@ public class ConnectionsDatabase extends LiveDatabase {
     //  could cause duplicated data, once from the proactive marking as disconnected, and once on actual restart disconnects
     //  need to think about a better approach for this
 
-    public void writeConnection(final Connectiontype connectiontype, final String playerName, final UUID playerUUID, final OffsetDateTime time) {
-        insert(time.toInstant(), new ConnectionsRecord(time, connectiontype, playerName, playerUUID), handle ->
-            handle.createUpdate("INSERT INTO connections (time, connection, player_name, player_uuid) VALUES (:time, :connection, :playerName, :playerUuid)")
-                .bind("time", time)
-                .bind("connection", connectiontype)
-                .bind("playerName", playerName)
-                .bind("playerUuid", playerUUID)
-                .execute());
+    public void writeConnection(final ConnectionType connectiontype, final String playerName, final UUID playerUUID, final OffsetDateTime time) {
+        insert(
+            time.toInstant(),
+            new ConnectionsFeedRecord(time, connectiontype, playerName, playerUUID),
+            handle -> {
+                handle.createUpdate("INSERT INTO connections (time, connection, player_name, player_uuid) VALUES (:time, :connection, :playerName, :playerUuid)")
+                    .bind("time", time)
+                    .bind("connection", connectiontype)
+                    .bind("playerName", playerName)
+                    .bind("playerUuid", playerUUID)
+                    .execute();
+            });
     }
 }

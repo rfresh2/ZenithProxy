@@ -81,7 +81,11 @@ public class ChatCache implements CachedData {
 
     private void parseCommandTree() {
         try {
-            this.commandDispatcher = McplBrigadierConverter.toBrigadier(this.commandNodes);
+            var dispatcher = McplBrigadierConverter.toBrigadier(this.commandNodes);
+            if (dispatcher == null) {
+                return;
+            }
+            this.commandDispatcher = dispatcher;
         } catch (Exception e) {
             CACHE_LOG.error("Failed to parse command tree", e);
         }

@@ -3,7 +3,6 @@ package com.zenith.feature.whitelist;
 import com.zenith.feature.api.ProfileData;
 import com.zenith.feature.api.crafthead.CraftheadApi;
 import com.zenith.feature.api.mcprofile.MCProfileApi;
-import com.zenith.feature.api.minetools.MinetoolsApi;
 import com.zenith.feature.api.mojang.MojangApi;
 import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.util.Wait;
@@ -109,7 +108,7 @@ public class PlayerListsManager {
         }
         return MojangApi.INSTANCE.getProfile(username).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile)
             .or(() -> CraftheadApi.INSTANCE.getProfile(username).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile)
-                .or(() -> MinetoolsApi.INSTANCE.getProfileFromUsername(username).filter(PlayerListsManager::validProfile)));
+                .or(() -> MCProfileApi.INSTANCE.getJavaProfile(username).filter(PlayerListsManager::validProfile)));
     }
 
     public static Optional<ProfileData> getProfileFromUUID(final UUID uuid) {
@@ -118,7 +117,7 @@ public class PlayerListsManager {
         }
         return SessionServerApi.INSTANCE.getProfile(uuid).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile)
             .or(() -> CraftheadApi.INSTANCE.getProfile(uuid).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile)
-                .or(() -> MinetoolsApi.INSTANCE.getProfileFromUUID(uuid).filter(PlayerListsManager::validProfile)));
+                .or(() -> MCProfileApi.INSTANCE.getJavaProfile(uuid).filter(PlayerListsManager::validProfile)));
     }
 
     private static boolean validProfile(final ProfileData profile) {

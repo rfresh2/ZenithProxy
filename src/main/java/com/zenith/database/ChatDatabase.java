@@ -1,7 +1,7 @@
 package com.zenith.database;
 
 import com.zenith.Proxy;
-import com.zenith.database.dto.records.ChatsRecord;
+import com.zenith.database.dto.records.ChatsFeedRecord;
 import com.zenith.event.chat.PublicChatEvent;
 import com.zenith.util.ComponentSerializer;
 import net.kyori.adventure.text.Component;
@@ -58,12 +58,16 @@ public class ChatDatabase extends LiveDatabase {
     }
 
     public void writeChat(final UUID playerUuid, final String playerName, final String chat, final OffsetDateTime time, final Component component) {
-        this.insert(time.toInstant(), new ChatsRecord(time, chat, playerName, playerUuid, ComponentSerializer.serializeJson(component)), handle ->
-            handle.createUpdate("INSERT INTO chats (time, chat, player_name, player_uuid) VALUES (:time, :chat, :player_name, :player_uuid);")
-                .bind("time", time)
-                .bind("chat", chat)
-                .bind("player_name", playerName)
-                .bind("player_uuid", playerUuid)
-                .execute());
+        this.insert(
+            time.toInstant(),
+            new ChatsFeedRecord(time, chat, playerName, playerUuid, ComponentSerializer.serializeJson(component)),
+            handle -> {
+                handle.createUpdate("INSERT INTO chats (time, chat, player_name, player_uuid) VALUES (:time, :chat, :player_name, :player_uuid);")
+                    .bind("time", time)
+                    .bind("chat", chat)
+                    .bind("player_name", playerName)
+                    .bind("player_uuid", playerUuid)
+                    .execute();
+            });
     }
 }

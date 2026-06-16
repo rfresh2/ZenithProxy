@@ -7,6 +7,10 @@ import com.zenith.feature.api.minetools.model.MinetoolsUuidResponse;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * API no longer exists
+ */
+@Deprecated(forRemoval = true)
 public class MinetoolsApi extends Api {
     public static final MinetoolsApi INSTANCE = new MinetoolsApi();
 

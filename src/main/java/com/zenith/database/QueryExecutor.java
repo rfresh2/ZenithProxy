@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 import static com.zenith.Globals.DATABASE_LOG;
 
 public record QueryExecutor(Jdbi jdbi) {
-    public void execute(final Supplier<HandleConsumer> queryProvider) {
+    public void execute(final Supplier<HandleConsumer<?>> queryProvider) {
         try (var handle = jdbi.open()) {
             queryProvider.get().useHandle(handle);
         } catch (final Exception e) {
