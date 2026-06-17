@@ -4,7 +4,7 @@ package com.zenith.mc.block;
 import com.zenith.mc.Registry;
 
 public final class BlockRegistry {
-    public static final Registry<Block> REGISTRY = new Registry<Block>(1168);
+    public static final Registry<Block> REGISTRY = new Registry<Block>(1196);
 
     public static final Block AIR;
 
@@ -2002,6 +2002,60 @@ public final class BlockRegistry {
 
     public static final Block CHISELED_TUFF_BRICKS;
 
+    public static final Block SULFUR;
+
+    public static final Block POTENT_SULFUR;
+
+    public static final Block SULFUR_SLAB;
+
+    public static final Block SULFUR_STAIRS;
+
+    public static final Block SULFUR_WALL;
+
+    public static final Block POLISHED_SULFUR;
+
+    public static final Block POLISHED_SULFUR_SLAB;
+
+    public static final Block POLISHED_SULFUR_STAIRS;
+
+    public static final Block POLISHED_SULFUR_WALL;
+
+    public static final Block SULFUR_BRICKS;
+
+    public static final Block SULFUR_BRICK_SLAB;
+
+    public static final Block SULFUR_BRICK_STAIRS;
+
+    public static final Block SULFUR_BRICK_WALL;
+
+    public static final Block CHISELED_SULFUR;
+
+    public static final Block CINNABAR;
+
+    public static final Block CINNABAR_SLAB;
+
+    public static final Block CINNABAR_STAIRS;
+
+    public static final Block CINNABAR_WALL;
+
+    public static final Block POLISHED_CINNABAR;
+
+    public static final Block POLISHED_CINNABAR_SLAB;
+
+    public static final Block POLISHED_CINNABAR_STAIRS;
+
+    public static final Block POLISHED_CINNABAR_WALL;
+
+    public static final Block CINNABAR_BRICKS;
+
+    public static final Block CINNABAR_BRICK_SLAB;
+
+    public static final Block CINNABAR_BRICK_STAIRS;
+
+    public static final Block CINNABAR_BRICK_WALL;
+
+    public static final Block CHISELED_CINNABAR;
+
     public static final Block CALCITE;
 
     public static final Block TINTED_GLASS;
@@ -2028,113 +2082,113 @@ public final class BlockRegistry {
 
     public static final Block OXIDIZED_COPPER;
 
+    public static final Block WAXED_COPPER_BLOCK;
+
+    public static final Block WAXED_EXPOSED_COPPER;
+
+    public static final Block WAXED_WEATHERED_COPPER;
+
+    public static final Block WAXED_OXIDIZED_COPPER;
+
     public static final Block COPPER_ORE;
 
     public static final Block DEEPSLATE_COPPER_ORE;
 
-    public static final Block OXIDIZED_CUT_COPPER;
-
-    public static final Block WEATHERED_CUT_COPPER;
+    public static final Block CUT_COPPER;
 
     public static final Block EXPOSED_CUT_COPPER;
 
-    public static final Block CUT_COPPER;
+    public static final Block WEATHERED_CUT_COPPER;
 
-    public static final Block OXIDIZED_CHISELED_COPPER;
-
-    public static final Block WEATHERED_CHISELED_COPPER;
-
-    public static final Block EXPOSED_CHISELED_COPPER;
-
-    public static final Block CHISELED_COPPER;
-
-    public static final Block WAXED_OXIDIZED_CHISELED_COPPER;
-
-    public static final Block WAXED_WEATHERED_CHISELED_COPPER;
-
-    public static final Block WAXED_EXPOSED_CHISELED_COPPER;
-
-    public static final Block WAXED_CHISELED_COPPER;
-
-    public static final Block OXIDIZED_CUT_COPPER_STAIRS;
-
-    public static final Block WEATHERED_CUT_COPPER_STAIRS;
-
-    public static final Block EXPOSED_CUT_COPPER_STAIRS;
-
-    public static final Block CUT_COPPER_STAIRS;
-
-    public static final Block OXIDIZED_CUT_COPPER_SLAB;
-
-    public static final Block WEATHERED_CUT_COPPER_SLAB;
-
-    public static final Block EXPOSED_CUT_COPPER_SLAB;
-
-    public static final Block CUT_COPPER_SLAB;
-
-    public static final Block WAXED_COPPER_BLOCK;
-
-    public static final Block WAXED_WEATHERED_COPPER;
-
-    public static final Block WAXED_EXPOSED_COPPER;
-
-    public static final Block WAXED_OXIDIZED_COPPER;
-
-    public static final Block WAXED_OXIDIZED_CUT_COPPER;
-
-    public static final Block WAXED_WEATHERED_CUT_COPPER;
-
-    public static final Block WAXED_EXPOSED_CUT_COPPER;
+    public static final Block OXIDIZED_CUT_COPPER;
 
     public static final Block WAXED_CUT_COPPER;
 
-    public static final Block WAXED_OXIDIZED_CUT_COPPER_STAIRS;
+    public static final Block WAXED_EXPOSED_CUT_COPPER;
 
-    public static final Block WAXED_WEATHERED_CUT_COPPER_STAIRS;
+    public static final Block WAXED_WEATHERED_CUT_COPPER;
 
-    public static final Block WAXED_EXPOSED_CUT_COPPER_STAIRS;
+    public static final Block WAXED_OXIDIZED_CUT_COPPER;
+
+    public static final Block CHISELED_COPPER;
+
+    public static final Block EXPOSED_CHISELED_COPPER;
+
+    public static final Block WEATHERED_CHISELED_COPPER;
+
+    public static final Block OXIDIZED_CHISELED_COPPER;
+
+    public static final Block WAXED_CHISELED_COPPER;
+
+    public static final Block WAXED_EXPOSED_CHISELED_COPPER;
+
+    public static final Block WAXED_WEATHERED_CHISELED_COPPER;
+
+    public static final Block WAXED_OXIDIZED_CHISELED_COPPER;
+
+    public static final Block CUT_COPPER_STAIRS;
+
+    public static final Block EXPOSED_CUT_COPPER_STAIRS;
+
+    public static final Block WEATHERED_CUT_COPPER_STAIRS;
+
+    public static final Block OXIDIZED_CUT_COPPER_STAIRS;
 
     public static final Block WAXED_CUT_COPPER_STAIRS;
 
-    public static final Block WAXED_OXIDIZED_CUT_COPPER_SLAB;
+    public static final Block WAXED_EXPOSED_CUT_COPPER_STAIRS;
 
-    public static final Block WAXED_WEATHERED_CUT_COPPER_SLAB;
+    public static final Block WAXED_WEATHERED_CUT_COPPER_STAIRS;
+
+    public static final Block WAXED_OXIDIZED_CUT_COPPER_STAIRS;
+
+    public static final Block CUT_COPPER_SLAB;
+
+    public static final Block EXPOSED_CUT_COPPER_SLAB;
+
+    public static final Block WEATHERED_CUT_COPPER_SLAB;
+
+    public static final Block OXIDIZED_CUT_COPPER_SLAB;
+
+    public static final Block WAXED_CUT_COPPER_SLAB;
 
     public static final Block WAXED_EXPOSED_CUT_COPPER_SLAB;
 
-    public static final Block WAXED_CUT_COPPER_SLAB;
+    public static final Block WAXED_WEATHERED_CUT_COPPER_SLAB;
+
+    public static final Block WAXED_OXIDIZED_CUT_COPPER_SLAB;
 
     public static final Block COPPER_DOOR;
 
     public static final Block EXPOSED_COPPER_DOOR;
 
-    public static final Block OXIDIZED_COPPER_DOOR;
-
     public static final Block WEATHERED_COPPER_DOOR;
+
+    public static final Block OXIDIZED_COPPER_DOOR;
 
     public static final Block WAXED_COPPER_DOOR;
 
     public static final Block WAXED_EXPOSED_COPPER_DOOR;
 
-    public static final Block WAXED_OXIDIZED_COPPER_DOOR;
-
     public static final Block WAXED_WEATHERED_COPPER_DOOR;
+
+    public static final Block WAXED_OXIDIZED_COPPER_DOOR;
 
     public static final Block COPPER_TRAPDOOR;
 
     public static final Block EXPOSED_COPPER_TRAPDOOR;
 
-    public static final Block OXIDIZED_COPPER_TRAPDOOR;
-
     public static final Block WEATHERED_COPPER_TRAPDOOR;
+
+    public static final Block OXIDIZED_COPPER_TRAPDOOR;
 
     public static final Block WAXED_COPPER_TRAPDOOR;
 
     public static final Block WAXED_EXPOSED_COPPER_TRAPDOOR;
 
-    public static final Block WAXED_OXIDIZED_COPPER_TRAPDOOR;
-
     public static final Block WAXED_WEATHERED_COPPER_TRAPDOOR;
+
+    public static final Block WAXED_OXIDIZED_COPPER_TRAPDOOR;
 
     public static final Block COPPER_GRATE;
 
@@ -2216,9 +2270,11 @@ public final class BlockRegistry {
 
     public static final Block WAXED_OXIDIZED_LIGHTNING_ROD;
 
+    public static final Block DRIPSTONE_BLOCK;
+
     public static final Block POINTED_DRIPSTONE;
 
-    public static final Block DRIPSTONE_BLOCK;
+    public static final Block SULFUR_SPIKE;
 
     public static final Block CAVE_VINES;
 
@@ -3343,175 +3399,203 @@ public final class BlockRegistry {
         TUFF_BRICK_STAIRS = REGISTRY.register(data.get(995));
         TUFF_BRICK_WALL = REGISTRY.register(data.get(996));
         CHISELED_TUFF_BRICKS = REGISTRY.register(data.get(997));
-        CALCITE = REGISTRY.register(data.get(998));
-        TINTED_GLASS = REGISTRY.register(data.get(999));
-        POWDER_SNOW = REGISTRY.register(data.get(1000));
-        SCULK_SENSOR = REGISTRY.register(data.get(1001));
-        CALIBRATED_SCULK_SENSOR = REGISTRY.register(data.get(1002));
-        SCULK = REGISTRY.register(data.get(1003));
-        SCULK_VEIN = REGISTRY.register(data.get(1004));
-        SCULK_CATALYST = REGISTRY.register(data.get(1005));
-        SCULK_SHRIEKER = REGISTRY.register(data.get(1006));
-        COPPER_BLOCK = REGISTRY.register(data.get(1007));
-        EXPOSED_COPPER = REGISTRY.register(data.get(1008));
-        WEATHERED_COPPER = REGISTRY.register(data.get(1009));
-        OXIDIZED_COPPER = REGISTRY.register(data.get(1010));
-        COPPER_ORE = REGISTRY.register(data.get(1011));
-        DEEPSLATE_COPPER_ORE = REGISTRY.register(data.get(1012));
-        OXIDIZED_CUT_COPPER = REGISTRY.register(data.get(1013));
-        WEATHERED_CUT_COPPER = REGISTRY.register(data.get(1014));
-        EXPOSED_CUT_COPPER = REGISTRY.register(data.get(1015));
-        CUT_COPPER = REGISTRY.register(data.get(1016));
-        OXIDIZED_CHISELED_COPPER = REGISTRY.register(data.get(1017));
-        WEATHERED_CHISELED_COPPER = REGISTRY.register(data.get(1018));
-        EXPOSED_CHISELED_COPPER = REGISTRY.register(data.get(1019));
-        CHISELED_COPPER = REGISTRY.register(data.get(1020));
-        WAXED_OXIDIZED_CHISELED_COPPER = REGISTRY.register(data.get(1021));
-        WAXED_WEATHERED_CHISELED_COPPER = REGISTRY.register(data.get(1022));
-        WAXED_EXPOSED_CHISELED_COPPER = REGISTRY.register(data.get(1023));
-        WAXED_CHISELED_COPPER = REGISTRY.register(data.get(1024));
-        OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1025));
-        WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1026));
-        EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1027));
-        CUT_COPPER_STAIRS = REGISTRY.register(data.get(1028));
-        OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1029));
-        WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1030));
-        EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1031));
-        CUT_COPPER_SLAB = REGISTRY.register(data.get(1032));
-        WAXED_COPPER_BLOCK = REGISTRY.register(data.get(1033));
-        WAXED_WEATHERED_COPPER = REGISTRY.register(data.get(1034));
-        WAXED_EXPOSED_COPPER = REGISTRY.register(data.get(1035));
-        WAXED_OXIDIZED_COPPER = REGISTRY.register(data.get(1036));
-        WAXED_OXIDIZED_CUT_COPPER = REGISTRY.register(data.get(1037));
-        WAXED_WEATHERED_CUT_COPPER = REGISTRY.register(data.get(1038));
-        WAXED_EXPOSED_CUT_COPPER = REGISTRY.register(data.get(1039));
-        WAXED_CUT_COPPER = REGISTRY.register(data.get(1040));
-        WAXED_OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1041));
-        WAXED_WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1042));
-        WAXED_EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1043));
-        WAXED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1044));
-        WAXED_OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1045));
-        WAXED_WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1046));
-        WAXED_EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1047));
-        WAXED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1048));
-        COPPER_DOOR = REGISTRY.register(data.get(1049));
-        EXPOSED_COPPER_DOOR = REGISTRY.register(data.get(1050));
-        OXIDIZED_COPPER_DOOR = REGISTRY.register(data.get(1051));
-        WEATHERED_COPPER_DOOR = REGISTRY.register(data.get(1052));
-        WAXED_COPPER_DOOR = REGISTRY.register(data.get(1053));
-        WAXED_EXPOSED_COPPER_DOOR = REGISTRY.register(data.get(1054));
-        WAXED_OXIDIZED_COPPER_DOOR = REGISTRY.register(data.get(1055));
-        WAXED_WEATHERED_COPPER_DOOR = REGISTRY.register(data.get(1056));
-        COPPER_TRAPDOOR = REGISTRY.register(data.get(1057));
-        EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1058));
-        OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1059));
-        WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1060));
-        WAXED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1061));
-        WAXED_EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1062));
-        WAXED_OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1063));
-        WAXED_WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1064));
-        COPPER_GRATE = REGISTRY.register(data.get(1065));
-        EXPOSED_COPPER_GRATE = REGISTRY.register(data.get(1066));
-        WEATHERED_COPPER_GRATE = REGISTRY.register(data.get(1067));
-        OXIDIZED_COPPER_GRATE = REGISTRY.register(data.get(1068));
-        WAXED_COPPER_GRATE = REGISTRY.register(data.get(1069));
-        WAXED_EXPOSED_COPPER_GRATE = REGISTRY.register(data.get(1070));
-        WAXED_WEATHERED_COPPER_GRATE = REGISTRY.register(data.get(1071));
-        WAXED_OXIDIZED_COPPER_GRATE = REGISTRY.register(data.get(1072));
-        COPPER_BULB = REGISTRY.register(data.get(1073));
-        EXPOSED_COPPER_BULB = REGISTRY.register(data.get(1074));
-        WEATHERED_COPPER_BULB = REGISTRY.register(data.get(1075));
-        OXIDIZED_COPPER_BULB = REGISTRY.register(data.get(1076));
-        WAXED_COPPER_BULB = REGISTRY.register(data.get(1077));
-        WAXED_EXPOSED_COPPER_BULB = REGISTRY.register(data.get(1078));
-        WAXED_WEATHERED_COPPER_BULB = REGISTRY.register(data.get(1079));
-        WAXED_OXIDIZED_COPPER_BULB = REGISTRY.register(data.get(1080));
-        COPPER_CHEST = REGISTRY.register(data.get(1081));
-        EXPOSED_COPPER_CHEST = REGISTRY.register(data.get(1082));
-        WEATHERED_COPPER_CHEST = REGISTRY.register(data.get(1083));
-        OXIDIZED_COPPER_CHEST = REGISTRY.register(data.get(1084));
-        WAXED_COPPER_CHEST = REGISTRY.register(data.get(1085));
-        WAXED_EXPOSED_COPPER_CHEST = REGISTRY.register(data.get(1086));
-        WAXED_WEATHERED_COPPER_CHEST = REGISTRY.register(data.get(1087));
-        WAXED_OXIDIZED_COPPER_CHEST = REGISTRY.register(data.get(1088));
-        COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1089));
-        EXPOSED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1090));
-        WEATHERED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1091));
-        OXIDIZED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1092));
-        WAXED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1093));
-        WAXED_EXPOSED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1094));
-        WAXED_WEATHERED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1095));
-        WAXED_OXIDIZED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1096));
-        LIGHTNING_ROD = REGISTRY.register(data.get(1097));
-        EXPOSED_LIGHTNING_ROD = REGISTRY.register(data.get(1098));
-        WEATHERED_LIGHTNING_ROD = REGISTRY.register(data.get(1099));
-        OXIDIZED_LIGHTNING_ROD = REGISTRY.register(data.get(1100));
-        WAXED_LIGHTNING_ROD = REGISTRY.register(data.get(1101));
-        WAXED_EXPOSED_LIGHTNING_ROD = REGISTRY.register(data.get(1102));
-        WAXED_WEATHERED_LIGHTNING_ROD = REGISTRY.register(data.get(1103));
-        WAXED_OXIDIZED_LIGHTNING_ROD = REGISTRY.register(data.get(1104));
-        POINTED_DRIPSTONE = REGISTRY.register(data.get(1105));
-        DRIPSTONE_BLOCK = REGISTRY.register(data.get(1106));
-        CAVE_VINES = REGISTRY.register(data.get(1107));
-        CAVE_VINES_PLANT = REGISTRY.register(data.get(1108));
-        SPORE_BLOSSOM = REGISTRY.register(data.get(1109));
-        AZALEA = REGISTRY.register(data.get(1110));
-        FLOWERING_AZALEA = REGISTRY.register(data.get(1111));
-        MOSS_CARPET = REGISTRY.register(data.get(1112));
-        PINK_PETALS = REGISTRY.register(data.get(1113));
-        WILDFLOWERS = REGISTRY.register(data.get(1114));
-        LEAF_LITTER = REGISTRY.register(data.get(1115));
-        MOSS_BLOCK = REGISTRY.register(data.get(1116));
-        BIG_DRIPLEAF = REGISTRY.register(data.get(1117));
-        BIG_DRIPLEAF_STEM = REGISTRY.register(data.get(1118));
-        SMALL_DRIPLEAF = REGISTRY.register(data.get(1119));
-        HANGING_ROOTS = REGISTRY.register(data.get(1120));
-        ROOTED_DIRT = REGISTRY.register(data.get(1121));
-        MUD = REGISTRY.register(data.get(1122));
-        DEEPSLATE = REGISTRY.register(data.get(1123));
-        COBBLED_DEEPSLATE = REGISTRY.register(data.get(1124));
-        COBBLED_DEEPSLATE_STAIRS = REGISTRY.register(data.get(1125));
-        COBBLED_DEEPSLATE_SLAB = REGISTRY.register(data.get(1126));
-        COBBLED_DEEPSLATE_WALL = REGISTRY.register(data.get(1127));
-        POLISHED_DEEPSLATE = REGISTRY.register(data.get(1128));
-        POLISHED_DEEPSLATE_STAIRS = REGISTRY.register(data.get(1129));
-        POLISHED_DEEPSLATE_SLAB = REGISTRY.register(data.get(1130));
-        POLISHED_DEEPSLATE_WALL = REGISTRY.register(data.get(1131));
-        DEEPSLATE_TILES = REGISTRY.register(data.get(1132));
-        DEEPSLATE_TILE_STAIRS = REGISTRY.register(data.get(1133));
-        DEEPSLATE_TILE_SLAB = REGISTRY.register(data.get(1134));
-        DEEPSLATE_TILE_WALL = REGISTRY.register(data.get(1135));
-        DEEPSLATE_BRICKS = REGISTRY.register(data.get(1136));
-        DEEPSLATE_BRICK_STAIRS = REGISTRY.register(data.get(1137));
-        DEEPSLATE_BRICK_SLAB = REGISTRY.register(data.get(1138));
-        DEEPSLATE_BRICK_WALL = REGISTRY.register(data.get(1139));
-        CHISELED_DEEPSLATE = REGISTRY.register(data.get(1140));
-        CRACKED_DEEPSLATE_BRICKS = REGISTRY.register(data.get(1141));
-        CRACKED_DEEPSLATE_TILES = REGISTRY.register(data.get(1142));
-        INFESTED_DEEPSLATE = REGISTRY.register(data.get(1143));
-        SMOOTH_BASALT = REGISTRY.register(data.get(1144));
-        RAW_IRON_BLOCK = REGISTRY.register(data.get(1145));
-        RAW_COPPER_BLOCK = REGISTRY.register(data.get(1146));
-        RAW_GOLD_BLOCK = REGISTRY.register(data.get(1147));
-        POTTED_AZALEA_BUSH = REGISTRY.register(data.get(1148));
-        POTTED_FLOWERING_AZALEA_BUSH = REGISTRY.register(data.get(1149));
-        OCHRE_FROGLIGHT = REGISTRY.register(data.get(1150));
-        VERDANT_FROGLIGHT = REGISTRY.register(data.get(1151));
-        PEARLESCENT_FROGLIGHT = REGISTRY.register(data.get(1152));
-        FROGSPAWN = REGISTRY.register(data.get(1153));
-        REINFORCED_DEEPSLATE = REGISTRY.register(data.get(1154));
-        DECORATED_POT = REGISTRY.register(data.get(1155));
-        CRAFTER = REGISTRY.register(data.get(1156));
-        TRIAL_SPAWNER = REGISTRY.register(data.get(1157));
-        VAULT = REGISTRY.register(data.get(1158));
-        HEAVY_CORE = REGISTRY.register(data.get(1159));
-        PALE_MOSS_BLOCK = REGISTRY.register(data.get(1160));
-        PALE_MOSS_CARPET = REGISTRY.register(data.get(1161));
-        PALE_HANGING_MOSS = REGISTRY.register(data.get(1162));
-        OPEN_EYEBLOSSOM = REGISTRY.register(data.get(1163));
-        CLOSED_EYEBLOSSOM = REGISTRY.register(data.get(1164));
-        POTTED_OPEN_EYEBLOSSOM = REGISTRY.register(data.get(1165));
-        POTTED_CLOSED_EYEBLOSSOM = REGISTRY.register(data.get(1166));
-        FIREFLY_BUSH = REGISTRY.register(data.get(1167));
+        SULFUR = REGISTRY.register(data.get(998));
+        POTENT_SULFUR = REGISTRY.register(data.get(999));
+        SULFUR_SLAB = REGISTRY.register(data.get(1000));
+        SULFUR_STAIRS = REGISTRY.register(data.get(1001));
+        SULFUR_WALL = REGISTRY.register(data.get(1002));
+        POLISHED_SULFUR = REGISTRY.register(data.get(1003));
+        POLISHED_SULFUR_SLAB = REGISTRY.register(data.get(1004));
+        POLISHED_SULFUR_STAIRS = REGISTRY.register(data.get(1005));
+        POLISHED_SULFUR_WALL = REGISTRY.register(data.get(1006));
+        SULFUR_BRICKS = REGISTRY.register(data.get(1007));
+        SULFUR_BRICK_SLAB = REGISTRY.register(data.get(1008));
+        SULFUR_BRICK_STAIRS = REGISTRY.register(data.get(1009));
+        SULFUR_BRICK_WALL = REGISTRY.register(data.get(1010));
+        CHISELED_SULFUR = REGISTRY.register(data.get(1011));
+        CINNABAR = REGISTRY.register(data.get(1012));
+        CINNABAR_SLAB = REGISTRY.register(data.get(1013));
+        CINNABAR_STAIRS = REGISTRY.register(data.get(1014));
+        CINNABAR_WALL = REGISTRY.register(data.get(1015));
+        POLISHED_CINNABAR = REGISTRY.register(data.get(1016));
+        POLISHED_CINNABAR_SLAB = REGISTRY.register(data.get(1017));
+        POLISHED_CINNABAR_STAIRS = REGISTRY.register(data.get(1018));
+        POLISHED_CINNABAR_WALL = REGISTRY.register(data.get(1019));
+        CINNABAR_BRICKS = REGISTRY.register(data.get(1020));
+        CINNABAR_BRICK_SLAB = REGISTRY.register(data.get(1021));
+        CINNABAR_BRICK_STAIRS = REGISTRY.register(data.get(1022));
+        CINNABAR_BRICK_WALL = REGISTRY.register(data.get(1023));
+        CHISELED_CINNABAR = REGISTRY.register(data.get(1024));
+        CALCITE = REGISTRY.register(data.get(1025));
+        TINTED_GLASS = REGISTRY.register(data.get(1026));
+        POWDER_SNOW = REGISTRY.register(data.get(1027));
+        SCULK_SENSOR = REGISTRY.register(data.get(1028));
+        CALIBRATED_SCULK_SENSOR = REGISTRY.register(data.get(1029));
+        SCULK = REGISTRY.register(data.get(1030));
+        SCULK_VEIN = REGISTRY.register(data.get(1031));
+        SCULK_CATALYST = REGISTRY.register(data.get(1032));
+        SCULK_SHRIEKER = REGISTRY.register(data.get(1033));
+        COPPER_BLOCK = REGISTRY.register(data.get(1034));
+        EXPOSED_COPPER = REGISTRY.register(data.get(1035));
+        WEATHERED_COPPER = REGISTRY.register(data.get(1036));
+        OXIDIZED_COPPER = REGISTRY.register(data.get(1037));
+        WAXED_COPPER_BLOCK = REGISTRY.register(data.get(1038));
+        WAXED_EXPOSED_COPPER = REGISTRY.register(data.get(1039));
+        WAXED_WEATHERED_COPPER = REGISTRY.register(data.get(1040));
+        WAXED_OXIDIZED_COPPER = REGISTRY.register(data.get(1041));
+        COPPER_ORE = REGISTRY.register(data.get(1042));
+        DEEPSLATE_COPPER_ORE = REGISTRY.register(data.get(1043));
+        CUT_COPPER = REGISTRY.register(data.get(1044));
+        EXPOSED_CUT_COPPER = REGISTRY.register(data.get(1045));
+        WEATHERED_CUT_COPPER = REGISTRY.register(data.get(1046));
+        OXIDIZED_CUT_COPPER = REGISTRY.register(data.get(1047));
+        WAXED_CUT_COPPER = REGISTRY.register(data.get(1048));
+        WAXED_EXPOSED_CUT_COPPER = REGISTRY.register(data.get(1049));
+        WAXED_WEATHERED_CUT_COPPER = REGISTRY.register(data.get(1050));
+        WAXED_OXIDIZED_CUT_COPPER = REGISTRY.register(data.get(1051));
+        CHISELED_COPPER = REGISTRY.register(data.get(1052));
+        EXPOSED_CHISELED_COPPER = REGISTRY.register(data.get(1053));
+        WEATHERED_CHISELED_COPPER = REGISTRY.register(data.get(1054));
+        OXIDIZED_CHISELED_COPPER = REGISTRY.register(data.get(1055));
+        WAXED_CHISELED_COPPER = REGISTRY.register(data.get(1056));
+        WAXED_EXPOSED_CHISELED_COPPER = REGISTRY.register(data.get(1057));
+        WAXED_WEATHERED_CHISELED_COPPER = REGISTRY.register(data.get(1058));
+        WAXED_OXIDIZED_CHISELED_COPPER = REGISTRY.register(data.get(1059));
+        CUT_COPPER_STAIRS = REGISTRY.register(data.get(1060));
+        EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1061));
+        WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1062));
+        OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1063));
+        WAXED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1064));
+        WAXED_EXPOSED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1065));
+        WAXED_WEATHERED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1066));
+        WAXED_OXIDIZED_CUT_COPPER_STAIRS = REGISTRY.register(data.get(1067));
+        CUT_COPPER_SLAB = REGISTRY.register(data.get(1068));
+        EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1069));
+        WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1070));
+        OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1071));
+        WAXED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1072));
+        WAXED_EXPOSED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1073));
+        WAXED_WEATHERED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1074));
+        WAXED_OXIDIZED_CUT_COPPER_SLAB = REGISTRY.register(data.get(1075));
+        COPPER_DOOR = REGISTRY.register(data.get(1076));
+        EXPOSED_COPPER_DOOR = REGISTRY.register(data.get(1077));
+        WEATHERED_COPPER_DOOR = REGISTRY.register(data.get(1078));
+        OXIDIZED_COPPER_DOOR = REGISTRY.register(data.get(1079));
+        WAXED_COPPER_DOOR = REGISTRY.register(data.get(1080));
+        WAXED_EXPOSED_COPPER_DOOR = REGISTRY.register(data.get(1081));
+        WAXED_WEATHERED_COPPER_DOOR = REGISTRY.register(data.get(1082));
+        WAXED_OXIDIZED_COPPER_DOOR = REGISTRY.register(data.get(1083));
+        COPPER_TRAPDOOR = REGISTRY.register(data.get(1084));
+        EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1085));
+        WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1086));
+        OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1087));
+        WAXED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1088));
+        WAXED_EXPOSED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1089));
+        WAXED_WEATHERED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1090));
+        WAXED_OXIDIZED_COPPER_TRAPDOOR = REGISTRY.register(data.get(1091));
+        COPPER_GRATE = REGISTRY.register(data.get(1092));
+        EXPOSED_COPPER_GRATE = REGISTRY.register(data.get(1093));
+        WEATHERED_COPPER_GRATE = REGISTRY.register(data.get(1094));
+        OXIDIZED_COPPER_GRATE = REGISTRY.register(data.get(1095));
+        WAXED_COPPER_GRATE = REGISTRY.register(data.get(1096));
+        WAXED_EXPOSED_COPPER_GRATE = REGISTRY.register(data.get(1097));
+        WAXED_WEATHERED_COPPER_GRATE = REGISTRY.register(data.get(1098));
+        WAXED_OXIDIZED_COPPER_GRATE = REGISTRY.register(data.get(1099));
+        COPPER_BULB = REGISTRY.register(data.get(1100));
+        EXPOSED_COPPER_BULB = REGISTRY.register(data.get(1101));
+        WEATHERED_COPPER_BULB = REGISTRY.register(data.get(1102));
+        OXIDIZED_COPPER_BULB = REGISTRY.register(data.get(1103));
+        WAXED_COPPER_BULB = REGISTRY.register(data.get(1104));
+        WAXED_EXPOSED_COPPER_BULB = REGISTRY.register(data.get(1105));
+        WAXED_WEATHERED_COPPER_BULB = REGISTRY.register(data.get(1106));
+        WAXED_OXIDIZED_COPPER_BULB = REGISTRY.register(data.get(1107));
+        COPPER_CHEST = REGISTRY.register(data.get(1108));
+        EXPOSED_COPPER_CHEST = REGISTRY.register(data.get(1109));
+        WEATHERED_COPPER_CHEST = REGISTRY.register(data.get(1110));
+        OXIDIZED_COPPER_CHEST = REGISTRY.register(data.get(1111));
+        WAXED_COPPER_CHEST = REGISTRY.register(data.get(1112));
+        WAXED_EXPOSED_COPPER_CHEST = REGISTRY.register(data.get(1113));
+        WAXED_WEATHERED_COPPER_CHEST = REGISTRY.register(data.get(1114));
+        WAXED_OXIDIZED_COPPER_CHEST = REGISTRY.register(data.get(1115));
+        COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1116));
+        EXPOSED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1117));
+        WEATHERED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1118));
+        OXIDIZED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1119));
+        WAXED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1120));
+        WAXED_EXPOSED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1121));
+        WAXED_WEATHERED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1122));
+        WAXED_OXIDIZED_COPPER_GOLEM_STATUE = REGISTRY.register(data.get(1123));
+        LIGHTNING_ROD = REGISTRY.register(data.get(1124));
+        EXPOSED_LIGHTNING_ROD = REGISTRY.register(data.get(1125));
+        WEATHERED_LIGHTNING_ROD = REGISTRY.register(data.get(1126));
+        OXIDIZED_LIGHTNING_ROD = REGISTRY.register(data.get(1127));
+        WAXED_LIGHTNING_ROD = REGISTRY.register(data.get(1128));
+        WAXED_EXPOSED_LIGHTNING_ROD = REGISTRY.register(data.get(1129));
+        WAXED_WEATHERED_LIGHTNING_ROD = REGISTRY.register(data.get(1130));
+        WAXED_OXIDIZED_LIGHTNING_ROD = REGISTRY.register(data.get(1131));
+        DRIPSTONE_BLOCK = REGISTRY.register(data.get(1132));
+        POINTED_DRIPSTONE = REGISTRY.register(data.get(1133));
+        SULFUR_SPIKE = REGISTRY.register(data.get(1134));
+        CAVE_VINES = REGISTRY.register(data.get(1135));
+        CAVE_VINES_PLANT = REGISTRY.register(data.get(1136));
+        SPORE_BLOSSOM = REGISTRY.register(data.get(1137));
+        AZALEA = REGISTRY.register(data.get(1138));
+        FLOWERING_AZALEA = REGISTRY.register(data.get(1139));
+        MOSS_CARPET = REGISTRY.register(data.get(1140));
+        PINK_PETALS = REGISTRY.register(data.get(1141));
+        WILDFLOWERS = REGISTRY.register(data.get(1142));
+        LEAF_LITTER = REGISTRY.register(data.get(1143));
+        MOSS_BLOCK = REGISTRY.register(data.get(1144));
+        BIG_DRIPLEAF = REGISTRY.register(data.get(1145));
+        BIG_DRIPLEAF_STEM = REGISTRY.register(data.get(1146));
+        SMALL_DRIPLEAF = REGISTRY.register(data.get(1147));
+        HANGING_ROOTS = REGISTRY.register(data.get(1148));
+        ROOTED_DIRT = REGISTRY.register(data.get(1149));
+        MUD = REGISTRY.register(data.get(1150));
+        DEEPSLATE = REGISTRY.register(data.get(1151));
+        COBBLED_DEEPSLATE = REGISTRY.register(data.get(1152));
+        COBBLED_DEEPSLATE_STAIRS = REGISTRY.register(data.get(1153));
+        COBBLED_DEEPSLATE_SLAB = REGISTRY.register(data.get(1154));
+        COBBLED_DEEPSLATE_WALL = REGISTRY.register(data.get(1155));
+        POLISHED_DEEPSLATE = REGISTRY.register(data.get(1156));
+        POLISHED_DEEPSLATE_STAIRS = REGISTRY.register(data.get(1157));
+        POLISHED_DEEPSLATE_SLAB = REGISTRY.register(data.get(1158));
+        POLISHED_DEEPSLATE_WALL = REGISTRY.register(data.get(1159));
+        DEEPSLATE_TILES = REGISTRY.register(data.get(1160));
+        DEEPSLATE_TILE_STAIRS = REGISTRY.register(data.get(1161));
+        DEEPSLATE_TILE_SLAB = REGISTRY.register(data.get(1162));
+        DEEPSLATE_TILE_WALL = REGISTRY.register(data.get(1163));
+        DEEPSLATE_BRICKS = REGISTRY.register(data.get(1164));
+        DEEPSLATE_BRICK_STAIRS = REGISTRY.register(data.get(1165));
+        DEEPSLATE_BRICK_SLAB = REGISTRY.register(data.get(1166));
+        DEEPSLATE_BRICK_WALL = REGISTRY.register(data.get(1167));
+        CHISELED_DEEPSLATE = REGISTRY.register(data.get(1168));
+        CRACKED_DEEPSLATE_BRICKS = REGISTRY.register(data.get(1169));
+        CRACKED_DEEPSLATE_TILES = REGISTRY.register(data.get(1170));
+        INFESTED_DEEPSLATE = REGISTRY.register(data.get(1171));
+        SMOOTH_BASALT = REGISTRY.register(data.get(1172));
+        RAW_IRON_BLOCK = REGISTRY.register(data.get(1173));
+        RAW_COPPER_BLOCK = REGISTRY.register(data.get(1174));
+        RAW_GOLD_BLOCK = REGISTRY.register(data.get(1175));
+        POTTED_AZALEA_BUSH = REGISTRY.register(data.get(1176));
+        POTTED_FLOWERING_AZALEA_BUSH = REGISTRY.register(data.get(1177));
+        OCHRE_FROGLIGHT = REGISTRY.register(data.get(1178));
+        VERDANT_FROGLIGHT = REGISTRY.register(data.get(1179));
+        PEARLESCENT_FROGLIGHT = REGISTRY.register(data.get(1180));
+        FROGSPAWN = REGISTRY.register(data.get(1181));
+        REINFORCED_DEEPSLATE = REGISTRY.register(data.get(1182));
+        DECORATED_POT = REGISTRY.register(data.get(1183));
+        CRAFTER = REGISTRY.register(data.get(1184));
+        TRIAL_SPAWNER = REGISTRY.register(data.get(1185));
+        VAULT = REGISTRY.register(data.get(1186));
+        HEAVY_CORE = REGISTRY.register(data.get(1187));
+        PALE_MOSS_BLOCK = REGISTRY.register(data.get(1188));
+        PALE_MOSS_CARPET = REGISTRY.register(data.get(1189));
+        PALE_HANGING_MOSS = REGISTRY.register(data.get(1190));
+        OPEN_EYEBLOSSOM = REGISTRY.register(data.get(1191));
+        CLOSED_EYEBLOSSOM = REGISTRY.register(data.get(1192));
+        POTTED_OPEN_EYEBLOSSOM = REGISTRY.register(data.get(1193));
+        POTTED_CLOSED_EYEBLOSSOM = REGISTRY.register(data.get(1194));
+        FIREFLY_BUSH = REGISTRY.register(data.get(1195));
     }
 }

@@ -29,6 +29,7 @@ import java.io.*;
 import java.nio.file.Path;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -96,7 +97,7 @@ public class ReplayRecording implements Closeable {
 
     // Start recording while we already have a logged in session
     private synchronized void lateStartRecording() {
-        writePacket0(0, new ClientboundLoginFinishedPacket(CACHE.getProfileCache().getProfile()), Proxy.getInstance().getClient(), ProtocolState.LOGIN);
+        writePacket0(0, new ClientboundLoginFinishedPacket(CACHE.getProfileCache().getProfile(), UUID.randomUUID()), Proxy.getInstance().getClient(), ProtocolState.LOGIN);
         CACHE.getRegistriesCache().getRegistryPackets(
             packet -> writePacket(System.nanoTime(), (MinecraftPacket) packet, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION),
             Proxy.getInstance().getClient());
@@ -127,6 +128,7 @@ public class ReplayRecording implements Closeable {
                 CACHE.getPlayerCache().getPortalCooldown(),
                 CACHE.getChunkCache().getSeaLevel()
             ),
+            true,
             false
         ), Proxy.getInstance().getClient());
         CACHE.getAllData().forEach(d ->
@@ -266,7 +268,7 @@ public class ReplayRecording implements Closeable {
         if (packet instanceof ClientboundLoginPacket) {
             recordSelfSpawn = true;
             if (preConnectSyncNeeded) {
-                writePacket0(0, new ClientboundLoginFinishedPacket(CACHE.getProfileCache().getProfile()), session, ProtocolState.LOGIN);
+                writePacket0(0, new ClientboundLoginFinishedPacket(CACHE.getProfileCache().getProfile(), UUID.randomUUID()), session, ProtocolState.LOGIN);
                 CACHE.getRegistriesCache().getRegistryPackets(
                     packet2 -> writePacket(System.nanoTime(), (MinecraftPacket) packet2, Proxy.getInstance().getClient(), ProtocolState.CONFIGURATION),
                     Proxy.getInstance().getClient());

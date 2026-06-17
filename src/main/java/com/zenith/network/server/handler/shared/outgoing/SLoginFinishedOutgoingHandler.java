@@ -200,7 +200,7 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
         if (Proxy.getInstance().getCurrentPlayer().compareAndSet(null, session)) {
             SERVER_LOG.info("Logging in {} [{}] ({}) as controlling player", clientGameProfile.getName(), clientGameProfile.getId().toString(), session.getMCVersion());
             session.getEventLoop().execute(() -> {
-                session.send(new ClientboundLoginFinishedPacket(CACHE.getProfileCache().getProfile()));
+                session.send(new ClientboundLoginFinishedPacket(CACHE.getProfileCache().getProfile(), UUID.randomUUID()));
                 session.switchOutboundState(ProtocolState.CONFIGURATION);
             });
             return true;
@@ -225,7 +225,7 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
         }
         session.getSpectatorFakeProfileCache().setProfile(spectatorFakeProfile);
         session.getEventLoop().execute(() -> {
-            session.send(new ClientboundLoginFinishedPacket(spectatorFakeProfile));
+            session.send(new ClientboundLoginFinishedPacket(spectatorFakeProfile, UUID.randomUUID()));
             session.switchOutboundState(ProtocolState.CONFIGURATION);
         });
         return true;

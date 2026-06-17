@@ -283,7 +283,7 @@ public final class PacketCodecRegistries {
                 .inbound(ServerboundPlayerInputPacket.class, new PlayerInputSpectatorHandler())
                 .inbound(ServerboundPlayerCommandPacket.class, new PlayerCommandSpectatorHandler())
                 .inbound(ServerboundTeleportToEntityPacket.class, new TeleportToEntitySpectatorHandler())
-                .inbound(ServerboundSpectateEntityPacket.class, new SpectateEntityHandler())
+                .inbound(ServerboundSpectatorActionPacket.class, new SpectateEntityHandler())
                 .inbound(ServerboundChatCommandPacket.class, new ChatCommandSpectatorHandler())
                 .inbound(ServerboundCommandSuggestionPacket.class, new CommandSuggestionSpectatorHandler())
                 .inbound(ServerboundChatCommandSignedPacket.class, new SignedChatCommandSpectatorHandler())

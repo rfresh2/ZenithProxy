@@ -87,6 +87,7 @@ public class ProxyServerLoginHandler {
                     CACHE.getPlayerCache().getPortalCooldown(),
                     CACHE.getChunkCache().getSeaLevel()
                 ),
+                false,
                 false
             ));
         } else {
@@ -113,6 +114,7 @@ public class ProxyServerLoginHandler {
                     CACHE.getPlayerCache().getPortalCooldown(),
                     CACHE.getChunkCache().getSeaLevel()
                 ),
+                false,
                 false
             ));
             if (CONFIG.debug.inventorySyncOnLogin && !Proxy.getInstance().isInQueue()) { PlayerCache.inventorySync(); }

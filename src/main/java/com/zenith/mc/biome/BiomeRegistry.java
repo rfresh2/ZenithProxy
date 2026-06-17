@@ -5,7 +5,7 @@ import com.zenith.mc.DynamicRegistry;
 import java.util.function.Supplier;
 
 public final class BiomeRegistry {
-    public static final DynamicRegistry<Biome> REGISTRY = new DynamicRegistry<Biome>(65);
+    public static final DynamicRegistry<Biome> REGISTRY = new DynamicRegistry<Biome>(66);
 
     public static final Supplier<Biome> BADLANDS = () -> REGISTRY.get("badlands");
 
@@ -113,6 +113,8 @@ public final class BiomeRegistry {
 
     public static final Supplier<Biome> STONY_SHORE = () -> REGISTRY.get("stony_shore");
 
+    public static final Supplier<Biome> SULFUR_CAVES = () -> REGISTRY.get("sulfur_caves");
+
     public static final Supplier<Biome> SUNFLOWER_PLAINS = () -> REGISTRY.get("sunflower_plains");
 
     public static final Supplier<Biome> SWAMP = () -> REGISTRY.get("swamp");
@@ -191,17 +193,18 @@ public final class BiomeRegistry {
         REGISTRY.register(new Biome(50, "sparse_jungle"));
         REGISTRY.register(new Biome(51, "stony_peaks"));
         REGISTRY.register(new Biome(52, "stony_shore"));
-        REGISTRY.register(new Biome(53, "sunflower_plains"));
-        REGISTRY.register(new Biome(54, "swamp"));
-        REGISTRY.register(new Biome(55, "taiga"));
-        REGISTRY.register(new Biome(56, "the_end"));
-        REGISTRY.register(new Biome(57, "the_void"));
-        REGISTRY.register(new Biome(58, "warm_ocean"));
-        REGISTRY.register(new Biome(59, "warped_forest"));
-        REGISTRY.register(new Biome(60, "windswept_forest"));
-        REGISTRY.register(new Biome(61, "windswept_gravelly_hills"));
-        REGISTRY.register(new Biome(62, "windswept_hills"));
-        REGISTRY.register(new Biome(63, "windswept_savanna"));
-        REGISTRY.register(new Biome(64, "wooded_badlands"));
+        REGISTRY.register(new Biome(53, "sulfur_caves"));
+        REGISTRY.register(new Biome(54, "sunflower_plains"));
+        REGISTRY.register(new Biome(55, "swamp"));
+        REGISTRY.register(new Biome(56, "taiga"));
+        REGISTRY.register(new Biome(57, "the_end"));
+        REGISTRY.register(new Biome(58, "the_void"));
+        REGISTRY.register(new Biome(59, "warm_ocean"));
+        REGISTRY.register(new Biome(60, "warped_forest"));
+        REGISTRY.register(new Biome(61, "windswept_forest"));
+        REGISTRY.register(new Biome(62, "windswept_gravelly_hills"));
+        REGISTRY.register(new Biome(63, "windswept_hills"));
+        REGISTRY.register(new Biome(64, "windswept_savanna"));
+        REGISTRY.register(new Biome(65, "wooded_badlands"));
     }
 }

@@ -2,7 +2,6 @@
 package com.zenith.mc.dimension;
 
 import com.zenith.mc.DynamicRegistry;
-
 import java.util.function.Supplier;
 
 public final class DimensionRegistry {

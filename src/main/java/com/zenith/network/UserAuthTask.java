@@ -55,7 +55,7 @@ public class UserAuthTask implements Runnable {
             this.session.send(new ClientboundLoginCompressionPacket(threshold));
         } else {
             session.setCompressionThreshold(threshold, CONFIG.server.compressionLevel, true);
-            session.send(new ClientboundLoginFinishedPacket(profile));
+            session.send(new ClientboundLoginFinishedPacket(profile, UUID.randomUUID()));
         }
     }
 }

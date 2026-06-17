@@ -41,8 +41,8 @@ public class TeamCache implements CachedData {
     public void add(@NonNull ClientboundSetPlayerTeamPacket packet) {
         var team = new Team(packet.getTeamName())
             .setDisplayName(packet.getDisplayName())
-            .setPrefix(packet.getPrefix())
-            .setSuffix(packet.getSuffix())
+            .setPrefix(packet.getPlayerPrefix())
+            .setSuffix(packet.getPlayerSuffix())
             .setFriendlyFire(packet.isFriendlyFire())
             .setSeeFriendlyInvisibles(packet.isSeeFriendlyInvisibles())
             .setNameTagVisibility(packet.getNameTagVisibility())

@@ -5,6 +5,8 @@ import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundLoginCompressionPacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.ClientboundLoginFinishedPacket;
 
+import java.util.UUID;
+
 import static com.zenith.Globals.CONFIG;
 
 public class LoginCompressionPostOutgoingHandler implements PostOutgoingPacketHandler<ClientboundLoginCompressionPacket, ServerSession> {
@@ -16,6 +18,6 @@ public class LoginCompressionPostOutgoingHandler implements PostOutgoingPacketHa
             session.disconnect("Failed to get profile");
             return;
         }
-        session.sendAsync(new ClientboundLoginFinishedPacket(profile));
+        session.sendAsync(new ClientboundLoginFinishedPacket(profile, UUID.randomUUID()));
     }
 }

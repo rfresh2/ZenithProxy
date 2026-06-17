@@ -51,6 +51,7 @@ public class COLoginHandler implements PacketHandler<ClientboundLoginPacket, Ser
                 packet.getCommonPlayerSpawnInfo().getPortalCooldown(),
                 packet.getCommonPlayerSpawnInfo().getSeaLevel()
             ),
+            packet.isOnlineMode(),
             false
         );
     }

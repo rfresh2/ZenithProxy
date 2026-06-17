@@ -5,6 +5,7 @@ import com.zenith.feature.api.minotar.MinotarApi;
 import com.zenith.feature.api.sessionserver.SessionServerApi;
 import com.zenith.feature.api.textures.TexturesApi;
 import org.geysermc.mcprotocollib.auth.GameProfile;
+import org.geysermc.mcprotocollib.auth.texture.TextureType;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -50,14 +51,14 @@ public class SkinRetriever {
      * 64x64 png of raw player skin data
      */
     private static Optional<byte[]> getSkinData(GameProfile profile) {
-        var skinTexture = profile.getTexture(GameProfile.TextureType.SKIN, false);
+        var skinTexture = profile.getTexture(TextureType.SKIN, false);
 
         if (skinTexture == null || skinTexture.getURL() == null) {
             // try to lookup skin data from mojang servers
             var gameProfileOptional = SessionServerApi.INSTANCE.getProfileAndSkin(profile.getId());
             if (gameProfileOptional.isPresent()) {
                 var gameProfile = gameProfileOptional.get();
-                skinTexture = gameProfile.getTexture(GameProfile.TextureType.SKIN, false);
+                skinTexture = gameProfile.getTexture(TextureType.SKIN, false);
             }
         }
 

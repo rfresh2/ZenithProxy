@@ -118,7 +118,7 @@ public class BlockStateProperties {
     public static final EnumProperty<BambooLeaves> BAMBOO_LEAVES = EnumProperty.create("leaves", BambooLeaves.class);
     public static final EnumProperty<Tilt> TILT = EnumProperty.create("tilt", Tilt.class);
     public static final EnumProperty<Direction> VERTICAL_DIRECTION = EnumProperty.create("vertical_direction", Direction.class, Direction.UP, Direction.DOWN);
-    public static final EnumProperty<DripstoneThickness> DRIPSTONE_THICKNESS = EnumProperty.create("thickness", DripstoneThickness.class);
+    public static final EnumProperty<SpeleothemThickness> SPELEOTHEM_THICKNESS = EnumProperty.create("thickness", SpeleothemThickness.class);
     public static final EnumProperty<SculkSensorPhase> SCULK_SENSOR_PHASE = EnumProperty.create("sculk_sensor_phase", SculkSensorPhase.class);
     public static final BooleanProperty SLOT_0_OCCUPIED = BooleanProperty.create("slot_0_occupied");
     public static final BooleanProperty SLOT_1_OCCUPIED = BooleanProperty.create("slot_1_occupied");
@@ -136,4 +136,5 @@ public class BlockStateProperties {
     public static final EnumProperty<TestBlockMode> TEST_BLOCK_MODE = EnumProperty.create("mode", TestBlockMode.class);
     public static final BooleanProperty MAP = BooleanProperty.create("map");
     public static final EnumProperty<CopperGolemStatueBlockPose> COPPER_GOLEM_POSE = EnumProperty.create("copper_golem_pose", CopperGolemStatueBlockPose.class);
+    public static final EnumProperty<PotentSulfurState> POTENT_SULFUR_STATE = EnumProperty.create("potent_sulfur_state", PotentSulfurState.class);
 }

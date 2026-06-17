@@ -45,8 +45,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
-import static com.zenith.Globals.CACHE;
 import static com.zenith.Globals.BOT;
+import static com.zenith.Globals.CACHE;
 import static org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot.*;
 
 
@@ -78,7 +78,7 @@ public class PlayerCache implements CachedData {
     protected float walkSpeed;
     protected boolean isSneaking = false;
     protected boolean isSprinting = false;
-    protected EntityEvent opLevel = EntityEvent.PLAYER_OP_PERMISSION_LEVEL_0;
+    protected EntityEvent opLevel = EntityEvent.PLAYER_SET_NO_PERMISSIONS;
     protected AtomicInteger actionId = new AtomicInteger(0);
     private static final MutableVec3i DEFAULT_SPAWN_POSITION = new MutableVec3i(0, 0, 0);
     protected MutableVec3i spawnPosition = DEFAULT_SPAWN_POSITION;

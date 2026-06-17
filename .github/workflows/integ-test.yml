@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+\+26.1.2.pre'
+      - '[0-9]+.[0-9]+.[0-9]+\+26.2.0.pre'
 
 jobs:
   build:

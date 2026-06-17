@@ -13,11 +13,10 @@ public class EntityEventHandler implements ClientEventLoopPacketHandler<Clientbo
     @Override
     public boolean applyAsync(final ClientboundEntityEventPacket packet, final ClientSession session) {
         if (packet.getEntityId() == CACHE.getPlayerCache().getEntityId()) {
-            if (packet.getEvent() == EntityEvent.PLAYER_OP_PERMISSION_LEVEL_0
-                || packet.getEvent() == EntityEvent.PLAYER_OP_PERMISSION_LEVEL_1
-                || packet.getEvent() == EntityEvent.PLAYER_OP_PERMISSION_LEVEL_2
-                || packet.getEvent() == EntityEvent.PLAYER_OP_PERMISSION_LEVEL_3
-                || packet.getEvent() == EntityEvent.PLAYER_OP_PERMISSION_LEVEL_4
+            if (packet.getEvent() == EntityEvent.PLAYER_SET_NO_PERMISSIONS
+                || packet.getEvent() == EntityEvent.PLAYER_SET_MODERATOR
+                || packet.getEvent() == EntityEvent.PLAYER_SET_ADMIN
+                || packet.getEvent() == EntityEvent.PLAYER_SET_GAMEMASTER
             ) {
                 CACHE.getPlayerCache().setOpLevel(packet.getEvent());
             }

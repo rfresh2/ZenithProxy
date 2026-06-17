@@ -4,7 +4,7 @@ package com.zenith.mc.entity;
 import com.zenith.mc.Registry;
 
 public final class EntityRegistry {
-    public static final Registry<EntityData> REGISTRY = new Registry<EntityData>(157);
+    public static final Registry<EntityData> REGISTRY = new Registry<EntityData>(158);
 
     public static final EntityData ACACIA_BOAT;
 
@@ -266,6 +266,8 @@ public final class EntityRegistry {
 
     public static final EntityData STRIDER;
 
+    public static final EntityData SULFUR_CUBE;
+
     public static final EntityData TADPOLE;
 
     public static final EntityData TEXT_DISPLAY;
@@ -453,32 +455,33 @@ public final class EntityRegistry {
         SQUID = REGISTRY.register(data.get(127));
         STRAY = REGISTRY.register(data.get(128));
         STRIDER = REGISTRY.register(data.get(129));
-        TADPOLE = REGISTRY.register(data.get(130));
-        TEXT_DISPLAY = REGISTRY.register(data.get(131));
-        TNT = REGISTRY.register(data.get(132));
-        TNT_MINECART = REGISTRY.register(data.get(133));
-        TRADER_LLAMA = REGISTRY.register(data.get(134));
-        TRIDENT = REGISTRY.register(data.get(135));
-        TROPICAL_FISH = REGISTRY.register(data.get(136));
-        TURTLE = REGISTRY.register(data.get(137));
-        VEX = REGISTRY.register(data.get(138));
-        VILLAGER = REGISTRY.register(data.get(139));
-        VINDICATOR = REGISTRY.register(data.get(140));
-        WANDERING_TRADER = REGISTRY.register(data.get(141));
-        WARDEN = REGISTRY.register(data.get(142));
-        WIND_CHARGE = REGISTRY.register(data.get(143));
-        WITCH = REGISTRY.register(data.get(144));
-        WITHER = REGISTRY.register(data.get(145));
-        WITHER_SKELETON = REGISTRY.register(data.get(146));
-        WITHER_SKULL = REGISTRY.register(data.get(147));
-        WOLF = REGISTRY.register(data.get(148));
-        ZOGLIN = REGISTRY.register(data.get(149));
-        ZOMBIE = REGISTRY.register(data.get(150));
-        ZOMBIE_HORSE = REGISTRY.register(data.get(151));
-        ZOMBIE_NAUTILUS = REGISTRY.register(data.get(152));
-        ZOMBIE_VILLAGER = REGISTRY.register(data.get(153));
-        ZOMBIFIED_PIGLIN = REGISTRY.register(data.get(154));
-        PLAYER = REGISTRY.register(data.get(155));
-        FISHING_BOBBER = REGISTRY.register(data.get(156));
+        SULFUR_CUBE = REGISTRY.register(data.get(130));
+        TADPOLE = REGISTRY.register(data.get(131));
+        TEXT_DISPLAY = REGISTRY.register(data.get(132));
+        TNT = REGISTRY.register(data.get(133));
+        TNT_MINECART = REGISTRY.register(data.get(134));
+        TRADER_LLAMA = REGISTRY.register(data.get(135));
+        TRIDENT = REGISTRY.register(data.get(136));
+        TROPICAL_FISH = REGISTRY.register(data.get(137));
+        TURTLE = REGISTRY.register(data.get(138));
+        VEX = REGISTRY.register(data.get(139));
+        VILLAGER = REGISTRY.register(data.get(140));
+        VINDICATOR = REGISTRY.register(data.get(141));
+        WANDERING_TRADER = REGISTRY.register(data.get(142));
+        WARDEN = REGISTRY.register(data.get(143));
+        WIND_CHARGE = REGISTRY.register(data.get(144));
+        WITCH = REGISTRY.register(data.get(145));
+        WITHER = REGISTRY.register(data.get(146));
+        WITHER_SKELETON = REGISTRY.register(data.get(147));
+        WITHER_SKULL = REGISTRY.register(data.get(148));
+        WOLF = REGISTRY.register(data.get(149));
+        ZOGLIN = REGISTRY.register(data.get(150));
+        ZOMBIE = REGISTRY.register(data.get(151));
+        ZOMBIE_HORSE = REGISTRY.register(data.get(152));
+        ZOMBIE_NAUTILUS = REGISTRY.register(data.get(153));
+        ZOMBIE_VILLAGER = REGISTRY.register(data.get(154));
+        ZOMBIFIED_PIGLIN = REGISTRY.register(data.get(155));
+        PLAYER = REGISTRY.register(data.get(156));
+        FISHING_BOBBER = REGISTRY.register(data.get(157));
     }
 }

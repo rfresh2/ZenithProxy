@@ -19,8 +19,8 @@ public class TeamHandler implements ClientEventLoopPacketHandler<ClientboundSetP
                 var team = CACHE.getTeamCache().getTeamsByName().get(packet.getTeamName());
                 if (team != null) {
                     team.setDisplayName(packet.getDisplayName())
-                        .setPrefix(packet.getPrefix())
-                        .setSuffix(packet.getSuffix())
+                        .setPrefix(packet.getPlayerPrefix())
+                        .setSuffix(packet.getPlayerSuffix())
                         .setFriendlyFire(packet.isFriendlyFire())
                         .setSeeFriendlyInvisibles(packet.isSeeFriendlyInvisibles())
                         .setNameTagVisibility(packet.getNameTagVisibility())
