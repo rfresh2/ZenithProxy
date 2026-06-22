@@ -71,7 +71,9 @@ public class TerminalManager {
                 }
             } catch (final UserInterruptException e) {
                 TERMINAL_LOG.info("Exiting...");
-                Proxy.getInstance().stop(false);
+                EXECUTOR.execute(() -> {
+                    Proxy.getInstance().stop(false);
+                });
                 break;
             } catch (final Exception e) {
                 TERMINAL_LOG.error("Error while reading terminal input", e);
