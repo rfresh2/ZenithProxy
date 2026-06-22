@@ -1226,6 +1226,15 @@
       ]
     },
     {
+      "type": "com.viaversion.viaversion.libs.gson.internal.bind.JavaTimeTypeAdapters",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "com.viaversion.viaversion.libs.opennbt.tag.builtin.CompoundTag",
       "allDeclaredFields": true,
       "methods": [

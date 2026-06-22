@@ -60,7 +60,7 @@ dependencies {
     api("io.netty:netty-resolver-dns-native-macos") { artifact { classifier = "osx-aarch_64" } }
     api("org.cloudburstmc.math:api:2.0")
     api("org.cloudburstmc.math:immutable:2.0")
-    api("org.redisson:redisson:4.6.0") {
+    api("org.redisson:redisson:4.6.1") {
         exclude(group = "io.netty")
     }
     api("com.github.rfresh2:SimpleEventBus:1.6")
@@ -74,10 +74,10 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.maps:long-double-maps:$fastutilVersion")
     api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
-    api("com.viaversion:viaversion-common:5.9.1")
-    api("com.viaversion:viabackwards-common:5.9.1")
-    api("com.viaversion:viarewind-common:4.1.1")
-    api("org.jline:jline:4.1.3")
+    api("com.viaversion:viaversion-common:5.10.0")
+    api("com.viaversion:viabackwards-common:5.10.0")
+    api("com.viaversion:viarewind-common:4.1.2")
+    api("org.jline:jline:4.2.1")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.1.0")
     api("org.postgresql:postgresql:42.7.11")
