@@ -32,7 +32,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.4.57"
+val mcplVersion = "1.21.4.58"
 dependencies {
     api("com.github.rfresh2:JDA:6.4.32") {
         exclude(group = "club.minnced")
@@ -118,6 +118,7 @@ tasks {
         workingDir = layout.projectDirectory.dir("run").asFile
         forkEvery = 1 // needed bc zenith uses global static state
         maxParallelForks = Runtime.getRuntime().availableProcessors()
+        jvmArgs.addAll(listOf("--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow"))
     }
     val commitHashTask = register<CommitHashTask>("writeCommitHash") {
         outputFile = project.layout.buildDirectory.file("resources/main/zenith_commit.txt")
@@ -170,6 +171,7 @@ tasks {
         workingDir = layout.projectDirectory.dir("run").asFile
         classpath = sourceSets.main.get().runtimeClasspath
         mainClass.set("com.zenith.Proxy")
+        jvmArgs.addAll(listOf("--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow"))
     }
     val updateWikiTask = register<UpdateWikiTask>("updateWiki") {
         inputs.files(generateCommandDocsTask.get().outputs.files)
