@@ -44,10 +44,6 @@ public class DebugCommand extends Command {
                 "sync inventory",
                 "sync chunks",
                 "clearEffects",
-                "packetLog on/off",
-                "packetLog client on/off", // todo: subcommands for configuring subsettings more explicitly
-                "packetLog server on/off",
-                "packetLog filter <string>",
                 "kickDisconnect on/off",
                 "dc",
                 "debugLogs on/off",
