@@ -44,10 +44,6 @@ public class DebugCommand extends Command {
                 "sync inventory",
                 "sync chunks",
                 "clearEffects",
-                "packetLog on/off",
-                "packetLog client on/off", // todo: subcommands for configuring subsettings more explicitly
-                "packetLog server on/off",
-                "packetLog filter <string>",
                 "kickDisconnect on/off",
                 "dc",
                 "debugLogs on/off",
@@ -246,11 +242,6 @@ public class DebugCommand extends Command {
                 CONFIG.debug.entityPushing = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Entity Pushing " + toggleStrCaps(CONFIG.debug.entityPushing));
-            })))
-            .then(literal("fixConnectDot2b2tDotOrgDnsChange").then(argument("toggle", toggle()).executes(c -> {
-                CONFIG.debug.fixConnectDot2b2tDotOrgDnsChange = getToggle(c, "toggle");
-                c.getSource().getEmbed()
-                    .title("Fix Connect.2b2t.org DNS Change " + toggleStrCaps(CONFIG.debug.fixConnectDot2b2tDotOrgDnsChange));
             })));
     }
 

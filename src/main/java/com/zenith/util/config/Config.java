@@ -699,7 +699,6 @@ public final class Config {
         public boolean inventoryRequestServerSyncOnAction = false;
         public boolean chainBreakSpeed2b2tFix = true;
         public boolean entityPushing = true;
-        public boolean fixConnectDot2b2tDotOrgDnsChange = true;
 
         public static final class PacketLog {
             public boolean enabled = false;

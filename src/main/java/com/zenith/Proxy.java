@@ -174,7 +174,6 @@ public class Proxy {
             }
             NotificationEventListener.INSTANCE.subscribeEvents();
             ChatRelayEventListener.INSTANCE.subscribeEvents();
-            fixConnectDot2b2tDotOrgDnsChange();
             if (CONFIG.plugins.enabled) PLUGIN_MANAGER.initialize();
             Queue.start();
             saveConfigAsync();
@@ -236,15 +235,6 @@ public class Proxy {
             DEFAULT_LOG.info("Shutting down...");
             if (this.server != null) this.server.close(true);
             saveConfig();
-        }
-    }
-
-    private static void fixConnectDot2b2tDotOrgDnsChange() {
-        if (!CONFIG.debug.fixConnectDot2b2tDotOrgDnsChange) return;
-        if (CONFIG.client.server.address.equals("connect.2b2t.org")) {
-            CONFIG.client.server.address = "2b2t.org";
-            saveConfig();
-            CLIENT_LOG.info("Fixed connect.2b2t.org DNS change -> is now set to `2b2t.org`");
         }
     }
 

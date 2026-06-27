@@ -180,7 +180,7 @@ public class ReplayMod extends Module {
             error("Failed to save recording", e);
         }
         var file = replayRecording.getReplayFile();
-        if (file.exists()) {
+        if (file != null && file.exists()) {
             info("Recording saved to {}", file.getPath());
             EVENT_BUS.postAsync(new ReplayStoppedEvent(replayRecording.getReplayFile()));
         } else {
