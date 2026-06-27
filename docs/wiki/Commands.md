@@ -457,14 +457,6 @@ Debug settings for features in testing or for use in development.
 
   ```debug clearEffects```
 
-  ```debug packetLog on/off```
-
-  ```debug packetLog client on/off```
-
-  ```debug packetLog server on/off```
-
-  ```debug packetLog filter <string>```
-
   ```debug kickDisconnect on/off```
 
   ```debug dc```

@@ -316,9 +316,11 @@ public final class Bot extends ModuleUtils {
 
         updateInWaterStateAndDoFluidPushing();
 
-        if (Math.abs(velocity.getX()) < 0.003) velocity.setX(0);
+        if (velocity.horizontalLengthSquared() < 9.0E-6) {
+            velocity.setX(0);
+            velocity.setZ(0);
+        }
         if (Math.abs(velocity.getY()) < 0.003) velocity.setY(0);
-        if (Math.abs(velocity.getZ()) < 0.003) velocity.setZ(0);
 
         if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
             velocity.set(0, 0, 0);
