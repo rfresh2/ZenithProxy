@@ -1,7 +1,7 @@
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "1.1.2"
-    id("com.gradleup.shadow") version "9.4.2"
+    id("org.graalvm.buildtools.native") version "1.1.3"
+    id("com.gradleup.shadow") version "9.4.3"
     id("io.freefair.lombok") version "9.5.0"
     `maven-publish`
 }
@@ -80,10 +80,10 @@ dependencies {
     api("org.jline:jline:4.2.1")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.1.0")
-    api("org.postgresql:postgresql:42.7.11")
+    api("org.postgresql:postgresql:42.7.12")
     api("org.jdbi:jdbi3-postgres:3.53.0")
     api("com.google.guava:guava:33.6.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.34")
+    api("ch.qos.logback:logback-classic:1.5.37")
     api("org.slf4j:slf4j-api:2.0.18")
     api("org.slf4j:jul-to-slf4j:2.0.18")
     api("com.mojang:brigadier:1.3.10")
@@ -93,7 +93,7 @@ dependencies {
     api("tools.jackson.core:jackson-databind")
     api("tools.jackson.dataformat:jackson-dataformat-smile")
 
-    testImplementation(platform("org.junit:junit-bom:6.1.0"))
+    testImplementation(platform("org.junit:junit-bom:6.1.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.testcontainers:testcontainers:2.0.5")
     testImplementation("org.testcontainers:testcontainers-junit-jupiter:2.0.5")
