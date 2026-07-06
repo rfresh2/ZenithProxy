@@ -32,9 +32,9 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "26.2.0.3"
+val mcplVersion = "26.2.0.4"
 dependencies {
-    api("com.github.rfresh2:JDA:6.4.32") {
+    api("com.github.rfresh2:JDA:6.5.33") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -118,7 +118,7 @@ tasks {
         workingDir = layout.projectDirectory.dir("run").asFile
         forkEvery = 1 // needed bc zenith uses global static state
         maxParallelForks = Runtime.getRuntime().availableProcessors()
-        jvmArgs.addAll(listOf("--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow"))
+        jvmArgs = listOf("--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow")
     }
     val commitHashTask = register<CommitHashTask>("writeCommitHash") {
         outputFile = project.layout.buildDirectory.file("resources/main/zenith_commit.txt")
@@ -139,11 +139,10 @@ tasks {
         workingDir = layout.projectDirectory.dir("run").asFile
         classpath = sourceSets.main.get().runtimeClasspath
         mainClass.set("com.zenith.Proxy")
-        val args = listOf(
-			"-Xmx300m", "-XX:+UseG1GC", "-XX:+UseCompactObjectHeaders",
-			"--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow"
-		)
-        jvmArgs = args
+        jvmArgs = listOf(
+            "-Xmx300m", "-XX:+UseG1GC", "-XX:+UseCompactObjectHeaders",
+            "--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow"
+        )
         standardInput = System.`in`
         environment("ZENITH_DEV", "true")
         outputs.upToDateWhen { false }
@@ -171,7 +170,7 @@ tasks {
         workingDir = layout.projectDirectory.dir("run").asFile
         classpath = sourceSets.main.get().runtimeClasspath
         mainClass.set("com.zenith.Proxy")
-        jvmArgs.addAll(listOf("--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow"))
+        jvmArgs = listOf("--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow")
     }
     val updateWikiTask = register<UpdateWikiTask>("updateWiki") {
         inputs.files(generateCommandDocsTask.get().outputs.files)
@@ -258,7 +257,7 @@ graalvmNative {
                 "-H:+TreatAllTypeReachableConditionsAsTypeReached",
                 "-H:+UsePredicates",
                 "--future-defaults=all",
-                "-R:MaxHeapSize=200m",
+                "-R:MaxHeapSize=20m",
                 "-march=x86-64-v3",
                 "--gc=serial",
                 "-J-XX:MaxRAMPercentage=90",
