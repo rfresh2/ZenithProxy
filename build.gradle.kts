@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     id("org.graalvm.buildtools.native") version "1.1.3"
-    id("com.gradleup.shadow") version "9.4.3"
+    id("com.gradleup.shadow") version "9.5.1"
     id("io.freefair.lombok") version "9.5.0"
     `maven-publish`
 }
@@ -77,11 +77,11 @@ dependencies {
     api("com.viaversion:viaversion-common:5.10.0")
     api("com.viaversion:viabackwards-common:5.10.0")
     api("com.viaversion:viarewind-common:4.1.2")
-    api("org.jline:jline:4.2.1")
+    api("org.jline:jline:4.3.1")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.1.0")
-    api("org.postgresql:postgresql:42.7.12")
-    api("org.jdbi:jdbi3-postgres:3.53.0")
+    api("org.postgresql:postgresql:42.7.13")
+    api("org.jdbi:jdbi3-postgres:3.54.0")
     api("com.google.guava:guava:33.6.0-jre")
     api("ch.qos.logback:logback-classic:1.5.37")
     api("org.slf4j:slf4j-api:2.0.18")
@@ -100,7 +100,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
     annotationProcessor("com.google.auto.service:auto-service:1.1.1")
-    compileOnly("org.graalvm.sdk:nativeimage:25.0.3")
+    compileOnly("org.graalvm.sdk:nativeimage:25.1.3")
 }
 
 lombok {
