@@ -32,9 +32,9 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.4.60"
+val mcplVersion = "1.21.4.61"
 dependencies {
-    api("com.github.rfresh2:JDA:6.4.32") {
+    api("com.github.rfresh2:JDA:6.5.33") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -246,7 +246,7 @@ graalvmNative {
             javaLauncher = graalVMJavaLauncher
             imageName = "ZenithProxy"
             mainClass = "com.zenith.Proxy"
-            quickBuild = true
+            quickBuild = false
             verbose = true
             sharedLibrary = false
             // additional config in: `src/main/resources/META-INF/native-image/com.zenith/zenithproxy/native-image.properties
