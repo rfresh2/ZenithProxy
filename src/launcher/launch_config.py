@@ -40,7 +40,7 @@ class LaunchConfig:
         self.custom_jvm_args = None
         self.launch_dir = "launcher/"
 
-    def load_launch_config_data(self, data):
+    def load_launch_config_data(self, data: dict):
         if data is None:
             critical_error("No data to read from launch_config.json")
         self.auto_update = data.get("auto_update", self.auto_update)
@@ -50,7 +50,7 @@ class LaunchConfig:
         self.local_version = data.get("local_version", self.local_version)
         self.repo_owner = data.get("repo_owner", self.repo_owner)
         self.repo_name = data.get("repo_name", self.repo_name)
-        self.custom_jvm_args = data.get("custom_jvm_args", self.custom_jvm_args)
+        self.custom_jvm_args = data.get("custom_jvm_args", None)
         if self.custom_jvm_args is not None and self.custom_jvm_args != "":
             info(f"Using custom JVM args: {self.custom_jvm_args}")
 

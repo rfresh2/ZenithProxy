@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 env:
-  UV_PYTHON: '3.14.4'
-  pyinstaller_version: "6.20.0"
+  UV_PYTHON: '3.14.6'
+  pyinstaller_version: "6.21.0"
 
 jobs:
   backup-existing:

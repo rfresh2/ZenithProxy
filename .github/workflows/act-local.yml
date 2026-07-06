@@ -2,7 +2,7 @@ name: ACT-Local GraalVM Native
 
 # Command:
 
-# act workflow_dispatch -W .github\workflows\act-local.yml --artifact-server-path build\artifacts
+# act workflow_dispatch -W .github/workflows/act-local.yml --artifact-server-path build/artifacts
 
 on:
   workflow_dispatch:
