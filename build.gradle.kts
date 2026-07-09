@@ -209,6 +209,7 @@ tasks {
         archiveBaseName = project.name
         archiveClassifier = ""
         archiveVersion = ""
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
         exclude(listOf(
             "module-info.class", "META-INF/licenses/**", "META-INF/maven/**", "META-INF/proguard/**",
