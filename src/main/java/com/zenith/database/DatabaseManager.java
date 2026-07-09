@@ -32,7 +32,7 @@ public class DatabaseManager {
     private RedisClient redisClient;
     private ScheduledFuture<?> databaseTickFuture;
 
-    public void start() {
+    public synchronized void start() {
         try {
             this.queryExecutor = new QueryExecutor(getJdbi());
             if (CONFIG.database.queueWaitEnabled) {
@@ -79,7 +79,7 @@ public class DatabaseManager {
         }
     }
 
-    public void stop() {
+    public synchronized void stop() {
         try {
             if (nonNull(databaseTickFuture)) databaseTickFuture.cancel(false);
             stopQueueWaitDatabase();
