@@ -8,6 +8,7 @@ public class KeepAliveSpectatorHandler implements PacketHandler<ServerboundKeepA
     public static final KeepAliveSpectatorHandler INSTANCE = new KeepAliveSpectatorHandler();
     @Override
     public ServerboundKeepAlivePacket apply(final ServerboundKeepAlivePacket packet, final ServerSession session) {
+        session.setLastKeepAliveResponseTime(System.currentTimeMillis());
         if (packet.getPingId() == session.getLastKeepAliveId()) {
             session.setPing(System.currentTimeMillis() - session.getLastKeepAliveTime());
         }

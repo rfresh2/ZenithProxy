@@ -86,6 +86,9 @@ public class ServerSession extends TcpServerSession {
     protected long ping = 0L;
     protected long lastKeepAliveId = 0L;
     protected long lastKeepAliveTime = 0L;
+    // last time we received a keep alive response from this session
+    // used to detect and disconnect half-open connections, e.g. after a controller's internet outage
+    protected volatile long lastKeepAliveResponseTime = System.currentTimeMillis();
 
     protected boolean whitelistChecked = false;
     protected boolean isPlayer = false;
@@ -290,6 +293,7 @@ public class ServerSession extends TcpServerSession {
 
     public void setLoggedIn() {
         this.isLoggedIn = true;
+        this.lastKeepAliveResponseTime = System.currentTimeMillis();
         if (!Proxy.getInstance().getActiveConnections().contains(this))
             Proxy.getInstance().getActiveConnections().add(this);
     }

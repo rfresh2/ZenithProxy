@@ -10,6 +10,7 @@ public class SPlayerKeepAliveHandler implements PacketHandler<ServerboundKeepAli
     public static final SPlayerKeepAliveHandler INSTANCE = new SPlayerKeepAliveHandler();
     @Override
     public ServerboundKeepAlivePacket apply(final ServerboundKeepAlivePacket packet, final ServerSession session) {
+        session.setLastKeepAliveResponseTime(System.currentTimeMillis());
         if (packet.getPingId() == session.getLastKeepAliveId()) {
             session.setPing(System.currentTimeMillis() - session.getLastKeepAliveTime());
         }
