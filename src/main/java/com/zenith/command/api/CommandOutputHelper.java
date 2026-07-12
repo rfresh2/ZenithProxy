@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.zenith.Globals.DISCORD;
 import static com.zenith.Globals.TERMINAL_LOG;
+import static com.zenith.discord.DiscordBot.escape;
 
 @UtilityClass
 public class CommandOutputHelper {
@@ -26,10 +27,10 @@ public class CommandOutputHelper {
 
     public void logInputToDiscord(String command, CommandSource source, CommandContext ctx) {
         Embed embed = Embed.builder().title(source.name() + " Command Executed")
-            .description(command);
+            .description(escape(command));
         if (source instanceof PlayerCommandSource playerCommandSource) {
             ServerSession executor = ctx.getInGamePlayerInfo().session();
-            embed.footer("Executed by: " + executor.getName(), Proxy.getInstance().getPlayerHeadURL(executor.getUUID()).toString());
+            embed.footer("Executed by: " + escape(executor.getName()), Proxy.getInstance().getPlayerHeadURL(executor.getUUID()).toString());
         }
         DISCORD.sendEmbedMessage(embed);
     }

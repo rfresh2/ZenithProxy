@@ -12,6 +12,7 @@ import java.util.Arrays;
 
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
+import static com.zenith.discord.DiscordBot.escape;
 
 public class ThemeCommand extends Command {
     @Override
@@ -21,9 +22,9 @@ public class ThemeCommand extends Command {
             .category(CommandCategory.MANAGE)
             .description("""
             Changes the color theme of alerts and messages.
-            
+
             Use `theme list` to see available colors.
-            
+
             Where Colors Are Used:
               * Primary: Most embeds and command responses if not an error.
               * Success: General "this worked" responses, server join, and friends
@@ -46,7 +47,7 @@ public class ThemeCommand extends Command {
         return command("theme")
             .then(literal("list").executes(c -> {
                 var allColors = Arrays.stream(ConfigColor.values())
-                    .map(color -> color.name().toLowerCase())
+                    .map(color -> escape(color.name().toLowerCase()))
                     .toList();
                 c.getSource().getEmbed()
                     .title("Available Colors")
@@ -62,7 +63,7 @@ public class ThemeCommand extends Command {
                 } catch (final Throwable e) {
                     c.getSource().getEmbed()
                         .title("Invalid Color!")
-                        .addField("Help", "Use `theme list` to see available colors", false);
+                        .addField("Help", "Use `theme list` to see available colors");
                     return ERROR;
                 }
             })))
@@ -76,7 +77,7 @@ public class ThemeCommand extends Command {
                 } catch (final Throwable e) {
                     c.getSource().getEmbed()
                         .title("Invalid Color!")
-                        .addField("Help", "Use `theme list` to see available colors", false);
+                        .addField("Help", "Use `theme list` to see available colors");
                     return ERROR;
                 }
             })))
@@ -90,7 +91,7 @@ public class ThemeCommand extends Command {
                 } catch (final Throwable e) {
                     c.getSource().getEmbed()
                         .title("Invalid Color!")
-                        .addField("Help", "Use `theme list` to see available colors", false);
+                        .addField("Help", "Use `theme list` to see available colors");
                     return ERROR;
                 }
             })))
@@ -104,7 +105,7 @@ public class ThemeCommand extends Command {
                 } catch (final Throwable e) {
                     c.getSource().getEmbed()
                         .title("Invalid Color!")
-                        .addField("Help", "Use `theme list` to see available colors", false);
+                        .addField("Help", "Use `theme list` to see available colors");
                     return ERROR;
                 }
             })));
@@ -114,9 +115,9 @@ public class ThemeCommand extends Command {
     public void defaultEmbed(Embed embed) {
         embed
             .primaryColor()
-            .addField("Primary", CONFIG.theme.primary.name().toLowerCase(), false)
-            .addField("Success", CONFIG.theme.success.name().toLowerCase(), false)
-            .addField("Error", CONFIG.theme.error.name().toLowerCase(), false)
-            .addField("In Queue", CONFIG.theme.inQueue.name().toLowerCase(), false);
+            .addField("Primary", escape(CONFIG.theme.primary.name().toLowerCase()))
+            .addField("Success", escape(CONFIG.theme.success.name().toLowerCase()))
+            .addField("Error", escape(CONFIG.theme.error.name().toLowerCase()))
+            .addField("In Queue", escape(CONFIG.theme.inQueue.name().toLowerCase()));
     }
 }
