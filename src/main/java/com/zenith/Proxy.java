@@ -160,14 +160,18 @@ public class Proxy {
             MODULE.init();
             this.tcpManager = new TcpConnectionManager();
             if (CONFIG.database.enabled) {
-                EXECUTOR.execute(() -> {
-                    try {
-                        DATABASE.start();
-                        DATABASE_LOG.info("Started Databases");
-                    } catch (final Exception e) {
-                        DATABASE_LOG.error("Failed starting database", e);
-                    }
-                });
+                try {
+                    EXECUTOR.submit(() -> {
+                        try {
+                            DATABASE.start();
+                            DATABASE_LOG.info("Started Databases");
+                        } catch (final Exception e) {
+                            DATABASE_LOG.error("Failed starting database", e);
+                        }
+                    }).get(10L, TimeUnit.SECONDS);
+                } catch (final Exception e) {
+                    DATABASE_LOG.error("Database start timeout", e);
+                }
             }
             if (CONFIG.discord.enable) {
                 try {
