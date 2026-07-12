@@ -9,6 +9,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.Serverbound
 import static com.mojang.brigadier.arguments.StringArgumentType.greedyString;
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.Globals.EVENT_BUS;
+import static com.zenith.discord.DiscordBot.escape;
 import static com.zenith.util.ComponentSerializer.minimessage;
 
 public class SendMessageCommand extends Command {
@@ -48,7 +49,7 @@ public class SendMessageCommand extends Command {
                                   Proxy.getInstance().getClient().sendAsync(new ServerboundChatPacket(message));
                                   c.getSource().getEmbed()
                                       .title("Sent Message!")
-                                      .description(message);
+                                      .description(escape(message));
                               } else {
                                   session.sendAsyncMessage(minimessage("<red>Spectator chat disabled"));
                                   c.getSource().setNoOutput(true);
@@ -58,7 +59,7 @@ public class SendMessageCommand extends Command {
                                   Proxy.getInstance().getClient().sendAsync(new ServerboundChatPacket(message));
                                   c.getSource().getEmbed()
                                       .title("Sent Message!")
-                                      .description(message);
+                                      .description(escape(message));
                               } else {
                                   c.getSource().getEmbed()
                                       .title("Failed to send message");

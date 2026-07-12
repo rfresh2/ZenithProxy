@@ -18,8 +18,8 @@ public abstract class Api {
 
     protected HttpClient buildHttpClient() {
         return HttpClient.newBuilder()
-            .followRedirects(java.net.http.HttpClient.Redirect.ALWAYS)
-            .connectTimeout(Duration.ofSeconds(2))
+            .followRedirects(HttpClient.Redirect.ALWAYS)
+            .connectTimeout(Duration.ofSeconds(3))
             .build();
     }
 
@@ -65,6 +65,6 @@ public abstract class Api {
         return HttpRequest.newBuilder()
             .uri(URI.create(baseUrl + uri))
             .headers("User-Agent", "ZenithProxy/" + VERSION)
-            .timeout(Duration.ofSeconds(15));
+            .timeout(Duration.ofSeconds(12));
     }
 }
