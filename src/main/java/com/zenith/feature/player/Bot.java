@@ -294,7 +294,7 @@ public final class Bot extends ModuleUtils {
             return;
         }
 
-        if (CACHE.getPlayerCache().getThePlayer().isSleeping()) {
+        if (CACHE.getPlayerCache().getThePlayer().isSleeping() && CONFIG.debug.botAutoExitBed) {
             debug("Player sleeping, sending leave bed packet");
             sendClientPacketAwait(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.LEAVE_BED));
             onInteractionTickSkipped();

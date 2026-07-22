@@ -177,7 +177,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                     .build()
             ).addInputExecutedListener(f -> {
                 if (futureSucceeded(f, placeTarget)) {
-                    PATH_LOG.info("Placed block at: [{}, {}, {}] with item: {}", x, y, z, placeItem);
+                    PATH_LOG.info("Placed block at: [{}, {}, {}] with item: {}", x, y, z, placeItem.name());
                     succeeded = true;
                 }
             });

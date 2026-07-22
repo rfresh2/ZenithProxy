@@ -242,7 +242,12 @@ public class DebugCommand extends Command {
                 CONFIG.debug.entityPushing = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Entity Pushing " + toggleStrCaps(CONFIG.debug.entityPushing));
-            })));
+            })))
+            .then(literal("botAutoExitBed").executes(c -> {
+                CONFIG.debug.botAutoExitBed = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Bot Auto Exit Bed " + toggleStrCaps(CONFIG.debug.botAutoExitBed));
+            }));
     }
 
     private static void uploadLog(CommandContext c, String path) {
