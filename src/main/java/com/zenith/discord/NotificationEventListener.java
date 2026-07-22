@@ -49,8 +49,6 @@ import static java.util.Objects.nonNull;
 public class NotificationEventListener {
     public static final NotificationEventListener INSTANCE = new NotificationEventListener();
 
-    private NotificationEventListener() {}
-
     public void subscribeEvents() {
         EVENT_BUS.subscribe(
             this,
@@ -101,7 +99,7 @@ public class NotificationEventListener {
         );
     }
 
-    private void handleScheduledTaskCommandExecutedEvent(TasksCommandExecutedEvent event) {
+    public void handleScheduledTaskCommandExecutedEvent(TasksCommandExecutedEvent event) {
         if (!CONFIG.client.extra.tasks.taskCommandExecutedNotification) return;
         sendEmbedMessage(Embed.builder()
             .title("Scheduled Task Executed")
@@ -117,7 +115,7 @@ public class NotificationEventListener {
         );
     }
 
-    private void handleSessionTimeLimitEvent(SessionTimeLimitWarningEvent event) {
+    public void handleSessionTimeLimitEvent(SessionTimeLimitWarningEvent event) {
         var embed = Embed.builder()
             .title("Session Time Limit Warning")
             .description(event.sessionTimeLimit().toHoursPart() + "h kick in: " + event.durationUntilKick().toMinutes() + "m")
@@ -129,7 +127,7 @@ public class NotificationEventListener {
         }
     }
 
-    private void handleSpawnPatrolTargetKilledEvent(SpawnPatrolTargetKilledEvent event) {
+    public void handleSpawnPatrolTargetKilledEvent(SpawnPatrolTargetKilledEvent event) {
         var embed = Embed.builder()
             .title("Target Killed")
             .addField("Target", "[" + event.profile().getName() + "](https://namemc.com/profile/" + event.profile().getId() + ")", false)
@@ -139,7 +137,7 @@ public class NotificationEventListener {
         sendEmbedMessage(embed);
     }
 
-    private void handleSpawnPatrolTargetAcquiredEvent(SpawnPatrolTargetAcquiredEvent event) {
+    public void handleSpawnPatrolTargetAcquiredEvent(SpawnPatrolTargetAcquiredEvent event) {
         var profile = event.targetProfile();
         var embed = Embed.builder()
             .title("Target Acquired")
@@ -179,7 +177,7 @@ public class NotificationEventListener {
         }
     }
 
-    private void handleClientConfigurationEnteringEvent(ClientConfigurationEvent.Entering event) {
+    public void handleClientConfigurationEnteringEvent(ClientConfigurationEvent.Entering event) {
         if (!CONFIG.client.extra.reconfiguringNotification) return;
         var embedBuilder = Embed.builder()
             .title("Reconfiguring...")
@@ -249,7 +247,7 @@ public class NotificationEventListener {
         EXECUTOR.execute(this::updatePresence);
     }
 
-    private void handleQueueWarning(QueueWarningEvent event) {
+    public void handleQueueWarning(QueueWarningEvent event) {
         sendEmbedMessage((event.mention() ? notificationMention() : ""), Embed.builder()
             .title("Queue Warning")
             .addField("Queue Position", "[" + Queue.queuePositionStr() + "]", false)
@@ -569,7 +567,7 @@ public class NotificationEventListener {
         }
     }
 
-    private void handleBlacklistedPlayerConnectedEvent(BlacklistedPlayerConnectedEvent event) {
+    public void handleBlacklistedPlayerConnectedEvent(BlacklistedPlayerConnectedEvent event) {
         var embed = Embed.builder()
             .title("Blacklisted Player Disconnected")
             .errorColor();
@@ -620,7 +618,7 @@ public class NotificationEventListener {
         sendEmbedMessage(embed);
     }
 
-    private void handleDeathMessageChatEventKillMessage(DeathMessageChatEvent event) {
+    public void handleDeathMessageChatEventKillMessage(DeathMessageChatEvent event) {
         if (!CONFIG.client.extra.killMessage) return;
         event.deathMessage().killer().ifPresent(killer -> {
             if (!killer.name().equals(CONFIG.authentication.username)) return;
@@ -823,7 +821,7 @@ public class NotificationEventListener {
             sendEmbedMessage(embed);
     }
 
-    private void handlePluginLoadFailure(PluginLoadFailureEvent event) {
+    public void handlePluginLoadFailure(PluginLoadFailureEvent event) {
         String id = event.id() != null ? event.id() : "?";
         var embed = Embed.builder()
             .title("Plugin Load Failure")
@@ -834,7 +832,7 @@ public class NotificationEventListener {
         sendEmbedMessage(embed);
     }
 
-    private void handlePluginLoadedEvent(PluginLoadedEvent event) {
+    public void handlePluginLoadedEvent(PluginLoadedEvent event) {
         var embed = Embed.builder()
             .title("Plugin Loaded")
             .successColor()
@@ -858,10 +856,10 @@ public class NotificationEventListener {
     public void sendMessage(final String message) {
         DISCORD.sendMessage(message);
     }
-    void sendEmbedMessageWithButtons(String message, Embed embed, List<Button> buttons, Consumer<ButtonInteractionEvent> mapper, Duration timeout) {
+    public void sendEmbedMessageWithButtons(String message, Embed embed, List<Button> buttons, Consumer<ButtonInteractionEvent> mapper, Duration timeout) {
         DISCORD.sendEmbedMessageWithButtons(message, embed, buttons, mapper, timeout);
     }
-    void sendEmbedMessageWithButtons(Embed embed, List<Button> buttons, Consumer<ButtonInteractionEvent> mapper, Duration timeout) {
+    public void sendEmbedMessageWithButtons(Embed embed, List<Button> buttons, Consumer<ButtonInteractionEvent> mapper, Duration timeout) {
         DISCORD.sendEmbedMessageWithButtons(embed, buttons, mapper, timeout);
     }
     public void updatePresence(final OnlineStatus onlineStatus, final Activity activity) {

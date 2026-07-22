@@ -14,9 +14,9 @@ import java.util.jar.JarFile;
  * Recursively register graalvm native image reflection for all classes under a package prefix
  */
 public abstract class AbstractGraalVMReflectionFeature implements Feature {
-    final List<String> prefixes;
+    public final List<String> prefixes;
 
-    protected AbstractGraalVMReflectionFeature(final List<String> prefixes) {
+    public AbstractGraalVMReflectionFeature(final List<String> prefixes) {
         this.prefixes = prefixes;
     }
 
@@ -37,7 +37,7 @@ public abstract class AbstractGraalVMReflectionFeature implements Feature {
         }
     }
 
-    static void registerReflection(Class<?> clazz) {
+    public void registerReflection(Class<?> clazz) {
         RuntimeReflection.register(clazz);
         RuntimeReflection.register(clazz.getDeclaredConstructors());
         RuntimeReflection.register(clazz.getDeclaredMethods());
@@ -53,7 +53,7 @@ public abstract class AbstractGraalVMReflectionFeature implements Feature {
         }
     }
 
-    private static Set<String> scanClasses(ClassLoader classLoader, String pkg) throws IOException {
+    public Set<String> scanClasses(ClassLoader classLoader, String pkg) throws IOException {
         var classes = new HashSet<String>();
         var packageName = pkg.replace(".", "/");
         var resources = classLoader.getResources(packageName);

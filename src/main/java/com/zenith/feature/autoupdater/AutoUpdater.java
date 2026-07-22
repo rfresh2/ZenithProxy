@@ -27,21 +27,17 @@ public abstract class AutoUpdater {
 
     public void start() {
         if (updateCheckFuture != null) return;
-        if (!EVENT_BUS.isSubscribed(this)) EVENT_BUS.subscribe(this,
-                                                               ClientDisconnectEvent.class, this::handleDisconnectEvent
+        EVENT_BUS.subscribe(this, ClientDisconnectEvent.class, this::handleDisconnectEvent);
+        scheduleUpdateCheck(
+            this::executeUpdateCheck,
+            30 + ThreadLocalRandom.current().nextInt(150),
+            Math.max(CONFIG.autoUpdater.autoUpdateCheckIntervalSeconds, 300),
+            TimeUnit.SECONDS
         );
-        scheduleUpdateCheck(this::executeUpdateCheck,
-                            30 + ThreadLocalRandom.current().nextInt(150),
-                            Math.max(CONFIG.autoUpdater.autoUpdateCheckIntervalSeconds, 300),
-                            TimeUnit.SECONDS);
     }
 
     public void scheduleUpdateCheck(Runnable runnable, long initialDelay, long interval, TimeUnit timeUnit) {
-        updateCheckFuture = EXECUTOR
-            .scheduleWithFixedDelay(runnable,
-                                    initialDelay,
-                                    interval,
-                                    timeUnit);
+        updateCheckFuture = EXECUTOR.scheduleWithFixedDelay(runnable, initialDelay, interval, timeUnit);
     }
 
     public void executeUpdateCheck() {
