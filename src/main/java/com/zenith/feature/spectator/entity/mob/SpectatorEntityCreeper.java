@@ -1,6 +1,7 @@
 package com.zenith.feature.spectator.entity.mob;
 
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.mc.entity.EntityRegistry;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
@@ -23,17 +24,17 @@ public class SpectatorEntityCreeper extends SpectatorMob {
 
     @Override
     public double getEyeHeight() {
-        return 1.445;
+        return EntityRegistry.CREEPER.eyeHeight();
     }
 
     @Override
     public double getHeight() {
-        return 1.7;
+        return EntityRegistry.CREEPER.height();
     }
 
     @Override
     public double getWidth() {
-        return 0.6;
+        return EntityRegistry.CREEPER.width();
     }
 
     @Override

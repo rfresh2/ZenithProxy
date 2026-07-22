@@ -1,6 +1,7 @@
 package com.zenith.feature.spectator.entity.mob;
 
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.mc.entity.EntityRegistry;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
@@ -18,17 +19,17 @@ public class SpectatorEntityAllay extends SpectatorMob {
 
     @Override
     public double getEyeHeight() {
-        return 0.36;
+        return EntityRegistry.ALLAY.eyeHeight();
     }
 
     @Override
     public double getHeight() {
-        return 0.6;
+        return EntityRegistry.ALLAY.height();
     }
 
     @Override
     public double getWidth() {
-        return 0.6;
+        return EntityRegistry.ALLAY.width();
     }
 
     @Override
