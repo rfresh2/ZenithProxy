@@ -1,6 +1,7 @@
 package com.zenith.feature.spectator.entity.mob;
 
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.mc.entity.EntityRegistry;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
@@ -31,12 +32,12 @@ public class SpectatorEntityEndCrystal extends SpectatorMob {
 
     @Override
     public double getHeight() {
-        return 2;
+        return EntityRegistry.END_CRYSTAL.height();
     }
 
     @Override
     public double getWidth() {
-        return 2;
+        return EntityRegistry.END_CRYSTAL.width();
     }
 
     @Override

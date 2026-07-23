@@ -1,6 +1,7 @@
 package com.zenith.feature.spectator.entity.mob;
 
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.mc.entity.EntityRegistry;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
@@ -32,12 +33,12 @@ public class SpectatorEntityEnderDragon extends SpectatorMob {
 
     @Override
     public double getHeight() {
-        return 8.0;
+        return EntityRegistry.ENDER_DRAGON.height();
     }
 
     @Override
     public double getWidth() {
-        return 16;
+        return EntityRegistry.ENDER_DRAGON.width();
     }
 
     @Override

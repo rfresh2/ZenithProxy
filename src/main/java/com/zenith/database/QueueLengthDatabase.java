@@ -42,6 +42,7 @@ public class QueueLengthDatabase extends LockingDatabase {
     }
 
     public void handleTickEvent(final DatabaseTickEvent event) {
+        if (Queue.lastQueueLengthUpdateMethod() != Queue.QueueLengthUpdateMethod.PING) return;
         var queueStatus = Queue.getQueueStatus();
         this.insert(Instant.now(), handle ->
             handle.createUpdate("INSERT INTO queuelength (time, regular, prio) VALUES (:time, :regular, :prio)")

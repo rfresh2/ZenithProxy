@@ -25,6 +25,10 @@ public class Queue {
     private static QueueEtaEquationResponse queueEtaEquation = new QueueEtaEquationResponse(199.0, 0.840);
     private static Instant lastQueueEtaEquationUpdate = Instant.EPOCH;
     private static Instant lastQueueApiUpdate = Instant.EPOCH;
+    public enum QueueLengthUpdateMethod {
+        PING, API
+    }
+    private volatile static QueueLengthUpdateMethod lastQueueLengthUpdateMethod = QueueLengthUpdateMethod.PING;
 
     public static void start() {
         EXECUTOR.scheduleAtFixedRate(
@@ -45,6 +49,10 @@ public class Queue {
             updateQueueStatusNow();
         }
         return queueStatus;
+    }
+
+    public static QueueLengthUpdateMethod lastQueueLengthUpdateMethod() {
+        return lastQueueLengthUpdateMethod;
     }
 
     public static void updateQueueStatus() {
@@ -110,6 +118,7 @@ public class Queue {
             final int regular = Integer.parseInt(regularQMatcher.group());
             final int prio = Integer.parseInt(prioQMatcher.group());
             queueStatus = new QueueStatus(prio, regular, ZonedDateTime.now().toEpochSecond());
+            lastQueueLengthUpdateMethod = QueueLengthUpdateMethod.PING;
             return true;
         } catch (final Exception e) {
             SERVER_LOG.debug("Failed updating queue with ping. 2b2t is likely offline", e);
@@ -123,6 +132,7 @@ public class Queue {
         try {
             var response = VcApi.INSTANCE.getQueue().orElseThrow();
             queueStatus = new QueueStatus(response.prio(), response.regular(), response.time().toEpochSecond());
+            lastQueueLengthUpdateMethod = QueueLengthUpdateMethod.API;
             return true;
         } catch (final Exception e) {
             SERVER_LOG.debug("Failed updating queue status from API", e);
@@ -150,9 +160,10 @@ public class Queue {
     }
 
     public static String queuePositionStr() {
-        if (Proxy.getInstance().isPrio())
+        if (Proxy.getInstance().isPrio()) {
             return Proxy.getInstance().getQueuePosition() + " / " + getQueueStatus().prio() + " - ETA: " + getQueueEta(Proxy.getInstance().getQueuePosition());
-        else
+        } else {
             return Proxy.getInstance().getQueuePosition() + " / " + getQueueStatus().regular() + " - ETA: " + getQueueEta(Proxy.getInstance().getQueuePosition());
+        }
     }
 }

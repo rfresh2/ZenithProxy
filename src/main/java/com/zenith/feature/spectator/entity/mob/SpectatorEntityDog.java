@@ -1,6 +1,7 @@
 package com.zenith.feature.spectator.entity.mob;
 
 import com.zenith.cache.data.PlayerCache;
+import com.zenith.mc.entity.EntityRegistry;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
@@ -28,17 +29,17 @@ public class SpectatorEntityDog extends SpectatorMob {
 
     @Override
     public double getEyeHeight() {
-        return 0.68;
+        return EntityRegistry.WOLF.eyeHeight();
     }
 
     @Override
     public double getHeight() {
-        return 0.85;
+        return EntityRegistry.WOLF.height();
     }
 
     @Override
     public double getWidth() {
-        return 0.6;
+        return EntityRegistry.WOLF.width();
     }
 
     @Override

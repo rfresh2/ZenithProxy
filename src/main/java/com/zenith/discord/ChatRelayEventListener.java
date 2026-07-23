@@ -39,8 +39,6 @@ import static java.util.Objects.isNull;
 public class ChatRelayEventListener {
     public static final ChatRelayEventListener INSTANCE = new ChatRelayEventListener();
 
-    private ChatRelayEventListener() {}
-
     public void subscribeEvents() {
         EVENT_BUS.subscribe(
             this,
@@ -55,7 +53,7 @@ public class ChatRelayEventListener {
         );
     }
 
-    private void handleRelayInputMessage(DiscordRelayChannelMessageReceivedEvent event) {
+    void handleRelayInputMessage(DiscordRelayChannelMessageReceivedEvent event) {
         if (!CONFIG.discord.chatRelay.enable) return;
         if (!CONFIG.discord.chatRelay.sendMessages) return;
         if (!Proxy.getInstance().isConnected() || event.message().isEmpty()) return;
@@ -101,7 +99,7 @@ public class ChatRelayEventListener {
         DISCORD.lastRelayMessage = Optional.of(Instant.now());
     }
 
-    private String extractRelayEmbedSenderUsername(@Nullable final Color color, final String msgContent) {
+    String extractRelayEmbedSenderUsername(@Nullable final Color color, final String msgContent) {
         final String sender;
         if (color != null && color.equals(Color.MAGENTA)) {
             // extract whisper sender
@@ -116,7 +114,7 @@ public class ChatRelayEventListener {
         return sender;
     }
 
-    private void handleWhisperChatEvent(WhisperChatEvent event) {
+    void handleWhisperChatEvent(WhisperChatEvent event) {
         if (!CONFIG.discord.chatRelay.whispers) return;
         if (!CONFIG.discord.chatRelay.enable || CONFIG.discord.chatRelay.channelId.isEmpty()) return;
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
@@ -154,7 +152,7 @@ public class ChatRelayEventListener {
         }
     }
 
-    private void handleSystemChatEvent(SystemChatEvent event) {
+    void handleSystemChatEvent(SystemChatEvent event) {
         if (!CONFIG.discord.chatRelay.serverMessages) return;
         if (!CONFIG.discord.chatRelay.enable || CONFIG.discord.chatRelay.channelId.isEmpty()) return;
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
@@ -172,7 +170,7 @@ public class ChatRelayEventListener {
         }
     }
 
-    private void handlePublicChatEvent(PublicChatEvent event) {
+    void handlePublicChatEvent(PublicChatEvent event) {
         if (!CONFIG.discord.chatRelay.publicChats) return;
         if (!CONFIG.discord.chatRelay.enable || CONFIG.discord.chatRelay.channelId.isEmpty()) return;
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
@@ -208,7 +206,7 @@ public class ChatRelayEventListener {
 
     private static final Color PRIVATE_MESSAGE_EMBED_COLOR = Color.RED;
 
-    private void handlePrivateMessageSendEvent(final PrivateMessageSendEvent event) {
+    void handlePrivateMessageSendEvent(final PrivateMessageSendEvent event) {
         var embed = Embed.builder()
             .description("**" + escape(event.getSenderName()) + "**: " + escape(event.getStringContents()))
             .color(PRIVATE_MESSAGE_EMBED_COLOR);
@@ -220,7 +218,7 @@ public class ChatRelayEventListener {
         sendRelayEmbedMessage(embed);
     }
 
-    private void handleDeathMessageChatEvent(DeathMessageChatEvent event) {
+    void handleDeathMessageChatEvent(DeathMessageChatEvent event) {
         if (!CONFIG.discord.chatRelay.deathMessages) return;
         if (!CONFIG.discord.chatRelay.enable || CONFIG.discord.chatRelay.channelId.isEmpty()) return;
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
@@ -247,7 +245,7 @@ public class ChatRelayEventListener {
         }
     }
 
-    private void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
+    void handleServerPlayerConnectedEvent(ServerPlayerConnectedEvent event) {
         if (!CONFIG.discord.chatRelay.enable || !CONFIG.discord.chatRelay.connectionMessages || CONFIG.discord.chatRelay.channelId.isEmpty()) return;
         if (!Proxy.getInstance().isOnlineForAtLeastDuration(Duration.ofSeconds(3))) return;
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
@@ -257,7 +255,7 @@ public class ChatRelayEventListener {
             .footer("\u200b", Proxy.getInstance().getPlayerHeadURL(event.playerEntry().getProfileId()).toString()));
     }
 
-    private void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
+    void handleServerPlayerDisconnectedEvent(ServerPlayerDisconnectedEvent event) {
         if (!CONFIG.discord.chatRelay.enable || !CONFIG.discord.chatRelay.connectionMessages || CONFIG.discord.chatRelay.channelId.isEmpty()) return;
         if (!Proxy.getInstance().isOnlineForAtLeastDuration(Duration.ofSeconds(3))) return;
         if (CONFIG.discord.chatRelay.ignoreQueue && Proxy.getInstance().isInQueue()) return;
@@ -271,7 +269,7 @@ public class ChatRelayEventListener {
         .expireAfterAccess(Duration.ofMinutes(1))
         .build();
 
-    private boolean ignoreRegexFilter(String contents) {
+    boolean ignoreRegexFilter(String contents) {
         for (int i = 0; i < CONFIG.discord.chatRelay.ignoreRegex.size(); i++) {
             var regex = CONFIG.discord.chatRelay.ignoreRegex.get(i);
             Pattern pattern;
@@ -290,7 +288,7 @@ public class ChatRelayEventListener {
         return false;
     }
 
-    private void sendPrivateMessage(String message, MessageReceivedEvent event) {
+    void sendPrivateMessage(String message, MessageReceivedEvent event) {
         EVENT_BUS.postAsync(new PrivateMessageSendEvent(
             event.getMessage().getAuthor().getName(),
             message));

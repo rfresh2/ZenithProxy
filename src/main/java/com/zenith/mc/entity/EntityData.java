@@ -9,6 +9,7 @@ public record EntityData(
     String name,
     float width,
     float height,
+    float eyeHeight,
     boolean attackable,
     boolean pickable,
     boolean livingEntity,

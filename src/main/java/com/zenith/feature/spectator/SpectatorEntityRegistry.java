@@ -16,7 +16,7 @@ public final class SpectatorEntityRegistry {
 
     private SpectatorEntityRegistry() {}
 
-    static final Map<String, SpectatorEntity> spectatorEntityMap = new ConcurrentHashMap<>();
+    public static final Map<String, SpectatorEntity> spectatorEntityMap = new ConcurrentHashMap<>();
 
     static {
         spectatorEntityMap.put("cat", new SpectatorEntityCat());

@@ -291,7 +291,7 @@ public final class Bot extends ModuleUtils {
             return;
         }
 
-        if (CACHE.getPlayerCache().getThePlayer().isSleeping()) {
+        if (CACHE.getPlayerCache().getThePlayer().isSleeping() && CONFIG.debug.botAutoExitBed) {
             debug("Player sleeping, sending leave bed packet");
             sendClientPacketAwait(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.LEAVE_BED));
             onInteractionTickSkipped();
@@ -1409,9 +1409,13 @@ public final class Bot extends ModuleUtils {
                     var fluidState = World.getFluidState(blockState.id());
                     if (fluidState == null) continue;
                     if (waterFluid) {
-                        if (!World.isWater(blockState.block())) continue;
+                        if (!fluidState.water()) {
+                            continue;
+                        }
                     } else {
-                        if (blockState.block() != BlockRegistry.LAVA) continue;
+                        if (!fluidState.lava()) {
+                            continue;
+                        }
                     }
                     float fluidHeight = World.getFluidHeight(fluidState, x, y, z);
                     if (fluidHeight == 0 || (fluidHeightToWorld = y + fluidHeight) < playerCollisionBox.minY() + 0.001) continue;
