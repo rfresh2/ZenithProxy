@@ -16,7 +16,7 @@
 
 ### Setup Guides
 
-* [DigitalOcean VPS + $200 free credits + auto setup script](DigitalOcean-Setup-Guide.md)
+* [DigitalOcean VPS + $5 free credits + auto setup script](DigitalOcean-Setup-Guide.md)
 * [Windows](Windows-Python-Launcher-Guide.md)
 
 ### Downloads

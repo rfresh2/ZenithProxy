@@ -18,7 +18,7 @@ One-click instance creation with a web interface for setting up and managing Zen
 
 [Setup guide](DigitalOcean-Setup-Guide.md)
 
-60-day trial with $200 free credits.
+90-day trial with $5 free credits.
 
 ### Oracle Cloud
 
