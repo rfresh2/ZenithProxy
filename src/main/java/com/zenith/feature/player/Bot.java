@@ -6,6 +6,7 @@ import com.zenith.Proxy;
 import com.zenith.cache.data.entity.EntityLiving;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.cache.data.inventory.Container;
+import com.zenith.event.client.BotPrePhysicsTick;
 import com.zenith.event.client.ClientBotTick;
 import com.zenith.event.client.ClientTickEvent;
 import com.zenith.feature.spectator.SpectatorSync;
@@ -374,6 +375,12 @@ public final class Bot extends ModuleUtils {
         if (movementInput.jumping && !didUpdateFlyState && !wasJumpPressed && !onClimbable() && tryToStartFallFlying()) {
             sendClientPacketAsync(new ServerboundPlayerCommandPacket(CACHE.getPlayerCache().getEntityId(), PlayerState.START_ELYTRA_FLYING));
         }
+        // Extension point for plugins: the server's latest entity metadata for this tick (fall-flying included)
+        // has just been applied above via updateFallFlying(), but the physics/movement step below hasn't run yet.
+        // Plugins implementing their own movement/flight logic can hook this to adjust tick-local physics-affecting
+        // state (e.g. via setFallFlying) at the one point in the tick where doing so stays consistent with what
+        // the server will confirm next, instead of racing the next metadata sync.
+        EVENT_BUS.post(BotPrePhysicsTick.INSTANCE);
         if (isFlying) {
             int verticalDirection = 0;
             if (this.movementInput.isSneaking()) {
@@ -1743,6 +1750,16 @@ public final class Bot extends ModuleUtils {
             return true;
         } else {
             return false;
+        }
+    }
+
+    // Public entry point for plugins (e.g. via a BotPrePhysicsTick subscriber) to set local fall-flying state
+    // directly, without going through tryToStartFallFlying()'s canGlide() gating.
+    public void setFallFlying(boolean value) {
+        if (value) {
+            startFallFlying();
+        } else {
+            stopFallFlying();
         }
     }
 
