@@ -59,6 +59,20 @@ And infinite Free Tier with 1 `e2-micro` instance
     Edit the network attached to your VM and add a firewall rule that allows all inbound traffic:
     ![](./_assets/img/hosting-providers/google-cloud-firewall-rule.png)
 
+
+### Azure
+
+https://azure.microsoft.com/en-us/pricing/purchase-options/azure-account
+
+30-day trial of $200 credits, and 12 month free tier with 1 ARM and 1 x64 linux VM.
+
+
+### Alibaba
+
+https://www.alibabacloud.com/en/free
+
+90-day free trial with $90 credit.
+
 ## Paid-only Providers
 
 ### OVH
