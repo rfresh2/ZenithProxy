@@ -5,6 +5,7 @@
 
 ## Select OS and Specs
 Select New York (any datacenter) for lowest ping to 2b2t and best connection reliability
+
 ![Select OS and Specs](./_assets/img/digitalocean-setup/DigitalOcean-Setup-Guide-2.png)
 
 ![OS and Plan Settings](./_assets/img/digitalocean-setup/DigitalOcean-Setup-Guide-3.png)
