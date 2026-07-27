@@ -931,6 +931,7 @@ public final class Config {
         public boolean manageDescription = true;
         public boolean managePresence = true;
         public boolean showNonWhitelistLoginIP = true;
+        public int maxQueuedRequestsPerBucket = 100;
         public boolean isUpdating = false; // internal use for update command state persistence
         public final ChatRelay chatRelay = new ChatRelay();
 
