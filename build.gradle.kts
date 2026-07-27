@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "1.1.5"
+    id("org.graalvm.buildtools.native") version "1.1.6"
     id("com.gradleup.shadow") version "9.6.1"
     id("io.freefair.lombok") version "9.5.0"
     `maven-publish`
@@ -83,7 +83,7 @@ dependencies {
     api("org.postgresql:postgresql:42.7.13")
     api("org.jdbi:jdbi3-postgres:3.54.0")
     api("com.google.guava:guava:33.6.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.38")
+    api("ch.qos.logback:logback-classic:1.6.0")
     api("org.slf4j:slf4j-api:2.0.18")
     api("org.slf4j:jul-to-slf4j:2.0.18")
     api("com.mojang:brigadier:1.3.10")
