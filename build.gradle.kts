@@ -243,6 +243,22 @@ tasks {
 
 graalvmNative {
     binaries {
+        // additional config in: `src/main/resources/META-INF/native-image/com.zenith/zenithproxy/native-image.properties
+        val graalvmBuildArgs = listOf(
+            "-H:DeadlockWatchdogInterval=30",
+            "-H:+CompactingOldGen",
+            "-H:+TrackPrimitiveValues",
+            "-H:+TreatAllTypeReachableConditionsAsTypeReached",
+            "-H:+UsePredicates",
+            "-H:-ReduceImplicitExceptionStackTraceInformation",
+            "--future-defaults=all",
+            "-R:MaxHeapSize=225m",
+            "-march=x86-64-v3",
+            "--gc=serial",
+            "-J-XX:MaxRAMPercentage=90",
+//          "--enable-monitoring=nmt,jfr",
+//          "-H:+PrintClassInitialization"
+        )
         named("main") {
             javaLauncher = graalVMJavaLauncher
             imageName = "ZenithProxy"
@@ -250,24 +266,10 @@ graalvmNative {
             quickBuild = false
             verbose = true
             sharedLibrary = false
-            // additional config in: `src/main/resources/META-INF/native-image/com.zenith/zenithproxy/native-image.properties
-            buildArgs.addAll(
-                "-H:DeadlockWatchdogInterval=30",
-                "-H:+CompactingOldGen",
-                "-H:+TrackPrimitiveValues",
-                "-H:+TreatAllTypeReachableConditionsAsTypeReached",
-                "-H:+UsePredicates",
-                "--future-defaults=all",
-                "-R:MaxHeapSize=225m",
-                "-march=x86-64-v3",
-                "--gc=serial",
-                "-J-XX:MaxRAMPercentage=90",
-//                "--enable-monitoring=nmt,jfr",
-//                "-H:+PrintClassInitialization"
-            )
+            buildArgs.addAll(graalvmBuildArgs)
             val pgoPath = providers.environmentVariable("GRAALVM_PGO_PATH").orNull
-			val pgoInstrument = providers.environmentVariable("GRAALVM_PGO_INSTRUMENT").orNull
-			val trace = providers.environmentVariable("GRAALVM_NATIVE_IMAGE_TRACE").orNull
+            val pgoInstrument = providers.environmentVariable("GRAALVM_PGO_INSTRUMENT").orNull
+            val trace = providers.environmentVariable("GRAALVM_NATIVE_IMAGE_TRACE").orNull
             val buildReport = providers.environmentVariable("GRAALVM_BUILD_REPORT").orNull
             if (pgoPath != null) {
                 println("Using PGO profile: $pgoPath")
@@ -279,9 +281,9 @@ graalvmNative {
                     buildArgs.add("--pgo-instrument")
                     buildArgs.add("-R:ProfilesDumpFile=profile.iprof")
                 } else if (trace != null) {
-					println("Enabling tracing agent")
-					buildArgs.add("-H:Preserve=all")
-				}
+                    println("Enabling tracing agent")
+                    buildArgs.add("-H:Preserve=all")
+                }
             }
             if (buildReport != null) {
                 buildArgs.add("--emit build-report")
@@ -293,19 +295,7 @@ graalvmNative {
             quickBuild = true
             verbose = true
             debug = true
-            // additional config in: `src/main/resources/META-INF/native-image/com.zenith/zenithproxy/native-image.properties
-            buildArgs.addAll(
-                "-H:DeadlockWatchdogInterval=30",
-                "-H:+CompactingOldGen",
-                "-H:+TrackPrimitiveValues",
-                "-H:+TreatAllTypeReachableConditionsAsTypeReached",
-                "-H:+UsePredicates",
-                "--future-defaults=all",
-                "-R:MaxHeapSize=225m",
-                "-march=x86-64-v3",
-                "--gc=serial",
-                "-J-XX:MaxRAMPercentage=90",
-            )
+            buildArgs.addAll(graalvmBuildArgs)
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
     }
