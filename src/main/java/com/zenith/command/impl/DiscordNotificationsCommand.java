@@ -43,7 +43,8 @@ public class DiscordNotificationsCommand extends Command {
                 "spectatorConnect mention on/off",
                 "spectatorDisconnect mention on/off",
                 "nonWhitelistedConnect mention on/off",
-                "mcVersionMismatchWarning on/off"
+                "mcVersionMismatchWarning on/off",
+                "prio mention on/off"
             )
             .aliases(
                 "alerts",
@@ -152,6 +153,11 @@ public class DiscordNotificationsCommand extends Command {
                     .title("Non Whitelisted Connect Mention " + toggleStrCaps(CONFIG.discord.mentionOnNonWhitelistedClientConnected));
                 return OK;
             }))))
+            .then(literal("prio").then(literal("mention").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.discord.mentionRoleOnPrioUpdate = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Prio Mention " + toggleStrCaps(CONFIG.discord.mentionRoleOnPrioUpdate));
+            }))))
             .then(literal("mcVersionMismatchWarning").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.discord.mcVersionMismatchWarning = getToggle(c, "toggle");
                 c.getSource().getEmbed()
@@ -166,20 +172,21 @@ public class DiscordNotificationsCommand extends Command {
             .primaryColor()
             .addField("Notification Role", CONFIG.discord.notificationMentionRoleId.isEmpty()
                 ? getRoleMention(CONFIG.discord.accountOwnerRoleId) + " (Manager)"
-                : getRoleMention(CONFIG.discord.notificationMentionRoleId), false)
-            .addField("Connect Mention", toggleStr(CONFIG.discord.mentionRoleOnConnect), false)
-            .addField("Online Mention", toggleStr(CONFIG.discord.mentionRoleOnPlayerOnline), false)
-            .addField("Disconnect Mention", toggleStr(CONFIG.discord.mentionRoleOnDisconnect), false)
-            .addField("Start Queue Mention", toggleStr(CONFIG.discord.mentionRoleOnStartQueue), false)
-            .addField("Death Mention", toggleStr(CONFIG.discord.mentionRoleOnDeath), false)
-            .addField("Server Restart Mention", toggleStr(CONFIG.discord.mentionRoleOnServerRestart), false)
-            .addField("Login Failed Mention", toggleStr(CONFIG.discord.mentionRoleOnLoginFailed), false)
-            .addField("Client Connect Mention", toggleStr(CONFIG.discord.mentionOnClientConnected), false)
-            .addField("Client Disconnect Mention", toggleStr(CONFIG.discord.mentionOnClientDisconnected), false)
-            .addField("Spectator Connect Mention", toggleStr(CONFIG.discord.mentionOnSpectatorConnected), false)
-            .addField("Spectator Disconnect Mention", toggleStr(CONFIG.discord.mentionOnSpectatorDisconnected), false)
-            .addField("Non Whitelisted Connect Mention", toggleStr(CONFIG.discord.mentionOnNonWhitelistedClientConnected), false)
-            .addField("MC Version Mismatch Warning", toggleStr(CONFIG.discord.mcVersionMismatchWarning), false);
+                : getRoleMention(CONFIG.discord.notificationMentionRoleId))
+            .addField("Connect Mention", toggleStr(CONFIG.discord.mentionRoleOnConnect))
+            .addField("Online Mention", toggleStr(CONFIG.discord.mentionRoleOnPlayerOnline))
+            .addField("Disconnect Mention", toggleStr(CONFIG.discord.mentionRoleOnDisconnect))
+            .addField("Start Queue Mention", toggleStr(CONFIG.discord.mentionRoleOnStartQueue))
+            .addField("Death Mention", toggleStr(CONFIG.discord.mentionRoleOnDeath))
+            .addField("Server Restart Mention", toggleStr(CONFIG.discord.mentionRoleOnServerRestart))
+            .addField("Login Failed Mention", toggleStr(CONFIG.discord.mentionRoleOnLoginFailed))
+            .addField("Client Connect Mention", toggleStr(CONFIG.discord.mentionOnClientConnected))
+            .addField("Client Disconnect Mention", toggleStr(CONFIG.discord.mentionOnClientDisconnected))
+            .addField("Spectator Connect Mention", toggleStr(CONFIG.discord.mentionOnSpectatorConnected))
+            .addField("Spectator Disconnect Mention", toggleStr(CONFIG.discord.mentionOnSpectatorDisconnected))
+            .addField("Non Whitelisted Connect Mention", toggleStr(CONFIG.discord.mentionOnNonWhitelistedClientConnected))
+            .addField("Prio Mention", toggleStr(CONFIG.discord.mentionRoleOnPrioUpdate))
+            .addField("MC Version Mismatch Warning", toggleStr(CONFIG.discord.mcVersionMismatchWarning));
     }
 
     private String getRoleMention(final String roleId) {
