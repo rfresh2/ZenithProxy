@@ -561,7 +561,7 @@ The default `-Xmx` used by the launcher depends on the `java` or `linux` release
 
 * `java`: 300M
 
-* `linux`: 200M
+* `linux`: 225M
 
 
 
