@@ -30,6 +30,7 @@ public class ConnectCommand extends Command {
                         .title("Already Connected!");
             } else {
                 EXECUTOR.execute(Proxy.getInstance()::connectAndCatchExceptions);
+                c.getSource().setNoOutput(true);
             }
         });
     }

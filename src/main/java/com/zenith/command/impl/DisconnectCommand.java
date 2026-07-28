@@ -44,6 +44,7 @@ public class DisconnectCommand extends Command {
                 try {
                     Proxy.getInstance().disconnect();
                     MODULE.get(AutoReconnect.class).cancelAutoReconnect();
+                    c.getSource().setNoOutput(true);
                 } catch (final Exception e) {
                     DISCORD_LOG.error("Failed to disconnect", e);
                     c.getSource().getEmbed()
