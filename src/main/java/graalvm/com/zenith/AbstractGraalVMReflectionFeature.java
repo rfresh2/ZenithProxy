@@ -4,7 +4,6 @@ import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
 import java.io.IOException;
-import java.net.URLDecoder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -60,9 +59,9 @@ public abstract class AbstractGraalVMReflectionFeature implements Feature {
         while (resources.hasMoreElements()) {
             var packageURL = resources.nextElement();
             if (!packageURL.getProtocol().equals("jar")) continue;
-            var jarFileName = URLDecoder.decode(packageURL.getFile(), "UTF-8");
-            jarFileName = jarFileName.substring(5, jarFileName.indexOf("!"));
-            try (var jf = new JarFile(jarFileName)) {
+            var jarFilePath = packageURL.getFile();
+            jarFilePath = jarFilePath.substring(5, jarFilePath.indexOf("!"));
+            try (var jf = new JarFile(jarFilePath)) {
                 var jarEntries = jf.entries();
                 while (jarEntries.hasMoreElements()) {
                     var entryName = jarEntries.nextElement().getName();
