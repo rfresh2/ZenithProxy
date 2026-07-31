@@ -85,6 +85,7 @@ public final class Bot extends ModuleUtils {
     );
     @Getter private boolean isSneaking;
     private boolean wasSneaking;
+    private boolean isSlowMovement;
     @Getter private boolean isSprinting;
     private boolean lastSprinting;
     private boolean isFlying;
@@ -328,10 +329,16 @@ public final class Bot extends ModuleUtils {
 
         updateFallFlying();
 
-        isSneaking = !isFlying
+        isSlowMovement = !isFlying
+            && !isSwimming
             && !CACHE.getPlayerCache().getThePlayer().isInVehicle()
             && canPlayerFitWithinBlocksAndEntitiesWhen(getCollisionBox(Pose.SNEAKING))
-            && (movementInput.sneaking || !CACHE.getPlayerCache().getThePlayer().isSleeping() && !canPlayerFitWithinBlocksAndEntitiesWhen(getCollisionBox(Pose.STANDING)));
+            && (wasSneaking || !CACHE.getPlayerCache().getThePlayer().isSleeping() && !canPlayerFitWithinBlocksAndEntitiesWhen(getCollisionBox(Pose.STANDING)))
+            || ((pose == Pose.SWIMMING || (!isFallFlying && pose == Pose.FALL_FLYING)) && !isTouchingWater);
+        if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
+            isSlowMovement = false;
+        }
+        isSneaking = movementInput.sneaking;
         isSprinting = movementInput.sprinting
             && (lastSprinting || isOnGround())
             && (lastSprinting || !CACHE.getPlayerCache().getThePlayer().getPotionEffectMap().containsKey(Effect.BLINDNESS))
@@ -623,12 +630,12 @@ public final class Bot extends ModuleUtils {
 //            this.input.forwardImpulse *= 0.2F;
 //            this.sprintTriggerTime = 0;
 //        }
-        if (movementInput.sneaking) strafe *= sneakSpeed;
+        if (isSlowMovement) strafe *= sneakSpeed;
         strafe = strafe * 0.98f;
         float fwd = 0.0F;
         if (movementInput.pressingForward) ++fwd;
         if (movementInput.pressingBack) --fwd;
-        if (movementInput.sneaking) fwd *= sneakSpeed;
+        if (isSlowMovement) fwd *= sneakSpeed;
         fwd = fwd * 0.98f;
         return new MutableVec3d(strafe, 0, fwd);
     }
@@ -1343,10 +1350,10 @@ public final class Bot extends ModuleUtils {
         this.supportingBlockPos = Optional.empty();
         this.onGroundNoBlocks = false;
         if (full) {
-            this.isSneaking = this.wasSneaking = false;
+            this.isSneaking = this.wasSneaking = isSlowMovement = false;
             this.isSprinting = this.lastSprinting = false;
         } else {
-            this.isSneaking = this.wasSneaking = CACHE.getPlayerCache().isSneaking();
+            this.isSneaking = this.wasSneaking = isSlowMovement = CACHE.getPlayerCache().isSneaking();
             this.isSprinting = this.lastSprinting = CACHE.getPlayerCache().isSprinting();
         }
         this.isSwimming = CACHE.getPlayerCache().getThePlayer().isSwimming();

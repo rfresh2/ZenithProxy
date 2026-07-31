@@ -10,6 +10,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.level.particle.ParticleType
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundLevelParticlesPacket;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.zenith.Globals.*;
@@ -66,9 +67,11 @@ public class IngamePathRenderer {
     }
 
     private List<ClientboundLevelParticlesPacket> buildPathPacketsDetailed(List<BlockPos> path, int pathPosition) {
+        if (path.isEmpty()) return Collections.emptyList();
+        if (pathPosition >= path.size()) return Collections.emptyList();
         var middlePosParticle = new Particle(ParticleType.SOUL_FIRE_FLAME, null);
         var lineParticle = new Particle(ParticleType.SMALL_FLAME, null);
-        List<ClientboundLevelParticlesPacket> packets = new ArrayList<>(path.size() - pathPosition);
+        List<ClientboundLevelParticlesPacket> packets = new ArrayList<>(Math.max(1, path.size() - pathPosition));
         BlockPos prevPos = path.get(pathPosition);
         packets.add(new ClientboundLevelParticlesPacket(
             middlePosParticle, true, true,

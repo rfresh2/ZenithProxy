@@ -561,7 +561,7 @@ The default `-Xmx` used by the launcher depends on the `java` or `linux` release
 
 * `java`: 300M
 
-* `linux`: 200M
+* `linux`: 225M
 
 
 
@@ -960,6 +960,8 @@ Configures various discord notifications regarding player and proxy connections,
 
   ```discordNotifications mcVersionMismatchWarning on/off```
 
+  ```discordNotifications prio mention on/off```
+
 
 ### inventory
 
@@ -1084,15 +1086,6 @@ Gets the playtime of a player on 2b2t using https://api.2b2t.vc/
 **Usage**
 
   ```playtime <playerName>```
-
-
-### prio
-
-Configure alerts for 2b2t priority queue status
-
-**Usage**
-
-  ```prio mentions on/off```
 
 
 ### queueStatus

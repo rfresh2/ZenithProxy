@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "1.1.5"
+    id("org.graalvm.buildtools.native") version "1.1.6"
     id("com.gradleup.shadow") version "9.6.1"
     id("io.freefair.lombok") version "9.5.0"
     `maven-publish`
@@ -32,9 +32,9 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "26.2.0.6"
+val mcplVersion = "26.2.0.7"
 dependencies {
-    api("com.github.rfresh2:JDA:6.5.33") {
+    api("com.github.rfresh2:JDA:6.5.34") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -83,7 +83,7 @@ dependencies {
     api("org.postgresql:postgresql:42.7.13")
     api("org.jdbi:jdbi3-postgres:3.54.0")
     api("com.google.guava:guava:33.6.0-jre")
-    api("ch.qos.logback:logback-classic:1.5.38")
+    api("ch.qos.logback:logback-classic:1.6.0")
     api("org.slf4j:slf4j-api:2.0.18")
     api("org.slf4j:jul-to-slf4j:2.0.18")
     api("com.mojang:brigadier:1.3.10")
@@ -243,6 +243,22 @@ tasks {
 
 graalvmNative {
     binaries {
+        // additional config in: `src/main/resources/META-INF/native-image/com.zenith/zenithproxy/native-image.properties
+        val graalvmBuildArgs = listOf(
+            "-H:DeadlockWatchdogInterval=30",
+            "-H:+CompactingOldGen",
+            "-H:+TrackPrimitiveValues",
+            "-H:+TreatAllTypeReachableConditionsAsTypeReached",
+            "-H:+UsePredicates",
+            "-H:-ReduceImplicitExceptionStackTraceInformation",
+            "--future-defaults=all",
+            "-R:MaxHeapSize=225m",
+            "-march=x86-64-v3",
+            "--gc=serial",
+            "-J-XX:MaxRAMPercentage=90",
+//          "--enable-monitoring=nmt,jfr",
+//          "-H:+PrintClassInitialization"
+        )
         named("main") {
             javaLauncher = graalVMJavaLauncher
             imageName = "ZenithProxy"
@@ -250,24 +266,10 @@ graalvmNative {
             quickBuild = false
             verbose = true
             sharedLibrary = false
-            // additional config in: `src/main/resources/META-INF/native-image/com.zenith/zenithproxy/native-image.properties
-            buildArgs.addAll(
-                "-H:DeadlockWatchdogInterval=30",
-                "-H:+CompactingOldGen",
-                "-H:+TrackPrimitiveValues",
-                "-H:+TreatAllTypeReachableConditionsAsTypeReached",
-                "-H:+UsePredicates",
-                "--future-defaults=all",
-                "-R:MaxHeapSize=225m",
-                "-march=x86-64-v3",
-                "--gc=serial",
-                "-J-XX:MaxRAMPercentage=90",
-//                "--enable-monitoring=nmt,jfr",
-//                "-H:+PrintClassInitialization"
-            )
+            buildArgs.addAll(graalvmBuildArgs)
             val pgoPath = providers.environmentVariable("GRAALVM_PGO_PATH").orNull
-			val pgoInstrument = providers.environmentVariable("GRAALVM_PGO_INSTRUMENT").orNull
-			val trace = providers.environmentVariable("GRAALVM_NATIVE_IMAGE_TRACE").orNull
+            val pgoInstrument = providers.environmentVariable("GRAALVM_PGO_INSTRUMENT").orNull
+            val trace = providers.environmentVariable("GRAALVM_NATIVE_IMAGE_TRACE").orNull
             val buildReport = providers.environmentVariable("GRAALVM_BUILD_REPORT").orNull
             if (pgoPath != null) {
                 println("Using PGO profile: $pgoPath")
@@ -279,9 +281,9 @@ graalvmNative {
                     buildArgs.add("--pgo-instrument")
                     buildArgs.add("-R:ProfilesDumpFile=profile.iprof")
                 } else if (trace != null) {
-					println("Enabling tracing agent")
-					buildArgs.add("-H:Preserve=all")
-				}
+                    println("Enabling tracing agent")
+                    buildArgs.add("-H:Preserve=all")
+                }
             }
             if (buildReport != null) {
                 buildArgs.add("--emit build-report")
@@ -293,19 +295,7 @@ graalvmNative {
             quickBuild = true
             verbose = true
             debug = true
-            // additional config in: `src/main/resources/META-INF/native-image/com.zenith/zenithproxy/native-image.properties
-            buildArgs.addAll(
-                "-H:DeadlockWatchdogInterval=30",
-                "-H:+CompactingOldGen",
-                "-H:+TrackPrimitiveValues",
-                "-H:+TreatAllTypeReachableConditionsAsTypeReached",
-                "-H:+UsePredicates",
-                "--future-defaults=all",
-                "-R:MaxHeapSize=225m",
-                "-march=x86-64-v3",
-                "--gc=serial",
-                "-J-XX:MaxRAMPercentage=90",
-            )
+            buildArgs.addAll(graalvmBuildArgs)
             configurationFileDirectories.from(file("src/main/resources/META-INF/native-image"))
         }
     }

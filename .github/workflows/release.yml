@@ -155,7 +155,7 @@ jobs:
           tag: ${{ env.JAVA_TAG }}
           artifacts: "artifacts/*.jar"
           prerelease: true
-          body: "File upload not for users. **Use the Launcher:** https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3"
+          body: "Looking for downloads? **Use the Launcher:** https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3"
           commit: ${{ github.sha }}
           artifactErrorsFailBuild: true
 
@@ -165,6 +165,6 @@ jobs:
           tag: ${{ env.LINUX_TAG }}
           artifacts: "artifacts/ZenithProxy.zip"
           prerelease: true
-          body: "File upload not for users. **Use the Launcher:** https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3"
+          body: "Looking for downloads? **Use the Launcher:** https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3"
           commit: ${{ github.sha }}
           artifactErrorsFailBuild: true

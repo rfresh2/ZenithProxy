@@ -22,17 +22,17 @@ public class JvmArgsCommand extends Command {
             .category(CommandCategory.MANAGE)
             .description("""
               Configures ZenithProxy's JVM arguments used by the launcher.
-              
+
               By default, this is empty and a set of default JVM arguments are used.
-              
+
               The primary arg to configure is `-Xmx` which sets the maximum memory heap size.
-              
+
               The default `-Xmx` used by the launcher depends on the `java` or `linux` release channel:
               * `java`: 300M
-              * `linux`: 200M
-              
+              * `linux`: 225M
+
               You should only need to increase this if the server view distance is > 15.
-              
+
               Be warned, changing this setting can cause ZenithProxy to be unable to restart. You will need to manually
               edit the `launch_config.json` to fix this if that happens.
               """)

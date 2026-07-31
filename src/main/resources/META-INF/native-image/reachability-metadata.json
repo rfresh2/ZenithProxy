@@ -667,6 +667,15 @@
       ]
     },
     {
+      "type": "com.google.gson.internal.bind.JavaTimeTypeAdapters",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "com.pgvector.PGvector"
     },
     {
@@ -1736,9 +1745,32 @@
       ]
     },
     {
+      "type": "com.zenith.feature.api.mcstatus.model.MCStatusMotdData",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.lang.String",
+            "java.lang.String",
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
       "type": "com.zenith.feature.api.mcstatus.model.MCStatusResponse",
       "allDeclaredFields": true,
       "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "boolean",
+            "java.lang.String",
+            "int",
+            "com.zenith.feature.api.mcstatus.model.MCStatusMotdData",
+            "java.lang.String"
+          ]
+        },
         {
           "name": "<init>",
           "parameterTypes": [
@@ -2295,6 +2327,23 @@
     {
       "type": "com.zenith.mc.entity.EntityData",
       "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int",
+            "java.lang.String",
+            "float",
+            "float",
+            "float",
+            "boolean",
+            "boolean",
+            "boolean",
+            "boolean",
+            "boolean",
+            "org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType",
+            "com.zenith.mc.entity.EntityAttachment"
+          ]
+        },
         {
           "name": "<init>",
           "parameterTypes": [
@@ -5322,6 +5371,17 @@
       "type": "java.util.RandomAccess"
     },
     {
+      "type": "java.util.SplittableRandom",
+      "methods": [
+        {
+          "name": "nextBytes",
+          "parameterTypes": [
+            "byte[]"
+          ]
+        }
+      ]
+    },
+    {
       "type": "java.util.TreeMap",
       "serializable": true
     },
@@ -6543,6 +6603,17 @@
         {
           "name": "<init>",
           "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "org.jline.terminal.impl.ffm.FfmSignalHandler",
+      "methods": [
+        {
+          "name": "signalReceived",
+          "parameterTypes": [
+            "int"
+          ]
         }
       ]
     },
@@ -8855,6 +8926,16 @@
     }
   ],
   "foreign": {
+    "directUpcalls": [
+      {
+        "class": "org.jline.terminal.impl.ffm.FfmSignalHandler",
+        "method": "signalReceived",
+        "returnType": "void",
+        "parameterTypes": [
+          "jint"
+        ]
+      }
+    ],
     "downcalls": [
       {
         "returnType": "jint",
@@ -8885,6 +8966,14 @@
         "parameterTypes": [
           "jint",
           "jint",
+          "void*"
+        ]
+      },
+      {
+        "returnType": "jint",
+        "parameterTypes": [
+          "jint",
+          "void*",
           "void*"
         ]
       },

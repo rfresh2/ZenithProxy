@@ -115,6 +115,10 @@ public class PacketLogCommand extends Command {
     @Override
     public void defaultHandler(CommandContext ctx) {
         ctx.getEmbed()
+            .addField("PacketLog", toggleStr(CONFIG.debug.packetLog.enabled))
+            .addField("Client", toggleStr(CONFIG.debug.packetLog.clientPacketLog.received))
+            .addField("Server", toggleStr(CONFIG.debug.packetLog.serverPacketLog.received))
+            .addField("Log Level Debug", toggleStr(CONFIG.debug.packetLog.logLevelDebug))
             .description(packetLogFilterList())
             .primaryColor();
     }

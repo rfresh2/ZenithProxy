@@ -12,6 +12,8 @@ import net.dv8tion.jda.internal.utils.ShutdownReason;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
+import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Globals.*;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
@@ -189,6 +191,11 @@ public class DiscordManageCommand extends Command {
                 CONFIG.discord.ignoreWebhooks = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Ignore Webhooks " + toggleStrCaps(CONFIG.discord.ignoreWebhooks));
+            })))
+            .then(literal("maxQueuedRequestsPerBucket").then(argument("limit", integer(0)).executes(c -> {
+                CONFIG.discord.maxQueuedRequestsPerBucket = getInteger(c, "limit");
+                c.getSource().getEmbed()
+                    .title("Max Queued Requests Per Bucket Set");
             })));
     }
 

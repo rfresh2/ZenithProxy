@@ -7,7 +7,7 @@ import com.zenith.command.api.CommandCategory;
 import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandUsage;
 import com.zenith.discord.Embed;
-import com.zenith.feature.api.mcsrvstatus.MCSrvStatusApi;
+import com.zenith.feature.api.mcstatus.MCStatusApi;
 
 import java.util.function.Supplier;
 
@@ -16,6 +16,7 @@ import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
+import static com.zenith.discord.DiscordBot.escape;
 
 public class ConnectionTestCommand extends Command {
     @Override
@@ -25,16 +26,16 @@ public class ConnectionTestCommand extends Command {
             .category(CommandCategory.INFO)
             .description("""
             Tests whether this proxy or another MC server is accessible from the public internet.
-            
+
             If the test succeeds, that means other people can connect.
-            
+
             If the test fails, either the `proxyIP` setting is not set to a public IP address or your instance is not
             exposed on the public internet.
-            
+
             To configure the `proxyIP` use the `help serverConnection` command
-            
+
             On a VPS this is usually due to a firewall needing to be disabled.
-            
+
             On a home PC you would need both disable any firewall and configure port forwarding in your router.
             """)
             .usageLines(
@@ -55,7 +56,7 @@ public class ConnectionTestCommand extends Command {
                         .errorColor()
                         .description("""
                             Not running connection test.
-                            
+
                             Enable the server in the config.json
                             """);
                     return;
@@ -66,7 +67,7 @@ public class ConnectionTestCommand extends Command {
                         .errorColor()
                         .description("""
                             Not running connection test.
-                            
+
                             The ZenithProxy server is not listening for connections
                             """);
                     return;
@@ -77,7 +78,7 @@ public class ConnectionTestCommand extends Command {
                         .errorColor()
                         .description("""
                             Pings must be enabled to perform the connection test.
-                            
+
                             See `help serverConnection` to configure pings
                             """);
                     return;
@@ -91,9 +92,9 @@ public class ConnectionTestCommand extends Command {
                         .description(
                             """
                             The `proxyIP` you have configured is currently set to `localhost`.
-                            
+
                             This means you are either hosting ZenithProxy on your home PC or you have not set the public IP yet.
-                            
+
                             To configure the `proxyIP` use the `help serverConnection` command.
                             """);
                     return;
@@ -103,14 +104,14 @@ public class ConnectionTestCommand extends Command {
                     proxyAddress,
                     () -> """
                         Unable to connect to configured `proxyIP`: %s
-                             
+
                         This test is most likely failing due to your firewall needing to be disabled.
-                        
+
                         For instructions on how to disable the firewall consult with your VPS provider. Each provider varies in steps.
-                         """.formatted(proxyAddress),
+                        """.formatted(proxyAddress),
                     () -> """
                          Internal error while querying the MC server status API.
-                        
+
                          This issue is not related to your proxy being inaccessible, try again later.
                          """);
             })
@@ -124,7 +125,7 @@ public class ConnectionTestCommand extends Command {
                         """.formatted(proxyAddress),
                     () -> """
                         Internal error while querying the MC server status API.
-                        
+
                         This issue is not related to the server being inaccessible, try again later.
                         """);
                 return OK;
@@ -144,27 +145,28 @@ public class ConnectionTestCommand extends Command {
         String address,
         Supplier<String> descriptionOnFailure,
         Supplier<String> descriptionOnInternalFailure) {
-        MCSrvStatusApi.INSTANCE.getMCSrvStatus(address).ifPresentOrElse(response -> {
+        MCStatusApi.INSTANCE.getMCServerStatus(address).ifPresentOrElse(response -> {
             if (response.online()) {
                 embed
                     .title("Connection Test Successful")
                     .successColor()
-                    .addField("Address", address, false)
-                    .addField("Host Response", response.ip(), false)
-                    .addField("Port Response", response.port(), false);
+                    .addField("Address", escape(address))
+                    .addField("Resolved IP", response.ip_address())
+                    .addField("Resolved Port", response.port())
+                    .addField("MOTD", escape(response.motd().clean()));
             } else {
                 embed
                     .title("Connection Test Failed")
                     .errorColor()
                     .description(descriptionOnFailure.get())
-                    .addField("Address", address, false);
+                    .addField("Address", escape(address));
             }
         }, () -> {
             embed
                 .title("Connection Test Error")
                 .errorColor()
                 .description(descriptionOnInternalFailure.get())
-                .addField("Address", address, false);
+                .addField("Address", escape(address));
         });
     }
 }

@@ -41,6 +41,7 @@ public class UpdateCommand extends Command {
                     LAUNCH_CONFIG.version = "0.0.0+" + LAUNCH_CONFIG.release_channel;
                     saveLaunchConfig();
                 }
+                c.getSource().setNoOutput(true);
                 Proxy.getInstance().stop();
             } catch (final Exception e) {
                 DISCORD_LOG.error("Failed to update", e);
@@ -60,6 +61,7 @@ public class UpdateCommand extends Command {
                 saveLaunchConfig();
             }
             EVENT_BUS.post(new UpdateStartEvent(Proxy.getInstance().getAutoUpdater().getNewVersion()));
+            c.getSource().setNoOutput(true);
             Proxy.getInstance().stop();
         }));
     }

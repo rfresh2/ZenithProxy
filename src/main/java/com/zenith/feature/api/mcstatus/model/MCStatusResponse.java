@@ -6,6 +6,7 @@ public record MCStatusResponse(
     boolean online,
     String host,
     int port,
+    @Nullable MCStatusMotdData motd,
     @Nullable String ip_address
 ) {
 }

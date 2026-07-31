@@ -79,7 +79,6 @@ public class CommandManager {
         new PearlLoader(),
         new PlaytimeCommand(),
         new PluginsCommand(),
-        new PrioCommand(),
         new QueueStatusCommand(),
         new QueueWarningCommand(),
         new RateLimiterCommand(),

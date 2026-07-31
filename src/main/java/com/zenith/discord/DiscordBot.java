@@ -32,6 +32,7 @@ import net.dv8tion.jda.api.exceptions.PermissionException;
 import net.dv8tion.jda.api.hooks.SimpleEventBusListener;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.RestConfig;
 import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.api.utils.ShutdownException;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
@@ -147,6 +148,7 @@ public class DiscordBot {
                 CONFIG.discord.token,
                 asList(GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MESSAGES))
             .setActivity(Activity.customStatus("Disconnected"))
+            .setRestConfig(new RestConfig().setMaxQueuedRequestsPerBucket(CONFIG.discord.maxQueuedRequestsPerBucket))
             .setStatus(OnlineStatus.DO_NOT_DISTURB)
             .addEventListeners(new SimpleEventBusListener(jdaEventBus));
         this.jda = builder.build();
