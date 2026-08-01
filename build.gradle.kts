@@ -32,9 +32,9 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.4.63"
+val mcplVersion = "1.21.4.64"
 dependencies {
-    api("com.github.rfresh2:JDA:6.5.34") {
+    api("com.github.rfresh2:JDA:6.5.35") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -64,16 +64,16 @@ dependencies {
         exclude(group = "io.netty")
     }
     api("com.github.rfresh2:SimpleEventBus:1.6")
-    val fastutilVersion = "8.5.16"
-    api("com.github.rfresh2.fastutil.maps:object-object-maps:$fastutilVersion")
-    api("com.github.rfresh2.fastutil.maps:int-object-maps:$fastutilVersion")
-    api("com.github.rfresh2.fastutil.maps:object-int-maps:$fastutilVersion")
-    api("com.github.rfresh2.fastutil.maps:long-object-maps:$fastutilVersion")
-    api("com.github.rfresh2.fastutil.maps:int-int-maps:$fastutilVersion")
-    api("com.github.rfresh2.fastutil.maps:int-double-maps:$fastutilVersion")
-    api("com.github.rfresh2.fastutil.maps:reference-object-maps:$fastutilVersion")
-    api("com.github.rfresh2.fastutil.maps:long-double-maps:$fastutilVersion")
-    api("com.github.rfresh2.fastutil.queues:int-queues:$fastutilVersion")
+    api(platform("com.github.rfresh2.fastutil:fastutil-bom:8.5.19"))
+    api("com.github.rfresh2.fastutil.maps:object-object-maps")
+    api("com.github.rfresh2.fastutil.maps:int-object-maps")
+    api("com.github.rfresh2.fastutil.maps:object-int-maps")
+    api("com.github.rfresh2.fastutil.maps:long-object-maps")
+    api("com.github.rfresh2.fastutil.maps:int-int-maps")
+    api("com.github.rfresh2.fastutil.maps:int-double-maps")
+    api("com.github.rfresh2.fastutil.maps:reference-object-maps")
+    api("com.github.rfresh2.fastutil.maps:long-double-maps")
+    api("com.github.rfresh2.fastutil.queues:int-queues")
     api("com.viaversion:viaversion-common:5.11.0")
     api("com.viaversion:viabackwards-common:5.11.0")
     api("com.viaversion:viarewind-common:4.1.3")
