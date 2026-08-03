@@ -26,7 +26,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
+        uses: gradle/actions/setup-gradle@v6.2.0
         with:
           dependency-graph: generate-and-submit
           cache-read-only: ${{ github.event_name == 'pull_request' }}
