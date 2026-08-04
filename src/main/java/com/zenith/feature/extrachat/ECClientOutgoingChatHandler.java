@@ -3,9 +3,8 @@ package com.zenith.feature.extrachat;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.codec.PacketHandler;
 import com.zenith.util.ChatUtil;
+import com.zenith.util.RandomString;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
-
-import java.util.UUID;
 
 import static com.zenith.Globals.CONFIG;
 
@@ -20,7 +19,7 @@ public class ECClientOutgoingChatHandler implements PacketHandler<ServerboundCha
         if (CONFIG.client.extra.chat.suffixChats) {
             String suffix = "";
             if (CONFIG.client.extra.chat.randomSuffix) {
-                suffix = UUID.randomUUID().toString().substring(0, 6);
+                suffix = "[%s]".formatted(RandomString.generate(6));
             } else if (!CONFIG.client.extra.chat.suffix.isEmpty()) {
                 suffix = CONFIG.client.extra.chat.suffix;
             }

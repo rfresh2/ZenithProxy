@@ -5,6 +5,7 @@ import com.zenith.Proxy;
 import com.zenith.event.client.ClientTickEvent;
 import com.zenith.module.api.Module;
 import com.zenith.util.ChatUtil;
+import com.zenith.util.RandomString;
 import com.zenith.util.timer.Timer;
 import com.zenith.util.timer.Timers;
 import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
@@ -14,7 +15,6 @@ import org.jspecify.annotations.Nullable;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -71,7 +71,7 @@ public class Spammer extends Module {
             spamIndex = (spamIndex + 1) % CONFIG.client.extra.spammer.messages.size();
         }
         var msg = CONFIG.client.extra.spammer.messages.get(spamIndex)
-            + (CONFIG.client.extra.spammer.appendRandom ? " " + UUID.randomUUID().toString().substring(0, 6) : "");
+            + (CONFIG.client.extra.spammer.appendRandom ? " [" + RandomString.generate(6) + "]" : "");
         if (CONFIG.client.extra.spammer.whisper) {
             var player = getNextPlayer();
             if (player != null) {

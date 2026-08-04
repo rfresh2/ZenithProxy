@@ -150,7 +150,8 @@ public class ReplayMod extends Module {
     @Locked
     private void startRecording() {
         cancelDelayedRecordingStop();
-        if (replayDirectory.toFile().getUsableSpace() < minFreeSpaceBytes) {
+        replayDirectory.toFile().mkdirs();
+        if (replayDirectory.toFile().exists() && replayDirectory.toFile().getUsableSpace() < minFreeSpaceBytes) {
             discordNotification(Embed.builder()
                 .title("Error")
                 .description("Not enough disk space remaining to start replay recording")

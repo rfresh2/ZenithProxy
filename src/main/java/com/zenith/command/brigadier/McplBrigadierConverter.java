@@ -182,6 +182,9 @@ public class McplBrigadierConverter {
                 continue;
             }
             var child = LiteralArgumentBuilder.<CommandContext>literal(childNode.getName());
+            if (childNode.isExecutable()) {
+                child.executes(c -> 0);
+            }
             for (var childChildIndex : childNode.getChildIndices()) {
                 var childChildNode = convertChildMcplNode(nodes, nodeMap, childChildIndex);
                 if (childChildNode != null) {

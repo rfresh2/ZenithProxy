@@ -142,7 +142,7 @@ public final class Bot extends ModuleUtils {
 
     private void tickWhilePlayerControlling(ClientTickEvent event) {
         if (!Proxy.getInstance().hasActivePlayer()) return;
-        syncFromCache(true);
+        syncFromCache(false);
         var currentPose = pose;
         updatePlayerPose();
         if (currentPose != pose) {
