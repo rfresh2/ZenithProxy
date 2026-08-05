@@ -5,13 +5,13 @@ import time
 from collections import deque
 
 import launch_platform
-from jdk_install import get_java_executable, get_java_version_from_subprocess
+from jdk_install import get_java_instance
 from log import info, warn, critical_error, critical_exception
 
 default_java_xmx = 300
 
 default_java_args = """\
--XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:+PerfDisableSharedMem"""
+-XX:+IgnoreUnrecognizedVMOptions -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:+PerfDisableSharedMem"""
 
 java24_addnl_args = """\
 -XX:+UseCompactObjectHeaders --sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED"""
@@ -30,9 +30,14 @@ launch_history = deque()
 
 def git_build():
     if platform.system() == "Windows":
-        os.system(".\\gradlew build --no-daemon")
+        run_script = ".\\gradlew build --no-daemon"
     else:
-        os.system("./gradlew build --no-daemon")
+        run_script = "./gradlew build --no-daemon"
+    info(f"> {run_script}")
+    try:
+        subprocess.run(run_script, shell=True, check=True)
+    except subprocess.CalledProcessError as e:
+        critical_exception("Error building application")
 
 
 def launch_linux(config):
@@ -67,9 +72,12 @@ def launch_linux(config):
 
 
 def launch_java(config):
-    java_executable = get_java_executable(launch_platform.min_java_version(config))
-    info(f"Using Java installation: {java_executable}")
-    java_version = int(get_java_version_from_subprocess(java_executable))
+    java_instance = get_java_instance(launch_platform.min_java_version(config))
+    if java_instance is None or java_instance.path is None or java_instance.version is None:
+        critical_error("Java not found")
+    java_executable = java_instance.path
+    info(f"Using Java installation: {java_instance}")
+    java_version = int(java_instance.version.major)
     if platform.system() == "Windows":
         java_executable = '"' + java_executable.replace("/", "\\") + '"'
     if not os.path.isfile(config.launch_dir + "ZenithProxy.jar"):
@@ -79,16 +87,16 @@ def launch_java(config):
         # if jvm args only contain -Xmx<int><unit>, add default args
         if jvm_args.startswith("-Xmx") and len(jvm_args.split(" ")) == 1:
             jvm_args += " " + default_java_args
-            if java_version == 24 or java_version == 25:
+            if java_version in (24, 25, 26):
                 jvm_args += " " + java24_addnl_args
-            if java_version == 26:
-                jvm_args += " " + java24_addnl_args + " " + java26_addnl_args
+            if java_version in (26,):
+                jvm_args += " " + java26_addnl_args
     else:
         jvm_args = default_java_args
-        if java_version == 24 or java_version == 25:
+        if java_version in (24, 25, 26):
             jvm_args += " " + java24_addnl_args
-        if java_version == 26:
-            jvm_args += " " + java24_addnl_args + " " + java26_addnl_args
+        if java_version in (26,):
+            jvm_args += " " + java26_addnl_args
     if "-Xmx" not in jvm_args:
         jvm_args += f" -Xmx{default_java_xmx}M"
     if platform.system() == "Windows":

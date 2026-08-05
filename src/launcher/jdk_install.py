@@ -1,13 +1,15 @@
 import os
 import re
 import subprocess
+from dataclasses import dataclass
 from enum import Enum
-from typing import Optional, Union, List
+from typing import Optional, List
 
 import jdk
 
 import launch_platform
 from log import info, error, warn, critical_error, debug
+from version import Version
 
 _USER_DIR = os.path.expanduser("~")
 _JDK_DIR = os.path.join(_USER_DIR, ".jdk")
@@ -20,55 +22,57 @@ class JavaInstallType(Enum):
     NO_INSTALL = 3
 
 
-def get_java_executable(min_version, install_type=JavaInstallType.AUTO_INSTALL) -> Optional[str]:
-    java_path = _locate_java(min_version)
-    if not java_path:
+@dataclass
+class JavaInstance:
+    path: str
+    version: Version
+
+
+def get_java_instance(min_version: Version, install_type: JavaInstallType = JavaInstallType.AUTO_INSTALL) -> Optional[JavaInstance]:
+    java_instance = _locate_java(min_version)
+    if not java_instance:
         if install_type == JavaInstallType.USER_PROMPT:
             _java_install_prompt()
-            java_path = _locate_java(min_version)
+            java_instance = _locate_java(min_version)
         elif install_type == JavaInstallType.AUTO_INSTALL:
             _install_java()
-            java_path = _locate_java(min_version)
+            java_instance = _locate_java(min_version)
         elif install_type == JavaInstallType.NO_INSTALL:
             critical_error("Java not found and both auto install and user prompt disabled.")
-        if not java_path:
+        if not java_instance:
             warn("Failed to install Java.")
             return None
-    return java_path
+    return java_instance
 
 
-def get_java_version_from_subprocess(java_path) -> Optional[Union[float, int]]:
+def _get_java_version_from_subprocess(java_path: str) -> Optional[Version]:
     try:
         output = subprocess.check_output([java_path, "-version"], stderr=subprocess.STDOUT, text=True)
         version_line = [line for line in output.split("\n") if "version" in line][0]
-        version_match = re.search(r'"(\d+(\.\d+)?)', version_line)
+        version_match = re.search(r'"(\d+(\.\d+){0,2})"', version_line)
         if version_match:
-            version = version_match.group(1)
-            return float(version) if "." in version else int(version)
+            version_str = version_match.group(1)
+            version = Version.from_short_str(version_str)
+            return version
     except:
         return None
 
 
-def _get_path_java_version() -> Optional[Union[float, int]]:
-    return get_java_version_from_subprocess("java")
+def _locate_path_java(min_version: Version) -> Optional[JavaInstance]:
+    version = _get_java_version_from_subprocess("java")
+    if version and version >= min_version:
+        return JavaInstance("java", version)
+    return None
 
 
-def _get_java_home_version() -> Optional[Union[float, int]]:
-    java_home = os.environ.get("JAVA_HOME")
-    if not java_home:
-        return None
-    java_path = os.path.join(java_home, "bin", "java" + _java_exe_extension())
-    return get_java_version_from_subprocess(java_path)
-
-
-def _locate_java_from_env(env_var, min_version) -> Optional[str]:
+def _locate_java_from_env(env_var: str, min_version: Version) -> Optional[JavaInstance]:
     java_home = os.environ.get(env_var)
     if not java_home:
         return None
     java_path = os.path.join(java_home, "bin", "java" + _java_exe_extension())
-    version = get_java_version_from_subprocess(java_path)
+    version = _get_java_version_from_subprocess(java_path)
     if version and version >= min_version:
-        return java_path
+        return JavaInstance(java_path, version)
     return None
 
 
@@ -89,7 +93,7 @@ def _java_exe_extension() -> str:
     return ".exe" if launch_platform.get_platform_os() == launch_platform.OperatingSystem.WINDOWS else ""
 
 
-def _search_for_java_in_dir(search_path) -> List[str]:
+def _search_for_java_in_dir(search_path: str) -> List[str]:
     output = []
     if not os.path.exists(search_path) or not os.path.isdir(search_path):
         return output
@@ -101,39 +105,41 @@ def _search_for_java_in_dir(search_path) -> List[str]:
     return output
 
 
-def _find_first_java_in_dir(java_path_list: List[str], min_version) -> Optional[str]:
+def _find_latest_java_in_dir(java_path_list: List[str], min_version: Version) -> Optional[JavaInstance]:
+    path_result = None
+    latest = Version("0.0.0")
     for java_path in java_path_list:
-        version = get_java_version_from_subprocess(java_path)
-        if version and version >= min_version:
-            return java_path
-    return None
+        version = _get_java_version_from_subprocess(java_path)
+        if version and version >= min_version and version > latest:
+            path_result = java_path
+            latest = version
+    return JavaInstance(path_result, latest) if path_result else None
 
 
-def _locate_in_dir(search_dir, min_version) -> Optional[str]:
-    return _find_first_java_in_dir(_search_for_java_in_dir(search_dir), min_version)
+def _locate_in_dir(search_dir, min_version) -> Optional[JavaInstance]:
+    return _find_latest_java_in_dir(_search_for_java_in_dir(search_dir), min_version)
 
 
-def _locate_java(min_version) -> Optional[str]:
-    path_java_version = _get_path_java_version()
-    if path_java_version and path_java_version >= min_version:
-        return "java"
+def _locate_java(min_version: Version) -> Optional[JavaInstance]:
+    # prefer path and env
+    path_java_instance = _locate_path_java(min_version)
+    if path_java_instance:
+        return path_java_instance
 
-    java_home_version = _locate_java_from_env("JAVA_HOME", min_version)
-    if java_home_version:
-        return java_home_version
+    java_home_instance = _locate_java_from_env("JAVA_HOME", min_version)
+    if java_home_instance:
+        return java_home_instance
 
+    # otherwise, search possible directories for highest java version
     jdk_dir_java = _locate_in_dir(_JDK_DIR, min_version)
-    if jdk_dir_java:
-        return jdk_dir_java
-
     jdks_dir_java = _locate_in_dir(_JDKS_DIR, min_version)
-    if jdks_dir_java:
-        return jdks_dir_java
-
     jre_dir_java = _locate_in_dir(_JRE_DIR, min_version)
-    if jre_dir_java:
-        return jre_dir_java
-    return None
+
+    if not jdk_dir_java and not jdks_dir_java and not jre_dir_java:
+        return None
+
+    # return highest version instance of dir instances (if one exists for each)
+    return max(jdk_dir_java, jdks_dir_java, jre_dir_java, key=lambda x: x.version if x else Version("0.0.0"))
 
 
 def _java_install_prompt():

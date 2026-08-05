@@ -27,6 +27,19 @@ class Version:
         """Create a Version from integer parts."""
         return cls(f"{major}.{minor}.{patch}")
 
+    # allow version strings that may be missing a minor or patch value
+    # if they are missing, it should default to 0
+    @classmethod
+    def from_short_str(cls, version: str) -> "Version":
+        if not re.search(r'(\d+(\.\d+){0,2})', version):
+            raise ValueError(f"Invalid version format: {version}")
+        parts = version.split(".")
+        if len(parts) == 1:
+            return cls.from_parts(int(parts[0]), 0, 0)
+        if len(parts) == 2:
+            return cls.from_parts(int(parts[0]), int(parts[1]), 0)
+        return cls.from_parts(int(parts[0]), int(parts[1]), int(parts[2]))
+
     @property
     def major(self) -> int:
         return self._parts[0]
