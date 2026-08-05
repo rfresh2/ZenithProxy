@@ -30,9 +30,14 @@ launch_history = deque()
 
 def git_build():
     if platform.system() == "Windows":
-        os.system(".\\gradlew build --no-daemon")
+        run_script = ".\\gradlew build --no-daemon"
     else:
-        os.system("./gradlew build --no-daemon")
+        run_script = "./gradlew build --no-daemon"
+    info(f"> {run_script}")
+    try:
+        subprocess.run(run_script, shell=True, check=True)
+    except subprocess.CalledProcessError as e:
+        critical_exception("Error building application")
 
 
 def launch_linux(config):
