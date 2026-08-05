@@ -83,20 +83,20 @@ def validate_linux_system(config: LaunchConfig) -> bool:
 def validate_java_system(config: LaunchConfig, install_type) -> bool:
     java_version = min_java_version(config)
     import jdk_install
-    java_executable = jdk_install.get_java_executable(java_version, install_type=install_type)
-    if java_executable is None:
+    java_instance = jdk_install.get_java_instance(java_version, install_type=install_type)
+    if java_instance is None:
         warn(f"Java >={java_version} not found.")
         return False
     return True
 
 
-def min_java_version(config: LaunchConfig) -> int:
+def min_java_version(config: LaunchConfig) -> Version:
     if config.version.startswith("1"):
-        return 17
+        return Version("17.0.0")
     mc_version = Version(config.get_mc_version())
     if mc_version < Version("1.21.11"):
-        return 21
-    return 25
+        return Version("21.0.0")
+    return Version("25.0.0")
 
 
 def validate_git_system() -> bool:

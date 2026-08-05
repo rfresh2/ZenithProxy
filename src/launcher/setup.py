@@ -6,7 +6,7 @@ import re
 import requests
 
 import launch_platform
-from jdk_install import get_java_executable, JavaInstallType
+from jdk_install import JavaInstallType, get_java_instance
 from launch_config import read_launch_config_file, LaunchConfig
 from launch_platform import get_public_ip, check_port_in_use
 from launch_platform import min_java_version
@@ -401,8 +401,8 @@ def setup_unattended(config):
                 if not validate_linux_system(config):
                     critical_error("Cannot use linux on current system")
             elif platform == "java":
-                java_exec = get_java_executable(min_java_version(config), install_type=JavaInstallType.AUTO_INSTALL)
-                if java_exec is None:
+                java_instance = get_java_instance(min_java_version(config), install_type=JavaInstallType.AUTO_INSTALL)
+                if java_instance is None:
                     critical_error("Java not found and auto install failed")
             else:
                 critical_error("Invalid ZENITH_PLATFORM. Must be one of: java, linux")
@@ -412,8 +412,8 @@ def setup_unattended(config):
                 config.release_channel = "linux." + mc_version
             else:
                 config.release_channel = "java." + mc_version
-                java_exec = get_java_executable(min_java_version(config), install_type=JavaInstallType.AUTO_INSTALL)
-                if java_exec is None:
+                java_instance = get_java_instance(min_java_version(config), install_type=JavaInstallType.AUTO_INSTALL)
+                if java_instance is None:
                     critical_error("Java not found and auto install failed")
         config.write_launch_config()
     if not os.path.exists("config.json"):
