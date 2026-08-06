@@ -2,6 +2,7 @@ package com.zenith.feature.whitelist;
 
 import com.zenith.feature.api.ProfileData;
 import com.zenith.feature.api.crafthead.CraftheadApi;
+import com.zenith.feature.api.mccompanion.MCCompanionApi;
 import com.zenith.feature.api.mcprofile.MCProfileApi;
 import com.zenith.feature.api.mojang.MojangApi;
 import com.zenith.feature.api.sessionserver.SessionServerApi;
@@ -104,20 +105,22 @@ public class PlayerListsManager {
 
     public static Optional<ProfileData> getProfileFromUsername(final String username) {
         if (isBedrock(username)) {
-            return MCProfileApi.INSTANCE.getBedrockProfile(username.replace(".", "")).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile);
+            return MCCompanionApi.INSTANCE.getBedrockProfile(username.replace(".", "")).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile)
+                .or(() -> MCProfileApi.INSTANCE.getBedrockProfile(username.replace(".", "")).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile));
         }
         return MojangApi.INSTANCE.getProfile(username).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile)
             .or(() -> CraftheadApi.INSTANCE.getProfile(username).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile)
-                .or(() -> MCProfileApi.INSTANCE.getJavaProfile(username).filter(PlayerListsManager::validProfile)));
+                .or(() -> MCCompanionApi.INSTANCE.getJavaProfile(username).filter(PlayerListsManager::validProfile)));
     }
 
     public static Optional<ProfileData> getProfileFromUUID(final UUID uuid) {
         if (isBedrock(uuid)) {
-            return MCProfileApi.INSTANCE.getBedrockProfile(uuid).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile);
+            return MCCompanionApi.INSTANCE.getBedrockProfile(uuid).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile)
+                .or(() -> MCProfileApi.INSTANCE.getBedrockProfile(uuid).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile));
         }
         return SessionServerApi.INSTANCE.getProfile(uuid).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile)
             .or(() -> CraftheadApi.INSTANCE.getProfile(uuid).map(o -> (ProfileData) o).filter(PlayerListsManager::validProfile)
-                .or(() -> MCProfileApi.INSTANCE.getJavaProfile(uuid).filter(PlayerListsManager::validProfile)));
+                .or(() -> MCCompanionApi.INSTANCE.getJavaProfile(uuid).filter(PlayerListsManager::validProfile)));
     }
 
     private static boolean validProfile(final ProfileData profile) {
