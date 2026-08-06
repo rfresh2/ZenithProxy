@@ -1698,6 +1698,33 @@
       ]
     },
     {
+      "type": "com.zenith.feature.api.mccompanion.model.MCCompanionBedrockResponse",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.lang.String",
+            "java.lang.String",
+            "java.util.UUID",
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.feature.api.mccompanion.model.MCCompanionJavaResponse",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "java.lang.String",
+            "java.util.UUID",
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
       "type": "com.zenith.feature.api.mcprofile.model.MCProfileBedrockResponse",
       "methods": [
         {
