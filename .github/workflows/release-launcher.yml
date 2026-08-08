@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 env:
-  UV_PYTHON: '3.14.6'
+  UV_PYTHON: '3.14.7'
   pyinstaller_version: "6.21.0"
 
 jobs:
