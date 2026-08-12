@@ -42,6 +42,7 @@ public class PlaceRecipe implements InventoryAction {
      * find the recipe ID you want manually from CACHE.getRecipeCache().getRecipeBookEntries()
      * it may be simpler to just use ClickItem and ShiftClick actions if you know the items and shape
      */
+    @Deprecated
     public PlaceRecipe(int containerId, String recipeOutputItem, boolean useMaxItems) {
         this(containerId, findRecipeByOutputItem(recipeOutputItem), useMaxItems);
     }
