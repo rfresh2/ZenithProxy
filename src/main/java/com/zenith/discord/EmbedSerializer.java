@@ -27,7 +27,7 @@ public class EmbedSerializer {
     // ||spoiler|| -> spoiler
     // there's more we don't currently use that aren't implemented here
     private static final Pattern DISCORD_FORMATTING_REGEX = Pattern.compile(
-        "(\\*\\*(\\w[^\\n\\\\\\*]*)\\*\\*)|(\\*(\\w[^\\n\\\\\\*]*)\\*)|(__(\\w[^\\n\\\\_]*)__)|(_(\\w[^\\n\\\\_]*)_)|(```(\\w[^\\\\`]*)```)|(`(\\w[^\\n\\\\`]*)`)|(\\[(.+?)]\\((.+?)\\))|(\\|\\|(.+?)\\|\\|)"
+        "(\\*\\*(\\w[^\\n\\\\\\*]*)\\*\\*)|(\\*(\\w[^\\n\\\\\\*]*)\\*)|(__(\\w[^\\n\\\\_]*)__)|(_(\\w[^\\n\\\\_]*)_)|(```(\\S[^\\\\`]*)```)|(`(\\S[^\\n\\\\`]*)`)|(\\[(.+?)]\\((.+?)\\))|(\\|\\|(.+?)\\|\\|)"
     );
 
     public static Component serialize(final Embed embed) {
@@ -102,8 +102,8 @@ public class EmbedSerializer {
                 component.append(Component.text(matcher.group(14)).color(NamedTextColor.BLUE)
                     .clickEvent(ClickEvent.openUrl(matcher.group(15)))
                     .hoverEvent(HoverEvent.showText(Component.text(matcher.group(15)))));
-            } else if (matcher.group(16) != null) {
-                component.append(Component.text(matcher.group(16)))
+            } else if (matcher.group(17) != null) {
+                component.append(Component.text(matcher.group(17)))
                                      .decorate(TextDecoration.ITALIC);
             }
             lastEnd = end;

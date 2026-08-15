@@ -7,8 +7,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EmbedSerializerTest {
     @Test
@@ -123,10 +122,44 @@ public class EmbedSerializerTest {
 
     @Test
     public void unescapeTest() {
-        var in = "**bold** *italic* _underline_ `code`";
+        var in = "**bold multi word** *italic* _underline_ `code`";
         var str = DiscordBot.escape(in);
         var c = EmbedSerializer.serializeText(str);
         var text = ComponentSerializer.serializePlain(c);
         assertEquals(in, text);
+    }
+
+    @Test
+    public void spoilerTest() {
+        var str = "||spoiler||";
+        var c = EmbedSerializer.serializeText(str);
+        var text = ComponentSerializer.serializePlain(c);
+        assertEquals("spoiler", text);
+        assertTrue(c.style().hasDecoration(TextDecoration.ITALIC));
+        assertEquals("spoiler", ((TextComponent) c.children().getFirst()).content());
+    }
+
+    @Test
+    public void chatSchemaMultiCodeStrTest() {
+        var str = """
+                  **Default Schema**
+                  * Public Chat: `<$s> $m`
+                  * Whisper Inbound: `$s whispers: $m`
+                  * Whisper Outbound: `to $r: $m`
+                  """;
+        var c = EmbedSerializer.serializeText(str);
+        var actual = ComponentSerializer.serializePlain(c);
+        var withoutDiscordFormatting = """
+                  Default Schema
+                  * Public Chat: <$s> $m
+                  * Whisper Inbound: $s whispers: $m
+                  * Whisper Outbound: to $r: $m
+                  """;
+        assertEquals(withoutDiscordFormatting, actual);
+        assertTrue(c.children().getFirst() instanceof TextComponent t && t.content().equals("Default Schema") && t.hasDecoration(TextDecoration.BOLD));
+        var codeCount = c.children().stream()
+            .filter(child -> child.style().color() == NamedTextColor.GRAY)
+            .count();
+        assertEquals(3, codeCount);
     }
 }
