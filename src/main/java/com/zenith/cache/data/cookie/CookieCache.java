@@ -12,10 +12,8 @@ import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.Clientbound
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.function.Consumer;
 
 import static com.zenith.Globals.CONFIG;
@@ -30,6 +28,7 @@ public class CookieCache implements CachedData {
     private static final Key zenithSpectatorKey = Key.key("zenith", "zenith-spectator");
     private static final List<Key> zenithCookies = asList(zenithTransferSrcKey, zenithSpectatorKey);
     private final Map<Key, @Nullable String> cookies = new HashMap<>(2);
+    private final Queue<Key> requestedCookies = new LinkedBlockingDeque<>();
 
     public Optional<Boolean> getSpectatorCookieValue() {
         var value = cookies.get(zenithSpectatorKey);
@@ -39,6 +38,16 @@ public class CookieCache implements CachedData {
 
     public boolean receivedAllCookieResponses() {
         return zenithCookies.stream().allMatch(cookies::containsKey);
+    }
+
+    public boolean validateCookieRequested(Key key) {
+        var next = requestedCookies.peek();
+        if (next == null) return false;
+        if (next.equals(key)) {
+            requestedCookies.poll();
+            return true;
+        }
+        return false;
     }
 
     public Optional<String> getZenithTransferSrc() {

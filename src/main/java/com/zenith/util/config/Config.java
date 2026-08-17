@@ -758,6 +758,15 @@ public final class Config {
         public boolean updateServerIcon = true;
         public boolean preferLoginAsController = true;
         public final ChatSigning chatSigning = new ChatSigning();
+        public final LoginTimeout loginTimeout = new LoginTimeout();
+        public boolean strictLoginPacketSequence = true;
+
+        public static class LoginTimeout {
+            public boolean enabled = true;
+            public int loginTimeoutTicks = 600;
+            public int statusTimeoutTicks = 100;
+            public int handshakeTimeoutTicks = 40;
+        }
 
         public static final class ChatSigning {
             public ChatSigningMode mode = ChatSigningMode.DISGUISED;

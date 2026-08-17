@@ -30,7 +30,10 @@ public class SLoginFinishedOutgoingHandler implements PacketHandler<ClientboundL
     public ClientboundLoginFinishedPacket apply(@NonNull ClientboundLoginFinishedPacket packet, @NonNull ServerSession session) {
         try {
             // finishLogin will send a second ClientboundLoginFinishedPacket, just return it as is
-            if (session.isWhitelistChecked()) return packet;
+            if (session.isWhitelistChecked()) {
+                session.setLoginState(ServerSession.LoginState.PROTOCOL_SWITCHING);
+                return packet;
+            }
             final GameProfile clientGameProfile = session.getProfileCache().getProfile();
             if (clientGameProfile == null) {
                 session.disconnect("Failed to Login");

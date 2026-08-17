@@ -14,22 +14,26 @@ import static com.zenith.Globals.EXECUTOR;
 public class SHelloHandler implements PacketHandler<ServerboundHelloPacket, ServerSession> {
     @Override
     public ServerboundHelloPacket apply(@NonNull ServerboundHelloPacket packet, @NonNull ServerSession session) {
+        if (CONFIG.server.strictLoginPacketSequence && session.getLoginState() != ServerSession.LoginState.HELLO) {
+            session.disconnect("Unexpected hello packet");
+            return null;
+        }
         if (!ChatUtil.isValidPlayerName(packet.getUsername())) {
             session.disconnect("Invalid username.");
             return null;
         }
         session.setUsername(packet.getUsername());
         session.setLoginProfileUUID(packet.getProfileId());
-        if (session.isTransferring())
-            // TODO: see how viaversion interacts with this sequence
-            //  it seems to be legal for clients to not send a response to the cookie request, at which point we stall
-            //  in this login sequence forever
+        if (session.isTransferring()) {
+            session.setLoginState(ServerSession.LoginState.WAITING_FOR_COOKIES);
             session.getCookieCache().getPackets(session::sendAsync, session);
-        else {
-            if (CONFIG.server.verifyUsers)
+        } else {
+            if (CONFIG.server.verifyUsers) {
+                session.setLoginState(ServerSession.LoginState.KEY);
                 session.sendAsync(new ClientboundHelloPacket(session.getServerId(), session.getKeyPair().getPublic(), session.getChallenge(), true));
-            else
+            } else {
                 EXECUTOR.execute(new UserAuthTask(session, null));
+            }
         }
         return null;
     }

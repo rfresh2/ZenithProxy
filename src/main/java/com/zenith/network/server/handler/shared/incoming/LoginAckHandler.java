@@ -10,12 +10,16 @@ import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundFinishConfigurationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundLoginAcknowledgedPacket;
 
-import static com.zenith.Globals.CACHE;
-import static com.zenith.Globals.EVENT_BUS;
+import static com.zenith.Globals.*;
 
 public class LoginAckHandler implements PacketHandler<ServerboundLoginAcknowledgedPacket, ServerSession> {
     @Override
     public ServerboundLoginAcknowledgedPacket apply(final ServerboundLoginAcknowledgedPacket packet, final ServerSession session) {
+        if (CONFIG.server.strictLoginPacketSequence && session.getLoginState() != ServerSession.LoginState.PROTOCOL_SWITCHING) {
+            session.disconnect("Unexpected login ack packet");
+            return null;
+        }
+        session.setLoginState(ServerSession.LoginState.ACCEPTED);
         session.switchInboundState(ProtocolState.CONFIGURATION);
         session.setClientLoaded(false);
         if (session.getPacketProtocol().getOutboundState() != ProtocolState.CONFIGURATION || !session.isWhitelistChecked()) {

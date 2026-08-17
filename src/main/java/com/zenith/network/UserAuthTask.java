@@ -23,6 +23,7 @@ public class UserAuthTask implements Runnable {
 
     @Override
     public void run() {
+        session.setLoginState(ServerSession.LoginState.VERIFYING);
         GameProfile profile;
         if (this.key != null) {
             final Optional<GameProfile> response = SessionServerApi.INSTANCE.hasJoined(

@@ -55,6 +55,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.Serve
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundTeleportToEntityPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.*;
 import org.geysermc.mcprotocollib.protocol.packet.login.clientbound.*;
+import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundCustomQueryAnswerPacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundHelloPacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundKeyPacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundLoginAcknowledgedPacket;
@@ -317,11 +318,13 @@ public final class PacketCodecRegistries {
                 .inbound(ServerboundHelloPacket.class, new SHelloHandler())
                 .inbound(ServerboundCookieResponsePacket.class, new SCookieResponseHandler())
                 .inbound(ServerboundLoginAcknowledgedPacket.class, new LoginAckHandler())
+                .inbound(ServerboundCustomQueryAnswerPacket.class, new SCustomQueryAnswerHandler())
                 .outbound(ClientboundLoginFinishedPacket.class, new SLoginFinishedOutgoingHandler())
                 .postOutbound(ClientboundLoginCompressionPacket.class, new LoginCompressionPostOutgoingHandler())
+                .postOutbound(ClientboundCookieRequestPacket.class, new CookieRequestPostOutgoingHandler())
                 .build())
             .state(ProtocolState.STATUS, PacketHandlerStateCodec.serverBuilder()
-                .inbound(ServerboundPingRequestPacket.class, PingRequestHandler.INSTANCE)
+                .inbound(ServerboundPingRequestPacket.class, StatusPingRequestHandler.INSTANCE)
                 .inbound(ServerboundStatusRequestPacket.class, new StatusRequestHandler())
                 .build())
             .state(ProtocolState.GAME, PacketHandlerStateCodec.serverBuilder()

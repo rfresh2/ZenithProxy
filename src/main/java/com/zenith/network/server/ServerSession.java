@@ -15,6 +15,7 @@ import com.zenith.feature.ratelimiter.LoginRateLimiter;
 import com.zenith.feature.ratelimiter.PacketRateLimiter;
 import com.zenith.feature.spectator.SpectatorEntityRegistry;
 import com.zenith.feature.spectator.entity.SpectatorEntity;
+import com.zenith.network.STimeoutTask;
 import com.zenith.network.codec.PacketCodecRegistries;
 import com.zenith.util.ComponentSerializer;
 import io.netty.channel.ChannelException;
@@ -123,6 +124,8 @@ public class ServerSession extends TcpServerSession {
     protected ClientInfoCache clientInfoCache = new ClientInfoCache();
     @Getter(lazy = true) private final PacketRateLimiter packetRateLimiter = new PacketRateLimiter();
     public static final LoginRateLimiter LOGIN_RATE_LIMITER = new LoginRateLimiter();
+    protected LoginState loginState = LoginState.HELLO;
+    protected boolean statusRequested = false;
 
     /**
      * Team data
@@ -203,7 +206,7 @@ public class ServerSession extends TcpServerSession {
 
     @Override
     public void callConnected() {
-
+        getEventLoop().scheduleAtFixedRate(new STimeoutTask(this), 0L, 50L, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -445,5 +448,15 @@ public class ServerSession extends TcpServerSession {
     public void transferToControllingPlayer() {
         cookieCache.getStoreSpectatorDestPacket(this::send, false);
         transfer(connectingServerAddress, connectingServerPort);
+    }
+
+    public enum LoginState {
+        HELLO,
+        KEY,
+        AUTHENTICATING,
+        VERIFYING,
+        WAITING_FOR_COOKIES,
+        PROTOCOL_SWITCHING,
+        ACCEPTED
     }
 }
