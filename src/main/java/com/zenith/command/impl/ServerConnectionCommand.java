@@ -173,6 +173,16 @@ public class ServerConnectionCommand extends Command {
                 CONFIG.server.preferLoginAsController = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Prefer Login As Controller " + toggleStrCaps(CONFIG.server.preferLoginAsController));
+            })))
+            .then(literal("strictLoginPacketSequence").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.server.strictLoginPacketSequence = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Strict Login Packet Sequence " + toggleStrCaps(CONFIG.server.strictLoginPacketSequence));
+            })))
+            .then(literal("loginTimeout").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.server.loginTimeout.enabled = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Login Timeout " + toggleStrCaps(CONFIG.server.loginTimeout.enabled));
             })));
     }
 

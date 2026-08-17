@@ -14,6 +14,11 @@ import static com.zenith.Globals.SERVER_LOG;
 public class StatusRequestHandler implements PacketHandler<ServerboundStatusRequestPacket, ServerSession> {
     @Override
     public ServerboundStatusRequestPacket apply(final ServerboundStatusRequestPacket packet, final ServerSession session) {
+        if (session.isStatusRequested()) {
+            session.disconnect("Duplicate status request");
+            return null;
+        }
+        session.setStatusRequested(true);
         if (CONFIG.server.ping.logPings)
             SERVER_LOG.info("[Ping] Request from: {} [{}] to: {}:{}",
                             session.getRemoteAddress(),
@@ -21,8 +26,11 @@ public class StatusRequestHandler implements PacketHandler<ServerboundStatusRequ
                             session.getConnectingServerAddress(),
                             session.getConnectingServerPort());
         ServerStatusInfo info = ZenithServerInfoBuilder.INSTANCE.buildInfo(session);
-        if (info == null) session.disconnect("bye");
-        else session.send(new ClientboundStatusResponsePacket(info));
+        if (info == null) {
+            session.disconnect("bye");
+        } else {
+            session.send(new ClientboundStatusResponsePacket(info));
+        }
         return null;
     }
 }
