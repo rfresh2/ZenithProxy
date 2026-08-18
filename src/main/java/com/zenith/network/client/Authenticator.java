@@ -156,6 +156,37 @@ public class Authenticator {
         }
     }
 
+    public record AuthCacheRefreshResult(
+        boolean success,
+        String reason
+    ) {}
+
+    public AuthCacheRefreshResult refreshAuthCacheNow() {
+        try {
+            AUTH_LOG.info("Running auth token refresh..");
+            var authCache = loadAuthCache();
+            if (authCache.isEmpty()) {
+                return new AuthCacheRefreshResult(false, "No auth cache found to refresh");
+            }
+            var javaAuthManager = authCache.get();
+            try {
+                javaAuthManager.getMinecraftToken().refresh();
+                javaAuthManager.getMinecraftProfile().refresh();
+                javaAuthManager.getMinecraftPlayerCertificates().refresh();
+                AUTH_LOG.info("Refreshed profile: {} [{}]", javaAuthManager.getMinecraftProfile().getCached().getName(), javaAuthManager.getMinecraftProfile().getCached().getId());
+                updateConfig(javaAuthManager);
+                saveAuthCacheAsync(javaAuthManager);
+                return new AuthCacheRefreshResult(true, "Success");
+            } catch (final Exception e) {
+                AUTH_LOG.error("Failed while refreshing auth cache", e);
+                return new AuthCacheRefreshResult(false, "Failed while refreshing auth cache");
+            }
+        } catch (Throwable e) {
+            AUTH_LOG.error("Error refreshing auth token", e);
+            return new AuthCacheRefreshResult(false, "Error refreshing auth token: %s:%s".formatted(e.getClass().getSimpleName(), e.getMessage()) );
+        }
+    }
+
     public void saveAuthCache(final JavaAuthManager session) {
         saveAuthCacheJson(JavaAuthManager.toJson(session));
     }

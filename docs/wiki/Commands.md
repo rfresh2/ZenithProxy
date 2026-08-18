@@ -192,6 +192,8 @@ If this still fails, try one of the alternate auth types.
 
   ```auth clear```
 
+  ```auth refreshNow```
+
   ```auth attempts <int>```
 
   ```auth alwaysRefreshOnLogin on/off```

@@ -41,6 +41,7 @@ public class AuthCommand extends Command {
             """)
             .usageLines(
                 "clear",
+                "refreshNow",
                 "attempts <int>",
                 "alwaysRefreshOnLogin on/off",
                 "type <deviceCode/emailAndPassword/prism>",
@@ -71,6 +72,22 @@ public class AuthCommand extends Command {
                     .title("Authentication Cleared")
                     .description("Cached tokens and authentication state cleared. Full re-auth will occur on next login.")
                     .primaryColor();
+            }))
+            .then(literal("refreshNow").executes(c -> {
+                var result = Authenticator.INSTANCE.refreshAuthCacheNow();
+                if (result.success()) {
+                    c.getSource().getEmbed()
+                        .title("Auth Cache Refreshed Successfully")
+                        .addField("Username", escape(CONFIG.authentication.username))
+                        .successColor();
+                    return OK;
+                } else {
+                    c.getSource().getEmbed()
+                        .title("Auth Cache Refresh Failed")
+                        .description(escape(result.reason()))
+                        .errorColor();
+                    return ERROR;
+                }
             }))
             .then(literal("attempts").then(argument("attempts", integer(1)).executes(c -> {
                 CONFIG.authentication.msaLoginAttemptsBeforeCacheWipe = c.getArgument("attempts", Integer.class);
