@@ -1,4 +1,4 @@
-/src/main/resources/
+src/main/resources/
 docs/
 licenses/
 gradle/
@@ -7,3 +7,5 @@ gradle/
 *.lock
 *.yml
 *.yaml
+src/main/java/com/zenith/mc/*/*Registry.java
+src/main/java/com/zenith/mc/item/ItemTags.java
