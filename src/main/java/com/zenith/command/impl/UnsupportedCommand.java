@@ -6,6 +6,8 @@ import com.zenith.command.api.*;
 import com.zenith.discord.Embed;
 import com.zenith.network.client.Authenticator;
 
+import java.util.UUID;
+
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
@@ -22,11 +24,11 @@ public class UnsupportedCommand extends Command {
             .category(CommandCategory.MANAGE)
             .description("""
             Unsupported settings that cause critical security issues.
-            
+
             Do not use edit these unless you absolutely understand what you are doing.
-            
+
             No user support will be provided if you modify any of these settings.
-            
+
             All subcommands are only usable from the terminal.
             """)
             .usageLines(
@@ -34,7 +36,9 @@ public class UnsupportedCommand extends Command {
                 "spectatorWhitelist on/off",
                 "allowOfflinePlayers on/off",
                 "auth type offline",
-                "auth offlineUsername <username>"
+                "auth offlineUsername <username>",
+                "auth offlineUUID <uuid>",
+                "auth offlineUUID clear"
             )
             .build();
     }
@@ -47,19 +51,16 @@ public class UnsupportedCommand extends Command {
                 CONFIG.server.extra.whitelist.enable = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Whitelist " + toggleStrCaps(CONFIG.server.extra.whitelist.enable));
-                return OK;
             })))
             .then(literal("spectatorWhitelist").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.server.spectator.whitelistEnabled = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Spectator Whitelist " + toggleStrCaps(CONFIG.server.spectator.whitelistEnabled));
-                return OK;
             })))
             .then(literal("allowOfflinePlayers").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.server.verifyUsers = !getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Allow Offline Players " + toggleStrCaps(!CONFIG.server.verifyUsers));
-                return OK;
             })))
             .then(literal("auth")
                 .then(literal("type").then(literal("offline").executes(c -> {
@@ -75,8 +76,29 @@ public class UnsupportedCommand extends Command {
                         .title("Offline Username Set");
                     Proxy.getInstance().cancelLogin();
                     Authenticator.INSTANCE.clearAuthCache();
-                    return OK;
-                }))));
+                })))
+                .then(literal("offlineUUID")
+                    .then(literal("clear").executes(c -> {
+                        CONFIG.authentication.offlineUUID = null;
+                        c.getSource().getEmbed()
+                            .title("Offline UUID Reset");
+                    }))
+                    .then(argument("uuid", wordWithChars()).executes(c -> {
+                        try {
+                            CONFIG.authentication.offlineUUID = UUID.fromString(getString(c, "uuid"));
+                        } catch (Exception e) {
+                            c.getSource().getEmbed()
+                                .title("Invalid UUID")
+                                .errorColor();
+                            return ERROR;
+                        }
+                        c.getSource().getEmbed()
+                            .title("Offline UUID Set");
+                        Proxy.getInstance().cancelLogin();
+                        Authenticator.INSTANCE.clearAuthCache();
+                        return OK;
+                    }))
+                ));
     }
 
     @Override
@@ -87,6 +109,9 @@ public class UnsupportedCommand extends Command {
             .addField("Allow Offline Players", toggleStr(!CONFIG.server.verifyUsers))
             .addField("Offline Authentication", toggleStr(CONFIG.authentication.accountType == OFFLINE))
             .addField("Offline Username", escape(CONFIG.authentication.username))
+            .addField("Offline UUID", CONFIG.authentication.offlineUUID != null
+                ? escape(CONFIG.authentication.offlineUUID.toString())
+                : "(random)")
             .primaryColor();
     }
 }

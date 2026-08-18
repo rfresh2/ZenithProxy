@@ -192,6 +192,8 @@ If this still fails, try one of the alternate auth types.
 
   ```auth clear```
 
+  ```auth refreshNow```
+
   ```auth attempts <int>```
 
   ```auth alwaysRefreshOnLogin on/off```
@@ -882,6 +884,10 @@ All subcommands are only usable from the terminal.
   ```unsupported auth type offline```
 
   ```unsupported auth offlineUsername <username>```
+
+  ```unsupported auth offlineUUID <uuid>```
+
+  ```unsupported auth offlineUUID clear```
 
 
 

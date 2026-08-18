@@ -40,6 +40,7 @@ public final class Config {
         public String password = "abc123";
         // updated on successful login
         public String username = "Unknown";
+        public @Nullable UUID offlineUUID = null;
         public boolean prio = false;
         public boolean authTokenRefresh = true;
         public int msaLoginAttemptsBeforeCacheWipe = 2;
