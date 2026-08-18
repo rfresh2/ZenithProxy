@@ -239,6 +239,12 @@ tasks {
         notCompatibleWithConfigurationCache("not compatible with configuration cache")
         dependsOn(shadowJar)
     }
+    nativeTestCompile {
+        notCompatibleWithConfigurationCache("not compatible with configuration cache")
+    }
+    generateTestResourcesConfigFile {
+        notCompatibleWithConfigurationCache("not compatible with configuration cache")
+    }
 }
 
 graalvmNative {
