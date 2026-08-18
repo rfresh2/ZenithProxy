@@ -27,6 +27,7 @@ import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ScheduledFuture;
@@ -58,7 +59,12 @@ public class Authenticator {
     public MinecraftProtocol login()  {
         if (CONFIG.authentication.accountType == OFFLINE) {
             AUTH_LOG.warn("Using offline account: '{}'. Offline accounts will not receive user support.", CONFIG.authentication.username);
-            return createMinecraftProtocol(new MinecraftProfile(UUID.randomUUID(), CONFIG.authentication.username), null, null);
+            return createMinecraftProtocol(
+                new MinecraftProfile(
+                    Objects.requireNonNullElseGet(CONFIG.authentication.offlineUUID, UUID::randomUUID),
+                    CONFIG.authentication.username),
+                null,
+                null);
         }
         var authSession = loadAuthCache()
             // todo: validate JavaAuthManager from cache matches configured auth type?

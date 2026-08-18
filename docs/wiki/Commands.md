@@ -883,6 +883,10 @@ All subcommands are only usable from the terminal.
 
   ```unsupported auth offlineUsername <username>```
 
+  ```unsupported auth offlineUUID <uuid>```
+
+  ```unsupported auth offlineUUID clear```
+
 
 
 ## Info Commands

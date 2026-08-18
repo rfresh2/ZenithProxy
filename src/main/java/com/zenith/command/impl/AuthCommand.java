@@ -7,12 +7,15 @@ import com.zenith.discord.Embed;
 import com.zenith.network.client.Authenticator;
 import com.zenith.util.config.Config;
 
+import java.util.UUID;
+
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Globals.CONFIG;
 import static com.zenith.command.brigadier.CustomStringArgumentType.getString;
 import static com.zenith.command.brigadier.CustomStringArgumentType.wordWithChars;
 import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
+import static com.zenith.discord.DiscordBot.escape;
 import static java.util.Arrays.asList;
 
 public class AuthCommand extends Command {
@@ -74,22 +77,21 @@ public class AuthCommand extends Command {
                 c.getSource().getEmbed()
                     .title("Authentication Max Attempts Set")
                     .primaryColor();
-                return OK;
             })))
             .then(literal("alwaysRefreshOnLogin").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.authentication.alwaysRefreshOnLogin = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Always Refresh On Login " + toggleStrCaps(CONFIG.authentication.alwaysRefreshOnLogin))
                     .primaryColor();
-                return OK;
             })))
             .then(literal("type").requires(this::validateDiscordOrTerminalSource)
-                .then(argument("typeArg", enumStrings("deviceCode", "emailAndPassword", "prism")).executes(c -> {
+                .then(argument("typeArg", enumStrings("deviceCode", "emailAndPassword", "prism", "offline")).executes(c -> {
                     String type = getString(c, "typeArg");
                     Config.Authentication.AccountType accountType = switch (type) {
                         case "deviceCode" -> Config.Authentication.AccountType.DEVICE_CODE;
                         case "emailAndPassword" -> Config.Authentication.AccountType.MSA;
                         case "prism" -> Config.Authentication.AccountType.PRISM;
+                        case "offline" -> Config.Authentication.AccountType.OFFLINE;
                         default -> null;
                     };
                     if (accountType == null) {
@@ -115,7 +117,7 @@ public class AuthCommand extends Command {
                         c.getSource().getEmbed()
                             .title("Invalid Email")
                             .errorColor();
-                        return OK;
+                        return ERROR;
                     }
                     CONFIG.authentication.email = emailStr;
                     c.getSource().getEmbed()
@@ -132,7 +134,7 @@ public class AuthCommand extends Command {
                         c.getSource().getEmbed()
                             .title("Invalid Password")
                             .errorColor();
-                        return OK;
+                        return ERROR;
                     }
                     CONFIG.authentication.password = passwordStr;
                     c.getSource().getEmbed()
@@ -146,28 +148,24 @@ public class AuthCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Mention Role " + toggleStrCaps(CONFIG.discord.mentionRoleOnDeviceCodeAuth))
                         .primaryColor();
-                    return OK;
                 })))
             .then(literal("openBrowser").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.authentication.openBrowserOnLogin = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Open Browser On Login " + toggleStrCaps(CONFIG.authentication.openBrowserOnLogin))
                     .primaryColor();
-                return OK;
             })))
             .then(literal("maxRefreshInterval").then(argument("minutes", integer(5, 500)).executes(c -> {
                 CONFIG.authentication.maxRefreshIntervalMins = c.getArgument("minutes", Integer.class);
                 c.getSource().getEmbed()
                     .title("Max Refresh Interval Set")
                     .primaryColor();
-                return OK;
             })))
             .then(literal("useClientConnectionProxy").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.authentication.useClientConnectionProxy = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Use Client Connection Proxy " + toggleStrCaps(CONFIG.authentication.useClientConnectionProxy))
                     .primaryColor();
-                return OK;
             })))
             .then(literal("chatSigning")
                 .then(argument("toggle", toggle()).executes(c -> {
@@ -175,22 +173,56 @@ public class AuthCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Chat Signing " + toggleStrCaps(CONFIG.client.chatSigning.enabled))
                         .primaryColor();
-                    return OK;
                 }))
                 .then(literal("force").then(argument("forceToggle", toggle()).executes(c -> {
                     CONFIG.client.chatSigning.force = getToggle(c, "forceToggle");
                     c.getSource().getEmbed()
                         .title("Chat Signing Force " + toggleStrCaps(CONFIG.client.chatSigning.force))
                         .primaryColor();
-                    return OK;
                 })))
                 .then(literal("commands").then(argument("commandsToggle", toggle()).executes(c -> {
                     CONFIG.client.chatSigning.signCommands = getToggle(c, "commandsToggle");
                     c.getSource().getEmbed()
                         .title("Chat Signing Commands " + toggleStrCaps(CONFIG.client.chatSigning.signCommands))
                         .primaryColor();
+                }))))
+            .then(literal("offlineUsername").then(argument("username", wordWithChars()).executes(c -> {
+                var username = getString(c, "username").trim();
+                if (username.isBlank()) {
+                    c.getSource().getEmbed()
+                        .title("Invalid Username")
+                        .errorColor();
+                    return ERROR;
+                }
+                CONFIG.authentication.username = getString(c, "username");
+                c.getSource().getEmbed()
+                    .title("Offline Username Set")
+                    .primaryColor();
+                Proxy.getInstance().cancelLogin();
+                Authenticator.INSTANCE.clearAuthCache();
+                return OK;
+            })))
+            .then(literal("offlineUUID")
+                .then(literal("clear").executes(c -> {
+                    CONFIG.authentication.offlineUUID = null;
+                    c.getSource().getEmbed()
+                        .title("Offline UUID Reset")
+                        .primaryColor();
+                }))
+                .then(argument("uuid", wordWithChars()).executes(c -> {
+                    try {
+                        CONFIG.authentication.offlineUUID = UUID.fromString(getString(c, "uuid"));
+                    } catch (Exception e) {
+                        c.getSource().getEmbed()
+                            .title("Invalid UUID")
+                            .errorColor();
+                        return ERROR;
+                    }
+                    c.getSource().getEmbed()
+                        .title("Offline UUID Set")
+                        .primaryColor();
                     return OK;
-                }))));
+                })));
     }
 
     private boolean validateTerminalSource(CommandContext c) {
@@ -214,6 +246,13 @@ public class AuthCommand extends Command {
             .addField("Chat Signing", toggleStr(CONFIG.client.chatSigning.enabled))
             .addField("Chat Signing Force", toggleStr(CONFIG.client.chatSigning.force))
             .addField("Chat Signing Commands", toggleStr(CONFIG.client.chatSigning.signCommands));
+        if (CONFIG.authentication.accountType == Config.Authentication.AccountType.OFFLINE) {
+            builder
+                .addField("Offline Username", escape(CONFIG.authentication.username))
+                .addField("Offline UUID", CONFIG.authentication.offlineUUID != null
+                    ? escape(CONFIG.authentication.offlineUUID.toString())
+                    : "(random)");
+        }
     }
 
     private String authTypeToString(Config.Authentication.AccountType type) {
