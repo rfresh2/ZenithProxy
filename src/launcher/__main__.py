@@ -30,6 +30,8 @@ from update_zenith import update_zenith_exec
 
 ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
 
+os.environ["ZENITH_LAUNCHER"] = "true"
+
 config = LaunchConfig()
 api = github_api.GitHubAPI(config)
 
