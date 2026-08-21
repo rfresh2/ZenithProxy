@@ -155,7 +155,7 @@ public class Proxy {
         try {
             if (inDevEnv()) CONFIG.debug.debugLogs = true;
             if (CONFIG.debug.clearOldLogs) EXECUTOR.schedule(Proxy::clearOldLogs, 10L, TimeUnit.SECONDS);
-            if (CONFIG.interactiveTerminal.enable) TERMINAL.start();
+            TERMINAL.start();
             if (CONFIG.debug.lockFile) tryOpenLockFile();
             MODULE.init();
             this.tcpManager = new TcpConnectionManager();

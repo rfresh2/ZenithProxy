@@ -896,7 +896,6 @@ public final class Config {
     public static final class InteractiveTerminal {
         public boolean enable = true;
         public boolean logToDiscord = true;
-        public boolean allowDumbTerminal = true;
         public boolean alwaysOnCompletions = true;
     }
 
