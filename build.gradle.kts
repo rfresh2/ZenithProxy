@@ -199,6 +199,7 @@ tasks {
                 "https://docs.oracle.com/en/java/javase/${javaReleaseVersion}/docs/api",
                 "https://maven.2b2t.vc/javadoc/releases/com/github/rfresh2/MCProtocolLib/$mcplVersion/raw"
             )
+            splitIndex()
         }
     }
     getByName("javadocJar", Jar::class) {
