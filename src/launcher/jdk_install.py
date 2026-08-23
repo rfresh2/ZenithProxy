@@ -49,7 +49,7 @@ def _get_java_version_from_subprocess(java_path: str) -> Optional[Version]:
     try:
         output = subprocess.check_output([java_path, "-version"], stderr=subprocess.STDOUT, text=True)
         version_line = [line for line in output.split("\n") if "version" in line][0]
-        version_match = re.search(r'"(\d+(\.\d+){0,2})"', version_line)
+        version_match = re.search(r'"(\d+(?:\.\d+)*)"', version_line) # Accept Java versions with additional version components
         if version_match:
             version_str = version_match.group(1)
             version = Version.from_short_str(version_str)
