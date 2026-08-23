@@ -67,9 +67,9 @@ public class TerminalManager {
         terminalThread.setDaemon(true);
         terminalThread.start();
         if (terminal instanceof DumbTerminal) {
-            TERMINAL_LOG.info("Initialized dumb terminal");
+            TERMINAL_LOG.debug("Initialized dumb terminal");
         } else {
-            TERMINAL_LOG.info("Initialized interactive terminal");
+            TERMINAL_LOG.debug("Initialized interactive terminal");
         }
     }
 
