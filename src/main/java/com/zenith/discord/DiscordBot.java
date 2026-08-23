@@ -5,8 +5,9 @@ import com.zenith.Proxy;
 import com.zenith.command.api.CommandContext;
 import com.zenith.command.api.CommandOutputHelper;
 import com.zenith.command.api.DiscordCommandContext;
-import com.zenith.event.message.DiscordMainChannelCommandReceivedEvent;
-import com.zenith.event.message.DiscordRelayChannelMessageReceivedEvent;
+import com.zenith.event.discord.DiscordMainChannelCommandReceivedEvent;
+import com.zenith.event.discord.DiscordRelayChannelMessageReceivedEvent;
+import com.zenith.event.discord.MainChannelMessageSentEvent;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.queue.Queue;
 import com.zenith.module.impl.AutoReconnect;
@@ -411,6 +412,7 @@ public class DiscordBot {
     public void sendEmbedMessage(@Nullable String message, Embed embed) {
         sendEmbedMessageTo(mainChannel, message, embed);
         CommandOutputHelper.logEmbedOutputToTerminal(embed);
+        EVENT_BUS.postAsync(new MainChannelMessageSentEvent(embed, message));
     }
 
     public void sendRelayEmbedMessage(Embed embed) {
@@ -439,6 +441,7 @@ public class DiscordBot {
     public void sendMessage(final String message) {
         sendMessageTo(mainChannel, message);
         TERMINAL_LOG.info(message);
+        EVENT_BUS.postAsync(new MainChannelMessageSentEvent(null, message));
     }
 
     public void sendRelayMessage(final String message) {
@@ -472,6 +475,7 @@ public class DiscordBot {
         sendEmbedMessageWithButtonsTo(mainChannel, message, embed, buttons, eventConsumer, timeout);
         TERMINAL_LOG.info(message);
         CommandOutputHelper.logEmbedOutputToTerminal(embed);
+        EVENT_BUS.postAsync(new MainChannelMessageSentEvent(embed, message));
     }
 
     public void sendEmbedMessageWithButtons(Embed embed, List<Button> buttons, Consumer<ButtonInteractionEvent> mapper, Duration timeout) {

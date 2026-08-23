@@ -7,7 +7,7 @@ import com.zenith.event.chat.DeathMessageChatEvent;
 import com.zenith.event.chat.PublicChatEvent;
 import com.zenith.event.chat.SystemChatEvent;
 import com.zenith.event.chat.WhisperChatEvent;
-import com.zenith.event.message.DiscordRelayChannelMessageReceivedEvent;
+import com.zenith.event.discord.DiscordRelayChannelMessageReceivedEvent;
 import com.zenith.event.message.PrivateMessageSendEvent;
 import com.zenith.event.server.ServerPlayerConnectedEvent;
 import com.zenith.event.server.ServerPlayerDisconnectedEvent;
@@ -294,8 +294,8 @@ public class ChatRelayEventListener {
             message));
     }
 
-    public void sendRelayEmbedMessage(Embed embedCreateSpec) {
-        DISCORD.sendRelayEmbedMessage(embedCreateSpec);
+    public void sendRelayEmbedMessage(Embed embed) {
+        DISCORD.sendRelayEmbedMessage(embed);
     }
     public void sendRelayEmbedMessage(String message, Embed embed) {
         DISCORD.sendRelayEmbedMessage(message, embed);

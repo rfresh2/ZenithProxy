@@ -3,6 +3,7 @@ package com.zenith.discord;
 import com.zenith.Proxy;
 import com.zenith.event.chat.DeathMessageChatEvent;
 import com.zenith.event.client.*;
+import com.zenith.event.discord.NotificationSentEvent;
 import com.zenith.event.module.*;
 import com.zenith.event.player.*;
 import com.zenith.event.plugin.PluginLoadFailureEvent;
@@ -849,18 +850,23 @@ public class NotificationEventListener {
      */
     public void sendEmbedMessage(Embed embed) {
         DISCORD.sendEmbedMessage(embed);
+        EVENT_BUS.postAsync(new NotificationSentEvent(embed, null));
     }
     public void sendEmbedMessage(String message, Embed embed) {
         DISCORD.sendEmbedMessage(message, embed);
+        EVENT_BUS.postAsync(new NotificationSentEvent(embed, message));
     }
     public void sendMessage(final String message) {
         DISCORD.sendMessage(message);
+        EVENT_BUS.postAsync(new NotificationSentEvent(null, message));
     }
     public void sendEmbedMessageWithButtons(String message, Embed embed, List<Button> buttons, Consumer<ButtonInteractionEvent> mapper, Duration timeout) {
         DISCORD.sendEmbedMessageWithButtons(message, embed, buttons, mapper, timeout);
+        EVENT_BUS.postAsync(new NotificationSentEvent(embed, message));
     }
     public void sendEmbedMessageWithButtons(Embed embed, List<Button> buttons, Consumer<ButtonInteractionEvent> mapper, Duration timeout) {
         DISCORD.sendEmbedMessageWithButtons(embed, buttons, mapper, timeout);
+        EVENT_BUS.postAsync(new NotificationSentEvent(embed, null));
     }
     public void updatePresence(final OnlineStatus onlineStatus, final Activity activity) {
         DISCORD.setPresence(onlineStatus, activity);
