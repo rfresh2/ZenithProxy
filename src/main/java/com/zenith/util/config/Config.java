@@ -517,6 +517,7 @@ public final class Config {
                 public enum AutoRecordMode {
                     NONE("off"),
                     PROXY_CONNECTED("proxyConnected"),
+                    ONLINE("online"),
                     PLAYER_CONNECTED("playerConnected"),
                     HEALTH("health");
                     private final String name;

@@ -4,12 +4,14 @@ import com.github.rfresh2.EventConsumer;
 import com.zenith.discord.Embed;
 import com.zenith.event.client.ClientConnectEvent;
 import com.zenith.event.client.ClientDisconnectEvent;
+import com.zenith.event.client.ClientOnlineEvent;
 import com.zenith.event.client.ClientTickEvent;
 import com.zenith.event.module.PlayerHealthChangedEvent;
 import com.zenith.event.module.ReplayStartedEvent;
 import com.zenith.event.module.ReplayStoppedEvent;
 import com.zenith.event.player.PlayerConnectedEvent;
 import com.zenith.event.player.PlayerDisconnectedEvent;
+import com.zenith.event.queue.QueueStartEvent;
 import com.zenith.feature.replay.ReplayModPacketHandlerCodec;
 import com.zenith.feature.replay.ReplayRecording;
 import com.zenith.module.api.Module;
@@ -48,6 +50,7 @@ public class ReplayMod extends Module {
         return List.of(
             of(ClientDisconnectEvent.class, this::onDisconnectEvent),
             of(ClientTickEvent.class, this::onClientTick),
+            of(QueueStartEvent.class, this::handleQueueStart),
             of(PlayerDisconnectedEvent.class, this::handleProxyClientDisconnectedEvent)
         );
     }
@@ -192,12 +195,17 @@ public class ReplayMod extends Module {
     }
 
     public void handleProxyClientDisconnectedEvent(final PlayerDisconnectedEvent event) {
-        if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PLAYER_CONNECTED) {
-            info("Stopping recording due to player disconnect");
-            disable();
-        }
+        if (CONFIG.client.extra.replayMod.autoRecordMode != AutoRecordMode.PLAYER_CONNECTED) return;
+        info("Stopping recording due to player disconnect");
+        disable();
     }
 
+    private void handleQueueStart(QueueStartEvent event) {
+        if (CONFIG.client.extra.replayMod.autoRecordMode != AutoRecordMode.ONLINE) return;
+        if (!event.wasOnline()) return;
+        info("Stopping recording because we got kicked to queue");
+        disable();
+    }
     /**
      * Event listeners even when the module is disabled
      */
@@ -213,37 +221,42 @@ public class ReplayMod extends Module {
                 this,
                 of(PlayerConnectedEvent.class, this::handleProxyClientConnectedEvent),
                 of(ClientConnectEvent.class, this::handleConnectEvent),
+                of(ClientOnlineEvent.class, this::handleOnlineEvent),
                 of(PlayerHealthChangedEvent.class, this::handleHealthChangeEvent)
             );
         }
 
-        public void handleProxyClientConnectedEvent(final PlayerConnectedEvent event) {
+        private void handleOnlineEvent(ClientOnlineEvent event) {
+            if (CONFIG.client.extra.replayMod.autoRecordMode != AutoRecordMode.ONLINE) return;
             if (instance.isEnabled()) return;
-            if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PLAYER_CONNECTED) {
-                instance.info("Starting recording because player connected");
-                instance.enable();
-            }
+            instance.info("Starting recording because proxy online");
+            instance.enable();
+        }
+
+        public void handleProxyClientConnectedEvent(final PlayerConnectedEvent event) {
+            if (CONFIG.client.extra.replayMod.autoRecordMode != AutoRecordMode.PLAYER_CONNECTED) return;
+            if (instance.isEnabled()) return;
+            instance.info("Starting recording because player connected");
+            instance.enable();
         }
 
         public void handleConnectEvent(ClientConnectEvent event) {
+            if (CONFIG.client.extra.replayMod.autoRecordMode != AutoRecordMode.PROXY_CONNECTED) return;
             if (instance.isEnabled()) return;
-            if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.PROXY_CONNECTED) {
-                instance.info("Starting recording because proxy connected");
-                instance.enable();
-            }
+            instance.info("Starting recording because proxy connected");
+            instance.enable();
         }
 
         public void handleHealthChangeEvent(PlayerHealthChangedEvent event) {
+            if (CONFIG.client.extra.replayMod.autoRecordMode != AutoRecordMode.HEALTH) return;
             if (instance.isEnabled()) return;
-            if (CONFIG.client.extra.replayMod.autoRecordMode == AutoRecordMode.HEALTH
-                && event.newHealth() <= CONFIG.client.extra.replayMod.replayRecordingHealthThreshold) {
-                instance.info("Starting recording because health is below {}", CONFIG.client.extra.replayMod.replayRecordingHealthThreshold);
-                instance.enable();
-                instance.startDelayedRecordingStop(
-                    30,
-                    () -> CACHE.getPlayerCache().getThePlayer().getHealth() > CONFIG.client.extra.replayMod.replayRecordingHealthThreshold
-                );
-            }
+            if (event.newHealth() > CONFIG.client.extra.replayMod.replayRecordingHealthThreshold) return;
+            instance.info("Starting recording because health is below {}", CONFIG.client.extra.replayMod.replayRecordingHealthThreshold);
+            instance.enable();
+            instance.startDelayedRecordingStop(
+                30,
+                () -> CACHE.getPlayerCache().getThePlayer().getHealth() > CONFIG.client.extra.replayMod.replayRecordingHealthThreshold
+            );
         }
     }
 }
