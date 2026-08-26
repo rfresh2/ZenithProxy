@@ -53,10 +53,14 @@ dependencies {
     api("io.netty:netty-handler")
     api("io.netty:netty-resolver-dns")
     api("io.netty:netty-transport-classes-epoll")
-    api("io.netty:netty-transport-native-epoll") { artifact { classifier = "linux-x86_64" } }
-    api("io.netty:netty-transport-native-epoll") { artifact { classifier = "linux-aarch_64" } }
-    api("io.netty:netty-transport-native-unix-common") { artifact { classifier = "linux-x86_64"} }
-    api("io.netty:netty-transport-native-unix-common") { artifact { classifier = "linux-aarch_64"} }
+    api("io.netty:netty-transport-native-epoll") {
+        artifact { classifier = "linux-x86_64" }
+        artifact { classifier = "linux-aarch_64" }
+    }
+    api("io.netty:netty-transport-native-unix-common") {
+        artifact { classifier = "linux-x86_64"}
+        artifact { classifier = "linux-aarch_64" }
+    }
     api("io.netty:netty-resolver-dns-native-macos") { artifact { classifier = "osx-aarch_64" } }
     api("org.cloudburstmc.math:api:2.0")
     api("org.cloudburstmc.math:immutable:2.0")
