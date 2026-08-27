@@ -29,7 +29,9 @@ public class AutoOmenCommand extends Command {
             .usageLines(
                 "on/off",
                 "whileRaidActive on/off",
-                "whileOmenActive on/off"
+                "whileOmenActive on/off",
+                "raidCooldown <ms>",
+                "omenCooldown <ms>"
             )
             .build();
     }
@@ -48,7 +50,7 @@ public class AutoOmenCommand extends Command {
                 c.getSource().getEmbed()
                     .title("AutoOmen While Raid Active " + toggleStrCaps(CONFIG.client.extra.autoOmen.whileRaidActive));
             })))
-            .then(literal("whileOmenActive").then(argument("toggle", toggle()).executes(c -> {;
+            .then(literal("whileOmenActive").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.client.extra.autoOmen.whileOmenActive = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("AutoOmen While Omen Active " + toggleStrCaps(CONFIG.client.extra.autoOmen.whileOmenActive));
@@ -56,21 +58,25 @@ public class AutoOmenCommand extends Command {
             .then(literal("raidCooldown").then(argument("ms", integer(1)).executes(c -> {
                 CONFIG.client.extra.autoOmen.raidCooldownMs = getInteger(c, "ms");
                 c.getSource().getEmbed()
-                    .title("Raid Cooldown Set");
+                    .title("Raid Cooldown Set to " + CONFIG.client.extra.autoOmen.raidCooldownMs + "ms");
             })))
             .then(literal("omenCooldown").then(argument("ms", integer(1)).executes(c -> {
                 CONFIG.client.extra.autoOmen.omenCooldownMs = getInteger(c, "ms");
                 c.getSource().getEmbed()
-                    .title("Omen Cooldown Set");
+                    .title("Omen Cooldown Set to " + CONFIG.client.extra.autoOmen.omenCooldownMs + "ms");
             })));
     }
 
     @Override
     public void defaultEmbed(Embed embed) {
+        var autoOmen = CONFIG.client.extra.autoOmen;
         embed
-            .addField("AutoOmen", toggleStr(CONFIG.client.extra.autoOmen.enabled))
-            .addField("While Raid Active", toggleStr(CONFIG.client.extra.autoOmen.whileRaidActive))
-            .addField("While Omen Active", toggleStr(CONFIG.client.extra.autoOmen.whileOmenActive))
+            .addField("AutoOmen", toggleStr(autoOmen.enabled))
+            .addField("While Raid Active", toggleStr(autoOmen.whileRaidActive))
+            .addField("While Omen Active", toggleStr(autoOmen.whileOmenActive))
+            .addField("Raid Cooldown", autoOmen.raidCooldownMs + " ms")
+            .addField("Omen Cooldown", autoOmen.omenCooldownMs + " ms")
+            .addField("Priority", autoOmen.priority != null ? String.valueOf(autoOmen.priority) : "None")
             .primaryColor();
     }
 }
