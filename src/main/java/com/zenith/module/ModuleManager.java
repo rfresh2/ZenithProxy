@@ -2,16 +2,16 @@ package com.zenith.module;
 
 import com.zenith.module.api.Module;
 import com.zenith.module.impl.*;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.zenith.Globals.MODULE_LOG;
 import static java.util.Arrays.asList;
 
 public class ModuleManager {
-    private final Reference2ObjectMap<Class<? extends Module>, Module> moduleClassMap = new Reference2ObjectOpenHashMap<>();
+    private final Map<Class<? extends Module>, Module> moduleClassMap = new IdentityHashMap<>();
 
     public void init() {
         asList(

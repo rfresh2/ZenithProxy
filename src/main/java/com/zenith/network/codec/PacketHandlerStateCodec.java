@@ -2,22 +2,23 @@ package com.zenith.network.codec;
 
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.server.ServerSession;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.geysermc.mcprotocollib.network.Session;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.jspecify.annotations.NonNull;
 
+import java.util.IdentityHashMap;
+import java.util.Map;
+
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class PacketHandlerStateCodec<S extends Session> {
     @NonNull
-    protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers;
+    protected final Map<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers;
     @NonNull
-    protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> outboundHandlers;
+    protected final Map<Class<? extends Packet>, PacketHandler<? extends Packet, S>> outboundHandlers;
     @NonNull
-    protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> postOutboundHandlers;
+    protected final Map<Class<? extends Packet>, PacketHandler<? extends Packet, S>> postOutboundHandlers;
     // If set to false, cancels any inbound packet type with no handler registered
     protected final boolean allowUnhandledInbound;
 
@@ -64,11 +65,11 @@ public class PacketHandlerStateCodec<S extends Session> {
 
     public static class Builder<S extends Session> {
 
-        protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers = new Reference2ObjectOpenHashMap<>();
+        protected final Map<Class<? extends Packet>, PacketHandler<? extends Packet, S>> inboundHandlers = new IdentityHashMap<>();
 
-        protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> outboundHandlers = new Reference2ObjectOpenHashMap<>();
+        protected final Map<Class<? extends Packet>, PacketHandler<? extends Packet, S>> outboundHandlers = new IdentityHashMap<>();
 
-        protected final Reference2ObjectMap<Class<? extends Packet>, PacketHandler<? extends Packet, S>> postOutboundHandlers = new Reference2ObjectOpenHashMap<>();
+        protected final Map<Class<? extends Packet>, PacketHandler<? extends Packet, S>> postOutboundHandlers = new IdentityHashMap<>();
         // If set to false, cancels any inbound packet type with no handler registered
         protected boolean allowUnhandledInbound = true;
 
