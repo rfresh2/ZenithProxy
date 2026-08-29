@@ -15,7 +15,7 @@ public class InGameCommandManager {
     // true = command was handled
     // false = command was not handled
     public boolean handleInGameCommand(final String message, final @NonNull ServerSession session, final boolean printUnhandled) {
-        if (matchesServerCommand(message, session)) {
+        if (matchesServerCommand(message, CommandContext.createInGamePlayerContext(message, session))) {
             // pass through to server
             return false;
         }
@@ -28,9 +28,9 @@ public class InGameCommandManager {
         return executeInGameCommand(message, session, printUnhandled);
     }
 
-    public boolean matchesServerCommand(final String message, final ServerSession session) {
+    public boolean matchesServerCommand(final String message, CommandContext context) {
         var dispatcher = CACHE.getChatCache().getCommandDispatcher();
-        var parse = dispatcher.parse(message, CommandContext.createInGamePlayerContext(message, session));
+        var parse = dispatcher.parse(message, context);
         if (!parse.getExceptions().isEmpty()) {
             return false;
         }

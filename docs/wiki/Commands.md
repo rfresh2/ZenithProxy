@@ -89,7 +89,9 @@ If this is disabled, spectators only have access to a limited set of core comman
 
   ```spectator entity <entity>```
 
-  ```spectator chat on/off```
+  ```spectator publicChat on/off```
+
+  ```spectator chatSendsPrivateMessage on/off```
 
   ```spectator playerCamOnJoin on/off```
 
@@ -98,6 +100,8 @@ If this is disabled, spectators only have access to a limited set of core comman
   ```spectator fullCommands slashCommands on/off```
 
   ```spectator fullCommands requireRegularWhitelist on/off```
+
+  ```spectator fullCommands serverCommands on/off```
 
 
 ### status

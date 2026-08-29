@@ -1,5 +1,6 @@
 package com.zenith.network.server.handler.spectator.outgoing;
 
+import com.zenith.command.brigadier.McplCommandTreeMerger;
 import com.zenith.network.codec.PacketHandler;
 import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;
@@ -15,10 +16,17 @@ public class ClientCommandsSpectatorOutgoingHandler implements PacketHandler<Cli
                 return null;
             }
             CommandNode[] zenithCommandNodes = COMMAND.getMcplCommandNodes();
-            return new ClientboundCommandsPacket(
-                zenithCommandNodes,
-                0
-            );
+            if (!CONFIG.server.spectator.fullCommandsServerCommands || packet.getFirstNodeIndex() == 0) {
+                return new ClientboundCommandsPacket(
+                    zenithCommandNodes,
+                    0
+                );
+            } else {
+                return new ClientboundCommandsPacket(
+                    McplCommandTreeMerger.mergeCommandNodes(zenithCommandNodes, packet.getNodes()),
+                    0
+                );
+            }
         }
         return null;
     }

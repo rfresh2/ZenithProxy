@@ -1,12 +1,10 @@
 package com.zenith.network.server.handler.player.outgoing;
 
+import com.zenith.command.brigadier.McplCommandTreeMerger;
 import com.zenith.network.codec.PacketHandler;
 import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.data.game.command.CommandNode;
-import org.geysermc.mcprotocollib.protocol.data.game.command.CommandType;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundCommandsPacket;
-
-import java.util.OptionalInt;
 
 import static com.zenith.Globals.*;
 
@@ -30,70 +28,10 @@ public class ClientCommandsOutgoingHandler implements PacketHandler<ClientboundC
                 );
             }
             return new ClientboundCommandsPacket(
-                combineCommandNodes(zenithCommandNodes, packet.getNodes()),
+                McplCommandTreeMerger.mergeCommandNodes(zenithCommandNodes, packet.getNodes()),
                 0
             );
         }
         return packet;
-    }
-
-    private static CommandNode[] combineCommandNodes(
-        final CommandNode[] nodesA, // these nodes are essentially left as-is, except for the root node
-        final CommandNode[] nodesB // these nodes are added to the end of the nodesA array, with indices offset
-    ) {
-        if (nodesB.length == 0) return nodesA;
-        if (nodesA.length == 0) return nodesB;
-        final CommandNode[] combinedNodes = new CommandNode[nodesA.length + nodesB.length - 1];
-        final int offset = nodesA.length - 1;
-        System.arraycopy(nodesA, 0, combinedNodes, 0, nodesA.length);
-        combinedNodes[0] = combineRootCommandNodes(offset, nodesA[0], nodesB[0]);
-        int nextIndex = nodesA.length;
-        for (int i = 1; i < nodesB.length; i++) {
-            combinedNodes[nextIndex++] = offsetCommandNode(offset, nodesB[i]);
-        }
-        return combinedNodes;
-    }
-
-    private static CommandNode combineRootCommandNodes(
-        final int offset,
-        final CommandNode rootNodeA,
-        final CommandNode rootNodeB
-    ) {
-        final int[] combinedRootChildIndices = new int[rootNodeA.getChildIndices().length + rootNodeB.getChildIndices().length];
-        System.arraycopy(rootNodeA.getChildIndices(), 0, combinedRootChildIndices, 0, rootNodeA.getChildIndices().length);
-        System.arraycopy(rootNodeB.getChildIndices(), 0, combinedRootChildIndices, rootNodeA.getChildIndices().length, rootNodeB.getChildIndices().length);
-        for (int i = rootNodeA.getChildIndices().length; i < combinedRootChildIndices.length; i++) {
-            combinedRootChildIndices[i] += offset;
-        }
-        return new CommandNode(
-            CommandType.ROOT,
-            rootNodeA.isExecutable(),
-            combinedRootChildIndices,
-            rootNodeA.getRedirectIndex(),
-            rootNodeA.getName(),
-            rootNodeA.getParser(),
-            rootNodeA.getProperties(),
-            rootNodeA.getSuggestionType()
-        );
-    }
-
-    private static CommandNode offsetCommandNode(final int offsetIndex, final CommandNode node) {
-        final int[] childIndices = new int[node.getChildIndices().length];
-        for (int j = 0; j < childIndices.length; j++) {
-            childIndices[j] = node.getChildIndices()[j] + offsetIndex;
-        }
-        OptionalInt redirectIndex = node.getRedirectIndex().isPresent()
-            ? OptionalInt.of(node.getRedirectIndex().getAsInt() + offsetIndex)
-            : OptionalInt.empty();
-        return new CommandNode(
-            node.getType(),
-            node.isExecutable(),
-            childIndices,
-            redirectIndex,
-            node.getName(),
-            node.getParser(),
-            node.getProperties(),
-            node.getSuggestionType()
-        );
     }
 }
