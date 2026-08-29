@@ -96,6 +96,10 @@ public class Globals {
         return System.getenv("ZENITH_DEV") != null;
     }
 
+    public static boolean inZenithLauncher() {
+        return System.getenv("ZENITH_LAUNCHER") != null;
+    }
+
     public static String getVersion() {
         var releaseVersion = getExecutableReleaseVersion();
         if (releaseVersion != null) {

@@ -2097,7 +2097,7 @@ Additional recording modes can be configured in the `visualRange` command.
 
   ```replay maxRecordingTime <minutes>```
 
-  ```replay autoRecord mode <off/proxyConnected/playerConnected/health>```
+  ```replay autoRecord mode <off/online/proxyConnected/playerConnected/health>```
 
   ```replay autoRecord health <integer>```
 

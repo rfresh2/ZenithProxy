@@ -27,15 +27,15 @@ public class ReplayCommand extends Command {
             .category(CommandCategory.MODULE)
             .description("""
             Captures a ReplayMod recording.
-            
+
             Replays can optionally be uploaded to discord if they are under the discord message size limit.
-            
-            If a replay is too large for discord, it can be uploaded to https://file.io instead if `fileIoUpload` is enabled. 
-            
+
+            If a replay is too large for discord, it can be uploaded to https://file.io instead if `fileIoUpload` is enabled.
+
             A `maxRecordingTime` of 0 means there is no limit, however, recording are always stopped on disconnects.
-            
+
             `autoRecord mode <mode` can automatically record while certain conditions are met.
-            
+
             Additional recording modes can be configured in the `visualRange` command.
             """)
             .usageLines(
@@ -44,7 +44,7 @@ public class ReplayCommand extends Command {
                 "discordUpload on/off",
                 "fileIoUpload on/off",
                 "maxRecordingTime <minutes>",
-                "autoRecord mode <off/proxyConnected/playerConnected/health>",
+                "autoRecord mode <off/online/proxyConnected/playerConnected/health>",
                 "autoRecord health <integer>",
                 "featureFlags on/off"
             )

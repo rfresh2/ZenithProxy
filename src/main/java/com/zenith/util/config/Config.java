@@ -517,6 +517,7 @@ public final class Config {
                 public enum AutoRecordMode {
                     NONE("off"),
                     PROXY_CONNECTED("proxyConnected"),
+                    ONLINE("online"),
                     PLAYER_CONNECTED("playerConnected"),
                     HEALTH("health");
                     private final String name;
@@ -896,7 +897,6 @@ public final class Config {
     public static final class InteractiveTerminal {
         public boolean enable = true;
         public boolean logToDiscord = true;
-        public boolean allowDumbTerminal = true;
         public boolean alwaysOnCompletions = true;
     }
 

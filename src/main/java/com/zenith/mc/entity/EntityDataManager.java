@@ -2,15 +2,14 @@ package com.zenith.mc.entity;
 
 import com.zenith.cache.data.entity.EntityLiving;
 import com.zenith.mc.block.LocalizedCollisionBox;
-import com.zenith.util.struct.Maps;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import lombok.SneakyThrows;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.jspecify.annotations.Nullable;
 
+import java.util.EnumMap;
+
 public class EntityDataManager {
-    private static final Reference2ObjectMap<EntityType, EntityData> entityTypeToData = new Reference2ObjectOpenHashMap<>(EntityRegistry.REGISTRY.size(), Maps.FAST_LOAD_FACTOR);
+    private static final EnumMap<EntityType, EntityData> entityTypeToData = new EnumMap<>(EntityType.class);
 
     static {
         init();
@@ -33,9 +32,7 @@ public class EntityDataManager {
     }
 
     public EntityData getEntityData(final EntityType type) {
-        var data = entityTypeToData.get(type);
-        if (data == entityTypeToData.defaultReturnValue()) return null;
-        return data;
+        return entityTypeToData.get(type);
     }
 
     public LocalizedCollisionBox getCollisionBox(final EntityLiving entity) {

@@ -11,13 +11,13 @@ public abstract class Database {
     }
 
     public void start() {
-        if (!isRunning)
-            subscribeEvents();
+        subscribeEvents();
         isRunning = true;
     }
 
     public void stop() {
         EVENT_BUS.unsubscribe(this);
+        isRunning = false;
     }
 
     public abstract void subscribeEvents();

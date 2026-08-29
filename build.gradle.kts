@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "1.1.9"
+    id("org.graalvm.buildtools.native") version "1.1.10"
     id("com.gradleup.shadow") version "9.6.1"
     id("io.freefair.lombok") version "9.5.0"
     `maven-publish`
@@ -53,10 +53,14 @@ dependencies {
     api("io.netty:netty-handler")
     api("io.netty:netty-resolver-dns")
     api("io.netty:netty-transport-classes-epoll")
-    api("io.netty:netty-transport-native-epoll") { artifact { classifier = "linux-x86_64" } }
-    api("io.netty:netty-transport-native-epoll") { artifact { classifier = "linux-aarch_64" } }
-    api("io.netty:netty-transport-native-unix-common") { artifact { classifier = "linux-x86_64"} }
-    api("io.netty:netty-transport-native-unix-common") { artifact { classifier = "linux-aarch_64"} }
+    api("io.netty:netty-transport-native-epoll") {
+        artifact { classifier = "linux-x86_64" }
+        artifact { classifier = "linux-aarch_64" }
+    }
+    api("io.netty:netty-transport-native-unix-common") {
+        artifact { classifier = "linux-x86_64"}
+        artifact { classifier = "linux-aarch_64" }
+    }
     api("io.netty:netty-resolver-dns-native-macos") { artifact { classifier = "osx-aarch_64" } }
     api("org.cloudburstmc.math:api:2.0")
     api("org.cloudburstmc.math:immutable:2.0")
@@ -77,12 +81,12 @@ dependencies {
     api("com.viaversion:viaversion-common:5.11.0")
     api("com.viaversion:viabackwards-common:5.11.0")
     api("com.viaversion:viarewind-common:4.1.3")
-    api("org.jline:jline:4.3.1")
+    api("org.jline:jline:4.4.0")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.1.0")
     api("org.postgresql:postgresql:42.7.13")
     api("org.jdbi:jdbi3-postgres:3.54.0")
-    api("com.google.guava:guava:33.6.0-jre")
+    api("com.google.guava:guava:33.7.1-jre")
     api("ch.qos.logback:logback-classic:1.6.3")
     api("org.slf4j:slf4j-api:2.0.18")
     api("org.slf4j:jul-to-slf4j:2.0.18")
@@ -199,6 +203,7 @@ tasks {
                 "https://docs.oracle.com/en/java/javase/${javaReleaseVersion}/docs/api",
                 "https://maven.2b2t.vc/javadoc/releases/com/github/rfresh2/MCProtocolLib/$mcplVersion/raw"
             )
+            splitIndex()
         }
     }
     getByName("javadocJar", Jar::class) {
@@ -238,6 +243,12 @@ tasks {
     generateResourcesConfigFile {
         notCompatibleWithConfigurationCache("not compatible with configuration cache")
         dependsOn(shadowJar)
+    }
+    nativeTestCompile {
+        notCompatibleWithConfigurationCache("not compatible with configuration cache")
+    }
+    generateTestResourcesConfigFile {
+        notCompatibleWithConfigurationCache("not compatible with configuration cache")
     }
 }
 

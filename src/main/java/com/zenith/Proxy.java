@@ -26,6 +26,7 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.server.LanBroadcaster;
 import com.zenith.network.server.ProxyServerListener;
 import com.zenith.network.server.ServerSession;
+import com.zenith.terminal.logback.TerminalConsoleAppender;
 import com.zenith.util.ImageInfo;
 import com.zenith.util.Wait;
 import com.zenith.util.struct.FastArrayList;
@@ -155,7 +156,8 @@ public class Proxy {
         try {
             if (inDevEnv()) CONFIG.debug.debugLogs = true;
             if (CONFIG.debug.clearOldLogs) EXECUTOR.schedule(Proxy::clearOldLogs, 10L, TimeUnit.SECONDS);
-            if (CONFIG.interactiveTerminal.enable) TERMINAL.start();
+            TerminalConsoleAppender.setPrintStdout(false); // cut-over to jline console
+            TERMINAL.start();
             if (CONFIG.debug.lockFile) tryOpenLockFile();
             MODULE.init();
             this.tcpManager = new TcpConnectionManager();
