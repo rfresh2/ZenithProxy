@@ -29,7 +29,8 @@ public class AutoOmenCommand extends Command {
             .usageLines(
                 "on/off",
                 "whileRaidActive on/off",
-                "whileOmenActive on/off"
+                "whileOmenActive on/off",
+                "consumeFullOmenStack on/off"
             )
             .build();
     }
@@ -53,6 +54,11 @@ public class AutoOmenCommand extends Command {
                 c.getSource().getEmbed()
                     .title("AutoOmen While Omen Active " + toggleStrCaps(CONFIG.client.extra.autoOmen.whileOmenActive));
             })))
+            .then(literal("consumeFullOmenStack").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.autoOmen.consumeFullOmenStack = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Consume Full Omen Stack " + toggleStrCaps(CONFIG.client.extra.autoOmen.consumeFullOmenStack));
+            })))
             .then(literal("raidCooldown").then(argument("ms", integer(1)).executes(c -> {
                 CONFIG.client.extra.autoOmen.raidCooldownMs = getInteger(c, "ms");
                 c.getSource().getEmbed()
@@ -71,6 +77,7 @@ public class AutoOmenCommand extends Command {
             .addField("AutoOmen", toggleStr(CONFIG.client.extra.autoOmen.enabled))
             .addField("While Raid Active", toggleStr(CONFIG.client.extra.autoOmen.whileRaidActive))
             .addField("While Omen Active", toggleStr(CONFIG.client.extra.autoOmen.whileOmenActive))
+            .addField("Consume Full Omen Stack", toggleStr(CONFIG.client.extra.autoOmen.consumeFullOmenStack))
             .primaryColor();
     }
 }

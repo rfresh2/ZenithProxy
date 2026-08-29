@@ -453,6 +453,7 @@ public final class Config {
                 public boolean enabled = false;
                 public boolean whileRaidActive = false;
                 public boolean whileOmenActive = false;
+                public boolean consumeFullOmenStack = true;
                 public int raidCooldownMs = 1000;
                 public int omenCooldownMs = 1000;
             }

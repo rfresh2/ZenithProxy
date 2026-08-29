@@ -1589,6 +1589,8 @@ Useful for raid farms on MC 1.21+ servers.
 
   ```autoOmen whileOmenActive on/off```
 
+  ```autoOmen consumeFullOmenStack on/off```
+
 
 ### autoReconnect
 

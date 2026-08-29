@@ -168,7 +168,9 @@ public class AutoOmen extends AbstractInventoryModule {
     @Override
     public boolean itemPredicate(final ItemStack itemStack) {
         ItemData itemData = ItemRegistry.REGISTRY.get(itemStack.getId());
-        return itemData != null && itemData == ItemRegistry.OMINOUS_BOTTLE;
+        return itemData != null
+            && itemData == ItemRegistry.OMINOUS_BOTTLE
+            && (CONFIG.client.extra.autoOmen.consumeFullOmenStack || itemStack.getAmount() > 1);
     }
 
     private boolean hasOmenEffect() {
