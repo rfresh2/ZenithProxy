@@ -49,3 +49,6 @@ jobs:
           path: build/libs/ZenithProxy.jar
           if-no-files-found: error
           archive: false
+
+      - name: Validate Command Docs Up-To-Date
+        run: ./gradlew updateWiki && git diff --exit-code --quiet docs/wiki/Commands.md
