@@ -1,6 +1,7 @@
 package com.zenith.module.impl;
 
 import com.github.rfresh2.EventConsumer;
+import com.zenith.Proxy;
 import com.zenith.event.client.ClientBotTick;
 import com.zenith.feature.inventory.InventoryActionRequest;
 import com.zenith.feature.player.ClickTarget;
@@ -10,6 +11,9 @@ import com.zenith.mc.block.Direction;
 import com.zenith.mc.item.ItemData;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.util.RequestFuture;
+import com.zenith.util.math.MathHelper;
+import com.zenith.util.timer.Timer;
+import com.zenith.util.timer.Timers;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
@@ -20,7 +24,6 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.Serv
 
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.*;
@@ -33,8 +36,9 @@ public class AutoOmen extends AbstractInventoryModule {
         Effect.RAID_OMEN,
         Effect.TRIAL_OMEN
     );
-    private long lastHadOmen = 0L;
-    private long lastRaidActive = 0L;
+    private final Timer omenActiveTimer = Timers.tickTimer();
+    private final Timer raidActiveTimer = Timers.tickTimer();
+    private final Timer constantTimer = Timers.tickTimer();
     RequestFuture swapFuture = RequestFuture.rejected;
 
     public AutoOmen() {
@@ -61,23 +65,29 @@ public class AutoOmen extends AbstractInventoryModule {
     }
 
     public void handleClientTick(final ClientBotTick e) {
-        if (hasOmenEffect()) {
-            lastHadOmen = System.nanoTime();
-        }
-        if (isRaidActive()) {
-            lastRaidActive = System.nanoTime();
-        }
-        if (CACHE.getPlayerCache().getThePlayer().isAlive()
-            && CACHE.getPlayerCache().getGameMode() != GameMode.CREATIVE
-            && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR
+        if (!CACHE.getPlayerCache().getThePlayer().isAlive()
+            || CACHE.getPlayerCache().getGameMode() == GameMode.CREATIVE
+            || CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR
         ) {
-            var raidActive = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastRaidActive) <= CONFIG.client.extra.autoOmen.raidCooldownMs;
-            var omenActive = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - lastHadOmen) <= CONFIG.client.extra.autoOmen.omenCooldownMs;
-            var omenOrRaidActive = ((raidActive && !CONFIG.client.extra.autoOmen.whileRaidActive) || (omenActive && !CONFIG.client.extra.autoOmen.whileOmenActive));
-            if (delay > 0) {
-                delay--;
-                if (isEating) {
-                    if (omenOrRaidActive) {
+            isEating = false;
+            delay = 0;
+            constantTimer.reset();
+            return;
+        }
+        switch (CONFIG.client.extra.autoOmen.mode) {
+            case EFFECT_AND_RAID_INACTIVE -> {
+                if (hasOmenEffect()) {
+                    omenActiveTimer.reset();
+                }
+                if (isRaidActive()) {
+                    raidActiveTimer.reset();
+                }
+                // grace period for server to send us updated states. e.g. from drink until omen effect packet
+                var stateChangeGracePeriodTicks = MathHelper.ceilI((Proxy.getInstance().getClient().getPing() / 50.0) * 2) + MathHelper.ceilI(((20.0 / TPS.getTPSValue()) * 10));
+                var raidActive = !raidActiveTimer.tick(stateChangeGracePeriodTicks, false);
+                var omenActive = !omenActiveTimer.tick(stateChangeGracePeriodTicks, false);
+                if (raidActive || omenActive) {
+                    if (isEating) {
                         sendClientPacketAsync(new ServerboundPlayerActionPacket(
                             PlayerAction.RELEASE_USE_ITEM,
                             0, 0, 0,
@@ -85,39 +95,49 @@ public class AutoOmen extends AbstractInventoryModule {
                             0
                         ));
                         debug("Cancelling omen drink because omen or raid now active");
-                        delay = 0;
-                        isEating = false;
-                        return;
                     }
-                    INPUTS.submit(InputRequest.noInput(this, getPriority()));
-                    INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
+                    delay = 0;
+                    isEating = false;
+                    return;
                 }
-                return;
             }
-            isEating = false;
-            if (!swapFuture.isDone()) {
+            case CONSTANT -> {
+                if (!constantTimer.tick(CONFIG.client.extra.autoOmen.constantTicks, false)) {
+                    delay = 0;
+                    isEating = false;
+                    return;
+                }
+            }
+        }
+
+        if (delay > 0) {
+            delay--;
+            if (isEating) {
                 INPUTS.submit(InputRequest.noInput(this, getPriority()));
-                return;
+                INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
             }
-            if (omenOrRaidActive) {
-                return;
+            return;
+        }
+        if (isEating) {
+            // we completed eating successfully
+            constantTimer.reset();
+        }
+        isEating = false;
+        if (!swapFuture.isDone()) {
+            INPUTS.submit(InputRequest.noInput(this, getPriority()));
+            return;
+        }
+        var invActionResult = doInventoryActionsV2();
+        switch (invActionResult.state()) {
+            case ITEM_IN_HAND -> {
+                delay = invActionResult.expectedDelay();
+                startEating(); // if accepted, will set delay to 50 (the eating duration ticks)
+                INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
             }
-            var invActionResult = doInventoryActionsV2();
-            switch (invActionResult.state()) {
-                case ITEM_IN_HAND -> {
-                    delay = invActionResult.expectedDelay();
-                    startEating(); // if accepted, will set delay to 50 (the eating duration ticks)
-                    INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
-                }
-                case NO_ITEM -> {}
-                case SWAPPING -> {
-                    swapFuture = invActionResult.inventoryActionFuture();
-                }
-                default -> throw new IllegalStateException("Unexpected action state: " + invActionResult.state());
+            case NO_ITEM -> {}
+            case SWAPPING -> {
+                swapFuture = invActionResult.inventoryActionFuture();
             }
-        } else {
-            isEating = false;
-            delay = 0;
         }
     }
 
@@ -160,8 +180,9 @@ public class AutoOmen extends AbstractInventoryModule {
     void reset() {
         delay = 0;
         isEating = false;
-        lastHadOmen = 0L;
-        lastRaidActive = 0L;
+        raidActiveTimer.reset();
+        omenActiveTimer.reset();
+        constantTimer.reset();
         swapFuture = RequestFuture.rejected;
     }
 
