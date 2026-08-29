@@ -572,7 +572,10 @@ public final class MovementHelper {
         // can we look at the center of a side face of this block and likely be able to place?
         // (thats how this check is used)
         // therefore dont include weird things that we technically could place against (like carpet) but practically can't
-        return isBlockNormalCube(blockStateId) || block == BlockRegistry.GLASS || block.name().endsWith("_stained_glass");
+        return isBlockNormalCube(blockStateId)
+            || block == BlockRegistry.GLASS
+            || block.name().endsWith("_stained_glass")
+            || block == BlockRegistry.SOUL_SAND;
     }
 
     public static double getMiningDurationTicks(CalculationContext context, int x, int y, int z, boolean includeFalling) {

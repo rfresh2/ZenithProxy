@@ -363,7 +363,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                 int dy = y + faceVec.y();
                 int dz = z + faceVec.z();
                 int blockStateId = World.getBlockStateId(dx, dy, dz);
-                if (!MovementHelper.canPlaceAgainst(blockStateId)) continue;
+                if (CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace && !MovementHelper.canPlaceAgainst(blockStateId)) continue;
                 var blockState = World.getBlockState(dx, dy, dz);
                 validPlaces.add(new PlaceTarget(blockState, faceVec.invert()));
             }
