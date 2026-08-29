@@ -1,5 +1,7 @@
 package com.zenith.cache.data.tab;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
 import lombok.Data;
@@ -13,6 +15,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundTabListPacket;
 import org.jspecify.annotations.NonNull;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
@@ -22,6 +25,9 @@ import java.util.function.Consumer;
 @Accessors(chain = true)
 public class TabListCache implements CachedData {
     protected final Map<UUID, PlayerListEntry> tablist = new ConcurrentHashMap<>();
+    protected final Cache<UUID, PlayerListEntry> recentlyRemovedPlayers = CacheBuilder.newBuilder()
+        .expireAfterWrite(Duration.ofSeconds(2))
+        .build();
     @NonNull
     protected Component header = Component.text("");
     @NonNull
@@ -41,6 +47,7 @@ public class TabListCache implements CachedData {
     public void reset(CacheResetType type) {
         if (type == CacheResetType.FULL || type == CacheResetType.PROTOCOL_SWITCH) {
             this.tablist.clear();
+            this.recentlyRemovedPlayers.invalidateAll();
             this.header = Component.text("");
             this.footer = Component.text("");
             this.lastUpdate = 0L;
@@ -61,7 +68,11 @@ public class TabListCache implements CachedData {
     }
 
     public Optional<PlayerListEntry> remove(@NonNull UUID uuid) {
-        return Optional.ofNullable(this.tablist.remove(uuid));
+        var entry = this.tablist.remove(uuid);
+        if (entry != null) {
+            this.recentlyRemovedPlayers.put(uuid, entry);
+        }
+        return Optional.ofNullable(entry);
     }
 
     public Optional<PlayerListEntry> get(UUID uuid) {
@@ -69,10 +80,28 @@ public class TabListCache implements CachedData {
     }
 
     public Optional<PlayerListEntry> getFromName(final String username) {
-        return this.tablist.values().stream().filter(v -> v.getName().equals(username)).findFirst();
+        for (var entry : this.tablist.values()) {
+            if (entry.getName().equals(username)) {
+                return Optional.of(entry);
+            }
+        }
+        return Optional.empty();
     }
 
     public Collection<PlayerListEntry> getEntries() {
         return this.tablist.values();
+    }
+
+    public Optional<PlayerListEntry> getRecentlyRemovedPlayer(UUID uuid) {
+        return Optional.ofNullable(this.recentlyRemovedPlayers.getIfPresent(uuid));
+    }
+
+    public Optional<PlayerListEntry> getRecentlyRemovedPlayer(String username) {
+        for (var entry : this.recentlyRemovedPlayers.asMap().values()) {
+            if (entry.getName().equals(username)) {
+                return Optional.of(entry);
+            }
+        }
+        return Optional.empty();
     }
 }

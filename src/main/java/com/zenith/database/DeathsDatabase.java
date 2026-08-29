@@ -118,7 +118,8 @@ public class DeathsDatabase extends LiveDatabase {
     }
 
     private Optional<PlayerListEntry> getPlayerEntryFromNameWithFallback(final String username) {
-        Optional<PlayerListEntry> tablistEntry = CACHE.getTabListCache().getFromName(username);
+        Optional<PlayerListEntry> tablistEntry = CACHE.getTabListCache().getFromName(username)
+            .or(() -> CACHE.getTabListCache().getRecentlyRemovedPlayer(username));
         if (tablistEntry.isPresent()) {
             return tablistEntry;
         } else {
