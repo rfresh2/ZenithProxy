@@ -89,7 +89,9 @@ If this is disabled, spectators only have access to a limited set of core comman
 
   ```spectator entity <entity>```
 
-  ```spectator chat on/off```
+  ```spectator publicChat on/off```
+
+  ```spectator chatSendsPrivateMessage on/off```
 
   ```spectator playerCamOnJoin on/off```
 
@@ -98,6 +100,8 @@ If this is disabled, spectators only have access to a limited set of core comman
   ```spectator fullCommands slashCommands on/off```
 
   ```spectator fullCommands requireRegularWhitelist on/off```
+
+  ```spectator fullCommands serverCommands on/off```
 
 
 ### status
@@ -1581,13 +1585,27 @@ Automatically drinks Bad Omen potions in the inventory.
 
 Useful for raid farms on MC 1.21+ servers.
 
+
+
+Modes:
+
+* `effectAndRaidInactive`: drink potion only when no omen effect or raid is active
+
+* `constant`: drink potion at a constant interval. By default the delay matches the omen effect length: 100 seconds (2000 ticks)
+
+
+
+if `consumeFullOmenStack` is disabled, a single omen potion will be left per stack. Stacks are not combined.
+
 **Usage**
 
   ```autoOmen on/off```
 
-  ```autoOmen whileRaidActive on/off```
+  ```autoOmen mode <effectAndRaidInactive/constant>```
 
-  ```autoOmen whileOmenActive on/off```
+  ```autoOmen consumeFullOmenStack on/off```
+
+  ```autoOmen constantMode delay <ticks>```
 
 
 ### autoReconnect

@@ -34,7 +34,12 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
                         }
                     }
                 } else {
-                    EVENT_BUS.postAsync(new PrivateMessageSendEvent(session.getUUID(), session.getName(), packet.getMessage()));
+                    if (CONFIG.server.spectator.chatSendsPrivateMessage) {
+                        EVENT_BUS.postAsync(new PrivateMessageSendEvent(session.getUUID(), session.getName(), packet.getMessage()));
+                    } else if (CONFIG.server.spectator.spectatorPublicChatEnabled) {
+                        SERVER_LOG.info("Spectator sent public chat");
+                        Proxy.getInstance().getClient().sendAsync(packet);
+                    }
                 }
             });
         }

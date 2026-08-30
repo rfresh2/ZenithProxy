@@ -132,7 +132,8 @@ public class ChatSchemaParser {
                             return null;
                         }
                         String s = groups[index];
-                        var profile = CACHE.getTabListCache().getFromName(s);
+                        var profile = CACHE.getTabListCache().getFromName(s)
+                            .or(() -> CACHE.getTabListCache().getRecentlyRemovedPlayer(s));
                         if (profile.isEmpty()) {
                             return null;
                         }
@@ -144,7 +145,8 @@ public class ChatSchemaParser {
                             return null;
                         }
                         String s = groups[index];
-                        var profile = CACHE.getTabListCache().getFromName(s);
+                        var profile = CACHE.getTabListCache().getFromName(s)
+                            .or(() -> CACHE.getTabListCache().getRecentlyRemovedPlayer(s));
                         if (profile.isEmpty()) {
                             return null;
                         }

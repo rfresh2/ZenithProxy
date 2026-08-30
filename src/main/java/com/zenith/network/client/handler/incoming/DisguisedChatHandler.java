@@ -19,7 +19,9 @@ public class DisguisedChatHandler implements PacketHandler<ClientboundDisguisedC
 
     @Override
     public ClientboundDisguisedChatPacket apply(final ClientboundDisguisedChatPacket packet, final ClientSession session) {
-        var senderPlayerEntry = CACHE.getTabListCache().getFromName(ComponentSerializer.serializePlain(packet.getName()));
+        var username = ComponentSerializer.serializePlain(packet.getName());
+        var senderPlayerEntry = CACHE.getTabListCache().getFromName(username)
+            .or(() -> CACHE.getTabListCache().getRecentlyRemovedPlayer(username));
         ChatType chatType = ChatTypeRegistry.REGISTRY.get(packet.getChatType().id());
         if (chatType != null) {
             Component chatComponent = chatType.render(
@@ -38,9 +40,9 @@ public class DisguisedChatHandler implements PacketHandler<ClientboundDisguisedC
                 whisperTarget = CACHE.getTabListCache().get(CACHE.getProfileCache().getProfile().getId());
             } else if ("commands.message.display.outgoing".equals(chatType.translationKey())) {
                 isWhisper = true;
-                whisperTarget = CACHE.getTabListCache().getFromName( // ???
-                     ComponentSerializer.serializePlain(packet.getTargetName())
-                );
+                var targetName = ComponentSerializer.serializePlain(packet.getTargetName());
+                whisperTarget = CACHE.getTabListCache().getFromName(targetName)
+                    .or(() -> CACHE.getTabListCache().getRecentlyRemovedPlayer(targetName));
             }
             if (isWhisper) {
                 if (senderPlayerEntry.isEmpty()) {

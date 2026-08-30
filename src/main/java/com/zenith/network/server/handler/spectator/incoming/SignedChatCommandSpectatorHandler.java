@@ -1,5 +1,7 @@
 package com.zenith.network.server.handler.spectator.incoming;
 
+import com.zenith.Proxy;
+import com.zenith.command.api.CommandContext;
 import com.zenith.network.codec.PacketHandler;
 import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatCommandSignedPacket;
@@ -18,10 +20,17 @@ public class SignedChatCommandSpectatorHandler implements PacketHandler<Serverbo
             && (CONFIG.server.spectator.fullCommandsRequireRegularWhitelist
                 ? PLAYER_LISTS.getWhitelist().contains(session.getProfileCache().getProfile().getId())
                 : true)) {
+            if (CONFIG.server.spectator.fullCommandsServerCommands) {
+                if (IN_GAME_COMMAND.matchesServerCommand(command, CommandContext.createSpectatorContext(command, session))) {
+                    Proxy.getInstance().getClient().sendAsync(packet);
+                    return null;
+                }
+            }
             EXECUTOR.execute(() -> IN_GAME_COMMAND.handleInGameCommandSpectator(
                 command,
                 session,
-                CONFIG.inGameCommands.slashCommandsReplacesServerCommands));
+                CONFIG.inGameCommands.slashCommandsReplacesServerCommands
+            ));
         }
         return null;
     }

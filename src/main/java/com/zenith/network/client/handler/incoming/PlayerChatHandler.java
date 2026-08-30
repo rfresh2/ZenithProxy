@@ -43,9 +43,9 @@ public class PlayerChatHandler implements PacketHandler<ClientboundPlayerChatPac
             } else if ("commands.message.display.outgoing".equals(chatType.translationKey())) {
                 isWhisper = true;
                 outboundWhisper = true;
-                whisperTarget = CACHE.getTabListCache().getFromName( // ???
-                     ComponentSerializer.serializePlain(packet.getTargetName())
-                );
+                var targetName = ComponentSerializer.serializePlain(packet.getTargetName());
+                whisperTarget = CACHE.getTabListCache().getFromName(targetName)
+                    .or(() -> CACHE.getTabListCache().getRecentlyRemovedPlayer(targetName));
             } else if ("%s".equals(chatType.translationKey())) {
                 var schemaParseResult = ChatSchemaParser.parse(messageContent);
                 if (schemaParseResult != null) {

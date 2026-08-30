@@ -31,12 +31,12 @@ public class SpectatorCommand extends Command {
             .category(CommandCategory.CORE)
             .description("""
             Configures the Spectator feature.
-            
+
             The spectator whitelist only allows players to join as spectators.
             Players who are regular whitelisted (i.e. with the `whitelist` command) can always join as spectators regardless.
-            
+
             Spectator entities control what entity is used to represent spectators in-game.
-            
+
             Full commands allow spectators access to all standard ZenithProxy commands like `connect`, `disconnect`, etc.
             If this is disabled, spectators only have access to a limited set of core commands.
             """)
@@ -48,11 +48,13 @@ public class SpectatorCommand extends Command {
                 "whitelist clear",
                 "entity list",
                 "entity <entity>",
-                "chat on/off",
+                "publicChat on/off",
+                "chatSendsPrivateMessage on/off",
                 "playerCamOnJoin on/off",
                 "fullCommands on/off",
                 "fullCommands slashCommands on/off",
-                "fullCommands requireRegularWhitelist on/off"
+                "fullCommands requireRegularWhitelist on/off",
+                "fullCommands serverCommands on/off"
             )
             .build();
     }
@@ -153,7 +155,7 @@ public class SpectatorCommand extends Command {
                             .errorColor();
                     }
                 })))
-            .then(literal("chat")
+            .then(literal("publicChat")
                 .then(argument("toggle", toggle()).executes(c -> {
                     CONFIG.server.spectator.spectatorPublicChatEnabled = getToggle(c, "toggle");
                     c.getSource().getEmbed()
@@ -161,6 +163,12 @@ public class SpectatorCommand extends Command {
                         .primaryColor()
                         .description(spectatorWhitelist());
                 })))
+            .then(literal("chatSendsPrivateMessage").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.server.spectator.chatSendsPrivateMessage = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Spectator Chat Sends Public Chat " + toggleStrCaps(CONFIG.server.spectator.chatSendsPrivateMessage))
+                    .primaryColor();
+            })))
             .then(literal("playerCamOnJoin").then(argument("toggle", toggle()).executes(c -> {
                 CONFIG.server.spectator.playerCamOnJoin = getToggle(c, "toggle");
                 c.getSource().getEmbed()
@@ -185,7 +193,14 @@ public class SpectatorCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Full Spectator Commands Require Regular Whitelist " + toggleStrCaps(CONFIG.server.spectator.fullCommandsRequireRegularWhitelist))
                         .primaryColor();
-                }))));
+                })))
+                .then(literal("serverCommands").then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.server.spectator.fullCommandsServerCommands = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Full Spectator Commands Server Commands " + toggleStrCaps(CONFIG.server.spectator.fullCommandsServerCommands))
+                        .primaryColor();
+                })))
+            );
     }
 
     private String spectatorWhitelist() {
@@ -200,11 +215,13 @@ public class SpectatorCommand extends Command {
     public void defaultEmbed(final Embed builder) {
         builder
             .addField("Spectators", toggleStr(CONFIG.server.spectator.allowSpectator))
-            .addField("Chat", toggleStr(CONFIG.server.spectator.spectatorPublicChatEnabled))
+            .addField("Public Chat", toggleStr(CONFIG.server.spectator.spectatorPublicChatEnabled))
+            .addField("Chat Sends Private Message", toggleStr(CONFIG.server.spectator.chatSendsPrivateMessage))
             .addField("Entity", CONFIG.server.spectator.spectatorEntity)
             .addField("PlayerCam On Join", toggleStr(CONFIG.server.spectator.playerCamOnJoin))
             .addField("Full Commands", toggleStr(CONFIG.server.spectator.fullCommandsEnabled))
             .addField("Full Commands Slash Commands", toggleStr(CONFIG.server.spectator.fullCommandsAcceptSlashCommands))
-            .addField("Full Commands Require Regular Whitelist", toggleStr(CONFIG.server.spectator.fullCommandsRequireRegularWhitelist));
+            .addField("Full Commands Require Regular Whitelist", toggleStr(CONFIG.server.spectator.fullCommandsRequireRegularWhitelist))
+            .addField("Full Commands Server Commands", toggleStr(CONFIG.server.spectator.fullCommandsServerCommands));
     }
 }

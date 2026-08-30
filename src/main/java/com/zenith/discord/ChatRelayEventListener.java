@@ -231,7 +231,9 @@ public class ChatRelayEventListener {
             var k = death.killer().filter(killer -> killer.type() == KillerType.PLAYER);
             if (k.isPresent()) message = message.replace(escape(k.get().name()), "**" + escape(k.get().name()) + "**");
             String senderName = death.victim();
-            UUID senderUUID = CACHE.getTabListCache().getFromName(death.victim()).map(PlayerListEntry::getProfileId).orElse(null);
+            UUID senderUUID = CACHE.getTabListCache().getFromName(death.victim())
+                .or(() -> CACHE.getTabListCache().getRecentlyRemovedPlayer(death.victim()))
+                .map(PlayerListEntry::getProfileId).orElse(null);
             final String avatarURL = senderUUID != null
                 ? Proxy.getInstance().getPlayerHeadURL(senderUUID).toString()
                 : Proxy.getInstance().getPlayerHeadURL(senderName).toString();
