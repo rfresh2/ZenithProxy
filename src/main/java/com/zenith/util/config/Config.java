@@ -41,6 +41,8 @@ public final class Config {
         // updated on successful login
         public String username = "Unknown";
         public @Nullable UUID offlineUUID = null;
+        public OfflineUUIDMode offlineUUIDMode = OfflineUUIDMode.RANDOM;
+        public String offlineUUIDPrefix = "OfflinePlayer:";
         public boolean prio = false;
         public boolean authTokenRefresh = true;
         public int msaLoginAttemptsBeforeCacheWipe = 2;
@@ -55,6 +57,12 @@ public final class Config {
             @SerializedName("device_code_without_device_token") DEVICE_CODE_WITHOUT_DEVICE_TOKEN,
             @SerializedName("prism") PRISM,
             @SerializedName("offline") OFFLINE
+        }
+
+        public enum OfflineUUIDMode {
+            @SerializedName("random") RANDOM,
+            @SerializedName("fixed") FIXED,
+            @SerializedName("generated") GENERATED
         }
     }
 

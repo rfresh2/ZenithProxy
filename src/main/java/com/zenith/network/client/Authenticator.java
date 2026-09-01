@@ -59,9 +59,17 @@ public class Authenticator {
     public MinecraftProtocol login()  {
         if (CONFIG.authentication.accountType == OFFLINE) {
             AUTH_LOG.warn("Using offline account: '{}'. Offline accounts will not receive user support.", CONFIG.authentication.username);
+            final UUID offlineUuid = switch (CONFIG.authentication.offlineUUIDMode) {
+                case FIXED -> CONFIG.authentication.offlineUUID != null
+                    ? CONFIG.authentication.offlineUUID
+                    : UUID.randomUUID();
+                case RANDOM -> UUID.randomUUID();
+                case GENERATED -> UUID.nameUUIDFromBytes(
+                    (CONFIG.authentication.offlineUUIDPrefix + CONFIG.authentication.username).getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            };
             return createMinecraftProtocol(
                 new MinecraftProfile(
-                    Objects.requireNonNullElseGet(CONFIG.authentication.offlineUUID, UUID::randomUUID),
+                    offlineUuid,
                     CONFIG.authentication.username),
                 null,
                 null);

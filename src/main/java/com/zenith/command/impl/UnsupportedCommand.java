@@ -15,6 +15,7 @@ import static com.zenith.command.brigadier.ToggleArgumentType.getToggle;
 import static com.zenith.command.brigadier.ToggleArgumentType.toggle;
 import static com.zenith.discord.DiscordBot.escape;
 import static com.zenith.util.config.Config.Authentication.AccountType.OFFLINE;
+import static com.zenith.util.config.Config.Authentication.OfflineUUIDMode;
 
 public class UnsupportedCommand extends Command {
     @Override
@@ -37,7 +38,9 @@ public class UnsupportedCommand extends Command {
                 "allowOfflinePlayers on/off",
                 "auth type offline",
                 "auth offlineUsername <username>",
-                "auth offlineUUID <uuid>",
+                "auth offlineUUID mode <random/fixed/generated>",
+                "auth offlineUUID prefix <prefix>",
+                "auth offlineUUID set <uuid>",
                 "auth offlineUUID clear"
             )
             .build();
@@ -78,14 +81,30 @@ public class UnsupportedCommand extends Command {
                     Authenticator.INSTANCE.clearAuthCache();
                 })))
                 .then(literal("offlineUUID")
+                    .then(literal("mode").then(argument("mode", enumStrings(OfflineUUIDMode.values())).executes(c -> {
+                        CONFIG.authentication.offlineUUIDMode = OfflineUUIDMode.valueOf(getString(c, "mode").toUpperCase());
+                        c.getSource().getEmbed()
+                            .title("Offline UUID Mode Set");
+                        Proxy.getInstance().cancelLogin();
+                        Authenticator.INSTANCE.clearAuthCache();
+                    })))
+                    .then(literal("prefix").then(argument("prefix", wordWithChars()).executes(c -> {
+                        CONFIG.authentication.offlineUUIDPrefix = getString(c, "prefix");
+                        c.getSource().getEmbed()
+                            .title("Offline UUID Prefix Set");
+                        Proxy.getInstance().cancelLogin();
+                        Authenticator.INSTANCE.clearAuthCache();
+                    })))
                     .then(literal("clear").executes(c -> {
                         CONFIG.authentication.offlineUUID = null;
+                        CONFIG.authentication.offlineUUIDMode = OfflineUUIDMode.RANDOM;
                         c.getSource().getEmbed()
                             .title("Offline UUID Reset");
                     }))
-                    .then(argument("uuid", wordWithChars()).executes(c -> {
+                    .then(literal("set").then(argument("uuid", wordWithChars()).executes(c -> {
                         try {
                             CONFIG.authentication.offlineUUID = UUID.fromString(getString(c, "uuid"));
+                            CONFIG.authentication.offlineUUIDMode = OfflineUUIDMode.FIXED;
                         } catch (Exception e) {
                             c.getSource().getEmbed()
                                 .title("Invalid UUID")
@@ -97,8 +116,9 @@ public class UnsupportedCommand extends Command {
                         Proxy.getInstance().cancelLogin();
                         Authenticator.INSTANCE.clearAuthCache();
                         return OK;
-                    }))
-                ));
+                    })))
+                )
+            );
     }
 
     @Override
@@ -109,9 +129,11 @@ public class UnsupportedCommand extends Command {
             .addField("Allow Offline Players", toggleStr(!CONFIG.server.verifyUsers))
             .addField("Offline Authentication", toggleStr(CONFIG.authentication.accountType == OFFLINE))
             .addField("Offline Username", escape(CONFIG.authentication.username))
+            .addField("Offline UUID Mode", CONFIG.authentication.offlineUUIDMode.name().toLowerCase())
+            .addField("Offline UUID Prefix", escape(CONFIG.authentication.offlineUUIDPrefix))
             .addField("Offline UUID", CONFIG.authentication.offlineUUID != null
                 ? escape(CONFIG.authentication.offlineUUID.toString())
-                : "(random)")
+                : "(auto)")
             .primaryColor();
     }
 }
