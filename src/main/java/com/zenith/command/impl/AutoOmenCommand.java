@@ -29,14 +29,15 @@ public class AutoOmenCommand extends Command {
                 Useful for raid farms on MC 1.21+ servers.
 
                 Modes:
-                * `effectAndRaidInactive`: drink potion only when no omen effect or raid is active
+                * `effectAndRaid`: drink potion when no omen effect or raid is active
+                * `effect`: drink potion when no omen effect is active
                 * `constant`: drink potion at a constant interval. By default the delay matches the omen effect length: 100 seconds (2000 ticks)
 
                 if `consumeFullOmenStack` is disabled, a single omen potion will be left per stack. Stacks are not combined.
                 """)
             .usageLines(
                 "on/off",
-                "mode <effectAndRaidInactive/constant>",
+                "mode <effectAndRaid/effect/constant>",
                 "consumeFullOmenStack on/off",
                 "constantMode delay <ticks>"
             )
@@ -52,7 +53,7 @@ public class AutoOmenCommand extends Command {
                     .title("AutoOmen " + toggleStrCaps(CONFIG.client.extra.autoOmen.enabled));
                 MODULE.get(AutoOmen.class).syncEnabledFromConfig();
             }))
-            .then(literal("mode").then(argument("mode", enumStrings("effectAndRaidInactive", "constant")).executes(c -> {
+            .then(literal("mode").then(argument("mode", enumStrings("effectAndRaid", "effect", "constant")).executes(c -> {
                 CONFIG.client.extra.autoOmen.mode = strToMode(getString(c, "mode"));
                 c.getSource().getEmbed()
                     .title("Mode Set");
@@ -81,14 +82,16 @@ public class AutoOmenCommand extends Command {
 
     private String modeStr(Mode mode) {
         return switch (mode) {
-            case EFFECT_AND_RAID_INACTIVE -> "effectAndRaidInactive";
+            case EFFECT_AND_RAID_INACTIVE -> "effectAndRaid";
+            case EFFECT_INACTIVE -> "effect";
             case CONSTANT -> "constant";
         };
     }
 
     private Mode strToMode(String mode) {
         return switch (mode) {
-            case "effectAndRaidInactive" -> Mode.EFFECT_AND_RAID_INACTIVE;
+            case "effectAndRaid" -> Mode.EFFECT_AND_RAID_INACTIVE;
+            case "effect" -> Mode.EFFECT_INACTIVE;
             case "constant" -> Mode.CONSTANT;
             default -> throw new IllegalArgumentException("unknown mode");
         };

@@ -457,6 +457,7 @@ public final class Config {
 
                 public enum Mode {
                     EFFECT_AND_RAID_INACTIVE,
+                    EFFECT_INACTIVE,
                     CONSTANT
                 }
             }

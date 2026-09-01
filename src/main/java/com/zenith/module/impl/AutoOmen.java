@@ -27,6 +27,7 @@ import java.util.Objects;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.*;
+import static com.zenith.util.config.Config.Client.Extra.AutoOmen.Mode.EFFECT_INACTIVE;
 
 public class AutoOmen extends AbstractInventoryModule {
     private int delay = 0;
@@ -38,7 +39,7 @@ public class AutoOmen extends AbstractInventoryModule {
     );
     private final Timer omenActiveTimer = Timers.tickTimer();
     private final Timer raidActiveTimer = Timers.tickTimer();
-    private final Timer constantTimer = Timers.tickTimer();
+    private final Timer constantTimer = Timers.unsyncedTickTimer();
     RequestFuture swapFuture = RequestFuture.rejected;
 
     public AutoOmen() {
@@ -75,7 +76,7 @@ public class AutoOmen extends AbstractInventoryModule {
             return;
         }
         switch (CONFIG.client.extra.autoOmen.mode) {
-            case EFFECT_AND_RAID_INACTIVE -> {
+            case EFFECT_AND_RAID_INACTIVE, EFFECT_INACTIVE -> {
                 if (hasOmenEffect()) {
                     omenActiveTimer.reset();
                 }
@@ -86,7 +87,10 @@ public class AutoOmen extends AbstractInventoryModule {
                 var stateChangeGracePeriodTicks = MathHelper.ceilI((Proxy.getInstance().getClient().getPing() / 50.0) * 2) + MathHelper.ceilI(((20.0 / TPS.getTPSValue()) * 10));
                 var raidActive = !raidActiveTimer.tick(stateChangeGracePeriodTicks, false);
                 var omenActive = !omenActiveTimer.tick(stateChangeGracePeriodTicks, false);
-                if (raidActive || omenActive) {
+                var stopCondition = CONFIG.client.extra.autoOmen.mode == EFFECT_INACTIVE
+                    ? omenActive
+                    : raidActive || omenActive;
+                if (stopCondition) {
                     if (isEating) {
                         sendClientPacketAsync(new ServerboundPlayerActionPacket(
                             PlayerAction.RELEASE_USE_ITEM,
