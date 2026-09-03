@@ -82,6 +82,13 @@ public class ClickCommand extends Command {
                     .title("Click Hold Off")
                     .primaryColor();
             }))
+            .then(literal("off").executes(c -> {
+                CONFIG.client.extra.click.holdLeftClick = false;
+                CONFIG.client.extra.click.holdRightClick = false;
+                c.getSource().getEmbed()
+                    .title("Click Hold Off")
+                    .primaryColor();
+            }))
             .then(literal("left").executes(c -> {
                     if (!Proxy.getInstance().isConnected()) {
                         c.getSource().getEmbed()

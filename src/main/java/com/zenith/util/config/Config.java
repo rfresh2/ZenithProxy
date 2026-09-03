@@ -267,7 +267,6 @@ public final class Config {
 
             public static class Click {
                 public @Nullable Integer priority = null;
-                public boolean enabled = true;
                 public boolean holdLeftClick = false;
                 public boolean holdRightClick = false;
                 public boolean hasRotation = false;

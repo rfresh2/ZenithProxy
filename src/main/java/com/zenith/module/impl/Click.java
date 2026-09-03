@@ -31,7 +31,7 @@ public class Click extends Module {
 
     @Override
     public boolean enabledSetting() {
-        return CONFIG.client.extra.click.enabled;
+        return true;
     }
 
     public int getPriority() {
