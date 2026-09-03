@@ -14,6 +14,7 @@ import com.zenith.feature.player.ClickTarget;
 import com.zenith.feature.player.Input;
 import com.zenith.feature.player.InputRequest;
 import com.zenith.mc.item.ItemRegistry;
+import com.zenith.module.impl.Click;
 import com.zenith.util.config.Config.Client.Extra.Click.HoldClickTarget;
 import com.zenith.util.config.Config.Client.Extra.Click.HoldRightClickMode;
 import com.zenith.util.math.MathHelper;
@@ -75,6 +76,13 @@ public class ClickCommand extends Command {
     @Override
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("click")
+            .then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.click.enabled = getToggle(c, "toggle");
+                MODULE.get(Click.class).syncEnabledFromConfig();
+                c.getSource().getEmbed()
+                    .title("Click " + toggleStrCaps(CONFIG.client.extra.click.enabled));
+                return OK;
+            }))
             .then(literal("stop").executes(c -> {
                 CONFIG.client.extra.click.holdLeftClick = false;
                 CONFIG.client.extra.click.holdRightClick = false;
