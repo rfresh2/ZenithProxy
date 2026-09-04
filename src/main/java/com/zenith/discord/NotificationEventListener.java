@@ -771,9 +771,9 @@ public class NotificationEventListener {
         var replayFile = event.replayFile();
         if (replayFile != null && CONFIG.client.extra.replayMod.sendRecordingsToDiscord) {
             try (InputStream in = new BufferedInputStream(new FileInputStream(replayFile))) {
-                // 10mb discord file attachment size limit
+                // 20mb discord file attachment size limit
                 long replaySizeMb = replayFile.length() / (1024 * 1024);
-                if (replaySizeMb > 10) {
+                if (replaySizeMb > 20) {
                     if (CONFIG.client.extra.replayMod.fileIOUploadIfTooLarge) {
                         DISCORD_LOG.info("Uploading large replay to file.io with size: {}", replayFile.length());
                         var notiEmbed = Embed.builder()
