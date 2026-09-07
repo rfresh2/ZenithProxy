@@ -144,7 +144,8 @@ tasks {
         classpath = sourceSets.main.get().runtimeClasspath
         mainClass.set("com.zenith.Proxy")
         jvmArgs = listOf(
-            "-Xmx300m", "-XX:+UseG1GC", "-XX:+UseCompactObjectHeaders",
+            "-Xmx300m", "-XX:+UseG1GC", "-Xms32m", "-XX:MinHeapFreeRatio=10", "-XX:MaxHeapFreeRatio=20",
+            "-XX:G1PeriodicGCInterval=30000", "-XX:TrimNativeHeapInterval=30000", "-XX:+UseCompactObjectHeaders",
             "--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow"
         )
         standardInput = System.`in`

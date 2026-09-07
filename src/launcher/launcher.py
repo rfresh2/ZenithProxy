@@ -11,7 +11,7 @@ from log import info, warn, critical_error, critical_exception
 default_java_xmx = 300
 
 default_java_args = """\
--XX:+IgnoreUnrecognizedVMOptions -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:+PerfDisableSharedMem"""
+-XX:+IgnoreUnrecognizedVMOptions -XX:+UseG1GC -Xms32m -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=20 -XX:G1PeriodicGCInterval=30000 -XX:TrimNativeHeapInterval=30000 -XX:+UnlockExperimentalVMOptions -XX:+PerfDisableSharedMem"""
 
 java24_addnl_args = """\
 -XX:+UseCompactObjectHeaders --sun-misc-unsafe-memory-access=allow --enable-native-access=ALL-UNNAMED"""
