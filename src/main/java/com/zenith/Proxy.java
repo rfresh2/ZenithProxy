@@ -26,6 +26,7 @@ import com.zenith.network.client.ClientSession;
 import com.zenith.network.server.LanBroadcaster;
 import com.zenith.network.server.ProxyServerListener;
 import com.zenith.network.server.ServerSession;
+import com.zenith.plugin.bootstrap.BootstrapMessageConsumer;
 import com.zenith.terminal.logback.TerminalConsoleAppender;
 import com.zenith.util.ImageInfo;
 import com.zenith.util.Wait;
@@ -135,6 +136,7 @@ public class Proxy {
     }
 
     public void start() {
+        BootstrapMessageConsumer.drainLogs();
         DEFAULT_LOG.info("Starting ZenithProxy-{}", VERSION);
         var exeReleaseVersion = getExecutableReleaseVersion();
         if (exeReleaseVersion == null) {
@@ -184,6 +186,7 @@ public class Proxy {
                     DISCORD_LOG.debug("Failed starting discord bot", e);
                 }
             }
+            BootstrapMessageConsumer.drain();
             NotificationEventListener.INSTANCE.subscribeEvents();
             ChatRelayEventListener.INSTANCE.subscribeEvents();
             if (CONFIG.plugins.enabled) PLUGIN_MANAGER.initialize();

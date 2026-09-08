@@ -1,0 +1,9 @@
+{
+  "entrypoint": "com.zenith.plugin.PluginManagerNativeClasspathTest$ClasspathTestPlugin",
+  "id": "native-classpath-test",
+  "version": "1.0.0",
+  "description": "Bundled classpath test plugin",
+  "url": "",
+  "authors": [],
+  "mcVersions": ["1.21.4"]
+}

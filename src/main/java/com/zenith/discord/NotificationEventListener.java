@@ -841,7 +841,8 @@ public class NotificationEventListener {
             .addField("Description", escape(event.pluginInfo().description()))
             .addField("Version", escape(event.pluginInfo().version().toString()), false)
             .addField("URL", escape(event.pluginInfo().url()), false)
-            .addField("Author(s)", String.join(", ", event.pluginInfo().authors()), false);
+            .addField("Author(s)", String.join(", ", event.pluginInfo().authors()), false)
+            .addField("Mixins", event.pluginInfo().mixins().isEmpty() ? "no" : "yes");
         sendEmbedMessage(embed);
     }
 

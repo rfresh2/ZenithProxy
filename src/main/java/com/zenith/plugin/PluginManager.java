@@ -8,6 +8,7 @@ import com.zenith.plugin.api.ConfigSerializer;
 import com.zenith.plugin.api.PluginInfo;
 import com.zenith.plugin.api.PluginInstance;
 import com.zenith.plugin.api.ZenithProxyPlugin;
+import com.zenith.plugin.bootstrap.PluginBootstrap;
 import com.zenith.util.ImageInfo;
 import lombok.SneakyThrows;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
@@ -16,7 +17,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Files;
@@ -37,6 +37,8 @@ public class PluginManager {
     protected final Map<String, ConfigInstance> pluginConfigurations = new ConcurrentHashMap<>();
     protected final Map<String, PluginInstance> pluginInstances = new ConcurrentHashMap<>();
     private final AtomicBoolean initialized = new AtomicBoolean(false);
+    private final List<String> pluginLoadOrder = new ArrayList<>();
+    private final Set<String> legacyDisabledIds = ConcurrentHashMap.newKeySet();
 
     public List<PluginInfo> getPluginInfos() {
         return pluginInstances.values().stream().map(PluginInstance::getPluginInfo).collect(Collectors.toList());
@@ -51,9 +53,14 @@ public class PluginManager {
     }
 
     public @Nullable ZenithProxyPlugin getPlugin(String id) {
+        if (isPluginDisabled(id)) return null;
         var instance = pluginInstances.get(id);
         if (instance == null) return null;
         return instance.getPluginInstance();
+    }
+
+    public boolean isPluginDisabled(String id) {
+        return PluginBootstrap.disabledIds.contains(id) || legacyDisabledIds.contains(id);
     }
 
     public String getId(final ZenithProxyPlugin pluginInstance) {
@@ -83,20 +90,35 @@ public class PluginManager {
 
     public synchronized void initialize() {
         if (initialized.get()) return;
-        ensurePluginsFolderExists();
-        preLoadPlugins();
-        loadPlugins();
-        initialized.set(true);
+
+        try {
+            ensurePluginsFolderExists();
+            if (ImageInfo.inImageCode()) {
+                preLoadLegacyPlugins();
+                if (ImageInfo.inImageRuntimeCode()) {
+                    linuxChannelIncompatibilityWarning();
+                }
+            } else {
+                var discoveredPlugins = PluginBootstrap.discoveredPlugins;
+                if (discoveredPlugins != null) {
+                    preLoadPlugins(discoveredPlugins);
+                } else {
+                    preLoadLegacyPlugins();
+                }
+            }
+            loadPlugins();
+        } finally {
+            initialized.set(true);
+        }
     }
 
     private void linuxChannelIncompatibilityWarning() {
-        var potentialJars = findPotentialPluginJars();
-        int potentialPluginCount = potentialJars.size();
+        int potentialPluginCount = countPotentialPluginJars();
         if (potentialPluginCount > 0) {
             DISCORD.sendEmbedMessage(Embed.builder()
                 .title("Potential Plugins Found")
                 .description("""
-                Plugins are not supported on the `linux` release channel.
+                External plugin JARs are not supported on the `linux` release channel.
 
                 To use plugins, switch to the `java` release channel:
 
@@ -109,6 +131,22 @@ public class PluginManager {
         }
     }
 
+    private int countPotentialPluginJars() {
+        if (!Files.isDirectory(PLUGINS_PATH)) return 0;
+        var count = 0;
+        try (var paths = Files.newDirectoryStream(
+            PLUGINS_PATH,
+            path -> Files.isRegularFile(path) && path.getFileName().toString().endsWith(".jar")
+        )) {
+            for (var ignored : paths) {
+                count++;
+            }
+        } catch (Throwable e) {
+            PLUGIN_LOG.error("Error scanning plugins directory", e);
+        }
+        return count;
+    }
+
     private void ensurePluginsFolderExists() {
         try {
             if (!PLUGINS_PATH.toFile().exists()) {
@@ -119,114 +157,76 @@ public class PluginManager {
         }
     }
 
-    private void preLoadPlugins() {
-        preLoadPluginsFromSystemClasspath();
-        if (ImageInfo.inImageRuntimeCode()) {
-            linuxChannelIncompatibilityWarning();
-            return;
-        }
-        if (ImageInfo.inAgentRuntime()) return;
-        var potentialPlugins = findPotentialPluginJars();
-        for (var jar : potentialPlugins) {
+    private void preLoadPlugins(List<PluginDiscovery.DiscoveredPlugin> descriptors) {
+        var classLoader = getClass().getClassLoader();
+        for (var descriptor : descriptors) {
+            var pluginInfo = descriptor.info();
             try {
-                preLoadPotentialPluginJar(jar);
+                preLoadPluginInstance(pluginInfo, descriptor.path(), classLoader);
             } catch (Throwable e) {
-                PLUGIN_LOG.error("Error loading plugin jar: {}", jar, e);
+                reportPreloadFailure(pluginInfo.id(), descriptor.path(), e);
             }
         }
+    }
+
+    private void preLoadLegacyPlugins() {
+        var definingLoader = getClass().getClassLoader();
+        var descriptors = ImageInfo.inImageCode()
+            ? PluginDiscovery.discoverClasspath(definingLoader, MC_VERSION, PLUGIN_LOG::error)
+            : PluginDiscovery.discover(PLUGINS_PATH, definingLoader, MC_VERSION, PLUGIN_LOG::error);
+        for (var descriptor : descriptors) {
+            var pluginInfo = descriptor.info();
+            var jarPath = descriptor.path();
+            if (!pluginInfo.mixins().isEmpty()) {
+                PLUGIN_LOG.warn("Plugin {} declares transformers but ZenithProxy was launched without ClassTransform", pluginInfo.id());
+                legacyDisabledIds.add(pluginInfo.id());
+                try {
+                    preLoadPluginInstance(pluginInfo, jarPath, definingLoader);
+                } catch (Throwable e) {
+                    reportPreloadFailure(pluginInfo.id(), jarPath, e);
+                }
+                continue;
+            }
+
+            ClassLoader classLoader = definingLoader;
+            try {
+                if (!ImageInfo.inImageCode() && !isClasspathPluginPath(jarPath)) {
+                    classLoader = new URLClassLoader(new URL[]{jarPath.toUri().toURL()}, definingLoader);
+                }
+                preLoadPluginInstance(pluginInfo, jarPath, classLoader);
+            } catch (Throwable e) {
+                closeLegacyClassLoader(classLoader);
+                reportPreloadFailure(pluginInfo.id(), jarPath, e);
+            }
+        }
+    }
+
+    private boolean isClasspathPluginPath(Path path) {
+        return path.toString().isEmpty();
+    }
+
+    private void reportPreloadFailure(String id, Path jarPath, Throwable failure) {
+        PLUGIN_LOG.error("Error loading plugin: {}", jarPath, failure);
+        EVENT_BUS.postAsync(new PluginLoadFailureEvent(id, jarPath, failure));
     }
 
     private void loadPlugins() {
-        for (var instance : pluginInstances.entrySet()) {
+        for (var id : pluginLoadOrder) {
+            var instance = pluginInstances.get(id);
+            if (instance == null) continue;
             try {
-                loadPlugin(instance.getValue());
+                loadPlugin(instance);
             } catch (Throwable e) {
-                PLUGIN_LOG.error("Error loading plugin: {} : {}", instance.getKey(), instance.getValue().getJarPath(), e);
+                PLUGIN_LOG.error("Error loading plugin: {} : {}", id, instance.getJarPath(), e);
             }
-        }
-    }
-
-    private void preLoadPluginsFromSystemClasspath() {
-        try {
-            // must be called before plugin jar discovery where classloaders are opened
-            var resources = ClassLoader.getSystemClassLoader().getResources("zenithproxy.plugin.json");
-            while (resources.hasMoreElements()) {
-                var resourceUrl = resources.nextElement();
-                try (var in = resourceUrl.openStream()) {
-                    var pluginInfo = readPluginInfo(in);
-                    preLoadPluginInstance(pluginInfo, Path.of(""), ClassLoader.getSystemClassLoader());
-                } catch (Exception e) {
-                    PLUGIN_LOG.error("Error loading classpath plugin: {}", resourceUrl.toString(), e);
-                }
-            }
-        } catch (Throwable e) {
-            PLUGIN_LOG.error("Error loading classpath plugins", e);
-        }
-    }
-
-    private List<Path> findPotentialPluginJars() {
-        if (!PLUGINS_PATH.toFile().exists()) return Collections.emptyList();
-        final List<Path> list = new ArrayList<>();
-        try (var jarStream = Files.newDirectoryStream(PLUGINS_PATH, p -> p.toFile().isFile() && p.toString().endsWith(".jar"))) {
-            for (var jarPath : jarStream) {
-                list.add(jarPath);
-            }
-        } catch (Throwable e) {
-            PLUGIN_LOG.error("Error loading plugins", e);
-        }
-        // sort alphabetically by filename
-        list.sort(Comparator.comparing(p -> p.getFileName().toString()));
-        return list;
-    }
-
-    private void preLoadPotentialPluginJar(final Path jarPath) {
-        String id = null;
-        URLClassLoader classLoader = null;
-        try {
-            classLoader = new URLClassLoader(new URL[]{jarPath.toUri().toURL()}, getClass().getClassLoader());
-            PluginInfo pluginInfo = readPluginInfo(classLoader, jarPath);
-            id = requireNonNull(pluginInfo.id(), "Plugin id is null");
-            preLoadPluginInstance(pluginInfo, jarPath, classLoader);
-        } catch (Throwable e) {
-            if (classLoader != null) {
-                try {
-                    classLoader.close();
-                } catch (IOException ignored) { }
-            }
-            PLUGIN_LOG.error("Error loading plugin: {}", jarPath, e);
-            EVENT_BUS.postAsync(new PluginLoadFailureEvent(id, jarPath, e));
         }
     }
 
     protected void preLoadPluginInstance(final PluginInfo pluginInfo, Path jarPath, ClassLoader classLoader) {
-        String id = pluginInfo.id();
-        if (pluginInfo.mcVersions().isEmpty()) {
-            PLUGIN_LOG.error("Plugin: {} has no MC versions specified", jarPath);
-            throw new RuntimeException("Plugin has no MC versions specified");
-        }
-        if (!pluginInfo.mcVersions().contains("*") && !pluginInfo.mcVersions().contains(MC_VERSION)) {
-            PLUGIN_LOG.warn("Plugin: {} not compatible with current MC version. Actual: {}, Plugin Required: {}", jarPath, MC_VERSION, pluginInfo.mcVersions());
-            return;
-        }
-
-        if (pluginInstances.containsKey(id)) {
-            PLUGIN_LOG.info("Found duplicate plugin IDs: {}", id);
-            var existing = pluginInstances.get(id);
-            if (existing.getPluginInfo().version().compareTo(pluginInfo.version()) < 0) {
-                PLUGIN_LOG.info("Unloading existing plugin ID: {} with lower version: {} vs {}", id, existing.getPluginInfo().version(), pluginInfo.version());
-                var existingClassloader = existing.getClassLoader();
-                if (existingClassloader instanceof URLClassLoader urlClassLoader) {
-                    try {
-                        urlClassLoader.close();
-                    } catch (Exception e) {
-                        throw new RuntimeException("Failed to close existing plugin classloader", e);
-                    }
-                }
-                pluginInstances.remove(id);
-            } else {
-                throw new RuntimeException("Plugin id already exists: " + id);
-            }
-        }
+        Objects.requireNonNull(pluginInfo, "pluginInfo");
+        Objects.requireNonNull(jarPath, "jarPath");
+        Objects.requireNonNull(classLoader, "classLoader");
+        String id = requireNonNull(pluginInfo.id(), "Plugin id is null");
 
         PLUGIN_LOG.info(
             "Found Plugin:\n  id: {}\n  version: {}\n  description: {}\n  url: {}\n  authors: {}\n  jar: {}",
@@ -237,10 +237,15 @@ public class PluginManager {
             pluginInfo.authors(),
             jarPath.getFileName()
         );
+        if (!pluginInstances.containsKey(id)) {
+            pluginLoadOrder.add(id);
+        }
         pluginInstances.put(id, new PluginInstance(id, jarPath, pluginInfo, classLoader));
     }
 
     protected void loadPlugin(final PluginInstance pluginInstance) {
+        var id = pluginInstance.getId();
+        if (isPluginDisabled(id)) return;
         try {
             var pluginInfo = pluginInstance.getPluginInfo();
             var classLoader = pluginInstance.getClassLoader();
@@ -250,6 +255,7 @@ public class PluginManager {
             PLUGIN_LOG.info("Loading Plugin: {}", pluginInfo.id());
 
             Class<?> pluginClass = classLoader.loadClass(entrypoint);
+            if (isPluginDisabled(id)) return;
             if (!ZenithProxyPlugin.class.isAssignableFrom(pluginClass)) {
                 throw new RuntimeException("Plugin does not implement ZenithProxyPlugin interface");
             }
@@ -261,81 +267,35 @@ public class PluginManager {
                 plugin = (ZenithProxyPlugin) pluginClass.getDeclaredConstructor().newInstance();
             }
 
+            if (isPluginDisabled(id)) return;
             pluginInstance.setPluginInstance(plugin);
 
+            if (isPluginDisabled(id)) return;
             try {
                 plugin.onLoad(new InstancedPluginAPI(plugin, pluginInfo));
             } catch (final Throwable e) {
                 PLUGIN_LOG.error("Exception in plugin onLoad: {}", jarPath, e);
-                pluginInstances.remove(pluginInstance.getId());
+                if (!isPluginDisabled(id)) pluginInstances.remove(id, pluginInstance);
                 throw new RuntimeException("Exception in plugin onLoad: " + e.getMessage(), e);
             }
+            if (isPluginDisabled(id)) return;
             EVENT_BUS.postAsync(new PluginLoadedEvent(pluginInfo));
         } catch (Throwable e) {
-            try {
-                var classloader = pluginInstance.getClassLoader();
-                if (classloader instanceof URLClassLoader urlClassLoader) {
-                    urlClassLoader.close();
-                }
-            } catch (IOException ignored) { }
+            closeLegacyClassLoader(pluginInstance.getClassLoader());
             PLUGIN_LOG.error("Error loading plugin: {}", pluginInstance, e);
             EVENT_BUS.postAsync(new PluginLoadFailureEvent(pluginInstance.getId(), pluginInstance.getJarPath(), e));
         }
     }
 
-    @SneakyThrows
-    private PluginInfo readPluginInfo(URLClassLoader classLoader, Path path) {
-        try {
-            return readPluginInfo(classLoader, "zenithproxy.plugin.json");
-        } catch (Throwable e) {
-            if (e.getMessage().contains("not found in jar")) {
-                // fall through
-            } else {
-                PLUGIN_LOG.error("Error reading zenithproxy.plugin.json: {}", path, e);
-                throw e;
-            }
+    private void closeLegacyClassLoader(ClassLoader classLoader) {
+        // The shared application loader owns application classes and remains open for background
+        // work. Only legacy per-JAR URL loaders may be closed after a failed load.
+        if (classLoader == null || classLoader == getClass().getClassLoader()) return;
+        if (classLoader instanceof URLClassLoader urlClassLoader) {
+            try {
+                urlClassLoader.close();
+            } catch (IOException ignored) { }
         }
-        try {
-            var plugin = readPluginInfo(classLoader, "plugin.json");
-            PLUGIN_LOG.warn("{} using deprecated plugin.json. Rebuild to migrate to zenithproxy.plugin.json", path);
-            return plugin;
-        } catch (Throwable e) {
-            if (e.getMessage().endsWith("not found in jar")) {
-                // fall through
-            } else {
-                PLUGIN_LOG.error("Error reading plugin.json: {}", path, e);
-                throw e;
-            }
-        }
-        throw new RuntimeException("No zenithproxy.plugin.json found in: " + path);
-    }
-
-    @SneakyThrows
-    private PluginInfo readPluginInfo(ClassLoader classLoader, String pluginJsonFileName) {
-        try (var stream = classLoader.getResourceAsStream(pluginJsonFileName)) {
-            if (stream == null) {
-                throw new RuntimeException(pluginJsonFileName + " not found in jar");
-            }
-            return readPluginInfo(stream);
-        }
-    }
-
-    @SneakyThrows
-    private PluginInfo readPluginInfo(InputStream stream) {
-        var info = OBJECT_MAPPER.readValue(stream, PluginInfo.class);
-        requireNonNull(info.entrypoint(), "Entrypoint is null");
-        if (info.entrypoint().isBlank()) throw new RuntimeException("Invalid entrypoint");
-        requireNonNull(info.id(), "Plugin id is null");
-        if (info.id().isBlank()) throw new RuntimeException("Invalid plugin id");
-        if (!PluginInfo.ID_PATTERN.matcher(info.id()).matches()) {
-            throw new RuntimeException("Invalid plugin id: " + info.id());
-        }
-        requireNonNull(info.version(), "Plugin version is null");
-        requireNonNull(info.description(), "Plugin description is null");
-        requireNonNull(info.url(), "Plugin url is null");
-        requireNonNull(info.authors(), "Plugin authors is null");
-        requireNonNull(info.mcVersions(), "Plugin mcVersions is null");
-        return info;
     }
 
     public synchronized <T> T registerConfig(String fileName, Class<T> clazz, ConfigSerializer serializer) {

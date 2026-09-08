@@ -16,8 +16,16 @@ public record PluginInfo(
     String description,
     String url,
     List<String> authors,
-    List<String> mcVersions
+    List<String> mcVersions,
+    List<String> mixins
 ) {
+    public PluginInfo {
+        // will occur if a legacy plugin is loaded, they don't have a mixins field
+        if (mixins == null) {
+            mixins = List.of();
+        }
+    }
+
     public static final String ID_PATTERN_STRING = "[a-z][a-z0-9-_]{0,63}";
     public static final Pattern ID_PATTERN = Pattern.compile(ID_PATTERN_STRING);
 }

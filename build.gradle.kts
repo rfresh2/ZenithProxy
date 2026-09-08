@@ -97,6 +97,12 @@ dependencies {
     api("tools.jackson.core:jackson-databind")
     api("tools.jackson.dataformat:jackson-dataformat-smile")
 
+    val classTransformVersion = "1.15.1"
+    api("net.lenni0451.classtransform:core:$classTransformVersion")
+    api("net.lenni0451.classtransform:mixinstranslator:$classTransformVersion")
+    api("net.lenni0451.classtransform:mixinsdummy:$classTransformVersion")
+    api("net.lenni0451.classtransform:additionalclassprovider:$classTransformVersion")
+
     testImplementation(platform("org.junit:junit-bom:6.1.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.testcontainers:testcontainers:2.0.5")
@@ -142,7 +148,7 @@ tasks {
         javaLauncher = javaLauncherProvider
         workingDir = layout.projectDirectory.dir("run").asFile
         classpath = sourceSets.main.get().runtimeClasspath
-        mainClass.set("com.zenith.Proxy")
+        mainClass.set("com.zenith.ProxyLaunchWrapper")
         jvmArgs = listOf(
             "-Xmx300m", "-XX:+UseG1GC", "-Xms32m", "-XX:MinHeapFreeRatio=10", "-XX:MaxHeapFreeRatio=20",
             "-XX:G1PeriodicGCInterval=30000", "-XX:TrimNativeHeapInterval=30000", "-XX:+UseCompactObjectHeaders",
@@ -174,7 +180,7 @@ tasks {
         javaLauncher = javaLauncherProvider
         workingDir = layout.projectDirectory.dir("run").asFile
         classpath = sourceSets.main.get().runtimeClasspath
-        mainClass.set("com.zenith.Proxy")
+        mainClass.set("com.zenith.ProxyLaunchWrapper")
         jvmArgs = listOf("--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow")
     }
     val updateWikiTask = register<UpdateWikiTask>("updateWiki") {
@@ -227,7 +233,7 @@ tasks {
             attributes(mapOf(
                 "Implementation-Title" to "ZenithProxy",
                 "Implementation-Version" to project.version,
-                "Main-Class" to "com.zenith.Proxy",
+                "Main-Class" to "com.zenith.ProxyLaunchWrapper",
                 "Multi-Release" to "true",
                 "Enable-Native-Access" to "ALL-UNNAMED"
             ))
