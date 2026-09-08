@@ -8,6 +8,7 @@ import net.lenni0451.classtransform.additionalclassprovider.GuavaClassPathProvid
 import net.lenni0451.classtransform.mixinstranslator.MixinsTranslator;
 import net.lenni0451.classtransform.utils.FailStrategy;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ import java.util.jar.JarOutputStream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
+@DisabledInNativeImage
 class SharedApplicationClassLoaderTest {
     private static final String TARGET_NAME = TransformTarget.class.getName();
 

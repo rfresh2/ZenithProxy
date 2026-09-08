@@ -4,6 +4,7 @@ import com.zenith.plugin.api.PluginAPI;
 import com.zenith.plugin.api.ZenithProxyPlugin;
 import com.zenith.util.ImageInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledInNativeImage;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -15,6 +16,7 @@ import java.util.jar.JarOutputStream;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+@DisabledInNativeImage
 class PluginManagerNativeClasspathTest {
     @Test
     void nativeImageRuntimeLoadsBundledPluginAndSkipsExternalJars() throws Exception {
