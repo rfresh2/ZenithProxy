@@ -32,9 +32,6 @@ ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=ce
 
 os.environ["ZENITH_LAUNCHER"] = "true"
 
-config = LaunchConfig()
-api = github_api.GitHubAPI(config)
-
 # Certain platforms like mac seem to not have the correct cwd set correctly when double clicking the executable
 if launch_platform.is_pyinstaller_bundle():
     current_cwd = os.getcwd()
@@ -42,6 +39,9 @@ if launch_platform.is_pyinstaller_bundle():
     expected_cwd = os.path.dirname(executable_path)
     if current_cwd != expected_cwd:
         os.chdir(expected_cwd)
+
+config = LaunchConfig()
+api = github_api.GitHubAPI(config)
 
 # for use with relaunches just so we don't get stuck in an infinite update loop if something goes wrong
 no_launcher_update = False
