@@ -18,4 +18,5 @@ public @interface Plugin {
     String url() default "";
     String[] authors() default "";
     String[] mcVersions() default "*";
+    String[] mixins() default "";
 }

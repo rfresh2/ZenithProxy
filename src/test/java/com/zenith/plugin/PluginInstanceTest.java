@@ -25,7 +25,8 @@ public class PluginInstanceTest {
             "A test plugin for unit testing",
             "",
             Collections.emptyList(),
-            List.of("*")
+            List.of("*"),
+            List.of()
         );
         PLUGIN_MANAGER.preLoadPluginInstance(pluginInfo, Path.of("test-plugin.jar"), this.getClass().getClassLoader());
         var pluginInstance = PLUGIN_MANAGER.getPluginInstances().stream().filter(i -> i.getId().equals(pluginInfo.id())).findFirst().orElseThrow();

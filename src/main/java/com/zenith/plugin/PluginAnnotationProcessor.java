@@ -91,7 +91,8 @@ public class PluginAnnotationProcessor extends AbstractProcessor {
                 plugin.description(),
                 plugin.url(),
                 Arrays.stream(plugin.authors()).filter(a -> !a.isBlank()).toList(),
-                Arrays.stream(plugin.mcVersions()).filter(a -> !a.isBlank()).toList()
+                Arrays.stream(plugin.mcVersions()).filter(a -> !a.isBlank()).toList(),
+                Arrays.stream(plugin.mixins()).filter(a -> !a.isBlank()).toList()
             );
             try {
                 FileObject object = environment.getFiler()

@@ -32,13 +32,13 @@ def get_java_instance(min_version: Version, install_type: JavaInstallType = Java
     java_instance = _locate_java(min_version)
     if not java_instance:
         if install_type == JavaInstallType.USER_PROMPT:
-            _java_install_prompt()
+            _java_install_prompt(min_version)
             java_instance = _locate_java(min_version)
         elif install_type == JavaInstallType.AUTO_INSTALL:
             _install_java()
             java_instance = _locate_java(min_version)
         elif install_type == JavaInstallType.NO_INSTALL:
-            critical_error("Java not found and both auto install and user prompt disabled.")
+            critical_error(f"Java {min_version.major}+ not found and both auto install and user prompt disabled.")
         if not java_instance:
             warn("Failed to install Java.")
             return None
@@ -76,17 +76,16 @@ def _locate_java_from_env(env_var: str, min_version: Version) -> Optional[JavaIn
     return None
 
 
-def _install_java():
+def _install_java(install_version: str = "25"):
     info(f"Installing Java to: {_JDK_DIR}")
-
     install_os = jdk.OS
     # default detector doesn't even attempt to detect alpine
     if launch_platform.get_platform_os() == launch_platform.OperatingSystem.ALPINE:
         debug("Installing java for alpine")
         install_os = jdk.OperatingSystem.ALPINE_LINUX
 
-    install_dir = jdk.install("25", path=_JDK_DIR, vendor="Adoptium", operating_system=install_os)
-    info(f"Java installed successfully to: {install_dir}")
+    install_dir = jdk.install(install_version, path=_JDK_DIR, vendor="Adoptium", operating_system=install_os)
+    info(f"Java {install_version} installed successfully to: {install_dir}")
 
 
 def _java_exe_extension() -> str:
@@ -142,7 +141,7 @@ def _locate_java(min_version: Version) -> Optional[JavaInstance]:
     return max(jdk_dir_java, jdks_dir_java, jre_dir_java, key=lambda x: x.version if x else Version("0.0.0"))
 
 
-def _java_install_prompt():
+def _java_install_prompt(min_version: Version):
     while True:
         info("Automatically install Java? (y/n)")
         i1 = input("> ")
@@ -150,7 +149,7 @@ def _java_install_prompt():
             _install_java()
             break
         elif i1 == "n":
-            error("Please install Java 21+ and try again.")
+            error(f"Please install Java {min_version.major}+ and try again.")
             break
         else:
             error("Invalid input. Enter y or n")

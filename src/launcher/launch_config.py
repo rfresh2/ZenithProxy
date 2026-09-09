@@ -6,14 +6,6 @@ from typing import Optional
 from log import info, error, critical_error
 
 
-def version_looks_valid(ver: str) -> bool:
-    return re.match(r"[0-9]+\.[0-9]+\.[0-9]+", ver) or (len(ver) == 8 and re.match(r"[0-9a-f]+", ver))
-
-
-def valid_release_channel(channel: str) -> bool:
-    return channel.startswith("git") or channel.startswith("java") or channel.startswith("linux")
-
-
 def read_launch_config_file() -> Optional[dict]:
     try:
         with open("launch_config.json") as f:
@@ -26,6 +18,13 @@ def read_launch_config_file() -> Optional[dict]:
         error("launch_config.json is invalid")
         return None
 
+def _version_looks_valid(ver: str) -> bool:
+    contains_semver = re.match(r"[0-9]+\.[0-9]+\.[0-9]+", ver) is not None
+    matches_git_ver_fmt = re.match(r"[0-9a-f]{8}", ver) is not None
+    return contains_semver or matches_git_ver_fmt
+
+def _valid_release_channel(channel: str) -> bool:
+    return channel.startswith("git") or channel.startswith("java") or channel.startswith("linux")
 
 class LaunchConfig:
 
@@ -75,10 +74,10 @@ class LaunchConfig:
         self.write_launch_config()
 
     def validate_launch_config(self):
-        if not valid_release_channel(self.release_channel):
+        if not _valid_release_channel(self.release_channel):
             error(f"Invalid release channel: {self.release_channel}")
             return False
-        if not version_looks_valid(self.version):
+        if not _version_looks_valid(self.version):
             error(f"Invalid version string: {self.version}")
             return False
         if self.repo_name == "":

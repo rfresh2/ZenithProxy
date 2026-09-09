@@ -81,17 +81,19 @@ public class PluginsCommand extends Command {
                          * URL: %s
                          * Author(s): %s
                          * MC: %s
+                         * Mixins: %s
                          """.formatted(
-                             DiscordBot.escape(p.id()),
+                             DiscordBot.escape(p.id()) + (PLUGIN_MANAGER.isPluginDisabled(p.id()) ? " (disabled: transformer unavailable)" : ""),
                              DiscordBot.escape(p.version().toString()),
                              DiscordBot.escape(p.description()),
                              DiscordBot.escape(p.url()),
                              DiscordBot.escape(String.join(", ", p.authors())),
-                             DiscordBot.escape(String.join(", ", p.mcVersions()))
+                             DiscordBot.escape(String.join(", ", p.mcVersions())),
+                             DiscordBot.escape(p.mixins().isEmpty() ? "no" : "yes")
                     ))
                     .collect(Collectors.joining("\n"));
                 c.getSource().getEmbed()
-                    .title("Loaded Plugins (" + plugins.size() + ")")
+                    .title("Plugins (" + plugins.size() + ")")
                     .description(appendWarningToDescription(plugins.isEmpty() ? "None" : info))
                     .primaryColor();
             }))
@@ -101,12 +103,6 @@ public class PluginsCommand extends Command {
                     c.getSource().getEmbed()
                         .title("Invalid URL")
                         .description("The URL must start with `http://` or `https://`");
-                    return ERROR;
-                }
-                if (!requestedUrl.endsWith(".jar")) {
-                    c.getSource().getEmbed()
-                        .title("Invalid URL")
-                        .description("The URL must point to a `.jar` file");
                     return ERROR;
                 }
                 URL url;
@@ -150,6 +146,7 @@ public class PluginsCommand extends Command {
                     .addField("Version", readResult.pluginInfo().version())
                     .addField("URL", readResult.pluginInfo().url())
                     .addField("Author(s)", String.join(", ", readResult.pluginInfo().authors()))
+                    .addField("Mixins", readResult.pluginInfo().mixins().isEmpty() ? "no" : "yes")
                     .addField("Jar", downloadResult.file().toPath().getFileName())
                     .primaryColor();
                 return OK;

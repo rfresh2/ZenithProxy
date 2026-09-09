@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "1.1.10"
+    id("org.graalvm.buildtools.native") version "1.1.12"
     id("com.gradleup.shadow") version "9.6.1"
     id("io.freefair.lombok") version "9.5.0"
     `maven-publish`
@@ -32,9 +32,9 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "26.2.0.10"
+val mcplVersion = "26.2.0.11"
 dependencies {
-    api("com.github.rfresh2:JDA:6.5.35") {
+    api("com.github.rfresh2:JDA:6.6.36") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -42,7 +42,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.17.Final"))
+    api(platform("io.netty:netty-bom:4.2.18.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -81,7 +81,7 @@ dependencies {
     api("com.viaversion:viaversion-common:5.11.0")
     api("com.viaversion:viabackwards-common:5.11.0")
     api("com.viaversion:viarewind-common:4.1.3")
-    api("org.jline:jline:4.4.0")
+    api("org.jline:jline:4.4.2")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.1.0")
     api("org.postgresql:postgresql:42.7.13")
@@ -97,6 +97,12 @@ dependencies {
     api("tools.jackson.core:jackson-databind")
     api("tools.jackson.dataformat:jackson-dataformat-smile")
 
+    val classTransformVersion = "1.15.1"
+    api("net.lenni0451.classtransform:core:$classTransformVersion")
+    api("net.lenni0451.classtransform:mixinstranslator:$classTransformVersion")
+    api("net.lenni0451.classtransform:mixinsdummy:$classTransformVersion")
+    api("net.lenni0451.classtransform:additionalclassprovider:$classTransformVersion")
+
     testImplementation(platform("org.junit:junit-bom:6.1.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.testcontainers:testcontainers:2.0.5")
@@ -104,11 +110,11 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
     annotationProcessor("com.google.auto.service:auto-service:1.1.1")
-    compileOnly("org.graalvm.sdk:nativeimage:25.2.4")
+    compileOnly("org.graalvm.sdk:nativeimage:25.3.4.1")
 }
 
 lombok {
-    version = "1.18.46"
+    version = "1.18.48"
 }
 
 tasks {
@@ -142,9 +148,10 @@ tasks {
         javaLauncher = javaLauncherProvider
         workingDir = layout.projectDirectory.dir("run").asFile
         classpath = sourceSets.main.get().runtimeClasspath
-        mainClass.set("com.zenith.Proxy")
+        mainClass.set("com.zenith.ProxyLaunchWrapper")
         jvmArgs = listOf(
-            "-Xmx300m", "-XX:+UseG1GC", "-XX:+UseCompactObjectHeaders",
+            "-Xmx300m", "-XX:+UseG1GC", "-Xms32m", "-XX:MinHeapFreeRatio=10", "-XX:MaxHeapFreeRatio=20",
+            "-XX:G1PeriodicGCInterval=30000", "-XX:TrimNativeHeapInterval=30000", "-XX:+UseCompactObjectHeaders",
             "--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow"
         )
         standardInput = System.`in`
@@ -173,7 +180,7 @@ tasks {
         javaLauncher = javaLauncherProvider
         workingDir = layout.projectDirectory.dir("run").asFile
         classpath = sourceSets.main.get().runtimeClasspath
-        mainClass.set("com.zenith.Proxy")
+        mainClass.set("com.zenith.ProxyLaunchWrapper")
         jvmArgs = listOf("--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow")
     }
     val updateWikiTask = register<UpdateWikiTask>("updateWiki") {
@@ -226,7 +233,7 @@ tasks {
             attributes(mapOf(
                 "Implementation-Title" to "ZenithProxy",
                 "Implementation-Version" to project.version,
-                "Main-Class" to "com.zenith.Proxy",
+                "Main-Class" to "com.zenith.ProxyLaunchWrapper",
                 "Multi-Release" to "true",
                 "Enable-Native-Access" to "ALL-UNNAMED"
             ))

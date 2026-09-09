@@ -1589,7 +1589,9 @@ Useful for raid farms on MC 1.21+ servers.
 
 Modes:
 
-* `effectAndRaidInactive`: drink potion only when no omen effect or raid is active
+* `effectAndRaid`: drink potion when no omen effect or raid is active
+
+* `effect`: drink potion when no omen effect is active
 
 * `constant`: drink potion at a constant interval. By default the delay matches the omen effect length: 100 seconds (2000 ticks)
 
@@ -1601,7 +1603,7 @@ if `consumeFullOmenStack` is disabled, a single omen potion will be left per sta
 
   ```autoOmen on/off```
 
-  ```autoOmen mode <effectAndRaidInactive/constant>```
+  ```autoOmen mode <effectAndRaid/effect/constant>```
 
   ```autoOmen consumeFullOmenStack on/off```
 
