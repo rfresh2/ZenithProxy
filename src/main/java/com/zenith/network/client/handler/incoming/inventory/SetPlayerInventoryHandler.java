@@ -36,7 +36,8 @@ public class SetPlayerInventoryHandler implements ClientEventLoopPacketHandler<C
                 container.setItemStack(index + containerTypeInfo.topSlots() - hotbarSlots, packet.getContents());
             }
         } else if (index < 40) { // armor
-            CACHE.getPlayerCache().getInventoryCache().getPlayerInventory().setItemStack(index - 36 + playerInvArmorSlotOffset, packet.getContents());
+            // armor index in packet is in reverse order where feet has lowest slot id and counts up to head
+            CACHE.getPlayerCache().getInventoryCache().getPlayerInventory().setItemStack(39 - index + playerInvArmorSlotOffset, packet.getContents());
         } else if (index == 40) { // offhand
             CACHE.getPlayerCache().getInventoryCache().getPlayerInventory().setItemStack(45, packet.getContents());
         } else {
