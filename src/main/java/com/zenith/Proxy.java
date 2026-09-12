@@ -13,6 +13,7 @@ import com.zenith.event.queue.QueuePositionUpdateEvent;
 import com.zenith.event.queue.QueueSkipEvent;
 import com.zenith.event.queue.QueueStartEvent;
 import com.zenith.event.server.ServerIconBuildEvent;
+import com.zenith.event.system.ProxyLaunchedEvent;
 import com.zenith.feature.api.mcstatus.MCStatusApi;
 import com.zenith.feature.autoupdater.AutoUpdater;
 import com.zenith.feature.autoupdater.NoOpAutoUpdater;
@@ -242,6 +243,7 @@ public class Proxy {
                 DEFAULT_LOG.info("Proxy IP: {}", CONFIG.server.getProxyAddress());
                 DEFAULT_LOG.info("Use the `connect` command to log in!");
             }
+            EVENT_BUS.post(ProxyLaunchedEvent.INSTANCE);
             Wait.waitSpinLoop();
         } catch (Exception e) {
             DEFAULT_LOG.error("", e);
