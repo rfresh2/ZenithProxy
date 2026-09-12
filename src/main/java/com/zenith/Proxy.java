@@ -143,16 +143,15 @@ public class Proxy {
             DEFAULT_LOG.warn("Detected unofficial ZenithProxy development build!");
         } else if (!LAUNCH_CONFIG.version.split("\\+")[0].equals(exeReleaseVersion.split("\\+")[0])) {
             DEFAULT_LOG.warn("launch_config.json version: {} and embedded ZenithProxy version: {} do not match!", LAUNCH_CONFIG.version, exeReleaseVersion);
-            if (inDevEnv() && !ImageInfo.inImageRuntimeCode()) {
-                var correctedVersion = exeReleaseVersion.split("\\+")[0] + "+java." + exeReleaseVersion.split("\\+")[1];
-                LAUNCH_CONFIG.version = correctedVersion;
-                LAUNCH_CONFIG.local_version = correctedVersion;
-                saveLaunchConfig();
-                DEFAULT_LOG.warn("Updated version to match embedded ZenithProxy version: {}", exeReleaseVersion);
-            } else if (LAUNCH_CONFIG.auto_update && !inDevEnv()) {
-                DEFAULT_LOG.warn("AutoUpdater is enabled but will break!");
-            }
-            DEFAULT_LOG.warn("Use the official launcher: https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3");
+            var correctedVersion = "%s+%s.%s".formatted(
+                exeReleaseVersion.split("\\+")[0],
+                ImageInfo.inImageRuntimeCode() ? "linux" : "java",
+                exeReleaseVersion.split("\\+")[1]
+            );
+            LAUNCH_CONFIG.version = correctedVersion;
+            LAUNCH_CONFIG.local_version = correctedVersion;
+            saveLaunchConfig();
+            DEFAULT_LOG.warn("Updated version to match embedded ZenithProxy version: {}", exeReleaseVersion);
         }
         initEventHandlers();
         try {
