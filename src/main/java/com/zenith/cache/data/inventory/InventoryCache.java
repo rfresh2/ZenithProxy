@@ -12,7 +12,6 @@ import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerType;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.MoveToHotbarAction;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundContainerClickPacket;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.inventory.ServerboundSetCreativeModeSlotPacket;
 import org.jspecify.annotations.Nullable;
 
 import static com.zenith.Globals.CACHE_LOG;
@@ -133,11 +132,6 @@ public class InventoryCache {
         packet.getChangedSlots().forEach(container::setItemStack);
         lastContainerClick = System.currentTimeMillis();
         activeContainerId = packet.getContainerId();
-    }
-
-    public void handleSetCreativeModeSlot(ServerboundSetCreativeModeSlotPacket packet) {
-        Container playerInventory = getPlayerInventory();
-        playerInventory.setItemStack(packet.getSlot(), packet.getClickedItem());
     }
 
     public synchronized void reset() {

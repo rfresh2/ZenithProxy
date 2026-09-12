@@ -217,7 +217,7 @@ public class Proxy {
                     connected = true;
                 }
             }
-            if (LAUNCH_CONFIG.auto_update && !inDevEnv()) {
+            if (LAUNCH_CONFIG.auto_update && inZenithLauncher() && !inDevEnv()) {
                 autoUpdater = LAUNCH_CONFIG.release_channel.equals("git")
                     ? NoOpAutoUpdater.INSTANCE
                     : new RestAutoUpdater();
