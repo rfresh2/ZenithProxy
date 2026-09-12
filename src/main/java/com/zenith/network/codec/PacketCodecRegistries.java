@@ -29,6 +29,7 @@ import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.*;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundClientInformationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundKeepAlivePacket;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundPongPacket;
+import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundResourcePackPacket;
 import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundFinishConfigurationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundRegistryDataPacket;
 import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundSelectKnownPacks;
@@ -306,6 +307,7 @@ public final class PacketCodecRegistries {
             .setPriority(0)
             .state(ProtocolState.CONFIGURATION, PacketHandlerStateCodec.serverBuilder()
                 .inbound(ServerboundFinishConfigurationPacket.class, new FinishConfigurationHandler())
+                .inbound(ServerboundResourcePackPacket.class, new SResourcePackHandler())
                 .inbound(ServerboundClientInformationPacket.class, SClientInformationHandler.INSTANCE)
                 .outbound(ClientboundKeepAlivePacket.class, KeepAliveOutgoingHandler.INSTANCE)
                 .postOutbound(ClientboundFinishConfigurationPacket.class, new ClientFinishConfigurationPostOutgoingHandler())
