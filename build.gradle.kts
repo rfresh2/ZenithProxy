@@ -32,7 +32,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.4.69"
+val mcplVersion = "1.21.4.70"
 dependencies {
     api("com.github.rfresh2:JDA:6.6.36") {
         exclude(group = "club.minnced")
