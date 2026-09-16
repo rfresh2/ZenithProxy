@@ -1,4 +1,3 @@
-import os
 import platform
 import socket
 import subprocess
@@ -9,6 +8,7 @@ from typing import Optional
 import requests
 
 from launch_config import LaunchConfig
+from launcher_paths import APP_ROOT
 from log import error, warn, debug, exception
 from version import Version
 
@@ -100,7 +100,7 @@ def min_java_version(config: LaunchConfig) -> Version:
 
 
 def validate_git_system() -> bool:
-    return os.path.isdir(".git")
+    return (APP_ROOT / ".git").is_dir()
 
 
 def validate_system_with_config(config: LaunchConfig) -> bool:
@@ -124,13 +124,7 @@ def is_nuitka_bundle() -> bool:
 
 
 def is_windows_python_bundle() -> bool:
-    return os.path.exists("python/python.exe")
-
-
-def executable_path() -> str:
-    if is_nuitka_bundle():
-        return sys.argv[0]
-    return sys.executable
+    return (APP_ROOT / "python" / "python.exe").is_file()
 
 
 class PlatformError(Exception):

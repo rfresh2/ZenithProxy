@@ -14,6 +14,10 @@ if sys.version_info[0] < 3 or sys.version_info[1] < 6:
 if sys.version_info[1] < 10:
     print("WARNING: Python 3.10 or higher is required. Current version: " + str(sys.version_info[0]) + "." + str(sys.version_info[1]))
 
+from launcher_paths import APP_ROOT, CONFIG_FILE
+
+os.chdir(APP_ROOT)
+
 from log import info, critical_error
 
 info("ZenithProxy Launcher Initializing...")
@@ -31,14 +35,6 @@ from update_zenith import update_zenith_exec
 ssl._create_default_https_context = lambda: ssl.create_default_context(cafile=certifi.where())
 
 os.environ["ZENITH_LAUNCHER"] = "true"
-
-# Certain platforms like mac seem to not have the correct cwd set correctly when double clicking the executable
-if launch_platform.is_pyinstaller_bundle():
-    current_cwd = os.getcwd()
-    executable_path = launch_platform.executable_path()
-    expected_cwd = os.path.dirname(executable_path)
-    if current_cwd != expected_cwd:
-        os.chdir(expected_cwd)
 
 config = LaunchConfig()
 api = github_api.GitHubAPI(config)
@@ -69,7 +65,7 @@ if unattended:
     setup_unattended(config)
 
 if env_config_enabled:
-    if not os.path.exists("config.json") and not unattended:
+    if not CONFIG_FILE.exists() and not unattended:
         setup_execute(config)
     env_config.apply()
 

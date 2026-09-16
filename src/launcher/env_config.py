@@ -2,6 +2,7 @@ import json
 import os
 import time
 
+from launcher_paths import CONFIG_FILE
 from log import error, info
 
 env_prefix = "ZENITH_CONFIG_"
@@ -34,7 +35,7 @@ def apply():
 
 def read_config() -> dict:
     try:
-        with open("config.json") as f:
+        with CONFIG_FILE.open() as f:
             data = json.load(f)
             return data
     except FileNotFoundError:
@@ -42,11 +43,11 @@ def read_config() -> dict:
         return {}
     except json.decoder.JSONDecodeError:
         error("config.json is invalid")
-        os.replace("config.json", f"config.backup-{time.time_ns()}.json")
+        CONFIG_FILE.replace(CONFIG_FILE.with_name(f"config.backup-{time.time_ns()}.json"))
         return {}
 
 def write_config(data: dict):
-    with open("config.json.tmp", "w") as f:
+    with CONFIG_FILE.with_suffix(".json.tmp").open("w") as f:
         json.dump(data, f, indent=2)
-    os.replace("config.json.tmp", "config.json")
+    CONFIG_FILE.with_suffix(".json.tmp").replace(CONFIG_FILE)
     info("config.json written successfully!")

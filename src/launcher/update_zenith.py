@@ -1,9 +1,9 @@
-import os
 import subprocess
 
 import zip_fixed
 from github_api import GitHubAPI
 from launch_config import LaunchConfig
+from launcher_paths import APP_ROOT, LAUNCH_DIR
 from log import info, error, exception
 
 
@@ -18,7 +18,7 @@ class RestUpdateError(UpdateError):
 def git_update_check():
     try:
         info("> git pull")
-        subprocess.run(["git", "pull"], check=True, capture_output=True, text=True)
+        subprocess.run(["git", "pull"], check=True, capture_output=True, text=True, cwd=APP_ROOT)
     except:
         exception("Error pulling from git")
     return None
@@ -28,7 +28,7 @@ def rest_update_check(config: LaunchConfig, api: GitHubAPI, asset_name, executab
     latest_release_and_ver = api.get_latest_release_and_ver(config.release_channel)
     if not latest_release_and_ver:
         raise RestUpdateError("Failed to get latest release for channel: " + config.release_channel)
-    if latest_release_and_ver[1] == config.version and os.path.isfile(config.launch_dir + executable_name):
+    if latest_release_and_ver[1] == config.version and (LAUNCH_DIR / executable_name).is_file():
         info(f"ZenithProxy up-to-date: {config.version}")
         return
     rest_get_assets(config, api, asset_name, latest_release_and_ver)
@@ -52,20 +52,19 @@ def rest_get_assets(config: LaunchConfig, api: GitHubAPI, asset_name, release_an
     if not asset_data:
         raise RestUpdateError("Failed to download executable asset")
     try:
-        if not os.path.exists(config.launch_dir):
-            os.makedirs(config.launch_dir)
-        existing_files = os.listdir(config.launch_dir)
+        LAUNCH_DIR.mkdir(parents=True, exist_ok=True)
+        existing_files = LAUNCH_DIR.iterdir()
         for existing_file in existing_files:
-            if existing_file == ".gitkeep":
+            if existing_file.name == ".gitkeep":
                 continue
             info(f"Removing existing file: {existing_file}")
-            os.remove(config.launch_dir + existing_file)
-        with open(config.launch_dir + asset_name, "wb") as f:
+            existing_file.unlink()
+        with open(LAUNCH_DIR / asset_name, "wb") as f:
             f.write(asset_data)
         if asset_name.endswith(".zip"):
-            with zip_fixed.ZipFileWithPermissions(config.launch_dir + asset_name, "r") as zip_ref:
-                zip_ref.extractall(config.launch_dir)
-            os.remove(config.launch_dir + asset_name)
+            with zip_fixed.ZipFileWithPermissions(LAUNCH_DIR / asset_name, "r") as zip_ref:
+                zip_ref.extractall(LAUNCH_DIR)
+            (LAUNCH_DIR / asset_name).unlink()
         config.local_version = config.version = release_and_version[1]
     except IOError as e:
         raise RestUpdateError("Failed to write executable asset: " + str(e))
@@ -92,7 +91,7 @@ def linux_native_get_version(config: LaunchConfig, api: GitHubAPI, target_versio
 def git_read_version(config: LaunchConfig):
     try:
         info("> git rev-parse --short=8 HEAD")
-        output = subprocess.check_output(["git", "rev-parse", "--short=8", "HEAD"], stderr=subprocess.STDOUT, text=True)
+        output = subprocess.check_output(["git", "rev-parse", "--short=8", "HEAD"], stderr=subprocess.STDOUT, text=True, cwd=APP_ROOT)
         v = str(output).splitlines()[0].strip()
         if len(v) == 8:
             config.version = v

@@ -1,7 +1,7 @@
 import logging.handlers
-import os
 import sys
 
+from launcher_paths import LOG_DIR
 
 logger = logging.getLogger("log")
 logger.setLevel(logging.DEBUG)
@@ -10,8 +10,8 @@ ch.setLevel(logging.INFO)
 logger.addHandler(ch)
 console_formatter = logging.Formatter("%(message)s")
 ch.setFormatter(console_formatter)
-os.makedirs("log", exist_ok=True) # create subfolder if needed
-fh = logging.handlers.RotatingFileHandler("log/launcher.log", maxBytes=1_000_000, backupCount=5)
+LOG_DIR.mkdir(parents=True, exist_ok=True) # create subfolder if needed
+fh = logging.handlers.RotatingFileHandler(LOG_DIR / "launcher.log", maxBytes=1_000_000, backupCount=5)
 fh.setLevel(logging.DEBUG)
 logger.addHandler(fh)
 file_formatter = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s", "%Y/%m/%d %H:%M:%S")

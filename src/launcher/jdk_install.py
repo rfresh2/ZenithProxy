@@ -1,8 +1,10 @@
 import os
 import re
+import shutil
 import subprocess
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
 from typing import Optional, List
 
 import jdk
@@ -11,10 +13,10 @@ import launch_platform
 from log import info, error, warn, critical_error, debug
 from version import Version
 
-_USER_DIR = os.path.expanduser("~")
-_JDK_DIR = os.path.join(_USER_DIR, ".jdk")
-_JDKS_DIR = os.path.join(_USER_DIR, ".jdks")
-_JRE_DIR = os.path.join(_USER_DIR, ".jre")
+_USER_DIR = Path.home()
+_JDK_DIR = _USER_DIR / ".jdk"
+_JDKS_DIR = _USER_DIR / ".jdks"
+_JRE_DIR = _USER_DIR / ".jre"
 
 class JavaInstallType(Enum):
     USER_PROMPT = 1
@@ -24,7 +26,7 @@ class JavaInstallType(Enum):
 
 @dataclass
 class JavaInstance:
-    path: str
+    path: Path
     version: Version
 
 
@@ -45,7 +47,7 @@ def get_java_instance(min_version: Version, install_type: JavaInstallType = Java
     return java_instance
 
 
-def _get_java_version_from_subprocess(java_path: str) -> Optional[Version]:
+def _get_java_version_from_subprocess(java_path: Path) -> Optional[Version]:
     try:
         output = subprocess.check_output([java_path, "-version"], stderr=subprocess.STDOUT, text=True)
         version_line = [line for line in output.split("\n") if "version" in line][0]
@@ -59,9 +61,13 @@ def _get_java_version_from_subprocess(java_path: str) -> Optional[Version]:
 
 
 def _locate_path_java(min_version: Version) -> Optional[JavaInstance]:
-    version = _get_java_version_from_subprocess("java")
+    java_command = shutil.which("java")
+    if java_command is None:
+        return None
+    java_path = Path(java_command).absolute()
+    version = _get_java_version_from_subprocess(java_path)
     if version and version >= min_version:
-        return JavaInstance("java", version)
+        return JavaInstance(java_path, version)
     return None
 
 
@@ -69,7 +75,7 @@ def _locate_java_from_env(env_var: str, min_version: Version) -> Optional[JavaIn
     java_home = os.environ.get(env_var)
     if not java_home:
         return None
-    java_path = os.path.join(java_home, "bin", "java" + _java_exe_extension())
+    java_path = Path(java_home).expanduser().absolute() / "bin" / ("java" + _java_exe_extension())
     version = _get_java_version_from_subprocess(java_path)
     if version and version >= min_version:
         return JavaInstance(java_path, version)
@@ -84,7 +90,7 @@ def _install_java(install_version: str = "25"):
         debug("Installing java for alpine")
         install_os = jdk.OperatingSystem.ALPINE_LINUX
 
-    install_dir = jdk.install(install_version, path=_JDK_DIR, vendor="Adoptium", operating_system=install_os)
+    install_dir = jdk.install(install_version, path=str(_JDK_DIR), vendor="Adoptium", operating_system=install_os)
     info(f"Java {install_version} installed successfully to: {install_dir}")
 
 
@@ -92,19 +98,19 @@ def _java_exe_extension() -> str:
     return ".exe" if launch_platform.get_platform_os() == launch_platform.OperatingSystem.WINDOWS else ""
 
 
-def _search_for_java_in_dir(search_path: str) -> List[str]:
+def _search_for_java_in_dir(search_path: Path) -> List[Path]:
     output = []
-    if not os.path.exists(search_path) or not os.path.isdir(search_path):
+    if not search_path.is_dir():
         return output
     # check if this has bin/java(.exe)
-    for folder in os.listdir(search_path):
-        java_path = os.path.join(search_path, folder, "bin", "java" + _java_exe_extension())
-        if os.path.exists(java_path):
+    for folder in search_path.iterdir():
+        java_path = folder / "bin" / ("java" + _java_exe_extension())
+        if java_path.is_file():
             output.append(java_path)
     return output
 
 
-def _find_latest_java_in_dir(java_path_list: List[str], min_version: Version) -> Optional[JavaInstance]:
+def _find_latest_java_in_dir(java_path_list: List[Path], min_version: Version) -> Optional[JavaInstance]:
     path_result = None
     latest = Version("0.0.0")
     for java_path in java_path_list:
