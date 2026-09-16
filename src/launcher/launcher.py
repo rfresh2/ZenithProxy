@@ -89,13 +89,13 @@ def launch_java(config):
             jvm_args += " " + default_java_args
             if java_version in (24, 25, 26):
                 jvm_args += " " + java24_addnl_args
-            if java_version in (26,):
+            if java_version in (26, 27):
                 jvm_args += " " + java26_addnl_args
     else:
         jvm_args = default_java_args
         if java_version in (24, 25, 26):
             jvm_args += " " + java24_addnl_args
-        if java_version in (26,):
+        if java_version in (26, 27):
             jvm_args += " " + java26_addnl_args
     if "-Xmx" not in jvm_args:
         jvm_args += f" -Xmx{default_java_xmx}M"
