@@ -2,7 +2,9 @@ package com.zenith;
 
 import com.zenith.util.Wait;
 import com.zenith.util.config.Config;
+import com.zenith.util.config.LaunchConfig;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -10,11 +12,13 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers(disabledWithoutDocker = true)
 @ExtendWith(TestLogCaptureJunitExtension.class)
+@DisabledInNativeImage
 public class ConnectIntegTest {
 
     @Container
@@ -29,26 +33,39 @@ public class ConnectIntegTest {
 
     @Test
     public void connectTest() {
-        var config = new Config();
-        config.interactiveTerminal.enable = false;
-        config.server.bind.port = 0;
-        config.client.server.address = "localhost";
-        config.client.server.port = minecraftServer.getFirstMappedPort();
-        config.authentication.accountType = Config.Authentication.AccountType.OFFLINE;
-        config.authentication.username = "ZenithTest";
-        TestUtils.setConfigFile(config);
+        var launchThread = new AtomicReference<Thread>();
+        try {
+            var config = new Config();
+            config.interactiveTerminal.enable = false;
+            config.server.bind.port = 0;
+            config.client.server.address = "localhost";
+            config.client.server.port = minecraftServer.getFirstMappedPort();
+            config.authentication.accountType = Config.Authentication.AccountType.OFFLINE;
+            config.authentication.username = "ZenithTest";
+            TestUtils.setConfigFile(config);
 
-        var launchThread = Thread.ofPlatform().start(Proxy::main);
+            var launchConfig = new LaunchConfig();
+            launchConfig.auto_update = false;
+            launchConfig.auto_update_launcher = false;
+            TestUtils.setLaunchConfigFile(launchConfig);
 
-        assertTrue(Wait.waitUntil(() ->
-                    !launchThread.isAlive()
-                        || (Proxy.getInstance().getServer() != null && Proxy.getInstance().getServer().isListening()),
-                10),
-            "Failed to start Zenith server"
-        );
+            launchThread.set(Thread.ofPlatform().daemon().start(Proxy::main));
 
-        Proxy.getInstance().connectAndCatchExceptions();
+            assertTrue(Wait.waitUntil(() ->
+                        !launchThread.get().isAlive()
+                            || (Proxy.getInstance().getServer() != null && Proxy.getInstance().getServer().isListening()),
+                    10),
+                "Failed to start Zenith server"
+            );
 
-        assertTrue(Proxy.getInstance().isConnected(), "Failed to connect to local mc server: " + minecraftServer.getLogs());
+            Proxy.getInstance().connectAndCatchExceptions();
+
+            assertTrue(Proxy.getInstance().isConnected(), "Failed to connect to local mc server: " + minecraftServer.getLogs());
+        } finally {
+            var t = launchThread.get();
+            if (t != null) {
+                t.interrupt();
+            }
+        }
     }
 }

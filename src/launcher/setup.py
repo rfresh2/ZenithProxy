@@ -11,6 +11,7 @@ from launch_config import read_launch_config_file, LaunchConfig
 from launch_platform import get_public_ip, check_port_in_use
 from launch_platform import min_java_version
 from launch_platform import validate_linux_system
+from launcher_paths import CONFIG_FILE
 from log import info, error, critical_error, exception
 
 
@@ -71,7 +72,7 @@ def setup_execute(config: LaunchConfig):
     info("launch_config.json written successfully!")
     info("")
 
-    if os.path.exists("config.json"):
+    if CONFIG_FILE.exists():
         while True:
             info("config.json already exists, overwrite and continue anyway? (y/n)")
             i1 = input("> ").lower()
@@ -283,7 +284,7 @@ def setup_execute(config: LaunchConfig):
                 "channelId": discord_chat_relay_channel
             }
 
-    with open("config.json", "w") as f:
+    with CONFIG_FILE.open("w") as f:
         f.write(json.dumps(config, indent=2))
         info("config.json written successfully!")
     info("")
@@ -416,7 +417,7 @@ def setup_unattended(config):
                 if java_instance is None:
                     critical_error("Java not found and auto install failed")
         config.write_launch_config()
-    if not os.path.exists("config.json"):
+    if not CONFIG_FILE.exists():
         info("Creating unattended config.json")
         config = {}
         # some env vars have default values
@@ -479,7 +480,7 @@ def setup_unattended(config):
                     "enable": True,
                     "channelId": discord_chat_relay_channel
                 }
-        with open("config.json", "w") as f:
+        with CONFIG_FILE.open("w") as f:
             f.write(json.dumps(config, indent=2))
             info("config.json written successfully!")
         info("")

@@ -1,14 +1,14 @@
 import json
-import os
 import re
 from typing import Optional
 
+from launcher_paths import LAUNCH_CONFIG_FILE
 from log import info, error, critical_error
 
 
 def read_launch_config_file() -> Optional[dict]:
     try:
-        with open("launch_config.json") as f:
+        with LAUNCH_CONFIG_FILE.open() as f:
             data = json.load(f)
             return data
     except FileNotFoundError:
@@ -37,7 +37,6 @@ class LaunchConfig:
         self.repo_owner = "rfresh2"
         self.repo_name = "ZenithProxy"
         self.custom_jvm_args = None
-        self.launch_dir = "launcher/"
 
     def load_launch_config_data(self, data: dict):
         if data is None:
@@ -65,9 +64,9 @@ class LaunchConfig:
         }
         if (self.custom_jvm_args is not None) and (self.custom_jvm_args != ""):
             output["custom_jvm_args"] = self.custom_jvm_args
-        with open("launch_config.json.tmp", "w") as f:
+        with LAUNCH_CONFIG_FILE.with_suffix(".json.tmp").open("w") as f:
             f.write(json.dumps(output, indent=2))
-        os.replace("launch_config.json.tmp", "launch_config.json")
+        LAUNCH_CONFIG_FILE.with_suffix(".json.tmp").replace(LAUNCH_CONFIG_FILE)
 
     def create_default_launch_config(self):
         info("Creating default launch_config.json")

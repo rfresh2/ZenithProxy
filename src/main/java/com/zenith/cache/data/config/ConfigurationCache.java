@@ -30,15 +30,8 @@ public class ConfigurationCache implements CachedData {
 
     public void getConfigurationPackets(@NonNull final Consumer<Packet> consumer, final @NonNull TcpSession session) {
         consumer.accept(new ClientboundUpdateEnabledFeaturesPacket(this.enabledFeatures));
-        // todo: we need to make the zenith mc server wait until the player has sent a response to the resource pack prompt(s)
-//        resourcePacks.forEach((uuid, resourcePack) -> consumer.accept(new ClientboundResourcePackPushPacket(
-//            resourcePack.id(),
-//            resourcePack.url(),
-//            resourcePack.hash(),
-//            resourcePack.required(),
-//            resourcePack.prompt()
-//        )));
         consumer.accept(new ClientboundUpdateTagsPacket(this.tags));
+        // resource pack sync to players handled by com.zenith.network.server.ResourcePackSync
     }
 
     @Override

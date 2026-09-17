@@ -7,7 +7,6 @@ import com.zenith.network.server.ServerSession;
 import net.kyori.adventure.key.Key;
 import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
 import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.ClientboundCustomPayloadPacket;
-import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.ClientboundFinishConfigurationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.login.serverbound.ServerboundLoginAcknowledgedPacket;
 
 import static com.zenith.Globals.*;
@@ -35,8 +34,7 @@ public class LoginAckHandler implements PacketHandler<ServerboundLoginAcknowledg
         CACHE.getRegistriesCache().getRegistryPackets(session::sendAsync, session);
         CACHE.getConfigurationCache().getConfigurationPackets(session::sendAsync, session);
         session.sendAsync(new ClientboundCustomPayloadPacket(Key.key("minecraft:brand"), CACHE.getChunkCache().getServerBrand()));
-        EVENT_BUS.post(new PlayerConfigurationEvent.Exiting(session));
-        session.sendAsync(new ClientboundFinishConfigurationPacket());
+        session.getResourcePackConfiguration().start(CACHE.getConfigurationCache().getResourcePacks().values());
         return null;
     }
 }

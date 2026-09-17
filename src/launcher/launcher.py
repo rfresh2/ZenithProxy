@@ -1,11 +1,13 @@
-import os
 import platform
+import shlex
 import subprocess
 import time
 from collections import deque
+from pathlib import Path
 
 import launch_platform
 from jdk_install import get_java_instance
+from launcher_paths import APP_ROOT, LAUNCH_DIR
 from log import info, warn, critical_error, critical_exception
 
 default_java_xmx = 300
@@ -29,19 +31,17 @@ launch_history = deque()
 
 
 def git_build():
-    if platform.system() == "Windows":
-        run_script = ".\\gradlew build --no-daemon"
-    else:
-        run_script = "./gradlew build --no-daemon"
-    info(f"> {run_script}")
+    wrapper = APP_ROOT / ("gradlew.bat" if platform.system() == "Windows" else "gradlew")
+    command = f"{_quote_path(wrapper)} build --no-daemon"
+    info(f"> {command}")
     try:
-        subprocess.run(run_script, shell=True, check=True)
+        subprocess.run(command, shell=True, cwd=APP_ROOT, check=True)
     except subprocess.CalledProcessError as e:
         critical_exception("Error building application")
 
 
 def launch_linux(config):
-    if not os.path.isfile(config.launch_dir + "ZenithProxy"):
+    if not (LAUNCH_DIR / "ZenithProxy").is_file():
         critical_error("ZenithProxy executable not found")
     if config.custom_jvm_args is not None and config.custom_jvm_args != "":
         jvm_args = config.custom_jvm_args
@@ -52,12 +52,12 @@ def launch_linux(config):
         jvm_args = default_linux_args
     if "-Xmx" not in jvm_args:
         jvm_args += f" -Xmx{default_linux_xmx}M"
-    run_script = f"./{config.launch_dir}ZenithProxy {jvm_args}"
-    info(f"> {run_script}")
+    command = f"{_quote_path(LAUNCH_DIR / 'ZenithProxy')} {jvm_args}"
+    info(f"> {command}")
     _record_launch()
     before = time.time()
     try:
-        subprocess.run(run_script, shell=True, check=True)
+        subprocess.run(command, shell=True, cwd=APP_ROOT, check=True)
     except subprocess.CalledProcessError as e:
         if e.returncode == 69:
             critical_error("Shutdown requested by user.")
@@ -78,37 +78,31 @@ def launch_java(config):
     java_executable = java_instance.path
     info(f"Using Java installation: {java_instance}")
     java_version = int(java_instance.version.major)
-    if platform.system() == "Windows":
-        java_executable = '"' + java_executable.replace("/", "\\") + '"'
-    if not os.path.isfile(config.launch_dir + "ZenithProxy.jar"):
+    if not (LAUNCH_DIR / "ZenithProxy.jar").is_file():
         critical_error("ZenithProxy.jar not found")
     if config.custom_jvm_args is not None and config.custom_jvm_args != "":
         jvm_args = config.custom_jvm_args
         # if jvm args only contain -Xmx<int><unit>, add default args
         if jvm_args.startswith("-Xmx") and len(jvm_args.split(" ")) == 1:
             jvm_args += " " + default_java_args
-            if java_version in (24, 25, 26):
+            if java_version in (24, 25, 26, 27):
                 jvm_args += " " + java24_addnl_args
-            if java_version in (26,):
+            if java_version in (26, 27):
                 jvm_args += " " + java26_addnl_args
     else:
         jvm_args = default_java_args
-        if java_version in (24, 25, 26):
+        if java_version in (24, 25, 26, 27):
             jvm_args += " " + java24_addnl_args
-        if java_version in (26,):
+        if java_version in (26, 27):
             jvm_args += " " + java26_addnl_args
     if "-Xmx" not in jvm_args:
         jvm_args += f" -Xmx{default_java_xmx}M"
-    if platform.system() == "Windows":
-        jar_command = "-jar " + config.launch_dir.replace("/", "\\") + "ZenithProxy.jar"
-    else:
-        jar_command = "-jar " + config.launch_dir + "ZenithProxy.jar"
-    run_script = f"{java_executable} {jvm_args} {jar_command}"
-    info(f"> {run_script}")
+    command = f"{_quote_path(java_executable)} {jvm_args} -jar {_quote_path(LAUNCH_DIR / 'ZenithProxy.jar')}"
+    info(f"> {command}")
     _record_launch()
     before = time.time()
     try:
-        subprocess.run(run_script, shell=True, check=True)
+        subprocess.run(command, shell=True, cwd=APP_ROOT, check=True)
     except subprocess.CalledProcessError as e:
         if e.returncode == 69:
             critical_error("Shutdown requested by user.")
@@ -132,18 +126,14 @@ def launch_git(config):
         jvm_args = default_java_args
     if "-Xmx" not in jvm_args:
         jvm_args += f" -Xmx{default_java_xmx}M"
-    if platform.system() == "Windows":
-        toolchain_command = ".\\build\\java_toolchain.bat"
-        jar_command = "-jar build\\libs\\ZenithProxy.jar"
-    else:
-        toolchain_command = "./build/java_toolchain"
-        jar_command = "-jar build/libs/ZenithProxy.jar"
-    run_script = f"{toolchain_command} {jvm_args} {jar_command}"
-    info(f"> {run_script}")
+    toolchain = APP_ROOT / "build" / ("java_toolchain.bat" if platform.system() == "Windows" else "java_toolchain")
+    jar = APP_ROOT / "build" / "libs" / "ZenithProxy.jar"
+    command = f"{_quote_path(toolchain)} {jvm_args} -jar {_quote_path(jar)}"
+    info(f"> {command}")
     _record_launch()
     before = time.time()
     try:
-        subprocess.run(run_script, shell=True, check=True)
+        subprocess.run(command, shell=True, cwd=APP_ROOT, check=True)
     except subprocess.CalledProcessError as e:
         if e.returncode == 69:
             critical_error("Shutdown requested by user.")
@@ -185,3 +175,10 @@ def check_bootloop():
     count = _launch_count_in_window()
     if count > bootloop_threshold:
         critical_error(f"Possible bootloop detected {count} launches within {bootloop_window} seconds. ")
+
+
+def _quote_path(path: Path) -> str:
+    """Quote a native filesystem path without changing the JVM argument string."""
+    if platform.system() == "Windows":
+        return f'"{path}"'
+    return shlex.quote(str(path))

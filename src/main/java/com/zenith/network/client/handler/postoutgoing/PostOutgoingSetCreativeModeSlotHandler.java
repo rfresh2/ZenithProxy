@@ -10,7 +10,8 @@ import static com.zenith.feature.spectator.SpectatorSync.syncPlayerEquipmentWith
 public class PostOutgoingSetCreativeModeSlotHandler implements ClientEventLoopPacketHandler<ServerboundSetCreativeModeSlotPacket, ClientSession> {
     @Override
     public boolean applyAsync(final ServerboundSetCreativeModeSlotPacket packet, final ClientSession session) {
-        CACHE.getPlayerCache().getInventoryCache().handleSetCreativeModeSlot(packet);
+        var playerInventory = CACHE.getPlayerCache().getInventoryCache().getPlayerInventory();
+        playerInventory.setItemStack(packet.getSlot(), packet.getClickedItem());
         syncPlayerEquipmentWithSpectatorsFromCache();
         return true;
     }
