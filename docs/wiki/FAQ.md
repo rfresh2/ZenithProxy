@@ -183,7 +183,8 @@ to be clear, finding a proxy's public ip does not let them get past the whitelis
 if you are hosting on the public internet, and it makes you uncomfortable, there are some things you can do:
 
 * disable server list pings: `serverConnection ping off`
-* set up a DNS hostname, and then set `serverConnection enforceMatchingConnectingAddress on`
+* set up a DNS hostname, configure it as `serverConnection proxyIP <domain>`, and then set `serverConnection enforceMatchingConnectingAddress on`
+  * if you don't own a domain, there are free options like [DuckDNS](https://www.duckdns.org/), [No-IP](https://www.noip.com/), [Dynu](https://www.dynu.com/)
 * make yourself more difficult to find: `serverConnection port <port>` with something non-standard, maybe something random between 30000-65535
-* set up a firewall on your OS that only allows you/your friends ip's to connect
-* host on a private network instead like with tailscale, hamachi, etc
+* set up a firewall that only allows you/your friends ip's to connect
+* host your proxy on a private network using tools like tailscale, hamachi, etc

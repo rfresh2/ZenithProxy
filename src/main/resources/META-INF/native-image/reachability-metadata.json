@@ -1224,6 +1224,9 @@
       "type": "com.viaversion.viaversion.api.minecraft.item.data.SuspiciousStewEffect[]"
     },
     {
+      "type": "com.viaversion.viaversion.api.minecraft.item.data.consumable.ConsumeEffect[]"
+    },
+    {
       "type": "com.viaversion.viaversion.libs.fastutil.longs.Long2ObjectOpenHashMap"
     },
     {
@@ -1684,20 +1687,6 @@
       ]
     },
     {
-      "type": "com.zenith.feature.api.mclogs.model.MclogsResponse",
-      "methods": [
-        {
-          "name": "<init>",
-          "parameterTypes": [
-            "boolean",
-            "java.lang.String",
-            "java.lang.String",
-            "java.lang.String"
-          ]
-        }
-      ]
-    },
-    {
       "type": "com.zenith.feature.api.mccompanion.model.MCCompanionBedrockResponse",
       "methods": [
         {
@@ -1719,6 +1708,20 @@
           "parameterTypes": [
             "java.lang.String",
             "java.util.UUID",
+            "java.lang.String"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.feature.api.mclogs.model.MclogsResponse",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "boolean",
+            "java.lang.String",
+            "java.lang.String",
             "java.lang.String"
           ]
         }
@@ -2337,6 +2340,31 @@
       "type": "com.zenith.mc.block.BlockOffsetType"
     },
     {
+      "type": "com.zenith.mc.block.BlockPos",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": [
+            "int",
+            "int",
+            "int"
+          ]
+        },
+        {
+          "name": "x",
+          "parameterTypes": []
+        },
+        {
+          "name": "y",
+          "parameterTypes": []
+        },
+        {
+          "name": "z",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "com.zenith.mc.block.BlockTags"
     },
     {
@@ -2486,6 +2514,38 @@
             "java.util.List",
             "java.util.List"
           ]
+        },
+        {
+          "name": "authors",
+          "parameterTypes": []
+        },
+        {
+          "name": "description",
+          "parameterTypes": []
+        },
+        {
+          "name": "entrypoint",
+          "parameterTypes": []
+        },
+        {
+          "name": "id",
+          "parameterTypes": []
+        },
+        {
+          "name": "mcVersions",
+          "parameterTypes": []
+        },
+        {
+          "name": "mixins",
+          "parameterTypes": []
+        },
+        {
+          "name": "url",
+          "parameterTypes": []
+        },
+        {
+          "name": "version",
+          "parameterTypes": []
         }
       ]
     },
@@ -2496,6 +2556,23 @@
           "name": "<init>",
           "parameterTypes": [
             "java.lang.String"
+          ]
+        },
+        {
+          "name": "toString",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.plugin.bootstrap.PluginBootstrap",
+      "methods": [
+        {
+          "name": "install",
+          "parameterTypes": [
+            "java.lang.String[]",
+            "java.lang.String[]",
+            "java.util.Set"
           ]
         }
       ]
@@ -2823,6 +2900,20 @@
         {
           "name": "<init>",
           "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.util.config.Config$Client$Extra$AutoOmen$Mode",
+      "fields": [
+        {
+          "name": "CONSTANT"
+        },
+        {
+          "name": "EFFECT_AND_RAID_INACTIVE"
+        },
+        {
+          "name": "EFFECT_INACTIVE"
         }
       ]
     },
@@ -3573,6 +3664,29 @@
     {
       "type": "com.zenith.util.config.Config$Server$LoginRateLimiter",
       "allDeclaredFields": true,
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "com.zenith.util.config.Config$Server$LoginTimeout",
+      "fields": [
+        {
+          "name": "enabled"
+        },
+        {
+          "name": "handshakeTimeoutTicks"
+        },
+        {
+          "name": "loginTimeoutTicks"
+        },
+        {
+          "name": "statusTimeoutTicks"
+        }
+      ],
       "methods": [
         {
           "name": "<init>",
@@ -4451,6 +4565,15 @@
       ]
     },
     {
+      "type": "it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "java.beans.Introspector"
     },
     {
@@ -4534,6 +4657,9 @@
           "parameterTypes": []
         }
       ]
+    },
+    {
+      "type": "java.lang.ClassLoader"
     },
     {
       "type": "java.lang.Cloneable"
@@ -4815,6 +4941,14 @@
       "type": "java.lang.invoke.MethodHandles$Lookup",
       "methods": [
         {
+          "name": "defineHiddenClass",
+          "parameterTypes": [
+            "byte[]",
+            "boolean",
+            "java.lang.invoke.MethodHandles$Lookup$ClassOption[]"
+          ]
+        },
+        {
           "name": "findVarHandle",
           "parameterTypes": [
             "java.lang.Class",
@@ -4823,6 +4957,12 @@
           ]
         }
       ]
+    },
+    {
+      "type": "java.lang.invoke.MethodHandles$Lookup$ClassOption"
+    },
+    {
+      "type": "java.lang.invoke.MethodHandles$Lookup$ClassOption[]"
     },
     {
       "type": "java.lang.invoke.VarHandle"
@@ -5346,6 +5486,15 @@
     },
     {
       "type": "java.util.ImmutableCollections"
+    },
+    {
+      "type": "java.util.ImmutableCollections$AbstractImmutableCollection"
+    },
+    {
+      "type": "java.util.ImmutableCollections$AbstractImmutableList"
+    },
+    {
+      "type": "java.util.ImmutableCollections$ListN"
     },
     {
       "type": "java.util.LinkedHashMap",
@@ -8292,6 +8441,33 @@
       ]
     },
     {
+      "type": "sun.net.www.protocol.http.Handler",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "sun.net.www.protocol.https.Handler",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
+      "type": "sun.net.www.protocol.jar.Handler",
+      "methods": [
+        {
+          "name": "<init>",
+          "parameterTypes": []
+        }
+      ]
+    },
+    {
       "type": "sun.nio.ch.FileChannelImpl",
       "jniAccessible": true,
       "fields": [
@@ -8969,13 +9145,6 @@
         "returnType": "jint",
         "parameterTypes": [
           "jint",
-          "void*"
-        ]
-      },
-      {
-        "returnType": "jint",
-        "parameterTypes": [
-          "jint",
           "jlong",
           "void*"
         ],
@@ -8993,6 +9162,34 @@
         "returnType": "jint",
         "parameterTypes": [
           "jint",
+          "void*",
+          "void*"
+        ]
+      },
+      {
+        "returnType": "jint",
+        "parameterTypes": [
+          "void*"
+        ]
+      },
+      {
+        "returnType": "jlong",
+        "parameterTypes": [
+          "jint",
+          "void*",
+          "jlong"
+        ]
+      },
+      {
+        "returnType": "jint",
+        "parameterTypes": [
+          "void*",
+          "jlong"
+        ]
+      },
+      {
+        "returnType": "jint",
+        "parameterTypes": [
           "jint",
           "void*"
         ]
@@ -9000,8 +9197,38 @@
       {
         "returnType": "jint",
         "parameterTypes": [
-          "jint",
           "void*",
+          "jlong",
+          "jint"
+        ],
+        "options": {
+          "captureCallState": true
+        }
+      },
+      {
+        "returnType": "void*",
+        "parameterTypes": [
+          "void*",
+          "jlong",
+          "jint",
+          "jint",
+          "jint",
+          "jlong"
+        ]
+      },
+      {
+        "returnType": "jint",
+        "parameterTypes": [
+          "void*",
+          "jlong",
+          "jint"
+        ]
+      },
+      {
+        "returnType": "jint",
+        "parameterTypes": [
+          "jint",
+          "jint",
           "void*"
         ]
       },
@@ -9012,6 +9239,17 @@
           "void*",
           "jlong"
         ]
+      },
+      {
+        "returnType": "jint",
+        "parameterTypes": [
+          "jint",
+          "jint",
+          "jint"
+        ],
+        "options": {
+          "firstVariadicArg": 2
+        }
       },
       {
         "returnType": "jint",
