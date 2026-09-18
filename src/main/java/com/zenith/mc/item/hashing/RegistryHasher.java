@@ -49,7 +49,9 @@ import org.geysermc.mcprotocollib.protocol.data.game.level.sound.BuiltinSound;
 import org.geysermc.mcprotocollib.protocol.data.game.level.sound.CustomSound;
 import org.geysermc.mcprotocollib.protocol.data.game.level.sound.Sound;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -118,19 +120,19 @@ public interface RegistryHasher<DirectType> extends MinecraftHasher<Integer> {
 //
 //    MinecraftHasher<Holder<InstrumentComponent.Instrument>> INSTRUMENT = holderIdOnly(DIRECT_INSTRUMENT);
 
-    MinecraftHasher<ArmorTrim.TrimMaterial> DIRECT_TRIM_MATERIAL = MinecraftHasher.mapBuilder(builder -> builder
-        .accept("asset_name", MinecraftHasher.STRING, ArmorTrim.TrimMaterial::assetBase)
-        .optional("override_armor_assets", MinecraftHasher.map(KEY, STRING), ArmorTrim.TrimMaterial::assetOverrides, Map.of())
-        .accept("description", ComponentHasher.COMPONENT, ArmorTrim.TrimMaterial::description));
-
-    MinecraftHasher<Holder<ArmorTrim.TrimMaterial>> TRIM_MATERIAL = holderIdOnly(DIRECT_TRIM_MATERIAL);
-
-    MinecraftHasher<ArmorTrim.TrimPattern> DIRECT_TRIM_PATTERN = MinecraftHasher.mapBuilder(builder -> builder
-        .accept("asset_id", KEY, ArmorTrim.TrimPattern::assetId)
-        .accept("description", ComponentHasher.COMPONENT, ArmorTrim.TrimPattern::description)
-        .accept("decal", BOOL, ArmorTrim.TrimPattern::decal));
-
-    MinecraftHasher<Holder<ArmorTrim.TrimPattern>> TRIM_PATTERN = holderIdOnly(DIRECT_TRIM_PATTERN);
+//    MinecraftHasher<ArmorTrim.TrimMaterial> DIRECT_TRIM_MATERIAL = MinecraftHasher.mapBuilder(builder -> builder
+//        .accept("asset_name", MinecraftHasher.STRING, ArmorTrim.TrimMaterial::paletteId)
+//        .optional("override_armor_assets", MinecraftHasher.map(KEY, STRING), ArmorTrim.TrimMaterial::assetOverrides, Map.of())
+//        .accept("description", ComponentHasher.COMPONENT, ArmorTrim.TrimMaterial::description));
+//
+//    MinecraftHasher<Holder<ArmorTrim.TrimMaterial>> TRIM_MATERIAL = holderIdOnly(DIRECT_TRIM_MATERIAL);
+//
+//    MinecraftHasher<ArmorTrim.TrimPattern> DIRECT_TRIM_PATTERN = MinecraftHasher.mapBuilder(builder -> builder
+//        .accept("asset_id", KEY, ArmorTrim.TrimPattern::assetId)
+//        .accept("description", ComponentHasher.COMPONENT, ArmorTrim.TrimPattern::description)
+//        .accept("decal", BOOL, ArmorTrim.TrimPattern::decal));
+//
+//    MinecraftHasher<Holder<ArmorTrim.TrimPattern>> TRIM_PATTERN = holderIdOnly(DIRECT_TRIM_PATTERN);
 
 //    MinecraftHasher<JukeboxPlayable.JukeboxSong> DIRECT_JUKEBOX_SONG = MinecraftHasher.mapBuilder(builder -> builder
 //        .accept("sound_event", SOUND_EVENT, JukeboxPlayable.JukeboxSong::soundEvent)
@@ -305,9 +307,9 @@ public interface RegistryHasher<DirectType> extends MinecraftHasher<Integer> {
 
 //    MinecraftHasher<ProvidesTrimMaterial> PROVIDES_TRIM_MATERIAL = MinecraftHasher.either(TRIM_MATERIAL, ProvidesTrimMaterial::materialHolder, KEY, ProvidesTrimMaterial::materialLocation);
 
-    MinecraftHasher<ArmorTrim> ARMOR_TRIM = MinecraftHasher.mapBuilder(builder -> builder
-        .accept("material", TRIM_MATERIAL, ArmorTrim::material)
-        .accept("pattern", TRIM_PATTERN, ArmorTrim::pattern));
+//    MinecraftHasher<ArmorTrim> ARMOR_TRIM = MinecraftHasher.mapBuilder(builder -> builder
+//        .accept("material", TRIM_MATERIAL, ArmorTrim::material)
+//        .accept("pattern", TRIM_PATTERN, ArmorTrim::pattern));
 
 //    MinecraftHasher<JukeboxPlayable> JUKEBOX_PLAYABLE = MinecraftHasher.either(JUKEBOX_SONG, JukeboxPlayable::songHolder, KEY, JukeboxPlayable::songLocation);
 
@@ -401,10 +403,10 @@ public interface RegistryHasher<DirectType> extends MinecraftHasher<Integer> {
             if (holder.getLocation() != null) {
                 return TAG.hash(holder.getLocation(), encoder);
             } else if (holder.getHolders() != null) {
-                if (holder.getHolders().length == 1) {
-                    return hash(holder.getHolders()[0], encoder);
+                if (holder.getHolders().size() == 1) {
+                    return hash(holder.getHolders().getInt(0), encoder);
                 }
-                return list().hash(Arrays.stream(holder.getHolders()).boxed().toList(), encoder);
+                return list().hash(holder.getHolders(), encoder);
             }
             throw new IllegalStateException("HolderSet must have either tag location or holders");
         };

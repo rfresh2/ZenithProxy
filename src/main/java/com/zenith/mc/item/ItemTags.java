@@ -12,6 +12,10 @@ public enum ItemTags {
 
     WOOL_CARPETS,
 
+    WOOL_STAIRS,
+
+    WOOL_SLABS,
+
     WOODEN_DOORS,
 
     WOODEN_STAIRS,
@@ -43,6 +47,8 @@ public enum ItemTags {
     SPRUCE_LOGS,
 
     MANGROVE_LOGS,
+
+    POPLAR_LOGS,
 
     JUNGLE_LOGS,
 
@@ -108,6 +114,10 @@ public enum ItemTags {
 
     CONCRETE,
 
+    CONCRETE_STAIRS,
+
+    CONCRETE_SLABS,
+
     CONCRETE_POWDERS,
 
     COMPLETES_FIND_TREE_TUTORIAL,
@@ -115,6 +125,8 @@ public enum ItemTags {
     SHULKER_BOXES,
 
     COPPER,
+
+    SKULLS,
 
     SIGNS,
 
@@ -159,8 +171,6 @@ public enum ItemTags {
     PIGLIN_SAFE_ARMOR,
 
     DUPLICATES_ALLAYS,
-
-    BREWING_FUEL,
 
     EGGS,
 
@@ -240,6 +250,8 @@ public enum ItemTags {
 
     SULFUR_CUBE_FOOD,
 
+    MUSHROOMS,
+
     NON_FLAMMABLE_WOOD,
 
     BOATS,
@@ -300,6 +312,10 @@ public enum ItemTags {
 
     COMPASSES,
 
+    CLONABLE_MAPS,
+
+    EXTENDABLE_MAPS,
+
     CREEPER_IGNITERS,
 
     NOTE_BLOCK_TOP_INSTRUMENTS,
@@ -311,8 +327,6 @@ public enum ItemTags {
     CHEST_ARMOR,
 
     HEAD_ARMOR,
-
-    SKULLS,
 
     TRIMMABLE_ARMOR,
 
@@ -358,6 +372,8 @@ public enum ItemTags {
 
     WOLF_COLLAR_DYES,
 
+    CUSHIONS,
+
     SKELETON_PREFERRED_WEAPONS,
 
     DROWNED_PREFERRED_WEAPONS,
@@ -371,6 +387,12 @@ public enum ItemTags {
     SHEARABLE_FROM_COPPER_GOLEM,
 
     METAL_NUGGETS,
+
+    DOUSES_CAMPFIRES,
+
+    BREWING_POTION_INPUTS,
+
+    FURNACE_FUEL_BOTTOM_TAKEABLE,
 
     FOOT_ARMOR_ENCHANTABLE,
 
@@ -435,6 +457,8 @@ public enum ItemTags {
     FLOWERS,
 
     FENCES,
+
+    ORES,
 
     GRASS_BLOCKS,
 

@@ -215,7 +215,7 @@ public final class Bot extends ModuleUtils {
                             MathHelper.floorI(blockY),
                             MathHelper.floorI(blockZ),
                             raycast.block().direction());
-                        sendClientPacketAsync(new ServerboundSwingPacket(Hand.MAIN_HAND));
+                        sendClientPacketAsync(ServerboundPunchPacket.INSTANCE);
                         wasLeftClicking = true;
                         inputRequestFuture.setClickResult(ClickResult.LeftClickResult.startDestroyBlock(blockX, blockY, blockZ, raycast.block().block()));
                         return;
@@ -225,13 +225,13 @@ public final class Bot extends ModuleUtils {
                             MathHelper.floorI(blockY),
                             MathHelper.floorI(blockZ),
                             raycast.block().direction())) {
-                            sendClientPacketAsync(new ServerboundSwingPacket(Hand.MAIN_HAND));
+                            sendClientPacketAsync(ServerboundPunchPacket.INSTANCE);
                             wasLeftClicking = true;
                         } else {
                             // we could not continue breaking this block for some reason
                             wasLeftClicking = false;
                             interactions.stopDestroyBlock();
-                            sendClientPacketAsync(new ServerboundSwingPacket(Hand.MAIN_HAND));
+                            sendClientPacketAsync(ServerboundPunchPacket.INSTANCE);
                         }
                         inputRequestFuture.setClickResult(ClickResult.LeftClickResult.continueDestroyBlock(blockX, blockY, blockZ, raycast.block().block()));
                         return;
@@ -239,11 +239,11 @@ public final class Bot extends ModuleUtils {
                 } else if (raycast.hit() && raycast.isEntity() && raycast.entity().entityData().attackable()) {
                     debug("Click attacking entity: {} [{}, {}, {}]", raycast.entity().entity().getEntityType(), raycast.entity().entity().getX(), raycast.entity().entity().getY(), raycast.entity().entity().getZ());
                     interactions.attackEntity(raycast.entity());
-                    sendClientPacketAsync(new ServerboundSwingPacket(Hand.MAIN_HAND));
+                    sendClientPacketAsync(ServerboundPunchPacket.INSTANCE);
                     inputRequestFuture.setClickResult(ClickResult.LeftClickResult.attackEntity(raycast.entity().entity()));
                 } else {
                     debug("Left click swing");
-                    sendClientPacketAsync(new ServerboundSwingPacket(Hand.MAIN_HAND));
+                    sendClientPacketAsync(ServerboundPunchPacket.INSTANCE);
                     inputRequestFuture.setClickResult(ClickResult.LeftClickResult.swing());
                 }
             } else if (movementInput.isRightClick()) {
@@ -252,18 +252,18 @@ public final class Bot extends ModuleUtils {
                 if (raycast.hit() && raycast.isBlock()) {
                     debug("Right click {} block at: [{}, {}, {}]", hand, raycast.block().x(), raycast.block().y(), raycast.block().z());
                     interactions.useItemOn(hand, raycast.block());
-                    sendClientPacketAsync(new ServerboundSwingPacket(hand));
+                    sendClientPacketAsync(ServerboundPunchPacket.INSTANCE);
                     inputRequestFuture.setClickResult(ClickResult.RightClickResult.useItemOnBlock(raycast.block().x(), raycast.block().y(), raycast.block().z(), raycast.block().block()));
                 } else if (raycast.hit() && raycast.isEntity()) {
                     debug("Right click {} entity: {} [{}, {}, {}]", hand, raycast.entity().entity().getEntityType(), raycast.entity().entity().getX(), raycast.entity().entity().getY(), raycast.entity().entity().getZ());
                     interactions.interactAt(hand, raycast.entity());
                     interactions.interact(hand, raycast.entity());
-                    sendClientPacketAsync(new ServerboundSwingPacket(hand));
+                    sendClientPacketAsync(ServerboundPunchPacket.INSTANCE);
                     inputRequestFuture.setClickResult(ClickResult.RightClickResult.useItemOnEntity(raycast.entity().entity()));
                 } else {
                     debug("Right click {} use item", hand);
                     interactions.useItem(hand);
-                    sendClientPacketAsync(new ServerboundSwingPacket(hand));
+                    sendClientPacketAsync(ServerboundPunchPacket.INSTANCE);
                     inputRequestFuture.setClickResult(ClickResult.RightClickResult.useItem());
                 }
             }
@@ -672,8 +672,7 @@ public final class Bot extends ModuleUtils {
     public void handlePlayerPosRotate(final int teleportId) {
         syncFromCache(true);
         CLIENT_LOG.info("Server teleport {} to: {}, {}, {}", teleportId, String.format("%.8f", this.x), String.format("%.8f", this.y), String.format("%.8f", this.z));
-        sendClientPacketAwait(new ServerboundAcceptTeleportationPacket(teleportId));
-        sendClientPacketAwait(new ServerboundMovePlayerPosRotPacket(false, false, this.x, this.y, this.z, this.yaw, this.pitch));
+        sendClientPacketAwait(new ServerboundAcceptTeleportationPacket(teleportId, this.x, this.y, this.z, this.yaw, this.pitch));
         CLIENT_LOG.debug("Accepted teleport: {}", teleportId);
     }
 
@@ -1553,8 +1552,7 @@ public final class Bot extends ModuleUtils {
                     .setPitch((packet.getRelatives().contains(PositionElement.X_ROT) ? cache.getPitch() : 0.0f) + packet.getPitch());
                 debug("Sending queued teleport: {}", packet.getId());
                 syncFromCache(true);
-                sendClientPacketAwait(new ServerboundAcceptTeleportationPacket(packet.getId()));
-                sendClientPacketAwait(new ServerboundMovePlayerPosRotPacket(false, false, x, y, z, yaw, pitch));
+                sendClientPacketAwait(new ServerboundAcceptTeleportationPacket(packet.getId(), x, y, z, yaw, pitch));
             }
         }
         return !CACHE.getPlayerCache().getTeleportQueue().isEmpty();

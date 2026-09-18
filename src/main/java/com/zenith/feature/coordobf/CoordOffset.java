@@ -14,6 +14,7 @@ import com.zenith.mc.dimension.DimensionRegistry;
 import com.zenith.mc.item.ItemRegistry;
 import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ReferenceSet;
+import org.cloudburstmc.math.vector.Vector3d;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.geysermc.mcprotocollib.protocol.data.game.chunk.ChunkSection;
 import org.geysermc.mcprotocollib.protocol.data.game.chunk.DataPalette;
@@ -93,6 +94,12 @@ public record CoordOffset(
         return vec.add(x() * 16, 0, z() * 16);
     }
     public Vector3i reverseOffsetVector(final Vector3i vec) {
+        return vec.sub(x() * 16, 0, z() * 16);
+    }
+    public Vector3d offsetVector(final Vector3d vec) {
+        return vec.add(x() * 16, 0, z() * 16);
+    }
+    public Vector3d reverseOffsetVector(final Vector3d vec) {
         return vec.sub(x() * 16, 0, z() * 16);
     }
     public MNBT offsetNbt(final MNBT nbt) {

@@ -60,8 +60,10 @@ public class IngamePathRenderer {
             .map(pos -> new ClientboundLevelParticlesPacket(
                 particle, true, true,
                 pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f,
-                0, 0, 0, 0f,
-                1
+                0, 0, 0,
+                0f, 0f, 0f,
+                1,
+                ClientboundLevelParticlesPacket.RandomizationType.DEFAULT
             ))
             .toList();
     }
@@ -76,16 +78,20 @@ public class IngamePathRenderer {
         packets.add(new ClientboundLevelParticlesPacket(
             middlePosParticle, true, true,
             prevPos.x() + 0.5f, prevPos.y() + 0.5f, prevPos.z() + 0.5f,
-            0, 0, 0, 0f,
-            1
+            0, 0, 0,
+            0f, 0f, 0f,
+            1,
+            ClientboundLevelParticlesPacket.RandomizationType.DEFAULT
         ));
         for (int i = pathPosition+1; i < path.size(); i++) {
             BlockPos blockPos = path.get(i);
             packets.add(new ClientboundLevelParticlesPacket(
                 middlePosParticle, true, true,
                 blockPos.x() + 0.5f, blockPos.y() + 0.5f, blockPos.z() + 0.5f,
-                0, 0, 0, 0f,
-                1
+                0, 0, 0,
+                0f, 0f, 0f,
+                1,
+                ClientboundLevelParticlesPacket.RandomizationType.DEFAULT
             ));
             // create "line" particle every 0.2 between prev and current
             double xDiff = blockPos.x() - prevPos.x();
@@ -105,8 +111,10 @@ public class IngamePathRenderer {
                 packets.add(new ClientboundLevelParticlesPacket(
                     lineParticle, true, true,
                     x, y, z,
-                    0, 0, 0, 0f,
-                    1
+                    0, 0, 0,
+                    0f, 0f, 0f,
+                    1,
+                    ClientboundLevelParticlesPacket.RandomizationType.DEFAULT
                 ));
             }
             prevPos = blockPos;

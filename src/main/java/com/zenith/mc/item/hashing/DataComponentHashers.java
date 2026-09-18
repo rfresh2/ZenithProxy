@@ -137,7 +137,7 @@ public class DataComponentHashers {
         register(DataComponentTypes.STORED_ENCHANTMENTS, RegistryHasher.ITEM_ENCHANTMENTS);
 
         registerInt(DataComponentTypes.DYED_COLOR);
-        registerInt(DataComponentTypes.MAP_COLOR);
+//        registerInt(DataComponentTypes.MAP_COLOR);
         registerInt(DataComponentTypes.MAP_ID);
         register(DataComponentTypes.MAP_DECORATIONS, MinecraftHasher.MNBT);
 
@@ -162,7 +162,7 @@ public class DataComponentHashers {
             .optionalList("pages", ComponentHasher.COMPONENT.filterable(), WrittenBookContent::getPages)
             .optional("resolved", MinecraftHasher.BOOL, WrittenBookContent::isResolved, false));
 
-        register(DataComponentTypes.TRIM, RegistryHasher.ARMOR_TRIM);
+//        register(DataComponentTypes.TRIM, RegistryHasher.ARMOR_TRIM);
         register(DataComponentTypes.DEBUG_STICK_STATE, MinecraftHasher.MNBT);
 //        register(DataComponentTypes.ENTITY_DATA, MinecraftHasher.MNBT);
         register(DataComponentTypes.BUCKET_ENTITY_DATA, MinecraftHasher.MNBT);
@@ -190,7 +190,7 @@ public class DataComponentHashers {
         register(DataComponentTypes.NOTE_BLOCK_SOUND, MinecraftHasher.KEY);
         register(DataComponentTypes.BANNER_PATTERNS, RegistryHasher.BANNER_PATTERN_LAYER.list());
         register(DataComponentTypes.BASE_COLOR, MinecraftHasher.DYE_COLOR);
-        register(DataComponentTypes.POT_DECORATIONS, RegistryHasher.ITEM.list());
+//        register(DataComponentTypes.POT_DECORATIONS, RegistryHasher.ITEM.list());
 //        register(DataComponentTypes.CONTAINER, RegistryHasher.ITEM_CONTAINER_CONTENTS);
         register(DataComponentTypes.BLOCK_STATE, MinecraftHasher.map(MinecraftHasher.STRING, MinecraftHasher.STRING).cast(BlockStateProperties::getProperties));
 //        register(DataComponentTypes.BEES, RegistryHasher.BEEHIVE_OCCUPANT.list());

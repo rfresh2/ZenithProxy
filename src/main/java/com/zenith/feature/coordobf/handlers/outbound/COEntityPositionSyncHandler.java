@@ -25,17 +25,27 @@ public class COEntityPositionSyncHandler implements PacketHandler<ClientboundEnt
         }
 
         if (entity != null && !entity.getPassengerIds().isEmpty()
-            && entity.getPassengerIds().contains(CACHE.getPlayerCache().getEntityId())) {
-            coordObf.playerMovePos(session, packet.getX(), packet.getZ());
+            && entity.getPassengerIds().contains(CACHE.getPlayerCache().getEntityId())
+        ) {
+            var endX = packet.getEndPosition() != null
+                ? packet.getEndPosition().getX()
+                : packet.getSteps().getLast().position().getX();
+            var endZ = packet.getEndPosition() != null
+                ? packet.getEndPosition().getZ()
+                : packet.getSteps().getLast().position().getZ();
+            coordObf.playerMovePos(session, endX, endZ);
         }
         return new ClientboundEntityPositionSyncPacket(
             packet.getId(),
-            coordObf.getCoordOffset(session).offsetX(packet.getX()),
-            packet.getY(),
-            coordObf.getCoordOffset(session).offsetZ(packet.getZ()),
-            packet.getDeltaX(),
-            packet.getDeltaY(),
-            packet.getDeltaZ(),
+            packet.isStepped(),
+            packet.getEndPosition() != null
+                ? coordObf.getCoordOffset(session).offsetVector(packet.getEndPosition())
+                : null,
+            packet.getSteps() != null
+                ? packet.getSteps().stream()
+                    .map(s -> new ClientboundEntityPositionSyncPacket.PositionStep(coordObf.getCoordOffset(session).offsetVector(s.position()), s.tickOffset()))
+                    .toList()
+                : null,
             packet.getYaw(),
             packet.getPitch(),
             packet.isOnGround()

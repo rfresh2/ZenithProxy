@@ -23,7 +23,8 @@ public class COExplodeHandler implements PacketHandler<ClientboundExplodePacket,
             packet.getPlayerKnockback(),
             coordObf.getCoordOffset(session).offsetParticle(packet.getExplosionParticle()),
             packet.getExplosionSound(),
-            new WeightedList<>(Collections.emptyList())
+            new WeightedList<>(Collections.emptyList()),
+            packet.isPlaySound()
         );
     }
 }

@@ -251,7 +251,7 @@ public class ReplayRecording implements Closeable {
             || packet instanceof ServerboundContainerClosePacket
             || packet instanceof ServerboundPlayerActionPacket) {
             SpectatorPacketProvider.playerEquipment().forEach(p -> writePacket(time, (MinecraftPacket) p, session, ProtocolState.GAME));
-        } else if (packet instanceof ServerboundSwingPacket) {
+        } else if (packet instanceof ServerboundPunchPacket) {
             SpectatorPacketProvider.playerSwing().forEach(p -> writePacket(time, (MinecraftPacket) p, session, ProtocolState.GAME));
         } else if (packet instanceof ServerboundPlayerCommandPacket) {
             SpectatorPacketProvider.playerPose().forEach(p -> writePacket(time, (MinecraftPacket) p, session, ProtocolState.GAME));

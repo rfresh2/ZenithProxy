@@ -6,9 +6,10 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.Equipment;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ObjectEntityMetadata;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Animation;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.BlockBreakStage;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
+import org.geysermc.mcprotocollib.protocol.data.game.item.component.SwingAnimation;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.*;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundBlockDestructionPacket;
 
@@ -98,11 +99,13 @@ public class SpectatorPacketProvider {
         );
     }
 
+    // todo: hardcoded values
     public static List<Packet> playerSwing() {
         return List.of(
-            new ClientboundAnimatePacket(
+            new ClientboundSwingAnimationPacket(
                 CACHE.getPlayerCache().getEntityId(),
-                Animation.SWING_ARM
+                Hand.MAIN_HAND,
+                SwingAnimation.builder().duration(6).type(SwingAnimation.Type.WHACK).build()
             )
         );
     }

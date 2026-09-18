@@ -21,8 +21,11 @@ public class COLevelParticlesHandler implements PacketHandler<ClientboundLevelPa
             packet.getOffsetX(),
             packet.getOffsetY(),
             packet.getOffsetZ(),
-            packet.getVelocityOffset(),
-            packet.getAmount()
+            packet.getXMaxSpeed(),
+            packet.getYMaxSpeed(),
+            packet.getZMaxSpeed(),
+            packet.getAmount(),
+            packet.getRandomizationType()
         );
     }
 }

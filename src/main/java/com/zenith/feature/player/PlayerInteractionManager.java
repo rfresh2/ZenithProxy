@@ -371,8 +371,8 @@ public class PlayerInteractionManager {
             } else {
                 var blockIdsArray = ruleBlocksHolder.getHolders();
                 if (blockIdsArray != null) {
-                    for (int j = 0; j < blockIdsArray.length; j++) {
-                        if (block.id() == blockIdsArray[j]) {
+                    for (int j = 0; j < blockIdsArray.size(); j++) {
+                        if (block.id() == blockIdsArray.getInt(j)) {
                             return rule.getSpeed();
                         }
                     }
@@ -414,8 +414,8 @@ public class PlayerInteractionManager {
             } else {
                 var blockIdsArray = ruleBlocksHolder.getHolders();
                 if (blockIdsArray != null) {
-                    for (int j = 0; j < blockIdsArray.length; j++) {
-                        if (block.id() == blockIdsArray[j]) {
+                    for (int j = 0; j < blockIdsArray.size(); j++) {
+                        if (block.id() == blockIdsArray.getInt(j)) {
                             return rule.getCorrectForDrops();
                         }
                     }

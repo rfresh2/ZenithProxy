@@ -29,6 +29,7 @@ import org.geysermc.mcprotocollib.protocol.packet.common.clientbound.*;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundClientInformationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundKeepAlivePacket;
 import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundPongPacket;
+import org.geysermc.mcprotocollib.protocol.packet.common.serverbound.ServerboundResourcePackPacket;
 import org.geysermc.mcprotocollib.protocol.packet.configuration.clientbound.*;
 import org.geysermc.mcprotocollib.protocol.packet.configuration.serverbound.ServerboundFinishConfigurationPacket;
 import org.geysermc.mcprotocollib.protocol.packet.handshake.serverbound.ClientIntentionPacket;
@@ -239,7 +240,7 @@ public final class PacketCodecRegistries {
                 .postOutbound(ServerboundMovePlayerPosRotPacket.class, new PostOutgoingPlayerPositionRotationHandler())
                 .postOutbound(ServerboundMovePlayerRotPacket.class, new PostOutgoingPlayerRotationHandler())
                 .postOutbound(ServerboundMovePlayerStatusOnlyPacket.class, new PostOutgoingPlayerStatusOnlyHandler())
-                .postOutbound(ServerboundSwingPacket.class, new PostOutgoingSwingHandler())
+                .postOutbound(ServerboundPunchPacket.class, new PostOutgoingSwingHandler())
                 .postOutbound(ServerboundContainerClosePacket.class, new PostOutgoingContainerCloseHandler())
                 .postOutbound(ServerboundContainerClickPacket.class, new PostOutgoingContainerClickHandler())
                 .postOutbound(ServerboundPlayerActionPacket.class, new PostOutgoingPlayerActionHandler())

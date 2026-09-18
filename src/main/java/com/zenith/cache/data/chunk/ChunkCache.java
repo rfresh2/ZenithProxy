@@ -311,8 +311,8 @@ public class ChunkCache implements CachedData {
         for (int i = 0; i < sectionPlusAboveBelowCount; i++) {
             skyUpdates.add(fullBrightSkyLightData);
         }
-        long[] lightMask = skylightMaskSet.toLongArray();
-        long[] emptyLightMask = emptySkyLightMask.toLongArray();
+        byte[] lightMask = skylightMaskSet.toByteArray();
+        byte[] emptyLightMask = emptySkyLightMask.toByteArray();
         return new LightUpdateData(
             lightMask,
             CONFIG.debug.server.cache.fullbrightChunkBlocklight
