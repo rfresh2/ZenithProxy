@@ -1,5 +1,6 @@
 package com.zenith.feature.autoupdater;
 
+import com.zenith.Globals;
 import com.zenith.Proxy;
 import com.zenith.event.client.ClientDisconnectEvent;
 import com.zenith.event.update.UpdateAvailableEvent;
@@ -85,7 +86,7 @@ public abstract class AutoUpdater {
     }
 
     public void handleDisconnectEvent(final ClientDisconnectEvent event) {
-        if (updateAvailable && !CONFIG.discord.isUpdating) {
+        if (updateAvailable && !CONFIG.discord.isUpdating && Globals.inZenithLauncher()) {
             CONFIG.autoUpdater.shouldReconnectAfterAutoUpdate = !event.reason().equals(MANUAL_DISCONNECT);
             saveConfigAsync();
             scheduleConditionalUpdate();
