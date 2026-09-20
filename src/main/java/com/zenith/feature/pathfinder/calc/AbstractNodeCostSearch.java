@@ -64,7 +64,7 @@ public abstract class AbstractNodeCostSearch {
         this.startZ = startZ;
         this.goal = goal;
         this.context = context;
-        this.map = new Long2ObjectOpenHashMap<>(1024, 0.75f);
+        this.map = new Long2ObjectOpenHashMap<>(4096, 0.8f);
     }
 
     public void cancel() {
@@ -122,9 +122,9 @@ public abstract class AbstractNodeCostSearch {
      * @return The distance, squared
      */
     protected double getDistFromStartSq(PathNode n) {
-        int xDiff = n.x - startX;
-        int yDiff = n.y - startY;
-        int zDiff = n.z - startZ;
+        int xDiff = n.x() - startX;
+        int yDiff = n.y() - startY;
+        int zDiff = n.z() - startZ;
         return xDiff * xDiff + yDiff * yDiff + zDiff * zDiff;
     }
 

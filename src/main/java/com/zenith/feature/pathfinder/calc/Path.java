@@ -45,7 +45,7 @@ public class Path extends PathBase {
     private volatile boolean verified;
 
     Path(BlockPos realStart, PathNode start, PathNode end, int numNodes, Goal goal, CalculationContext context) {
-        this.end = new BlockPos(end.x, end.y, end.z);
+        this.end = new BlockPos(end.x(), end.y(), end.z());
         this.numNodes = numNodes;
         this.movements = new ArrayList<>();
         this.goal = goal;
@@ -56,7 +56,7 @@ public class Path extends PathBase {
         List<PathNode> tempNodes = new ArrayList<>();
         while (current != null) {
             tempNodes.add(current);
-            tempPath.add(new BlockPos(current.x, current.y, current.z));
+            tempPath.add(new BlockPos(current.x(), current.y(), current.z()));
             current = current.previous;
         }
 
@@ -64,7 +64,7 @@ public class Path extends PathBase {
         // and A* gave us no movements, then add a fake node that will allow a movement to be created
         // that gets us to the single position in the path.
         // See PathingBehavior#createPathfinder and https://github.com/cabaletta/baritone/pull/4519
-        var startNodePos = new BlockPos(start.x, start.y, start.z);
+        var startNodePos = new BlockPos(start.x(), start.y(), start.z());
         if (!realStart.equals(startNodePos) && start.equals(end)) {
             this.start = realStart;
             PathNode fakeNode = new PathNode(realStart.x(), realStart.y(), realStart.z(), goal);

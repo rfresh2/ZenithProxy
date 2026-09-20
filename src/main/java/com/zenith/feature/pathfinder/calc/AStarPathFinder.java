@@ -71,15 +71,15 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
             PathNode currentNode = openSet.removeLowest();
             mostRecentConsidered = currentNode;
             numNodes++;
-            if (goal.isInGoal(currentNode.x, currentNode.y, currentNode.z)) {
+            if (goal.isInGoal(currentNode.x(), currentNode.y(), currentNode.z())) {
                 PATH_LOG.info("Calculated path to goal in {}ms, {} movements considered", System.currentTimeMillis() - startTime, numMovementsConsidered);
                 return Optional.of(new Path(realStart, startNode, currentNode, numNodes, goal, calcContext));
             }
             for (int j = 0; j < allMoves.length; j++) {
                 final Moves moves = allMoves[j];
-                int newX = currentNode.x + moves.xOffset;
-                int newZ = currentNode.z + moves.zOffset;
-                if ((newX >> 4 != currentNode.x >> 4 || newZ >> 4 != currentNode.z >> 4)
+                int newX = currentNode.x() + moves.xOffset;
+                int newZ = currentNode.z() + moves.zOffset;
+                if ((newX >> 4 != currentNode.x() >> 4 || newZ >> 4 != currentNode.z() >> 4)
                     && !calcContext.isLoaded(newX, newZ)) {
                     // only need to check if the destination is a loaded chunk if it's in a different chunk than the start of the movement
                     if (!moves.dynamicXZ) { // only increment the counter if the movement would have gone out of bounds guaranteed
@@ -90,11 +90,11 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
 //                if (!moves.dynamicXZ && !worldBorder.entirelyContains(newX, newZ)) {
 //                    continue;
 //                }
-                if (currentNode.y + moves.yOffset > height || currentNode.y + moves.yOffset < minY) {
+                if (currentNode.y() + moves.yOffset > height || currentNode.y() + moves.yOffset < minY) {
                     continue;
                 }
                 res.reset();
-                moves.apply(calcContext, currentNode.x, currentNode.y, currentNode.z, res);
+                moves.apply(calcContext, currentNode.x(), currentNode.y(), currentNode.z(), res);
                 numMovementsConsidered++;
                 double actionCost = res.cost;
                 if (actionCost >= ActionCosts.COST_INF) {
@@ -110,8 +110,8 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
                 if (!moves.dynamicXZ && (res.x != newX || res.z != newZ)) {
                     throw new IllegalStateException(moves + " " + res.x + " " + newX + " " + res.z + " " + newZ);
                 }
-                if (!moves.dynamicY && res.y != currentNode.y + moves.yOffset) {
-                    throw new IllegalStateException(moves + " " + res.y + " " + (currentNode.y + moves.yOffset));
+                if (!moves.dynamicY && res.y != currentNode.y() + moves.yOffset) {
+                    throw new IllegalStateException(moves + " " + res.y + " " + (currentNode.y() + moves.yOffset));
                 }
                 long hashCode = BlockPos.longHash(res.x, res.y, res.z);
                 if (isFavoring) {
