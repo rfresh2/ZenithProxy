@@ -54,7 +54,7 @@ public final class BinaryHeapOpenSet implements IOpenSet {
     public void update(PathNode val) {
         int index = val.heapPosition;
         int parentInd = index >>> 1;
-        double cost = val.combinedCost();
+        float cost = val.combinedCost();
         PathNode parentNode = array[parentInd];
         while (index > 1 && parentNode.combinedCost() > cost) {
             array[index] = parentNode;
@@ -89,13 +89,13 @@ public final class BinaryHeapOpenSet implements IOpenSet {
         }
         int index = 1;
         int smallerChild = 2;
-        double cost = val.combinedCost();
+        float cost = val.combinedCost();
         do {
             PathNode smallerChildNode = array[smallerChild];
-            double smallerChildCost = smallerChildNode.combinedCost();
+            float smallerChildCost = smallerChildNode.combinedCost();
             if (smallerChild < size) {
                 PathNode rightChildNode = array[smallerChild + 1];
-                double rightChildCost = rightChildNode.combinedCost();
+                float rightChildCost = rightChildNode.combinedCost();
                 if (smallerChildCost > rightChildCost) {
                     smallerChild++;
                     smallerChildCost = rightChildCost;

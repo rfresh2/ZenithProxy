@@ -33,7 +33,7 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
         startNode.cost = 0;
         BinaryHeapOpenSet openSet = new BinaryHeapOpenSet();
         openSet.insert(startNode);
-        double[] bestHeuristicSoFar = new double[COEFFICIENTS.length];//keep track of the best node by the metric of (estimatedCostToGoal + cost / COEFFICIENTS[i])
+        float[] bestHeuristicSoFar = new float[COEFFICIENTS.length];//keep track of the best node by the metric of (estimatedCostToGoal + cost / COEFFICIENTS[i])
         for (int i = 0; i < bestHeuristicSoFar.length; i++) {
             bestHeuristicSoFar[i] = startNode.estimatedCostToGoal;
             bestSoFar[i] = startNode;
@@ -54,7 +54,7 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
         boolean isFavoring = !favoring.isEmpty();
         int timeCheckInterval = 1 << 6;
         int pathingMaxChunkBorderFetch = 50;
-        double minimumImprovement = MIN_IMPROVEMENT;
+        float minimumImprovement = MIN_IMPROVEMENT;
         Moves[] allMoves = Moves.values();
         while (!openSet.isEmpty() && numEmptyChunk < pathingMaxChunkBorderFetch && !cancelRequested && mapSize() < MAX_MAP_SIZE) {
             if ((numNodes & (timeCheckInterval - 1)) == 0) { // only call this once every 64 nodes (about half a millisecond)
@@ -96,11 +96,11 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
                 res.reset();
                 moves.apply(calcContext, currentNode.x(), currentNode.y(), currentNode.z(), res);
                 numMovementsConsidered++;
-                double actionCost = res.cost;
+                float actionCost = (float) res.cost;
                 if (actionCost >= ActionCosts.COST_INF) {
                     continue;
                 }
-                if (actionCost <= 0 || Double.isNaN(actionCost)) {
+                if (actionCost <= 0 || Float.isNaN(actionCost)) {
                     throw new IllegalStateException(moves + " calculated implausible cost " + actionCost);
                 }
                 // check destination after verifying it's not COST_INF -- some movements return a static IMPOSSIBLE object with COST_INF and destination being 0,0,0 to avoid allocating a new result for every failed calculation
@@ -116,10 +116,10 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
                 long hashCode = BlockPos.longHash(res.x, res.y, res.z);
                 if (isFavoring) {
                     // see issue #18
-                    actionCost *= favoring.calculate(hashCode);
+                    actionCost = (float) (actionCost * favoring.calculate(hashCode));
                 }
                 PathNode neighbor = getNodeAtPosition(res.x, res.y, res.z, hashCode);
-                double tentativeCost = currentNode.cost + actionCost;
+                var tentativeCost = currentNode.cost + actionCost;
                 if (neighbor.cost - tentativeCost > minimumImprovement) {
                     neighbor.previous = currentNode;
                     neighbor.cost = tentativeCost;
@@ -129,7 +129,7 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
                         openSet.insert(neighbor);
                     }
                     for (int i = 0; i < COEFFICIENTS.length; i++) {
-                        double heuristic = neighbor.estimatedCostToGoal + neighbor.cost / COEFFICIENTS[i];
+                        float heuristic = neighbor.estimatedCostToGoal + neighbor.cost / COEFFICIENTS[i];
                         if (bestHeuristicSoFar[i] - heuristic > minimumImprovement) {
                             bestHeuristicSoFar[i] = heuristic;
                             bestSoFar[i] = neighbor;

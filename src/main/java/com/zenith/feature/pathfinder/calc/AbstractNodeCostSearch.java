@@ -41,12 +41,12 @@ public abstract class AbstractNodeCostSearch {
      *
      * @see <a href="https://docs.google.com/document/d/1WVHHXKXFdCR1Oz__KtK8sFqyvSwJN_H4lftkHFgmzlc/edit">here</a>
      */
-    protected static final double[] COEFFICIENTS = {1.5, 2, 2.5, 3, 4, 5, 10};
+    protected static final float[] COEFFICIENTS = {1.5f, 2f, 2.5f, 3f, 4f, 5f, 10f};
 
     /**
      * If a path goes less than 5 blocks and doesn't make it to its goal, it's not worth considering.
      */
-    protected static final double MIN_DIST_PATH = 5;
+    protected static final float MIN_DIST_PATH = 5;
 
     /**
      * there are floating point errors caused by random combinations of traverse and diagonal over a flat area
@@ -55,7 +55,7 @@ public abstract class AbstractNodeCostSearch {
      * <p>
      * who cares about a hundredth of a tick? that's half a millisecond for crying out loud!
      */
-    protected static final double MIN_IMPROVEMENT = 0.01;
+    protected static final float MIN_IMPROVEMENT = 0.01f;
 
     AbstractNodeCostSearch(BlockPos realStart, int startX, int startY, int startZ, Goal goal, CalculationContext context) {
         this.realStart = realStart;

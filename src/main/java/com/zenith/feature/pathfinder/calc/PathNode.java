@@ -13,19 +13,19 @@ public final class PathNode {
     /**
      * Cached, should always be equal to goal.heuristic(pos)
      */
-    public final double estimatedCostToGoal;
+    public final float estimatedCostToGoal;
 
     /**
      * Total cost of getting from start to here
      * Mutable and changed by PathFinder
      */
-    public double cost;
+    public float cost;
 
     /**
      * Should always be equal to estimatedCosttoGoal + cost
      * Mutable and changed by PathFinder
      */
-    public double combinedCost() {
+    public float combinedCost() {
         return cost + estimatedCostToGoal;
     }
 
@@ -42,9 +42,9 @@ public final class PathNode {
 
     public PathNode(int x, int y, int z, Goal goal) {
         this.previous = null;
-        this.cost = ActionCosts.COST_INF;
-        this.estimatedCostToGoal = goal.heuristic(x, y, z);
-        if (Double.isNaN(estimatedCostToGoal)) {
+        this.cost = (float) ActionCosts.COST_INF;
+        this.estimatedCostToGoal = (float) goal.heuristic(x, y, z);
+        if (Float.isNaN(estimatedCostToGoal)) {
             throw new IllegalStateException(goal + " calculated implausible heuristic");
         }
         this.heapPosition = -1;
