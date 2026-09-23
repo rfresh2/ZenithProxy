@@ -259,7 +259,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
             }
             if (World.isChunkLoadedBlockPos(x, z)) {
                 Block block = World.getBlock(x, y, z);
-                if (CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace && !block.isAir()) {
+                if (CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace && !block.replaceable()) {
                     info("A block: {} is already at [{}, {}, {}], stopping", block.name(), x, y, z);
                     return false;
                 }
