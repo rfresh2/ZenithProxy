@@ -123,8 +123,12 @@ public class AutoOmen extends AbstractInventoryModule {
             return;
         }
         if (isEating) {
+            isEating = false;
             // we completed eating successfully
             constantTimer.reset();
+            delay = 0;
+            INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
+            return;
         }
         isEating = false;
         if (!swapFuture.isDone()) {
