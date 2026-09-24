@@ -1869,6 +1869,10 @@ Custom targets list: https://link.2b2t.vc/1
 
 Aggressive mobs are mobs that are actively targeting and attacking the player.
 
+
+
+ignoreNamedMobs skips non-player entities with a custom name, including custom targets.
+
 **Aliases:** `ka`
 
 **Usage**
@@ -1892,6 +1896,8 @@ Aggressive mobs are mobs that are actively targeting and attacking the player.
   ```killAura targetCustom on/off```
 
   ```killAura targetCustom add/del <entityType>```
+
+  ```killAura ignoreNamedMobs on/off```
 
   ```killAura weaponSwitch on/off```
 
