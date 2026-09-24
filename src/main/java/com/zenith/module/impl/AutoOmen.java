@@ -126,11 +126,8 @@ public class AutoOmen extends AbstractInventoryModule {
             isEating = false;
             // we completed eating successfully
             constantTimer.reset();
-            delay = 0;
-            INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
             return;
         }
-        isEating = false;
         if (!swapFuture.isDone()) {
             INPUTS.submit(InputRequest.noInput(this, getPriority()));
             return;
