@@ -23,7 +23,6 @@ import java.lang.ref.WeakReference;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -199,12 +198,8 @@ public class KillAura extends AbstractInventoryModule {
     }
 
     private static boolean hasCustomName(final EntityLiving entity) {
-        // Custom name is independent of the custom-name-visible flag at index 3.
-        var customName = entity.getMetadata().get(2);
-        return customName != null
-            && customName.getType() == MetadataTypes.OPTIONAL_CHAT
-            && customName.getValue() instanceof Optional<?> name
-            && name.isPresent();
+        var customName = entity.getMetadataValue(2, MetadataTypes.OPTIONAL_CHAT);
+        return customName != null && customName.isPresent();
     }
 
     private static boolean isAggressive(final EntityLiving entity) {
