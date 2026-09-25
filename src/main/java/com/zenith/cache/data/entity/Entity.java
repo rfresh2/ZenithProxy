@@ -108,6 +108,10 @@ public abstract class Entity {
     }
 
     public <T> @Nullable T getMetadataValue(int index, MetadataType<T> metadataType, Class<T> valueClass) {
+        return getMetadataValue(index, metadataType);
+    }
+
+    public <T> @Nullable T getMetadataValue(int index, MetadataType<T> metadataType) {
         var metadata = this.metadata.get(index);
         if (metadata == null) return null;
         if (metadata.getType() == metadataType) {
@@ -115,8 +119,10 @@ public abstract class Entity {
             if (metadataValue == null) {
                 return null;
             }
-            if (valueClass.isInstance(metadataValue)) {
-                return valueClass.cast(metadata.getValue());
+            try {
+                return (T) metadataValue;
+            } catch (ClassCastException e) {
+                return null;
             }
         }
         return null;

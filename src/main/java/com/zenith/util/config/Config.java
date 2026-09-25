@@ -398,6 +398,7 @@ public final class Config {
                 public boolean targetHostileMobs = true;
                 public boolean targetNeutralMobs = false;
                 public boolean targetCustom = false;
+                public boolean ignoreNamedMobs = false;
                 public boolean onlyNeutralAggressive = false;
                 public boolean onlyHostileAggressive = false;
                 public boolean switchWeapon = true;

@@ -1893,6 +1893,8 @@ Aggressive mobs are mobs that are actively targeting and attacking the player.
 
   ```killAura targetCustom add/del <entityType>```
 
+  ```killAura ignoreNamedMobs on/off```
+
   ```killAura weaponSwitch on/off```
 
   ```killAura weaponType <any/sword/axe>```

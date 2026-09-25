@@ -169,6 +169,7 @@ public class KillAura extends AbstractInventoryModule {
                 && !PLAYER_LISTS.getSpectatorWhitelist().contains(player.getUuid());
 
         } else if (entity instanceof EntityStandard e) {
+            if (CONFIG.client.extra.killAura.ignoreNamedMobs && hasCustomName(e)) return false;
             if (CONFIG.client.extra.killAura.targetCustom) {
                 if (CONFIG.client.extra.killAura.customTargets.contains(e.getEntityType())) {
                     return true;
@@ -194,6 +195,11 @@ public class KillAura extends AbstractInventoryModule {
             }
         }
         return false;
+    }
+
+    private static boolean hasCustomName(final EntityLiving entity) {
+        var customName = entity.getMetadataValue(2, MetadataTypes.OPTIONAL_CHAT);
+        return customName != null && customName.isPresent();
     }
 
     private static boolean isAggressive(final EntityLiving entity) {
