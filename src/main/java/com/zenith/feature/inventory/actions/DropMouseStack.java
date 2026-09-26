@@ -42,8 +42,8 @@ public class DropMouseStack implements InventoryAction {
         return new ServerboundContainerClickPacket(
             containerId,
             CONFIG.debug.inventoryRequestServerSyncOnAction
-                ? CACHE.getPlayerCache().getActionId().get() + 1
-                : CACHE.getPlayerCache().getActionId().get(),
+                ? CACHE.getPlayerCache().getInventoryCache().getOpenContainer().incrementStateId()
+                : CACHE.getPlayerCache().getInventoryCache().getOpenContainer().getStateId(),
             -999,
             containerActionType,
             clickItemAction,

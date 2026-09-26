@@ -12,8 +12,8 @@ public class ContainerSetSlotHandler implements ClientEventLoopPacketHandler<Cli
     @Override
     public boolean applyAsync(@NonNull ClientboundContainerSetSlotPacket packet, @NonNull ClientSession session) {
         CACHE.getPlayerCache().setInventorySlot(packet.getContainerId(), packet.getItem(), packet.getSlot());
+        CACHE.getPlayerCache().getInventoryCache().getOpenContainer().setStateId(packet.getStateId());
         SpectatorSync.syncPlayerEquipmentWithSpectatorsFromCache();
-        CACHE.getPlayerCache().getActionId().set(packet.getStateId());
         return true;
     }
 }

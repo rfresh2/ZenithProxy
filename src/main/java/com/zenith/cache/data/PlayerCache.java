@@ -78,7 +78,7 @@ public class PlayerCache implements CachedData {
     protected boolean isSneaking = false;
     protected boolean isSprinting = false;
     protected EntityEvent opLevel = EntityEvent.PLAYER_OP_PERMISSION_LEVEL_0;
-    protected AtomicInteger actionId = new AtomicInteger(0);
+//    protected AtomicInteger actionId = new AtomicInteger(0);
     private static final MutableVec3i DEFAULT_SPAWN_POSITION = new MutableVec3i(0, 0, 0);
     protected MutableVec3i spawnPosition = DEFAULT_SPAWN_POSITION;
     protected Queue<ClientboundPlayerPositionPacket> teleportQueue = new LinkedBlockingQueue<>();
@@ -107,7 +107,7 @@ public class PlayerCache implements CachedData {
         }
         consumer.accept(new ClientboundContainerSetContentPacket(
             container.getContainerId(),
-            actionId.get(),
+            container.getStateId(),
             container.getContents().toArray(new ItemStack[0]),
             null));
         if (session instanceof ServerSession serverSession) {
@@ -131,7 +131,6 @@ public class PlayerCache implements CachedData {
             this.teleportQueue.clear();
             this.keepAliveQueue.clear();
             this.pingQueue.clear();
-            this.actionId.set(0);
         }
         if (type == CacheResetType.LOGIN) {
             this.teleportQueue.clear();
@@ -324,6 +323,11 @@ public class PlayerCache implements CachedData {
 
     public void openContainer(final int containerId, final ContainerType type, final Component title) {
         this.inventoryCache.openContainer(containerId, type, title);
+    }
+
+    @Deprecated
+    public AtomicInteger getActionId() {
+        return this.inventoryCache.getOpenContainer().getStateIdAtomic();
     }
 
     public List<ItemStack> getPlayerInventory() {
