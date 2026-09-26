@@ -125,6 +125,7 @@ public final class Bot extends ModuleUtils {
     // todo: local attribute cache
     private static final Attribute DEFAULT_SPEED_ATTRIBUTE = new Attribute(AttributeType.Builtin.MOVEMENT_SPEED, 0.10000000149011612f);
     private Attribute speedAttribute = DEFAULT_SPEED_ATTRIBUTE;
+    private boolean tickSkipped = false;
 
     public Bot() {
         EVENT_BUS.subscribe(
@@ -282,9 +283,11 @@ public final class Bot extends ModuleUtils {
     void onInteractionTickSkipped() {
         interactions.stopDestroyBlock();
         wasLeftClicking = false;
+        tickSkipped = true;
     }
 
     private void tick(final ClientBotTick event) {
+        tickSkipped = false;
         if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) {
             onInteractionTickSkipped();
             return;
@@ -306,7 +309,6 @@ public final class Bot extends ModuleUtils {
         if (handleOpenContainer()) {
             movementInput.reset();
             this.inputRequestFuture.complete(false);
-            this.inputRequestFuture = InputRequestFuture.rejected;
         } else {
             if (!CONFIG.debug.botRotateBeforeInteract) {
                 interactionTick();
@@ -517,7 +519,10 @@ public final class Bot extends ModuleUtils {
     }
 
     void postTick(ClientBotTick event) {
-        this.inputRequestFuture.notifyListeners();
+        this.inputRequestFuture.complete(!tickSkipped);
+        if (this.inputRequestFuture.getNow()) {
+            this.inputRequestFuture.notifyListeners();
+        }
         this.inputRequestFuture = InputRequestFuture.rejected;
         sendClientPacket(ServerboundClientTickEndPacket.INSTANCE);
     }

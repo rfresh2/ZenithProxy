@@ -46,7 +46,6 @@ public class InputManager {
         }
         BOT.requestMovement(currentMovementInputRequest, currentMovementInputRequestFuture);
         currentMovementInputRequest = DEFAULT_MOVEMENT_INPUT_REQUEST;
-        currentMovementInputRequestFuture.complete(true);
         currentMovementInputRequestFuture = DEFAULT_REQUEST_FUTURE;
     }
 
