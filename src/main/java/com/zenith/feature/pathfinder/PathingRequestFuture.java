@@ -21,6 +21,7 @@ public class PathingRequestFuture extends RequestFuture {
     public static final PathingRequestFuture rejected = wrap(immediateFuture(false));
 
     public synchronized void addExecutedListener(Consumer<PathingRequestFuture> executedListener) {
+        if (isCompleted()) return;
         if (executedListeners.isEmpty()) {
             executedListeners = new ArrayList<>(1);
         }

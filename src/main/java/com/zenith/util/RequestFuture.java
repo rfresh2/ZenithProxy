@@ -2,7 +2,6 @@ package com.zenith.util;
 
 import com.zenith.Proxy;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import org.jspecify.annotations.NonNull;
 
@@ -11,10 +10,10 @@ import java.util.concurrent.TimeUnit;
 
 public class RequestFuture implements Future<Boolean> {
     // whether the future has completed
-    @Getter @Setter
+    @Getter
     private volatile boolean completed = false;
     // whether this request was accepted
-    @Getter @Setter
+    @Getter
     private volatile boolean accepted = false;
 
     public static final RequestFuture rejected = immediateFuture(false);
@@ -25,9 +24,19 @@ public class RequestFuture implements Future<Boolean> {
         return future;
     }
 
-    public synchronized void complete(final boolean accepted) {
+    protected void setCompleted(final boolean completed) {
+        if (this.completed) return;
+        this.completed = completed;
+    }
+
+    protected void setAccepted(final boolean accepted) {
+        if (completed) return;
         this.accepted = accepted;
-        this.completed = true;
+    }
+
+    public synchronized void complete(final boolean accepted) {
+        setAccepted(accepted);
+        setCompleted(true);
     }
 
     @Override
@@ -42,7 +51,7 @@ public class RequestFuture implements Future<Boolean> {
 
     @Override
     public boolean isDone() {
-        return completed;
+        return isCompleted();
     }
 
     @SneakyThrows
@@ -52,8 +61,8 @@ public class RequestFuture implements Future<Boolean> {
         if (client != null && client.getClientEventLoop().inEventLoop()) {
             throw new IllegalStateException("Cannot block on RequestFuture in client event loop");
         }
-        Wait.waitUntil(() -> completed, 1, 1L, TimeUnit.SECONDS);
-        return accepted;
+        Wait.waitUntil(this::isCompleted, 1, 1L, TimeUnit.SECONDS);
+        return isAccepted();
     }
 
     @SneakyThrows
@@ -63,12 +72,12 @@ public class RequestFuture implements Future<Boolean> {
         if (client != null && client.getClientEventLoop().inEventLoop()) {
             throw new IllegalStateException("Cannot block on RequestFuture in client event loop");
         }
-        Wait.waitUntil(() -> completed, 1, timeout, unit);
-        return accepted;
+        Wait.waitUntil(this::isCompleted, 1, timeout, unit);
+        return isAccepted();
     }
 
     public boolean getNow() {
-        if (!completed) return false;
-        return accepted;
+        if (!isCompleted()) return false;
+        return isAccepted();
     }
 }
