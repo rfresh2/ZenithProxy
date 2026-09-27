@@ -444,7 +444,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                     info("No block is at [{}, {}, {}], stopping", x, y, z);
                     return false;
                 }
-                if (World.isFluid(block)) {
+                if (World.isFluid(World.getBlockStateId(x, y, z))) {
                     info("A fluid {} is at [{}, {}, {}], stopping", block.name(), x, y, z);
                     return false;
                 }

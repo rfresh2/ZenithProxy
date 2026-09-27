@@ -320,7 +320,7 @@ public class PlayerInteractionManager {
         speed *= BOT.getAttributeValue(AttributeType.Builtin.BLOCK_BREAK_SPEED, 1.0f);
 
         boolean isEyeInWater = World.isWater(
-            World.getBlock(
+            World.getBlockStateId(
                 MathHelper.floorI(BOT.getX()),
                 MathHelper.floorI(BOT.getEyeY()),
                 MathHelper.floorI(BOT.getZ())));

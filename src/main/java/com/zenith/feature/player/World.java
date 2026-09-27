@@ -212,13 +212,25 @@ public class World {
         return entityType.name().contains("_BOAT") || entityType.name().contains("_RAFT");
     }
 
+    @Deprecated
     public boolean isWater(Block block) {
         return block == BlockRegistry.WATER
             || block == BlockRegistry.BUBBLE_COLUMN;
     }
 
+    public boolean isWater(int blockStateId) {
+        var fluidState = getFluidState(blockStateId);
+        if (fluidState == null) return false;
+        return fluidState.water();
+    }
+
+    @Deprecated
     public boolean isFluid(Block block) {
         return isWater(block) || block == BlockRegistry.LAVA;
+    }
+
+    public boolean isFluid(int blockStateId) {
+        return getFluidState(blockStateId) != null;
     }
 
     public @Nullable FluidState getFluidState(int blockStateId) {

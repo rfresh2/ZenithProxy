@@ -51,12 +51,11 @@ public class MovementParkour extends Movement {
             return;
         }
         int adj = context.getId(x + xDiff, y - 1, z + zDiff);
-        Block adjBlock = BlockStateInterface.getBlock(adj);
         if (MovementHelper.canWalkOn(context, x + xDiff, y - 1, z + zDiff, adj)) { // don't parkour if we could just traverse (for now)
             // second most common case -- we could just traverse not parkour
             return;
         }
-        if (MovementHelper.avoidWalkingInto(adjBlock) && !(MovementHelper.isWater(adjBlock))) { // magma sucks
+        if (MovementHelper.avoidWalkingInto(adj) && !(MovementHelper.isWater(adj))) { // magma sucks
             return;
         }
         if (!MovementHelper.fullyPassable(context, x + xDiff, y + 1, z + zDiff)) {
@@ -73,7 +72,7 @@ public class MovementParkour extends Movement {
         if (standingOnBlock.blockTags().contains(BlockTags.CLIMBABLE) || standingOnBlock.blockTags().contains(BlockTags.STAIRS) || BlockStateInterface.isBottomSlab(standingOn)) {
             return;
         }
-        if (World.isFluid(context.getBlock(x, y, z))) {
+        if (World.isFluid(context.getId(x, y, z))) {
             return; // can't jump out of water
         }
         int maxJump;
@@ -179,8 +178,8 @@ public class MovementParkour extends Movement {
 
     private static boolean checkOvershootSafety(int x, int y, int z) {
         // we're going to walk into these two blocks after the landing of the parkour anyway, so make sure they aren't avoidWalkingInto
-        return !MovementHelper.avoidWalkingInto(BlockStateInterface.getBlock(x, y, z)) && !MovementHelper.avoidWalkingInto(
-            BlockStateInterface.getBlock(x, y + 1, z));
+        return !MovementHelper.avoidWalkingInto(BlockStateInterface.getId(x, y, z)) && !MovementHelper.avoidWalkingInto(
+            BlockStateInterface.getId(x, y + 1, z));
     }
 
     private static double costFromJumpDistance(int dist) {

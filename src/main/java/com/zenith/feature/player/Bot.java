@@ -1318,10 +1318,12 @@ public final class Bot extends ModuleUtils {
 
     private float getBlockSpeedFactor() {
         if (this.isFallFlying || this.isFlying) return 1.0f;
-        Block inBlock = World.getBlock(MathHelper.floorI(x), MathHelper.floorI(y), MathHelper.floorI(z));
+        int blockX = MathHelper.floorI(x);
+        int blockY = MathHelper.floorI(y);
+        int blockZ = MathHelper.floorI(z);
+        Block inBlock = World.getBlock(blockX, blockY, blockZ);
         float inBlockSpeedFactor = inBlock.speedFactor();
-        if (inBlockSpeedFactor != 1.0f || World.isWater(inBlock)) return inBlockSpeedFactor;
-        int blockX, blockY, blockZ;
+        if (inBlockSpeedFactor != 1.0f || World.isWater(World.getBlockStateId(blockX, blockY, blockZ))) return inBlockSpeedFactor;
         if (supportingBlockPos.isPresent()) {
             BlockPos pos = supportingBlockPos.get();
             blockX = pos.x();
