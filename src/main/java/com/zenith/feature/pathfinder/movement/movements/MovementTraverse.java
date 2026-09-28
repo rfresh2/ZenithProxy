@@ -66,10 +66,10 @@ public class MovementTraverse extends Movement {
         if (frostWalker || MovementHelper.canWalkOn(context, destX, y - 1, destZ, destOn)) { //this is a walk, not a bridge
             double WC = WALK_ONE_BLOCK_COST;
             boolean liquid = false;
-            if (MovementHelper.isWater(pb0Block) || MovementHelper.isWater(pb1Block)) {
+            if (MovementHelper.isWater(pb0) || MovementHelper.isWater(pb1)) {
                 WC = context.waterWalkSpeed;
                 liquid = true;
-            } else if (MovementHelper.isLava(pb0Block) || MovementHelper.isLava(pb1Block)) {
+            } else if (MovementHelper.isLava(pb0) || MovementHelper.isLava(pb1)) {
                 WC = context.lavaWalkSpeed;
                 liquid = true;
             } else {
@@ -108,9 +108,9 @@ public class MovementTraverse extends Movement {
                 return COST_INF;
             }
             if (MovementHelper.isReplaceable(destX, destZ, destOn)) {
-                boolean throughWater = MovementHelper.isWater(pb0Block) || MovementHelper.isWater(pb1Block);
-                boolean throughLava = MovementHelper.isLava(pb0Block) || MovementHelper.isLava(pb1Block);
-                if (MovementHelper.isWater(destOnBlock) && throughWater) {
+                boolean throughWater = MovementHelper.isWater(pb0) || MovementHelper.isWater(pb1);
+                boolean throughLava = MovementHelper.isLava(pb0) || MovementHelper.isLava(pb1);
+                if (MovementHelper.isWater(destOn) && throughWater) {
                     // this happens when assume walk on water is true and this is a traverse in water, which isn't allowed
                     return COST_INF;
                 }
@@ -143,7 +143,7 @@ public class MovementTraverse extends Movement {
                     return COST_INF; // this is obviously impossible
                 }
                 Block blockSrc = context.getBlock(x, y, z);
-                if ((blockSrc == BlockRegistry.LILY_PAD || blockSrc.blockTags().contains(BlockTags.WOOL_CARPETS)) && World.isFluid(srcDownBlock)) {
+                if ((blockSrc == BlockRegistry.LILY_PAD || blockSrc.blockTags().contains(BlockTags.WOOL_CARPETS)) && World.isFluid(srcDown)) {
                     return COST_INF; // we can stand on these but can't place against them
                 }
                 WC = WC * (SNEAK_ONE_BLOCK_COST / WALK_ONE_BLOCK_COST);//since we are sneak backplacing, we are sneaking lol
@@ -170,10 +170,10 @@ public class MovementTraverse extends Movement {
                 return state;
             }
             // and if it's fine to walk into the blocks in front
-            if (MovementHelper.avoidWalkingInto(pb0Block)) {
+            if (MovementHelper.avoidWalkingInto(pb0)) {
                 return state;
             }
-            if (MovementHelper.avoidWalkingInto(pb1Block)) {
+            if (MovementHelper.avoidWalkingInto(pb1)) {
                 return state;
             }
             // and we aren't already pressed up against the block
@@ -273,9 +273,9 @@ public class MovementTraverse extends Movement {
                 return state;
             }
             BlockPos into = dest.subtract(src).offset(dest);
-            Block intoBelowBlock = BlockStateInterface.getBlock(into);
-            Block intoAboveBlock = BlockStateInterface.getBlock(into.above());
-            if (wasTheBridgeBlockAlwaysThere && (!MovementHelper.avoidWalkingInto(intoBelowBlock) || MovementHelper.isWater(intoBelowBlock)) && !MovementHelper.avoidWalkingInto(intoAboveBlock)) {
+            var intoBelowState = BlockStateInterface.getId(into);
+            var intoAboveState = BlockStateInterface.getId(into.above());
+            if (wasTheBridgeBlockAlwaysThere && (!MovementHelper.avoidWalkingInto(intoBelowState) || MovementHelper.isWater(intoBelowState)) && !MovementHelper.avoidWalkingInto(intoAboveState)) {
                 state.setInput(PathInput.SPRINT, true);
             }
 

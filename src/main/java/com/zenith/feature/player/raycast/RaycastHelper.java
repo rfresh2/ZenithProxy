@@ -4,7 +4,6 @@ import com.zenith.cache.data.entity.Entity;
 import com.zenith.cache.data.entity.EntityPlayer;
 import com.zenith.feature.player.World;
 import com.zenith.mc.block.Block;
-import com.zenith.mc.block.BlockRegistry;
 import com.zenith.mc.block.CollisionBox;
 import com.zenith.mc.block.LocalizedCollisionBox;
 import com.zenith.mc.entity.EntityData;
@@ -235,12 +234,17 @@ public class RaycastHelper {
         int blockX, int blockY, int blockZ,
         int blockStateId,
         Block block,
-        boolean includeFluids) {
-        if (!includeFluids && World.isWater(block)) {
-            return new BlockRaycastResult(false, 0, 0, 0, null, BlockRegistry.AIR);
-        }
+        // todo: implement correctly, pure fluids won't have interaction boxes so currently this always behaves as if set to false
+        //       need to lookup fluid shape based on flow and use those boxes. might just need to use collision boxes instead of interaction
+        //       not sure if waterlogged states account for fluid shape (could be above or inside the block's shape)
+        //       vanilla raycast has many other options based on fluid state like source, water only, etc.
+        //       but i dont have any real use cases for fluid raycasts yet, and id prefer no api breaks
+        boolean includeFluids
+    ) {
         final List<CollisionBox> collisionBoxes = BLOCK_DATA.getInteractionBoxesFromBlockStateId(blockStateId);
-        if (collisionBoxes == null || collisionBoxes.isEmpty()) return BlockRaycastResult.miss();
+        if (collisionBoxes.isEmpty()) {
+            return BlockRaycastResult.miss();
+        }
 
         BlockRaycastResult result = BlockRaycastResult.miss();
         double prevLen = Double.MAX_VALUE;

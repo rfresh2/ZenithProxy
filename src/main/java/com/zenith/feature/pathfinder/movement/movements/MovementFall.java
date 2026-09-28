@@ -9,7 +9,6 @@ import com.zenith.feature.pathfinder.util.VecUtils;
 import com.zenith.feature.player.Rotation;
 import com.zenith.feature.player.RotationHelper;
 import com.zenith.feature.player.World;
-import com.zenith.mc.block.Block;
 import com.zenith.mc.block.BlockPos;
 import com.zenith.mc.block.BlockRegistry;
 import com.zenith.mc.block.Direction;
@@ -71,8 +70,7 @@ public class MovementFall extends Movement {
         Rotation toDest = new Rotation(rotVec.getX(), rotVec.getY());
         Rotation targetRotation = null;
         int destState = BlockStateInterface.getId(dest);
-        Block destBlock = BlockStateInterface.getBlock(destState);
-        boolean isWater = World.isWater(destBlock);
+        boolean isWater = World.isWater(destState);
         if (!isWater && willPlaceBucket() && !playerFeet.equals(dest)) {
             return state.setStatus(MovementStatus.UNREACHABLE);
 //            if (!Inventory.isHotbarSlot(ctx.player().getInventory().findSlotMatchingItem(STACK_BUCKET_WATER)) || ctx.world().dimension() == Level.NETHER) {

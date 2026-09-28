@@ -21,10 +21,10 @@ public class BlockDataManager {
         .map(Block::maxStateId)
         .max(Integer::compareTo)
         .orElseThrow();
-    private static final Int2ObjectOpenHashMap<Block> blockStateIdToBlock = new Int2ObjectOpenHashMap<>(blockStateIdCount, Maps.FAST_LOAD_FACTOR);;
+    private static final Int2ObjectOpenHashMap<Block> blockStateIdToBlock = new Int2ObjectOpenHashMap<>(blockStateIdCount, Maps.FAST_LOAD_FACTOR);
     private static final Int2ObjectOpenHashMap<List<CollisionBox>> blockStateIdToCollisionBoxes = new Int2ObjectOpenHashMap<>(blockStateIdCount, Maps.FAST_LOAD_FACTOR);
     private static final Int2ObjectOpenHashMap<List<CollisionBox>> blockStateIdToInteractionBoxes = new Int2ObjectOpenHashMap<>(blockStateIdCount, Maps.FAST_LOAD_FACTOR);
-    private static final Int2ObjectOpenHashMap<FluidState> blockStateIdToFluidState = new Int2ObjectOpenHashMap<>(100, Maps.FAST_LOAD_FACTOR);
+    private static final Int2ObjectOpenHashMap<FluidState> blockStateIdToFluidState = new Int2ObjectOpenHashMap<>(10000, Maps.FAST_LOAD_FACTOR);
     private static final IntOpenHashSet pathfindableStateIds = new IntOpenHashSet();
     static {
         init();

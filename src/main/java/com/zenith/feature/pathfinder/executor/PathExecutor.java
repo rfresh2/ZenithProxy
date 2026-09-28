@@ -564,10 +564,10 @@ public class PathExecutor {
                 }
             }
         }
-        if (MovementHelper.avoidWalkingInto(BlockStateInterface.getBlock(current.getSrc().above(3)))) {
+        if (MovementHelper.avoidWalkingInto(BlockStateInterface.getId(current.getSrc().above(3)))) {
             return false;
         }
-        return !MovementHelper.avoidWalkingInto(BlockStateInterface.getBlock(next.getDest().above(2))); // codacy smh my head
+        return !MovementHelper.avoidWalkingInto(BlockStateInterface.getId(next.getDest().above(2))); // codacy smh my head
     }
 
     private static boolean canSprintFromDescendInto(PlayerContext ctx, IMovement current, IMovement next) {

@@ -8,26 +8,24 @@ public final class PathNode {
     /**
      * The position of this node
      */
-    public final int x;
-    public final int y;
-    public final int z;
+    public long pos;
 
     /**
      * Cached, should always be equal to goal.heuristic(pos)
      */
-    public final double estimatedCostToGoal;
+    public final float estimatedCostToGoal;
 
     /**
      * Total cost of getting from start to here
      * Mutable and changed by PathFinder
      */
-    public double cost;
+    public float cost;
 
     /**
      * Should always be equal to estimatedCosttoGoal + cost
      * Mutable and changed by PathFinder
      */
-    public double combinedCost() {
+    public float combinedCost() {
         return cost + estimatedCostToGoal;
     }
 
@@ -44,19 +42,29 @@ public final class PathNode {
 
     public PathNode(int x, int y, int z, Goal goal) {
         this.previous = null;
-        this.cost = ActionCosts.COST_INF;
-        this.estimatedCostToGoal = goal.heuristic(x, y, z);
-        if (Double.isNaN(estimatedCostToGoal)) {
+        this.cost = (float) ActionCosts.COST_INF;
+        this.estimatedCostToGoal = (float) goal.heuristic(x, y, z);
+        if (Float.isNaN(estimatedCostToGoal)) {
             throw new IllegalStateException(goal + " calculated implausible heuristic");
         }
         this.heapPosition = -1;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.pos = BlockPos.asLong(x, y, z);
     }
 
     public boolean isOpen() {
         return heapPosition != -1;
+    }
+
+    public int x() {
+        return BlockPos.getX(pos);
+    }
+
+    public int y() {
+        return BlockPos.getY(pos);
+    }
+
+    public int z() {
+        return BlockPos.getZ(pos);
     }
 
     /**
@@ -66,7 +74,7 @@ public final class PathNode {
      */
     @Override
     public int hashCode() {
-        return (int) BlockPos.longHash(x, y, z);
+        return (int) BlockPos.longHash(x(), y(), z());
     }
 
     @Override
@@ -81,6 +89,6 @@ public final class PathNode {
         final PathNode other = (PathNode) obj;
         //return Objects.equals(this.pos, other.pos) && Objects.equals(this.goal, other.goal);
 
-        return x == other.x && y == other.y && z == other.z;
+        return pos == other.pos;
     }
 }

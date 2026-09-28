@@ -65,10 +65,11 @@ public class MovementPillar extends Movement {
             return COST_INF;
         }
         Block srcUp = null;
-        if (MovementHelper.isLiquid(toBreakBlock) && MovementHelper.isLiquid(fromBlock)) { // TODO should this also be allowed if toBreakBlock is air?
+        if (MovementHelper.isLiquid(toBreak) && MovementHelper.isLiquid(fromState)) { // TODO should this also be allowed if toBreakBlock is air?
             srcUp = context.getBlock(x, y + 1, z);
-            if (MovementHelper.isLiquid(srcUp)) {
-                if (MovementHelper.isWater(srcUp)) {
+            var srcUpState = context.getId(x, y + 1, z);
+            if (MovementHelper.isLiquid(srcUpState)) {
+                if (MovementHelper.isWater(srcUpState)) {
                     return LADDER_UP_ONE_COST; // allow ascending pillars of water, but only if we're already in one
                 } else {
                     // lava
@@ -87,13 +88,13 @@ public class MovementPillar extends Movement {
                 placeCost += 0.1; // slightly (1/200th of a second) penalize pillaring on what's currently air
             }
         }
-        if ((MovementHelper.isLiquid(fromBlock) && !MovementHelper.canPlaceAgainst(fromDown)) || (MovementHelper.isLiquid(fromDownBlock) && context.assumeWalkOnWater)) {
+        if ((MovementHelper.isLiquid(fromState) && !MovementHelper.canPlaceAgainst(fromDown)) || (MovementHelper.isLiquid(fromDown) && context.assumeWalkOnWater)) {
             // otherwise, if we're standing in water, we cannot pillar
             // if we're standing on water and assumeWalkOnWater is true, we cannot pillar
             // if we're standing on water and assumeWalkOnWater is false, we must have ascended to here, or sneak backplaced, so it is possible to pillar again
             return COST_INF;
         }
-        if ((fromBlock == BlockRegistry.LILY_PAD || fromBlock.blockTags().contains(BlockTags.WOOL_CARPETS)) && World.isFluid(fromDownBlock)) {
+        if ((fromBlock == BlockRegistry.LILY_PAD || fromBlock.blockTags().contains(BlockTags.WOOL_CARPETS)) && World.isFluid(fromDown)) {
             // to ascend here we'd have to break the block we are standing on
             return COST_INF;
         }
@@ -189,15 +190,15 @@ public class MovementPillar extends Movement {
 
         int fromDown = BlockStateInterface.getId(src);
         Block fromDownBlock = BlockStateInterface.getBlock(fromDown);
-        if (MovementHelper.isLiquid(fromDownBlock) && MovementHelper.isLiquid(dest)) {
+        if (MovementHelper.isLiquid(fromDown) && MovementHelper.isLiquid(dest)) {
             var headBonkPos = dest.above(1);
-            var headBonkBlock = BlockStateInterface.getBlock(headBonkPos);
+            var headBonkState = BlockStateInterface.getId(headBonkPos);
             var headBonkPos2 = dest.above(2);
-            var headBonkBlock2 = BlockStateInterface.getBlock(headBonkPos2);
+            var headBonkState2 = BlockStateInterface.getId(headBonkPos2);
             BlockPos breakHeadBonk = null;
-            if (!MovementHelper.isLiquid(headBonkBlock) && !MovementHelper.canWalkThrough(headBonkPos)) {
+            if (!MovementHelper.isLiquid(headBonkState) && !MovementHelper.canWalkThrough(headBonkPos)) {
                 breakHeadBonk = headBonkPos;
-            } else if (!MovementHelper.isLiquid(headBonkBlock2) && !MovementHelper.canWalkThrough(headBonkPos2)) {
+            } else if (!MovementHelper.isLiquid(headBonkState2) && !MovementHelper.canWalkThrough(headBonkPos2)) {
                 breakHeadBonk = headBonkPos2;
             }
             if (breakHeadBonk != null) {

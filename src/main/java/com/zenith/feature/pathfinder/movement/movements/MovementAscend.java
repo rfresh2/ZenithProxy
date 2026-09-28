@@ -21,7 +21,7 @@ public class MovementAscend extends Movement {
     private int ticksWithoutPlacement = 0;
 
     public MovementAscend(BlockPos src, BlockPos dest) {
-        super(src, dest, new BlockPos[]{dest, src.above(2), dest.above()}, dest.below());
+        super(src, dest, new BlockPos[]{dest, dest.above(), src.above(), src.above(2)}, dest.below());
     }
 
     @Override

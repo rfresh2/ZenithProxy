@@ -125,6 +125,7 @@ public final class Bot extends ModuleUtils {
     // todo: local attribute cache
     private static final Attribute DEFAULT_SPEED_ATTRIBUTE = new Attribute(AttributeType.Builtin.MOVEMENT_SPEED, 0.10000000149011612f);
     private Attribute speedAttribute = DEFAULT_SPEED_ATTRIBUTE;
+    private boolean tickSkipped = false;
 
     public Bot() {
         EVENT_BUS.subscribe(
@@ -279,9 +280,11 @@ public final class Bot extends ModuleUtils {
     void onInteractionTickSkipped() {
         interactions.stopDestroyBlock();
         wasLeftClicking = false;
+        tickSkipped = true;
     }
 
     private void tick(final ClientBotTick event) {
+        tickSkipped = false;
         if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) {
             onInteractionTickSkipped();
             return;
@@ -303,7 +306,6 @@ public final class Bot extends ModuleUtils {
         if (handleOpenContainer()) {
             movementInput.reset();
             this.inputRequestFuture.complete(false);
-            this.inputRequestFuture = InputRequestFuture.rejected;
         } else {
             if (!CONFIG.debug.botRotateBeforeInteract) {
                 interactionTick();
@@ -511,7 +513,10 @@ public final class Bot extends ModuleUtils {
     }
 
     void postTick(ClientBotTick event) {
-        this.inputRequestFuture.notifyListeners();
+        this.inputRequestFuture.complete(!tickSkipped);
+        if (this.inputRequestFuture.getNow()) {
+            this.inputRequestFuture.notifyListeners();
+        }
         this.inputRequestFuture = InputRequestFuture.rejected;
         sendClientPacket(ServerboundClientTickEndPacket.INSTANCE);
     }
@@ -1306,10 +1311,12 @@ public final class Bot extends ModuleUtils {
 
     private float getBlockSpeedFactor() {
         if (this.isFallFlying || this.isFlying) return 1.0f;
-        Block inBlock = World.getBlock(MathHelper.floorI(x), MathHelper.floorI(y), MathHelper.floorI(z));
+        int blockX = MathHelper.floorI(x);
+        int blockY = MathHelper.floorI(y);
+        int blockZ = MathHelper.floorI(z);
+        Block inBlock = World.getBlock(blockX, blockY, blockZ);
         float inBlockSpeedFactor = inBlock.speedFactor();
-        if (inBlockSpeedFactor != 1.0f || World.isWater(inBlock)) return inBlockSpeedFactor;
-        int blockX, blockY, blockZ;
+        if (inBlockSpeedFactor != 1.0f || World.isWater(World.getBlockStateId(blockX, blockY, blockZ))) return inBlockSpeedFactor;
         if (supportingBlockPos.isPresent()) {
             BlockPos pos = supportingBlockPos.get();
             blockX = pos.x();

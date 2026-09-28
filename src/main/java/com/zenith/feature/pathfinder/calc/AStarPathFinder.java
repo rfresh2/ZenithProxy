@@ -33,7 +33,7 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
         startNode.cost = 0;
         BinaryHeapOpenSet openSet = new BinaryHeapOpenSet();
         openSet.insert(startNode);
-        double[] bestHeuristicSoFar = new double[COEFFICIENTS.length];//keep track of the best node by the metric of (estimatedCostToGoal + cost / COEFFICIENTS[i])
+        float[] bestHeuristicSoFar = new float[COEFFICIENTS.length];//keep track of the best node by the metric of (estimatedCostToGoal + cost / COEFFICIENTS[i])
         for (int i = 0; i < bestHeuristicSoFar.length; i++) {
             bestHeuristicSoFar[i] = startNode.estimatedCostToGoal;
             bestSoFar[i] = startNode;
@@ -54,7 +54,7 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
         boolean isFavoring = !favoring.isEmpty();
         int timeCheckInterval = 1 << 6;
         int pathingMaxChunkBorderFetch = 50;
-        double minimumImprovement = MIN_IMPROVEMENT;
+        float minimumImprovement = MIN_IMPROVEMENT;
         Moves[] allMoves = Moves.values();
         while (!openSet.isEmpty() && numEmptyChunk < pathingMaxChunkBorderFetch && !cancelRequested && mapSize() < MAX_MAP_SIZE) {
             if ((numNodes & (timeCheckInterval - 1)) == 0) { // only call this once every 64 nodes (about half a millisecond)
@@ -71,15 +71,15 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
             PathNode currentNode = openSet.removeLowest();
             mostRecentConsidered = currentNode;
             numNodes++;
-            if (goal.isInGoal(currentNode.x, currentNode.y, currentNode.z)) {
+            if (goal.isInGoal(currentNode.x(), currentNode.y(), currentNode.z())) {
                 PATH_LOG.info("Calculated path to goal in {}ms, {} movements considered", System.currentTimeMillis() - startTime, numMovementsConsidered);
                 return Optional.of(new Path(realStart, startNode, currentNode, numNodes, goal, calcContext));
             }
             for (int j = 0; j < allMoves.length; j++) {
                 final Moves moves = allMoves[j];
-                int newX = currentNode.x + moves.xOffset;
-                int newZ = currentNode.z + moves.zOffset;
-                if ((newX >> 4 != currentNode.x >> 4 || newZ >> 4 != currentNode.z >> 4)
+                int newX = currentNode.x() + moves.xOffset;
+                int newZ = currentNode.z() + moves.zOffset;
+                if ((newX >> 4 != currentNode.x() >> 4 || newZ >> 4 != currentNode.z() >> 4)
                     && !calcContext.isLoaded(newX, newZ)) {
                     // only need to check if the destination is a loaded chunk if it's in a different chunk than the start of the movement
                     if (!moves.dynamicXZ) { // only increment the counter if the movement would have gone out of bounds guaranteed
@@ -90,17 +90,17 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
 //                if (!moves.dynamicXZ && !worldBorder.entirelyContains(newX, newZ)) {
 //                    continue;
 //                }
-                if (currentNode.y + moves.yOffset > height || currentNode.y + moves.yOffset < minY) {
+                if (currentNode.y() + moves.yOffset > height || currentNode.y() + moves.yOffset < minY) {
                     continue;
                 }
                 res.reset();
-                moves.apply(calcContext, currentNode.x, currentNode.y, currentNode.z, res);
+                moves.apply(calcContext, currentNode.x(), currentNode.y(), currentNode.z(), res);
                 numMovementsConsidered++;
-                double actionCost = res.cost;
+                float actionCost = (float) res.cost;
                 if (actionCost >= ActionCosts.COST_INF) {
                     continue;
                 }
-                if (actionCost <= 0 || Double.isNaN(actionCost)) {
+                if (actionCost <= 0 || Float.isNaN(actionCost)) {
                     throw new IllegalStateException(moves + " calculated implausible cost " + actionCost);
                 }
                 // check destination after verifying it's not COST_INF -- some movements return a static IMPOSSIBLE object with COST_INF and destination being 0,0,0 to avoid allocating a new result for every failed calculation
@@ -110,16 +110,16 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
                 if (!moves.dynamicXZ && (res.x != newX || res.z != newZ)) {
                     throw new IllegalStateException(moves + " " + res.x + " " + newX + " " + res.z + " " + newZ);
                 }
-                if (!moves.dynamicY && res.y != currentNode.y + moves.yOffset) {
-                    throw new IllegalStateException(moves + " " + res.y + " " + (currentNode.y + moves.yOffset));
+                if (!moves.dynamicY && res.y != currentNode.y() + moves.yOffset) {
+                    throw new IllegalStateException(moves + " " + res.y + " " + (currentNode.y() + moves.yOffset));
                 }
                 long hashCode = BlockPos.longHash(res.x, res.y, res.z);
                 if (isFavoring) {
                     // see issue #18
-                    actionCost *= favoring.calculate(hashCode);
+                    actionCost = (float) (actionCost * favoring.calculate(hashCode));
                 }
                 PathNode neighbor = getNodeAtPosition(res.x, res.y, res.z, hashCode);
-                double tentativeCost = currentNode.cost + actionCost;
+                var tentativeCost = currentNode.cost + actionCost;
                 if (neighbor.cost - tentativeCost > minimumImprovement) {
                     neighbor.previous = currentNode;
                     neighbor.cost = tentativeCost;
@@ -129,7 +129,7 @@ public class AStarPathFinder extends AbstractNodeCostSearch {
                         openSet.insert(neighbor);
                     }
                     for (int i = 0; i < COEFFICIENTS.length; i++) {
-                        double heuristic = neighbor.estimatedCostToGoal + neighbor.cost / COEFFICIENTS[i];
+                        float heuristic = neighbor.estimatedCostToGoal + neighbor.cost / COEFFICIENTS[i];
                         if (bestHeuristicSoFar[i] - heuristic > minimumImprovement) {
                             bestHeuristicSoFar[i] = heuristic;
                             bestSoFar[i] = neighbor;

@@ -135,16 +135,19 @@ public class MovementDiagonal extends Movement {
             multiplier += (WALK_ONE_OVER_SOUL_SAND_COST - WALK_ONE_BLOCK_COST) / 2;
         }
         Block cuttingOver1 = context.getBlock(x, y - 1, destZ);
-        if (cuttingOver1 == BlockRegistry.MAGMA_BLOCK || MovementHelper.isLava(cuttingOver1)) {
+        var cuttingOver1State = context.getId(x, y - 1, destZ);
+        if (cuttingOver1 == BlockRegistry.MAGMA_BLOCK || MovementHelper.isLava(cuttingOver1State)) {
             return;
         }
         Block cuttingOver2 = context.getBlock(destX, y - 1, z);
-        if (cuttingOver2 == BlockRegistry.MAGMA_BLOCK || MovementHelper.isLava(cuttingOver2)) {
+        var cuttingOver2State = context.getId(destX, y - 1, z);
+        if (cuttingOver2 == BlockRegistry.MAGMA_BLOCK || MovementHelper.isLava(cuttingOver2State)) {
             return;
         }
         boolean liquid = false;
         Block startIn = context.getBlock(x, y, z);
-        if (MovementHelper.isWater(startIn) || MovementHelper.isWater(BlockStateInterface.getBlock(destInto))) {
+        var startInState = context.getId(x, y, z);
+        if (MovementHelper.isWater(startInState) || MovementHelper.isWater(destInto)) {
             if (ascend) {
                 return;
             }
@@ -153,7 +156,7 @@ public class MovementDiagonal extends Movement {
             // Not even touching the blocks below
             multiplier = context.waterWalkSpeed;
             liquid = true;
-        } else if (MovementHelper.isLava(startIn) || MovementHelper.isLava(BlockStateInterface.getBlock(destInto))) {
+        } else if (MovementHelper.isLava(startInState) || MovementHelper.isLava(destInto)) {
             if (ascend) {
                 return;
             }
@@ -172,8 +175,8 @@ public class MovementDiagonal extends Movement {
             boolean BMid = MovementHelper.canWalkThrough(context, destX, y + 1, z);
             boolean BLow = MovementHelper.canWalkThrough(context, destX, y, z, pb2);
             if ((!(ATop && AMid && ALow) && !(BTop && BMid && BLow)) // no option
-                    || MovementHelper.avoidWalkingInto(pb0Block) // bad
-                    || MovementHelper.avoidWalkingInto(pb2Block) // bad
+                    || MovementHelper.avoidWalkingInto(pb0) // bad
+                    || MovementHelper.avoidWalkingInto(pb2) // bad
                     || (ATop && AMid && MovementHelper.canWalkOn(context, x, y, destZ, pb0)) // we could just ascend
                     || (BTop && BMid && MovementHelper.canWalkOn(context, destX, y, z, pb2)) // we could just ascend
                     || (!ATop && AMid && ALow) // head bonk A
@@ -202,7 +205,7 @@ public class MovementDiagonal extends Movement {
         }
         int pb3 = context.getId(destX, y + 1, z);
         Block pb3Block = BlockStateInterface.getBlock(pb3);
-        if (optionA == 0 && ((MovementHelper.avoidWalkingInto(pb2Block) && pb2Block != BlockRegistry.WATER) || MovementHelper.avoidWalkingInto(pb3Block))) {
+        if (optionA == 0 && ((MovementHelper.avoidWalkingInto(pb2) && pb2Block != BlockRegistry.WATER) || MovementHelper.avoidWalkingInto(pb3))) {
             // at this point we're done calculating optionA, so we can check if it's actually possible to edge around in that direction
             return;
         }
@@ -211,7 +214,7 @@ public class MovementDiagonal extends Movement {
             // and finally, if the cost is nonzero for both ways to approach this diagonal, it's not possible
             return;
         }
-        if (optionB == 0 && ((MovementHelper.avoidWalkingInto(pb0Block) && pb0Block != BlockRegistry.WATER) || MovementHelper.avoidWalkingInto(pb1Block))) {
+        if (optionB == 0 && ((MovementHelper.avoidWalkingInto(pb0) && pb0Block != BlockRegistry.WATER) || MovementHelper.avoidWalkingInto(pb1))) {
             // and now that option B is fully calculated, see if we can edge around that way
             return;
         }
