@@ -110,7 +110,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
     annotationProcessor("com.google.auto.service:auto-service:1.1.1")
-    compileOnly("org.graalvm.sdk:nativeimage:25.3.4.1")
+    compileOnly("org.graalvm.sdk:nativeimage:25.4.4.1.1")
 }
 
 lombok {
