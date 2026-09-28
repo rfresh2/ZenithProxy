@@ -76,8 +76,9 @@ public class ClearAreaProcess extends BaritoneProcessHelper {
     public boolean targetValid(int x, int y, int z) {
         if (World.isChunkLoadedBlockPos(x, z)) {
             Block block = World.getBlock(x, y, z);
+            var state = World.getBlockStateId(x, y, z);
             if (block.isAir()) return false;
-            if (World.isFluid(block)) return false;
+            if (World.isFluid(state)) return false;
             if (block.destroySpeed() < 0) return false;
             var cbs = BLOCK_DATA.getInteractionBoxesFromBlockStateId(World.getBlockStateId(x, y, z));
             if (cbs.isEmpty()) return false;

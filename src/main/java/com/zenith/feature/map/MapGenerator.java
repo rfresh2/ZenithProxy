@@ -94,15 +94,13 @@ public class MapGenerator {
                     block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
                     if (block != null) mapColorId = block.mapColorId();
                 }
-                if (height > chunk.minY() && World.isWater(block)) {
+                if (height > chunk.minY() && World.getFluidState(blockStateId) != null) {
                     int yUnderBlock = height - 1;
                     int blockStateId2;
-                    Block block2;
                     do {
                         blockStateId2 = chunk.getBlockStateId(sectionX, yUnderBlock--, sectionZ);
-                        block2 = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId2);
                         i0++; // water brightness shading
-                    } while (yUnderBlock > chunk.minY() && World.isWater(block2));
+                    } while (yUnderBlock > chunk.minY() && World.getFluidState(blockStateId2) != null);
                 }
 
                 d1 += height;

@@ -68,7 +68,7 @@ public final class MovementHelper {
         }
         // only pure liquids for now
         // waterlogged blocks can have closed bottom sides and such
-        if (isLiquid(block)) {
+        if (isLiquid(state)) {
             if (directlyAbove) {
                 return true;
             }
@@ -76,19 +76,20 @@ public final class MovementHelper {
             if (fluidState != null && fluidState.source()) return true; // source blocks like to flow horizontally
 
             // everything else will prefer flowing down
-            return !isLiquid(BlockStateInterface.getBlock(x, y -1, z)); // assume everything is in a static state
+            return !isLiquid(BlockStateInterface.getId(x, y -1, z)); // assume everything is in a static state
         }
         return World.getFluidState(x, y, z) != null;
     }
 
     static boolean freeForFallingBlock(int x, int y, int z) {
         var block = BlockStateInterface.getBlock(x, y, z);
+        var state = BlockStateInterface.getId(x, y, z);
         if (block.fallingBlock()) {
             return freeForFallingBlock(x, y - 1, z);
         }
         return block.isAir()
             || block == BlockRegistry.FIRE || block == BlockRegistry.SOUL_FIRE
-            || isLiquid(block)
+            || isLiquid(state)
             || block.replaceable();
 
     }
@@ -162,8 +163,12 @@ public final class MovementHelper {
             // it would otherwise make long distance pathing through snowy biomes impossible
             return MAYBE;
         }
-        boolean isFluid = World.isFluid(block);
+        boolean isFluid = World.isFluid(blockStateId);
         if (isFluid) {
+            // can't walk through waterlogged blocks with collision boxes
+            if (!BLOCK_DATA.getCollisionBoxesFromBlockStateId(blockStateId).isEmpty()) {
+                return NO;
+            }
             FluidState fluidState = World.getFluidState(blockStateId);
             if (fluidState != null) {
                 return MAYBE;
@@ -202,11 +207,10 @@ public final class MovementHelper {
             // ok, it's low enough we could walk through it, but is it supported?
             return canWalkOn(x, y - 1, z);
         }
-
-        boolean isFluid = World.isFluid(block);
+        boolean isFluid = World.isFluid(blockStateId);
         if (isFluid) {
-            var playerInLava = PlayerContext.INSTANCE.player().isTouchingLava() || MovementHelper.isLava(World.getBlock(PlayerContext.INSTANCE.playerFeet()));
-            var playerInWater = PlayerContext.INSTANCE.player().isTouchingWater() || MovementHelper.isWater(World.getBlock(PlayerContext.INSTANCE.playerFeet()));
+            var playerInLava = PlayerContext.INSTANCE.player().isTouchingLava() || MovementHelper.isLava(World.getBlockStateId(PlayerContext.INSTANCE.playerFeet()));
+            var playerInWater = PlayerContext.INSTANCE.player().isTouchingWater() || MovementHelper.isWater(World.getBlockStateId(PlayerContext.INSTANCE.playerFeet()));
             var playerInFluid = playerInLava || playerInWater;
             if (isFlowing(x, y, z) && !playerInFluid) {
                 return false;
@@ -217,13 +221,14 @@ public final class MovementHelper {
 //            }
 
             Block up = BlockStateInterface.getBlock(x, y + 1, z);
-            if (World.isFluid(up) || up == BlockRegistry.LILY_PAD) {
+            var upState = BlockStateInterface.getId(x, y + 1, z);
+            if (World.isFluid(upState) || up == BlockRegistry.LILY_PAD) {
                 return false;
             }
-            if (isLava(block)) {
+            if (isLava(blockStateId)) {
                 return playerInLava;
             }
-            return World.isWater(block);
+            return World.isWater(blockStateId);
         }
 
         return BlockStateInterface.isPathfindable(blockStateId);
@@ -249,7 +254,7 @@ public final class MovementHelper {
             || block.blockTags().contains(BlockTags.DOORS)
             || block.blockTags().contains(BlockTags.FENCE_GATES)
             || block == BlockRegistry.SNOW
-            || World.isFluid(block)
+            || World.isFluid(state)
             || block.blockTags().contains(BlockTags.TRAPDOORS)
             || block == BlockRegistry.END_PORTAL
             || block == BlockRegistry.END_PORTAL_FRAME
@@ -361,8 +366,9 @@ public final class MovementHelper {
         return requireNonNullElse(openProperty, true);
     }
 
-    public static boolean avoidWalkingInto(Block block) {
-        return World.isFluid(block)
+    public static boolean avoidWalkingInto(int blockStateId) {
+        var block = BlockStateInterface.getBlock(blockStateId);
+        return World.isFluid(blockStateId)
             || block == BlockRegistry.MAGMA_BLOCK
             || block == BlockRegistry.CACTUS
             || block == BlockRegistry.SWEET_BERRY_BUSH
@@ -390,6 +396,7 @@ public final class MovementHelper {
 
     public static Ternary canWalkOnBlockState(int blockStateId) {
         Block block = BlockStateInterface.getBlock(blockStateId);
+
         if (isBlockNormalCube(blockStateId) && block != BlockRegistry.MAGMA_BLOCK && block != BlockRegistry.BUBBLE_COLUMN && block != BlockRegistry.HONEY_BLOCK) {
             return YES;
         }
@@ -424,7 +431,7 @@ public final class MovementHelper {
         if (block.blockTags().contains(BlockTags.STAIRS)) {
             return YES;
         }
-        if (isLiquid(block)) {
+        if (isLiquid(blockStateId)) {
             return MAYBE;
         }
 //        MovementHelper.isLava(block);
@@ -435,10 +442,9 @@ public final class MovementHelper {
     }
 
     public static boolean canWalkOnPosition(int x, int y, int z, int blockStateId) {
-        Block block = BlockStateInterface.getBlock(blockStateId);
-        if (isLiquid(block)) {
-            var playerInLava = PlayerContext.INSTANCE.player().isTouchingLava() || MovementHelper.isLava(World.getBlock(PlayerContext.INSTANCE.playerFeet()));
-            if (isLava(block) && !playerInLava) {
+        if (isLiquid(blockStateId)) {
+            var playerInLava = PlayerContext.INSTANCE.player().isTouchingLava() || MovementHelper.isLava(World.getBlockStateId(PlayerContext.INSTANCE.playerFeet()));
+            if (isLava(blockStateId) && !playerInLava) {
                 return false;
             }
 
@@ -451,11 +457,11 @@ public final class MovementHelper {
             }
             if (MovementHelper.isFlowing(x, y, z) || MovementHelper.isFlowing(x, y + 1, z)) {
                 // the only scenario in which we can walk on flowing water is if it's under still water with jesus off
-                return isLiquid(up);
+                return isLiquid(upState);
             }
             // if assumeWalkOnWater is on, we can only walk on water if there isn't water above it
             // if assumeWalkOnWater is off, we can only walk on water if there is water above it
-            return isLiquid(up);
+            return isLiquid(upState);
         }
 
 //        if (MovementHelper.isLava(state) && !MovementHelper.isFlowing(x, y, z, state, bsi) && Baritone.settings().assumeWalkOnLava.value) { // if we get here it means that assumeWalkOnLava must be true, so put it last
@@ -521,7 +527,10 @@ public final class MovementHelper {
         if (block.blockTags().contains(BlockTags.CLIMBABLE)) {
             return false;
         }
-        if (World.isFluid(block)) { // todo: waterlogged state check
+        if (World.isFluid(blockStateId)) { // todo: waterlogged state check
+            if (BLOCK_DATA.isShapeFullBlock(blockStateId)) {
+                return true;
+            }
             return false;
             // used for frostwalker so only includes blocks where we are still on ground when leaving them to any side
 //            if (block instanceof SlabBlock) {
@@ -585,7 +594,7 @@ public final class MovementHelper {
     public static double getMiningDurationTicks(CalculationContext context, int x, int y, int z, int blockStateId, boolean includeFalling) {
         Block block = BlockStateInterface.getBlock(blockStateId);
         if (!canWalkThrough(context, x, y, z, blockStateId)) {
-            if (World.isFluid(block)) {
+            if (World.isFluid(blockStateId)) {
                 return COST_INF;
             }
             double mult = context.breakCostMultiplierAt(x, y, z, blockStateId);
@@ -745,6 +754,11 @@ public final class MovementHelper {
      * Returns whether or not the specified block is
      * water, regardless of whether or not it is flowing.
      */
+    public static boolean isWater(int blockStateId) {
+        return World.isWater(blockStateId);
+    }
+
+    @Deprecated
     public static boolean isWater(Block block) {
         return World.isWater(block);
     }
@@ -757,11 +771,17 @@ public final class MovementHelper {
      * @return Whether or not the block is water
      */
     public static boolean isWater(BlockPos bp) {
-        return isWater(BlockStateInterface.getBlock(bp));
+        return isWater(BlockStateInterface.getId(bp));
     }
 
+    @Deprecated
     public static boolean isLava(Block block) {
         return block == BlockRegistry.LAVA;
+    }
+
+    public static boolean isLava(int blockStateId) {
+        var fluidState = World.getFluidState(blockStateId);
+        return fluidState != null && fluidState.lava();
     }
 
     /**
@@ -771,19 +791,24 @@ public final class MovementHelper {
      * @return Whether or not the block is a liquid
      */
     public static boolean isLiquid(BlockPos p) {
-        return isLiquid(BlockStateInterface.getBlock(p));
+        return isLiquid(BlockStateInterface.getId(p));
     }
 
+    public static boolean isLiquid(int blockStateId) {
+        return World.isFluid(blockStateId);
+    }
+
+    @Deprecated
     public static boolean isLiquid(Block block) {
         return World.isFluid(block);
     }
 
     public static boolean isPlayerTouchingWater() {
-        return PlayerContext.INSTANCE.player().isTouchingWater() || MovementHelper.isWater(World.getBlock(PlayerContext.INSTANCE.playerFeet()));
+        return PlayerContext.INSTANCE.player().isTouchingWater() || MovementHelper.isWater(World.getBlockStateId(PlayerContext.INSTANCE.playerFeet()));
     }
 
     public static boolean isPlayerTouchingLava() {
-        return PlayerContext.INSTANCE.player().isTouchingLava() || MovementHelper.isLava(World.getBlock(PlayerContext.INSTANCE.playerFeet()));
+        return PlayerContext.INSTANCE.player().isTouchingLava() || MovementHelper.isLava(World.getBlockStateId(PlayerContext.INSTANCE.playerFeet()));
     }
 
     public static boolean isPlayerTouchingLiquid() {

@@ -2,7 +2,6 @@ package com.zenith.feature.player;
 
 import com.zenith.util.RequestFuture;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,17 +11,23 @@ import java.util.function.Consumer;
 import static com.zenith.Globals.DEFAULT_LOG;
 
 public class InputRequestFuture extends RequestFuture {
-    @Getter @Setter
+    @Getter
     private volatile ClickResult clickResult = ClickResult.None.INSTANCE;
     private volatile List<Consumer<InputRequestFuture>> executedListeners = Collections.emptyList();
 
     public static final InputRequestFuture rejected = wrap(immediateFuture(false));
+
+    public void setClickResult(ClickResult clickResult) {
+        if (isCompleted()) return;
+        this.clickResult = clickResult;
+    }
 
     /**
      * Add a callback function to be run if the input was completed, accepted, and executed.
      * Called after the client bot tick event.
      */
     public synchronized void addInputExecutedListener(Consumer<InputRequestFuture> listener) {
+        if (isCompleted()) return;
         if (executedListeners.isEmpty()) {
             executedListeners = new ArrayList<>(1);
         }

@@ -9,6 +9,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.zenith.Globals.CACHE_LOG;
 
@@ -19,6 +20,7 @@ public class Container {
     private ContainerType type = ContainerType.GENERIC_9X4;
     private Component title = Component.empty();
     public static final ItemStack EMPTY_STACK = null;
+    private final AtomicInteger stateId = new AtomicInteger(0);
 
     public Container(int containerId, List<ItemStack> contents) {
         this.containerId = containerId;
@@ -93,5 +95,22 @@ public class Container {
 
     public int getSize() {
         return contents.size();
+    }
+
+    public int getStateId() {
+        return this.stateId.get();
+    }
+
+    @Deprecated
+    public AtomicInteger getStateIdAtomic() {
+        return this.stateId;
+    }
+
+    public int incrementStateId() {
+        return this.stateId.updateAndGet(v -> v + 1 & 32767);
+    }
+
+    public void setStateId(final int stateId) {
+        this.stateId.set(stateId);
     }
 }

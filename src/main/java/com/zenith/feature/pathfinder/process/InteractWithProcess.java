@@ -259,7 +259,7 @@ public class InteractWithProcess extends BaritoneProcessHelper {
             }
             if (World.isChunkLoadedBlockPos(x, z)) {
                 Block block = World.getBlock(x, y, z);
-                if (CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace && !block.isAir()) {
+                if (CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace && !block.replaceable()) {
                     info("A block: {} is already at [{}, {}, {}], stopping", block.name(), x, y, z);
                     return false;
                 }
@@ -392,6 +392,8 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         private final boolean autoTool;
         private boolean isBreaking = false;
         private boolean succeeded = false;
+        private int toBreakStateId = -1;
+        private boolean toBreakStateIdentified = false;
 
         @Override
         public PathingCommand pathingCommand() {
@@ -435,17 +437,14 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         public boolean targetValid() {
             if (World.isChunkLoadedBlockPos(x, z)) {
                 Block block = World.getBlock(x, y, z);
-                if (block.isAir()) {
+                var currentTargetId = World.getBlockStateId(x, y, z);
+                if (block.isAir() || (toBreakStateIdentified && toBreakStateId != currentTargetId)) {
                     if (isBreaking) {
                         succeeded = true;
                         info("Block [{}, {}, {}] broken!", x, y, z);
                         return false;
                     }
-                    info("No block is at [{}, {}, {}], stopping", x, y, z);
-                    return false;
-                }
-                if (World.isFluid(block)) {
-                    info("A fluid {} is at [{}, {}, {}], stopping", block.name(), x, y, z);
+                    info("No block is at or target block has changed at [{}, {}, {}], stopping", x, y, z);
                     return false;
                 }
                 if (block.destroySpeed() < 0) {
@@ -478,6 +477,10 @@ public class InteractWithProcess extends BaritoneProcessHelper {
                 .leftClick(true);
             Position center = World.blockInteractionCenter(x, y, z);
             Vector2f rot = RotationHelper.rotationTo(center.x(), center.y(), center.z());
+            if (!isBreaking) {
+                toBreakStateId = World.getBlockStateId(x, y, z);
+                toBreakStateIdentified = true;
+            }
             INPUTS.submit(
                 InputRequest.builder()
                     .owner(this)

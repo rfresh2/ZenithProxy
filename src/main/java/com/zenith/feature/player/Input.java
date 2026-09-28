@@ -50,6 +50,7 @@ public class Input {
         this.rightClick = in.rightClick;
         this.hand = in.hand;
         this.clickTarget = in.clickTarget;
+        this.clickRequiresRotation = in.clickRequiresRotation;
     }
 
     public void reset() {

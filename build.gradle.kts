@@ -1,6 +1,6 @@
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "1.1.12"
+    id("org.graalvm.buildtools.native") version "1.1.14"
     id("com.gradleup.shadow") version "9.6.1"
     id("io.freefair.lombok") version "9.5.0"
     `maven-publish`
@@ -34,7 +34,7 @@ repositories {
 
 val mcplVersion = "26.2.0.12"
 dependencies {
-    api("com.github.rfresh2:JDA:6.6.36") {
+    api("com.github.rfresh2:JDA:6.7.37") {
         exclude(group = "club.minnced")
         exclude(group = "net.java.dev.jna")
         exclude(group = "com.google.crypto.tink")
@@ -81,7 +81,7 @@ dependencies {
     api("com.viaversion:viaversion-common:5.12.0")
     api("com.viaversion:viabackwards-common:5.12.0")
     api("com.viaversion:viarewind-common:4.2.0")
-    api("org.jline:jline:4.4.3")
+    api("org.jline:jline:4.4.5")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.1.0")
     api("org.postgresql:postgresql:42.7.13")
@@ -110,7 +110,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
     annotationProcessor("com.google.auto.service:auto-service:1.1.1")
-    compileOnly("org.graalvm.sdk:nativeimage:25.3.4.1")
+    compileOnly("org.graalvm.sdk:nativeimage:25.4.4.1.1")
 }
 
 lombok {
