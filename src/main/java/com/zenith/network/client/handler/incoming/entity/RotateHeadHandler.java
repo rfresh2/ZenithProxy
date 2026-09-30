@@ -13,7 +13,7 @@ public class RotateHeadHandler implements ClientEventLoopPacketHandler<Clientbou
     public boolean applyAsync(@NonNull ClientboundRotateHeadPacket packet, @NonNull ClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
-            entity.setHeadYaw(packet.getHeadYaw());
+            entity.lerpHeadTo(packet.getHeadYaw(), 3);
         }
         return true;
     }

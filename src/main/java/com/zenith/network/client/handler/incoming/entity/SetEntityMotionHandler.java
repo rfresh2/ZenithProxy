@@ -1,4 +1,4 @@
-package com.zenith.network.client.handler.incoming;
+package com.zenith.network.client.handler.incoming.entity;
 
 import com.zenith.Proxy;
 import com.zenith.network.client.ClientSession;

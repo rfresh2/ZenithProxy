@@ -94,4 +94,14 @@ public class EntityPlayer extends EntityLiving {
         }
         super.addPackets(consumer);
     }
+
+    @Override
+    public void tick() {
+        if (selfPlayer) {
+            lerpSteps = 0;
+            lerpHeadSteps = 0;
+        } else {
+            super.tick();
+        }
+    }
 }

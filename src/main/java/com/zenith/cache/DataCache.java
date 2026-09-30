@@ -42,6 +42,9 @@ public class DataCache {
     protected final ConfigurationCache configurationCache = new ConfigurationCache();
     protected final ClientInfoCache clientInfoCache = new ClientInfoCache();
     protected final RegistriesCache registriesCache = new RegistriesCache();
+    {
+        entityCache.subscribeEvents();
+    }
 
     public Collection<CachedData> getAllData() {
         // order is important, matches vanilla

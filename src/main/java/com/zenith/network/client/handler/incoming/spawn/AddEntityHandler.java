@@ -34,6 +34,9 @@ public class AddEntityHandler implements ClientEventLoopPacketHandler<Clientboun
                 .setX(packet.getX())
                 .setY(packet.getY())
                 .setZ(packet.getZ())
+                .setBaseX(packet.getX())
+                .setBaseY(packet.getY())
+                .setBaseZ(packet.getZ())
                 .setYaw(packet.getYaw())
                 .setPitch(packet.getPitch())
                 .setHeadYaw(packet.getHeadYaw())
@@ -52,6 +55,9 @@ public class AddEntityHandler implements ClientEventLoopPacketHandler<Clientboun
             .setX(packet.getX())
             .setY(packet.getY())
             .setZ(packet.getZ())
+            .setBaseX(packet.getX())
+            .setBaseY(packet.getY())
+            .setBaseZ(packet.getZ())
             .setYaw(packet.getYaw())
             .setPitch(packet.getPitch());
         final Entity playerCachedAlready = CACHE.getEntityCache().get(packet.getEntityId());

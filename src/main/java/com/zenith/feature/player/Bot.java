@@ -14,7 +14,6 @@ import com.zenith.mc.block.properties.api.BlockStateProperties;
 import com.zenith.mc.dimension.DimensionRegistry;
 import com.zenith.mc.entity.EntityData;
 import com.zenith.mc.entity.EntityDimensions;
-import com.zenith.mc.entity.EntityRegistry;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.module.api.ModuleUtils;
 import com.zenith.util.math.MathHelper;
@@ -305,6 +304,12 @@ public final class Bot extends ModuleUtils {
             return;
         }
 
+        if (CACHE.getPlayerCache().getThePlayer().isInVehicle()) {
+            // vehicle passengers ticked in EntityCache
+            // so player can move outside the bot tick logic in this class
+            syncRiddenPosition();
+        }
+
         // stop movement and interaction inputs while a container is open
         if (handleOpenContainer()) {
             movementInput.reset();
@@ -506,7 +511,6 @@ public final class Bot extends ModuleUtils {
             this.lastSprinting = this.isSprinting;
         }
         tickEntityPushing();
-        rideTick();
         var currentPose = pose;
         updatePlayerPose();
         if (currentPose != pose) {
@@ -1371,9 +1375,19 @@ public final class Bot extends ModuleUtils {
         }
         this.isSwimming = CACHE.getPlayerCache().getThePlayer().isSwimming();
         updateFallFlying();
-        rideTick();
         syncPlayerCollisionBox();
         updateAttributes();
+    }
+
+    // will cause desync unless we know that player is in a vehicle
+    private void syncRiddenPosition() {
+        if (!CACHE.getPlayerCache().getThePlayer().isInVehicle()) return;
+        this.x = CACHE.getPlayerCache().getX();
+        this.y = CACHE.getPlayerCache().getY();
+        this.z = CACHE.getPlayerCache().getZ();
+        this.yaw = CACHE.getPlayerCache().getYaw();
+        this.pitch = CACHE.getPlayerCache().getPitch();
+        syncPlayerCollisionBox();
     }
 
     private void updateInWaterStateAndDoFluidPushing() {
@@ -1675,24 +1689,6 @@ public final class Bot extends ModuleUtils {
             }
         }
         return levelCbs;
-    }
-
-    private void rideTick() {
-        var player = CACHE.getPlayerCache().getThePlayer();
-        if (!player.isInVehicle()) return;
-        var vehicle = CACHE.getEntityCache().get(player.getVehicleId());
-        if (vehicle == null) return;
-        var vehicleEntityData = vehicle.getEntityData();
-        var vehicleAttachment = vehicleEntityData.entityAttachment();
-        if (vehicleAttachment == null) return;
-        var playerAttachment = EntityRegistry.PLAYER.entityAttachment();
-        if (playerAttachment == null) return;
-        var vehicleAttachY = vehicle.getY() + vehicleAttachment.passenger();
-        var playerAttachY = playerAttachment.vehicle();
-        x = vehicle.getX();
-        y = vehicleAttachY - playerAttachY;
-        z = vehicle.getZ();
-        CACHE.getPlayerCache().getThePlayer().setX(x).setY(y).setZ(z);
     }
 
     public void onUpdateAbilities() {

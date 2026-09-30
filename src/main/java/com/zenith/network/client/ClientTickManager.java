@@ -111,6 +111,7 @@ public class ClientTickManager {
             if (doBotTicks.get()) {
                 EVENT_BUS.post(ClientBotTick.INSTANCE);
             }
+            EVENT_BUS.post(ClientTickEvent.End.INSTANCE);
             long after = System.currentTimeMillis();
             long elapsedMs = after - before;
             if (elapsedMs > LONG_TICK_THRESHOLD_MS) {

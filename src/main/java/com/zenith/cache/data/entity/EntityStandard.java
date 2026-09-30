@@ -24,12 +24,12 @@ public class EntityStandard extends EntityLiving {
             this.uuid,
             this.entityType,
             this.objectData,
-            this.x,
-            this.y,
-            this.z,
-            this.yaw,
-            this.headYaw,
-            this.pitch,
+            this.lerpTargetX(),
+            this.lerpTargetY(),
+            this.lerpTargetZ(),
+            this.lerpTargetYaw(),
+            this.lerpTargetHeadYaw(),
+            this.lerpTargetPitch(),
             this.velX,
             this.velY,
             this.velZ));
@@ -40,7 +40,7 @@ public class EntityStandard extends EntityLiving {
         }
         consumer.accept(new ClientboundRotateHeadPacket(
             this.entityId,
-            this.headYaw
+            this.lerpTargetHeadYaw()
         ));
         super.addPackets(consumer);
     }

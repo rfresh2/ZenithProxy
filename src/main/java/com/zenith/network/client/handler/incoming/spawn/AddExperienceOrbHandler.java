@@ -19,6 +19,9 @@ public class AddExperienceOrbHandler implements ClientEventLoopPacketHandler<Cli
                 .setX(packet.getX())
                 .setY(packet.getY())
                 .setZ(packet.getZ())
+                .setBaseX(packet.getX())
+                .setBaseY(packet.getY())
+                .setBaseZ(packet.getZ())
                 .setEntityType(EntityType.EXPERIENCE_ORB)
         );
         return true;

@@ -34,6 +34,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import static com.zenith.Globals.CACHE;
 import static com.zenith.Globals.ENTITY_DATA;
 
 
@@ -44,6 +45,9 @@ public abstract class Entity {
     protected double x;
     protected double y;
     protected double z;
+    protected double baseX;
+    protected double baseY;
+    protected double baseZ;
     protected float yaw;
     protected float pitch;
     protected float headYaw;
@@ -157,4 +161,49 @@ public abstract class Entity {
         return new LocalizedCollisionBox(minX, maxX, minY, maxY, minZ, maxZ, x, y, z);
     }
 
+    public void lerpTo(double x, double y, double z, float yaw, float pitch, int steps) {
+        setX(x);
+        setY(y);
+        setZ(z);
+        setYaw(yaw);
+        setPitch(pitch);
+    }
+
+    public void lerpHeadTo(float yaw, int steps) {
+        this.setHeadYaw(yaw);
+    }
+
+    public void cancelLerp() {}
+
+    public double lerpTargetX() {
+        return this.getX();
+    }
+
+    public double lerpTargetY() {
+        return this.getY();
+    }
+
+    public double lerpTargetZ() {
+        return this.getZ();
+    }
+
+    public float lerpTargetPitch() {
+        return this.getPitch();
+    }
+
+    public float lerpTargetYaw() {
+        return this.getYaw();
+    }
+
+    public void tick() {}
+
+    public boolean isControlledByLocalInstance() {
+        // todo: extract vanilla entity data about which entities allow passengers to control movement
+        //       but there's also edge cases like horses where this changes based on custom logic (if saddled in this example)
+        if (getEntityType() == EntityType.MINECART) return false;
+        if (passengerIds.isEmpty()) return false;
+        var firstPassengerId = passengerIds.getFirst();
+        if (firstPassengerId == null) return false;
+        return CACHE.getEntityCache().get(firstPassengerId) instanceof EntityPlayer p && p.isSelfPlayer();
+    }
 }
