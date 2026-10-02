@@ -102,7 +102,6 @@ public final class Bot extends ModuleUtils {
     private int ticksSinceLastPositionPacketSent;
     private final MutableVec3d stuckSpeedMultiplier = new MutableVec3d(0, 0, 0);
     @Getter private final MutableVec3d velocity = new MutableVec3d(0, 0, 0);
-    private boolean wasLeftClicking = false;
     private final Input movementInput = new Input();
     private InputRequestFuture inputRequestFuture = InputRequestFuture.rejected;
     private Input lastSentMovementInput = new Input(movementInput);
@@ -202,7 +201,6 @@ public final class Bot extends ModuleUtils {
             if (movementInput.clickRequiresRotation) {
                 if (!MathHelper.isYawInRange(requestedYaw, yaw, 0.1f) || !MathHelper.isPitchInRange(requestedPitch, pitch, 0.1f)) {
                     interactions.stopDestroyBlock();
-                    wasLeftClicking = false;
                     return;
                 }
             }
@@ -212,33 +210,31 @@ public final class Bot extends ModuleUtils {
                     int blockX = raycast.block().x();
                     int blockY = raycast.block().y();
                     int blockZ = raycast.block().z();
-                    if (!wasLeftClicking && !interactions.isDestroying()) {
-                        interactions.startDestroyBlock(
+                    if (!interactions.isDestroying(blockX, blockY, blockZ)) {
+                        if (interactions.startDestroyBlock(
                             MathHelper.floorI(blockX),
                             MathHelper.floorI(blockY),
                             MathHelper.floorI(blockZ),
-                            raycast.block().direction());
-                        sendClientPacketAsync(new ServerboundSwingPacket(Hand.MAIN_HAND));
-                        wasLeftClicking = true;
-                        inputRequestFuture.setClickResult(ClickResult.LeftClickResult.startDestroyBlock(blockX, blockY, blockZ, raycast.block().block()));
-                        return;
+                            raycast.block().direction())
+                        ) {
+                            inputRequestFuture.setClickResult(ClickResult.LeftClickResult.startDestroyBlock(blockX, blockY, blockZ, raycast.block().block()));
+                        } else {
+                            interactions.stopDestroyBlock();
+                        }
                     } else {
                         if (interactions.continueDestroyBlock(
                             MathHelper.floorI(blockX),
                             MathHelper.floorI(blockY),
                             MathHelper.floorI(blockZ),
-                            raycast.block().direction())) {
-                            sendClientPacketAsync(new ServerboundSwingPacket(Hand.MAIN_HAND));
-                            wasLeftClicking = true;
+                            raycast.block().direction())
+                        ) {
+                            inputRequestFuture.setClickResult(ClickResult.LeftClickResult.continueDestroyBlock(blockX, blockY, blockZ, raycast.block().block()));
                         } else {
-                            // we could not continue breaking this block for some reason
-                            wasLeftClicking = false;
                             interactions.stopDestroyBlock();
-                            sendClientPacketAsync(new ServerboundSwingPacket(Hand.MAIN_HAND));
                         }
-                        inputRequestFuture.setClickResult(ClickResult.LeftClickResult.continueDestroyBlock(blockX, blockY, blockZ, raycast.block().block()));
-                        return;
                     }
+                    sendClientPacketAsync(new ServerboundSwingPacket(Hand.MAIN_HAND));
+                    return;
                 } else if (raycast.hit() && raycast.isEntity() && raycast.entity().entityData().attackable()) {
                     debug("Click attacking entity: {} [{}, {}, {}]", raycast.entity().entity().getEntityType(), raycast.entity().entity().getX(), raycast.entity().entity().getY(), raycast.entity().entity().getZ());
                     interactions.attackEntity(raycast.entity());
@@ -273,7 +269,6 @@ public final class Bot extends ModuleUtils {
             // todo: track ongoing right click item consumes
             //  and if one is cancelled, do interactions.releaseUsingItem()
             interactions.stopDestroyBlock();
-            wasLeftClicking = false;
         } catch (final Exception e) {
             CLIENT_LOG.error("Error during interaction tick", e);
         }
@@ -281,7 +276,6 @@ public final class Bot extends ModuleUtils {
 
     void onInteractionTickSkipped() {
         interactions.stopDestroyBlock();
-        wasLeftClicking = false;
         tickSkipped = true;
     }
 

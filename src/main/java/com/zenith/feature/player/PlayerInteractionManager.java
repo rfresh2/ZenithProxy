@@ -63,20 +63,21 @@ public class PlayerInteractionManager {
         MinecraftPacket predict(int sequence);
     }
 
-    void startPrediction(PredictiveAction action) {
+    boolean startPrediction(PredictiveAction action) {
         try (var predictionHandler = CACHE.getChunkCache().getBlockStatePredictionHandler().startPredicting()) {
             int i = predictionHandler.currentSequence();
             var packet = action.predict(i);
             if (packet != null) {
                 Proxy.getInstance().getClient().send(packet);
             }
+            return packet != null;
         }
     }
 
     protected boolean startDestroyBlock(final int x, final int y, final int z, Direction face) {
         if (CACHE.getPlayerCache().getGameMode() == GameMode.CREATIVE) {
             BOT.debug("[{}] [{}, {}, {}] StartDestroyBlock START: Creative break", System.currentTimeMillis(), x, y, z);
-            startPrediction(seqId -> {
+            var res = startPrediction(seqId -> {
                 destroyBlock(x, y, z);
                 return new ServerboundPlayerActionPacket(
                     PlayerAction.START_DESTROY_BLOCK,
@@ -86,6 +87,7 @@ public class PlayerInteractionManager {
                 );
             });
             this.destroyDelay = destroyDelayInterval;
+            return res;
         } else if (!this.isDestroying || !this.sameDestroyTarget(x, y, z)) {
             if (this.isDestroying) {
                 BOT.debug("[{}] [{}, {}, {}] StartDestroyBlock CANCEL: Changed destroy target", System.currentTimeMillis(), x, y, z);
@@ -100,7 +102,7 @@ public class PlayerInteractionManager {
                 SpectatorSync.sendBlockBreakProgress(x, y, z, BlockBreakStage.RESET);
             }
 
-            startPrediction(seqId -> {
+            var res = startPrediction(seqId -> {
                 Block block = World.getBlock(x, y, z);
                 if (!block.isAir() && blockBreakSpeed(block) >= 1.0) {
                     destroyBlock(x, y, z);
@@ -130,9 +132,9 @@ public class PlayerInteractionManager {
             if (isDestroying) {
                 SpectatorSync.sendBlockBreakProgress(x, y, z, getDestroyStageMcpl());
             }
+            return res;
         }
-
-        return true;
+        return false;
     }
 
     protected void stopDestroyBlock() {
@@ -154,11 +156,11 @@ public class PlayerInteractionManager {
     protected boolean continueDestroyBlock(final int x, final int y, final int z, Direction directionFacing) {
         if (this.destroyDelay > 0) {
             --this.destroyDelay;
-            return true;
+            return false;
         } else if (CACHE.getPlayerCache().getGameMode() == GameMode.CREATIVE) {
             this.destroyDelay = destroyDelayInterval;
             BOT.debug("[{}] [{}, {}, {}] ContinueDestroyBlock START: Creative Break", System.currentTimeMillis(), x, y, z);
-            startPrediction(seqId -> {
+            return startPrediction(seqId -> {
                 destroyBlock(x, y, z);
                 return new ServerboundPlayerActionPacket(
                     PlayerAction.START_DESTROY_BLOCK,
@@ -167,7 +169,6 @@ public class PlayerInteractionManager {
                     seqId
                 );
             });
-            return true;
         } else if (this.sameDestroyTarget(x, y, z)) {
             Block block = World.getBlock(x, y, z);
             if (block.isAir()) {
