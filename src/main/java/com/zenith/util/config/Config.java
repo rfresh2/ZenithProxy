@@ -400,9 +400,7 @@ public final class Config {
                 public boolean targetCustom = false;
                 public boolean ignoreNamedMobs = false;
                 public boolean onlyNeutralAggressive = false;
-                public boolean onlyHostileAggressive = false;
                 public boolean switchWeapon = true;
-                public boolean targetArmorStands = false; // soft deprecated
                 public int attackDelayTicks = 10;
                 // When enabled, adjusts attackDelayTicks by current server TPS
                 // so attack rate stays consistent.

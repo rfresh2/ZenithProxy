@@ -1883,8 +1883,6 @@ Aggressive mobs are mobs that are actively targeting and attacking the player.
 
   ```killAura targetHostileMobs on/off```
 
-  ```killAura targetHostileMobs onlyAggressive on/off```
-
   ```killAura targetNeutralMobs on/off```
 
   ```killAura targetNeutralMobs onlyAggressive on/off```
