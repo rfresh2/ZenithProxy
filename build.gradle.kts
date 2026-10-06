@@ -2,7 +2,7 @@ plugins {
     `java-library`
     id("org.graalvm.buildtools.native") version "1.1.14"
     id("com.gradleup.shadow") version "9.6.1"
-    id("io.freefair.lombok") version "9.7.0"
+    id("io.freefair.lombok") version "9.8.0"
     `maven-publish`
 }
 
