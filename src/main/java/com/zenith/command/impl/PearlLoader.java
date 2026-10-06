@@ -91,11 +91,11 @@ public class PearlLoader extends Command {
             })))
             .then(literal("clear").executes(c -> {
                 var pearls = CONFIG.client.extra.pearlLoader.pearls;
+                int sizeBefore = pearls.size();
                 pearls.clear();
                 c.getSource().getEmbed()
-                    .title("All Pearls Cleared")
+                    .title(sizeBefore + " Pearls Cleared")
                     .successColor();
-                return OK;
             }))
             .then(literal("list").executes(c -> {
                 c.getSource().getEmbed()
