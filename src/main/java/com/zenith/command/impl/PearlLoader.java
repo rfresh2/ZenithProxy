@@ -35,6 +35,7 @@ public class PearlLoader extends Command {
             .usageLines(
                 "add <id> <x> <y> <z>",
                 "del <id>",
+                "clear",
                 "load <id>",
                 "list",
                 "returnToStartPos on/off"
@@ -88,6 +89,14 @@ public class PearlLoader extends Command {
                     .errorColor();
                 return OK;
             })))
+            .then(literal("clear").executes(c -> {
+                var pearls = CONFIG.client.extra.pearlLoader.pearls;
+                int sizeBefore = pearls.size();
+                pearls.clear();
+                c.getSource().getEmbed()
+                    .title(sizeBefore + " Pearls Cleared")
+                    .successColor();
+            }))
             .then(literal("list").executes(c -> {
                 c.getSource().getEmbed()
                     .title("Pearls List")

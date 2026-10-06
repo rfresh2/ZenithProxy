@@ -2043,6 +2043,8 @@ They should be unobstructed and reachable.
 
   ```pearlLoader del <id>```
 
+  ```pearlLoader clear```
+
   ```pearlLoader load <id>```
 
   ```pearlLoader list```
