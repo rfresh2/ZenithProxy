@@ -32,7 +32,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "1.21.4.70"
+val mcplVersion = "1.21.4.71"
 dependencies {
     api("com.github.rfresh2:JDA:6.7.37") {
         exclude(group = "club.minnced")
@@ -42,7 +42,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.18.Final"))
+    api(platform("io.netty:netty-bom:4.2.19.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -64,7 +64,7 @@ dependencies {
     api("io.netty:netty-resolver-dns-native-macos") { artifact { classifier = "osx-aarch_64" } }
     api("org.cloudburstmc.math:api:2.0")
     api("org.cloudburstmc.math:immutable:2.0")
-    api("org.redisson:redisson:4.7.0") {
+    api("org.redisson:redisson:4.8.0") {
         exclude(group = "io.netty")
     }
     api("com.github.rfresh2:SimpleEventBus:1.6")
