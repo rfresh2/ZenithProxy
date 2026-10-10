@@ -383,8 +383,24 @@ public class InteractWithProcess extends BaritoneProcessHelper {
             if (block.replaceable()) { // we can place, but we will place into the target instead of against, so this isn't valid
                 return false;
             }
-            if (block.blockEntityType() != null) {
-                // assume we have to shift to place against all block entities
+            if (block.blockEntityType() != null
+                || block.blockTags().contains(BlockTags.TRAPDOORS)
+                || block.blockTags().contains(BlockTags.FENCE_GATES)
+                || block.blockTags().contains(BlockTags.DOORS)
+                || block.blockTags().contains(BlockTags.ANVIL)
+                || block.blockTags().contains(BlockTags.BEDS)
+                || block.blockTags().contains(BlockTags.PORTALS)
+                || block.blockTags().contains(BlockTags.BUTTONS)
+                || block.blockTags().contains(BlockTags.CANDLE_CAKES)
+                || block == BlockRegistry.LEVER
+                || block == BlockRegistry.DRAGON_EGG
+                || block == BlockRegistry.LOOM
+                || block == BlockRegistry.CARTOGRAPHY_TABLE
+                || block == BlockRegistry.GRINDSTONE
+                || block == BlockRegistry.SMITHING_TABLE
+                || block == BlockRegistry.STONECUTTER
+
+            ) {
                 return CONFIG.client.extra.pathfinder.placeBlockSneak;
             }
             return true;
