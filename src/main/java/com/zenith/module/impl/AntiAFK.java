@@ -133,7 +133,7 @@ public class AntiAFK extends Module {
 
     private void jumpTick() {
         if (jumpTimer.tick(CONFIG.client.extra.antiafk.actions.jumpDelayTicks)) {
-            if (CONFIG.client.extra.antiafk.actions.jumpOnlyInWater && !BOT.isTouchingWater()) return;
+            if (CONFIG.client.extra.antiafk.actions.jumpOnlyInLiquid && !(BOT.isTouchingWater() || BOT.isTouchingLava())) return;
             INPUTS.submit(InputRequest.builder()
                 .owner(this)
                 .input(Input.builder()

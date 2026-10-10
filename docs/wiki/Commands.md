@@ -1346,7 +1346,7 @@ For delay settings, 1 tick = 50ms
 
   ```antiAFK jump on/off```
 
-  ```antiAFK jump onlyInWater on/off```
+  ```antiAFK jump onlyInLiquid on/off```
 
   ```antiAFK jump delay <ticks>```
 
