@@ -5,7 +5,7 @@ where uv >nul 2>nul
 if %errorlevel% == 0 (
   echo Found uv
   echo Starting Launcher...
-  uv run --python ">=3.14" --upgrade --with-requirements requirements.txt -- launcher-py.zip %*
+  uv run --python ">=3.15" --upgrade --with-requirements requirements.txt -- launcher-py.zip %*
   exit /b
 )
 
@@ -21,7 +21,7 @@ if not exist python\python.exe (
 
     echo Downloading Python...
     REM --ssl-no-revoke necessary as some users have broken windows installs? https://discord.com/channels/1127460556710883391/1127461501960208465/1320859617487618078
-    curl -L --ssl-no-revoke -o python.tar.gz "https://github.com/astral-sh/python-build-standalone/releases/download/20260807/cpython-3.14.7+20260807-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"
+    curl -L --ssl-no-revoke -o python.tar.gz "https://github.com/astral-sh/python-build-standalone/releases/download/20261009/cpython-3.15.0+20261009-x86_64-pc-windows-msvc-install_only_stripped.tar.gz"
 
   	if errorlevel 1 (
 		echo Error: Failed to download Python.
