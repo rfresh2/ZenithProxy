@@ -236,6 +236,7 @@ public final class Config {
                 public boolean itemSaver = false;
                 public int itemSaverThreshold = 5;
                 public boolean preferSilkTouch = false;
+                public boolean mineProcessExitLavaGoal = true;
                 public final Set<String> acceptableThrowawayItems = new ObjectArraySet<>(new String[]{
                     ItemRegistry.DIRT.name(),
                     ItemRegistry.COBBLESTONE.name(),
