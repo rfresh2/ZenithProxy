@@ -11,6 +11,13 @@ import static com.zenith.Globals.CACHE;
 public class SetEntityMotionHandler implements ClientEventLoopPacketHandler<ClientboundSetEntityMotionPacket, ClientSession> {
     @Override
     public boolean applyAsync(final ClientboundSetEntityMotionPacket packet, final ClientSession session) {
+        var entity = CACHE.getEntityCache().get(packet.getEntityId());
+        if (entity != null && packet.getEntityId() != CACHE.getPlayerCache().getEntityId()) {
+            entity
+                .setVelX(packet.getMotionX())
+                .setVelY(packet.getMotionY())
+                .setVelZ(packet.getMotionZ());
+        }
         if (!Proxy.getInstance().hasActivePlayer() && packet.getEntityId() == CACHE.getPlayerCache().getEntityId()) {
             BOT.handleSetMotion(packet.getMotionX(), packet.getMotionY(), packet.getMotionZ());
         }

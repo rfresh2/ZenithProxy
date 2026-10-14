@@ -29,6 +29,7 @@ public class EntityPositionSyncHandler implements ClientEventLoopPacketHandler<C
                 if (tickable && !tooFar) {
                     entity.lerpTo(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch(), 3);
                 } else {
+                    entity.cancelLerp();
                     entity
                         .setX(packet.getX())
                         .setY(packet.getY())

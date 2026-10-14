@@ -89,14 +89,18 @@ public class MutableVec3d {
     public void xRot(double pitch) {
         var cosPitch = Math.cos(pitch);
         var sinPitch = Math.sin(pitch);
-        this.y = this.y * cosPitch + this.z * sinPitch;
-        this.z = this.z * cosPitch - this.y * sinPitch;
+        var newY = this.y * cosPitch + this.z * sinPitch;
+        var newZ = this.z * cosPitch - this.y * sinPitch;
+        this.y = newY;
+        this.z = newZ;
     }
 
     public void yRot(double yaw) {
         var cosYaw = Math.cos(yaw);
         var sinYaw = Math.sin(yaw);
-        this.x = this.x * cosYaw + this.z * sinYaw;
-        this.z = this.z * cosYaw - this.x * sinYaw;
+        var newX = this.x * cosYaw + this.z * sinYaw;
+        var newZ = this.z * cosYaw - this.x * sinYaw;
+        this.x = newX;
+        this.z = newZ;
     }
 }
