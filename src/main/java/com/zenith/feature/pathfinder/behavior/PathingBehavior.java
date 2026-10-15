@@ -384,6 +384,9 @@ public class PathingBehavior extends Behavior {
                     //PATH_LOG.info("Faking path start assuming player is midair and falling");
                     return feet.below();
                 }
+                if (MovementHelper.isLiquid(feet.below())) {
+                    return feet.below();
+                }
             }
         }
         return feet;
