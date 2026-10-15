@@ -10,14 +10,30 @@ import org.geysermc.mcprotocollib.protocol.data.game.level.notify.ThunderStrengt
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundGameEventPacket;
 import org.jspecify.annotations.NonNull;
 
-import static com.zenith.Globals.CACHE;
-import static com.zenith.Globals.EVENT_BUS;
+import static com.zenith.Globals.*;
 
 public class GameEventHandler implements ClientEventLoopPacketHandler<ClientboundGameEventPacket, ClientSession> {
     @Override
     public boolean applyAsync(@NonNull ClientboundGameEventPacket packet, @NonNull ClientSession session) {
         switch (packet.getNotification()) {
-            case CHANGE_GAMEMODE -> CACHE.getPlayerCache().setGameMode((GameMode) packet.getValue());
+            case CHANGE_GAMEMODE -> {
+                var gameMode = (GameMode) packet.getValue();
+                CACHE.getPlayerCache().setGameMode(gameMode);
+                switch (gameMode) {
+                    case CREATIVE -> CACHE.getPlayerCache()
+                        .setCanFly(true)
+                        .setInvincible(true);
+                    case SPECTATOR -> CACHE.getPlayerCache()
+                        .setCanFly(true)
+                        .setFlying(true)
+                        .setInvincible(true);
+                    case SURVIVAL, ADVENTURE -> CACHE.getPlayerCache()
+                        .setCanFly(false)
+                        .setInvincible(false)
+                        .setFlying(false);
+                }
+                BOT.syncFromCache(false);
+            }
             case START_RAIN -> {
                 CACHE.getChunkCache().setRaining(true);
                 EVENT_BUS.postAsync(WeatherChangeEvent.INSTANCE);
