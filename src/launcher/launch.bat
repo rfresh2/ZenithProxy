@@ -8,7 +8,7 @@ where uv >nul 2>nul
 if %errorlevel% == 0 (
   echo Found uv
   echo Starting Launcher...
-  uv run --python ">=3.14" --upgrade --with-requirements requirements.txt -- launcher-py.zip %*
+  uv run --python ">=3.15" --upgrade --with-requirements requirements.txt -- launcher-py.zip %*
   exit /b
 )
 

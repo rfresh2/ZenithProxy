@@ -75,9 +75,9 @@ public class CommandConfigCommand extends Command {
                         syncSlashCommandsToCurrentPlayer();
                     })))
                     .then(literal("suggestions").then(argument("toggle", toggle()).executes(c -> {
-                        CONFIG.inGameCommands.slashCommands = getToggle(c, "toggle");
+                        CONFIG.inGameCommands.suggestions = getToggle(c, "toggle");
                         c.getSource().getEmbed()
-                            .title("In Game Slash Commands Suggestions " + toggleStrCaps(CONFIG.inGameCommands.slashCommands));
+                            .title("In Game Slash Commands Suggestions " + toggleStrCaps(CONFIG.inGameCommands.suggestions));
                     }))))
                 .then(literal("prefix").then(argument("prefix", wordWithChars()).executes(c -> {
                     final String newPrefix = c.getArgument("prefix", String.class);
@@ -115,7 +115,7 @@ public class CommandConfigCommand extends Command {
             .addField("Ingame Commands", toggleStr(CONFIG.inGameCommands.enable))
             .addField("Ingame Slash Commands", toggleStr(CONFIG.inGameCommands.slashCommands))
             .addField("Ingame Slash Commands Replace Server Commands", toggleStr(CONFIG.inGameCommands.slashCommandsReplacesServerCommands))
-            .addField("Ingame Slash Command Suggestions", toggleStr(CONFIG.inGameCommands.slashCommands))
+            .addField("Ingame Slash Command Suggestions", toggleStr(CONFIG.inGameCommands.suggestions))
             .addField("Ingame Prefix", CONFIG.inGameCommands.prefix)
             .addField("Ingame Allow Whitelisted To Use Account Owner Commands", toggleStr(CONFIG.inGameCommands.allowWhitelistedToUseAccountOwnerCommands))
             .primaryColor();

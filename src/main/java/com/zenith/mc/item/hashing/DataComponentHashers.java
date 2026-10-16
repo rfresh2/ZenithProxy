@@ -175,7 +175,7 @@ public class DataComponentHashers {
 
 //        register(DataComponentTypes.JUKEBOX_PLAYABLE, RegistryHasher.JUKEBOX_PLAYABLE);
 //        register(DataComponentTypes.PROVIDES_BANNER_PATTERNS, MinecraftHasher.TAG);
-        register(DataComponentTypes.RECIPES, MinecraftHasher.NBT_LIST);
+        register(DataComponentTypes.RECIPES, MinecraftHasher.MNBT);
 
         registerMap(DataComponentTypes.LODESTONE_TRACKER, builder -> builder
             .optionalNullable("target", MinecraftHasher.GLOBAL_POS, LodestoneTracker::getPos)

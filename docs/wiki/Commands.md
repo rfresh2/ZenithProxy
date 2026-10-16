@@ -1346,7 +1346,7 @@ For delay settings, 1 tick = 50ms
 
   ```antiAFK jump on/off```
 
-  ```antiAFK jump onlyInWater on/off```
+  ```antiAFK jump onlyInLiquid on/off```
 
   ```antiAFK jump delay <ticks>```
 
@@ -1883,8 +1883,6 @@ Aggressive mobs are mobs that are actively targeting and attacking the player.
 
   ```killAura targetHostileMobs on/off```
 
-  ```killAura targetHostileMobs onlyAggressive on/off```
-
   ```killAura targetNeutralMobs on/off```
 
   ```killAura targetNeutralMobs onlyAggressive on/off```
@@ -2044,6 +2042,8 @@ They should be unobstructed and reachable.
   ```pearlLoader add <id> <x> <y> <z>```
 
   ```pearlLoader del <id>```
+
+  ```pearlLoader clear```
 
   ```pearlLoader load <id>```
 

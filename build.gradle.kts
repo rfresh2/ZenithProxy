@@ -2,7 +2,7 @@ plugins {
     `java-library`
     id("org.graalvm.buildtools.native") version "1.1.14"
     id("com.gradleup.shadow") version "9.6.1"
-    id("io.freefair.lombok") version "9.5.0"
+    id("io.freefair.lombok") version "9.8.0"
     `maven-publish`
 }
 
@@ -32,7 +32,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "26.3.0.1"
+val mcplVersion = "26.3.0.3"
 dependencies {
     api("com.github.rfresh2:JDA:6.7.37") {
         exclude(group = "club.minnced")
@@ -42,7 +42,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.18.Final"))
+    api(platform("io.netty:netty-bom:4.2.19.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
@@ -64,7 +64,7 @@ dependencies {
     api("io.netty:netty-resolver-dns-native-macos") { artifact { classifier = "osx-aarch_64" } }
     api("org.cloudburstmc.math:api:2.0")
     api("org.cloudburstmc.math:immutable:2.0")
-    api("org.redisson:redisson:4.7.0") {
+    api("org.redisson:redisson:4.8.0") {
         exclude(group = "io.netty")
     }
     api("com.github.rfresh2:SimpleEventBus:1.6")
@@ -78,22 +78,22 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:reference-object-maps")
     api("com.github.rfresh2.fastutil.maps:long-double-maps")
     api("com.github.rfresh2.fastutil.queues:int-queues")
-    api("com.viaversion:viaversion-common:5.12.0")
-    api("com.viaversion:viabackwards-common:5.12.0")
+    api("com.viaversion:viaversion-common:5.12.1")
+    api("com.viaversion:viabackwards-common:5.12.1")
     api("com.viaversion:viarewind-common:4.2.0")
-    api("org.jline:jline:4.4.5")
+    api("org.jline:jline:4.4.6")
     api("ar.com.hjg:pngj:2.1.0")
     api("com.zaxxer:HikariCP:7.1.0")
     api("org.postgresql:postgresql:42.7.13")
     api("org.jdbi:jdbi3-postgres:3.54.0")
     api("com.google.guava:guava:33.7.1-jre")
-    api("ch.qos.logback:logback-classic:1.6.3")
+    api("ch.qos.logback:logback-classic:1.6.4")
     api("org.slf4j:slf4j-api:2.0.18")
     api("org.slf4j:jul-to-slf4j:2.0.18")
     api("com.mojang:brigadier:1.3.10")
     api("net.kyori:adventure-text-logger-slf4j")
     api("dev.omega24:upnp4j:1.0")
-    api(platform("tools.jackson:jackson-bom:3.2.2"))
+    api(platform("tools.jackson:jackson-bom:3.2.3"))
     api("tools.jackson.core:jackson-databind")
     api("tools.jackson.dataformat:jackson-dataformat-smile")
 

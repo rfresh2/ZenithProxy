@@ -7,7 +7,7 @@ echo Finding python interpreter...
 if command -v 'uv' >/dev/null 2>&1; then
     echo Found uv
     echo Starting Launcher...
-    uv run --python ">=3.14" --upgrade --with-requirements requirements.txt -- launcher-py.zip "$@"
+    uv run --python ">=3.15" --upgrade --with-requirements requirements.txt -- launcher-py.zip "$@"
     exit 0
 fi
 

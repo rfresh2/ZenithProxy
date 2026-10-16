@@ -1059,6 +1059,13 @@ public class PathfinderCommand extends Command {
                     .title("Pathfinder")
                     .addField("Lava Walk Cost", CONFIG.client.extra.pathfinder.lavaWalkCost)
                     .primaryColor();
+            })))
+            .then(literal("mineProcessExitLavaGoal").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.pathfinder.mineProcessExitLavaGoal = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Mine Process Exit Lava Goal", toggleStr(CONFIG.client.extra.pathfinder.mineProcessExitLavaGoal))
+                    .primaryColor();
             })));
     }
 
@@ -1099,6 +1106,7 @@ public class PathfinderCommand extends Command {
         settingsMap.put("itemSaverThreshold", String.valueOf(CONFIG.client.extra.pathfinder.itemSaverThreshold));
         settingsMap.put("placeBlockVerifyAbleToPlace", toggleStr(CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace));
         settingsMap.put("placeBlockSneak", toggleStr(CONFIG.client.extra.pathfinder.placeBlockSneak));
+        settingsMap.put("mineProcessExitLavaGoal", toggleStr(CONFIG.client.extra.pathfinder.mineProcessExitLavaGoal));
         return settingsMap;
     }
 

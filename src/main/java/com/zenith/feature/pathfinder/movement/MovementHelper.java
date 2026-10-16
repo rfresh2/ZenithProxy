@@ -209,8 +209,20 @@ public final class MovementHelper {
         }
         boolean isFluid = World.isFluid(blockStateId);
         if (isFluid) {
-            var playerInLava = PlayerContext.INSTANCE.player().isTouchingLava() || MovementHelper.isLava(World.getBlockStateId(PlayerContext.INSTANCE.playerFeet()));
-            var playerInWater = PlayerContext.INSTANCE.player().isTouchingWater() || MovementHelper.isWater(World.getBlockStateId(PlayerContext.INSTANCE.playerFeet()));
+            var feet = PlayerContext.INSTANCE.playerFeet();
+            var playerInLava = PlayerContext.INSTANCE.player().isTouchingLava();
+            var playerInWater = PlayerContext.INSTANCE.player().isTouchingWater();
+            for (int yy = 0; yy < 2; yy++) {
+                var b = World.getBlockState(feet.below(yy));
+                if (b.block().isAir()) continue;
+                if (MovementHelper.isLava(b.id())) {
+                    playerInLava = true;
+                }
+                if (MovementHelper.isWater(b.id())) {
+                    playerInWater = true;
+                }
+                break;
+            }
             var playerInFluid = playerInLava || playerInWater;
             if (isFlowing(x, y, z) && !playerInFluid) {
                 return false;
@@ -448,26 +460,20 @@ public final class MovementHelper {
                 return false;
             }
 
-            // since this is called literally millions of times per second, the benefit of not allocating millions of useless "pos.up()"
-            // BlockPos s that we'd just garbage collect immediately is actually noticeable. I don't even think its a decrease in readability
             int upState = BlockStateInterface.getId(x, y + 1, z);
-            Block up = BlockStateInterface.getBlock(upState);
-            if (up == BlockRegistry.LILY_PAD || up.name().endsWith("_carpet")) {
+            var up = BlockStateInterface.getBlock(upState);
+            if (up == BlockRegistry.LILY_PAD || up.blockTags().contains(BlockTags.WOOL_CARPETS)) {
                 return true;
             }
-            if (MovementHelper.isFlowing(x, y, z) || MovementHelper.isFlowing(x, y + 1, z)) {
-                // the only scenario in which we can walk on flowing water is if it's under still water with jesus off
-                return isLiquid(upState);
+            // avoid if above fluid is flowing with a short height
+            // otherwise we'll have our y pos constantly shifting inside this fluid we will supposedly be walking on
+            if (MovementHelper.isFlowing(x, y + 1, z)) {
+                var upFluidState = World.getFluidState(x, y + 1, z);
+                var upHeight = World.getFluidHeight(upFluidState, x, y + 1, z);
+                return upHeight >= 8 / 9f;
             }
-            // if assumeWalkOnWater is on, we can only walk on water if there isn't water above it
-            // if assumeWalkOnWater is off, we can only walk on water if there is water above it
             return isLiquid(upState);
         }
-
-//        if (MovementHelper.isLava(state) && !MovementHelper.isFlowing(x, y, z, state, bsi) && Baritone.settings().assumeWalkOnLava.value) { // if we get here it means that assumeWalkOnLava must be true, so put it last
-//            return true;
-//        }
-
         return false; // If we don't recognise it then we want to just return false to be safe.
     }
 

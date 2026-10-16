@@ -42,14 +42,19 @@ public class ClientTickManager {
     private void tickManagerLoop() {
         while (true) {
             try {
+                var tickRate = CONFIG.client.tickRate;
+                if (tickRate <= 0) {
+                    Wait.waitMs(50);
+                    continue;
+                }
                 var client = Proxy.getInstance().getClient();
                 if (client == null) {
-                    Wait.waitMs((int) (50.0 / CONFIG.client.tickRate));
+                    Wait.waitMs((int) (50.0 / tickRate));
                     continue;
                 }
                 var eventLoop = client.getClientEventLoop();
                 if (!doClientTicks.get() || eventLoop.isShuttingDown()) {
-                    Wait.waitMs((int) (50.0 / CONFIG.client.tickRate));
+                    Wait.waitMs((int) (50.0 / tickRate));
                     continue;
                 }
                 var before = System.nanoTime();
@@ -58,7 +63,7 @@ public class ClientTickManager {
                 // we will drift slightly lower in tps as thread sleep duration is variable in scheduling
                 // todo: vanilla client limits to 10 catch-up ticks, but we are not tracking this across multiple ticks
                 var elapsed = System.nanoTime() - before;
-                var nextTickNsDelay = (long) (50_000_000.0 / CONFIG.client.tickRate);
+                var nextTickNsDelay = (long) (50_000_000.0 / tickRate);
                 var waitDuration = Duration.ofNanos(MathHelper.clamp(nextTickNsDelay - elapsed, 0L, nextTickNsDelay));
                 Wait.wait(waitDuration);
             } catch (RejectedExecutionException e) {
@@ -111,6 +116,7 @@ public class ClientTickManager {
             if (doBotTicks.get()) {
                 EVENT_BUS.post(ClientBotTick.INSTANCE);
             }
+            EVENT_BUS.post(ClientTickEvent.End.INSTANCE);
             long after = System.currentTimeMillis();
             long elapsedMs = after - before;
             if (elapsedMs > LONG_TICK_THRESHOLD_MS) {

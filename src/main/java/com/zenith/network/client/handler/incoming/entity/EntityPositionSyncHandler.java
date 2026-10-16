@@ -1,9 +1,10 @@
 package com.zenith.network.client.handler.incoming.entity;
 
 import com.zenith.cache.data.entity.Entity;
-import com.zenith.feature.spectator.SpectatorSync;
+import com.zenith.feature.player.World;
 import com.zenith.network.client.ClientSession;
 import com.zenith.network.codec.ClientEventLoopPacketHandler;
+import com.zenith.util.math.MathHelper;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.ClientboundEntityPositionSyncPacket;
 
 import static com.zenith.Globals.CACHE;
@@ -14,30 +15,30 @@ public class EntityPositionSyncHandler implements ClientEventLoopPacketHandler<C
     public boolean applyAsync(final ClientboundEntityPositionSyncPacket packet, final ClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getId());
         if (entity != null) {
-            // todo: need to tick entity movement according to steps
-            var endX = packet.getEndPosition() != null
-                ? packet.getEndPosition().getX()
-                : packet.getSteps().getLast().position().getX();
-            var endY = packet.getEndPosition() != null
-                ? packet.getEndPosition().getY()
-                : packet.getSteps().getLast().position().getY();
-            var endZ = packet.getEndPosition() != null
-                ? packet.getEndPosition().getZ()
-                : packet.getSteps().getLast().position().getZ();
+            var pos = packet.isStepped()
+                ? packet.getSteps().getLast().position()
+                : packet.getEndPosition();
             entity
-                .setX(endX)
-                .setY(endY)
-                .setZ(endZ)
-                .setYaw(packet.getYaw())
-                .setPitch(packet.getPitch());
-            if (!entity.getPassengerIds().isEmpty()) {
-                var player = CACHE.getPlayerCache().getThePlayer();
-                if (entity.getPassengerIds().contains(player.getEntityId())) {
-                    player
-                        .setX(endX)
-                        .setY(endY)
-                        .setZ(endZ);
-                    SpectatorSync.syncPlayerPositionWithSpectators();
+                .setBaseX(pos.getX())
+                .setBaseY(pos.getY())
+                .setBaseZ(pos.getZ());
+            var isControlledByLocalInstance = entity.isControlledByLocalInstance();
+            if (!isControlledByLocalInstance) {
+                var tickable = World.isChunkLoadedBlockPos(MathHelper.floorI(entity.getX()), MathHelper.floorI(entity.getZ()));
+                var tooFar = entity.position().distanceSquared(pos.getX(), pos.getY(), pos.getZ()) > 4096.0;
+                if (tickable && !tooFar) {
+                    // todo: this is no longer correct in 26.3
+                    //  interpolation is no longer hardcoded to 3 ticks
+                    //  and each entity type has an interval over which they step through interpolations
+                    entity.lerpTo(pos.getX(), pos.getY(), pos.getZ(), packet.getYaw(), packet.getPitch(), 3);
+                } else {
+                    entity.cancelLerp();
+                    entity
+                        .setX(pos.getX())
+                        .setY(pos.getY())
+                        .setZ(pos.getZ())
+                        .setYaw(packet.getYaw())
+                        .setPitch(packet.getPitch());
                 }
             }
             return true;
