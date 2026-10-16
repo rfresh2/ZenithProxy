@@ -35,7 +35,7 @@ public class TickRateCommand extends Command {
     public LiteralArgumentBuilder<CommandContext> register() {
         return command("tickRate")
             .then(argument("rate", doubleArg(0)).executes(c -> {
-                CONFIG.client.tickRate = getDouble(c, "rate");;
+                CONFIG.client.tickRate = getDouble(c, "rate");
                 c.getSource().getEmbed()
                     .title("Tick Rate Set");
             }));
