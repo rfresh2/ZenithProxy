@@ -38,7 +38,8 @@ public class PearlLoader extends Command {
                 "clear",
                 "load <id>",
                 "list",
-                "returnToStartPos on/off"
+                "returnToStartPos on/off",
+                "doubleClick on/off"
             )
             .aliases("pl")
             .build();
@@ -123,22 +124,29 @@ public class PearlLoader extends Command {
                 for (var pearl : pearls) {
                     if (pearl.id().equals(id)) {
                         BlockPos current = CACHE.getPlayerCache().getThePlayer().blockPos();
-                        BARITONE.rightClickBlock(pearl.x(), pearl.y(), pearl.z())
-                            .addExecutedListener(f -> {
-                                c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
-                                    .title("Pearl Loaded!")
-                                    .addField("Pearl ID", pearl.id(), false)
-                                    .successColor());
-                                if (CONFIG.client.extra.pearlLoader.returnToStartPos) {
-                                    BARITONE.pathTo(current.x(), current.z())
-                                        .addExecutedListener(f2 -> {
-                                            c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
-                                                .description("Returned to start pos")
-                                                .successColor());
-                                        });
-                                }
-
-                            });
+                        Runnable pearlLoaded = () -> {
+                            c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
+                                .title("Pearl Loaded!")
+                                .addField("Pearl ID", pearl.id(), false)
+                                .successColor());
+                            if (CONFIG.client.extra.pearlLoader.returnToStartPos) {
+                                BARITONE.pathTo(current.x(), current.z())
+                                    .addExecutedListener(f2 -> {
+                                        c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
+                                            .description("Returned to start pos")
+                                            .successColor());
+                                    });
+                            }
+                        };
+                        if (CONFIG.client.extra.pearlLoader.doubleClick) {
+                            BARITONE.rightClickBlock(pearl.x(), pearl.y(), pearl.z())
+                                .addExecutedListener(f ->
+                                    BARITONE.rightClickBlock(pearl.x(), pearl.y(), pearl.z())
+                                        .addExecutedListener(f2 -> pearlLoaded.run()));
+                        } else {
+                            BARITONE.rightClickBlock(pearl.x(), pearl.y(), pearl.z())
+                                .addExecutedListener(f -> pearlLoaded.run());
+                        }
                         c.getSource().getEmbed()
                             .title("Loading Pearl")
                             .successColor();
@@ -156,6 +164,12 @@ public class PearlLoader extends Command {
                 c.getSource().getEmbed()
                     .title("Return to Start Pos Set")
                     .primaryColor();
+            })))
+            .then(literal("doubleClick").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.pearlLoader.doubleClick = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Double Click Set")
+                    .primaryColor();
             })));
     }
 
@@ -165,7 +179,8 @@ public class PearlLoader extends Command {
             embed.description(pearlsList());
         }
         embed
-            .addField("Return To Start Pos", toggleStr(CONFIG.client.extra.pearlLoader.returnToStartPos));
+            .addField("Return To Start Pos", toggleStr(CONFIG.client.extra.pearlLoader.returnToStartPos))
+            .addField("Double Click", toggleStr(CONFIG.client.extra.pearlLoader.doubleClick));
     }
 
     private String pearlsList() {
