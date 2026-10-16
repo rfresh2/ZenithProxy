@@ -1,6 +1,8 @@
 package com.zenith.cache.data.entity;
 
+import com.zenith.feature.spectator.SpectatorSync;
 import com.zenith.mc.entity.EntityData;
+import com.zenith.util.math.MathHelper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -26,12 +28,21 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import static com.zenith.Globals.CACHE;
 import static com.zenith.Globals.ENTITY_DATA;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class EntityLiving extends Entity {
+    protected int lerpSteps;
+    protected double lerpX;
+    protected double lerpY;
+    protected double lerpZ;
+    protected double lerpYaw;
+    protected double lerpPitch;
+    protected double lerpHeadYaw;
+    protected int lerpHeadSteps;
     @Nullable
     protected Float health;
     protected Map<Effect, PotionEffect> potionEffectMap = new EnumMap<>(Effect.class);
@@ -134,4 +145,80 @@ public class EntityLiving extends Entity {
         return Vector2d.ZERO;
     }
 
+    @Override
+    public void lerpTo(double x, double y, double z, float yaw, float pitch, int steps) {
+        this.lerpX = x;
+        this.lerpY = y;
+        this.lerpZ = z;
+        this.lerpYaw = yaw;
+        this.lerpPitch = pitch;
+        this.lerpSteps = steps;
+    }
+
+    @Override
+    public void lerpHeadTo(float yaw, int steps) {
+        this.lerpHeadYaw = yaw;
+        this.lerpHeadSteps = steps;
+    }
+
+    @Override
+    public void cancelLerp() {
+        this.lerpSteps = 0;
+    }
+
+    @Override
+    public double lerpTargetX() {
+        return this.lerpSteps > 0 ? this.lerpX : this.getX();
+    }
+
+    public double lerpTargetY() {
+        return this.lerpSteps > 0 ? this.lerpY : this.getY();
+    }
+
+    public double lerpTargetZ() {
+        return this.lerpSteps > 0 ? this.lerpZ : this.getZ();
+    }
+
+    public float lerpTargetPitch() {
+        return this.lerpSteps > 0 ? (float) this.lerpPitch : this.getPitch();
+    }
+
+    public float lerpTargetYaw() {
+        return this.lerpSteps > 0 ? (float) this.lerpYaw : this.getYaw();
+    }
+
+    public float lerpTargetHeadYaw() {
+        return this.lerpHeadSteps > 0 ? (float) this.lerpHeadYaw : this.getHeadYaw();
+    }
+
+    @Override
+    public void tick() {
+        if (this.lerpSteps > 0) {
+            this.lerpPositionAndRotationStep(this.lerpSteps, this.lerpX, this.lerpY, this.lerpZ, this.lerpYaw, this.lerpPitch);
+            if (passengerIds.contains(CACHE.getPlayerCache().getThePlayer().getEntityId())) {
+                SpectatorSync.syncPlayerPositionWithSpectators();
+            }
+            this.lerpSteps--;
+        }
+        if (this.lerpHeadSteps > 0) {
+            this.lerpHeadRotationStep(this.lerpHeadSteps, this.lerpHeadYaw);
+            if (passengerIds.contains(CACHE.getPlayerCache().getThePlayer().getEntityId())) {
+                SpectatorSync.syncPlayerPositionWithSpectators();
+            }
+            this.lerpHeadSteps--;
+        }
+    }
+
+    protected void lerpPositionAndRotationStep(int steps, double targetX, double targetY, double targetZ, double targetYaw, double targetPitch) {
+        var delta = 1.0 / steps;
+        setX(MathHelper.lerp(delta, this.getX(), targetX));
+        setY(MathHelper.lerp(delta, this.getY(), targetY));
+        setZ(MathHelper.lerp(delta, this.getZ(), targetZ));
+        setYaw((float)MathHelper.rotLerp(delta, this.getYaw(), targetYaw));
+        setPitch((float)MathHelper.lerp(delta, this.getPitch(), targetPitch));
+    }
+
+    protected void lerpHeadRotationStep(int lerpHeadSteps, double lerpHeadYaw) {
+        this.headYaw = (float) MathHelper.rotLerp(1.0 / lerpHeadSteps, this.headYaw, lerpHeadYaw);
+    }
 }

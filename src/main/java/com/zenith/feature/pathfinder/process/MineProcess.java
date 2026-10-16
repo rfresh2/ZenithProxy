@@ -155,6 +155,10 @@ public final class MineProcess extends BaritoneProcessHelper implements IBariton
         if (filter == null) {
             return null;
         }
+        if (CONFIG.client.extra.pathfinder.mineProcessExitLavaGoal && MovementHelper.isPlayerTouchingLava()) {
+            var feet = PlayerContext.INSTANCE.playerFeet();
+            return new PathingCommand(new GoalAvoidBlocks(feet.x(), feet.y(), feet.z(), BlockRegistry.LAVA), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
+        }
 
         List<BlockPos> locs = knownOreLocations;
         if (!locs.isEmpty()) {

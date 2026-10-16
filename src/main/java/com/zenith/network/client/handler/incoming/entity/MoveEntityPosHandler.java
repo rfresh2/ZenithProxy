@@ -13,10 +13,20 @@ public class MoveEntityPosHandler implements ClientEventLoopPacketHandler<Client
     public boolean applyAsync(@NonNull ClientboundMoveEntityPosPacket packet, @NonNull ClientSession session) {
         Entity entity = CACHE.getEntityCache().get(packet.getEntityId());
         if (entity != null) {
-            entity
-                .setX(entity.getX() + packet.getMoveX())
-                .setY(entity.getY() + packet.getMoveY())
-                .setZ(entity.getZ() + packet.getMoveZ());
+            var isControlledByLocalInstance = entity.isControlledByLocalInstance();
+            entity.setBaseX(entity.getBaseX() + packet.getMoveX());
+            entity.setBaseY(entity.getBaseY() + packet.getMoveY());
+            entity.setBaseZ(entity.getBaseZ() + packet.getMoveZ());
+            if (!isControlledByLocalInstance) {
+                entity.lerpTo(
+                    entity.getBaseX(),
+                    entity.getBaseY(),
+                    entity.getBaseZ(),
+                    entity.lerpTargetYaw(),
+                    entity.lerpTargetPitch(),
+                    3
+                );
+            }
         }
         return true;
     }

@@ -41,7 +41,6 @@ public class KillAuraCommand extends Command {
                 "tpsSync on/off",
                 "targetPlayers on/off",
                 "targetHostileMobs on/off",
-                "targetHostileMobs onlyAggressive on/off",
                 "targetNeutralMobs on/off",
                 "targetNeutralMobs onlyAggressive on/off",
                 "targetCustom on/off",
@@ -82,11 +81,6 @@ public class KillAuraCommand extends Command {
                     .title("Target Players " + toggleStrCaps(CONFIG.client.extra.killAura.targetPlayers));
             })))
             .then(literal("targetHostileMobs")
-                .then(literal("onlyAggressive").then(argument("toggle", toggle()).executes(c -> {
-                    CONFIG.client.extra.killAura.onlyHostileAggressive = getToggle(c, "toggle");
-                    c.getSource().getEmbed()
-                        .title("Target Hostile Mobs Only Aggressive " + toggleStrCaps(CONFIG.client.extra.killAura.onlyHostileAggressive));
-                })))
                 .then(argument("toggle", toggle()).executes(c -> {
                     CONFIG.client.extra.killAura.targetHostileMobs = getToggle(c, "toggle");
                     c.getSource().getEmbed()
@@ -168,7 +162,7 @@ public class KillAuraCommand extends Command {
         builder
             .addField("KillAura", toggleStr(CONFIG.client.extra.killAura.enabled))
             .addField("Target Players", toggleStr(CONFIG.client.extra.killAura.targetPlayers))
-            .addField("Target Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.targetHostileMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.onlyHostileAggressive) + "]")
+            .addField("Target Hostile Mobs", toggleStr(CONFIG.client.extra.killAura.targetHostileMobs))
             .addField("Target Neutral Mobs", toggleStr(CONFIG.client.extra.killAura.targetNeutralMobs) + " [onlyAggressive: " + toggleStr(CONFIG.client.extra.killAura.onlyNeutralAggressive) + "]")
             .addField("Target Custom", toggleStr(CONFIG.client.extra.killAura.targetCustom))
             .addField("Ignore Named Mobs", toggleStr(CONFIG.client.extra.killAura.ignoreNamedMobs))

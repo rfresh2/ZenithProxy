@@ -12,7 +12,7 @@ import com.zenith.mc.item.ItemRegistry;
 import com.zenith.mc.item.ToolTier;
 import com.zenith.mc.item.ToolType;
 import com.zenith.util.math.MathHelper;
-import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
+import lombok.Getter;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
@@ -20,30 +20,30 @@ import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.zenith.Globals.*;
 
 public class KillAura extends AbstractInventoryModule {
 
-    private static final Set<EntityType> hostileEntities = ReferenceOpenHashSet.of(
+    @Getter
+    private final Set<EntityType> hostileEntities = EnumSet.of(
         EntityType.BLAZE, EntityType.BOGGED, EntityType.BREEZE, EntityType.CAVE_SPIDER, EntityType.CREAKING,
         EntityType.CREEPER, EntityType.DROWNED, EntityType.ELDER_GUARDIAN,
         EntityType.ENDER_DRAGON, EntityType.ENDERMITE, EntityType.EVOKER, EntityType.GHAST, EntityType.GUARDIAN,
         EntityType.HOGLIN, EntityType.HUSK, EntityType.ILLUSIONER, EntityType.FIREBALL, EntityType.MAGMA_CUBE,
-        EntityType.PHANTOM, EntityType.PIGLIN, EntityType.PIGLIN_BRUTE, EntityType.PILLAGER, EntityType.RAVAGER,
+        EntityType.PHANTOM, EntityType.PIGLIN_BRUTE, EntityType.PILLAGER, EntityType.RAVAGER,
         EntityType.SHULKER, EntityType.SHULKER_BULLET, EntityType.SILVERFISH, EntityType.SKELETON, EntityType.SLIME,
         EntityType.SMALL_FIREBALL, EntityType.SPIDER, EntityType.STRAY, EntityType.VEX, EntityType.VINDICATOR,
         EntityType.WARDEN, EntityType.WITCH, EntityType.WITHER, EntityType.WITHER_SKELETON, EntityType.ZOGLIN,
         EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER
     );
-    private static final Set<EntityType> neutralEntities = ReferenceOpenHashSet.of(
+
+    @Getter
+    private final Set<EntityType> neutralEntities = EnumSet.of(
         EntityType.BEE, EntityType.DOLPHIN, EntityType.ENDERMAN, EntityType.FOX, EntityType.GOAT, EntityType.IRON_GOLEM,
-        EntityType.LLAMA, EntityType.PANDA, EntityType.POLAR_BEAR, EntityType.TRADER_LLAMA, EntityType.WOLF,
+        EntityType.LLAMA, EntityType.PANDA, EntityType.PIGLIN, EntityType.POLAR_BEAR, EntityType.TRADER_LLAMA, EntityType.WOLF,
         EntityType.ZOMBIFIED_PIGLIN
     );
     private int delay = 0;
@@ -52,15 +52,6 @@ public class KillAura extends AbstractInventoryModule {
 
     public KillAura() {
         super(HandRestriction.MAIN_HAND, 1);
-        // convert legacy config
-        if (CONFIG.client.extra.killAura.targetArmorStands) {
-            if (!CONFIG.client.extra.killAura.customTargets.contains(EntityType.ARMOR_STAND)) {
-                CONFIG.client.extra.killAura.customTargets.add(EntityType.ARMOR_STAND);
-            }
-            CONFIG.client.extra.killAura.targetArmorStands = false;
-            CONFIG.client.extra.killAura.targetCustom = true;
-            saveConfigAsync();
-        }
     }
 
     public boolean isActive() {
@@ -177,11 +168,7 @@ public class KillAura extends AbstractInventoryModule {
             }
             if (CONFIG.client.extra.killAura.targetHostileMobs) {
                 if (hostileEntities.contains(e.getEntityType())) {
-                    if (CONFIG.client.extra.killAura.onlyHostileAggressive) {
-                        if (isAggressive(e)) return true;
-                    } else {
-                        return true;
-                    }
+                    return true;
                 }
             }
             if (CONFIG.client.extra.killAura.targetNeutralMobs) {

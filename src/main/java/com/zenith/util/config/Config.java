@@ -236,6 +236,7 @@ public final class Config {
                 public boolean itemSaver = false;
                 public int itemSaverThreshold = 5;
                 public boolean preferSilkTouch = false;
+                public boolean mineProcessExitLavaGoal = true;
                 public final Set<String> acceptableThrowawayItems = new ObjectArraySet<>(new String[]{
                     ItemRegistry.DIRT.name(),
                     ItemRegistry.COBBLESTONE.name(),
@@ -400,9 +401,7 @@ public final class Config {
                 public boolean targetCustom = false;
                 public boolean ignoreNamedMobs = false;
                 public boolean onlyNeutralAggressive = false;
-                public boolean onlyHostileAggressive = false;
                 public boolean switchWeapon = true;
-                public boolean targetArmorStands = false; // soft deprecated
                 public int attackDelayTicks = 10;
                 // When enabled, adjusts attackDelayTicks by current server TPS
                 // so attack rate stays consistent.
@@ -492,7 +491,7 @@ public final class Config {
                     public boolean rotate = true;
                     public long rotateDelayTicks = 300L;
                     public boolean jump = false;
-                    public boolean jumpOnlyInWater = true;
+                    public boolean jumpOnlyInLiquid = true;
                     public long jumpDelayTicks = 1L;
                     public boolean sneak = false;
                     public long sneakDelayTicks = 200L;

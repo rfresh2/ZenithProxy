@@ -25,13 +25,13 @@ public class EntityStandard extends EntityLiving {
             this.uuid,
             this.entityType,
             this.objectData,
-            this.x,
-            this.y,
-            this.z,
+            this.lerpTargetX(),
+            this.lerpTargetY(),
+            this.lerpTargetZ(),
             Vector3d.from(this.velX, this.velY, this.velZ),
-            this.yaw,
-            this.headYaw,
-            this.pitch
+            this.lerpTargetYaw(),
+            this.lerpTargetHeadYaw(),
+            this.lerpTargetPitch()
         ));
         if (!equipment.isEmpty()) {
             consumer.accept(new ClientboundSetEquipmentPacket(this.entityId, this.equipment.entrySet().stream()
@@ -40,7 +40,7 @@ public class EntityStandard extends EntityLiving {
         }
         consumer.accept(new ClientboundRotateHeadPacket(
             this.entityId,
-            this.headYaw
+            this.lerpTargetHeadYaw()
         ));
         super.addPackets(consumer);
     }

@@ -16,7 +16,7 @@ public class ClientCommandsSpectatorOutgoingHandler implements PacketHandler<Cli
                 return null;
             }
             CommandNode[] zenithCommandNodes = COMMAND.getMcplCommandNodes();
-            if (!CONFIG.server.spectator.fullCommandsServerCommands || packet.getFirstNodeIndex() == 0) {
+            if (!CONFIG.server.spectator.fullCommandsServerCommands || packet.getFirstNodeIndex() != 0) {
                 return new ClientboundCommandsPacket(
                     zenithCommandNodes,
                     0

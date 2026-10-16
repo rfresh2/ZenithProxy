@@ -39,6 +39,11 @@ public enum Direction implements StringRepresentable {
         Direction.WEST
     );
 
+    public static final List<Direction> VERTICALS = ImmutableList.of(
+        Direction.UP,
+        Direction.DOWN
+    );
+
     public int x() {
         return this.normal.getX();
     }

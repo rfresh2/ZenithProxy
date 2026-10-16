@@ -12,7 +12,6 @@ import com.zenith.feature.pathfinder.PathingCommandType;
 import com.zenith.feature.pathfinder.PathingRequestFuture;
 import com.zenith.feature.pathfinder.goals.Goal;
 import com.zenith.feature.pathfinder.goals.GoalNear;
-import com.zenith.feature.pathfinder.movement.MovementHelper;
 import com.zenith.feature.player.*;
 import com.zenith.feature.player.raycast.RaycastHelper;
 import com.zenith.mc.block.*;
@@ -358,16 +357,53 @@ public class InteractWithProcess extends BaritoneProcessHelper {
 
         public List<PlaceTarget> findPlaceTargets() {
             ArrayList<PlaceTarget> validPlaces = new ArrayList<>();
+            var targetBlockState = World.getBlockState(x, y, z);
+            if (targetBlockState.block().replaceable() && !targetBlockState.getInteractionBoxes().isEmpty()) {
+                // blocks like grass will be replaced directly, so we don't need an adjacent block to place against
+                for (var faceVec : placeDirections) {
+                    validPlaces.add(new PlaceTarget(targetBlockState, faceVec));
+                }
+            }
             for (var faceVec : placeDirections) {
                 int dx = x + faceVec.x();
                 int dy = y + faceVec.y();
                 int dz = z + faceVec.z();
                 int blockStateId = World.getBlockStateId(dx, dy, dz);
-                if (CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace && !MovementHelper.canPlaceAgainst(blockStateId)) continue;
+                if (CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace && !canPlaceAgainst(blockStateId)) continue;
                 var blockState = World.getBlockState(dx, dy, dz);
                 validPlaces.add(new PlaceTarget(blockState, faceVec.invert()));
             }
             return validPlaces;
+        }
+
+        boolean canPlaceAgainst(int blockStateId) {
+            var interactionBoxes = BLOCK_DATA.getInteractionBoxesFromBlockStateId(blockStateId);
+            if (interactionBoxes.isEmpty()) return false;
+            var block = World.getBlock(blockStateId);
+            if (block.replaceable()) { // we can place, but we will place into the target instead of against, so this isn't valid
+                return false;
+            }
+            if (block.blockEntityType() != null
+                || block.blockTags().contains(BlockTags.TRAPDOORS)
+                || block.blockTags().contains(BlockTags.FENCE_GATES)
+                || block.blockTags().contains(BlockTags.DOORS)
+                || block.blockTags().contains(BlockTags.ANVIL)
+                || block.blockTags().contains(BlockTags.BEDS)
+                || block.blockTags().contains(BlockTags.PORTALS)
+                || block.blockTags().contains(BlockTags.BUTTONS)
+                || block.blockTags().contains(BlockTags.CANDLE_CAKES)
+                || block == BlockRegistry.LEVER
+                || block == BlockRegistry.DRAGON_EGG
+                || block == BlockRegistry.LOOM
+                || block == BlockRegistry.CARTOGRAPHY_TABLE
+                || block == BlockRegistry.GRINDSTONE
+                || block == BlockRegistry.SMITHING_TABLE
+                || block == BlockRegistry.STONECUTTER
+
+            ) {
+                return CONFIG.client.extra.pathfinder.placeBlockSneak;
+            }
+            return true;
         }
 
         @Override

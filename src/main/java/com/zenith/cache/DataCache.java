@@ -44,6 +44,9 @@ public class DataCache {
     protected final ClientInfoCache clientInfoCache = new ClientInfoCache();
     protected final RegistriesCache registriesCache = new RegistriesCache();
     protected final WaypointCache waypointCache = new WaypointCache();
+    {
+        entityCache.subscribeEvents();
+    }
 
     public Collection<CachedData> getAllData() {
         // order is important, matches vanilla
