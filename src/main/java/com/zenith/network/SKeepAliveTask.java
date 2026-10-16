@@ -16,6 +16,7 @@ public class SKeepAliveTask implements Runnable {
 
     @Override
     public void run() {
+        if (session.getChannel() == null || !session.getChannel().isActive()) return;
         if (!session.isSpectator() && CONFIG.client.keepAliveHandling.keepAliveMode != KeepAliveMode.INDEPENDENT) return;
         var state = session.getPacketProtocol().getOutboundState();
         if (state != ProtocolState.CONFIGURATION && state != ProtocolState.GAME) return;
