@@ -2,6 +2,7 @@ package com.zenith.feature.pathfinder.goals;
 
 import com.zenith.feature.player.World;
 import com.zenith.mc.block.Block;
+import com.zenith.mc.block.Direction;
 import lombok.Data;
 
 import java.util.Collections;
@@ -26,9 +27,22 @@ public class GoalAvoidBlocks implements Goal {
     @Override
     public boolean isInGoal(final int x, final int y, final int z) {
         if (World.isChunkLoadedBlockPos(x, z)) {
-            var p1 = World.getBlock(x, y, z);
-            var p2 = World.getBlock(x, y-1, z);
-            return !this.blocksToAvoid.contains(p1) && !this.blocksToAvoid.contains(p2);
+            if (this.blocksToAvoid.contains(World.getBlock(x, y, z))) {
+                return false;
+            }
+            for (var d : Direction.VERTICALS) {
+                if (this.blocksToAvoid.contains(World.getBlock(x, y + d.y(), z))) {
+                    return false;
+                }
+            }
+            // the end of a path can leave us still colliding with an adjacent block to avoid
+            // as baritone says we reached the goal as soon as feet pos reach the target
+            for (var d : Direction.HORIZONTALS) {
+                if (this.blocksToAvoid.contains(World.getBlock(x + d.x(), y, z + d.z()))) {
+                    return false;
+                }
+            }
+            return true;
         }
         return false;
     }

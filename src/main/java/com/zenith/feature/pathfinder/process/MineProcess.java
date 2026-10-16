@@ -14,7 +14,6 @@ import com.zenith.mc.block.Block;
 import com.zenith.mc.block.BlockPos;
 import com.zenith.mc.block.BlockRegistry;
 import com.zenith.mc.item.ItemRegistry;
-import com.zenith.util.math.MathHelper;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
@@ -156,13 +155,9 @@ public final class MineProcess extends BaritoneProcessHelper implements IBariton
         if (filter == null) {
             return null;
         }
-
-        if (CONFIG.client.extra.pathfinder.mineProcessExitLavaGoal && BOT.isTouchingLava()) {
-            var playerCache = CACHE.getPlayerCache();
-            var playerX = MathHelper.floorI(playerCache.getX());
-            var playerY = MathHelper.floorI(playerCache.getY());
-            var playerZ = MathHelper.floorI(playerCache.getZ());
-            return new PathingCommand(new GoalAvoidBlocks(playerX, playerY, playerZ, BlockRegistry.LAVA), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
+        if (CONFIG.client.extra.pathfinder.mineProcessExitLavaGoal && MovementHelper.isPlayerTouchingLava()) {
+            var feet = PlayerContext.INSTANCE.playerFeet();
+            return new PathingCommand(new GoalAvoidBlocks(feet.x(), feet.y(), feet.z(), BlockRegistry.LAVA), PathingCommandType.REVALIDATE_GOAL_AND_PATH);
         }
 
         List<BlockPos> locs = knownOreLocations;
