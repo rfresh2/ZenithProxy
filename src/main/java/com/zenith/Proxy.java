@@ -203,6 +203,7 @@ public class Proxy {
             EXECUTOR.scheduleAtFixedRate(this::serverHealthCheck, 1L, 5L, TimeUnit.MINUTES);
             EXECUTOR.scheduleAtFixedRate(this::tablistUpdate, 20L, 3L, TimeUnit.SECONDS);
             EXECUTOR.scheduleAtFixedRate(this::maxPlaytimeTick, CONFIG.client.maxPlaytimeReconnectMins, 1L, TimeUnit.MINUTES);
+            EXECUTOR.scheduleAtFixedRate(this::deprecationWarningTick, 0L, 72L, TimeUnit.HOURS);
             EXECUTOR.schedule(this::serverConnectionTest, 10L, TimeUnit.SECONDS);
             boolean connected = false;
             if (CONFIG.client.autoConnect && !isConnected()) {
@@ -374,6 +375,26 @@ public class Proxy {
             MODULE.get(AutoReconnect.class).cancelAutoReconnect();
             connect();
         }
+    }
+
+    private void deprecationWarningTick() {
+        if (!CONFIG.deprecationWarning_26_2_0) return;
+        String platform = ImageInfo.inImageCode() ? "linux" : "java";
+        DISCORD.sendEmbedMessage(NotificationEventListener.notificationMention(), Embed.builder()
+            .title("26.2.0 Deprecation")
+                .description("""
+                  Update to ZenithProxy for 26.3.0 (or 1.21.4) with this command:
+
+                  `channel set %s 26.3.0`
+
+                  ZenithProxy for 26.2.0 has been deprecated and will no longer receive updates and support.
+
+                  You can continue using 26.2.0 clients on the `26.3.0` channel, ZenithProxy has built-in ViaVersion.
+
+                  To disable this notification: `deprecationWarning off`
+                  """.formatted(platform))
+            .errorColor()
+        );
     }
 
     private void tablistUpdate() {

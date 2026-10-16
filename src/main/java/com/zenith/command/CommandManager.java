@@ -58,6 +58,7 @@ public class CommandManager {
         new CoordinateObfuscationCommand(),
         new DatabaseCommand(),
         new DebugCommand(),
+        new DeprecationWarningCommand(),
         new DisconnectCommand(),
         new DiscordManageCommand(),
         new DiscordNotificationsCommand(),
