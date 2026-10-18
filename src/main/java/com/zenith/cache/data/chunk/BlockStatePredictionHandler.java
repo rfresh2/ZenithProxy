@@ -74,6 +74,10 @@ public class BlockStatePredictionHandler implements AutoCloseable {
         return this.currentSequenceNr;
     }
 
+    public void abortPrediction() {
+        this.currentSequenceNr--;
+    }
+
     public boolean isPredicting() {
         return this.isPredicting;
     }

@@ -69,6 +69,8 @@ public class PlayerInteractionManager {
             var packet = action.predict(i);
             if (packet != null) {
                 Proxy.getInstance().getClient().send(packet);
+            } else {
+                predictionHandler.abortPrediction();
             }
             return packet != null;
         }
