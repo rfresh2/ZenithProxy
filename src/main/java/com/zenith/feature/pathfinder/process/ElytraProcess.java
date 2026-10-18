@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.zenith.Globals.CACHE;
+import static com.zenith.Globals.CONFIG;
 
 public class ElytraProcess extends BaritoneProcessHelper {
     public State state;
@@ -96,11 +97,11 @@ public class ElytraProcess extends BaritoneProcessHelper {
 
         boolean safetyLanding = false;
         if (ctx.player().isFallFlying() && shouldLandForSafety()) {
-            if (true /* Baritone.settings().elytraAllowEmergencyLand */) {
+            if (CONFIG.client.extra.pathfinder.elytra.allowEmergencyLand) {
                 info("Emergency landing - almost out of elytra durability or fireworks");
                 safetyLanding = true;
             } else {
-                info("almost out of elytra durability or fireworks, but I'm going to continue since elytraAllowEmergencyLand is false");
+                info("almost out of elytra durability or fireworks, but I'm going to continue since elytra allowEmergencyLand is off");
             }
         }
         if (ctx.player().isFallFlying() && this.state != State.LANDING && (this.behavior.pathManager.isComplete() || safetyLanding)) {
@@ -183,7 +184,7 @@ public class ElytraProcess extends BaritoneProcessHelper {
         }
 
         if (this.state == State.FLYING || this.state == State.START_FLYING) {
-            this.state = ctx.player().isOnGround() && true /* Baritone.settings().elytraAutoJump */
+            this.state = ctx.player().isOnGround() && CONFIG.client.extra.pathfinder.elytra.autoJump
                     ? State.JUMP
                     : State.START_FLYING;
         }
@@ -409,7 +410,7 @@ public class ElytraProcess extends BaritoneProcessHelper {
 
     private boolean shouldLandForSafety() {
         var chest = CACHE.getPlayerCache().getEquipment(EquipmentSlot.CHESTPLATE);
-        if ((chest == null || chest.getId() != ItemRegistry.ELYTRA.id()) || ItemUtil.getDamageUntilBreak(chest) < 5 /* Baritone.settings().elytraMinimumDurability */) {
+        if ((chest == null || chest.getId() != ItemRegistry.ELYTRA.id()) || ItemUtil.getDamageUntilBreak(chest) < CONFIG.client.extra.pathfinder.elytra.minimumDurability) {
             // elytrabehavior replaces when durability <= minimumDurability, so if durability < minimumDurability then we can reasonably assume that the elytra will soon be broken without replacement
             return true;
         }
@@ -421,7 +422,7 @@ public class ElytraProcess extends BaritoneProcessHelper {
                 qty += inv.get(i).getAmount();
             }
         }
-        if (qty <= 5 /* Baritone.settings().elytraMinFireworksBeforeLanding */) {
+        if (qty <= CONFIG.client.extra.pathfinder.elytra.minFireworksBeforeLanding) {
             return true;
         }
         return false;
