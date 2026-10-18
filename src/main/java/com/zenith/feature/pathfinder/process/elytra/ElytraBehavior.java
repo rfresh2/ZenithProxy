@@ -36,6 +36,7 @@ import java.util.concurrent.*;
 import java.util.function.UnaryOperator;
 
 import static com.zenith.Globals.CACHE;
+import static com.zenith.Globals.CONFIG;
 import static com.zenith.Globals.INVENTORY;
 import static com.zenith.util.math.MathHelper.ceilI;
 import static com.zenith.util.math.MathHelper.floorI;
@@ -704,7 +705,7 @@ public final class ElytraBehavior implements ProcessUtil {
         if (this.landingMode) {
             return;
         }
-        final boolean useOnDescend = !false /* Baritone.settings().elytraConserveFireworks */ || ctx.playerFeetAsVec().getY() < goingTo.getY() + 5;
+        final boolean useOnDescend = !CONFIG.client.extra.pathfinder.elytra.conserveFireworks || ctx.playerFeetAsVec().getY() < goingTo.getY() + 5;
         final double currentSpeed = Vector3d.from(
                 ctx.playerMotion().getX(),
                 // ignore y component if we are BOTH below where we want to be AND descending
@@ -712,7 +713,7 @@ public final class ElytraBehavior implements ProcessUtil {
                 ctx.playerMotion().getZ()
         ).lengthSquared();
 
-        final double elytraFireworkSpeed = 1.2 /* Baritone.settings().elytraFireworkSpeed */;
+        final double elytraFireworkSpeed = CONFIG.client.extra.pathfinder.elytra.fireworkSpeed;
         if (this.remainingFireworkTicks <= 0 && (forceUseFirework || (!isBoosted
                 && useOnDescend
                 && (ctx.playerFeetAsVec().getY() < goingTo.getY() - 5 || start.distance(Vector3d.from(goingTo.getX() + 0.5, ctx.playerFeetAsVec().getY(), goingTo.getZ() + 0.5)) > 5) // UGH!!!!!!!
@@ -1254,7 +1255,7 @@ public final class ElytraBehavior implements ProcessUtil {
         for (int i = 9; i < 45; i++) {
             var slot = invy.get(i);
             if (slot != null && slot.getId() == ItemRegistry.ELYTRA.id()
-                && ItemUtil.getDamageUntilBreak(slot) > 5 /* Baritone.settings().elytraMinimumDurability */) {
+                && ItemUtil.getDamageUntilBreak(slot) > CONFIG.client.extra.pathfinder.elytra.minimumDurability) {
                 return i;
             }
         }
@@ -1262,11 +1263,11 @@ public final class ElytraBehavior implements ProcessUtil {
     }
 
     private void trySwapElytra() {
-        if (!true /* Baritone.settings().elytraAutoSwap */ || inventoryRequest != null
+        if (!CONFIG.client.extra.pathfinder.elytra.autoSwap || inventoryRequest != null
             || CACHE.getPlayerCache().getInventoryCache().getOpenContainerId() != 0) return;
         var chest = CACHE.getPlayerCache().getEquipment(EquipmentSlot.CHESTPLATE);
         if (chest == null || chest.getId() != ItemRegistry.ELYTRA.id()
-            || ItemUtil.getDamageUntilBreak(chest) > 5 /* Baritone.settings().elytraMinimumDurability */) return;
+            || ItemUtil.getDamageUntilBreak(chest) > CONFIG.client.extra.pathfinder.elytra.minimumDurability) return;
         int goodElytraSlot = findGoodElytra();
         if (goodElytraSlot != -1) {
             inventoryRequest = INVENTORY.submit(InventoryActionRequest.builder()
@@ -1281,7 +1282,7 @@ public final class ElytraBehavior implements ProcessUtil {
     }
 
     void logVerbose(String message) {
-        if (false /* Baritone.settings().elytraChatSpam */) {
+        if (CONFIG.client.extra.pathfinder.elytra.verboseLogging) {
             debug(message);
         }
     }

@@ -256,6 +256,18 @@ public final class Config {
                 public final Set<String> allowBreakAnyway = new ObjectArraySet<>();
                 public final Set<String> blocksToDisallowBreaking = new ObjectArraySet<>();
                 public final Set<String> blocksToAvoid = new ObjectArraySet<>();
+                public final Elytra elytra = new Elytra();
+
+                public static final class Elytra {
+                    public boolean autoSwap = true;
+                    public int minimumDurability = 5;
+                    public int minFireworksBeforeLanding = 5;
+                    public boolean allowEmergencyLand = true;
+                    public boolean conserveFireworks = false;
+                    public double fireworkSpeed = 1.2;
+                    public boolean autoJump = true;
+                    public boolean verboseLogging = false;
+                }
             }
 
             public static class SessionTimeLimit {

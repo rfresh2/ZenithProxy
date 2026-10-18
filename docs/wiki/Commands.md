@@ -1992,6 +1992,22 @@ Baritone pathfinder
 
   ```pathfinder elytra <x> <y> <z>```
 
+  ```pathfinder elytra autoSwap on/off```
+
+  ```pathfinder elytra minimumDurability <durability>```
+
+  ```pathfinder elytra minFireworksBeforeLanding <count>```
+
+  ```pathfinder elytra allowEmergencyLand on/off```
+
+  ```pathfinder elytra conserveFireworks on/off```
+
+  ```pathfinder elytra fireworkSpeed <speed>```
+
+  ```pathfinder elytra autoJump on/off```
+
+  ```pathfinder elytra verboseLogging on/off```
+
   ```pathfinder stop```
 
   ```pathfinder follow```

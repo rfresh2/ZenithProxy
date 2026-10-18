@@ -61,6 +61,14 @@ public class PathfinderCommand extends Command {
                 "goto <waypointId>",
                 "elytra <x> <z>",
                 "elytra <x> <y> <z>",
+                "elytra autoSwap on/off",
+                "elytra minimumDurability <durability>",
+                "elytra minFireworksBeforeLanding <count>",
+                "elytra allowEmergencyLand on/off",
+                "elytra conserveFireworks on/off",
+                "elytra fireworkSpeed <speed>",
+                "elytra autoJump on/off",
+                "elytra verboseLogging on/off",
                 "stop",
                 "follow",
                 "follow <playerName>",
@@ -198,7 +206,63 @@ public class PathfinderCommand extends Command {
                             : "Coords disabled")
                         .primaryColor();
                     return OK;
+                }))
+                .then(literal("autoSwap").then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.pathfinder.elytra.autoSwap = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .addField("Elytra Auto Swap", CONFIG.client.extra.pathfinder.elytra.autoSwap)
+                        .primaryColor();
                 })))
+                .then(literal("minimumDurability").then(argument("durability", integer(0, 432)).executes(c -> {
+                    CONFIG.client.extra.pathfinder.elytra.minimumDurability = getInteger(c, "durability");
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .addField("Elytra Minimum Durability", CONFIG.client.extra.pathfinder.elytra.minimumDurability)
+                        .primaryColor();
+                })))
+                .then(literal("minFireworksBeforeLanding").then(argument("count", integer(0)).executes(c -> {
+                    CONFIG.client.extra.pathfinder.elytra.minFireworksBeforeLanding = getInteger(c, "count");
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .addField("Elytra Min Fireworks Before Landing", CONFIG.client.extra.pathfinder.elytra.minFireworksBeforeLanding)
+                        .primaryColor();
+                })))
+                .then(literal("allowEmergencyLand").then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.pathfinder.elytra.allowEmergencyLand = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .addField("Elytra Allow Emergency Land", CONFIG.client.extra.pathfinder.elytra.allowEmergencyLand)
+                        .primaryColor();
+                })))
+                .then(literal("conserveFireworks").then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.pathfinder.elytra.conserveFireworks = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .addField("Elytra Conserve Fireworks", CONFIG.client.extra.pathfinder.elytra.conserveFireworks)
+                        .primaryColor();
+                })))
+                .then(literal("fireworkSpeed").then(argument("speed", doubleArg(0.0, 10.0)).executes(c -> {
+                    CONFIG.client.extra.pathfinder.elytra.fireworkSpeed = getDouble(c, "speed");
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .addField("Elytra Firework Speed", CONFIG.client.extra.pathfinder.elytra.fireworkSpeed)
+                        .primaryColor();
+                })))
+                .then(literal("autoJump").then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.pathfinder.elytra.autoJump = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .addField("Elytra Auto Jump", CONFIG.client.extra.pathfinder.elytra.autoJump)
+                        .primaryColor();
+                })))
+                .then(literal("verboseLogging").then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.client.extra.pathfinder.elytra.verboseLogging = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Pathfinder")
+                        .addField("Elytra Verbose Logging", CONFIG.client.extra.pathfinder.elytra.verboseLogging)
+                        .primaryColor();
+                }))))
             .then(literal("stop").executes(c -> {
                 BARITONE.stop();
                 c.getSource().getEmbed()
@@ -1134,6 +1198,14 @@ public class PathfinderCommand extends Command {
         settingsMap.put("placeBlockVerifyAbleToPlace", toggleStr(CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace));
         settingsMap.put("placeBlockSneak", toggleStr(CONFIG.client.extra.pathfinder.placeBlockSneak));
         settingsMap.put("mineProcessExitLavaGoal", toggleStr(CONFIG.client.extra.pathfinder.mineProcessExitLavaGoal));
+        settingsMap.put("elytra autoSwap", toggleStr(CONFIG.client.extra.pathfinder.elytra.autoSwap));
+        settingsMap.put("elytra minimumDurability", String.valueOf(CONFIG.client.extra.pathfinder.elytra.minimumDurability));
+        settingsMap.put("elytra minFireworksBeforeLanding", String.valueOf(CONFIG.client.extra.pathfinder.elytra.minFireworksBeforeLanding));
+        settingsMap.put("elytra allowEmergencyLand", toggleStr(CONFIG.client.extra.pathfinder.elytra.allowEmergencyLand));
+        settingsMap.put("elytra conserveFireworks", toggleStr(CONFIG.client.extra.pathfinder.elytra.conserveFireworks));
+        settingsMap.put("elytra fireworkSpeed", String.valueOf(CONFIG.client.extra.pathfinder.elytra.fireworkSpeed));
+        settingsMap.put("elytra autoJump", toggleStr(CONFIG.client.extra.pathfinder.elytra.autoJump));
+        settingsMap.put("elytra verboseLogging", toggleStr(CONFIG.client.extra.pathfinder.elytra.verboseLogging));
         return settingsMap;
     }
 
