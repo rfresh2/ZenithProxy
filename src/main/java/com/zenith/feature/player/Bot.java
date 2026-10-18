@@ -679,7 +679,7 @@ public final class Bot extends ModuleUtils {
     }
 
     public void handlePlayerPosRotate(final int teleportId) {
-        syncFromCache(true);
+        syncFromCache(false);
         CLIENT_LOG.info("Server teleport {} to: {}, {}, {}", teleportId, String.format("%.8f", this.x), String.format("%.8f", this.y), String.format("%.8f", this.z));
         sendClientPacketAwait(new ServerboundAcceptTeleportationPacket(teleportId));
         sendClientPacketAwait(new ServerboundMovePlayerPosRotPacket(false, false, this.x, this.y, this.z, this.yaw, this.pitch));
@@ -1573,7 +1573,7 @@ public final class Bot extends ModuleUtils {
                     .setYaw((packet.getRelatives().contains(PositionElement.Y_ROT) ? cache.getYaw() : 0.0f) + packet.getYaw())
                     .setPitch((packet.getRelatives().contains(PositionElement.X_ROT) ? cache.getPitch() : 0.0f) + packet.getPitch());
                 debug("Sending queued teleport: {}", packet.getId());
-                syncFromCache(true);
+                syncFromCache(false);
                 sendClientPacketAwait(new ServerboundAcceptTeleportationPacket(packet.getId()));
                 sendClientPacketAwait(new ServerboundMovePlayerPosRotPacket(false, false, x, y, z, yaw, pitch));
             }
