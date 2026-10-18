@@ -58,6 +58,20 @@ public class World {
         return CACHE.getChunkCache().isChunkLoaded(chunkX, chunkZ);
     }
 
+    public int getSurfaceHeight(int x, int z) {
+        var dimension = getCurrentDimension();
+        if (!isChunkLoadedBlockPos(x, z)) {
+            return dimension.buildHeight();
+        }
+        for (int y = dimension.buildHeight() - 1; y >= dimension.minY(); y--) {
+            var b = getBlock(x, y, z);
+            if (!b.isAir()) {
+                return y + 1;
+            }
+        }
+        return dimension.minY();
+    }
+
     public boolean isInWorldBounds(final int x, final int y, final int z) {
         var dim = getCurrentDimension();
         if (y < dim.minY() || y > dim.buildHeight()) return false;

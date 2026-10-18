@@ -60,22 +60,19 @@ public final class PlayerContext {
         return feet.above();
     }
 
-    //
-    //    default Vec3 playerFeetAsVec() {
-    //        return new Vec3(player().position().x, player().position().y, player().position().z);
-    //    }
-    //
+    public Vector3d playerFeetAsVec() {
+        return Vector3d.from(player().getX(), player().getY(), player().getZ());
+    }
+
+    public Vector3d playerMotion() {
+        var velocity = player().getVelocity();
+        return Vector3d.from(velocity.getX(), velocity.getY(), velocity.getZ());
+    }
+
     public Vector3d playerHead() {
         return Vector3d.from(player().getX(), player().getEyeY(), player().getZ());
     }
 
-//
-//    default Vec3 playerMotion() {
-//        return player().getDeltaMovement();
-//    }
-//
-//    BetterBlockPos viewerPos();
-//
     public Rotation playerRotations() {
         return new Rotation(player().getYaw(), player().getPitch());
     }

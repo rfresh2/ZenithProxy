@@ -12,16 +12,29 @@ import com.zenith.feature.pathfinder.goals.Goal;
 import com.zenith.feature.pathfinder.goals.GoalBlock;
 import com.zenith.feature.pathfinder.goals.GoalXZ;
 import com.zenith.feature.pathfinder.process.*;
+import com.zenith.feature.pathfinder.process.elytra.network.BaritoneBlockUpdateHandler;
+import com.zenith.feature.pathfinder.process.elytra.network.BaritoneForgetLevelChunkHandler;
+import com.zenith.feature.pathfinder.process.elytra.network.BaritoneLevelChunkHandler;
+import com.zenith.feature.pathfinder.process.elytra.network.BaritoneSectionBlocksUpdateHandler;
 import com.zenith.feature.player.InputRequest;
 import com.zenith.mc.block.Block;
 import com.zenith.mc.block.BlockPos;
 import com.zenith.mc.item.ItemData;
+import com.zenith.network.client.ClientSession;
+import com.zenith.network.codec.PacketCodecRegistries;
+import com.zenith.network.codec.PacketHandlerCodec;
+import com.zenith.network.codec.PacketHandlerStateCodec;
 import com.zenith.util.math.MathHelper;
 import com.zenith.util.timer.Timer;
 import com.zenith.util.timer.Timers;
 import lombok.Data;
 import lombok.Getter;
 import org.cloudburstmc.math.vector.Vector3d;
+import org.geysermc.mcprotocollib.protocol.data.ProtocolState;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundBlockUpdatePacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundForgetLevelChunkPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundLevelChunkWithLightPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundSectionBlocksUpdatePacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -63,6 +76,7 @@ public class Baritone implements Pathfinder {
     private final MineProcess mineProcess = new MineProcess(this);
     private final InteractWithProcess interactWithProcess = new InteractWithProcess(this);
     private final ClearAreaProcess clearAreaProcess = new ClearAreaProcess(this);
+    private final ElytraProcess elytraProcess = new ElytraProcess(this);
     private final Timer teleportDelayTimer = Timers.timer();
     private final IngamePathRenderer ingamePathRenderer = new IngamePathRenderer();
 
@@ -73,6 +87,7 @@ public class Baritone implements Pathfinder {
         pathingControlManager.registerProcess(mineProcess);
         pathingControlManager.registerProcess(interactWithProcess);
         pathingControlManager.registerProcess(clearAreaProcess);
+        pathingControlManager.registerProcess(elytraProcess);
         EVENT_BUS.subscribe(
             this,
             of(ClientBotTick.class, this::onClientBotTick),
@@ -80,6 +95,16 @@ public class Baritone implements Pathfinder {
             of(ClientBotTick.Starting.class, this::onClientBotTickStarting),
             of(ClientBotTick.Stopped.class, this::onClientBotTickStopped)
         );
+        PacketCodecRegistries.CLIENT_REGISTRY.register(PacketHandlerCodec.clientBuilder()
+            .setId("baritone")
+            .setPriority(-10)
+            .state(ProtocolState.GAME, PacketHandlerStateCodec.<ClientSession>builder()
+                .inbound(ClientboundBlockUpdatePacket.class, new BaritoneBlockUpdateHandler())
+                .inbound(ClientboundSectionBlocksUpdatePacket.class, new BaritoneSectionBlocksUpdateHandler())
+                .inbound(ClientboundForgetLevelChunkPacket.class, new BaritoneForgetLevelChunkHandler())
+                .inbound(ClientboundLevelChunkWithLightPacket.class, new BaritoneLevelChunkHandler())
+                .build())
+            .build());
     }
 
     public static int getPriority() {
@@ -108,6 +133,16 @@ public class Baritone implements Pathfinder {
     @Override
     public PathingRequestFuture pathTo(@NonNull Goal goal) {
         return getCustomGoalProcess().setGoalAndPath(goal);
+    }
+
+    @Override
+    public PathingRequestFuture elytraTo(int x, int z) {
+        return getElytraProcess().pathTo(new GoalXZ(x, z));
+    }
+
+    @Override
+    public PathingRequestFuture elytraTo(int x, int y, int z) {
+        return getElytraProcess().pathTo(new GoalBlock(x, y, z));
     }
 
     @Override
@@ -211,15 +246,16 @@ public class Baritone implements Pathfinder {
         if (!CACHE.getPlayerCache().isAlive()) return;
         if (CACHE.getChunkCache().getCache().size() < 8) return;
         if (!teleportDelayTimer.tick(CONFIG.client.extra.pathfinder.teleportDelayMs, false)) return;
-        lookBehavior.onTick();
         pathingBehavior.onTick();
+        var elytraInControl = pathingControlManager.mostRecentInControl().orElse(null) == elytraProcess && elytraProcess.isActive();
         if (pathingControlManager.isActive()) {
-            inventoryBehavior.onTick();
+            inventoryBehavior.onTick(!elytraInControl);
         }
+        lookBehavior.onTick();
         inputOverrideHandler.onTick();
+        if (elytraInControl) elytraProcess.applyFlightInput();
         ingamePathRenderer.onTick();
-
-        if (pathingBehavior.isPathing() || (pathingControlManager.isActive() && lookBehavior.currentRotation != null)) {
+        if (elytraInControl || pathingBehavior.isPathing() || (pathingControlManager.isActive() && lookBehavior.currentRotation != null)) {
             var rotation = lookBehavior.currentRotation;
             var req = InputRequest.builder()
                 .owner(this)
@@ -230,16 +266,19 @@ public class Baritone implements Pathfinder {
                     .yaw(rotation.yaw())
                     .pitch(rotation.pitch());
             }
-            INPUTS.submit(req.build());
+            var inputFuture = INPUTS.submit(req.build());
+            if (elytraInControl) elytraProcess.onInputSubmitted(inputFuture);
         }
     }
 
     private void onClientBotTickPost(ClientBotTick event) {
         pathingControlManager.postTick();
+        elytraProcess.onPostTick();
     }
 
     private void onClientBotTickStopped(ClientBotTick.Stopped event) {
         getPathingBehavior().cancelEverything();
+        getElytraProcess().onLostControl();
     }
 
     private void onClientBotTickStarting(ClientBotTick.Starting event) {
@@ -248,5 +287,6 @@ public class Baritone implements Pathfinder {
 
     public void onPlayerPosRotate() {
         teleportDelayTimer.reset();
+        elytraProcess.onPlayerPosRotate();
     }
 }

@@ -29,6 +29,10 @@ public class InventoryBehavior extends Behavior {
     }
 
     public void onTick() {
+        onTick(true);
+    }
+
+    public void onTick(boolean manageWalkingInventory) {
         if (!CONFIG.client.extra.pathfinder.allowInventory) {
             return;
         }
@@ -37,6 +41,7 @@ public class InventoryBehavior extends Behavior {
             return;
         }
         ticksSinceLastInventoryMove++;
+        if (!manageWalkingInventory) return;
         int throwawayIndex = firstValidThrowaway();
         if (throwawayIndex > -1 && throwawayIndex < 36) { // aka there are none on the hotbar, but there are some in main inventory
             requestSwapWithHotBar(throwawayIndex, 8);
