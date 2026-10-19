@@ -202,6 +202,28 @@ public class ServerSession extends TcpServerSession {
         return isLoggedIn;
     }
 
+    private int packetsToFlush = 0;
+    public void proxyClientPacket(Packet packet) {
+        getEventLoop().execute(() -> {
+            if (!getChannel().isWritable()) { // will occur if our outbound buffer reaches the watermark
+                flush();
+                packetsToFlush = 0;
+            }
+            sendDelayed(packet);
+            if (++packetsToFlush >= 1024 || !getChannel().isWritable()) {
+                flush();
+                packetsToFlush = 0;
+            }
+        });
+    }
+
+    public void onClientChannelReadComplete() {
+        getEventLoop().execute(() -> {
+            flush();
+            packetsToFlush = 0;
+        });
+    }
+
     @Override
     public void callConnected() {
         getEventLoop().scheduleAtFixedRate(new STimeoutTask(this), 0L, 50L, TimeUnit.MILLISECONDS);
