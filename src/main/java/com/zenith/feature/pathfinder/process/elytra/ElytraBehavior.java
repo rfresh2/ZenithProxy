@@ -1249,12 +1249,11 @@ public final class ElytraBehavior implements ProcessUtil {
         if (inventoryRequest != null && inventoryRequest.isCompleted()) inventoryRequest = null;
     }
 
-    private int findGoodElytra() {
+    public int findGoodElytra() {
         var invy = CACHE.getPlayerCache().getPlayerInventory();
         for (int i = 9; i < 45; i++) {
             var slot = invy.get(i);
-            if (slot != null && slot.getId() == ItemRegistry.ELYTRA.id()
-                && ItemUtil.getDamageUntilBreak(slot) > 5 /* Baritone.settings().elytraMinimumDurability */) {
+            if (slot != null && slot.getId() == ItemRegistry.ELYTRA.id() && ItemUtil.getDamageUntilBreak(slot) > 2) {
                 return i;
             }
         }
@@ -1262,11 +1261,9 @@ public final class ElytraBehavior implements ProcessUtil {
     }
 
     private void trySwapElytra() {
-        if (!true /* Baritone.settings().elytraAutoSwap */ || inventoryRequest != null
-            || CACHE.getPlayerCache().getInventoryCache().getOpenContainerId() != 0) return;
+        if (inventoryRequest != null || CACHE.getPlayerCache().getInventoryCache().getOpenContainerId() != 0) return;
         var chest = CACHE.getPlayerCache().getEquipment(EquipmentSlot.CHESTPLATE);
-        if (chest == null || chest.getId() != ItemRegistry.ELYTRA.id()
-            || ItemUtil.getDamageUntilBreak(chest) > 5 /* Baritone.settings().elytraMinimumDurability */) return;
+        if (chest == null || chest.getId() != ItemRegistry.ELYTRA.id() || ItemUtil.getDamageUntilBreak(chest) > 2) return;
         int goodElytraSlot = findGoodElytra();
         if (goodElytraSlot != -1) {
             inventoryRequest = INVENTORY.submit(InventoryActionRequest.builder()

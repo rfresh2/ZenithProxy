@@ -409,8 +409,11 @@ public class ElytraProcess extends BaritoneProcessHelper {
 
     private boolean shouldLandForSafety() {
         var chest = CACHE.getPlayerCache().getEquipment(EquipmentSlot.CHESTPLATE);
-        if ((chest == null || chest.getId() != ItemRegistry.ELYTRA.id()) || ItemUtil.getDamageUntilBreak(chest) < 5 /* Baritone.settings().elytraMinimumDurability */) {
-            // elytrabehavior replaces when durability <= minimumDurability, so if durability < minimumDurability then we can reasonably assume that the elytra will soon be broken without replacement
+        if (chest == null || chest.getId() != ItemRegistry.ELYTRA.id()) {
+            return true;
+        }
+        if (ItemUtil.getDamageUntilBreak(chest) <= 3 && behavior.findGoodElytra() == -1) {
+            // our current elytra is about to break and we have no usable elytra to swap to
             return true;
         }
 
