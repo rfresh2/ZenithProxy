@@ -2,7 +2,7 @@ package com.zenith.feature.pathfinder.process.elytra;
 
 import com.zenith.cache.data.entity.Entity;
 import com.zenith.feature.inventory.InventoryActionRequest;
-import com.zenith.feature.inventory.actions.ClickItem;
+import com.zenith.feature.inventory.util.InventoryActionMacros;
 import com.zenith.feature.pathfinder.Baritone;
 import com.zenith.feature.pathfinder.PathInput;
 import com.zenith.feature.pathfinder.PlayerContext;
@@ -27,7 +27,6 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
-import org.geysermc.mcprotocollib.protocol.data.game.inventory.ClickItemAction;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentTypes;
 
@@ -92,7 +91,7 @@ public final class ElytraBehavior implements ProcessUtil {
     private long timeLastCacheCull = 0L;
 
     // auto swap
-    private RequestFuture inventoryRequest;
+    private RequestFuture inventoryRequest = RequestFuture.rejected;
     private final Queue<Runnable> tickTasks = new ConcurrentLinkedQueue<>();
     private volatile boolean destroyed;
     private volatile boolean setback;
@@ -490,9 +489,6 @@ public final class ElytraBehavior implements ProcessUtil {
                 this.solver = null;
             }
         }
-
-        tickInventoryTransactions();
-
         // Certified mojang employee incident
         if (this.remainingFireworkTicks > 0) {
             this.remainingFireworkTicks--;
@@ -530,7 +526,7 @@ public final class ElytraBehavior implements ProcessUtil {
     }
 
     /**
-     * Called by {@link ElytraProcess#onTick(boolean, boolean)} when the process is in control and the player is flying
+     * Called by {@link ElytraProcess#onTick} when the process is in control and the player is flying
      */
     public void tick() {
         if (this.pathManager.getPath().isEmpty()) {
@@ -1245,10 +1241,6 @@ public final class ElytraBehavior implements ProcessUtil {
         }
     }
 
-    private void tickInventoryTransactions() {
-        if (inventoryRequest != null && inventoryRequest.isCompleted()) inventoryRequest = null;
-    }
-
     public int findGoodElytra() {
         var invy = CACHE.getPlayerCache().getPlayerInventory();
         for (int i = 9; i < 45; i++) {
@@ -1260,21 +1252,24 @@ public final class ElytraBehavior implements ProcessUtil {
         return -1;
     }
 
-    private void trySwapElytra() {
-        if (inventoryRequest != null || CACHE.getPlayerCache().getInventoryCache().getOpenContainerId() != 0) return;
+    public void trySwapElytra() {
+        if (isSwappingElytra() || CACHE.getPlayerCache().getInventoryCache().getOpenContainerId() != 0) return;
         var chest = CACHE.getPlayerCache().getEquipment(EquipmentSlot.CHESTPLATE);
-        if (chest == null || chest.getId() != ItemRegistry.ELYTRA.id() || ItemUtil.getDamageUntilBreak(chest) > 2) return;
-        int goodElytraSlot = findGoodElytra();
-        if (goodElytraSlot != -1) {
-            inventoryRequest = INVENTORY.submit(InventoryActionRequest.builder()
-                .owner(this)
-                .priority(Baritone.getPriority())
-                .actionDelayTicks(1) // Baritone.settings().ticksBetweenInventoryMoves
-                .actions(new ClickItem(goodElytraSlot, ClickItemAction.LEFT_CLICK),
-                    new ClickItem(6, ClickItemAction.LEFT_CLICK),
-                    new ClickItem(goodElytraSlot, ClickItemAction.LEFT_CLICK))
-                .build());
+        if (chest == null || chest.getId() != ItemRegistry.ELYTRA.id() || ItemUtil.getDamageUntilBreak(chest) <= 3) {
+            int goodElytraSlot = findGoodElytra();
+            if (goodElytraSlot != -1) {
+                inventoryRequest = INVENTORY.submit(InventoryActionRequest.builder()
+                    .owner(this)
+                    .priority(Baritone.getPriority())
+                    .actionDelayTicks(1) // Baritone.settings().ticksBetweenInventoryMoves
+                    .actions(InventoryActionMacros.swapSlots(0, goodElytraSlot, 6))
+                    .build());
+            }
         }
+    }
+
+    public boolean isSwappingElytra() {
+        return !inventoryRequest.isCompleted();
     }
 
     void logVerbose(String message) {

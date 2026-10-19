@@ -189,6 +189,10 @@ public class ElytraProcess extends BaritoneProcessHelper {
         }
 
         if (this.state == State.JUMP) {
+            behavior.trySwapElytra();
+            if (behavior.isSwappingElytra()) {
+                return new PathingCommand(null, PathingCommandType.CANCEL_AND_SET_GOAL);
+            }
             if (startedJumpStateTime == 0L) {
                 startedJumpStateTime = System.currentTimeMillis();
             }
