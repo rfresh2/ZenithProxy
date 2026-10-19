@@ -1255,7 +1255,7 @@ public final class ElytraBehavior implements ProcessUtil {
     public void trySwapElytra() {
         if (isSwappingElytra() || CACHE.getPlayerCache().getInventoryCache().getOpenContainerId() != 0) return;
         var chest = CACHE.getPlayerCache().getEquipment(EquipmentSlot.CHESTPLATE);
-        if (chest == null || chest.getId() != ItemRegistry.ELYTRA.id() || ItemUtil.getDamageUntilBreak(chest) <= 3) {
+        if (chest == null || chest.getId() != ItemRegistry.ELYTRA.id() || ItemUtil.getDamageUntilBreak(chest) <= 2) {
             int goodElytraSlot = findGoodElytra();
             if (goodElytraSlot != -1) {
                 inventoryRequest = INVENTORY.submit(InventoryActionRequest.builder()

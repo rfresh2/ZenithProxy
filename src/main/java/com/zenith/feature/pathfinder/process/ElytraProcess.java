@@ -416,7 +416,7 @@ public class ElytraProcess extends BaritoneProcessHelper {
         if (chest == null || chest.getId() != ItemRegistry.ELYTRA.id()) {
             return true;
         }
-        if (ItemUtil.getDamageUntilBreak(chest) <= 3 && behavior.findGoodElytra() == -1) {
+        if (ItemUtil.getDamageUntilBreak(chest) <= 5 && behavior.findGoodElytra() == -1) {
             // our current elytra is about to break and we have no usable elytra to swap to
             return true;
         }
