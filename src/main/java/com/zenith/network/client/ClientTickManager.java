@@ -8,11 +8,10 @@ import com.zenith.event.client.ClientTickEvent;
 import com.zenith.event.player.PlayerConnectedEvent;
 import com.zenith.event.player.PlayerDisconnectedEvent;
 import com.zenith.util.Wait;
-import com.zenith.util.math.MathHelper;
 import io.netty.channel.EventLoop;
 
-import java.time.Duration;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -23,6 +22,7 @@ public class ClientTickManager {
     private final AtomicBoolean doClientTicks = new AtomicBoolean(false);
     private final AtomicBoolean doBotTicks = new AtomicBoolean(false);
     private final Thread tickManagerThread;
+    private final DeltaTracker deltaTracker = new DeltaTracker(System.nanoTime());
 
     public ClientTickManager() {
         EVENT_BUS.subscribe(
@@ -43,34 +43,57 @@ public class ClientTickManager {
         while (true) {
             try {
                 var tickRate = CONFIG.client.tickRate;
-                if (tickRate <= 0) {
+                var client = Proxy.getInstance().getClient();
+                if (tickRate <= 0 || client == null || !doClientTicks.get() || client.getClientEventLoop().isShuttingDown()) {
+                    deltaTracker.reset(System.nanoTime());
                     Wait.waitMs(50);
                     continue;
                 }
-                var client = Proxy.getInstance().getClient();
-                if (client == null) {
-                    Wait.waitMs((int) (50.0 / tickRate));
-                    continue;
-                }
                 var eventLoop = client.getClientEventLoop();
-                if (!doClientTicks.get() || eventLoop.isShuttingDown()) {
-                    Wait.waitMs((int) (50.0 / tickRate));
-                    continue;
+                var ticksToDo = deltaTracker.advanceTime(System.nanoTime(), tickRate);
+                if (ticksToDo > 0) {
+                    eventLoop.submit(() -> {
+                        for (var i = 0; i < ticksToDo && doClientTicks.get() && !eventLoop.isShuttingDown(); i++) {
+                            tick();
+                        }
+                    }).await();
                 }
-                var before = System.nanoTime();
-                eventLoop.submit(this::tick).await();
-                // now calculate how long to wait until next tick
-                // we will drift slightly lower in tps as thread sleep duration is variable in scheduling
-                // todo: vanilla client limits to 10 catch-up ticks, but we are not tracking this across multiple ticks
-                var elapsed = System.nanoTime() - before;
-                var nextTickNsDelay = (long) (50_000_000.0 / tickRate);
-                var waitDuration = Duration.ofNanos(MathHelper.clamp(nextTickNsDelay - elapsed, 0L, nextTickNsDelay));
-                Wait.wait(waitDuration);
+                var waitNs = deltaTracker.nanosUntilNextTick(System.nanoTime(), tickRate);
+                if (waitNs > 0) {
+                    Wait.waitMs((int) TimeUnit.NANOSECONDS.toMillis(waitNs));
+                }
             } catch (RejectedExecutionException e) {
                 CLIENT_LOG.debug("ClientTickManager eventloop rejected execution", e);
             } catch (Exception e) {
                 CLIENT_LOG.error("ClientTickManager loop error", e);
             }
+        }
+    }
+
+    static final class DeltaTracker {
+        private final double nsPerTick = TimeUnit.MILLISECONDS.toNanos(50);
+        private long lastTimeNs;
+        private double deltaTickResidual;
+
+        DeltaTracker(long currentTimeNs) {
+            reset(currentTimeNs);
+        }
+
+        void reset(long currentTimeNs) {
+            lastTimeNs = currentTimeNs;
+            deltaTickResidual = 0;
+        }
+
+        int advanceTime(long currentTimeNs, double tickRate) {
+            deltaTickResidual += (currentTimeNs - lastTimeNs) / (nsPerTick / tickRate);
+            lastTimeNs = currentTimeNs;
+            var ticks = Math.floor(deltaTickResidual);
+            deltaTickResidual -= ticks;
+            return (int) Math.min(10, ticks);
+        }
+
+        long nanosUntilNextTick(long currentTimeNs, double tickRate) {
+            return Math.max(0L, (long) Math.ceil((1 - deltaTickResidual) * (nsPerTick / tickRate) - (currentTimeNs - lastTimeNs)));
         }
     }
 
