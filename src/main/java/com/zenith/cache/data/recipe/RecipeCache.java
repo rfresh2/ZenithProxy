@@ -5,7 +5,6 @@ import com.zenith.cache.CachedData;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.geysermc.mcprotocollib.network.packet.Packet;
@@ -26,7 +25,7 @@ import java.util.function.Consumer;
 @Accessors(chain = true)
 public class RecipeCache implements CachedData {
     protected Map<String, int[]> itemSets = new ConcurrentHashMap<>();
-    protected Set<ClientboundUpdateRecipesPacket.SelectableRecipe> stoneCutterRecipes = Collections.synchronizedSet(new ObjectOpenHashSet<>());
+    protected List<ClientboundUpdateRecipesPacket.SelectableRecipe> stoneCutterRecipes = Collections.synchronizedList(new ArrayList<>());
     protected Map<CraftingBookStateType, ClientboundRecipeBookSettingsPacket.TypeSettings> recipeBookSettings = Collections.synchronizedMap(new EnumMap<>(CraftingBookStateType.class));
     protected Int2ObjectMap<RecipeDisplayEntry> recipeBookEntries = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
 
