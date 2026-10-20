@@ -10,6 +10,7 @@ import com.zenith.plugin.api.PluginInstance;
 import com.zenith.plugin.api.ZenithProxyPlugin;
 import com.zenith.plugin.bootstrap.PluginBootstrap;
 import com.zenith.util.ImageInfo;
+import com.zenith.util.config.ConfigVerifier;
 import lombok.SneakyThrows;
 import org.geysermc.mcprotocollib.protocol.codec.MinecraftCodec;
 import org.jspecify.annotations.NullMarked;
@@ -308,6 +309,11 @@ public class PluginManager {
             if (!configFile.getParentFile().mkdirs() && !configFile.getParentFile().exists()) {
                 throw new RuntimeException("Unable to create plugin config directory: " + configFile.getParentFile());
             }
+        }
+        var verifyResult = ConfigVerifier.verifyPluginConfig(config, fileName);
+        if (!verifyResult.pass()) {
+            PLUGIN_LOG.error("Plugin config verification error: {}", verifyResult.msg());
+            throw new RuntimeException("Plugin config verification error: " + verifyResult.msg());
         }
         var configInstance = new ConfigInstance(
             config,

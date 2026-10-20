@@ -1,6 +1,5 @@
 package com.zenith.util.config;
 
-import com.zenith.util.Wait;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
@@ -14,35 +13,31 @@ import static java.lang.reflect.Modifier.isStatic;
 public final class ConfigVerifier {
     private ConfigVerifier() {}
 
-    public static void verifyConfigs() {
-        if (containsNullFields(CONFIG, Config.class)) {
-            failVerify("config");
+    public static ConfigVerificationResult verifyConfigs() {
+        if (containsNullFields(CONFIG, "com.zenith")) {
+            return failDueToNullsIn("config");
         }
-        if (containsNullFields(LAUNCH_CONFIG, LaunchConfig.class)) {
-            failVerify("launch_config");
+        if (containsNullFields(LAUNCH_CONFIG, "com.zenith")) {
+            return failDueToNullsIn("launch_config");
         }
-        for (var config : PLUGIN_MANAGER.getAllPluginConfigs()) {
-            if (containsNullFields(config.instance(), config.getClass())) {
-                // we could drop this down to a warning
-                // plugin authors may intend for null values
-                failVerify("Plugin Config", config.file().getName());
-            }
-        }
+        return new ConfigVerificationResult(true, "");
     }
 
-    private static void failVerify(String configName) {
-        failVerify(configName, configName);
+    public static ConfigVerificationResult verifyPluginConfig(Object config, String name) {
+        if (containsNullFields(config, config.getClass().getPackageName())) {
+            return failDueToNullsIn(name);
+        }
+        return new ConfigVerificationResult(true, "");
     }
 
-    private static void failVerify(String id, String configName) {
-        DEFAULT_LOG.error("{} verification failed: null values found", id);
-        DEFAULT_LOG.error("{}.json must be manually fixed or deleted", configName);
-        DEFAULT_LOG.error("Shutting down in 10s");
-        Wait.wait(10);
-        System.exit(1);
+    public record ConfigVerificationResult(boolean pass, String msg) {}
+
+    private static ConfigVerificationResult failDueToNullsIn(String configName) {
+        return new ConfigVerificationResult(false, "Null value in %s.json".formatted(configName));
     }
 
-    private static boolean containsNullFields(Object obj, Class<?> clazz) {
+    private static boolean containsNullFields(Object obj, String configPackagePrefix) {
+        var clazz = obj.getClass();
         // recursively check all fields for null
         Field[] declaredFields = clazz.getDeclaredFields();
         for (Field field : declaredFields) {
@@ -55,14 +50,16 @@ public final class ConfigVerifier {
                 // skip non-accessible fields
                 if (!field.canAccess(obj)) continue;
                 Object value = field.get(obj);
-                if (value == null && !isNullableField(field)) {
-                    DEFAULT_LOG.error("Field: '{}' in '{}' is null\nIf this is intended, annotate the field with: {}", field.getName(), clazz.getName(), Nullable.class.getName());
-                    return true;
-                }
-                if (field.getType().getName().startsWith("com.zenith")
-                    && !field.getType().isEnum()) {
-                    if (containsNullFields(value, field.getType())) {
+                if (value == null) {
+                    if (!isNullableField(field)) {
+                        DEFAULT_LOG.error("Field: '{}' in '{}' is null\nIf this is intended, annotate the field with: {}", field.getName(), clazz.getName(), Nullable.class.getName());
                         return true;
+                    }
+                } else {
+                    if (field.getType().getName().startsWith(configPackagePrefix) && !field.getType().isEnum()) {
+                        if (containsNullFields(value, configPackagePrefix)) {
+                            return true;
+                        }
                     }
                 }
             } catch (Throwable e) {

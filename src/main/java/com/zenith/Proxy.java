@@ -31,6 +31,7 @@ import com.zenith.plugin.bootstrap.BootstrapMessageConsumer;
 import com.zenith.terminal.logback.TerminalConsoleAppender;
 import com.zenith.util.ImageInfo;
 import com.zenith.util.Wait;
+import com.zenith.util.config.ConfigVerifier;
 import com.zenith.util.struct.FastArrayList;
 import com.zenith.via.ZenithClientChannelInitializer;
 import com.zenith.via.ZenithServerChannelInitializer;
@@ -156,6 +157,12 @@ public class Proxy {
         }
         initEventHandlers();
         try {
+            var configVerifyResult = ConfigVerifier.verifyConfigs();
+            if (!configVerifyResult.pass()) {
+                DEFAULT_LOG.error("Config verification failed: {}", configVerifyResult.msg());
+                System.exit(69);
+                return;
+            }
             if (inDevEnv()) CONFIG.debug.debugLogs = true;
             if (CONFIG.debug.clearOldLogs) EXECUTOR.schedule(Proxy::clearOldLogs, 10L, TimeUnit.SECONDS);
             TerminalConsoleAppender.setPrintStdout(false); // cut-over to jline console
@@ -399,7 +406,8 @@ public class Proxy {
         try {
             CompletableFuture.runAsync(() -> {
                 if (nonNull(this.client)) this.client.disconnect(SERVER_CLOSING_MESSAGE);
-                MODULE.get(AutoReconnect.class).cancelAutoReconnect();
+                var autoReconnect = MODULE.get(AutoReconnect.class);
+                if (nonNull(autoReconnect)) autoReconnect.cancelAutoReconnect();
                 stopServer();
                 if (nonNull(tcpManager)) tcpManager.close();
                 saveConfig();

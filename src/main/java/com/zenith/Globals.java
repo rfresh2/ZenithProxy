@@ -31,7 +31,6 @@ import com.zenith.util.KotlinUtil;
 import com.zenith.util.Wait;
 import com.zenith.util.ZenithScheduledExecutor;
 import com.zenith.util.config.Config;
-import com.zenith.util.config.ConfigVerifier;
 import com.zenith.util.config.LaunchConfig;
 import com.zenith.via.ZenithViaInitializer;
 import lombok.Locked;
@@ -245,13 +244,14 @@ public class Globals {
             LAUNCH_CONFIG = loadLaunchConfig();
             VERSION = getVersion();
             PLUGIN_MANAGER = new PluginManager();
-            ConfigVerifier.verifyConfigs();
             PLAYER_LISTS.init(); // must be init after config
             TPS = new TPSCalculator(CONFIG.client.extra.tpsBufferSize);
             BOT = new Bot();
             BARITONE = new Baritone();
             GUI = new InGameGuiManager();
         } catch (final Throwable e) {
+            System.err.println("Unable to initialize!");
+            e.printStackTrace();
             DEFAULT_LOG.error("Unable to initialize!", e);
             throw e;
         }
