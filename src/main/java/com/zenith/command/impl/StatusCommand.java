@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.zenith.Globals.*;
+import static com.zenith.discord.DiscordBot.escape;
 import static java.util.Objects.nonNull;
 
 public class StatusCommand extends Command {
@@ -41,11 +42,11 @@ public class StatusCommand extends Command {
 
     public static String getCoordinates(final Entity entity) {
         if (CONFIG.discord.reportCoords) {
-            return "||["
-                    + MathHelper.floorI(entity.getX()) + ", "
-                    + MathHelper.floorI(entity.getY()) + ", "
-                    + MathHelper.floorI(entity.getZ())
-                    + "]||";
+            return "||[%d, %d, %d]||".formatted(
+                MathHelper.floorI(entity.getX()),
+                MathHelper.floorI(entity.getY()),
+                MathHelper.floorI(entity.getZ())
+            );
         } else {
             return "Coords disabled";
         }
@@ -54,7 +55,10 @@ public class StatusCommand extends Command {
     private String getCurrentClientUserName() {
         ServerSession currentConnection = Proxy.getInstance().getCurrentPlayer().get();
         if (nonNull(currentConnection)) {
-            return currentConnection.getName() + " [" + currentConnection.getPing() + "ms]";
+            return "%s [%dms]".formatted(
+                escape(currentConnection.getName()),
+                currentConnection.getPing()
+            );
         } else {
             return "None";
         }
@@ -62,7 +66,10 @@ public class StatusCommand extends Command {
 
     private List<String> getSpectatorUserNames() {
         return Proxy.getInstance().getSpectatorConnections().stream()
-                .map(connection -> connection.getName() + " [" + connection.getPing() + "ms]")
+                .map(connection -> "%s [%dms]".formatted(
+                    escape(connection.getName()),
+                    connection.getPing())
+                )
                 .collect(Collectors.toList());
     }
 
@@ -70,13 +77,21 @@ public class StatusCommand extends Command {
         if (Proxy.getInstance().isConnected()) {
             if (Proxy.getInstance().isInQueue()) {
                 if (Proxy.getInstance().isPrio()) {
-                    return "In Prio Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().prio() + "]\n"
-                        + "ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n"
-                        + "(" + TimeFormat.DATE_TIME_SHORT.format(Instant.now().plus(Duration.ofSeconds(Queue.getQueueWait(Proxy.getInstance().getQueuePosition())))) +")";
+                    return "In Prio Queue [%d / %d]\nETA: %s\n(%s)".formatted(
+                        Proxy.getInstance().getQueuePosition(),
+                        Queue.getQueueStatus().prio(),
+                        Queue.getQueueEta(Proxy.getInstance().getQueuePosition()),
+                        TimeFormat.DATE_TIME_SHORT.format(Instant.now()
+                            .plus(Duration.ofSeconds(Queue.getQueueWait(Proxy.getInstance().getQueuePosition()))))
+                    );
                 } else {
-                    return "In Queue [" + Proxy.getInstance().getQueuePosition() + " / " + Queue.getQueueStatus().regular() + "]\n"
-                        + "ETA: " + Queue.getQueueEta(Proxy.getInstance().getQueuePosition()) + "\n"
-                        + "(" + TimeFormat.DATE_TIME_SHORT.format(Instant.now().plus(Duration.ofSeconds(Queue.getQueueWait(Proxy.getInstance().getQueuePosition())))) +")";
+                    return "In Queue [%d / %d]\nETA: %s\n(%s)".formatted(
+                        Proxy.getInstance().getQueuePosition(),
+                        Queue.getQueueStatus().regular(),
+                        Queue.getQueueEta(Proxy.getInstance().getQueuePosition()),
+                        TimeFormat.DATE_TIME_SHORT.format(Instant.now()
+                            .plus(Duration.ofSeconds(Queue.getQueueWait(Proxy.getInstance().getQueuePosition()))))
+                    );
                 }
             } else {
                 return "Online";
@@ -87,14 +102,18 @@ public class StatusCommand extends Command {
     }
 
     private String getQueueStatus() {
-        return "Priority: " + Queue.getQueueStatus().prio() + " [" + Queue.getQueueEta(Queue.getQueueStatus().prio()) + "]"
-                + "\nRegular: " + Queue.getQueueStatus().regular() + " [" + Queue.getQueueEta(Queue.getQueueStatus().regular()) + "]";
+        return "Priority: %d [%s]\nRegular: %d [%s]".formatted(
+            Queue.getQueueStatus().prio(),
+            Queue.getQueueEta(Queue.getQueueStatus().prio()),
+            Queue.getQueueStatus().regular(),
+            Queue.getQueueEta(Queue.getQueueStatus().regular())
+        );
     }
 
     public String getOnlineTime() {
         return Proxy.getInstance().isConnected()
             ? Proxy.getInstance().getOnlineTimeString()
-            : "Not Online!";
+            : "Offline";
     }
 
     @Override
@@ -142,25 +161,27 @@ public class StatusCommand extends Command {
                         : CONFIG.theme.success.discord())
                                : CONFIG.theme.error.discord())
                     .thumbnail(getThumbnailImage())
-                    .addField("Status", getStatus(), true)
-                    .addField("Uptime", MathHelper.formatDuration(Duration.ofMillis(System.currentTimeMillis() - Proxy.getInstance().getStartTime())))
+                    .addField("Status", getStatus())
+                    //end row 1
+                    .addField("Uptime", MathHelper.formatDuration(Duration.ofMillis(System.currentTimeMillis() - Proxy.getInstance().getStartTime())), true)
                     .addField("Online Duration", getOnlineTime(), true)
-                    // end row 1
+                    .addField("Ping", (Proxy.getInstance().isConnected() ? Proxy.getInstance().getClient().getPing() : 0) + "ms", true)
+                    // end row 2
                     .addField("Health",  (CACHE.getPlayerCache().getThePlayer().getHealth()), true)
                     .addField("Dimension",
                               (nonNull(CACHE.getChunkCache().getCurrentDimension()) ? CACHE.getChunkCache().getCurrentDimension().name(): "None"),
                               true)
-                    .addField("Ping", (Proxy.getInstance().isConnected() ? Proxy.getInstance().getClient().getPing() : 0) + "ms", true)
-                    // end row 2
-                    .addField("Proxy IP", CONFIG.server.getProxyAddress(), true)
-                    .addField("Server", CONFIG.client.server.address + ':' + CONFIG.client.server.port, true)
-                    .addField("Connected Player", getCurrentClientUserName(), true);
+                    .addField("TPS", "%s [%s]".formatted(TPS.getTPS(), CLIENT_TPS.getTPS()), true)
                     // end row 3
+                    .addField("Proxy IP", escape(CONFIG.server.getProxyAddress()), true)
+                    .addField("Server", escape(CONFIG.client.server.address + ':' + CONFIG.client.server.port), true)
+                    .addField("Connected Player", getCurrentClientUserName(), true);
+                    // end row 4
                 if (Proxy.getInstance().isOn2b2t()) {
                     embed.addField("Priority Queue", (CONFIG.authentication.prio ? "yes" : "no"), true);
                 }
                 if (!getSpectatorUserNames().isEmpty())
-                    embed.addField("Online Spectators", String.join(", ", getSpectatorUserNames()), true);
+                    embed.addField("Spectators", String.join(", ", getSpectatorUserNames()), true);
                 if (CONFIG.server.queueStatusRefreshWhileNotOn2b2t || Proxy.getInstance().isOn2b2t()) {
                     embed
                         .addField("2b2t Queue", getQueueStatus(), true);
@@ -175,7 +196,7 @@ public class StatusCommand extends Command {
 
     private static String getThumbnailImage() {
         return "Unknown".equals(CONFIG.authentication.username)
-            ? "https://raw.githubusercontent.com/rfresh2/ZenithProxy/1.21.0/src/main/resources/servericon.png"
+            ? "https://cdn.2b2t.vc/default-zenith-server-icon.png"
             : Proxy.getInstance().getPlayerHeadURL(CONFIG.authentication.username).toString();
     }
 }
