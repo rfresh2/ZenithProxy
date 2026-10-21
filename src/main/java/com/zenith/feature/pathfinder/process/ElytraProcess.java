@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import static com.zenith.Globals.CACHE;
 
 public class ElytraProcess extends BaritoneProcessHelper {
-    public State state;
+    private State state;
     private boolean goingToLandingSpot;
     private BlockPos landingSpot;
     private boolean reachedGoal; // this basically just prevents potential notification spam
@@ -43,13 +43,24 @@ public class ElytraProcess extends BaritoneProcessHelper {
     private LandingSearchState landingSearchState;
     private long startedJumpStateTime = 0L;
 
+    public State state() {
+        return this.state;
+    }
+
+    void setState(State newState) {
+        if (state != newState) {
+            debug("ElytraProcess State: {} -> {}", state, newState);
+        }
+        state = newState;
+    }
+
     @Override
     public void onLostControl() {
         onLostControl(true);
     }
 
     public synchronized void onLostControl(boolean destroyNpf) {
-        this.state = State.START_FLYING; // TODO: null state?
+        setState(State.START_FLYING); // TODO: null state?
         this.goingToLandingSpot = false;
         this.landingSpot = null;
         this.landingSearchState = null;
@@ -103,7 +114,7 @@ public class ElytraProcess extends BaritoneProcessHelper {
                 info("almost out of elytra durability or fireworks, but I'm going to continue since elytraAllowEmergencyLand is false");
             }
         }
-        if (ctx.player().isFallFlying() && this.state != State.LANDING && (this.behavior.pathManager.isComplete() || safetyLanding)) {
+        if (ctx.player().isFallFlying() && state() != State.LANDING && (this.behavior.pathManager.isComplete() || safetyLanding)) {
             var last = this.behavior.pathManager.path.getLast();
             if (last != null && (ctx.playerFeetAsVec().distanceSquared(Vector3d.from(last.x() + 0.5, last.y() + 0.5, last.z() + 0.5)) < (48 * 48) || safetyLanding) && (!goingToLandingSpot || (safetyLanding && this.landingSpot == null))) {
                 if (this.landingSearchState == null) {
@@ -130,13 +141,13 @@ public class ElytraProcess extends BaritoneProcessHelper {
 
                 // we are goingToLandingSpot and we are in the last node of the path
                 if (this.goingToLandingSpot && landingSpot != null) {
-                    this.state = State.LANDING;
+                    setState(State.LANDING);
                     info("Above the landing spot, landing...");
                 }
             }
         }
 
-        if (this.state == State.LANDING) {
+        if (state() == State.LANDING) {
             var endPos = this.landingSpot != null ? this.landingSpot : behavior.pathManager.path.getLast();
             if (ctx.player().isFallFlying() && endPos != null) {
                 var from = ctx.playerFeetAsVec();
@@ -152,8 +163,8 @@ public class ElytraProcess extends BaritoneProcessHelper {
         }
 
         if (ctx.player().isFallFlying()) {
-            if (state != State.LANDING) state = State.FLYING;
-            behavior.landingMode = this.state == State.LANDING;
+            if (state() != State.LANDING) setState(State.FLYING);
+            behavior.landingMode = state() == State.LANDING;
             baritone.getInputOverrideHandler().clearAllKeys();
             if (this.behavior.npfContext.tryAcquireReadLock()) {
                 try {
@@ -163,7 +174,7 @@ public class ElytraProcess extends BaritoneProcessHelper {
                 }
             }
             return new PathingCommand(null, PathingCommandType.CANCEL_AND_SET_GOAL);
-        } else if (this.state == State.LANDING) {
+        } else if (state() == State.LANDING) {
             if (ctx.playerMotion().mul(1, 0, 1).length() > 0.001) {
                 info("Landed, but still moving, waiting for velocity to die down... ");
                 baritone.getInputOverrideHandler().setInputForceState(PathInput.SNEAK, true);
@@ -182,13 +193,13 @@ public class ElytraProcess extends BaritoneProcessHelper {
             return new PathingCommand(null, PathingCommandType.REQUEST_PAUSE);
         }
 
-        if (this.state == State.FLYING || this.state == State.START_FLYING) {
-            this.state = ctx.player().isOnGround() && true /* Baritone.settings().elytraAutoJump */
+        if (state() == State.FLYING || state() == State.START_FLYING) {
+            setState(ctx.player().isOnGround() && true /* Baritone.settings().elytraAutoJump */
                     ? State.JUMP
-                    : State.START_FLYING;
+                    : State.START_FLYING);
         }
 
-        if (this.state == State.JUMP) {
+        if (state() == State.JUMP) {
             behavior.trySwapElytra();
             if (behavior.isSwappingElytra()) {
                 return new PathingCommand(null, PathingCommandType.CANCEL_AND_SET_GOAL);
@@ -209,7 +220,7 @@ public class ElytraProcess extends BaritoneProcessHelper {
             final boolean canStartFlying = !ctx.player().isOnGround() && !ctx.player().isFallFlying();
 
             if (canStartFlying) {
-                this.state = State.START_FLYING;
+                setState(State.START_FLYING);
             } else {
                 // todo: would be better if we searched for a safe pos to takeoff from, and then pathed directly there
                 if (System.currentTimeMillis() - startedJumpStateTime > 2500) {
@@ -226,14 +237,27 @@ public class ElytraProcess extends BaritoneProcessHelper {
         }
 
         // yucky
-        if (this.state == State.PAUSE) {
+        if (state() == State.PAUSE) {
             return new PathingCommand(null, PathingCommandType.REQUEST_PAUSE);
         }
 
-        if (this.state == State.START_FLYING) {
+        if (state() == State.START_FLYING) {
             if (!isSafeToCancel) {
                 // owned
                 baritone.getPathingBehavior().secretInternalSegmentCancel();
+            }
+            behavior.trySwapElytra();
+            if (behavior.isSwappingElytra()) {
+                return new PathingCommand(null, PathingCommandType.CANCEL_AND_SET_GOAL);
+            }
+            if (!hasFlyableElytraEquipped()) {
+                if (behavior.findGoodElytra() == -1) {
+                    warn("In start flying state but we have no elytra to fly with");
+                    onLostControl();
+                } else {
+                    // must be another inv action executing before our swap can go through
+                }
+                return new PathingCommand(null, PathingCommandType.CANCEL_AND_SET_GOAL);
             }
             boolean wasJumpPressed = baritone.getInputOverrideHandler().isInputForcedDown(PathInput.JUMP);
             baritone.getInputOverrideHandler().clearAllKeys();
@@ -414,7 +438,7 @@ public class ElytraProcess extends BaritoneProcessHelper {
     private boolean shouldLandForSafety() {
         var chest = CACHE.getPlayerCache().getEquipment(EquipmentSlot.CHESTPLATE);
         if (chest == null || chest.getId() != ItemRegistry.ELYTRA.id()) {
-            return true;
+            return behavior.findGoodElytra() == -1;
         }
         if (ItemUtil.getDamageUntilBreak(chest) <= 5 && behavior.findGoodElytra() == -1) {
             // our current elytra is about to break and we have no usable elytra to swap to
@@ -432,6 +456,17 @@ public class ElytraProcess extends BaritoneProcessHelper {
             return true;
         }
         return false;
+    }
+
+    private boolean hasFlyableElytraEquipped() {
+        var chest = CACHE.getPlayerCache().getEquipment(EquipmentSlot.CHESTPLATE);
+        if (chest == null || chest.getId() != ItemRegistry.ELYTRA.id()) {
+            return false;
+        }
+        if (ItemUtil.getDamageUntilBreak(chest) <= 1) {
+            return false;
+        }
+        return true;
     }
 
     public boolean isLoaded() {

@@ -325,7 +325,7 @@ public final class ElytraBehavior implements ProcessUtil {
                 return; // previous iterations of this function SHOULD have fixed this by now :rage_cat:
             }
 
-            if (ElytraBehavior.this.process.state != ElytraProcess.State.LANDING && this.ticksNearUnchanged > 100) {
+            if (ElytraBehavior.this.process.state() != ElytraProcess.State.LANDING && this.ticksNearUnchanged > 100) {
                 this.pathRecalcSegment(OptionalInt.of(rangeEndExcl - 1))
                         .thenRun(() -> {
                             logVerbose("Recalculating segment, no progress in last 100 ticks");

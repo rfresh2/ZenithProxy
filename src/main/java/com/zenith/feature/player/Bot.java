@@ -684,6 +684,7 @@ public final class Bot extends ModuleUtils {
         sendClientPacketAwait(new ServerboundAcceptTeleportationPacket(teleportId));
         sendClientPacketAwait(new ServerboundMovePlayerPosRotPacket(false, false, this.x, this.y, this.z, this.yaw, this.pitch));
         CLIENT_LOG.debug("Accepted teleport: {}", teleportId);
+        this.velocity.set(CACHE.getPlayerCache().getVelX(), CACHE.getPlayerCache().getVelY(), CACHE.getPlayerCache().getVelZ());
     }
 
     public void handlePlayerRotate() {
@@ -1574,6 +1575,7 @@ public final class Bot extends ModuleUtils {
                     .setPitch((packet.getRelatives().contains(PositionElement.X_ROT) ? cache.getPitch() : 0.0f) + packet.getPitch());
                 debug("Sending queued teleport: {}", packet.getId());
                 syncFromCache(false);
+                this.velocity.set(CACHE.getPlayerCache().getVelX(), CACHE.getPlayerCache().getVelY(), CACHE.getPlayerCache().getVelZ());
                 sendClientPacketAwait(new ServerboundAcceptTeleportationPacket(packet.getId()));
                 sendClientPacketAwait(new ServerboundMovePlayerPosRotPacket(false, false, x, y, z, yaw, pitch));
             }
