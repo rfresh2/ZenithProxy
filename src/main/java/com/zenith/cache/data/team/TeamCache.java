@@ -2,12 +2,10 @@ package com.zenith.cache.data.team;
 
 import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
-import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.geysermc.mcprotocollib.network.packet.Packet;
 import org.geysermc.mcprotocollib.network.tcp.TcpSession;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.scoreboard.ClientboundSetPlayerTeamPacket;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Map;
@@ -36,22 +34,5 @@ public class TeamCache implements CachedData {
     @Override
     public String getSendingMessage() {
         return String.format("Sending %d teams", this.teamsByName.size());
-    }
-
-    public void add(@NonNull ClientboundSetPlayerTeamPacket packet) {
-        var team = new Team(packet.getTeamName())
-            .setDisplayName(packet.getDisplayName())
-            .setPrefix(packet.getPrefix())
-            .setSuffix(packet.getSuffix())
-            .setFriendlyFire(packet.isFriendlyFire())
-            .setSeeFriendlyInvisibles(packet.isSeeFriendlyInvisibles())
-            .setNameTagVisibility(packet.getNameTagVisibility())
-            .setCollisionRule(packet.getCollisionRule())
-            .setColor(packet.getColor())
-            .setPlayers(ObjectArraySet.of(packet.getPlayers()));
-        this.teamsByName.put(packet.getTeamName(), team);
-        for (var player : packet.getPlayers()) {
-            this.teamsByPlayer.put(player, team);
-        }
     }
 }
