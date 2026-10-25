@@ -225,6 +225,7 @@ public final class PacketCodecRegistries {
                 .inbound(ClientboundAddExperienceOrbPacket.class, new AddExperienceOrbHandler())
                 .inbound(ClientboundAddEntityPacket.class, new AddEntityHandler())
                 .inbound(ClientboundSetDefaultSpawnPositionPacket.class, new SpawnPositionHandler())
+                .inbound(ClientboundBlockEventPacket.class, new BlockEventHandler())
                 .outbound(ServerboundChatPacket.class, new OutgoingChatHandler())
                 .outbound(ServerboundChatCommandSignedPacket.class, new OutgoingChatCommandSignedHandler())
                 .outbound(ServerboundContainerClickPacket.class, new OutgoingContainerClickHandler())

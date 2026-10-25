@@ -44,6 +44,7 @@ public class DataCache {
     protected final RegistriesCache registriesCache = new RegistriesCache();
     {
         entityCache.subscribeEvents();
+        chunkCache.subscribeEvents();
     }
 
     public Collection<CachedData> getAllData() {

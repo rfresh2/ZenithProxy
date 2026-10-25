@@ -52,6 +52,33 @@ public record LocalizedCollisionBox(
         );
     }
 
+    public LocalizedCollisionBox minmax(final LocalizedCollisionBox other) {
+        return new LocalizedCollisionBox(
+            Math.min(minX, other.minX), Math.max(maxX, other.maxX),
+            Math.min(minY, other.minY), Math.max(maxY, other.maxY),
+            Math.min(minZ, other.minZ), Math.max(maxZ, other.maxZ),
+            x, y, z
+        );
+    }
+
+    public LocalizedCollisionBox intersect(final LocalizedCollisionBox other) {
+        return new LocalizedCollisionBox(
+            Math.max(minX, other.minX), Math.min(maxX, other.maxX),
+            Math.max(minY, other.minY), Math.min(maxY, other.maxY),
+            Math.max(minZ, other.minZ), Math.min(maxZ, other.maxZ),
+            x, y, z
+        );
+    }
+
+    /**
+     * Excludes boxes that are only touching, like vanilla's AABB.intersects
+     */
+    public boolean intersectsStrict(final LocalizedCollisionBox other) {
+        return this.minX < other.maxX && this.maxX > other.minX
+            && this.minY < other.maxY && this.maxY > other.minY
+            && this.minZ < other.maxZ && this.maxZ > other.minZ;
+    }
+
     public double collideX(final LocalizedCollisionBox other, double x) {
         if (noYIntersection(other) || noZIntersection(other)) return x;
         return collidePushOut(this.minX(), this.maxX(), other.minX(), other.maxX(), x);

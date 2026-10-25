@@ -23,6 +23,7 @@ public record Block(
     float speedFactor,
     float jumpFactor,
     boolean fallingBlock,
+    PushReaction pushReaction,
     @Nullable BlockEntityType blockEntityType
 ) implements RegistryData {
     @Override
