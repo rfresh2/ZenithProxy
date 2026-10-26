@@ -1,6 +1,7 @@
 package com.zenith.command.impl;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.zenith.Globals;
 import com.zenith.command.api.*;
 import com.zenith.discord.Embed;
 import com.zenith.util.MentionUtil;
@@ -9,6 +10,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.ShutdownException;
 import net.dv8tion.jda.internal.utils.ShutdownReason;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
@@ -125,20 +127,42 @@ public class DiscordManageCommand extends Command {
             .then(literal("token").requires(DiscordManageCommand::validateTerminalSource).then(argument("token", wordWithChars()).executes(c -> {
                 c.getSource().setSensitiveInput(true);
                 var token = getString(c, "token");
-                var result = validateToken(token);
-                if (!result.success()) {
-                    c.getSource().getEmbed()
-                        .title("Invalid Token")
-                        .description("Discord API returned an error during test login\n\n" + escape(result.error()));
-                    return ERROR;
-                }
-                CONFIG.discord.token = token;
                 c.getSource().getEmbed()
-                    .title("Token set!")
-                    .description("Discord bot will now restart if enabled");
-                if (DISCORD.isRunning())
-                    EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
-                return OK;
+                    .title("Validating Token...")
+                    .description("May take up to 10 seconds");
+                CompletableFuture.supplyAsync(() -> validateToken(token))
+                    .orTimeout(10L, TimeUnit.SECONDS)
+                    .whenCompleteAsync((r, e) -> {
+                        if (r != null) {
+                            if (!r.success()) {
+                                c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
+                                    .title("Invalid Token")
+                                    .description("Discord API returned an error during test login\n\n" + escape(r.error()))
+                                    .errorColor());
+                            } else {
+                                CONFIG.discord.token = token;
+                                c.getSource().getEmbed()
+                                    .title("Token set!")
+                                    .description("Discord bot will now restart if enabled");
+                                if (DISCORD.isRunning()) {
+                                    EXECUTOR.schedule(this::restartDiscordBot, 3, TimeUnit.SECONDS);
+                                }
+                                Globals.saveConfigAsync();
+                            }
+                        } else {
+                            if (e != null) {
+                                c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
+                                    .title("Invalid Token")
+                                    .description("Discord API timeout\n\n" + escape(e.getMessage()))
+                                    .errorColor());
+                            } else {
+                                c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
+                                    .title("Invalid Token")
+                                    .description("Discord API timeout")
+                                    .errorColor());
+                            }
+                        }
+                    });
             })))
             .then(literal("role").requires(DiscordManageCommand::validateTerminalSource).then(argument("roleId", wordWithChars()).executes(c -> {
                 c.getSource().setSensitiveInput(true);

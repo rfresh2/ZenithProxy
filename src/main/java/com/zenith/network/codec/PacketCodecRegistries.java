@@ -222,6 +222,7 @@ public final class PacketCodecRegistries {
                 .inbound(ClientboundTeleportEntityPacket.class, new TeleportEntityHandler())
                 .inbound(ClientboundAddEntityPacket.class, new AddEntityHandler())
                 .inbound(ClientboundSetDefaultSpawnPositionPacket.class, new SpawnPositionHandler())
+                .inbound(ClientboundBlockEventPacket.class, new BlockEventHandler())
                 .outbound(ServerboundChatPacket.class, new OutgoingChatHandler())
                 .outbound(ServerboundChatCommandSignedPacket.class, new OutgoingChatCommandSignedHandler())
                 .outbound(ServerboundContainerClickPacket.class, new OutgoingContainerClickHandler())

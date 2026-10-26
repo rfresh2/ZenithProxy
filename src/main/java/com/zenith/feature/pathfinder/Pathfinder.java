@@ -14,6 +14,8 @@ public interface Pathfinder {
     PathingRequestFuture pathTo(Goal goal);
     PathingRequestFuture pathTo(int x, int z);
     PathingRequestFuture pathTo(int x, int y, int z);
+    PathingRequestFuture elytraTo(int x, int z);
+    PathingRequestFuture elytraTo(int x, int y, int z);
     PathingRequestFuture thisWay(int dist);
     PathingRequestFuture getTo(Block block);
     PathingRequestFuture getTo(Block block, boolean rightClickContainerOnArrival);

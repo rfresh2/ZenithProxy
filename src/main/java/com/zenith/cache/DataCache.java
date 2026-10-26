@@ -46,6 +46,7 @@ public class DataCache {
     protected final WaypointCache waypointCache = new WaypointCache();
     {
         entityCache.subscribeEvents();
+        chunkCache.subscribeEvents();
     }
 
     public Collection<CachedData> getAllData() {

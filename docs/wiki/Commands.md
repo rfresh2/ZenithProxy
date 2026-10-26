@@ -1988,6 +1988,10 @@ Baritone pathfinder
 
   ```pathfinder goto <waypointId>```
 
+  ```pathfinder elytra <x> <z>```
+
+  ```pathfinder elytra <x> <y> <z>```
+
   ```pathfinder stop```
 
   ```pathfinder follow```

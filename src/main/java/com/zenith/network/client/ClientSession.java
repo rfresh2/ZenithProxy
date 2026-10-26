@@ -11,6 +11,7 @@ import com.zenith.network.ClientPacketPingTask;
 import com.zenith.network.ClientPongTask;
 import com.zenith.network.codec.PacketCodecRegistries;
 import com.zenith.util.ComponentSerializer;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.DefaultEventLoop;
 import io.netty.channel.EventLoop;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -141,12 +142,21 @@ public class ClientSession extends TcpClientSession {
                     var connection = connections[i];
                     if (state == ProtocolState.CONFIGURATION && !connection.isConfigured()) continue;
                     if (connection.isSpectator() && PacketCodecRegistries.SPECTATOR_PACKET_FILTER.contains(p.getClass())) continue;
-                    connection.sendAsync(p);
+                    connection.proxyClientPacket(packet);
                 }
             }
         } catch (Exception e) {
             CLIENT_LOG.error("Client Packet Received Error", e);
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) {
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            connection.onClientChannelReadComplete();
         }
     }
 

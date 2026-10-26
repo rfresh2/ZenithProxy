@@ -59,6 +59,8 @@ public class PathfinderCommand extends Command {
                 "goto <x> <z>",
                 "goto <x> <y> <z>",
                 "goto <waypointId>",
+                "elytra <x> <z>",
+                "elytra <x> <y> <z>",
                 "stop",
                 "follow",
                 "follow <playerName>",
@@ -168,6 +170,31 @@ public class PathfinderCommand extends Command {
                         .title("Pathing")
                         .addField("Goal", CONFIG.discord.reportCoords
                             ? "||[" + x + ", " + y + ", " + z + "]||"
+                            : "Coords disabled")
+                        .primaryColor();
+                    return OK;
+                })))
+            .then(literal("elytra")
+                .then(argument("xz", vec2()).executes(c -> {
+                    if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
+                    var pos = getVec2(c, "xz");
+                    BARITONE.elytraTo(MathHelper.floorI(pos.getX()), MathHelper.floorI(pos.getY()));
+                    c.getSource().getEmbed()
+                        .title("Elytra Pathing")
+                        .addField("Goal", CONFIG.discord.reportCoords
+                            ? "||[" + pos.getX() + ", " + pos.getY() + "]||"
+                            : "Coords disabled")
+                        .primaryColor();
+                    return OK;
+                }))
+                .then(argument("xyz", blockPos()).executes(c -> {
+                    if (!verifyAbleToPathfind(c.getSource().getEmbed())) return ERROR;
+                    var pos = getBlockPos(c, "xyz");
+                    BARITONE.elytraTo(pos.x(), pos.y(), pos.z());
+                    c.getSource().getEmbed()
+                        .title("Elytra Pathing")
+                        .addField("Goal", CONFIG.discord.reportCoords
+                            ? "||[" + pos.x() + ", " + pos.y() + ", " + pos.z() + "]||"
                             : "Coords disabled")
                         .primaryColor();
                     return OK;

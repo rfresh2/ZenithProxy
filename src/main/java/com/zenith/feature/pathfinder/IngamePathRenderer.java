@@ -1,7 +1,6 @@
 package com.zenith.feature.pathfinder;
 
 import com.zenith.Proxy;
-import com.zenith.feature.pathfinder.calc.IPath;
 import com.zenith.mc.block.BlockPos;
 import com.zenith.util.timer.Timer;
 import com.zenith.util.timer.Timers;
@@ -19,7 +18,7 @@ public class IngamePathRenderer {
     private final Timer renderPathTimer = Timers.tickTimer();
 
     public void onTick() {
-        if (BARITONE.getPathingBehavior().isPathing() && CONFIG.client.extra.pathfinder.renderPath) {
+        if ((BARITONE.getPathingBehavior().isPathing() || BARITONE.getElytraProcess().isActive()) && CONFIG.client.extra.pathfinder.renderPath) {
             renderPath();
         }
     }
@@ -36,13 +35,21 @@ public class IngamePathRenderer {
     }
 
     private void renderPath0() {
-        var pathOptional = BARITONE.getPathingBehavior().getPath();
-        if (pathOptional.isEmpty()) return;
-        IPath path = pathOptional.get();
-        int pathPosition = BARITONE.getPathingBehavior().getCurrent().getPosition();
-        List<ClientboundLevelParticlesPacket> packets = CONFIG.client.extra.pathfinder.renderPathDetailed
-            ? buildPathPacketsDetailed(path.positions(), pathPosition)
-            : buildPathPacketsSimple(path.positions(), pathPosition);
+        List<BlockPos> positions;
+        int pathPosition;
+        if (BARITONE.getElytraProcess().isActive()) {
+            positions = BARITONE.getElytraProcess().getPath();
+            pathPosition = BARITONE.getElytraProcess().getPathPosition();
+            positions = positions.subList(0, Math.min(positions.size(), pathPosition + 100));
+        } else {
+            var pathOptional = BARITONE.getPathingBehavior().getPath();
+            if (pathOptional.isEmpty()) return;
+            positions = pathOptional.get().positions();
+            pathPosition = BARITONE.getPathingBehavior().getCurrent().getPosition();
+        }
+        var packets = CONFIG.client.extra.pathfinder.renderPathDetailed
+            ? buildPathPacketsDetailed(positions, pathPosition)
+            : buildPathPacketsSimple(positions, pathPosition);
 
         var connections = Proxy.getInstance().getActiveConnections().getArray();
         for (int i = 0; i < connections.length; i++) {

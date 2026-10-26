@@ -46,10 +46,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.Serve
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.level.ServerboundPlayerInputPacket;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.OptionalInt;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.rfresh2.EventConsumer.of;
@@ -124,6 +121,8 @@ public final class Bot extends ModuleUtils {
     private static final Attribute DEFAULT_SPEED_ATTRIBUTE = new Attribute(AttributeType.Builtin.MOVEMENT_SPEED, 0.10000000149011612f);
     private Attribute speedAttribute = DEFAULT_SPEED_ATTRIBUTE;
     private boolean tickSkipped = false;
+    private final double[] pistonDeltas = new double[]{0.0, 0.0, 0.0};
+    private int pistonDeltasGameTime;
 
     public Bot() {
         EVENT_BUS.subscribe(
@@ -673,10 +672,11 @@ public final class Bot extends ModuleUtils {
     }
 
     public void handlePlayerPosRotate(final int teleportId) {
-        syncFromCache(true);
+        syncFromCache(false);
         CLIENT_LOG.info("Server teleport {} to: {}, {}, {}", teleportId, String.format("%.8f", this.x), String.format("%.8f", this.y), String.format("%.8f", this.z));
         sendClientPacketAwait(new ServerboundAcceptTeleportationPacket(teleportId, this.x, this.y, this.z, this.yaw, this.pitch));
         CLIENT_LOG.debug("Accepted teleport: {}", teleportId);
+        this.velocity.set(CACHE.getPlayerCache().getVelX(), CACHE.getPlayerCache().getVelY(), CACHE.getPlayerCache().getVelZ());
     }
 
     public void handlePlayerRotate() {
@@ -738,7 +738,7 @@ public final class Bot extends ModuleUtils {
                 waterSlowdown = 0.96f;
             }
             updateVelocity(waterSpeed, movementInputVec);
-            move();
+            move(MoverType.SELF, new MutableVec3d(velocity));
             if (horizontalCollision && onClimbable()) {
                 velocity.setY(0.2);
             }
@@ -752,7 +752,7 @@ public final class Bot extends ModuleUtils {
             velocity.setY(fluidFallingAdjustedY);
         } else { // lava
             updateVelocity(0.02f, movementInputVec);
-            move();
+            move(MoverType.SELF, new MutableVec3d(velocity));
             if (lavaHeight <= 0.4) {
                 velocity.multiply(0.5, 0.8, 0.5);
                 double fluidFallingAdjustedY;
@@ -804,7 +804,7 @@ public final class Bot extends ModuleUtils {
             velocity.add((lookVec.getX() / hLookVec * hVel - velocity.getX()) * 0.1, 0, (lookVec.getZ() / hLookVec * hVel - velocity.getZ()) * 0.1);
         }
         velocity.multiply(0.99, 0.98, 0.99);
-        move();
+        move(MoverType.SELF, new MutableVec3d(velocity));
     }
 
     private void travelInAir(MutableVec3d movementInputVec) {
@@ -869,8 +869,11 @@ public final class Bot extends ModuleUtils {
         return adjustedMovement;
     }
 
-    private void move() {
-        MutableVec3d movement = new MutableVec3d(velocity);
+    private void move(MoverType type, MutableVec3d movement) {
+        if (type == MoverType.PISTON) {
+            limitPistonMovement(movement);
+            if (movement.lengthSquared() == 0) return;
+        }
         if (stuckSpeedMultiplier.lengthSquared() > 1.0E-7) {
             movement.multiply(stuckSpeedMultiplier.getX(), stuckSpeedMultiplier.getY(), stuckSpeedMultiplier.getZ());
             stuckSpeedMultiplier.set(0, 0, 0);
@@ -878,7 +881,9 @@ public final class Bot extends ModuleUtils {
         }
 
         // in-place velocity update
-        maybeBackOffFromEdge(movement);
+        if (type == MoverType.SELF) {
+            maybeBackOffFromEdge(movement);
+        }
 
         var collidedVec = collide(movement);
 
@@ -911,6 +916,48 @@ public final class Bot extends ModuleUtils {
         syncPlayerCollisionBox();
         float velocityMultiplier = MathHelper.lerp(movementEfficiency, this.getBlockSpeedFactor(), 1.0f);
         velocity.multiply(velocityMultiplier, 1.0, velocityMultiplier);
+    }
+
+    private void limitPistonMovement(MutableVec3d movement) {
+        if (movement.lengthSquared() <= 1.0E-7) return;
+        int gameTime = CACHE.getPlayerCache().getThePlayer().getTickCount();
+        if (gameTime != pistonDeltasGameTime) {
+            Arrays.fill(pistonDeltas, 0.0);
+            pistonDeltasGameTime = gameTime;
+        }
+        if (movement.getX() != 0.0) {
+            double d = applyPistonMovementRestriction(Direction.Axis.X, movement.getX());
+            movement.set(Math.abs(d) <= 1.0E-5F ? 0 : d, 0, 0);
+        } else if (movement.getY() != 0.0) {
+            double d = applyPistonMovementRestriction(Direction.Axis.Y, movement.getY());
+            movement.set(0, Math.abs(d) <= 1.0E-5F ? 0 : d, 0);
+        } else if (movement.getZ() != 0.0) {
+            double d = applyPistonMovementRestriction(Direction.Axis.Z, movement.getZ());
+            movement.set(0, 0, Math.abs(d) <= 1.0E-5F ? 0 : d);
+        }
+    }
+
+    private double applyPistonMovementRestriction(Direction.Axis axis, double distance) {
+        int i = axis.ordinal();
+        double clamped = Math.clamp(distance + pistonDeltas[i], -0.51, 0.51);
+        distance = clamped - pistonDeltas[i];
+        pistonDeltas[i] = clamped;
+        return distance;
+    }
+
+    public boolean canBePushedByPistons() {
+        return !Proxy.getInstance().hasActivePlayer()
+            && CACHE.getPlayerCache().getGameMode() != GameMode.SPECTATOR
+            && !CACHE.getPlayerCache().getThePlayer().isInVehicle();
+    }
+
+    public void moveByPiston(MutableVec3d movement) {
+        move(MoverType.PISTON, movement);
+        tryCheckInsideBlocks();
+    }
+
+    public boolean isSupportedBy(BlockPos pos) {
+        return supportingBlockPos.isPresent() && supportingBlockPos.get().equals(pos);
     }
 
     private boolean isHorizontalCollisionMinor() {
@@ -1151,7 +1198,7 @@ public final class Bot extends ModuleUtils {
 
             velocity.set(velX, velY, velZ);
         }
-        move();
+        move(MoverType.SELF, new MutableVec3d(velocity));
         if (horizontalCollision || movementInput.jumping) {
             Block inBlock = World.getBlock(MathHelper.floorI(x), MathHelper.floorI(y), MathHelper.floorI(z));
             if (onClimbable() || inBlock == BlockRegistry.POWDER_SNOW) { // todo: or inside powder snow
@@ -1566,7 +1613,8 @@ public final class Bot extends ModuleUtils {
                     .setYaw((packet.getRelatives().contains(PositionElement.Y_ROT) ? cache.getYaw() : 0.0f) + packet.getYaw())
                     .setPitch((packet.getRelatives().contains(PositionElement.X_ROT) ? cache.getPitch() : 0.0f) + packet.getPitch());
                 debug("Sending queued teleport: {}", packet.getId());
-                syncFromCache(true);
+                syncFromCache(false);
+                this.velocity.set(CACHE.getPlayerCache().getVelX(), CACHE.getPlayerCache().getVelY(), CACHE.getPlayerCache().getVelZ());
                 sendClientPacketAwait(new ServerboundAcceptTeleportationPacket(packet.getId(), x, y, z, yaw, pitch));
             }
         }

@@ -5,6 +5,9 @@ import com.viaversion.nbt.mini.MNBTWriter;
 import com.zenith.Proxy;
 import com.zenith.cache.CacheResetType;
 import com.zenith.cache.CachedData;
+import com.zenith.event.client.ClientTickEvent;
+import com.zenith.feature.player.tickable.block_entity.TickableBlockEntity;
+import com.zenith.mc.block.BlockPos;
 import com.zenith.mc.dimension.DimensionData;
 import com.zenith.mc.dimension.DimensionRegistry;
 import com.zenith.network.server.ServerSession;
@@ -39,6 +42,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.github.rfresh2.EventConsumer.of;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.zenith.Globals.*;
 import static com.zenith.cache.data.chunk.Chunk.chunkPosToLong;
@@ -56,6 +60,8 @@ public class ChunkCache implements CachedData {
     // to do iteration, copy the key or value set into a new list, then iterate over that copied list.
     // trade-off: faster and lower memory lookups (compared to ConcurrentHashMap), but slower and more memory intensive iteration
     protected final Long2ObjectOpenHashMap<Chunk> cache = new Long2ObjectOpenHashMap<>(81, 0.5f);
+    // keyed by BlockPos.asLong
+    protected final Long2ObjectOpenHashMap<TickableBlockEntity> tickableBlockEntities = new Long2ObjectOpenHashMap<>();
     protected @Nullable DimensionData currentDimension = null;
     protected List<Key> worldNames = new ArrayList<>();
     protected int serverViewDistance = -1;
@@ -75,6 +81,15 @@ public class ChunkCache implements CachedData {
     protected WorldBorderData worldBorderData = WorldBorderData.DEFAULT;
     protected WorldTimeData worldTimeData;
     protected byte[] serverBrand = null;
+
+    public static final int BLOCK_ENTITY_TICK_PRIORITY = -11000;
+
+    public void subscribeEvents() {
+        EVENT_BUS.subscribe(this,
+            // must be after entity ticks
+            of(ClientTickEvent.End.class, BLOCK_ENTITY_TICK_PRIORITY, this::tickBlockEntities)
+        );
+    }
 
     public void setCurrentWorld(final int dimensionId, final Key worldName, long hashedSeed, boolean debug, boolean flat) {
         this.dimensionType = dimensionId;
@@ -139,6 +154,9 @@ public class ChunkCache implements CachedData {
             int relativeZ = z & 15;
             int currentBlockId = chunkSection.getBlock(relativeX, relativeY, relativeZ);
             chunkSection.setBlock(relativeX, relativeY, relativeZ, blockStateId);
+            if (currentBlockId != blockStateId) {
+                removeInvalidTickableBlockEntity(x, y, z, blockStateId);
+            }
             handleBlockUpdateBlockEntity(blockStateId, relativeX, y, relativeZ, chunk);
             if (blockStatePredictionHandler.isPredicting()) {
                 blockStatePredictionHandler.retainKnownServerState(x, y, z, currentBlockId, CACHE.getPlayerCache().getX(), CACHE.getPlayerCache().getY(), CACHE.getPlayerCache().getZ());
@@ -175,12 +193,10 @@ public class ChunkCache implements CachedData {
             CLIENT_LOG.debug("Received block update packet for unknown block id: {}", blockStateId);
             return;
         }
-        if (block.isAir()) {
+        if (block.blockEntityType() == null) {
             chunk.blockEntities.removeIf(tileEntity -> tileEntity.getX() == relativeX && tileEntity.getY() == y && tileEntity.getZ() == relativeZ);
-        } else {
-            if (block.blockEntityType() != null && !chunkContainsBlockEntityTypeAtPos(chunk, relativeX, y, relativeZ, block.blockEntityType())) {
-                writeBlockEntity(chunk, block.name(), block.blockEntityType(), relativeX, y, relativeZ);
-            }
+        } else if (!chunkContainsBlockEntityTypeAtPos(chunk, relativeX, y, relativeZ, block.blockEntityType())) {
+            writeBlockEntity(chunk, block.name(), block.blockEntityType(), relativeX, y, relativeZ);
         }
     }
 
@@ -383,6 +399,7 @@ public class ChunkCache implements CachedData {
     public void reset(CacheResetType type) {
         // chunk reset, i.e. from changing worlds
         this.cache.clear();
+        this.tickableBlockEntities.clear();
         this.isRaining = false;
         this.thunderStrength = 0.0f;
         this.rainStrength = 0.0f;
@@ -430,6 +447,7 @@ public class ChunkCache implements CachedData {
                 : p.getLightData()
         );
         this.cache.put(pos, chunk);
+        removeTickableBlockEntitiesInChunk(chunkX, chunkZ); // might be incorrect
     }
 
     public int getSectionsCount() {
@@ -465,6 +483,65 @@ public class ChunkCache implements CachedData {
 
     public void remove(int x, int z) {
         this.cache.remove(chunkPosToLong(x, z));
+        removeTickableBlockEntitiesInChunk(x, z);
+    }
+
+    private void removeTickableBlockEntitiesInChunk(int x, int z) {
+        if (tickableBlockEntities.isEmpty()) return;
+        for (var it = tickableBlockEntities.long2ObjectEntrySet().fastIterator(); it.hasNext();) {
+            var blockEntity = it.next().getValue();
+            var pos = blockEntity.getBlockPos();
+            if (pos.getChunkX() == x && pos.getChunkZ() == z) {
+                blockEntity.setRemoved();
+                it.remove();
+            }
+        }
+    }
+
+    public @Nullable TickableBlockEntity getTickableBlockEntity(final int x, final int y, final int z) {
+        return tickableBlockEntities.get(BlockPos.asLong(x, y, z));
+    }
+
+    public void setTickableBlockEntity(final TickableBlockEntity blockEntity) {
+        var prev = tickableBlockEntities.put(blockEntity.getBlockPos().asLong(), blockEntity);
+        if (prev != null && prev != blockEntity) {
+            prev.setRemoved();
+        }
+    }
+
+    public void removeTickableBlockEntity(final int x, final int y, final int z) {
+        var removed = tickableBlockEntities.remove(BlockPos.asLong(x, y, z));
+        if (removed != null) {
+            removed.setRemoved();
+        }
+    }
+
+    private void removeInvalidTickableBlockEntity(final int x, final int y, final int z, final int blockStateId) {
+        var blockEntity = getTickableBlockEntity(x, y, z);
+        if (blockEntity == null) return;
+        var block = BLOCK_DATA.getBlockDataFromBlockStateId(blockStateId);
+        if (block == null || !blockEntity.isValidBlock(block)) {
+            removeTickableBlockEntity(x, y, z);
+        }
+    }
+
+    // todo: not sure if we should tick block entities while being controlled...
+    //  server should resync us to correct end states
+    private void tickBlockEntities(final ClientTickEvent.End event) {
+        if (tickableBlockEntities.isEmpty()) return;
+        for (var it = tickableBlockEntities.long2ObjectEntrySet().fastIterator(); it.hasNext();) {
+            var blockEntity = it.next().getValue();
+            if (blockEntity.isRemoved()) {
+                it.remove();
+                continue;
+            }
+            try {
+                blockEntity.tick();
+            } catch (final Exception e) {
+                CLIENT_LOG.error("Error ticking block entity at {}", blockEntity.getBlockPos(), e);
+                removeTickableBlockEntity(blockEntity.getBlockPos().x(), blockEntity.getBlockPos().y(), blockEntity.getBlockPos().z());
+            }
+        }
     }
 
     public void updateCurrentDimension(final ClientboundRespawnPacket packet) {

@@ -15,6 +15,7 @@ import com.zenith.feature.pathfinder.Baritone;
 import com.zenith.feature.player.Bot;
 import com.zenith.feature.player.InputManager;
 import com.zenith.feature.tasks.*;
+import com.zenith.feature.tps.ClientTPSCalculator;
 import com.zenith.feature.tps.TPSCalculator;
 import com.zenith.feature.whitelist.PlayerListsManager;
 import com.zenith.mc.block.BlockDataManager;
@@ -31,7 +32,6 @@ import com.zenith.util.KotlinUtil;
 import com.zenith.util.Wait;
 import com.zenith.util.ZenithScheduledExecutor;
 import com.zenith.util.config.Config;
-import com.zenith.util.config.ConfigVerifier;
 import com.zenith.util.config.LaunchConfig;
 import com.zenith.via.ZenithViaInitializer;
 import lombok.Locked;
@@ -78,6 +78,7 @@ public class Globals {
     public static final MapBlockColorManager MAP_BLOCK_COLOR;
     public static final DatabaseManager DATABASE;
     public static final TPSCalculator TPS;
+    public static final ClientTPSCalculator CLIENT_TPS;
     public static final ModuleManager MODULE;
     public static final InputManager INPUTS;
     public static final TerminalManager TERMINAL;
@@ -245,13 +246,15 @@ public class Globals {
             LAUNCH_CONFIG = loadLaunchConfig();
             VERSION = getVersion();
             PLUGIN_MANAGER = new PluginManager();
-            ConfigVerifier.verifyConfigs();
             PLAYER_LISTS.init(); // must be init after config
             TPS = new TPSCalculator(CONFIG.client.extra.tpsBufferSize);
+            CLIENT_TPS = new ClientTPSCalculator(CONFIG.client.extra.tpsBufferSize * 20);
             BOT = new Bot();
             BARITONE = new Baritone();
             GUI = new InGameGuiManager();
         } catch (final Throwable e) {
+            System.err.println("Unable to initialize!");
+            e.printStackTrace();
             DEFAULT_LOG.error("Unable to initialize!", e);
             throw e;
         }
