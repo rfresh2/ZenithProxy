@@ -19,6 +19,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponen
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
@@ -238,21 +239,27 @@ public class InventoryCommand extends Command {
                         .errorColor();
                     return OK;
                 }
-                var accepted = INVENTORY.submit(InventoryActionRequest.builder()
-                        .owner(this)
-                        .actions(InventoryActionMacros.withdraw(getOpenContainerId()))
-                        .priority(INV_ACTION_PRIORITY)
-                        .build())
-                    .get();
-                if (accepted) {
-                    logInv();
-                    c.getSource().setNoOutput(true);
-                } else {
-                    c.getSource().getEmbed()
-                        .title("Failed")
-                        .description("Another inventory action has taken priority this tick, try again")
-                        .errorColor();
-                }
+                c.getSource().setNoOutput(true);
+                EXECUTOR.execute(() -> {
+                    var actions = InventoryActionMacros.withdraw(getOpenContainerId());
+                    var expectedMs = 50L * (actions.size() + (actions.size() * CONFIG.client.inventory.actionDelayTicks) + 20);
+                    var accepted = INVENTORY.submit(InventoryActionRequest.builder()
+                            .owner(this)
+                            .actions(actions)
+                            .priority(INV_ACTION_PRIORITY)
+                            .build())
+                        .get(expectedMs, TimeUnit.MILLISECONDS);
+                    if (accepted) {
+                        logInv();
+                    } else {
+                        c.getSource().getSource().logEmbed(c.getSource(),
+                            Embed.builder()
+                                .title("Failed")
+                                .description("Another inventory action has taken priority this tick, try again")
+                                .errorColor()
+                        );
+                    }
+                });
                 return OK;
             }))
             .then(literal("deposit").executes(c -> {
@@ -264,21 +271,27 @@ public class InventoryCommand extends Command {
                         .errorColor();
                     return OK;
                 }
-                var accepted = INVENTORY.submit(InventoryActionRequest.builder()
-                        .owner(this)
-                        .actions(InventoryActionMacros.deposit(getOpenContainerId()))
-                        .priority(INV_ACTION_PRIORITY)
-                        .build())
-                    .get();
-                if (accepted) {
-                    logInv();
-                    c.getSource().setNoOutput(true);
-                } else {
-                    c.getSource().getEmbed()
-                        .title("Failed")
-                        .description("Another inventory action has taken priority this tick, try again")
-                        .errorColor();
-                }
+                c.getSource().setNoOutput(true);
+                EXECUTOR.execute(() -> {
+                    var actions = InventoryActionMacros.deposit(getOpenContainerId());
+                    var expectedMs = 50L * (actions.size() + (actions.size() * CONFIG.client.inventory.actionDelayTicks) + 20);
+                    var accepted = INVENTORY.submit(InventoryActionRequest.builder()
+                            .owner(this)
+                            .actions(actions)
+                            .priority(INV_ACTION_PRIORITY)
+                            .build())
+                        .get(expectedMs, TimeUnit.MILLISECONDS);
+                    if (accepted) {
+                        logInv();
+                    } else {
+                        c.getSource().getSource().logEmbed(c.getSource(),
+                            Embed.builder()
+                                .title("Failed")
+                                .description("Another inventory action has taken priority this tick, try again")
+                                .errorColor()
+                        );
+                    }
+                });
                 return OK;
             }))
             .then(literal("click")

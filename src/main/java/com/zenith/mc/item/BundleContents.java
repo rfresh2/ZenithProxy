@@ -35,7 +35,7 @@ public class BundleContents {
             && !components.contains(DataComponentTypes.UNBREAKABLE)
             && components.contains(DataComponentTypes.DAMAGE);
         var isDamagedItem = components.getOrDefault(DataComponentTypes.DAMAGE, 0) > 0;
-        boolean isStackable = itemData.stackSize() > 1 && (!isDamageableItem || isDamagedItem);
+        boolean isStackable = itemData.stackSize() > 1 && (!isDamageableItem || !isDamagedItem);
 
         if (!isStackable) {
             return -1;
