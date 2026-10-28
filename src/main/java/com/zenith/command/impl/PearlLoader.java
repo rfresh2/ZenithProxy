@@ -10,6 +10,11 @@ import com.zenith.discord.Embed;
 import com.zenith.feature.player.World;
 import com.zenith.mc.block.BlockPos;
 import com.zenith.util.config.Config.Client.Extra.PearlLoader.Pearl;
+import com.zenith.util.timer.Timer;
+import com.zenith.util.timer.Timers;
+import lombok.Data;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.zenith.Globals.*;
 import static com.zenith.command.brigadier.BlockPosArgument.blockPos;
@@ -38,7 +43,8 @@ public class PearlLoader extends Command {
                 "clear",
                 "load <id>",
                 "list",
-                "returnToStartPos on/off"
+                "returnToStartPos on/off",
+                "doubleClick on/off"
             )
             .aliases("pl")
             .build();
@@ -123,22 +129,8 @@ public class PearlLoader extends Command {
                 for (var pearl : pearls) {
                     if (pearl.id().equals(id)) {
                         BlockPos current = CACHE.getPlayerCache().getThePlayer().blockPos();
-                        BARITONE.rightClickBlock(pearl.x(), pearl.y(), pearl.z())
-                            .addExecutedListener(f -> {
-                                c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
-                                    .title("Pearl Loaded!")
-                                    .addField("Pearl ID", pearl.id(), false)
-                                    .successColor());
-                                if (CONFIG.client.extra.pearlLoader.returnToStartPos) {
-                                    BARITONE.pathTo(current.x(), current.z())
-                                        .addExecutedListener(f2 -> {
-                                            c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
-                                                .description("Returned to start pos")
-                                                .successColor());
-                                        });
-                                }
-
-                            });
+                        var loadAction = new PearlLoadAction(pearl, c, current);
+                        loadAction.tick();
                         c.getSource().getEmbed()
                             .title("Loading Pearl")
                             .successColor();
@@ -156,7 +148,75 @@ public class PearlLoader extends Command {
                 c.getSource().getEmbed()
                     .title("Return to Start Pos Set")
                     .primaryColor();
+            })))
+            .then(literal("doubleClick").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.pearlLoader.doubleClick = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Double Click Set")
+                    .primaryColor();
             })));
+    }
+
+    @Data
+    private static class PearlLoadAction {
+        private final Pearl pearl;
+        private final com.mojang.brigadier.context.CommandContext<CommandContext> c;
+        private final BlockPos startPos;
+        private final Timer doubleClickTimer = Timers.tickTimer();
+        private State state = State.PEARL_LOAD;
+        private enum State {
+            PEARL_LOAD, DOUBLE_CLICK, RETURN_TO_START, END,
+        }
+
+        public void tick() {
+            if (!Proxy.getInstance().isConnected() || Proxy.getInstance().hasActivePlayer()) {
+                return;
+            }
+            switch (state) {
+                case PEARL_LOAD -> {
+                    BARITONE.rightClickBlock(pearl.x(), pearl.y(), pearl.z())
+                        .addExecutedListener(f -> {
+                            if (CONFIG.client.extra.pearlLoader.doubleClick) {
+                                state = State.DOUBLE_CLICK;
+                                doubleClickTimer.reset();
+                            } else if (CONFIG.client.extra.pearlLoader.returnToStartPos) {
+                                state = State.RETURN_TO_START;
+                            } else {
+                                state = State.END;
+                            }
+                            tick();
+                        });
+                }
+                case DOUBLE_CLICK -> {
+                    if (!doubleClickTimer.tick(5)) {
+                        EXECUTOR.schedule(this::tick, 50, TimeUnit.MILLISECONDS);
+                        return;
+                    }
+                    BARITONE.rightClickBlock(pearl.x(), pearl.y(), pearl.z())
+                        .addExecutedListener(f -> {
+                            if (CONFIG.client.extra.pearlLoader.returnToStartPos) {
+                                state = State.RETURN_TO_START;
+                            } else {
+                                state = State.END;
+                            }
+                            tick();
+                        });
+                }
+                case RETURN_TO_START -> {
+                    BARITONE.pathTo(startPos.x(), startPos.y(), startPos.z())
+                        .addExecutedListener(f -> {
+                            state = State.END;
+                            tick();
+                        });
+                }
+                case END -> {
+                    c.getSource().getSource().logEmbed(c.getSource(), Embed.builder()
+                        .title("Pearl Loaded!")
+                        .addField("Pearl ID", pearl.id(), false)
+                        .successColor());
+                }
+            }
+        }
     }
 
     @Override
@@ -165,7 +225,8 @@ public class PearlLoader extends Command {
             embed.description(pearlsList());
         }
         embed
-            .addField("Return To Start Pos", toggleStr(CONFIG.client.extra.pearlLoader.returnToStartPos));
+            .addField("Return To Start Pos", toggleStr(CONFIG.client.extra.pearlLoader.returnToStartPos))
+            .addField("Double Click", toggleStr(CONFIG.client.extra.pearlLoader.doubleClick));
     }
 
     private String pearlsList() {
