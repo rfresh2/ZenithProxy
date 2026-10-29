@@ -87,11 +87,14 @@ public class InteractWithProcess extends BaritoneProcessHelper {
         }
         PathingCommand pathingCommand = t.pathingCommand();
         if (pathingCommand == null) {
-            if (t.succeeded() && future != null) {
-                future.complete(true);
-                future.notifyListeners();
+            var f = future;
+            if (t.succeeded() && f != null) {
+                f.complete(true);
             }
             onLostControl();
+            if (f != null && f.isAccepted()) {
+                f.notifyListeners();
+            }
             return new PathingCommand(null, PathingCommandType.DEFER);
         }
         if (calcFailed) {

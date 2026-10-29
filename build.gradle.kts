@@ -1,8 +1,8 @@
 plugins {
     `java-library`
-    id("org.graalvm.buildtools.native") version "1.1.14"
+    id("org.graalvm.buildtools.native") version "1.1.17"
     id("com.gradleup.shadow") version "9.6.1"
-    id("io.freefair.lombok") version "9.8.0"
+    id("io.freefair.lombok") version "9.8.2"
     `maven-publish`
 }
 
@@ -32,7 +32,7 @@ repositories {
     mavenLocal()
 }
 
-val mcplVersion = "26.3.0.4"
+val mcplVersion = "26.3.0.5"
 dependencies {
     api("com.github.rfresh2:JDA:6.7.37") {
         exclude(group = "club.minnced")
@@ -78,8 +78,8 @@ dependencies {
     api("com.github.rfresh2.fastutil.maps:reference-object-maps")
     api("com.github.rfresh2.fastutil.maps:long-double-maps")
     api("com.github.rfresh2.fastutil.queues:int-queues")
-    api("com.viaversion:viaversion-common:5.12.1")
-    api("com.viaversion:viabackwards-common:5.12.1")
+    api("com.viaversion:viaversion-common:5.12.2")
+    api("com.viaversion:viabackwards-common:5.12.2")
     api("com.viaversion:viarewind-common:4.2.0")
     api("org.jline:jline:4.4.6")
     api("ar.com.hjg:pngj:2.1.0")

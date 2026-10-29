@@ -2055,6 +2055,8 @@ They should be unobstructed and reachable.
 
   ```pearlLoader returnToStartPos on/off```
 
+  ```pearlLoader doubleClick on/off```
+
 
 ### rateLimiter
 
