@@ -184,7 +184,7 @@ public class PistonMovingBlockEntity extends TickableBlockEntity {
     public void finalTick() {
         this.progress = 1.0F;
         this.progressO = this.progress;
-        World.removeTickableBlockEntity(this.blockPos);
+        this.setRemoved();
         if (World.getBlock(this.blockPos) == BlockRegistry.MOVING_PISTON) {
             if (this.isSourcePiston) {
                 World.setBlockState(this.blockPos.x(), this.blockPos.y(), this.blockPos.z(), BlockRegistry.AIR.minStateId());
@@ -201,7 +201,7 @@ public class PistonMovingBlockEntity extends TickableBlockEntity {
             if (this.deathTicks < 5) {
                 this.deathTicks++;
             } else {
-                World.removeTickableBlockEntity(this.blockPos);
+                this.setRemoved();
                 if (World.getBlock(this.blockPos) == BlockRegistry.MOVING_PISTON) {
                     BlockState blockstate = this.movedState;
                     if (Boolean.TRUE.equals(blockstate.getProperty(BlockStateProperties.WATERLOGGED))) {

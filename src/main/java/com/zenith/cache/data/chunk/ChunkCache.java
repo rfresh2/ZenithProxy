@@ -507,9 +507,9 @@ public class ChunkCache implements CachedData {
     }
 
     public void removeTickableBlockEntity(final int x, final int y, final int z) {
-        var removed = tickableBlockEntities.remove(BlockPos.asLong(x, y, z));
-        if (removed != null) {
-            removed.setRemoved();
+        var prev = tickableBlockEntities.get(BlockPos.asLong(x, y, z));
+        if (prev != null) {
+            prev.setRemoved();
         }
     }
 
@@ -536,7 +536,7 @@ public class ChunkCache implements CachedData {
                 blockEntity.tick();
             } catch (final Exception e) {
                 CLIENT_LOG.error("Error ticking block entity at {}", blockEntity.getBlockPos(), e);
-                removeTickableBlockEntity(blockEntity.getBlockPos().x(), blockEntity.getBlockPos().y(), blockEntity.getBlockPos().z());
+                it.remove();
             }
         }
     }
