@@ -15,6 +15,8 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.entity.Clie
 
 import java.nio.file.Path;
 
+import static com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg;
+import static com.mojang.brigadier.arguments.DoubleArgumentType.getDouble;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 import static com.mojang.brigadier.arguments.IntegerArgumentType.integer;
 import static com.zenith.Globals.CACHE;
@@ -178,7 +180,17 @@ public class DebugCommand extends Command {
                 CONFIG.debug.botAutoExitBed = getToggle(c, "toggle");
                 c.getSource().getEmbed()
                     .title("Bot Auto Exit Bed " + toggleStrCaps(CONFIG.debug.botAutoExitBed));
-            }));
+            }))
+            .then(literal("pistonPushSim").executes(c -> {
+                CONFIG.debug.pistonPushSim = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Piston Push Simulation " + toggleStrCaps(CONFIG.debug.pistonPushSim));
+            }))
+            .then(literal("pistonPushSimMaxDistanceFromPlayer").then(argument("distance", doubleArg()).executes(c -> {
+                CONFIG.debug.pistonPushSimMaxDistanceFromPlayer = getDouble(c, "distance");
+                c.getSource().getEmbed()
+                    .title("Piston Push Simulation Max Distance From Player " + CONFIG.debug.pistonPushSimMaxDistanceFromPlayer);
+            })));
     }
 
     private static void uploadLog(CommandContext c, String path) {

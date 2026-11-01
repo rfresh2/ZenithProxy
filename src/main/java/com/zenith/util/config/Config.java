@@ -707,6 +707,8 @@ public final class Config {
         public boolean chainBreakSpeed2b2tFix = true;
         public boolean entityPushing = true;
         public boolean botAutoExitBed = true;
+        public boolean pistonPushSim = true;
+        public double pistonPushSimMaxDistanceFromPlayer = 15;
 
         public static final class PacketLog {
             public boolean enabled = false;
