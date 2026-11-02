@@ -14,16 +14,20 @@ import static com.zenith.Globals.CONFIG;
 public class BlockEventHandler implements ClientEventLoopPacketHandler<ClientboundBlockEventPacket, ClientSession> {
     @Override
     public boolean applyAsync(final ClientboundBlockEventPacket packet, final ClientSession session) {
-        if (CONFIG.debug.pistonPushSim
-            && MathHelper.distance3d(
-                packet.getX(), packet.getY(), packet.getZ(),
-                World.getCurrentPlayerX(), World.getCurrentPlayerY(), World.getCurrentPlayerZ())
-                <= CONFIG.debug.pistonPushSimMaxDistanceFromPlayer
-            && PistonBaseBlock.isPiston(World.getBlock(packet.getX(), packet.getY(), packet.getZ()))
+        if (PistonBaseBlock.isPiston(World.getBlock(packet.getX(), packet.getY(), packet.getZ()))
             && packet.getType() instanceof PistonValueType pistonValueType
             && packet.getValue() instanceof PistonValue pistonValue
         ) {
-            PistonBaseBlock.triggerEvent(World.getBlockState(packet.getX(), packet.getY(), packet.getZ()), pistonValueType, pistonValue);
+            if (CONFIG.debug.pistonPushSim
+                && MathHelper.distance3d(
+                    packet.getX(), packet.getY(), packet.getZ(),
+                    World.getCurrentPlayerX(), World.getCurrentPlayerY(), World.getCurrentPlayerZ())
+                <= CONFIG.debug.pistonPushSimMaxDistanceFromPlayer
+            ) {
+                PistonBaseBlock.triggerEvent(World.getBlockState(packet.getX(), packet.getY(), packet.getZ()), pistonValueType, pistonValue);
+            } else {
+                World.removeTickableBlockEntity(packet.getX(), packet.getY(), packet.getZ());
+            }
         }
         return true;
     }
