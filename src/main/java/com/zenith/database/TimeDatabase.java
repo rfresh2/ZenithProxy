@@ -74,11 +74,7 @@ public class TimeDatabase extends LockingDatabase {
         var timeInstant = Instant.ofEpochMilli(worldTimeData.getLastUpdate());
         var time = timeInstant.atOffset(ZoneOffset.UTC);
         long worldage = worldTimeData.getGameTime();
-        // todo: networked world clock registry in 26.1
-        //  the clockstates map is a clock id (related to dimension) -> state
-        //  nether does not have a default clock, so i dont think it will have a worldtime necessarily
-        //  but we only are saving the overworld clock, so maybe it doesn't matter too much
-        var owClock = worldTimeData.getClockStates().get(0);
+        var owClock = worldTimeData.getClockInstance(0);
         if (owClock == null) {
             DATABASE_LOG.warn("no overworld clock found?");
         }

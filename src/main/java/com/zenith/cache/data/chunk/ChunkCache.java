@@ -83,12 +83,20 @@ public class ChunkCache implements CachedData {
     protected byte[] serverBrand = null;
 
     public static final int BLOCK_ENTITY_TICK_PRIORITY = -11000;
+    public static final int CLOCK_TICK_PRIORITY = -11001;
 
     public void subscribeEvents() {
         EVENT_BUS.subscribe(this,
             // must be after entity ticks
-            of(ClientTickEvent.End.class, BLOCK_ENTITY_TICK_PRIORITY, this::tickBlockEntities)
+            of(ClientTickEvent.End.class, BLOCK_ENTITY_TICK_PRIORITY, this::tickBlockEntities),
+            of(ClientTickEvent.End.class, CLOCK_TICK_PRIORITY, this::tickClocks)
         );
+    }
+
+    private void tickClocks(ClientTickEvent.End event) {
+        if (this.worldTimeData != null) {
+            this.worldTimeData.tick(this.worldTimeData.getGameTime() + 1L);
+        }
     }
 
     public void setCurrentWorld(final int dimensionId, final Key worldName, long hashedSeed, boolean debug, boolean flat) {
