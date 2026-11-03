@@ -560,7 +560,9 @@ public class ChunkCache implements CachedData {
     }
 
     public void updateWorldTime(final ClientboundSetTimePacket packet) {
-        if (this.worldTimeData == null) this.worldTimeData = new WorldTimeData();
-        else this.worldTimeData.update(packet);
+        if (this.worldTimeData == null) {
+            this.worldTimeData = new WorldTimeData();
+        }
+        this.worldTimeData.update(packet);
     }
 }
