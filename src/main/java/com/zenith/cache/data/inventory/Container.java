@@ -1,6 +1,7 @@
 package com.zenith.cache.data.inventory;
 
 import com.zenith.mc.item.hashing.ItemStackHasher;
+import com.zenith.mc.item.ContainerTypeInfoRegistry;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
 import org.geysermc.mcprotocollib.protocol.data.game.inventory.ContainerType;
@@ -36,7 +37,9 @@ public class Container {
         this.containerId = containerId;
         this.type = type;
         this.title = title;
-        this.contents = initializeEmptyContents(0);
+        var typeInfo = ContainerTypeInfoRegistry.REGISTRY.get(type);
+        var size = typeInfo != null ? typeInfo.totalSlots() : 0;
+        this.contents = initializeEmptyContents(size);
     }
 
     private List<ItemStack> initializeEmptyContents(int size) {
@@ -48,7 +51,8 @@ public class Container {
     }
 
     public void setContents(final ItemStack[] inventory) {
-        if (inventory.length != contents.size()) {
+        if (inventory.length > contents.size()) {
+            CACHE_LOG.debug("container: {} type: {} setContents: new len: {} > contents size: {}", containerId, type, inventory.length, contents.size());
             this.contents = initializeEmptyContents(inventory.length);
         }
         for (int i = 0; i < inventory.length; i++) {
