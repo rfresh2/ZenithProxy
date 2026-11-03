@@ -318,6 +318,10 @@ public final class Bot extends ModuleUtils {
             }
         }
 
+        // if these aren't equal something has gone wrong
+        wasSneaking = CACHE.getPlayerCache().isSneaking();
+        lastSprinting = CACHE.getPlayerCache().isSprinting();
+
         updateInWaterStateAndDoFluidPushing();
 
         if (Math.abs(velocity.getX()) < 0.003) velocity.setX(0);
@@ -521,7 +525,7 @@ public final class Bot extends ModuleUtils {
             this.inputRequestFuture.notifyListeners();
         }
         this.inputRequestFuture = InputRequestFuture.rejected;
-        sendClientPacket(ServerboundClientTickEndPacket.INSTANCE);
+        sendClientPacketAwait(ServerboundClientTickEndPacket.INSTANCE);
     }
 
     private void tickEntities() {
