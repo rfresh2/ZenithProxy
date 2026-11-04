@@ -50,7 +50,7 @@ public class McplBrigadierConverter {
             return null;
         }
         try {
-            return convertTopLevelMcplNodes(nodes, rootNode);
+            return convertMcplNodes(nodes);
         } catch (Exception e) {
             CLIENT_LOG.warn("Failed to convert command nodes to brigadier", e);
             return null;
@@ -167,57 +167,46 @@ public class McplBrigadierConverter {
 
     /** To Brigadier **/
 
-    // todo: fix redirects
-
-    private static @NotNull CommandDispatcher<CommandContext> convertTopLevelMcplNodes(final CommandNode[] nodes, final CommandNode rootNode) {
-        var nodeMap = new Int2ObjectOpenHashMap<com.mojang.brigadier.tree.CommandNode>();
-        var dispatcher = new CommandDispatcher<CommandContext>();
-        nodeMap.put(0, dispatcher.getRoot());
-        for (var childIndex : rootNode.getChildIndices()) {
-            var childNode = nodes[childIndex];
-            if (childNode.getType() != CommandType.LITERAL) {
-                continue;
-            }
-            if (childNode.getRedirectIndex().isPresent()) {
-                continue;
-            }
-            var child = LiteralArgumentBuilder.<CommandContext>literal(childNode.getName());
-            if (childNode.isExecutable()) {
-                child.executes(c -> 0);
-            }
-            for (var childChildIndex : childNode.getChildIndices()) {
-                var childChildNode = convertChildMcplNode(nodes, nodeMap, childChildIndex);
-                if (childChildNode != null) {
-                    child.then(childChildNode);
-                }
-            }
-            var build = dispatcher.register(child);
-            nodeMap.put(childIndex, build);
-        }
-        for (var childIndex : rootNode.getChildIndices()) {
-            var childNode = nodes[childIndex];
-            if (childNode.getType() != CommandType.LITERAL) {
-                continue;
-            }
-            if (childNode.getRedirectIndex().isPresent()) {
-                var redirectNode = nodeMap.get(childNode.getRedirectIndex().getAsInt());
-                var child = LiteralArgumentBuilder.<CommandContext>literal(childNode.getName());
-                child.redirect(redirectNode);
-                var build = dispatcher.register(child);
-                nodeMap.put(childIndex, build);
-            }
-        }
-        return dispatcher;
+    private static @NotNull CommandDispatcher<CommandContext> convertMcplNodes(final CommandNode[] nodes) {
+        var root = (RootCommandNode<CommandContext>) resolveMcplNode(nodes, new Int2ObjectOpenHashMap<>(), 0);
+        return new CommandDispatcher<>(root);
     }
 
-    private static com.mojang.brigadier.tree.CommandNode<CommandContext> convertChildMcplNode(CommandNode[] nodes, Int2ObjectMap<com.mojang.brigadier.tree.CommandNode> nodeMap, int nodeIndex) {
+    private static com.mojang.brigadier.tree.CommandNode<CommandContext> resolveMcplNode(
+        CommandNode[] nodes,
+        Int2ObjectMap<com.mojang.brigadier.tree.CommandNode<CommandContext>> resolved,
+        int nodeIndex
+    ) {
+        if (resolved.containsKey(nodeIndex)) {
+            return resolved.get(nodeIndex);
+        }
         CommandNode node = nodes[nodeIndex];
-        ArgumentBuilder<CommandContext, ?> argBuilder = switch (node.getType()) {
-            case ROOT -> {
-                // shouldn't get here
-                CLIENT_LOG.debug("Unexpected ROOT node in non-top-level position: {}", node);
-                yield null;
+        com.mojang.brigadier.tree.CommandNode<CommandContext> built;
+        if (node.getType() == CommandType.ROOT) {
+            built = new RootCommandNode<>();
+        } else {
+            var builder = createBuilder(node);
+            if (node.getRedirectIndex().isPresent()) {
+                builder.redirect(resolveMcplNode(nodes, resolved, node.getRedirectIndex().getAsInt()));
             }
+            if (node.isExecutable()) {
+                builder.executes(context -> 0);
+            }
+            built = builder.build();
+        }
+        resolved.put(nodeIndex, built);
+        for (var childIndex : node.getChildIndices()) {
+            var child = resolveMcplNode(nodes, resolved, childIndex);
+            if (!(child instanceof RootCommandNode)) {
+                built.addChild(child);
+            }
+        }
+        return built;
+    }
+
+    private static ArgumentBuilder<CommandContext, ?> createBuilder(CommandNode node) {
+        return switch (node.getType()) {
+            case ROOT -> throw new IllegalArgumentException("Cannot create builder for root node");
             case LITERAL -> LiteralArgumentBuilder.literal(node.getName());
             case ARGUMENT -> {
                 ArgumentType<?> argType = switch (node.getParser()) {
@@ -277,33 +266,5 @@ public class McplBrigadierConverter {
                 yield RequiredArgumentBuilder.argument(node.getName(), argType);
             }
         };
-        if (argBuilder == null) {
-            return null;
-        }
-        for (var childIndex : node.getChildIndices()) {
-            var child = convertChildMcplNode(nodes, nodeMap, childIndex);
-            if (child != null) {
-                argBuilder.then(child);
-            }
-        }
-        if (node.isExecutable()) {
-            argBuilder.executes(context -> 0);
-        }
-        if (node.getRedirectIndex().isPresent()) {
-            // todo: not sure if this works tbh
-            //  requires the redirect node to already be built and in the map
-            //  so ordering is very strict
-            //  vanilla mc uses an intermediary stub tree to solve this
-            var redirectNode = nodeMap.get(node.getRedirectIndex().getAsInt());
-            if (redirectNode != null) {
-                argBuilder.redirect(redirectNode);
-            } else {
-//                CLIENT_LOG.debug("Failed to find redirect node at index {} for node {}", node.getRedirectIndex().getAsInt(), node);
-            }
-        }
-        var build = argBuilder.build();
-        nodeMap.put(nodeIndex, build);
-
-        return build;
     }
 }

@@ -34,7 +34,7 @@ public class InGameCommandManager {
         if (!parse.getExceptions().isEmpty()) {
             return false;
         }
-        if (parse.getContext().getCommand() == null) {
+        if (parse.getContext().getLastChild().getCommand() == null) {
             return false;
         }
         return !parse.getReader().canRead();
