@@ -41,6 +41,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
 import net.raphimc.minecraftauth.bedrock.exception.MinecraftRequestException;
 import org.geysermc.mcprotocollib.auth.GameProfile;
 import org.geysermc.mcprotocollib.network.ProxyInfo;
@@ -480,11 +481,7 @@ public class Proxy {
             minecraftProtocol = this.logIn();
         } catch (final Exception e) {
             EVENT_BUS.post(new ClientLoginFailedEvent(e));
-            var connections = getActiveConnections().getArray();
-            for (int i = 0; i < connections.length; i++) {
-                var connection = connections[i];
-                connection.disconnect("Login failed");
-            }
+            disconnectAllServerSessions(Component.text("Login failed"));
             EXECUTOR.schedule(() -> EVENT_BUS.post(new ClientDisconnectEvent(LOGIN_FAILED)), 1L, TimeUnit.SECONDS);
             return;
         }
@@ -821,6 +818,24 @@ public class Proxy {
 
     public String getOnlineTimeString() {
         return Queue.getEtaStringFromSeconds(getOnlineTimeSecondsWithQueueSkip());
+    }
+
+    public void disconnectAllServerSessions(Component reason) {
+        var connections = Proxy.getInstance().getActiveConnections().getArray();
+        for (int i = 0; i < connections.length; i++) {
+            var connection = connections[i];
+            connection.disconnect(reason);
+        }
+        var server = Proxy.getInstance().getServer();
+        if (server != null) {
+            var sessions = server.getSessions();
+            for (int i = 0; i < sessions.size(); i++) {
+                final var session = sessions.get(i);
+                if (session.isConnected()) {
+                    session.disconnect(reason);
+                }
+            }
+        }
     }
 
     public void handleDisconnectEvent(ClientDisconnectEvent event) {
