@@ -42,7 +42,7 @@ dependencies {
     api("com.github.rfresh2:MCProtocolLib:$mcplVersion") {
         exclude(group = "io.netty")
     }
-    api(platform("io.netty:netty-bom:4.2.19.Final"))
+    api(platform("io.netty:netty-bom:4.2.20.Final"))
     api("io.netty:netty-buffer")
     api("io.netty:netty-codec-haproxy")
     api("io.netty:netty-codec-dns")
