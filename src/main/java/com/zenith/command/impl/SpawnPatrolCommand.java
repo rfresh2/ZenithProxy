@@ -143,7 +143,7 @@ public class SpawnPatrolCommand extends Command {
                           }
                           c.getSource().getEmbed()
                               .title("Added " + players.length + " Players to ignore list")
-                              .description(playerListToString(PLAYER_LISTS.getSpawnPatrolIgnoreList()));;
+                              .description(playerListToString(PLAYER_LISTS.getSpawnPatrolIgnoreList()));
                           return OK;
                       })))
                       .then(literal("del").then(argument("player", wordWithChars()).executes(c -> {
