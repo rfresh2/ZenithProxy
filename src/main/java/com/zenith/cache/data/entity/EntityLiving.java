@@ -103,6 +103,13 @@ public class EntityLiving extends Entity {
         return (flagsByte & (1 << 4)) != 0;
     }
 
+    public boolean isUsingItem() {
+        if (removed) return false;
+        Byte flagsByte = getMetadataValue(0, MetadataTypes.BYTE, Byte.class);
+        if (flagsByte == null) return false;
+        return (flagsByte & 1) != 0;
+    }
+
     public boolean isBaby() {
         if (removed) return false;
         var entityData = ENTITY_DATA.getEntityData(entityType);

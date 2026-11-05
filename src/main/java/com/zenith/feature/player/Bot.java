@@ -633,21 +633,20 @@ public final class Bot extends ModuleUtils {
     }
 
     private MutableVec3d getMovementInputVec() {
+        final boolean usingItem = CACHE.getPlayerCache().getThePlayer().isUsingItem()
+            && !CACHE.getPlayerCache().getThePlayer().isInVehicle();
         float strafe = 0.0F;
         if (movementInput.pressingLeft) ++strafe;
         if (movementInput.pressingRight) --strafe;
-        // todo:
-//        if (isUsingItem && !isPassenger) {
-//            this.input.leftImpulse *= 0.2F;
-//            this.input.forwardImpulse *= 0.2F;
-//            this.sprintTriggerTime = 0;
-//        }
         if (isSlowMovement) strafe *= sneakSpeed;
+        // vanilla applies the item use multiplier before the 0.98 input scale
+        if (usingItem) strafe *= 0.2f;
         strafe = strafe * 0.98f;
         float fwd = 0.0F;
         if (movementInput.pressingForward) ++fwd;
         if (movementInput.pressingBack) --fwd;
         if (isSlowMovement) fwd *= sneakSpeed;
+        if (usingItem) fwd *= 0.2f;
         fwd = fwd * 0.98f;
         return new MutableVec3d(strafe, 0, fwd);
     }
