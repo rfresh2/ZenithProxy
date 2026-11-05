@@ -238,6 +238,9 @@ public final class Config {
                 public int itemSaverThreshold = 5;
                 public boolean preferSilkTouch = false;
                 public boolean mineProcessExitLavaGoal = true;
+                public boolean mineProcessLimitY = false;
+                public int mineProcessMaxY = 360;
+                public int mineProcessMinY = -128;
                 public final Set<String> acceptableThrowawayItems = new ObjectArraySet<>(new String[]{
                     ItemRegistry.DIRT.name(),
                     ItemRegistry.COBBLESTONE.name(),

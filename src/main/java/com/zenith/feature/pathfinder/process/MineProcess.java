@@ -396,6 +396,15 @@ public final class MineProcess extends BaritoneProcessHelper implements IBariton
 
             .filter(pos -> !blacklist.contains(pos))
 
+            .filter(pos -> {
+                if (CONFIG.client.extra.pathfinder.mineProcessLimitY) {
+                    if (pos.y() > CONFIG.client.extra.pathfinder.mineProcessMaxY || pos.y() < CONFIG.client.extra.pathfinder.mineProcessMinY) {
+                        return false;
+                    }
+                }
+                return true;
+            })
+
             .sorted(Comparator.comparingDouble(BARITONE.getPlayerContext().player().blockPosition()::squaredDistance))
             .collect(Collectors.toList());
 
