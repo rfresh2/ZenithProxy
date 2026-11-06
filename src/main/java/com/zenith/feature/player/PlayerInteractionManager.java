@@ -473,6 +473,9 @@ public class PlayerInteractionManager {
 
     // todo: is this allowed if we are not holding a usable item? or any item at all?
     protected InteractionResult useItem(Hand hand) {
+        // the vanilla client starts using the item the moment it sends the packet. the server's
+        // metadata echo arrives a round trip later, so the local state is what drives movement.
+        BOT.startUsingItem(getItemUseTicks(hand));
         startPrediction(seqId -> {
             return new ServerboundUseItemPacket(
                 hand,
@@ -484,12 +487,47 @@ public class PlayerInteractionManager {
         return InteractionResult.PASS;
     }
 
+    /**
+     * How long the use stays active.
+     *
+     * <p>Items with a consumable component finish on their own after its {@code consumeSeconds},
+     * so the duration is taken from the item itself rather than from a hardcoded table. The
+     * remaining items that enter the use state at all stay in use until they are released and are
+     * listed explicitly; anything else is instant and never slows the player.
+     */
+    private static int getItemUseTicks(final Hand hand) {
+        final ItemStack item = CACHE.getPlayerCache().getEquipment(hand);
+        if (item == Container.EMPTY_STACK) return UsingItemState.NOT_USING;
+        final ItemData itemData = ItemRegistry.REGISTRY.get(item.getId());
+        if (itemData == null) return UsingItemState.NOT_USING;
+        final var consumable = item.withAddedComponents(itemData.components())
+            .getDataComponents()
+            .get(DataComponentTypes.CONSUMABLE);
+        if (consumable != null) {
+            return UsingItemState.consumeTicks(consumable.consumeSeconds());
+        }
+        // a bow, shield or trident keeps the use open until it is released
+        return isHeldOpenItem(itemData) ? UsingItemState.HELD_OPEN : UsingItemState.NOT_USING;
+    }
+
+    private static boolean isHeldOpenItem(final ItemData itemData) {
+        return itemData == ItemRegistry.BOW
+            || itemData == ItemRegistry.CROSSBOW
+            || itemData == ItemRegistry.SHIELD
+            || itemData == ItemRegistry.TRIDENT
+            || itemData == ItemRegistry.SPYGLASS
+            || itemData == ItemRegistry.GOAT_HORN
+            || itemData == ItemRegistry.BRUSH;
+    }
+
     protected void attackEntity(final EntityRaycastResult entity) {
         BOT.debug("[{}] [{}, {}, {}] Attack Entity", System.currentTimeMillis(), entity.entity().getX(), entity.entity().getY(), entity.entity().getZ());
         Proxy.getInstance().getClient().sendAsync(new ServerboundInteractPacket(entity.entity().getEntityId(), InteractAction.ATTACK, false));
     }
 
     protected void releaseUsingItem() {
+        // the client leaves the use state the instant it releases, not when the server echoes it
+        BOT.stopUsingItem();
         Proxy.getInstance().getClient().sendAsync(new ServerboundPlayerActionPacket(
             PlayerAction.RELEASE_USE_ITEM,
             0, 0, 0,

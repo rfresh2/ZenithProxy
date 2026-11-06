@@ -94,6 +94,10 @@ public final class Bot extends ModuleUtils {
     private int jumpTriggerTime;
     private int noJumpDelay;
     private boolean wasSneakPressed = false;
+    // client side echo of the "using item" living entity state. the server's metadata copy lags
+    // behind by the connection latency, so the client is expected to set and clear this itself the
+    // moment it starts or stops a use, exactly like sprinting.
+    private final UsingItemState usingItemState = new UsingItemState();
     private double waterHeight;
     private double lavaHeight;
     private int ticksSinceLastPositionPacketSent;
@@ -265,8 +269,11 @@ public final class Bot extends ModuleUtils {
                     inputRequestFuture.setClickResult(ClickResult.RightClickResult.useItem());
                 }
             }
-            // todo: track ongoing right click item consumes
-            //  and if one is cancelled, do interactions.releaseUsingItem()
+            // a use that is still open but no longer being requested has to be released, or the
+            // client stays slowed and the server keeps the use active
+            if (isHoldingOpenUse() && !movementInput.isRightClick()) {
+                interactions.releaseUsingItem();
+            }
             interactions.stopDestroyBlock();
         } catch (final Exception e) {
             CLIENT_LOG.error("Error during interaction tick", e);
@@ -415,6 +422,7 @@ public final class Bot extends ModuleUtils {
             // todo: full jump when at water surface
         } else this.noJumpDelay = 0;
 
+        tickUsingItem();
         final MutableVec3d movementInputVec = getMovementInputVec();
         if (isTouchingWater && isSneaking && !isFlying) velocity.setY(velocity.getY() - 0.04f);
         if (CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
@@ -633,22 +641,57 @@ public final class Bot extends ModuleUtils {
     }
 
     private MutableVec3d getMovementInputVec() {
-        final boolean usingItem = CACHE.getPlayerCache().getThePlayer().isUsingItem()
-            && !CACHE.getPlayerCache().getThePlayer().isInVehicle();
+        final boolean slowedByUse = isUsingItem() && !CACHE.getPlayerCache().getThePlayer().isInVehicle();
         float strafe = 0.0F;
         if (movementInput.pressingLeft) ++strafe;
         if (movementInput.pressingRight) --strafe;
         if (isSlowMovement) strafe *= sneakSpeed;
         // vanilla applies the item use multiplier before the 0.98 input scale
-        if (usingItem) strafe *= 0.2f;
+        if (slowedByUse) strafe *= 0.2f;
         strafe = strafe * 0.98f;
         float fwd = 0.0F;
         if (movementInput.pressingForward) ++fwd;
         if (movementInput.pressingBack) --fwd;
         if (isSlowMovement) fwd *= sneakSpeed;
-        if (usingItem) fwd *= 0.2f;
+        if (slowedByUse) fwd *= 0.2f;
         fwd = fwd * 0.98f;
         return new MutableVec3d(strafe, 0, fwd);
+    }
+
+    /**
+     * Marks the player as using an item, mirroring what the vanilla client does the instant it
+     * sends the use packet. The server echoes this back in the living entity metadata, but that
+     * copy only arrives after a full round trip, so it cannot be used to drive movement.
+     *
+     * @param useTicks {@link UsingItemState#HELD_OPEN} for a use that must be released,
+     *                 {@link UsingItemState#NOT_USING} for an instant item, or the number of ticks
+     *                 a self finishing use stays active
+     */
+    void startUsingItem(final int useTicks) {
+        this.usingItemState.start(useTicks);
+    }
+
+    /**
+     * Ends the current use, e.g. after releasing a bow or cancelling an eat.
+     */
+    void stopUsingItem() {
+        this.usingItemState.stop();
+    }
+
+    public boolean isUsingItem() {
+        return this.usingItemState.isUsing();
+    }
+
+    /**
+     * Advances the use state by one tick, expiring a finite length use such as eating or drinking.
+     */
+    private void tickUsingItem() {
+        this.usingItemState.tick();
+    }
+
+    private boolean isHoldingOpenUse() {
+        return this.usingItemState.isUsing()
+            && this.usingItemState.ticksRemaining() == UsingItemState.HELD_OPEN;
     }
 
     private void jump() {
@@ -1413,6 +1456,8 @@ public final class Bot extends ModuleUtils {
         if (full) {
             this.isSneaking = this.wasSneaking = isSlowMovement = false;
             this.isSprinting = this.lastSprinting = false;
+            // a respawn or dimension change drops any use that was in progress
+            this.usingItemState.stop();
         } else {
             this.isSneaking = this.wasSneaking = isSlowMovement = CACHE.getPlayerCache().isSneaking();
             this.isSprinting = this.lastSprinting = CACHE.getPlayerCache().isSprinting();
