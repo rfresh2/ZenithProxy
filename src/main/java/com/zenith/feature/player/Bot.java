@@ -37,6 +37,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PositionElement;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
+import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.CollisionRule;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundExplodePacket;
@@ -269,9 +270,10 @@ public final class Bot extends ModuleUtils {
                     inputRequestFuture.setClickResult(ClickResult.RightClickResult.useItem());
                 }
             }
-            // a use that is still open but no longer being requested has to be released, or the
-            // client stays slowed and the server keeps the use active
-            if (isHoldingOpenUse() && !movementInput.isRightClick()) {
+            // a held open use whose item is gone has to be released, otherwise the client stays
+            // slowed and the server keeps the use active. an active use must survive ticks that
+            // simply did not request a right click.
+            if (this.usingItemState.isHeldOpen() && !isHoldingOpenUse()) {
                 interactions.releaseUsingItem();
             }
             interactions.stopDestroyBlock();
@@ -287,6 +289,10 @@ public final class Bot extends ModuleUtils {
 
     private void tick(final ClientBotTick event) {
         tickSkipped = false;
+        // advance the use state before any early return: it is pure local bookkeeping and must
+        // expire even on ticks that skip the movement simulation, otherwise a use that was
+        // interrupted by a teleport or an unloaded chunk would keep slowing the player forever
+        tickUsingItem();
         if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) {
             onInteractionTickSkipped();
             return;
@@ -422,7 +428,6 @@ public final class Bot extends ModuleUtils {
             // todo: full jump when at water surface
         } else this.noJumpDelay = 0;
 
-        tickUsingItem();
         final MutableVec3d movementInputVec = getMovementInputVec();
         if (isTouchingWater && isSneaking && !isFlying) velocity.setY(velocity.getY() - 0.04f);
         if (CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
@@ -667,8 +672,8 @@ public final class Bot extends ModuleUtils {
      *                 {@link UsingItemState#NOT_USING} for an instant item, or the number of ticks
      *                 a self finishing use stays active
      */
-    void startUsingItem(final int useTicks) {
-        this.usingItemState.start(useTicks);
+    void startUsingItem(final int useTicks, final Hand hand, final int itemId) {
+        this.usingItemState.start(useTicks, hand, itemId);
     }
 
     /**
@@ -689,9 +694,18 @@ public final class Bot extends ModuleUtils {
         this.usingItemState.tick();
     }
 
+    /**
+     * True while a held open use (bow, shield, ...) is still valid and must not be released.
+     *
+     * <p>Input is rebuilt from scratch every tick, so "no right click this tick" does not mean the
+     * use is over - a module re-requesting a right click every few ticks would otherwise release
+     * and restart the use constantly. The use only has to be dropped once the item it was started
+     * with is no longer in that hand.
+     */
     private boolean isHoldingOpenUse() {
-        return this.usingItemState.isUsing()
-            && this.usingItemState.ticksRemaining() == UsingItemState.HELD_OPEN;
+        if (!this.usingItemState.isHeldOpen()) return false;
+        final ItemStack held = CACHE.getPlayerCache().getEquipment(this.usingItemState.hand());
+        return held != Container.EMPTY_STACK && held.getId() == this.usingItemState.itemId();
     }
 
     private void jump() {

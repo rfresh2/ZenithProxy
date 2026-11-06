@@ -1,5 +1,7 @@
 package com.zenith.feature.player;
 
+import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
+
 /**
  * Client side model of the vanilla "using an item" state.
  *
@@ -19,9 +21,26 @@ public final class UsingItemState {
 
     private boolean using;
     private int ticksRemaining;
+    private Hand hand = Hand.MAIN_HAND;
+    private int itemId = -1;
 
     public boolean isUsing() {
         return this.using;
+    }
+
+    /** True while a use that stays open until released is active. */
+    public boolean isHeldOpen() {
+        return this.using && this.ticksRemaining == HELD_OPEN;
+    }
+
+    /** Hand the active use was started with. */
+    public Hand hand() {
+        return this.hand;
+    }
+
+    /** Item id the active use was started with, or {@code -1}. */
+    public int itemId() {
+        return this.itemId;
     }
 
     /**
@@ -29,19 +48,24 @@ public final class UsingItemState {
      *
      * @param useTicks {@link #HELD_OPEN} for a use that must be released, {@link #NOT_USING} for an
      *                 instant item, or the number of ticks a self finishing use stays active
+     * @param hand     hand the item is held in
+     * @param itemId   item id being used
      */
-    public void start(final int useTicks) {
+    public void start(final int useTicks, final Hand hand, final int itemId) {
         if (useTicks == NOT_USING) {
             stop();
             return;
         }
         this.using = true;
         this.ticksRemaining = useTicks;
+        this.hand = hand;
+        this.itemId = itemId;
     }
 
     public void stop() {
         this.using = false;
         this.ticksRemaining = 0;
+        this.itemId = -1;
     }
 
     /**

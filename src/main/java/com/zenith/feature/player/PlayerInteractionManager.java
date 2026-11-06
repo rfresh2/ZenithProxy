@@ -475,7 +475,8 @@ public class PlayerInteractionManager {
     protected InteractionResult useItem(Hand hand) {
         // the vanilla client starts using the item the moment it sends the packet. the server's
         // metadata echo arrives a round trip later, so the local state is what drives movement.
-        BOT.startUsingItem(getItemUseTicks(hand));
+        final ItemStack item = CACHE.getPlayerCache().getEquipment(hand);
+        BOT.startUsingItem(getItemUseTicks(item), hand, item == Container.EMPTY_STACK ? -1 : item.getId());
         startPrediction(seqId -> {
             return new ServerboundUseItemPacket(
                 hand,
@@ -495,8 +496,7 @@ public class PlayerInteractionManager {
      * remaining items that enter the use state at all stay in use until they are released and are
      * listed explicitly; anything else is instant and never slows the player.
      */
-    private static int getItemUseTicks(final Hand hand) {
-        final ItemStack item = CACHE.getPlayerCache().getEquipment(hand);
+    private static int getItemUseTicks(final ItemStack item) {
         if (item == Container.EMPTY_STACK) return UsingItemState.NOT_USING;
         final ItemData itemData = ItemRegistry.REGISTRY.get(item.getId());
         if (itemData == null) return UsingItemState.NOT_USING;
