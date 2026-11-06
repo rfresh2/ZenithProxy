@@ -7,7 +7,6 @@ import com.zenith.feature.inventory.InventoryActionRequest;
 import com.zenith.feature.player.ClickTarget;
 import com.zenith.feature.player.Input;
 import com.zenith.feature.player.InputRequest;
-import com.zenith.mc.block.Direction;
 import com.zenith.mc.item.ItemData;
 import com.zenith.mc.item.ItemRegistry;
 import com.zenith.util.RequestFuture;
@@ -18,9 +17,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.GameMode;
-import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerAction;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
-import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.player.ServerboundPlayerActionPacket;
 
 import java.util.List;
 import java.util.Objects;
@@ -92,12 +89,9 @@ public class AutoOmen extends AbstractInventoryModule {
                     : raidActive || omenActive;
                 if (stopCondition) {
                     if (isEating) {
-                        sendClientPacketAsync(new ServerboundPlayerActionPacket(
-                            PlayerAction.RELEASE_USE_ITEM,
-                            0, 0, 0,
-                            Direction.DOWN.mcpl(),
-                            0
-                        ));
+                        // release through the interaction manager so the client side use state is
+                        // cleared too, otherwise the local movement slowdown outlives the drink
+                        BOT.getInteractions().releaseUsingItem();
                         debug("Cancelling omen drink because omen or raid now active");
                     }
                     delay = 0;

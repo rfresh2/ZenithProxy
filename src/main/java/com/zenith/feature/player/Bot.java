@@ -273,7 +273,7 @@ public final class Bot extends ModuleUtils {
             // a held open use whose item is gone has to be released, otherwise the client stays
             // slowed and the server keeps the use active. an active use must survive ticks that
             // simply did not request a right click.
-            if (this.usingItemState.isHeldOpen() && !isHoldingOpenUse()) {
+            if (shouldReleaseHeldOpenUse()) {
                 interactions.releaseUsingItem();
             }
             interactions.stopDestroyBlock();
@@ -650,17 +650,36 @@ public final class Bot extends ModuleUtils {
         float strafe = 0.0F;
         if (movementInput.pressingLeft) ++strafe;
         if (movementInput.pressingRight) --strafe;
-        if (isSlowMovement) strafe *= sneakSpeed;
-        // vanilla applies the item use multiplier before the 0.98 input scale
-        if (slowedByUse) strafe *= 0.2f;
-        strafe = strafe * 0.98f;
         float fwd = 0.0F;
         if (movementInput.pressingForward) ++fwd;
         if (movementInput.pressingBack) --fwd;
-        if (isSlowMovement) fwd *= sneakSpeed;
-        if (slowedByUse) fwd *= 0.2f;
-        fwd = fwd * 0.98f;
+        strafe = applyMovementModifiers(strafe, isSlowMovement, sneakSpeed, slowedByUse);
+        fwd = applyMovementModifiers(fwd, isSlowMovement, sneakSpeed, slowedByUse);
         return new MutableVec3d(strafe, 0, fwd);
+    }
+
+    /**
+     * Applies the input modifiers vanilla applies in {@code LocalPlayer#aiStep}, in vanilla's order.
+     *
+     * <p>Sneaking scales the input by the sneaking speed attribute, using an item scales it by 0.2,
+     * and only then is the whole thing scaled by the 0.98 input factor. The order matters: a
+     * sneaking player eating an apple moves at {@code 0.3 * 0.2 * 0.98}, not at {@code 0.98 * 0.3}
+     * with the use multiplier applied to the already scaled value.
+     *
+     * @param input        raw impulse, -1, 0 or 1
+     * @param slowMovement whether the sneaking slow modifier applies
+     * @param sneakSpeed   the sneaking speed attribute value
+     * @param slowedByUse  whether the player is using an item outside a vehicle
+     * @return the modified impulse
+     */
+    static float applyMovementModifiers(final float input,
+                                        final boolean slowMovement,
+                                        final float sneakSpeed,
+                                        final boolean slowedByUse) {
+        float modified = input;
+        if (slowMovement) modified *= sneakSpeed;
+        if (slowedByUse) modified *= 0.2f;
+        return modified * 0.98f;
     }
 
     /**
@@ -695,17 +714,18 @@ public final class Bot extends ModuleUtils {
     }
 
     /**
-     * True while a held open use (bow, shield, ...) is still valid and must not be released.
+     * True while a held open use (bow, shield, ...) has to be released because the item it was
+     * started with is no longer in the hand that started it.
      *
      * <p>Input is rebuilt from scratch every tick, so "no right click this tick" does not mean the
      * use is over - a module re-requesting a right click every few ticks would otherwise release
      * and restart the use constantly. The use only has to be dropped once the item it was started
      * with is no longer in that hand.
      */
-    private boolean isHoldingOpenUse() {
+    private boolean shouldReleaseHeldOpenUse() {
         if (!this.usingItemState.isHeldOpen()) return false;
         final ItemStack held = CACHE.getPlayerCache().getEquipment(this.usingItemState.hand());
-        return held != Container.EMPTY_STACK && held.getId() == this.usingItemState.itemId();
+        return held == Container.EMPTY_STACK || held.getId() != this.usingItemState.itemId();
     }
 
     private void jump() {

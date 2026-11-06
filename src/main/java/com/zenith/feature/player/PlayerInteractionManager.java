@@ -476,8 +476,9 @@ public class PlayerInteractionManager {
         // the vanilla client starts using the item the moment it sends the packet. the server's
         // metadata echo arrives a round trip later, so the local state is what drives movement.
         final ItemStack item = CACHE.getPlayerCache().getEquipment(hand);
-        BOT.startUsingItem(getItemUseTicks(item), hand, item == Container.EMPTY_STACK ? -1 : item.getId());
-        startPrediction(seqId -> {
+        final int useTicks = getItemUseTicks(item);
+        final int itemId = item == Container.EMPTY_STACK ? -1 : item.getId();
+        final boolean sent = startPrediction(seqId -> {
             return new ServerboundUseItemPacket(
                 hand,
                 seqId,
@@ -485,6 +486,9 @@ public class PlayerInteractionManager {
                 BOT.getPitch()
             );
         });
+        // only enter the use state once the packet actually went out. an aborted prediction would
+        // otherwise leave the client slowing itself down for a use the server never saw
+        if (sent) BOT.startUsingItem(useTicks, hand, itemId);
         return InteractionResult.PASS;
     }
 
@@ -510,6 +514,17 @@ public class PlayerInteractionManager {
         return isHeldOpenItem(itemData) ? UsingItemState.HELD_OPEN : UsingItemState.NOT_USING;
     }
 
+    /**
+     * Items that enter the use state and stay there until they are released.
+     *
+     * <p>This mirrors vanilla, not Grim. On 1.14-1.21.4 Grim only models the use state for items
+     * with a consumable component and treats everything else as "not slowed", so the bot is
+     * stricter than the anticheat for these items: it slows where Grim allows full speed. That is
+     * the safe direction - the cost is a prediction offset while the use is held, not a bypass -
+     * and Grim's prediction engine simulates both the slowed and the unslowed input every tick,
+     * so a correct slowdown still matches. Keeping the list is what stops a shield or bow use from
+     * desyncing real movement against the server's own slowdown.
+     */
     private static boolean isHeldOpenItem(final ItemData itemData) {
         return itemData == ItemRegistry.BOW
             || itemData == ItemRegistry.CROSSBOW
@@ -525,7 +540,14 @@ public class PlayerInteractionManager {
         Proxy.getInstance().getClient().sendAsync(new ServerboundInteractPacket(entity.entity().getEntityId(), InteractAction.ATTACK, false));
     }
 
-    protected void releaseUsingItem() {
+    /**
+     * Releases an active item use and clears the client side use state.
+     *
+     * <p>Anything that sends a release on its own (a module cancelling a drink, for instance) has
+     * to go through here instead of building the packet itself, otherwise the local use state
+     * keeps the movement slowdown applied after the use is over.
+     */
+    public void releaseUsingItem() {
         // the client leaves the use state the instant it releases, not when the server echoes it
         BOT.stopUsingItem();
         Proxy.getInstance().getClient().sendAsync(new ServerboundPlayerActionPacket(
