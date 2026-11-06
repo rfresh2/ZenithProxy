@@ -577,6 +577,7 @@ public final class Config {
                 public boolean enabled = true;
                 public int delaySeconds = 5;
                 public int maxAttempts = 200;
+                public int alreadyConnectedDelaySecond = 300;
             }
 
             public static final class AutoRespawn {

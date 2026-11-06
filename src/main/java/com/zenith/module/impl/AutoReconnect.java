@@ -8,6 +8,7 @@ import com.zenith.event.client.ClientDisconnectEvent;
 import com.zenith.event.module.AutoReconnectDecisionEvent;
 import com.zenith.event.module.AutoReconnectEvent;
 import com.zenith.module.api.Module;
+import com.zenith.util.DisconnectReasonInfo;
 import com.zenith.util.Wait;
 import org.jspecify.annotations.Nullable;
 
@@ -58,11 +59,20 @@ public class AutoReconnect extends Module {
     public void handleDisconnectEvent(ClientDisconnectEvent event) {
         var autoReconnectEvent = new AutoReconnectDecisionEvent(event);
         EVENT_BUS.post(autoReconnectEvent);
-        if (!autoReconnectEvent.isCancelled()) {
-            scheduleAutoReconnect(CONFIG.client.extra.autoReconnect.delaySeconds);
-        } else {
+        
+        if (autoReconnectEvent.isCancelled()) {
             info("Cancelling AutoReconnect because disconnect reason is not reconnectable");
+            return;
         }
+
+        int delaySeconds = CONFIG.client.extra.autoReconnect.delaySeconds;
+
+        if (DisconnectReasonInfo.getDisconnectCategory(event.reason()) == DisconnectReasonInfo.DisconnectCategory.ALREADY_CONNECTED) {
+            delaySeconds = Math.max(delaySeconds, CONFIG.client.extra.autoReconnect.alreadyConnectedDelaySecond);
+            info("Account is already connected; delaying AutoReconnect by {}s", delaySeconds);
+        }
+
+        scheduleAutoReconnect(delaySeconds);
     }
 
     public void scheduleAutoReconnect(final int delaySeconds) {
