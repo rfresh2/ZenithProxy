@@ -37,6 +37,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PositionElement;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
+import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.CollisionRule;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundExplodePacket;
@@ -94,6 +95,10 @@ public final class Bot extends ModuleUtils {
     private int jumpTriggerTime;
     private int noJumpDelay;
     private boolean wasSneakPressed = false;
+    // client side echo of the "using item" living entity state. the server's metadata copy lags
+    // behind by the connection latency, so the client is expected to set and clear this itself the
+    // moment it starts or stops a use, exactly like sprinting.
+    private final UsingItemState usingItemState = new UsingItemState();
     private double waterHeight;
     private double lavaHeight;
     private int ticksSinceLastPositionPacketSent;
@@ -265,8 +270,12 @@ public final class Bot extends ModuleUtils {
                     inputRequestFuture.setClickResult(ClickResult.RightClickResult.useItem());
                 }
             }
-            // todo: track ongoing right click item consumes
-            //  and if one is cancelled, do interactions.releaseUsingItem()
+            // a held open use whose item is gone has to be released, otherwise the client stays
+            // slowed and the server keeps the use active. an active use must survive ticks that
+            // simply did not request a right click.
+            if (shouldReleaseHeldOpenUse()) {
+                interactions.releaseUsingItem();
+            }
             interactions.stopDestroyBlock();
         } catch (final Exception e) {
             CLIENT_LOG.error("Error during interaction tick", e);
@@ -280,6 +289,10 @@ public final class Bot extends ModuleUtils {
 
     private void tick(final ClientBotTick event) {
         tickSkipped = false;
+        // advance the use state before any early return: it is pure local bookkeeping and must
+        // expire even on ticks that skip the movement simulation, otherwise a use that was
+        // interrupted by a teleport or an unloaded chunk would keep slowing the player forever
+        tickUsingItem();
         if (!CACHE.getChunkCache().isChunkLoaded((int) x >> 4, (int) z >> 4)) {
             onInteractionTickSkipped();
             return;
@@ -633,23 +646,86 @@ public final class Bot extends ModuleUtils {
     }
 
     private MutableVec3d getMovementInputVec() {
+        final boolean slowedByUse = isUsingItem() && !CACHE.getPlayerCache().getThePlayer().isInVehicle();
         float strafe = 0.0F;
         if (movementInput.pressingLeft) ++strafe;
         if (movementInput.pressingRight) --strafe;
-        // todo:
-//        if (isUsingItem && !isPassenger) {
-//            this.input.leftImpulse *= 0.2F;
-//            this.input.forwardImpulse *= 0.2F;
-//            this.sprintTriggerTime = 0;
-//        }
-        if (isSlowMovement) strafe *= sneakSpeed;
-        strafe = strafe * 0.98f;
         float fwd = 0.0F;
         if (movementInput.pressingForward) ++fwd;
         if (movementInput.pressingBack) --fwd;
-        if (isSlowMovement) fwd *= sneakSpeed;
-        fwd = fwd * 0.98f;
+        strafe = applyMovementModifiers(strafe, isSlowMovement, sneakSpeed, slowedByUse);
+        fwd = applyMovementModifiers(fwd, isSlowMovement, sneakSpeed, slowedByUse);
         return new MutableVec3d(strafe, 0, fwd);
+    }
+
+    /**
+     * Applies the input modifiers vanilla applies in {@code LocalPlayer#aiStep}, in vanilla's order.
+     *
+     * <p>Sneaking scales the input by the sneaking speed attribute, using an item scales it by 0.2,
+     * and only then is the whole thing scaled by the 0.98 input factor. The order matters: a
+     * sneaking player eating an apple moves at {@code 0.3 * 0.2 * 0.98}, not at {@code 0.98 * 0.3}
+     * with the use multiplier applied to the already scaled value.
+     *
+     * @param input        raw impulse, -1, 0 or 1
+     * @param slowMovement whether the sneaking slow modifier applies
+     * @param sneakSpeed   the sneaking speed attribute value
+     * @param slowedByUse  whether the player is using an item outside a vehicle
+     * @return the modified impulse
+     */
+    static float applyMovementModifiers(final float input,
+                                        final boolean slowMovement,
+                                        final float sneakSpeed,
+                                        final boolean slowedByUse) {
+        float modified = input;
+        if (slowMovement) modified *= sneakSpeed;
+        if (slowedByUse) modified *= 0.2f;
+        return modified * 0.98f;
+    }
+
+    /**
+     * Marks the player as using an item, mirroring what the vanilla client does the instant it
+     * sends the use packet. The server echoes this back in the living entity metadata, but that
+     * copy only arrives after a full round trip, so it cannot be used to drive movement.
+     *
+     * @param useTicks {@link UsingItemState#HELD_OPEN} for a use that must be released,
+     *                 {@link UsingItemState#NOT_USING} for an instant item, or the number of ticks
+     *                 a self finishing use stays active
+     */
+    void startUsingItem(final int useTicks, final Hand hand, final int itemId) {
+        this.usingItemState.start(useTicks, hand, itemId);
+    }
+
+    /**
+     * Ends the current use, e.g. after releasing a bow or cancelling an eat.
+     */
+    void stopUsingItem() {
+        this.usingItemState.stop();
+    }
+
+    public boolean isUsingItem() {
+        return this.usingItemState.isUsing();
+    }
+
+    /**
+     * Advances the use state by one tick, expiring a finite length use such as eating or drinking.
+     */
+    private void tickUsingItem() {
+        this.usingItemState.tick();
+    }
+
+    /**
+     * True while a held open use (bow, shield, ...) has to be released because the item it was
+     * started with is no longer in the hand that started it.
+     *
+     * <p>Input is rebuilt from scratch every tick, so "no right click this tick" does not mean the
+     * use is over - a module re-requesting a right click every few ticks would otherwise release
+     * and restart the use constantly. The use only has to be dropped once the item it was started
+     * with is no longer in that hand.
+     */
+    private boolean shouldReleaseHeldOpenUse() {
+        if (!this.usingItemState.isHeldOpen()) return false;
+        final ItemStack held = CACHE.getPlayerCache().getEquipment(this.usingItemState.hand());
+        return held == Container.EMPTY_STACK || held.getId() != this.usingItemState.itemId();
     }
 
     private void jump() {
@@ -1414,6 +1490,8 @@ public final class Bot extends ModuleUtils {
         if (full) {
             this.isSneaking = this.wasSneaking = isSlowMovement = false;
             this.isSprinting = this.lastSprinting = false;
+            // a respawn or dimension change drops any use that was in progress
+            this.usingItemState.stop();
         } else {
             this.isSneaking = this.wasSneaking = isSlowMovement = CACHE.getPlayerCache().isSneaking();
             this.isSprinting = this.lastSprinting = CACHE.getPlayerCache().isSprinting();
