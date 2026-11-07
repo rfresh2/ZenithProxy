@@ -16,6 +16,7 @@ import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.Clientbound
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -33,6 +34,8 @@ public class ChatCache implements CachedData {
     protected boolean enforcesSecureChat = false;
     protected ChatSession chatSession = new ChatSession(UUID.randomUUID());
     protected @Nullable MinecraftPlayerCertificates playerCertificates;
+    private int pendingAcks = 0;
+    private byte @Nullable [] lastPendingSignature;
 
     @Override
     public void getPackets(@NonNull final Consumer<Packet> consumer, final @NonNull TcpSession session) {
@@ -46,6 +49,8 @@ public class ChatCache implements CachedData {
             this.commandDispatcher = new CommandDispatcher<>();
             this.commandTreeParsed = false;
             this.firstCommandNodeIndex = 0;
+            pendingAcks = 0;
+            lastPendingSignature = null;
         }
         if (type == CacheResetType.FULL) {
             this.enforcesSecureChat = false;
@@ -56,6 +61,19 @@ public class ChatCache implements CachedData {
     @Override
     public String getSendingMessage()  {
         return String.format("Sending %s server commands", this.commandNodes.length);
+    }
+
+    public synchronized int addPendingAck(final byte[] signature) {
+        if (Arrays.equals(signature, lastPendingSignature)) {
+            return 0;
+        }
+        lastPendingSignature = signature;
+        if (++pendingAcks <= 64) {
+            return 0;
+        }
+        int offset = pendingAcks;
+        pendingAcks = 0;
+        return offset;
     }
 
     public boolean canUseChatSigning() {

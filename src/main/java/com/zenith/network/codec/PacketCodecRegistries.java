@@ -264,6 +264,7 @@ public final class PacketCodecRegistries {
                 .inbound(ServerboundChatCommandPacket.class, new ChatCommandHandler())
                 .inbound(ServerboundChatCommandSignedPacket.class, new SignedChatCommandHandler())
                 .inbound(ServerboundChatPacket.class, new ChatHandler())
+                .inbound(ServerboundChatAckPacket.class, new ChatAckHandler())
                 .inbound(ServerboundCommandSuggestionPacket.class, new CommandSuggestionHandler())
                 .inbound(ServerboundKeepAlivePacket.class, SPlayerKeepAliveHandler.INSTANCE)
                 .inbound(ServerboundSetCarriedItemPacket.class, new SSetCarriedItemHandler())
