@@ -20,25 +20,31 @@ public class ChatCommandSpectatorHandler implements PacketHandler<ServerboundCha
             && CONFIG.server.spectator.fullCommandsAcceptSlashCommands
             && (CONFIG.server.spectator.fullCommandsRequireRegularWhitelist
                 ? PLAYER_LISTS.getWhitelist().contains(session.getProfileCache().getProfile().getId())
-                : true)) {
-            if (CONFIG.server.spectator.fullCommandsServerCommands) {
-                if (IN_GAME_COMMAND.matchesServerCommand(command, CommandContext.createSpectatorContext(command, session))) {
-                    if (CONFIG.client.chatSigning.signCommands && CACHE.getChatCache().isSignableCommand(command)) {
-                        // if we overwrite a server command with a zenith command, the signing state won't match
-                        // for example: `/say hello` is both a zenith and server command
-                        // from the client perspective, their command tree (now from zenith) says it's no longer a signed arg
-                        session.callPacketReceived(new ServerboundChatCommandSignedPacket(command));
-                        return null;
-                    }
-                    Proxy.getInstance().getClient().sendAsync(packet);
-                    return null;
-                }
-            }
-            EXECUTOR.execute(() -> IN_GAME_COMMAND.handleInGameCommandSpectator(
+                : true)
+        ) {
+            var zenithHandled = IN_GAME_COMMAND.handleInGameCommandSpectator(
                 command,
                 session,
-                CONFIG.inGameCommands.slashCommandsReplacesServerCommands
-            ));
+                CONFIG.server.spectator.fullCommandsPrioritizeServerCommands
+            );
+            if (zenithHandled) {
+                return null;
+            }
+            if (CONFIG.server.spectator.fullCommandsServerCommands
+                && IN_GAME_COMMAND.matchesServerCommand(command, CommandContext.createSpectatorContext(command, session))
+            ) {
+                if (CONFIG.client.chatSigning.signCommands && CACHE.getChatCache().isSignableCommand(command)) {
+                    // if we overwrite a server command with a zenith command, the signing state won't match
+                    // for example: `/say hello` is both a zenith and server command
+                    // from the client perspective, their command tree (now from zenith) says it's no longer a signed arg
+                    session.callPacketReceived(new ServerboundChatCommandSignedPacket(command));
+                    return null;
+                }
+                Proxy.getInstance().getClient().sendAsync(packet);
+                return null;
+            } else {
+                session.sendAsyncAlert("<red>Unknown command!");
+            }
         }
         return null;
     }

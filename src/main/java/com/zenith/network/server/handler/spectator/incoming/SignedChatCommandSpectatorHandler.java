@@ -18,19 +18,25 @@ public class SignedChatCommandSpectatorHandler implements PacketHandler<Serverbo
             && CONFIG.server.spectator.fullCommandsEnabled
             && CONFIG.server.spectator.fullCommandsAcceptSlashCommands
             && (CONFIG.server.spectator.fullCommandsRequireRegularWhitelist
-                ? PLAYER_LISTS.getWhitelist().contains(session.getProfileCache().getProfile().getId())
-                : true)) {
-            if (CONFIG.server.spectator.fullCommandsServerCommands) {
-                if (IN_GAME_COMMAND.matchesServerCommand(command, CommandContext.createSpectatorContext(command, session))) {
-                    Proxy.getInstance().getClient().sendAsync(packet);
-                    return null;
-                }
-            }
-            EXECUTOR.execute(() -> IN_GAME_COMMAND.handleInGameCommandSpectator(
+            ? PLAYER_LISTS.getWhitelist().contains(session.getProfileCache().getProfile().getId())
+            : true)
+        ) {
+            var zenithHandled = IN_GAME_COMMAND.handleInGameCommandSpectator(
                 command,
                 session,
-                CONFIG.inGameCommands.slashCommandsReplacesServerCommands
-            ));
+                CONFIG.server.spectator.fullCommandsPrioritizeServerCommands
+            );
+            if (zenithHandled) {
+                return null;
+            }
+            if (CONFIG.server.spectator.fullCommandsServerCommands
+                && IN_GAME_COMMAND.matchesServerCommand(command, CommandContext.createSpectatorContext(command, session))
+            ) {
+                Proxy.getInstance().getClient().sendAsync(packet);
+                return null;
+            } else {
+                session.sendAsyncAlert("<red>Unknown command!");
+            }
         }
         return null;
     }

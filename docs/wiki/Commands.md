@@ -103,6 +103,8 @@ If this is disabled, spectators only have access to a limited set of core comman
 
   ```spectator fullCommands serverCommands on/off```
 
+  ```spectator fullCommands prioritizeServerCommands on/off```
+
 
 ### status
 
@@ -394,6 +396,8 @@ Configures ZenithProxy command prefixes and settings.
   ```commandConfig ingame slashCommands on/off```
 
   ```commandConfig ingame slashCommands replaceServerCommands on/off```
+
+  ```commandConfig ingame slashCommands prioritizeServerCommands on/off```
 
   ```commandConfig ingame slashCommands suggestions on/off```
 

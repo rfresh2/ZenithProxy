@@ -54,7 +54,8 @@ public class SpectatorCommand extends Command {
                 "fullCommands on/off",
                 "fullCommands slashCommands on/off",
                 "fullCommands requireRegularWhitelist on/off",
-                "fullCommands serverCommands on/off"
+                "fullCommands serverCommands on/off",
+                "fullCommands prioritizeServerCommands on/off"
             )
             .build();
     }
@@ -200,6 +201,12 @@ public class SpectatorCommand extends Command {
                         .title("Full Spectator Commands Server Commands " + toggleStrCaps(CONFIG.server.spectator.fullCommandsServerCommands))
                         .primaryColor();
                 })))
+                .then(literal("prioritizeServerCommands").then(argument("toggle", toggle()).executes(c -> {
+                    CONFIG.server.spectator.fullCommandsPrioritizeServerCommands = getToggle(c, "toggle");
+                    c.getSource().getEmbed()
+                        .title("Full Spectator Commands Prioritize Server Commands " + toggleStrCaps(CONFIG.server.spectator.fullCommandsPrioritizeServerCommands))
+                        .primaryColor();
+                })))
             );
     }
 
@@ -222,6 +229,7 @@ public class SpectatorCommand extends Command {
             .addField("Full Commands", toggleStr(CONFIG.server.spectator.fullCommandsEnabled))
             .addField("Full Commands Slash Commands", toggleStr(CONFIG.server.spectator.fullCommandsAcceptSlashCommands))
             .addField("Full Commands Require Regular Whitelist", toggleStr(CONFIG.server.spectator.fullCommandsRequireRegularWhitelist))
-            .addField("Full Commands Server Commands", toggleStr(CONFIG.server.spectator.fullCommandsServerCommands));
+            .addField("Full Commands Server Commands", toggleStr(CONFIG.server.spectator.fullCommandsServerCommands))
+            .addField("Full Commands Prioritize Server Commands", toggleStr(CONFIG.server.spectator.fullCommandsPrioritizeServerCommands));
     }
 }

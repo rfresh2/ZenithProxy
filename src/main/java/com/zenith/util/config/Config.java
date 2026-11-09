@@ -812,6 +812,7 @@ public final class Config {
             public boolean fullCommandsAcceptSlashCommands = true;
             public boolean fullCommandsRequireRegularWhitelist = true;
             public boolean fullCommandsServerCommands = true;
+            public boolean fullCommandsPrioritizeServerCommands = true;
             public boolean playerCamOnJoin = false;
             public boolean whitelistEnabled = true;
             public ArrayList<PlayerEntry> whitelist = new ArrayList<>();
@@ -917,6 +918,7 @@ public final class Config {
         public boolean enable = true;
         public boolean slashCommands = true;
         public boolean slashCommandsReplacesServerCommands = false;
+        public boolean prioritizeServerCommands = true;
         public boolean suggestions = true;
         public String prefix = "!";
         public boolean logToDiscord = true;

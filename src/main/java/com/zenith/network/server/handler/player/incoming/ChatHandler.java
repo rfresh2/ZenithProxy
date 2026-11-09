@@ -5,15 +5,26 @@ import com.zenith.network.server.ServerSession;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatPacket;
 import org.jspecify.annotations.NonNull;
 
-import static com.zenith.Globals.*;
+import static com.zenith.Globals.CONFIG;
+import static com.zenith.Globals.IN_GAME_COMMAND;
 
 public class ChatHandler implements PacketHandler<ServerboundChatPacket, ServerSession> {
     @Override
     public ServerboundChatPacket apply(@NonNull ServerboundChatPacket packet, @NonNull ServerSession session) {
         if (CONFIG.inGameCommands.enable) {
             final String message = packet.getMessage();
+            if (IN_GAME_COMMAND.isDoubleCommandPrefixed(message)) {
+                return packet.withMessage(message.substring(CONFIG.inGameCommands.prefix.length()));
+            }
             if (IN_GAME_COMMAND.isCommandPrefixed(message)) {
-                EXECUTOR.execute(() -> IN_GAME_COMMAND.handleInGameCommand(message.substring(CONFIG.inGameCommands.prefix.length()), session, true));
+                var zenithHandled = IN_GAME_COMMAND.handleInGameCommand(
+                    message.substring(CONFIG.inGameCommands.prefix.length()),
+                    session,
+                    false // chat prefixed commands can never be server commands
+                );
+                if (!zenithHandled) {
+                    session.sendAsyncAlert("<red>Unknown command!");
+                }
                 return null;
             }
         }

@@ -28,6 +28,7 @@ public class CommandConfigCommand extends Command {
                 "ingame on/off",
                 "ingame slashCommands on/off",
                 "ingame slashCommands replaceServerCommands on/off",
+                "ingame slashCommands prioritizeServerCommands on/off",
                 "ingame slashCommands suggestions on/off",
                 "ingame prefix <string>",
                 "ingame allowWhitelistedToUseAccountOwnerCommands on/off"
@@ -74,6 +75,11 @@ public class CommandConfigCommand extends Command {
                             .title("Replace Server Commands " + toggleStrCaps(CONFIG.inGameCommands.slashCommandsReplacesServerCommands));
                         syncSlashCommandsToCurrentPlayer();
                     })))
+                    .then(literal("prioritizeServerCommands").then(argument("toggle", toggle()).executes(c -> {
+                        CONFIG.inGameCommands.prioritizeServerCommands = getToggle(c, "toggle");
+                        c.getSource().getEmbed()
+                            .title("Prioritize Server Commands " + toggleStrCaps(CONFIG.inGameCommands.prioritizeServerCommands));
+                    })))
                     .then(literal("suggestions").then(argument("toggle", toggle()).executes(c -> {
                         CONFIG.inGameCommands.suggestions = getToggle(c, "toggle");
                         c.getSource().getEmbed()
@@ -115,6 +121,7 @@ public class CommandConfigCommand extends Command {
             .addField("Ingame Commands", toggleStr(CONFIG.inGameCommands.enable))
             .addField("Ingame Slash Commands", toggleStr(CONFIG.inGameCommands.slashCommands))
             .addField("Ingame Slash Commands Replace Server Commands", toggleStr(CONFIG.inGameCommands.slashCommandsReplacesServerCommands))
+            .addField("Ingame Slash Command Prioritize Server Commands", toggleStr(CONFIG.inGameCommands.prioritizeServerCommands))
             .addField("Ingame Slash Command Suggestions", toggleStr(CONFIG.inGameCommands.suggestions))
             .addField("Ingame Prefix", CONFIG.inGameCommands.prefix)
             .addField("Ingame Allow Whitelisted To Use Account Owner Commands", toggleStr(CONFIG.inGameCommands.allowWhitelistedToUseAccountOwnerCommands))
