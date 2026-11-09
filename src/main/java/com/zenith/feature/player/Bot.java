@@ -24,11 +24,13 @@ import it.unimi.dsi.fastutil.doubles.DoubleSet;
 import lombok.Getter;
 import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.Effect;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.EntityEvent;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.Attribute;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeModifier;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.AttributeType;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.attribute.ModifierOperation;
+import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.EntityMetadata;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.MetadataTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.Pose;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.metadata.type.ByteEntityMetadata;
@@ -37,6 +39,7 @@ import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PlayerState;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.PositionElement;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.type.EntityType;
+import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
 import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentTypes;
 import org.geysermc.mcprotocollib.protocol.data.game.scoreboard.CollisionRule;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.level.ClientboundExplodePacket;
@@ -123,6 +126,9 @@ public final class Bot extends ModuleUtils {
     private boolean tickSkipped = false;
     private final double[] pistonDeltas = new double[]{0.0, 0.0, 0.0};
     private int pistonDeltasGameTime;
+    private ItemStack useItem = Container.EMPTY_STACK;
+    private Hand usingItemHand = Hand.MAIN_HAND;
+    private boolean startedUsingItem = false;
 
     public Bot() {
         EVENT_BUS.subscribe(
@@ -197,6 +203,18 @@ public final class Bot extends ModuleUtils {
 
     private void interactionTick() {
         try {
+            if (isUsingItem()) {
+                if (CONFIG.debug.botUseItemRequiresRightClickHold) {
+                    if (!movementInput.isRightClick()) {
+                        interactions.releaseUsingItem();
+                        releaseUsingItem();
+                    }
+                } else {
+                    // let server decide to release it for us
+                    // breaks ability for inputs API to release used item
+                    // but may be needed for older plugin compat
+                }
+            }
             if (movementInput.clickRequiresRotation) {
                 if (!MathHelper.isYawInRange(requestedYaw, yaw, 0.1f) || !MathHelper.isPitchInRange(requestedPitch, pitch, 0.1f)) {
                     interactions.stopDestroyBlock();
@@ -258,15 +276,22 @@ public final class Bot extends ModuleUtils {
                     interactions.interact(hand, raycast.entity());
                     sendClientPacketAsync(new ServerboundSwingPacket(hand));
                     inputRequestFuture.setClickResult(ClickResult.RightClickResult.useItemOnEntity(raycast.entity().entity()));
-                } else {
-                    debug("Right click {} use item", hand);
-                    interactions.useItem(hand);
-                    sendClientPacketAsync(new ServerboundSwingPacket(hand));
-                    inputRequestFuture.setClickResult(ClickResult.RightClickResult.useItem());
+                } else if (CACHE.getPlayerCache().getEquipment(hand) != Container.EMPTY_STACK) {
+                    if (isUsingItem()) {
+                        debug("Right click {} continue use item", hand);
+                        // todo: new right click result type?
+                        inputRequestFuture.setClickResult(ClickResult.RightClickResult.useItem());
+                    } else {
+                        debug("Right click {} use item", hand);
+                        var res = interactions.useItem(hand);
+                        sendClientPacketAsync(new ServerboundSwingPacket(hand));
+                        inputRequestFuture.setClickResult(ClickResult.RightClickResult.useItem());
+                        if (res == InteractionResult.CONSUME) {
+                            startUsingItem(hand);
+                        }
+                    }
                 }
             }
-            // todo: track ongoing right click item consumes
-            //  and if one is cancelled, do interactions.releaseUsingItem()
             interactions.stopDestroyBlock();
         } catch (final Exception e) {
             CLIENT_LOG.error("Error during interaction tick", e);
@@ -316,6 +341,7 @@ public final class Bot extends ModuleUtils {
             if (CONFIG.debug.botRotateBeforeInteract) {
                 interactionTick();
             }
+            updatingUsingItem();
         }
 
         // if these aren't equal something has gone wrong
@@ -528,6 +554,82 @@ public final class Bot extends ModuleUtils {
         sendClientPacketAwait(ServerboundClientTickEndPacket.INSTANCE);
     }
 
+    void updatingUsingItem() {
+        if (startedUsingItem) {
+            if (useItem != CACHE.getPlayerCache().getEquipment(usingItemHand)) {
+                this.stopUsingItem();
+            }
+        }
+    }
+
+    void startUsingItem(Hand hand) {
+        var item = CACHE.getPlayerCache().getEquipment(hand);
+        if (item != Container.EMPTY_STACK && !startedUsingItem) {
+            startedUsingItem = true;
+            usingItemHand = hand;
+            useItem = item;
+        }
+    }
+
+    void stopUsingItem() {
+        this.useItem = Container.EMPTY_STACK;
+        this.startedUsingItem = false;
+    }
+
+    public boolean isUsingItem() {
+        return startedUsingItem;
+    }
+
+    void releaseUsingItem() {
+        if (useItem != Container.EMPTY_STACK) {
+            // todo: only impl for crossbow
+//            if (this.useItem.useOnRelease()) {
+//                this.updatingUsingItem();
+//            }
+        }
+        stopUsingItem();
+    }
+
+    void completeUsingItem() {
+        if (this.isUsingItem()) {
+            if (!Objects.equals(this.useItem, CACHE.getPlayerCache().getEquipment(usingItemHand))) {
+                releaseUsingItem();
+            } else {
+                if (useItem != Container.EMPTY_STACK && this.isUsingItem()) {
+                    stopUsingItem();
+                }
+            }
+        }
+    }
+
+    public void onEntityEvent(EntityEvent event) {
+        if (event == EntityEvent.PLAYER_FINISH_USING_ITEM) {
+            completeUsingItem();
+        }
+    }
+
+    public void onMetadataUpdated(final List<EntityMetadata<?, ?>> metadata) {
+        for (var m : metadata) {
+            if (m.getId() == 8) { // https://minecraft.wiki/w/Java_Edition_protocol/Entity_metadata?oldid=2849368#Living_Entity
+                Byte mdVal = (Byte) m.getValue();
+                // from LivingEntity
+                if (startedUsingItem && useItem == Container.EMPTY_STACK) {
+                    useItem = CACHE.getPlayerCache().getEquipment(usingItemHand);
+                } else if (!startedUsingItem && useItem != Container.EMPTY_STACK) {
+                    useItem = Container.EMPTY_STACK;
+                }
+                // from LocalPlayer
+                var handActiveFlag = (mdVal & 1) > 0;
+                var hand = (mdVal & 2) > 0 ? Hand.OFF_HAND : Hand.MAIN_HAND;
+                if (handActiveFlag && !startedUsingItem) {
+                    startUsingItem(hand);
+                } else if (!handActiveFlag && startedUsingItem) {
+                    stopUsingItem();
+                }
+            }
+        }
+    }
+
     private void tickEntities() {
         for (var entity : CACHE.getEntityCache().getEntities().values()) {
             if (!entity.isRemoved()) {
@@ -636,17 +738,14 @@ public final class Bot extends ModuleUtils {
         float strafe = 0.0F;
         if (movementInput.pressingLeft) ++strafe;
         if (movementInput.pressingRight) --strafe;
-        // todo:
-//        if (isUsingItem && !isPassenger) {
-//            this.input.leftImpulse *= 0.2F;
-//            this.input.forwardImpulse *= 0.2F;
-//            this.sprintTriggerTime = 0;
-//        }
+        var usingItem = startedUsingItem && !CACHE.getPlayerCache().getThePlayer().isInVehicle();
+        if (usingItem) strafe *= 0.2F;
         if (isSlowMovement) strafe *= sneakSpeed;
         strafe = strafe * 0.98f;
         float fwd = 0.0F;
         if (movementInput.pressingForward) ++fwd;
         if (movementInput.pressingBack) --fwd;
+        if (usingItem) fwd *= 0.2F;
         if (isSlowMovement) fwd *= sneakSpeed;
         fwd = fwd * 0.98f;
         return new MutableVec3d(strafe, 0, fwd);
@@ -1411,6 +1510,9 @@ public final class Bot extends ModuleUtils {
         this.velocity.set(0, 0, 0);
         this.supportingBlockPos = Optional.empty();
         this.onGroundNoBlocks = false;
+        this.startedUsingItem = false;
+        this.useItem = Container.EMPTY_STACK;
+        this.usingItemHand = Hand.MAIN_HAND;
         if (full) {
             this.isSneaking = this.wasSneaking = isSlowMovement = false;
             this.isSprinting = this.lastSprinting = false;

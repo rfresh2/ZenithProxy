@@ -712,6 +712,7 @@ public final class Config {
         public boolean botAutoExitBed = true;
         public boolean pistonPushSim = true;
         public double pistonPushSimMaxDistanceFromPlayer = 15;
+        public boolean botUseItemRequiresRightClickHold = true;
 
         public static final class PacketLog {
             public boolean enabled = false;

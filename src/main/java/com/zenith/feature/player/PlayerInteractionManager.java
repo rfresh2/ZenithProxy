@@ -473,6 +473,14 @@ public class PlayerInteractionManager {
 
     // todo: is this allowed if we are not holding a usable item? or any item at all?
     protected InteractionResult useItem(Hand hand) {
+        if (CACHE.getPlayerCache().getGameMode() == GameMode.SPECTATOR) {
+            return InteractionResult.PASS;
+        }
+        // todo: must check item use cooldown state (not tracked yet)
+//        if (player.getCooldowns().isOnCooldown(itemstack)) {
+//
+//        }
+        var result = useItem0(hand);
         startPrediction(seqId -> {
             return new ServerboundUseItemPacket(
                 hand,
@@ -481,7 +489,57 @@ public class PlayerInteractionManager {
                 BOT.getPitch()
             );
         });
-        return InteractionResult.PASS;
+        return result;
+    }
+
+    // InteractionResult.CONSUME -> multi-tick use item
+    // InteractionResult.PASS -> single-tick use item or item is not consumable
+    // InteractionResult.FAIL -> fail to use multi-tick item
+    private InteractionResult useItem0(Hand hand) {
+        var itemStack = CACHE.getPlayerCache().getEquipment(hand);
+        var itemData = ItemRegistry.REGISTRY.get(itemStack.getId());
+        if (itemData == null) return InteractionResult.PASS;
+        var itemWithDefaultComponents = itemStack.withAddedComponents(itemData.components());
+        var consumableComponent = itemWithDefaultComponents.getDataComponentsOrEmpty().get(DataComponentTypes.CONSUMABLE);
+        if (consumableComponent != null) {
+            var foodComponent = itemWithDefaultComponents.getDataComponentsOrEmpty().get(DataComponentTypes.FOOD);
+            if (foodComponent != null) {
+                var canEat = foodComponent.isCanAlwaysEat() || CACHE.getPlayerCache().getThePlayer().getFood() < 20;
+                if (!canEat) {
+                    return InteractionResult.FAIL;
+                }
+            }
+            var consumeTicks = (int) (consumableComponent.consumeSeconds() * 20.0f);
+            if (consumeTicks > 0) {
+                return InteractionResult.CONSUME;
+            } else {
+                // todo: verify this doesn't cause desync
+                //  idk what consumables would even be in this state
+//                if (itemStack.getAmount() == 1) {
+//                    var playerCache = CACHE.getPlayerCache();
+//                    var invCache = playerCache.getPlayerInventory();
+//                    invCache.set(playerCache.getHeldItemSlot() + 36, Container.EMPTY_STACK);
+//                } else {
+//                    itemStack.setAmount(itemStack.getAmount() - 1);
+//                }
+                // todo: vanilla passes item instance in the InteractionResult back up the call stack
+                return InteractionResult.SUCCESS;
+            }
+        } else {
+            if (itemData == ItemRegistry.BOW
+                || itemData == ItemRegistry.CROSSBOW
+                || itemData == ItemRegistry.SHIELD
+                || itemData == ItemRegistry.TRIDENT
+                || itemData == ItemRegistry.SPYGLASS
+                || itemData == ItemRegistry.GOAT_HORN
+                || itemData == ItemRegistry.BRUSH
+            ) {
+                // todo: some of these items have more specific conditions to begin consuming
+                //  for example, bows require an available arrow in inventory
+                return InteractionResult.CONSUME;
+            }
+            return InteractionResult.PASS;
+        }
     }
 
     protected void attackEntity(final EntityRaycastResult entity) {
@@ -490,6 +548,7 @@ public class PlayerInteractionManager {
     }
 
     protected void releaseUsingItem() {
+        BOT.debug("[{}] Release Use Item");
         Proxy.getInstance().getClient().sendAsync(new ServerboundPlayerActionPacket(
             PlayerAction.RELEASE_USE_ITEM,
             0, 0, 0,

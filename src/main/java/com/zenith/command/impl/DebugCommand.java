@@ -190,6 +190,11 @@ public class DebugCommand extends Command {
                 CONFIG.debug.pistonPushSimMaxDistanceFromPlayer = getDouble(c, "distance");
                 c.getSource().getEmbed()
                     .title("Piston Push Simulation Max Distance From Player " + CONFIG.debug.pistonPushSimMaxDistanceFromPlayer);
+            })))
+            .then(literal("botUseItemRequiresRightClickHold").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.debug.botUseItemRequiresRightClickHold = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Bot Use Item Requires Right Click Hold " + toggleStrCaps(CONFIG.debug.botUseItemRequiresRightClickHold));
             })));
     }
 

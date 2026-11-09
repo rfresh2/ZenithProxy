@@ -64,7 +64,18 @@ public class AutoEat extends AbstractInventoryModule {
             if (delay > 0) {
                 delay--;
                 if (isEating) {
-                    INPUTS.submit(InputRequest.noInput(this, getPriority()));
+                    if (BOT.isUsingItem()) {
+                        INPUTS.submit(InputRequest.builder()
+                            .owner(this)
+                            .priority(getPriority())
+                            .input(Input.builder()
+                                .rightClick(true)
+                                .clickTarget(ClickTarget.None.INSTANCE)
+                                .build())
+                            .build());
+                    } else {
+                        delay = 0;
+                    }
                     INVENTORY.submit(InventoryActionRequest.noAction(this, getPriority()));
                 }
                 return;
