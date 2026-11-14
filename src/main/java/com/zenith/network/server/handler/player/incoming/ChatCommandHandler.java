@@ -13,8 +13,16 @@ public class ChatCommandHandler implements PacketHandler<ServerboundChatCommandP
         final String command = packet.getCommand();
         if (command.isBlank()) return packet;
         if (CONFIG.inGameCommands.slashCommands && CONFIG.inGameCommands.enable) {
-            var zenithHandled = IN_GAME_COMMAND.handleInGameCommand(command, session, CONFIG.inGameCommands.slashCommandsReplacesServerCommands);
-            if (zenithHandled || CONFIG.inGameCommands.slashCommandsReplacesServerCommands) {
+            var zenithHandled = IN_GAME_COMMAND.handleInGameCommand(
+                command,
+                session,
+                CONFIG.inGameCommands.prioritizeServerCommands
+            );
+            if (zenithHandled) {
+                return null;
+            }
+            if (CONFIG.inGameCommands.slashCommandsReplacesServerCommands) {
+                session.sendAsyncAlert("<red>Unknown command!");
                 return null;
             }
             if (CONFIG.client.chatSigning.signCommands && CACHE.getChatCache().isSignableCommand(command)) {

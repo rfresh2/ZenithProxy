@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import org.geysermc.mcprotocollib.protocol.data.game.PlayerListEntry;
 import org.geysermc.mcprotocollib.protocol.packet.ingame.clientbound.ClientboundPlayerChatPacket;
+import org.geysermc.mcprotocollib.protocol.packet.ingame.serverbound.ServerboundChatAckPacket;
 
 import java.util.Optional;
 
@@ -21,6 +22,12 @@ public class PlayerChatHandler implements PacketHandler<ClientboundPlayerChatPac
 
     @Override
     public ClientboundPlayerChatPacket apply(ClientboundPlayerChatPacket packet, ClientSession session) {
+        if (packet.getMessageSignature() != null) {
+            var ackOffset = CACHE.getChatCache().addPendingAck(packet.getMessageSignature());
+            if (ackOffset > 0) {
+                session.send(new ServerboundChatAckPacket(ackOffset));
+            }
+        }
         var senderPlayerEntry = CACHE.getTabListCache().get(packet.getSender());
         var chatType = ChatTypeRegistry.REGISTRY.get(packet.getChatType().id());
         if (chatType != null) {

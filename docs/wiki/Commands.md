@@ -103,6 +103,8 @@ If this is disabled, spectators only have access to a limited set of core comman
 
   ```spectator fullCommands serverCommands on/off```
 
+  ```spectator fullCommands prioritizeServerCommands on/off```
+
 
 ### status
 
@@ -395,6 +397,8 @@ Configures ZenithProxy command prefixes and settings.
 
   ```commandConfig ingame slashCommands replaceServerCommands on/off```
 
+  ```commandConfig ingame slashCommands prioritizeServerCommands on/off```
+
   ```commandConfig ingame slashCommands suggestions on/off```
 
   ```commandConfig ingame prefix <string>```
@@ -602,10 +606,6 @@ Kicks all players or a specific player. Only usable by account owners.
 
 
 ### plugins
-
-[BETA]
-
-
 
 Configures the ZenithProxy plugin manager.
 
@@ -1732,10 +1732,6 @@ Simulates a click to the block or entity in front of you
 
 ### coordObf
 
-[BETA]
-
-
-
 Obfuscates actual coordinates to players and spectators.
 
 
@@ -2373,10 +2369,6 @@ Sends alerts when players join or leave
 
 
 ### tasks
-
-[BETA]
-
-
 
 Schedules commands to be executed after a delay or after specified events.
 

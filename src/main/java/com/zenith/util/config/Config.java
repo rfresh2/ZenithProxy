@@ -238,6 +238,9 @@ public final class Config {
                 public int itemSaverThreshold = 5;
                 public boolean preferSilkTouch = false;
                 public boolean mineProcessExitLavaGoal = true;
+                public boolean mineProcessLimitY = false;
+                public int mineProcessMaxY = 360;
+                public int mineProcessMinY = -128;
                 public final Set<String> acceptableThrowawayItems = new ObjectArraySet<>(new String[]{
                     ItemRegistry.DIRT.name(),
                     ItemRegistry.COBBLESTONE.name(),
@@ -709,6 +712,7 @@ public final class Config {
         public boolean botAutoExitBed = true;
         public boolean pistonPushSim = true;
         public double pistonPushSimMaxDistanceFromPlayer = 15;
+        public boolean botUseItemRequiresRightClickHold = true;
 
         public static final class PacketLog {
             public boolean enabled = false;
@@ -808,6 +812,7 @@ public final class Config {
             public boolean fullCommandsAcceptSlashCommands = true;
             public boolean fullCommandsRequireRegularWhitelist = true;
             public boolean fullCommandsServerCommands = true;
+            public boolean fullCommandsPrioritizeServerCommands = true;
             public boolean playerCamOnJoin = false;
             public boolean whitelistEnabled = true;
             public ArrayList<PlayerEntry> whitelist = new ArrayList<>();
@@ -913,6 +918,7 @@ public final class Config {
         public boolean enable = true;
         public boolean slashCommands = true;
         public boolean slashCommandsReplacesServerCommands = false;
+        public boolean prioritizeServerCommands = true;
         public boolean suggestions = true;
         public String prefix = "!";
         public boolean logToDiscord = true;

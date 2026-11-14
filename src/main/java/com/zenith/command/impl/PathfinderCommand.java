@@ -1093,6 +1093,27 @@ public class PathfinderCommand extends Command {
                     .title("Pathfinder")
                     .addField("Mine Process Exit Lava Goal", toggleStr(CONFIG.client.extra.pathfinder.mineProcessExitLavaGoal))
                     .primaryColor();
+            })))
+            .then(literal("mineProcessLimitY").then(argument("toggle", toggle()).executes(c -> {
+                CONFIG.client.extra.pathfinder.mineProcessLimitY = getToggle(c, "toggle");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Mine Process Limit Y", toggleStr(CONFIG.client.extra.pathfinder.mineProcessLimitY))
+                    .primaryColor();
+            })))
+            .then(literal("mineProcessMaxY").then(argument("y", integer()).executes(c -> {
+                CONFIG.client.extra.pathfinder.mineProcessMaxY = getInteger(c, "y");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Mine Process Max Y", CONFIG.client.extra.pathfinder.mineProcessMaxY)
+                    .primaryColor();
+            })))
+            .then(literal("mineProcessMinY").then(argument("y", integer()).executes(c -> {
+                CONFIG.client.extra.pathfinder.mineProcessMinY = getInteger(c, "y");
+                c.getSource().getEmbed()
+                    .title("Pathfinder")
+                    .addField("Mine Process Min Y", CONFIG.client.extra.pathfinder.mineProcessMinY)
+                    .primaryColor();
             })));
     }
 
@@ -1134,6 +1155,9 @@ public class PathfinderCommand extends Command {
         settingsMap.put("placeBlockVerifyAbleToPlace", toggleStr(CONFIG.client.extra.pathfinder.placeBlockVerifyAbleToPlace));
         settingsMap.put("placeBlockSneak", toggleStr(CONFIG.client.extra.pathfinder.placeBlockSneak));
         settingsMap.put("mineProcessExitLavaGoal", toggleStr(CONFIG.client.extra.pathfinder.mineProcessExitLavaGoal));
+        settingsMap.put("mineProcessLimitY", toggleStr(CONFIG.client.extra.pathfinder.mineProcessLimitY));
+        settingsMap.put("mineProcessMaxY", String.valueOf(CONFIG.client.extra.pathfinder.mineProcessMaxY));
+        settingsMap.put("mineProcessMinY", String.valueOf(CONFIG.client.extra.pathfinder.mineProcessMinY));
         return settingsMap;
     }
 

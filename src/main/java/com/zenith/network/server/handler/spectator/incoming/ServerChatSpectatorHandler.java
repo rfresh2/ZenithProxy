@@ -20,28 +20,43 @@ public class ServerChatSpectatorHandler implements PacketHandler<ServerboundChat
     @Override
     public ServerboundChatPacket apply(ServerboundChatPacket packet, ServerSession session) {
         if (CONFIG.inGameCommands.enable) {
-            EXECUTOR.execute(() -> {
-                if (IN_GAME_COMMAND.isCommandPrefixed(packet.getMessage())) {
-                    TERMINAL_LOG.info("{} executed spectator command: {}", session.getName(), packet.getMessage());
-                    if (CONFIG.server.spectator.fullCommandsEnabled && (!CONFIG.server.spectator.fullCommandsRequireRegularWhitelist || PLAYER_LISTS.getWhitelist().contains(session.getProfileCache().getProfile()))) {
-                        final String fullCommandAndArgs = packet.getMessage().substring(CONFIG.inGameCommands.prefix.length()).trim(); // cut off the prefix
-                        IN_GAME_COMMAND.handleInGameCommandSpectator(fullCommandAndArgs, session, true);
-                    } else {
-                        try {
-                            handleCommandInput(packet.getMessage(), session);
-                        } catch (Exception e) {
-                            SERVER_LOG.error("Failed to handle spectator command: {} from: {}", packet.getMessage(), session.getName(), e);
+            var message = packet.getMessage();
+            if (IN_GAME_COMMAND.isCommandPrefixed(message)) {
+                if (CONFIG.server.spectator.fullCommandsEnabled && (!CONFIG.server.spectator.fullCommandsRequireRegularWhitelist || PLAYER_LISTS.getWhitelist().contains(session.getProfileCache().getProfile()))) {
+                    if (IN_GAME_COMMAND.isDoubleCommandPrefixed(message)) {
+                        var newMsg = message.substring(CONFIG.inGameCommands.prefix.length());
+                        if (CONFIG.server.spectator.chatSendsPrivateMessage) {
+                            EVENT_BUS.postAsync(new PrivateMessageSendEvent(session.getUUID(), session.getName(), newMsg));
+                        } else if (CONFIG.server.spectator.spectatorPublicChatEnabled) {
+                            SERVER_LOG.info("Spectator sent public chat");
+                            Proxy.getInstance().getClient().sendAsync(packet.withMessage(newMsg));
                         }
+                        return null;
                     }
+                    final String fullCommandAndArgs = message.substring(CONFIG.inGameCommands.prefix.length()); // cut off the prefix
+                    var zenithHandled = IN_GAME_COMMAND.handleInGameCommandSpectator(fullCommandAndArgs, session, false);
+                    if (!zenithHandled) {
+                        session.sendAsyncAlert("<red>Unknown command!");
+                    }
+                    return null;
                 } else {
-                    if (CONFIG.server.spectator.chatSendsPrivateMessage) {
-                        EVENT_BUS.postAsync(new PrivateMessageSendEvent(session.getUUID(), session.getName(), packet.getMessage()));
-                    } else if (CONFIG.server.spectator.spectatorPublicChatEnabled) {
-                        SERVER_LOG.info("Spectator sent public chat");
-                        Proxy.getInstance().getClient().sendAsync(packet);
-                    }
+                    EXECUTOR.execute(() -> {
+                        try {
+                            handleCommandInput(message, session);
+                        } catch (Exception e) {
+                            SERVER_LOG.error("Failed to handle spectator command: {} from: {}",
+                                message, session.getName(), e);
+                        }
+                    });
                 }
-            });
+            } else {
+                if (CONFIG.server.spectator.chatSendsPrivateMessage) {
+                    EVENT_BUS.postAsync(new PrivateMessageSendEvent(session.getUUID(), session.getName(), message));
+                } else if (CONFIG.server.spectator.spectatorPublicChatEnabled) {
+                    SERVER_LOG.info("Spectator sent public chat");
+                    Proxy.getInstance().getClient().sendAsync(packet);
+                }
+            }
         }
         return null;
     }

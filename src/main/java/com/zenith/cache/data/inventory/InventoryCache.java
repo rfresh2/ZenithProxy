@@ -107,7 +107,18 @@ public class InventoryCache {
 
     public void openContainer(final int containerId, final ContainerType type, final Component title) {
         if (containerId == 0) return;
-        containers.put(containerId, new Container(containerId, type, title));
+        var container = new Container(containerId, type, title);
+        containers.put(containerId, container);
+        var typeInfo = ContainerTypeInfoRegistry.REGISTRY.get(type);
+        if (typeInfo != null && typeInfo.topSlots() + 36 == typeInfo.totalSlots()) {
+            var playerInventory = getPlayerInventory();
+            var playerIndexOffset = 9;
+            var containerIndexOffset = typeInfo.topSlots();
+            for (int i = 0; i < 36; i++) {
+                var playerStack = playerInventory.getItemStack(playerIndexOffset + i);
+                container.setItemStack(containerIndexOffset + i, playerStack);
+            }
+        }
         setOpenContainerId(containerId);
         activeContainerId = containerId;
         if (!Proxy.getInstance().hasActivePlayer()) CACHE_LOG.info("Container {} opened: {}", containerId, type);

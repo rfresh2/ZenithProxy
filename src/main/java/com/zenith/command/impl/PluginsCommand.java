@@ -38,8 +38,6 @@ public class PluginsCommand extends Command {
             .name("plugins")
             .category(CommandCategory.MANAGE)
             .description("""
-             [BETA]
-
              Configures the ZenithProxy plugin manager.
 
              Plugins are user-created add-ons that add modules and commands.

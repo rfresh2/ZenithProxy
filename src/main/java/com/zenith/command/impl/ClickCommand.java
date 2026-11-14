@@ -20,10 +20,7 @@ import com.zenith.util.math.MathHelper;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.EquipmentSlot;
 import org.geysermc.mcprotocollib.protocol.data.game.entity.player.Hand;
 import org.geysermc.mcprotocollib.protocol.data.game.item.ItemStack;
-import org.geysermc.mcprotocollib.protocol.data.game.item.component.DataComponentTypes;
 import org.jspecify.annotations.NonNull;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.github.rfresh2.EventConsumer.of;
 import static com.mojang.brigadier.arguments.FloatArgumentType.floatArg;
@@ -356,10 +353,6 @@ public class ClickCommand extends Command {
     }
 
     private void useItem(Hand hand, @NonNull ItemStack item) {
-        var itemData = ItemRegistry.REGISTRY.get(item.getId());
-        var components = item.withAddedComponents(itemData.components()).getDataComponents();
-        var isConsumable = components.contains(DataComponentTypes.CONSUMABLE);
-        int ticks = isConsumable ? 50 : 0;
         var startUse = InputRequest.builder()
             .owner(this)
             .input(Input.builder()
@@ -370,24 +363,28 @@ public class ClickCommand extends Command {
             .priority(PRIORITY)
             .build();
         var req = INPUTS.submit(startUse);
-        if (ticks > 0) {
-            req.addInputExecutedListener(f -> {
-                if (f.isAccepted()) {
-                    noActionForNextNTicks(ticks);
-                }
-            });
-        }
+        req.addInputExecutedListener(f -> {
+            if (f.isAccepted()) {
+                rightClickHoldUseItem(hand, item);
+            }
+        });
     }
 
-    private void noActionForNextNTicks(final int ticks) {
+    private void rightClickHoldUseItem(Hand hand, @NonNull ItemStack item) {
         var tickSubOwner = new Object();
-        var counter = new AtomicInteger(0);
         EVENT_BUS.subscribe(tickSubOwner, of(ClientBotTick.class, event -> {
-            INPUTS.submit(InputRequest.noInput(this, PRIORITY));
-            INVENTORY.submit(InventoryActionRequest.noAction(this, PRIORITY));
-            if (counter.incrementAndGet() >= ticks) {
+            if (!BOT.isUsingItem() || CACHE.getPlayerCache().getEquipment(hand) != item) {
                 EVENT_BUS.unsubscribe(tickSubOwner);
             }
+            INPUTS.submit(InputRequest.builder()
+				.owner(this)
+                .priority(PRIORITY)
+                .input(Input.builder()
+                    .rightClick(true)
+                    .hand(hand)
+                    .build())
+                .build());
+            INVENTORY.submit(InventoryActionRequest.noAction(this, PRIORITY));
         }), of(ClientBotTick.Stopped.class, event -> EVENT_BUS.unsubscribe(tickSubOwner)));
     }
 

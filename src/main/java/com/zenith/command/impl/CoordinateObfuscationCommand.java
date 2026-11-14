@@ -28,23 +28,21 @@ public class CoordinateObfuscationCommand extends Command {
             .name("coordObf")
             .category(CommandCategory.MODULE)
             .description("""
-                [BETA]
-                
                 Obfuscates actual coordinates to players and spectators.
-                
+
                 Designed specifically for 2b2t, to let players you don't trust to visit your base/stash
-                
+
                 How it works:
                 * For each player, a chunk coordinate offset is generated
                 * Packets that contain coordinates are modified with that offset
                 * Respawns/server switches will regenerate the offset or disconnect the player
                 * Various exploits like bedrock patterns, eye of ender triangulation, and beehive data are blocked
-                
+
                 It is highly recommended to use this in conjunction with the `actionLimiter` module
-                
+
                 You should avoid allowing players to travel or respawn to 0,0, visit the worldborder, or any other known landmarks
                 to avoid leaking the offset.
-                
+
                 There are multiple modes for how the offset is generated. Random is recommended as it reduces the likelihood
                 and impact of the offset being discovered.
                 """)

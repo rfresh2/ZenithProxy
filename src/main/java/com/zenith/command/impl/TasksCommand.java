@@ -46,8 +46,6 @@ public class TasksCommand extends Command {
             .name("tasks")
             .category(CommandCategory.MODULE)
             .description("""
-                [BETA]
-
                 Schedules commands to be executed after a delay or after specified events.
 
                 Examples:
