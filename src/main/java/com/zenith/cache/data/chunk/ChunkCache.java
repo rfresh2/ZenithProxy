@@ -53,7 +53,6 @@ import static java.util.Collections.synchronizedList;
 @Accessors(chain = true)
 public class ChunkCache implements CachedData {
     // todo: consider moving weather to a separate cache object
-    private boolean isRaining = false;
     private float rainStrength = 0f;
     private float thunderStrength = 0f;
     // iterators over this map are not thread safe.
@@ -353,6 +352,10 @@ public class ChunkCache implements CachedData {
         );
     }
 
+    public boolean isRaining() {
+        return rainStrength > 0;
+    }
+
     @Override
     public void getPackets(@NonNull Consumer<Packet> consumer, final @NonNull TcpSession session) {
         try {
@@ -396,8 +399,7 @@ public class ChunkCache implements CachedData {
         } catch (Exception e) {
             CLIENT_LOG.error("Error getting ChunkData packets from cache", e);
         }
-        if (isRaining) {
-            consumer.accept(new ClientboundGameEventPacket(GameEvent.START_RAINING, null));
+        if (this.rainStrength > 0) {
             consumer.accept(new ClientboundGameEventPacket(GameEvent.RAIN_LEVEL_CHANGE, new RainStrengthValue(this.rainStrength)));
             consumer.accept(new ClientboundGameEventPacket(GameEvent.THUNDER_LEVEL_CHANGE, new ThunderStrengthValue(this.thunderStrength)));
         }
@@ -408,7 +410,6 @@ public class ChunkCache implements CachedData {
         // chunk reset, i.e. from changing worlds
         this.cache.clear();
         this.tickableBlockEntities.clear();
-        this.isRaining = false;
         this.thunderStrength = 0.0f;
         this.rainStrength = 0.0f;
         this.blockStatePredictionHandler = new BlockStatePredictionHandler();

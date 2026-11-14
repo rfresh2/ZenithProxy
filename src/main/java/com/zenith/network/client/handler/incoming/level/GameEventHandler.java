@@ -34,14 +34,13 @@ public class GameEventHandler implements ClientEventLoopPacketHandler<Clientboun
                 }
                 BOT.syncFromCache(false);
             }
+            // note: on 26.3 start/stop raining are sent OPPOSITE
             case START_RAINING -> {
-                CACHE.getChunkCache().setRaining(true);
+                CACHE.getChunkCache().setRainStrength(0.0f);
                 EVENT_BUS.postAsync(WeatherChangeEvent.INSTANCE);
             }
             case STOP_RAINING -> {
-                CACHE.getChunkCache().setRaining(false);
-                CACHE.getChunkCache().setThunderStrength(0.0f);
-                CACHE.getChunkCache().setRainStrength(0.0f);
+                CACHE.getChunkCache().setRainStrength(1.0f);
                 EVENT_BUS.postAsync(WeatherChangeEvent.INSTANCE);
             }
             case RAIN_LEVEL_CHANGE -> {
