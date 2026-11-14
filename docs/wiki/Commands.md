@@ -607,10 +607,6 @@ Kicks all players or a specific player. Only usable by account owners.
 
 ### plugins
 
-[BETA]
-
-
-
 Configures the ZenithProxy plugin manager.
 
 
@@ -1736,10 +1732,6 @@ Simulates a click to the block or entity in front of you
 
 ### coordObf
 
-[BETA]
-
-
-
 Obfuscates actual coordinates to players and spectators.
 
 
@@ -2377,10 +2369,6 @@ Sends alerts when players join or leave
 
 
 ### tasks
-
-[BETA]
-
-
 
 Schedules commands to be executed after a delay or after specified events.
 
