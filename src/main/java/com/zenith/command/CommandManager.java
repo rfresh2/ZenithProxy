@@ -161,6 +161,7 @@ public class CommandManager {
             DEFAULT_LOG.warn("Duplicate command being registered: {}", cmdBuilder.getLiteral(), new RuntimeException());
         }
         final LiteralCommandNode<CommandContext> node = dispatcher.register(cmdBuilder);
+        dispatcher.register(command.redirect("zenith:" + cmdBuilder.getLiteral(), node));
         command.commandUsage().getAliases().forEach(alias -> dispatcher.register(command.redirect(alias, node)));
     }
 

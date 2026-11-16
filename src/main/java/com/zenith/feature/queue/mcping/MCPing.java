@@ -4,6 +4,7 @@ import com.zenith.feature.queue.mcping.data.MCResponse;
 import com.zenith.feature.queue.mcping.rawData.Player;
 import com.zenith.feature.queue.mcping.rawData.Players;
 import com.zenith.feature.queue.mcping.rawData.Version;
+import com.zenith.util.ComponentSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.AddressedEnvelope;
 import io.netty.channel.EventLoopGroup;
@@ -123,9 +124,9 @@ public class MCPing {
             }
             var players = new Players(max, online, playersList);
             var descriptionNode = jsonTree.get("description");
-            var descriptionText = descriptionNode.get("text").asString();
+            var descriptionComponent = ComponentSerializer.deserialize(descriptionNode.toString());
             var favicon = jsonTree.get("favicon").asString();
-            return new MCResponse(players, version, favicon, descriptionText);
+            return new MCResponse(players, version, favicon, descriptionComponent);
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }

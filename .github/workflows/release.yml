@@ -168,3 +168,11 @@ jobs:
           body: "Looking for downloads? **Use the Launcher:** https://github.com/rfresh2/ZenithProxy/releases/tag/launcher-v3"
           commit: ${{ github.sha }}
           artifactErrorsFailBuild: true
+
+  deploy-wiki:
+    needs:
+      - release-artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Wiki
+        run: curl -d "" ${{ secrets.CF_WIKI_DEPLOY_WEBHOOK_URL }}

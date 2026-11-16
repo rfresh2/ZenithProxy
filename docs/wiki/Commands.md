@@ -672,6 +672,10 @@ Change the MC server ZenithProxy connects to.
 
   ```server <IP> <port>```
 
+  ```server ping <IP>```
+
+  ```server ping <IP> <port>```
+
 
 ### serverConnection
 

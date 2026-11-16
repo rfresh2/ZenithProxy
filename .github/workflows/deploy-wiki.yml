@@ -1,0 +1,11 @@
+name: deploy-wiki.yml
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Wiki
+        run: curl -d "" ${{ secrets.CF_WIKI_DEPLOY_WEBHOOK_URL }}
