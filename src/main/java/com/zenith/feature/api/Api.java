@@ -38,7 +38,7 @@ public abstract class Api {
             try {
                 return Optional.of(OBJECT_MAPPER.readValue(body, clazz));
             } catch (final Exception e) {
-                DEFAULT_LOG.error("Failed to parse response: {}", body, e);
+                DEFAULT_LOG.error("Failed to parse response to: {}{} - {}", baseUrl, uri, body, e);
                 return Optional.empty();
             }
         } catch (Exception e) {

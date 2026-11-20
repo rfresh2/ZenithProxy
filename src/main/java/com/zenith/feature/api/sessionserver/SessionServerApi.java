@@ -38,7 +38,7 @@ public class SessionServerApi extends Api {
     public void joinServer(final UUID uuid, final String accessToken, final String sharedSecret) {
         final JoinServerRequest request = new JoinServerRequest(uuid, accessToken, sharedSecret);
         final HttpRequest httpRequest = buildBaseRequest("/session/minecraft/join")
-            .POST(HttpRequest.BodyPublishers.ofString(GSON.toJson(request)))
+            .POST(HttpRequest.BodyPublishers.ofString(OBJECT_MAPPER.writeValueAsString(request)))
             .header("Content-Type", "application/json")
             .build();
         try (var client = buildHttpClient()) {
@@ -49,13 +49,13 @@ public class SessionServerApi extends Api {
                         throw new RuntimeException("Client join has been rate limited by Mojang");
                     }
                     try {
-                        var errorResponse = GSON.fromJson(response.body(), JoinServerErrorResponse.class);
+                        var errorResponse = OBJECT_MAPPER.readValue(response.body(), JoinServerErrorResponse.class);
                         throw new RuntimeException("Failed to join server: " + errorResponse.toString());
                     } catch (final Exception e) {
-                        throw new RuntimeException("Failed to join server: " + response.body());
+                        throw new RuntimeException("Failed to join server: " + response.statusCode());
                     }
                 }
-                throw new RuntimeException("Failed to join server: " + response.body());
+                throw new RuntimeException("Failed to join server: " + response.statusCode());
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to join server", e);
@@ -78,7 +78,7 @@ public class SessionServerApi extends Api {
                 DEFAULT_LOG.error("Player: {} failed to join server. Status code: {}, Response body: {}", name, response.statusCode(), response.body());
                 return Optional.empty();
             }
-            return Optional.of(GSON.fromJson(response.body(), HasJoinedResponse.class).toGameProfile());
+            return Optional.of(OBJECT_MAPPER.readValue(response.body(), HasJoinedResponse.class).toGameProfile());
         } catch (Exception e) {
             DEFAULT_LOG.error("Failed to join server. name: {}, serverId: {}", name, serverId, e);
             return Optional.empty();
@@ -92,22 +92,27 @@ public class SessionServerApi extends Api {
         try (var client = buildHttpClient()) {
             var response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                DEFAULT_LOG.error("Failed to get profile and skin for uuid: {}. Status code: {}, Response body: {}", uuid, response.statusCode(), response.body());
+                DEFAULT_LOG.error("Request failed to: {} - {}", httpRequest.uri(), response.statusCode());
                 return Optional.empty();
             }
-            var profileAndSkin = Optional.of(GSON.fromJson(response.body(), MojangProfileAndSkin.class)).get();
-            var propsResponse = profileAndSkin.properties();
-            var props = new ArrayList<GameProfile.Property>(propsResponse.size());
-            for (var prop : propsResponse) {
-                props.add(new GameProfile.Property(prop.name(), prop.value(), prop.signature()));
+            try {
+                var profileAndSkin = OBJECT_MAPPER.readValue(response.body(), MojangProfileAndSkin.class);
+                var propsResponse = profileAndSkin.properties();
+                var props = new ArrayList<GameProfile.Property>(propsResponse.size());
+                for (var prop : propsResponse) {
+                    props.add(new GameProfile.Property(prop.name(), prop.value(), prop.signature()));
+                }
+                var gameProfile = new GameProfile(profileAndSkin.uuid(), profileAndSkin.name());
+                gameProfile.setProperties(props);
+                return Optional.of(gameProfile);
+            } catch (Exception e) {
+                DEFAULT_LOG.error("Failed to parse response to: {} : {}", httpRequest.uri(), response.body(), e);
             }
-            var gameProfile = new GameProfile(profileAndSkin.uuid(), profileAndSkin.name());
-            gameProfile.setProperties(props);
-            return Optional.of(gameProfile);
         } catch (Exception e) {
-            DEFAULT_LOG.error("Failed to get profile and skin for uuid: {}", uuid, e);
-            return Optional.empty();
+            DEFAULT_LOG.error("Request failed to: {} - {}", httpRequest.uri(), e.getMessage());
+            DEFAULT_LOG.debug("Request failed to: {}", httpRequest.uri(), e);
         }
+        return Optional.empty();
     }
 
     public String getSharedSecret(String serverId, PublicKey publicKey, SecretKey secretKey) {
