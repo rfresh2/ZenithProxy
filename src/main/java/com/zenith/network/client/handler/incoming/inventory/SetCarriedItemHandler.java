@@ -13,7 +13,7 @@ import static com.zenith.Globals.DEFAULT_LOG;
 public class SetCarriedItemHandler implements ClientEventLoopPacketHandler<ClientboundSetHeldSlotPacket, ClientSession> {
     @Override
     public boolean applyAsync(ClientboundSetHeldSlotPacket packet, ClientSession session) {
-        if (!Proxy.getInstance().hasActivePlayer() && CACHE.getPlayerCache().getHeldItemSlot() != packet.getSlot()) {
+        if (!Proxy.getInstance().hasActivePlayer() && CACHE.getPlayerCache().getHeldItemSlot() != packet.getSlot() && packet.getSlot() >= 0 && packet.getSlot() <= 8) {
             try {
                 // the mc server does not know we are using this slot until we say so
                 // so we make sure its synced correctly here

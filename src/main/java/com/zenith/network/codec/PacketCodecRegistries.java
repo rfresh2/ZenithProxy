@@ -137,6 +137,7 @@ public final class PacketCodecRegistries {
                 .postOutbound(ServerboundFinishConfigurationPacket.class, new PostOutgoingFinishConfigurationHandler())
                 .build())
             .state(ProtocolState.GAME, PacketHandlerStateCodec.clientBuilder()
+                .inbound(ClientboundAnimatePacket.class, new AnimateHandler())
                 .inbound(ClientboundDisconnectPacket.class, CDisconnectHandler.INSTANCE)
                 .inbound(ClientboundStartConfigurationPacket.class, new CStartConfigurationHandler())
                 .inbound(ClientboundDamageEventPacket.class, new DamageEventHandler())
