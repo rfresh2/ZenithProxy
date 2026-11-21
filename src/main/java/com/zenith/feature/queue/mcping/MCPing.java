@@ -14,6 +14,7 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.handler.codec.dns.*;
 import io.netty.resolver.dns.DnsNameResolver;
 import io.netty.resolver.dns.DnsNameResolverBuilder;
+import net.kyori.adventure.text.Component;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.ArrayNode;
 
@@ -23,6 +24,7 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import static com.zenith.Globals.DEFAULT_LOG;
 import static com.zenith.Globals.OBJECT_MAPPER;
 
 public class MCPing {
@@ -123,10 +125,21 @@ public class MCPing {
                 playersList.add(player);
             }
             var players = new Players(max, online, playersList);
-            var descriptionNode = jsonTree.get("description");
-            var descriptionComponent = ComponentSerializer.deserialize(descriptionNode.toString());
-            var favicon = jsonTree.get("favicon").asString();
-            return new MCResponse(players, version, favicon, descriptionComponent);
+            Component description = Component.empty();
+            if (jsonTree.get("description") != null) {
+                try {
+                    var descriptionNode = jsonTree.get("description");
+                    description = ComponentSerializer.deserialize(descriptionNode.toString());
+                } catch (Exception e) {
+                    DEFAULT_LOG.debug("Failed parsing MCPing description component");
+                    // fall through
+                }
+            }
+            String favicon = null;
+            if (jsonTree.get("favicon") != null) {
+                favicon = jsonTree.get("favicon").asString();
+            }
+            return new MCResponse(players, version, favicon, description);
         } catch (final Exception e) {
             throw new RuntimeException(e);
         }
