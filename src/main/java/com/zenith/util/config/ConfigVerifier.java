@@ -14,29 +14,32 @@ public final class ConfigVerifier {
     private ConfigVerifier() {}
 
     public static ConfigVerificationResult verifyConfigs() {
-        if (containsNullFields(CONFIG, "com.zenith")) {
-            return failDueToNullsIn("config");
+        var configRes = containsNullFields(CONFIG, "com.zenith");
+        if (!configRes.pass()) {
+            return failDueToNullsIn("config", configRes);
         }
-        if (containsNullFields(LAUNCH_CONFIG, "com.zenith")) {
-            return failDueToNullsIn("launch_config");
+        var launchConfigRes = containsNullFields(LAUNCH_CONFIG, "com.zenith");
+        if (!launchConfigRes.pass()) {
+            return failDueToNullsIn("launch_config", launchConfigRes);
         }
         return new ConfigVerificationResult(true, "");
     }
 
     public static ConfigVerificationResult verifyPluginConfig(Object config, String name) {
-        if (containsNullFields(config, config.getClass().getPackageName())) {
-            return failDueToNullsIn(name);
+        var configRes = containsNullFields(config, config.getClass().getPackageName());
+        if (!configRes.pass()) {
+            return failDueToNullsIn(name, configRes);
         }
         return new ConfigVerificationResult(true, "");
     }
 
     public record ConfigVerificationResult(boolean pass, String msg) {}
 
-    private static ConfigVerificationResult failDueToNullsIn(String configName) {
-        return new ConfigVerificationResult(false, "Null value in %s.json".formatted(configName));
+    private static ConfigVerificationResult failDueToNullsIn(String configName, final ConfigVerificationResult configRes) {
+        return new ConfigVerificationResult(false, "Null value in %s.json\n%s".formatted(configName, configRes.msg()));
     }
 
-    private static boolean containsNullFields(Object obj, String configPackagePrefix) {
+    private static ConfigVerificationResult containsNullFields(Object obj, String configPackagePrefix) {
         var clazz = obj.getClass();
         // recursively check all fields for null
         Field[] declaredFields = clazz.getDeclaredFields();
@@ -52,13 +55,13 @@ public final class ConfigVerifier {
                 Object value = field.get(obj);
                 if (value == null) {
                     if (!isNullableField(field)) {
-                        DEFAULT_LOG.error("Field: '{}' in '{}' is null\nIf this is intended, annotate the field with: {}", field.getName(), clazz.getName(), Nullable.class.getName());
-                        return true;
+                        return new ConfigVerificationResult(false, "'%s' in '%s' is null. Write a value manually or annotate the field with %s if intended".formatted(field.getName(), clazz.getName(), Nullable.class.getName()));
                     }
                 } else {
                     if (field.getType().getName().startsWith(configPackagePrefix) && !field.getType().isEnum()) {
-                        if (containsNullFields(value, configPackagePrefix)) {
-                            return true;
+                        var res = containsNullFields(value, configPackagePrefix);
+                        if (!res.pass()) {
+                            return new ConfigVerificationResult(false, res.msg());
                         }
                     }
                 }
@@ -66,7 +69,7 @@ public final class ConfigVerifier {
                 DEFAULT_LOG.error("Error verifying config fields", e);
             }
         }
-        return false;
+        return new ConfigVerificationResult(true, "");
     }
 
     private static boolean isNullableField(Field field) {
