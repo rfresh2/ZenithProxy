@@ -14,4 +14,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class AutoReconnectDecisionEvent extends CancellableEvent {
     private final ClientDisconnectEvent disconnectEvent;
+    private int delaySeconds;
 }

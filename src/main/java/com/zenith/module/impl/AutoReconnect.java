@@ -8,6 +8,7 @@ import com.zenith.event.client.ClientDisconnectEvent;
 import com.zenith.event.module.AutoReconnectDecisionEvent;
 import com.zenith.event.module.AutoReconnectEvent;
 import com.zenith.module.api.Module;
+import com.zenith.util.DisconnectReasonInfo;
 import com.zenith.util.Wait;
 import org.jspecify.annotations.Nullable;
 
@@ -27,7 +28,8 @@ public class AutoReconnect extends Module {
         return List.of(
             of(ClientDisconnectEvent.class, this::handleDisconnectEvent),
             of(ClientConnectEvent.class, this::handleConnectEvent),
-            of(AutoReconnectDecisionEvent.class, this::defaultAutoReconnectCancelHandler)
+            of(AutoReconnectDecisionEvent.class, this::defaultAutoReconnectCancelHandler),
+            of(AutoReconnectDecisionEvent.class, this::defaultAlreadyConnectedDelayHandler)
         );
     }
 
@@ -57,12 +59,14 @@ public class AutoReconnect extends Module {
 
     public void handleDisconnectEvent(ClientDisconnectEvent event) {
         var autoReconnectEvent = new AutoReconnectDecisionEvent(event);
+        autoReconnectEvent.setDelaySeconds(CONFIG.client.extra.autoReconnect.delaySeconds);
         EVENT_BUS.post(autoReconnectEvent);
-        if (!autoReconnectEvent.isCancelled()) {
-            scheduleAutoReconnect(CONFIG.client.extra.autoReconnect.delaySeconds);
-        } else {
+        if (autoReconnectEvent.isCancelled()) {
             info("Cancelling AutoReconnect because disconnect reason is not reconnectable");
+            return;
         }
+
+        scheduleAutoReconnect(autoReconnectEvent.getDelaySeconds());
     }
 
     public void scheduleAutoReconnect(final int delaySeconds) {
@@ -117,5 +121,18 @@ public class AutoReconnect extends Module {
         if (NON_RECONNECTABLE_DISCONNECT_REASONS.contains(event.getDisconnectEvent().reason())) {
             event.setCancelled(true);
         }
+    }
+
+    public void defaultAlreadyConnectedDelayHandler(AutoReconnectDecisionEvent event) {
+        if (event.isCancelled()) return;
+        if (DisconnectReasonInfo.getDisconnectCategory(event.getDisconnectEvent().reason())
+            != DisconnectReasonInfo.DisconnectCategory.ALREADY_CONNECTED) {
+            return;
+        }
+        if (event.getDelaySeconds() != CONFIG.client.extra.autoReconnect.delaySeconds) return;
+        int configured = CONFIG.client.extra.autoReconnect.alreadyConnectedDelaySecond;
+        if (configured <= 0) return;
+        event.setDelaySeconds(configured);
+        info("Account is already connected; delaying AutoReconnect by {}s", configured);
     }
 }
